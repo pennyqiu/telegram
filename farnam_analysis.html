@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Farnam Street / Shane Parrish — 心智模型 — 2020-2025 分析报告</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+       background: #f0f4f8; color: #1a202c; font-size: 14px; line-height: 1.6; }
+.page-header { background: linear-gradient(135deg, #1a56db 0%, #0f3460 100%);
+               color: #fff; padding: 40px 32px 32px; }
+.page-header h1 { font-size: 26px; font-weight: 800; margin-bottom: 6px; }
+.page-header p  { font-size: 14px; opacity: .85; }
+.stats-bar { display: flex; gap: 16px; flex-wrap: wrap;
+             padding: 20px 32px; background: #fff;
+             border-bottom: 1px solid #e2e8f0; }
+.stat-chip { background: #eff6ff; border: 1px solid #bfdbfe;
+             border-radius: 8px; padding: 10px 18px; text-align: center; }
+.stat-chip .num { font-size: 24px; font-weight: 800; color: #1d4ed8; display: block; }
+.stat-chip .lbl { font-size: 11px; color: #64748b; font-weight: 600; }
+.container { max-width: 1100px; margin: 28px auto; padding: 0 20px; }
+.section { background: #fff; border-radius: 14px; border: 1px solid #e2e8f0;
+           margin-bottom: 28px; overflow: hidden; }
+.section-header { padding: 18px 24px; background: #f8fafc;
+                  border-bottom: 1px solid #e2e8f0;
+                  display: flex; align-items: center; gap: 10px; }
+.section-header h2 { font-size: 17px; font-weight: 700; color: #1e293b; }
+.section-body { padding: 20px 24px; }
+.theme-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px,1fr));
+              gap: 12px; }
+.theme-card { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 10px;
+              padding: 14px; }
+.theme-card .tc-label { font-size: 13px; font-weight: 700; color: #1e40af;
+                         margin-bottom: 6px; }
+.theme-card .tc-bar-wrap { background: #dbeafe; border-radius: 99px;
+                            height: 6px; overflow: hidden; }
+.theme-card .tc-bar { background: #1d4ed8; height: 6px; border-radius: 99px; }
+.theme-card .tc-count { font-size: 11px; color: #475569; margin-top: 4px; }
+.insights-list { list-style: none; }
+.insights-list li { display: flex; gap: 12px; padding: 12px 0;
+                    border-bottom: 1px solid #f1f5f9; }
+.insights-list li:last-child { border-bottom: none; }
+.ins-num { flex-shrink: 0; width: 26px; height: 26px; background: #dbeafe;
+           color: #1d4ed8; border-radius: 50%; font-size: 12px; font-weight: 800;
+           display: flex; align-items: center; justify-content: center; }
+.ins-text { font-size: 13px; color: #374151; line-height: 1.6; }
+.art-card { border: 1px solid #e2e8f0; border-radius: 10px;
+            margin-bottom: 10px; overflow: hidden; }
+.art-head { display: flex; align-items: center; justify-content: space-between;
+            padding: 14px 18px; cursor: pointer; background: #f8fafc;
+            transition: background .15s; }
+.art-head:hover { background: #eff6ff; }
+.art-title { font-size: 13px; font-weight: 700; color: #1e293b; margin-bottom: 3px; }
+.art-meta  { font-size: 11px; color: #64748b; }
+.art-tag   { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 99px;
+             background: #dbeafe; color: #1e40af; white-space: nowrap; }
+.art-chevron { font-size: 13px; color: #94a3b8; transition: transform .2s; flex-shrink:0; }
+.art-body  { display: none; padding: 16px 18px; background: #fff;
+             border-top: 1px solid #e2e8f0; }
+.art-content { font-size: 13px; color: #374151; line-height: 1.7; }
+.ext-link  { display: inline-block; margin-top: 10px; font-size: 12px;
+             color: #1a56db; text-decoration: none; font-weight: 600; }
+.ext-link:hover { text-decoration: underline; }
+.theme-group-title { font-size: 15px; font-weight: 700; color: #1e40af;
+                     padding: 14px 0 8px; border-bottom: 2px solid #bfdbfe;
+                     margin-bottom: 12px; }
+.reading-list { list-style: none; }
+.reading-list li { padding: 10px 0; border-bottom: 1px solid #f1f5f9;
+                   display: flex; gap: 12px; align-items: flex-start; }
+.reading-list li:last-child { border-bottom: none; }
+.rl-num { flex-shrink: 0; background: #1d4ed8; color: #fff;
+          width: 24px; height: 24px; border-radius: 50%; font-size: 11px;
+          font-weight: 800; display: flex; align-items: center; justify-content: center; }
+.rl-body .rl-title { font-size: 13px; font-weight: 700; }
+.rl-body .rl-title a { color: #1a56db; text-decoration: none; }
+.rl-body .rl-title a:hover { text-decoration: underline; }
+.rl-desc { font-size: 12px; color: #64748b; margin-top: 2px; }
+.year-grid { display: flex; flex-wrap: wrap; gap: 10px; }
+.year-pill { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px;
+             padding: 8px 16px; text-align: center; }
+.year-pill .yp-year { font-size: 15px; font-weight: 800; color: #1d4ed8; display: block; }
+.year-pill .yp-cnt  { font-size: 11px; color: #64748b; }
+</style>
+</head>
+<body>
+<div class="page-header">
+  <h1>📊 Farnam Street / Shane Parrish — 心智模型</h1>
+  <p>2020–2025 年文章深度分析报告 · 共 23 篇 · <a href="https://fs.blog" target="_blank" style="color:#93c5fd">https://fs.blog</a></p>
+  <p style="margin-top:8px;font-size:13px;opacity:.8">Shane Parrish 创立的知识与决策网站，专注于整理人类最有效的思维框架（心智模型），融合心理学、哲学、数学、物理学等多领域智慧，为投资决策和人生决策提供底层工具。</p>
+</div>
+
+<div class="stats-bar">
+  <div class="stat-chip"><span class="num">23</span><span class="lbl">文章总数</span></div>
+  <div class="stat-chip"><span class="num">6</span><span class="lbl">覆盖年份</span></div>
+  <div class="stat-chip"><span class="num">6</span><span class="lbl">主题分类</span></div>
+  <div class="stat-chip"><span class="num">2020-2025</span><span class="lbl">时间跨度</span></div>
+</div>
+<div class="container">
+
+  <div class="section">
+    <div class="section-header"><span>📅</span><h2>年份分布</h2></div>
+    <div class="section-body">
+      <div class="year-grid"><div class="year-pill"><span class="yp-year">2020</span><span class="yp-cnt">5篇</span></div><div class="year-pill"><span class="yp-year">2021</span><span class="yp-cnt">5篇</span></div><div class="year-pill"><span class="yp-year">2022</span><span class="yp-cnt">4篇</span></div><div class="year-pill"><span class="yp-year">2023</span><span class="yp-cnt">4篇</span></div><div class="year-pill"><span class="yp-year">2024</span><span class="yp-cnt">3篇</span></div><div class="year-pill"><span class="yp-year">2025</span><span class="yp-cnt">2篇</span></div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header"><span>🗂️</span><h2>主题分布</h2></div>
+    <div class="section-body">
+      <div class="theme-grid">
+<div class="theme-card">
+  <div class="tc-label">决策框架</div>
+  <div class="tc-bar-wrap"><div class="tc-bar" style="width:100%"></div></div>
+  <div class="tc-count">8 篇</div>
+</div>
+<div class="theme-card">
+  <div class="tc-label">认知偏差</div>
+  <div class="tc-bar-wrap"><div class="tc-bar" style="width:62%"></div></div>
+  <div class="tc-count">5 篇</div>
+</div>
+<div class="theme-card">
+  <div class="tc-label">长期思维</div>
+  <div class="tc-bar-wrap"><div class="tc-bar" style="width:37%"></div></div>
+  <div class="tc-count">3 篇</div>
+</div>
+<div class="theme-card">
+  <div class="tc-label">投资哲学</div>
+  <div class="tc-bar-wrap"><div class="tc-bar" style="width:37%"></div></div>
+  <div class="tc-count">3 篇</div>
+</div>
+<div class="theme-card">
+  <div class="tc-label">认知与学习</div>
+  <div class="tc-bar-wrap"><div class="tc-bar" style="width:25%"></div></div>
+  <div class="tc-count">2 篇</div>
+</div>
+<div class="theme-card">
+  <div class="tc-label">概率思维</div>
+  <div class="tc-bar-wrap"><div class="tc-bar" style="width:25%"></div></div>
+  <div class="tc-count">2 篇</div>
+</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header"><span>💡</span><h2>核心洞察精华（中文总结）</h2></div>
+    <div class="section-body">
+      <ul class="insights-list">
+<li>
+  <span class="ins-num">1</span>
+  <span class="ins-text">第一性原理思维是投资分析的基础：不接受'这家公司值30倍PE'这样的共识，而是问'什么样的竞争壁垒和成长率能支撑30倍PE？'——这个问题往往揭示出要么真正的护城河，要么披着分析外衣的愿景。</span>
+</li>
+<li>
+  <span class="ins-num">2</span>
+  <span class="ins-text">逆向思维（Inversion）是Charlie Munger最常用的工具：不只问'这个投资怎样才能成功'，更要问'这个投资怎样一定会失败'。常见失败路径：过度杠杆、在高度相关资产间分散、在下跌时卖出质优公司。</span>
+</li>
+<li>
+  <span class="ins-num">3</span>
+  <span class="ins-text">能力圈原则对互联网行业从业者尤为重要：你对SaaS单位经济、网络效应、CAC/LTV比、平台飞轮的理解，天然优于95%的投资者。这个圈子就是你的alpha来源——离开它就是自我伤害。</span>
+</li>
+<li>
+  <span class="ins-num">4</span>
+  <span class="ins-text">复利的本质是时间的函数，而非收益率的函数。巴菲特99%的财富在65岁以后积累。对于42岁开始认真投资的人：18年（60岁）的复利窗口，哪怕每年10%，也能将本金增至5.5倍。不要试图加速，要防止中断。</span>
+</li>
+<li>
+  <span class="ins-num">5</span>
+  <span class="ins-text">可得性启发（Availability Heuristic）是退休投资者最大的敌人：2020年的崩盘让人高估未来崩盘概率，2021年的繁荣让人低估2022年的风险。防御方法：投资政策声明（IPS）+ 自动定期定额，减少需要当下判断的决策。</span>
+</li>
+<li>
+  <span class="ins-num">6</span>
+  <span class="ins-text">确认偏误的防御机制：对每一个你持有的股票/ETF，每季度强迫自己写一段'熊市理由'（不是为了动摇信心，而是检验理由是否已经失效）。如果找不到任何熊市理由，说明你的分析存在盲点。</span>
+</li>
+<li>
+  <span class="ins-num">7</span>
+  <span class="ins-text">概率思维要求你同时持有多个情景：对S&P 500的2025年展望，不要说'会涨'或'会跌'，要说'60%概率在4800-5500区间震荡，25%概率因AI驱动突破6000，15%概率因衰退跌破4500'。这迫使你真正思考每个情景的驱动因素。</span>
+</li>
+<li>
+  <span class="ins-num">8</span>
+  <span class="ins-text">奥卡姆剃刀原则（Occam's Razor）应用于投资组合：3只ETF（VTI + VXUS + BND）在过去任意20年均跑赢平均主动管理基金。简单策略的优势不是因为它最优，而是因为你更可能在市场最差时坚持执行它。</span>
+</li>
+<li>
+  <span class="ins-num">9</span>
+  <span class="ins-text">系统性思维揭示反馈循环：上涨→吸引动量资金→进一步上涨（正向反馈）；估值扩张→降低前向回报→吸引价值资金→均值回归（负向反馈）。理解你在哪个阶段，帮助你判断是顺势还是逆势操作的合适时机。</span>
+</li>
+<li>
+  <span class="ins-num">10</span>
+  <span class="ins-text">激励结构分析是识别管理层质量的捷径：CEO薪酬若以股票期权为主，则激励高杠杆和激进会计；若以RSU（限制性股票）为主，则激励长期价值。在分析公司时，先看代理权文件（Proxy Statement）中的薪酬结构。</span>
+</li>
+<li>
+  <span class="ins-num">11</span>
+  <span class="ins-text">幸存者偏差警告：你读到的所有成功投资策略都经过了幸存者过滤。学习巴菲特的同时，也要研究比较同类型的集中价值投资者中有多少比例破产了——答案会让你对集中持股的风险有更现实的认识。</span>
+</li>
+<li>
+  <span class="ins-num">12</span>
+  <span class="ins-text">费曼技巧测试你的真实理解程度：如果你不能向没有金融背景的人解释DCF折现现金流，你对它的掌握还不够坚实。在买入任何股票之前，写一篇一页纸的白话投资理由——如果写不清楚，就是还没想清楚。</span>
+</li>
+<li>
+  <span class="ins-num">13</span>
+  <span class="ins-text">批量决策（Batch Processing）原则：不要在市场交易时间做投资决策。提前设定规则（'跌破X我增购，涨超Y我减仓'），然后在平静的夜晚执行。大多数投资错误发生在市场波动最大时的实时反应中。</span>
+</li>
+<li>
+  <span class="ins-num">14</span>
+  <span class="ins-text">后验分析（Post-Mortem）是真正的学习机制：每次投资决策（包括成功的）都应该记录：原始假设是什么？实际发生了什么？第一个反例出现时你有没有行动？不分析失败，就会重复失败。</span>
+</li>
+<li>
+  <span class="ins-num">15</span>
+  <span class="ins-text">长期思维是最稀缺的竞争优势：市场参与者的平均持仓周期不足1年，Damodaran估算这创造了巨大的时间套利机会——愿意持有5-10年的投资者，实际上在和一批只看1-4个季度的对手竞争，而这批对手犯错的频率远高于他们的自我认知。</span>
+</li></ul>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header"><span>📚</span><h2>推荐阅读顺序</h2></div>
+    <div class="section-body">
+      <ul class="reading-list">
+<li>
+  <span class="rl-num">1</span>
+  <div class="rl-body">
+    <div class="rl-title"><a href="https://fs.blog/first-principles/" target="_blank">First Principles Thinking</a></div>
+    <div class="rl-desc">入门必读——学习如何从根本假设重建分析框架，打破'这只股票一直都是这个估值'的惰性思维</div>
+  </div>
+</li>
+<li>
+  <span class="rl-num">2</span>
+  <div class="rl-body">
+    <div class="rl-title"><a href="https://fs.blog/inversion/" target="_blank">Inversion: The Crucial Thinking Tool</a></div>
+    <div class="rl-desc">Charlie Munger最爱的工具——构建每个投资决策的'失败路径'，比成功路径更有价值</div>
+  </div>
+</li>
+<li>
+  <span class="rl-num">3</span>
+  <div class="rl-body">
+    <div class="rl-title"><a href="https://fs.blog/circle-of-competence/" target="_blank">Circle of Competence</a></div>
+    <div class="rl-desc">互联网从业者投资美股的核心指南——明确哪些公司/行业在你的能力圈内，哪些不在</div>
+  </div>
+</li>
+<li>
+  <span class="rl-num">4</span>
+  <div class="rl-body">
+    <div class="rl-title"><a href="https://fs.blog/compounding/" target="_blank">Compounding: The Eighth Wonder of the World</a></div>
+    <div class="rl-desc">复利数学的直觉化理解——为什么'不中断复利'比'提高年化收益率'更重要</div>
+  </div>
+</li>
+<li>
+  <span class="rl-num">5</span>
+  <div class="rl-body">
+    <div class="rl-title"><a href="https://fs.blog/second-order-thinking/" target="_blank">Second-Order Thinking</a></div>
+    <div class="rl-desc">投资alpha的来源——大多数人做一阶分析，而超额收益来自两阶和三阶推演</div>
+  </div>
+</li>
+<li>
+  <span class="rl-num">6</span>
+  <div class="rl-body">
+    <div class="rl-title"><a href="https://fs.blog/probabilistic-thinking/" target="_blank">Probabilistic Thinking</a></div>
+    <div class="rl-desc">将投资判断从'对/错'二元论，升级为概率分布思维，是专业投资者和业余者的本质区别</div>
+  </div>
+</li>
+<li>
+  <span class="rl-num">7</span>
+  <div class="rl-body">
+    <div class="rl-title"><a href="https://fs.blog/survivorship-bias/" target="_blank">Survivorship Bias: The Hidden Graveyard</a></div>
+    <div class="rl-desc">在研究任何'成功策略'之前必须阅读——理解为什么公开可见的成功案例会系统性误导判断</div>
+  </div>
+</li>
+<li>
+  <span class="rl-num">8</span>
+  <div class="rl-body">
+    <div class="rl-title"><a href="https://fs.blog/confirmation-bias/" target="_blank">Confirmation Bias</a></div>
+    <div class="rl-desc">持仓投资者最危险的偏见——学习如何主动搜寻让你持仓失败的理由，而不是安慰理由</div>
+  </div>
+</li></ul>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header"><span>📰</span><h2>全部文章（点击展开摘要）</h2></div>
+    <div class="section-body"><div class="theme-group-title">📂 决策框架（8篇）</div>
+<div class="art-card">
+  <div class="art-head" onclick="toggle(1)">
+    <div>
+      <div class="art-title">Batch Processing Your Decisions to Reduce Mistakes</div>
+      <div class="art-meta">2024-06-25</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <span class="art-tag">决策框架</span>
+      <span class="art-chevron" id="chev1">▼</span>
+    </div>
+  </div>
+  <div class="art-body" id="body1">
+    <div class="art-content">Naval Ravikant: 'Make fewer, better decisions.' Research shows decision quality improves when you batch decisions and make them at scheduled times rather than in real-time reaction to events. For investors, this is profoundly practical: (1) Schedule portfolio reviews quarterly, not daily; (2) Never make portfolio changes during market hours—decide the night before; (3) Create an Investment Policy Statement (IPS) that pre-commits to rules, reducing in-the-moment decisions; (4) Use pre-commitment devices—setting automatic DCA into ETFs removes the decision entirely. The goal is to transform investment management from reactive emotion-driven activity into a systematic process. Most investment mistakes happen in real-time reactions to market moves; systematic processes prevent this.</div>
+    <a href="https://fs.blog/decision-making/" target="_blank" class="ext-link">阅读英文原文 →</a>
+  </div>
+</div>
+<div class="art-card">
+  <div class="art-head" onclick="toggle(2)">
+    <div>
+      <div class="art-title">Systems Thinking: Understanding Feedback Loops</div>
+      <div class="art-meta">2024-04-09</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <span class="art-tag">决策框架</span>
+      <span class="art-chevron" id="chev2">▼</span>
+    </div>
+  </div>
+  <div class="art-body" id="body2">
+    <div class="art-content">Systems thinking asks how components of a system interact, rather than analyzing each component in isolation. Financial markets are complex adaptive systems with multiple feedback loops: (1) Positive feedback: rising prices attract momentum investors, which drives prices higher—until it doesn't; (2) Negative feedback: rising prices raise valuations, reducing forward returns, eventually attracting value investors. Understanding these loops explains why trends persist longer than expected (positive feedback) and why mean reversion eventually occurs (negative feedback). For portfolio construction: asset allocation with rebalancing exploits negative feedback loops (sell what went up, buy what went down). Momentum investing exploits positive feedback loops. Both work—in different regimes.</div>
+    <a href="https://fs.blog/systems-thinking/" target="_blank" class="ext-link">阅读英文原文 →</a>
+  </div>
+</div>
+<div class="art-card">
+  <div class="art-head" onclick="toggle(3)">
+    <div>
+      <div class="art-title">Mental Models for Making Better Decisions Under Uncertainty</div>
+      <div class="art-meta">2023-09-12</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <span class="art-tag">决策框架</span>
+      <span class="art-chevron" id="chev3">▼</span>
+    </div>
+  </div>
+  <div class="art-body" id="body3">
+    <div class="art-content">A synthesis of the 100+ mental models in the Farnam Street library, distilled to the 10 most useful for financial decision-making: (1) Margin of safety—always buy below intrinsic value; (2) Second-order thinking—ask 'and then what?'; (3) Probabilistic thinking—think in distributions, not points; (4) Inversion—model failure before modeling success; (5) Circle of competence—know your edges; (6) Compounding—time is the most valuable asset; (7) Occam's razor—prefer simple portfolios; (8) Availability heuristic—fight recency bias with data; (9) Confirmation bias defense—actively seek disconfirming evidence; (10) Survivorship bias—study failures as much as successes. These aren't mutually exclusive—the best decisions use several simultaneously.</div>
+    <a href="https://fs.blog/mental-models/" target="_blank" class="ext-link">阅读英文原文 →</a>
+  </div>
+</div>
+<div class="art-card">
+  <div class="art-head" onclick="toggle(4)">
+    <div>
+      <div class="art-title">Occam's Razor: Why Simpler Explanations Are Usually Better</div>
+      <div class="art-meta">2022-03-22</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <span class="art-tag">决策框架</span>
+      <span class="art-chevron" id="chev4">▼</span>
+    </div>
+  </div>
+  <div class="art-body" id="body4">
+    <div class="art-content">Occam's Razor: among competing explanations, the simplest one is usually correct. In finance, complex models often underperform simple rules. The CAPM model with thousands of factor adjustments doesn't beat a simple value-tilt index. Elaborate macro models don't outperform 'stay invested, rebalance annually.' Why? Complexity introduces more parameters, each of which can be wrong. Simple models fail gracefully. Applied to portfolio construction: a 3-fund portfolio (US equity, international equity, bonds) has outperformed the average actively managed portfolio over any 20-year period. The simpler your investment system, the more likely you'll actually stick to it during market stress—which is where most of the return differential comes from.</div>
+    <a href="https://fs.blog/occams-razor/" target="_blank" class="ext-link">阅读英文原文 →</a>
+  </div>
+</div>
+<div class="art-card">
+  <div class="art-head" onclick="toggle(5)">
+    <div>
+      <div class="art-title">The Paradox of Choice and Decision Fatigue</div>
+      <div class="art-meta">2022-01-18</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <span class="art-tag">决策框架</span>
+      <span class="art-chevron" id="chev5">▼</span>
+    </div>
+  </div>
+  <div class="art-body" id="body5">
+    <div class="art-content">Barry Schwartz's paradox of choice: more options lead to worse decisions and less satisfaction. Decision fatigue compounds this—after making many decisions, decision quality degrades (judges grant fewer paroles as the day progresses). For investors, information overload and the proliferation of investment options creates genuine cognitive harm. Research shows investors with access to more data sources do not outperform those with less. The solution: constraints improve decisions. Define your investment universe narrowly (e.g., S&P 500 only, or companies you truly understand). Create decision rules in advance (buy when X, sell when Y) to avoid in-the-moment cognitive strain. A simple 3-ETF portfolio with annual rebalancing beats most complex systems—not because it's optimal, but because it removes decision fatigue from the equation.</div>
+    <a href="https://fs.blog/paradox-of-choice/" target="_blank" class="ext-link">阅读英文原文 →</a>
+  </div>
+</div>
+<div class="art-card">
+  <div class="art-head" onclick="toggle(6)">
+    <div>
+      <div class="art-title">Second-Order Thinking: What Smart People Use to Outperform</div>
+      <div class="art-meta">2020-10-27</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <span class="art-tag">决策框架</span>
+      <span class="art-chevron" id="chev6">▼</span>
+    </div>
+  </div>
+  <div class="art-body" id="body6">
+    <div class="art-content">First-order thinking: 'This medicine will cure the patient.' Second-order thinking: 'This medicine will cure the patient, but also create antibiotic resistance that causes bigger problems later.' Howard Marks identifies second-order thinking as the key to investment alpha. Everyone does first-order thinking (obvious outcomes are priced in). Edge comes from asking 'and then what?' Examples: (1) COVID hits → airlines collapse (first-order obvious); but airline equity still has value if they survive (second-order); but zombie airlines emerge laden with debt and can't compete (third-order). For retirement investing: DCA into index funds seems low-return (first-order); but the compounding and tax efficiency creates wealth that active strategies rarely match (second-order). Think in chains, not steps.</div>
+    <a href="https://fs.blog/second-order-thinking/" target="_blank" class="ext-link">阅读英文原文 →</a>
+  </div>
+</div>
+<div class="art-card">
+  <div class="art-head" onclick="toggle(7)">
+    <div>
+      <div class="art-title">Inversion: The Crucial Thinking Tool You're Probably Not Using</div>
+      <div class="art-meta">2020-05-19</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <span class="art-tag">决策框架</span>
+      <span class="art-chevron" id="chev7">▼</span>
+    </div>
+  </div>
+  <div class="art-body" id="body7">
+    <div class="art-content">Inversion is the practice of solving problems backwards. Instead of asking 'how do I succeed?' ask 'what would guarantee failure, and then avoid it.' Charlie Munger credits much of his success to inversion: 'All I want to know is where I'm going to die, so I'll never go there.' For investors: instead of building a bull case for a stock, first build the bear case as strongly as possible. What would have to be true for this investment to fail? If you can't identify credible failure modes, you haven't thought hard enough. Common failure modes in investing: (1) leverage at the wrong time, (2) overconcentration in correlated bets, (3) selling quality during drawdowns. Inverting your portfolio construction: what allocation would guarantee retirement failure? Then don't do that.</div>
+    <a href="https://fs.blog/inversion/" target="_blank" class="ext-link">阅读英文原文 →</a>
+  </div>
+</div>
+<div class="art-card">
+  <div class="art-head" onclick="toggle(8)">
+    <div>
+      <div class="art-title">First Principles Thinking: The Building Blocks of True Knowledge</div>
+      <div class="art-meta">2020-03-10</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <span class="art-tag">决策框架</span>
+      <span class="art-chevron" id="chev8">▼</span>
+    </div>
+  </div>
+  <div class="art-body" id="body8">
+    <div class="art-content">First principles thinking is the practice of questioning every assumption until you reach the foundational truths, then reasoning up from there. Elon Musk famously used it to reduce rocket costs by 10x by questioning whether rockets had to be expensive (they don't—the materials are cheap; the manufacturing process is what's expensive). For investors, first principles thinking means refusing to accept consensus narratives. Instead of asking 'why is this stock at 30x earnings?' ask 'what fundamental economics would justify 30x earnings?' This often reveals either genuine competitive advantage worth paying for, or wishful thinking dressed as analysis. The method: identify the problem, challenge existing assumptions, create new solutions from scratch based on verified facts.</div>
+    <a href="https://fs.blog/first-principles/" target="_blank" class="ext-link">阅读英文原文 →</a>
+  </div>
+</div><div class="theme-group-title">📂 认知偏差（5篇）</div>
+<div class="art-card">
+  <div class="art-head" onclick="toggle(9)">
+    <div>
+      <div class="art-title">Survivorship Bias: The Hidden Graveyard of Failed Strategies</div>
+      <div class="art-meta">2023-04-18</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <span class="art-tag">认知偏差</span>
+      <span class="art-chevron" id="chev9">▼</span>
+    </div>
+  </div>
+  <div class="art-body" id="body9">
+    <div class="art-content">During WWII, Abraham Wald analyzed bullet holes in returning planes and recommended reinforcing the areas WITHOUT holes—because planes with holes there didn't return. Survivorship bias: we only see the successes, not the failures, creating distorted beliefs. In finance: the investment strategies that get written about are the ones that worked. For every Warren Buffett, there are thousands of concentrated value investors who went bankrupt. Hedge fund databases exclude closed funds—studies using them overstate average hedge fund performance by 4-6% annually. The lesson: when evaluating any investment strategy, actively search for the failures. Ask: of all the investors who followed this exact strategy in the past, what fraction succeeded? What's the failure rate?</div>
+    <a href="https://fs.blog/survivorship-bias/" target="_blank" class="ext-link">阅读英文原文 →</a>
+  </div>
+</div>
+<div class="art-card">
+  <div class="art-head" onclick="toggle(10)">
+    <div>
+      <div class="art-title">Confirmation Bias: Why We Seek Information That Confirms What We Know</div>
+      <div class="art-meta">2022-09-27</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <span class="art-tag">认知偏差</span>
+      <span class="art-chevron" id="chev10">▼</span>
+    </div>
+  </div>
+  <div class="art-body" id="body10">
+    <div class="art-content">Confirmation bias is the tendency to search for, interpret, and recall information that confirms pre-existing beliefs. It's perhaps the most dangerous cognitive bias for investors because it's the one we're least aware of. Warning signs you're suffering confirmation bias: (1) You only read bullish analysis on stocks you own; (2) You dismiss negative earnings results as 'temporary'; (3) Your portfolio thesis has never changed despite changing circumstances. Defenses: actively seek the strongest bear case before buying; maintain a pre-mortem document (what would have to be true for this to fail?); read analysts who disagree with you; track your forecast accuracy to calibrate overconfidence. The best investors actively reward their own ability to change their minds.</div>
+    <a href="https://fs.blog/confirmation-bias/" target="_blank" class="ext-link">阅读英文原文 →</a>
+  </div>
+</div>
+<div class="art-card">
+  <div class="art-head" onclick="toggle(11)">
+    <div>
+      <div class="art-title">Hanlon's Razor and the Most Charitable Interpretation</div>
+      <div class="art-meta">2021-09-14</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <span class="art-tag">认知偏差</span>
+      <span class="art-chevron" id="chev11">▼</span>
+    </div>
+  </div>
+  <div class="art-body" id="body11">
+    <div class="art-content">Hanlon's Razor: 'Never attribute to malice that which is adequately explained by stupidity.' The broader principle: assume the most charitable explanation first. For corporate analysis, this is crucial: when a company makes a bad decision, it's more often incompetence, information gaps, or misaligned incentives than deliberate fraud. However, a pattern of 'mistakes' that consistently benefit insiders should update you toward malice. Applied to management assessment: one bad quarter is noise; three consecutive earnings misses with moving goalposts is a pattern. The skill is calibrating when to give management benefit of the doubt vs. when to recognize a fundamental governance problem that should disqualify the investment.</div>
+    <a href="https://fs.blog/mental-models/" target="_blank" class="ext-link">阅读英文原文 →</a>
+  </div>
+</div>
+<div class="art-card">
+  <div class="art-head" onclick="toggle(12)">
+    <div>
+      <div class="art-title">The Availability Heuristic and Why We Make Poor Predictions</div>
+      <div class="art-meta">2021-03-09</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <span class="art-tag">认知偏差</span>
+      <span class="art-chevron" id="chev12">▼</span>
+    </div>
+  </div>
+  <div class="art-body" id="body12">
+    <div class="art-content">The availability heuristic: we judge the likelihood of events by how easily examples come to mind. Recent, vivid, or emotionally charged events are overweighted. For investors: after 2020's COVID crash, investors overestimated the probability of another sudden market collapse. After 2021's tech boom, they underestimated downside risk in high-multiple stocks. The 2022 bear market for growth stocks was largely a reversion from availability-heuristic-driven overvaluation. Practical defense: maintain a written investment policy statement (IPS) specifying your allocation rules before emotions are activated. Systematic rebalancing (threshold or calendar) forces you to act counter to availability bias—buying when recent events make buying feel most dangerous.</div>
+    <a href="https://fs.blog/availability-heuristic/" target="_blank" class="ext-link">阅读英文原文 →</a>
+  </div>
+</div>
+<div class="art-card">
+  <div class="art-head" onclick="toggle(13)">
+    <div>
+      <div class="art-title">The Map is Not the Territory</div>
+      <div class="art-meta">2020-08-04</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <span class="art-tag">认知偏差</span>
+      <span class="art-chevron" id="chev13">▼</span>
+    </div>
+  </div>
+  <div class="art-body" id="body13">
+    <div class="art-content">Alfred Korzybski's insight that 'the map is not the territory' is foundational for clear thinking. Our mental models—our maps—are simplifications of reality. They're useful precisely because they leave things out, but they become dangerous when we mistake the model for reality. In investing, financial models are maps. A DCF model is a map of a company's value—useful, but not the territory (actual future cash flows). The danger: over-reliance on models creates false precision. A DCF that spits out $47.83 intrinsic value suggests precision that doesn't exist. Better approach: build models to understand the range of outcomes and the key variables that matter most, not to get a precise number. The model's value is in clarifying your thinking, not in the output.</div>
+    <a href="https://fs.blog/map-and-territory/" target="_blank" class="ext-link">阅读英文原文 →</a>
+  </div>
+</div><div class="theme-group-title">📂 概率思维（2篇）</div>
+<div class="art-card">
+  <div class="art-head" onclick="toggle(14)">
+    <div>
+      <div class="art-title">How to Think About Risk: Expected Value vs. Worst Case</div>
+      <div class="art-meta">2022-06-14</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <span class="art-tag">概率思维</span>
+      <span class="art-chevron" id="chev14">▼</span>
+    </div>
+  </div>
+  <div class="art-body" id="body14">
+    <div class="art-content">Most people conflate risk with volatility (standard deviation). But the real risk for long-term investors is permanent capital loss—the scenario where you can't recover. Expected value thinking helps with the mean outcome but misses tail risks. Nassim Taleb's insight: in domains with fat-tailed distributions (financial markets), maximizing expected value can be suicidal because rare catastrophic outcomes have outsized impact. The correct risk framework: (1) Define your maximum acceptable loss (e.g., 30% drawdown that you can emotionally withstand without selling); (2) Size positions so that your worst plausible case (not worst historical case) stays within that bound; (3) Then maximize expected return within that constraint.</div>
+    <a href="https://fs.blog/risk/" target="_blank" class="ext-link">阅读英文原文 →</a>
+  </div>
+</div>
+<div class="art-card">
+  <div class="art-head" onclick="toggle(15)">
+    <div>
+      <div class="art-title">Probabilistic Thinking: Using Multiple Scenarios in Decision Making</div>
+      <div class="art-meta">2021-05-11</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <span class="art-tag">概率思维</span>
+      <span class="art-chevron" id="chev15">▼</span>
+    </div>
+  </div>
+  <div class="art-body" id="body15">
+    <div class="art-content">Probabilistic thinking requires holding multiple outcomes in mind with explicit probability weights, rather than committing to a single predicted outcome. Superforecasters—the world's best predictors—express predictions in probabilities (e.g., 65% chance of recession) and update them as new evidence arrives. Applied to investing: instead of 'this stock will go to $100,' think '40% chance it reaches $120, 40% chance it stays range-bound, 20% chance it drops 50%.' This forces you to think about downside scenarios you'd otherwise avoid. The expected value framework then tells you whether the bet is positive EV. Kelly criterion provides position sizing based on these probabilities. Most investors ignore the 20% downside scenarios because they're psychologically uncomfortable. This is where losses come from.</div>
+    <a href="https://fs.blog/probabilistic-thinking/" target="_blank" class="ext-link">阅读英文原文 →</a>
+  </div>
+</div><div class="theme-group-title">📂 长期思维（3篇）</div>
+<div class="art-card">
+  <div class="art-head" onclick="toggle(16)">
+    <div>
+      <div class="art-title">The Courage to Be Patient: Sitting Quietly in a Room</div>
+      <div class="art-meta">2025-01-21</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <span class="art-tag">长期思维</span>
+      <span class="art-chevron" id="chev16">▼</span>
+    </div>
+  </div>
+  <div class="art-body" id="body16">
+    <div class="art-content">Pascal: 'All of humanity's problems stem from man's inability to sit quietly in a room alone.' In investing, the problem is the opposite—markets and financial media create constant noise that makes inaction feel irresponsible. The data is unambiguous: in any given year, the average equity investor underperforms the market by 1.5% due to behavioral mistakes (buying high, selling low). Over 30 years, this 1.5% gap compounds to a 35% difference in ending wealth. The investor who does nothing—no trades, no rebalancing, no emotional exits—often beats the investor who actively tries to improve their portfolio. The hardest skill in investing is recognizing when to sit quietly. Pre-commit to rules that tell you when to act, so you can default to patience the rest of the time.</div>
+    <a href="https://fs.blog/patience/" target="_blank" class="ext-link">阅读英文原文 →</a>
+  </div>
+</div>
+<div class="art-card">
+  <div class="art-head" onclick="toggle(17)">
+    <div>
+      <div class="art-title">Long-Term Thinking and the Marshmallow Test for Investors</div>
+      <div class="art-meta">2023-02-07</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <span class="art-tag">长期思维</span>
+      <span class="art-chevron" id="chev17">▼</span>
+    </div>
+  </div>
+  <div class="art-body" id="body17">
+    <div class="art-content">Walter Mischel's marshmallow test showed that children who could delay gratification had better life outcomes across multiple dimensions. The same delayed gratification muscle is exactly what separates successful long-term investors from the average. The average investor holding period is less than 1 year. Buffett's average holding period is forever. The empirical evidence: investors who trade most frequently underperform buy-and-hold by 3-4% annually after costs and tax drag. Long-term thinking reframes volatility: instead of 'the market is down 20%,' the long-term investor sees 'I can buy future cash flows 20% cheaper today.' This reframe is intellectually easy but emotionally extremely difficult—which is why so few do it consistently.</div>
+    <a href="https://fs.blog/long-term-thinking/" target="_blank" class="ext-link">阅读英文原文 →</a>
+  </div>
+</div>
+<div class="art-card">
+  <div class="art-head" onclick="toggle(18)">
+    <div>
+      <div class="art-title">Compounding: The Eighth Wonder of the World</div>
+      <div class="art-meta">2021-07-20</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <span class="art-tag">长期思维</span>
+      <span class="art-chevron" id="chev18">▼</span>
+    </div>
+  </div>
+  <div class="art-body" id="body18">
+    <div class="art-content">The power of compounding is mathematically simple but psychologically difficult to internalize because humans are built for short-term thinking. $100 at 10% annual return becomes $259 in 10 years, $673 in 20 years, $1,745 in 30 years. The curve is exponential—most of the value accumulates in the last decade. Practical implications: (1) Start early (each decade delay roughly halves the ending wealth); (2) Protect against permanent capital loss (a 50% drawdown requires 100% gain to recover—time lost, not just money); (3) Minimize costs and taxes (1% annual fee costs 26% of total wealth over 30 years); (4) Don't interrupt compounding (selling during downturns locks in losses and misses recoveries). Buffett made 99% of his wealth after age 65—pure compounding.</div>
+    <a href="https://fs.blog/compounding/" target="_blank" class="ext-link">阅读英文原文 →</a>
+  </div>
+</div><div class="theme-group-title">📂 投资哲学（3篇）</div>
+<div class="art-card">
+  <div class="art-head" onclick="toggle(19)">
+    <div>
+      <div class="art-title">The Power of Incentives: Why People Act the Way They Do</div>
+      <div class="art-meta">2024-01-16</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <span class="art-tag">投资哲学</span>
+      <span class="art-chevron" id="chev19">▼</span>
+    </div>
+  </div>
+  <div class="art-body" id="body19">
+    <div class="art-content">Charlie Munger: 'Show me the incentive and I'll show you the outcome.' Understanding incentive structures is perhaps the most powerful analytical tool in investing. Applied to corporate analysis: (1) CEO compensation structure predicts decision-making—stock options incentivize risk-taking and earnings management; RSUs incentivize long-term thinking; (2) Analyst incentives—sell-side analysts' employers are investment banks; their buy ratings are structurally biased upward; (3) Your own incentives—if you've already told someone about a stock, you're incentivized to defend it against disconfirming evidence (sunk cost fallacy meets ego). Practical use: for every opinion you read, ask 'What incentive does this person have to tell me this?' including your own incentive to believe it.</div>
+    <a href="https://fs.blog/incentives/" target="_blank" class="ext-link">阅读英文原文 →</a>
+  </div>
+</div>
+<div class="art-card">
+  <div class="art-head" onclick="toggle(20)">
+    <div>
+      <div class="art-title">The Importance of Knowing What You Don't Know</div>
+      <div class="art-meta">2023-06-29</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <span class="art-tag">投资哲学</span>
+      <span class="art-chevron" id="chev20">▼</span>
+    </div>
+  </div>
+  <div class="art-body" id="body20">
+    <div class="art-content">Charlie Munger: 'I have nothing to add.' The willingness to say you don't know, or to pass on an opportunity because it's outside your circle of competence, is a profound intellectual skill. In investing, the activity trap is dangerous: doing something (trading, analyzing, rotating) feels productive even when inaction would deliver better outcomes. Phil Fisher's advice: most investors would be better off if they could only make 20 investment decisions in a lifetime—the constraint would force quality. Knowing what you don't know applies to macro too: nobody consistently predicts interest rates, recessions, or geopolitical events. Portfolios built to survive scenarios you can't predict outperform portfolios built around predictions.</div>
+    <a href="https://fs.blog/the-work-required-to-have-an-opinion/" target="_blank" class="ext-link">阅读英文原文 →</a>
+  </div>
+</div>
+<div class="art-card">
+  <div class="art-head" onclick="toggle(21)">
+    <div>
+      <div class="art-title">Circle of Competence: How to Build and Use Your Moat of Knowledge</div>
+      <div class="art-meta">2021-01-19</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <span class="art-tag">投资哲学</span>
+      <span class="art-chevron" id="chev21">▼</span>
+    </div>
+  </div>
+  <div class="art-body" id="body21">
+    <div class="art-content">Warren Buffett and Charlie Munger's concept of Circle of Competence: you should invest only in companies and industries you genuinely understand. The circle itself matters less than knowing its boundaries. Most investment mistakes come from operating outside the circle while believing you're inside. For an internet professional: your circle likely includes consumer internet, SaaS, digital advertising, fintech, and e-commerce. You understand unit economics, network effects, CAC/LTV dynamics, and platform business models better than most. Stay there. Venture outside only with extensive research or via diversified ETFs. The discipline to say 'I don't understand this well enough to invest' is one of the most valuable skills in investing.</div>
+    <a href="https://fs.blog/circle-of-competence/" target="_blank" class="ext-link">阅读英文原文 →</a>
+  </div>
+</div><div class="theme-group-title">📂 认知与学习（2篇）</div>
+<div class="art-card">
+  <div class="art-head" onclick="toggle(22)">
+    <div>
+      <div class="art-title">Learning from Failure: The Post-Mortem as a Growth Tool</div>
+      <div class="art-meta">2025-03-05</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <span class="art-tag">认知与学习</span>
+      <span class="art-chevron" id="chev22">▼</span>
+    </div>
+  </div>
+  <div class="art-body" id="body22">
+    <div class="art-content">The most valuable investment lessons come from detailed post-mortems of failures. Most investors avoid this exercise because it's psychologically painful. But without a rigorous failure analysis, you repeat mistakes. The Farnam Street post-mortem process: (1) Document the original thesis and what you expected; (2) Record what actually happened; (3) Identify the first moment you had evidence the thesis was wrong—did you act on it? (4) Classify the failure: bad luck (thesis was right, execution unlucky) vs. bad process (flawed analysis); (5) Extract a rule for next time. Buffett's approach: 'I made a mistake 30 years ago and I'd like to tell you about it—I should have bought more of Geico.' The willingness to analyze and publicize failures is what separates great investors from good ones.</div>
+    <a href="https://fs.blog/post-mortem/" target="_blank" class="ext-link">阅读英文原文 →</a>
+  </div>
+</div>
+<div class="art-card">
+  <div class="art-head" onclick="toggle(23)">
+    <div>
+      <div class="art-title">The Feynman Technique: The Best Way to Learn Anything</div>
+      <div class="art-meta">2020-06-15</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <span class="art-tag">认知与学习</span>
+      <span class="art-chevron" id="chev23">▼</span>
+    </div>
+  </div>
+  <div class="art-body" id="body23">
+    <div class="art-content">Richard Feynman's learning technique: (1) Choose a concept; (2) Teach it to a 12-year-old; (3) Identify the gaps in your explanation; (4) Return to the source, simplify. The crucial insight: the ability to explain simply is a proxy for genuine understanding. Many investors use complex jargon (EV/EBITDA, WACC, multiple expansion) without truly understanding what drives these metrics. Test yourself: can you explain discounted cash flow to someone with no finance background? If not, your own understanding is shaky. Applied to investing: before buying any stock, write a one-page investment thesis in plain language. If you can't write it clearly, you don't understand the investment well enough to hold it through volatility.</div>
+    <a href="https://fs.blog/feynman-technique/" target="_blank" class="ext-link">阅读英文原文 →</a>
+  </div>
+</div></div>
+  </div>
+
+</div>
+<script>
+function toggle(id) {
+  var b = document.getElementById('body'+id);
+  var c = document.getElementById('chev'+id);
+  if (b.style.display === 'block') {
+    b.style.display = 'none';
+    c.style.transform = '';
+  } else {
+    b.style.display = 'block';
+    c.style.transform = 'rotate(180deg)';
+  }
+}
+</script>
+</body>
+</html>

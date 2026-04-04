@@ -7,6 +7,8 @@ from telegram.ext import Application, CommandHandler, CallbackQueryHandler
 from app.core.config import settings
 from app.core.database import engine, Base, AsyncSessionLocal
 from app.api.routes import clubs, players, admin
+from app.models import league, club, player, transfer, admin_user  # noqa: F401 确保所有模型注册到 Base.metadata
+from app.api.routes.admin import public_router as admin_public_router
 
 _bot_app: Application | None = None
 
@@ -98,6 +100,7 @@ app.add_middleware(
 app.include_router(clubs.router,  prefix="/api/v1")
 app.include_router(players.router, prefix="/api/v1")
 app.include_router(admin.router,  prefix="/api/v1")
+app.include_router(admin_public_router, prefix="/api/v1")
 
 
 @app.post("/webhooks/telegram")
