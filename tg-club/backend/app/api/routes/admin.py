@@ -24,6 +24,8 @@ router = APIRouter(
     dependencies=[Depends(verify_admin_token)],
 )
 
+public_router = APIRouter(prefix="/admin", tags=["admin"])
+
 
 # ══════════════════════════════════════════════════════════════════
 # 登录（不需要鉴权，覆盖 router 级别的依赖）
@@ -34,7 +36,7 @@ class LoginBody(BaseModel):
     password: str
 
 
-@router.post("/auth/login", dependencies=[])
+@public_router.post("/auth/login")
 async def admin_login(body: LoginBody, db: AsyncSession = Depends(get_db)):
     result = await db.execute(select(AdminUser).where(AdminUser.username == body.username))
     user = result.scalar_one_or_none()

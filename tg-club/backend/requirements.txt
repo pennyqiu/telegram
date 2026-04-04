@@ -10,3 +10,5 @@ python-jose[cryptography]==3.3.0
 passlib[bcrypt]==1.7.4
 boto3==1.35.0
 Pillow==10.4.0
+python-telegram-bot==21.9
+bcrypt==3.2.2
