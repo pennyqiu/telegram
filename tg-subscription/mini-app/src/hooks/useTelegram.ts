@@ -6,6 +6,8 @@ export function useTelegram() {
   useEffect(() => {
     tg?.ready();
     tg?.expand();
+    tg?.setBackgroundColor?.("#ffffff");
+    tg?.setHeaderColor?.("#ffffff");
   }, []);
 
   const openInvoice = (link: string, onPaid: () => void) => {

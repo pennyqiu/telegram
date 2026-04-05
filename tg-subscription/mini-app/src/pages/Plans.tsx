@@ -247,7 +247,15 @@ export default function Plans() {
   const subBg = isDark ? "#1e3a5f" : "#e8f4fd";
 
   return (
-    <div style={{ padding: 16 }}>
+    <div
+      style={{
+        minHeight: "100vh",
+        boxSizing: "border-box",
+        background: "#ffffff",
+        color: "#1a1a1a",
+        padding: 16,
+      }}
+    >
       <h2 style={{ marginBottom: 16 }}>选择订阅套餐</h2>
 
       {subscription && (
@@ -333,3 +341,4 @@ export default function Plans() {
     </div>
   );
 }
+
