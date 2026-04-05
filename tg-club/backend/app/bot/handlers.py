@@ -378,7 +378,7 @@ async def _send_player_detail(update: Update, context, player_id: int):
         f"{'─' * 24}",
         f"位置：{player.position or '—'}",
         f"国籍：{player.nationality or '—'}",
-        f"状态：{{'active':'在役','retired':'已退役','free_agent':'自由球员','loan':'租借中'}.get(str(player.status), str(player.status))}",
+        "状态：" + {'active':'在役','retired':'已退役','free_agent':'自由球员','loan':'租借中'}.get(str(player.status), str(player.status)),
         f"效力：{club_name or '自由球员' if str(player.status) != 'retired' else '已退役'}",
     ]
 
@@ -387,7 +387,7 @@ async def _send_player_detail(update: Update, context, player_id: int):
             f"出生：{player.birth_date or '—'}",
             f"身高：{player.height_cm or '—'} cm",
             f"体重：{player.weight_kg or '—'} kg",
-            f"惯用脚：{{'left':'左脚','right':'右脚','both':'双脚'}.get(player.preferred_foot or '', '—')}",
+            "惯用脚：" + {'left':'左脚','right':'右脚','both':'双脚'}.get(player.preferred_foot or '', '—'),
         ]
 
     if is_admin:

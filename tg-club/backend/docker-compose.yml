@@ -12,8 +12,8 @@ services:
     image: postgres:16-alpine
     environment:
       POSTGRES_DB: tg_club
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: pass
+      POSTGRES_USER: clubuser
+      POSTGRES_PASSWORD: clubpass123
     volumes: [club_pgdata:/var/lib/postgresql/data]
     ports: ["5433:5432"]
 
