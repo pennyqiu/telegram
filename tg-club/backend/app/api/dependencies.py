@@ -16,17 +16,21 @@ from app.services.subscription_client import get_user_tier
 
 # ── Mini App 用户认证 ──────────────────────────────────────────────
 
-async def get_tg_user(x_init_data: str = Header(...)) -> dict:
-    """验证 Mini App initData，返回 Telegram 用户信息"""
+async def get_tg_user(x_init_data: str = Header(default="")) -> dict:
+    """验证 Mini App initData，返回 Telegram 用户信息。
+    initData 为空时返回游客用户（id=0），享有 free tier 权限。
+    """
+    if not x_init_data:
+        return {"id": 0, "first_name": "Guest"}
     params = dict(parse_qsl(x_init_data, keep_blank_values=True))
     received_hash = params.pop("hash", "")
     data_check_string = "\n".join(f"{k}={v}" for k, v in sorted(params.items()))
-    tg_bot_token = settings.subscription_service_url  # 实际应单独配置
-    secret_key = hmac.new(b"WebAppData", tg_bot_token.encode(), hashlib.sha256).digest()
+    bot_token = settings.club_bot_token
+    secret_key = hmac.new(b"WebAppData", bot_token.encode(), hashlib.sha256).digest()
     expected = hmac.new(secret_key, data_check_string.encode(), hashlib.sha256).hexdigest()
     if not hmac.compare_digest(expected, received_hash):
         raise HTTPException(status_code=401, detail="Invalid initData")
-    return json.loads(params["user"])
+    return json.loads(params.get("user", "{}") or "{}")
 
 
 async def get_tier(tg_user: dict = Depends(get_tg_user)) -> str:

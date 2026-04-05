@@ -1,6 +1,15 @@
 const tg = window.Telegram?.WebApp;
 const BASE = import.meta.env.VITE_CLUB_API_URL ?? "";
 
+function toQuery(params: Record<string, unknown>): string {
+  const p = new URLSearchParams();
+  for (const [k, v] of Object.entries(params)) {
+    if (v !== undefined && v !== null && v !== "") p.append(k, String(v));
+  }
+  const s = p.toString();
+  return s ? `?${s}` : "";
+}
+
 async function req<T>(path: string, opts: RequestInit = {}): Promise<T> {
   const res = await fetch(`${BASE}/api/v1${path}`, {
     ...opts,
@@ -13,12 +22,12 @@ async function req<T>(path: string, opts: RequestInit = {}): Promise<T> {
 
 export const clubApi = {
   listClubs: (params?: { league_id?: number; search?: string; page?: number }) =>
-    req<{ data: Club[] }>(`/clubs?${new URLSearchParams(params as any)}`),
+    req<{ data: Club[] }>(`/clubs${toQuery(params ?? {})}`),
 
   getClub: (id: number) => req<{ data: Club }>(`/clubs/${id}`),
 
   listPlayers: (params?: { position?: string; club_id?: number; status?: string; search?: string }) =>
-    req<{ data: Player[] }>(`/players?${new URLSearchParams(params as any)}`),
+    req<{ data: Player[] }>(`/players${toQuery(params ?? {})}`),
 
   getPlayer: (id: number) => req<{ data: Player }>(`/players/${id}`),
 
