@@ -1,0 +1,3626 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>美股系统学习路径 · 24小时完整版</title>
+<style>
+  :root {
+    --primary:#1a56db;--primary-dark:#1e429f;--primary-light:#ebf5ff;
+    --success:#057a55;--success-light:#def7ec;
+    --warning:#c27803;--warning-light:#fdf6b2;
+    --danger:#c81e1e;--danger-light:#fde8e8;
+    --purple:#7e3af2;--purple-light:#edebfe;
+    --gray-50:#f9fafb;--gray-100:#f3f4f6;--gray-200:#e5e7eb;
+    --gray-300:#d1d5db;--gray-400:#9ca3af;--gray-500:#6b7280;
+    --gray-600:#4b5563;--gray-700:#374151;--gray-800:#1f2937;--gray-900:#111827;
+    --sidebar-width:300px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hiragino Sans GB',sans-serif;background:var(--gray-50);color:var(--gray-800);line-height:1.7;}
+  .app{display:flex;min-height:100vh;}
+  /* SIDEBAR */
+  .sidebar{width:var(--sidebar-width);background:#fff;border-right:1px solid var(--gray-200);position:fixed;top:0;left:0;bottom:0;overflow-y:auto;z-index:100;display:flex;flex-direction:column;}
+  .sidebar-header{padding:18px 16px 14px;background:linear-gradient(135deg,#1a56db 0%,#1e429f 100%);color:#fff;}
+  .sidebar-header h1{font-size:14px;font-weight:800;line-height:1.4;}
+  .sidebar-header p{font-size:11px;opacity:.85;margin-top:3px;}
+  .progress-bar-wrap{padding:10px 16px;background:#fff;border-bottom:1px solid var(--gray-100);}
+  .progress-label{display:flex;justify-content:space-between;font-size:11px;color:var(--gray-500);margin-bottom:5px;}
+  .progress-track{height:5px;background:var(--gray-200);border-radius:99px;overflow:hidden;}
+  .progress-fill{height:100%;background:linear-gradient(90deg,#1a56db,#06b6d4);border-radius:99px;transition:width .4s ease;}
+  .phase-group{padding:6px 0;}
+  .phase-label{padding:5px 16px 3px;font-size:10px;font-weight:700;letter-spacing:.05em;color:var(--gray-400);text-transform:uppercase;}
+  .nav-item{display:flex;align-items:center;gap:9px;padding:8px 14px;cursor:pointer;border-left:3px solid transparent;transition:all .15s;font-size:13px;color:var(--gray-600);}
+  .nav-item:hover{background:var(--gray-50);color:var(--gray-900);}
+  .nav-item.active{background:var(--primary-light);border-left-color:var(--primary);color:var(--primary);font-weight:600;}
+  .nav-item.completed{color:var(--gray-500);}
+  .nav-item.completed .nav-icon{background:var(--success);color:#fff;}
+  .nav-icon{width:22px;height:22px;border-radius:50%;background:var(--gray-200);color:var(--gray-500);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;transition:all .2s;}
+  .nav-item.active .nav-icon{background:var(--primary);color:#fff;}
+  .nav-title{flex:1;line-height:1.3;}
+  .nav-tag{font-size:10px;padding:1px 5px;border-radius:99px;background:var(--gray-100);color:var(--gray-500);font-weight:600;flex-shrink:0;}
+  .nav-item.active .nav-tag{background:var(--primary-light);color:var(--primary);}
+  /* MAIN */
+  .main{margin-left:var(--sidebar-width);flex:1;min-height:100vh;display:flex;flex-direction:column;}
+  .topbar{background:#fff;border-bottom:1px solid var(--gray-200);padding:10px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
+  .breadcrumb{font-size:12px;color:var(--gray-500);}
+  .breadcrumb span{color:var(--gray-800);font-weight:600;}
+  .nav-btns{display:flex;gap:8px;}
+  .btn{padding:6px 16px;border-radius:7px;border:none;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:5px;}
+  .btn-outline{background:#fff;border:1.5px solid var(--gray-300);color:var(--gray-700);}
+  .btn-outline:hover{border-color:var(--primary);color:var(--primary);background:var(--primary-light);}
+  .btn-outline:disabled{opacity:.4;cursor:not-allowed;}
+  .btn-primary{background:var(--primary);color:#fff;}
+  .btn-primary:hover{background:var(--primary-dark);}
+  .btn-success{background:var(--success);color:#fff;}
+  /* CONTENT */
+  .content-area{padding:32px 36px 56px;max-width:900px;}
+  .lesson-header{margin-bottom:28px;}
+  .lesson-phase-badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:99px;font-size:11px;font-weight:700;margin-bottom:10px;}
+  .badge-blue{background:var(--primary-light);color:var(--primary);}
+  .badge-green{background:var(--success-light);color:var(--success);}
+  .badge-yellow{background:var(--warning-light);color:var(--warning);}
+  .badge-purple{background:var(--purple-light);color:var(--purple);}
+  .badge-red{background:var(--danger-light);color:var(--danger);}
+  .lesson-completed-badge{display:none;align-items:center;gap:7px;padding:8px 16px;border-radius:99px;background:var(--success-light);color:var(--success);font-size:13px;font-weight:700;margin-bottom:16px;}
+  .lesson-completed-badge.show{display:flex;}
+  .lesson-title{font-size:26px;font-weight:900;color:var(--gray-900);line-height:1.3;margin-bottom:8px;}
+  .lesson-meta{display:flex;gap:18px;font-size:12px;color:var(--gray-500);}
+  .lesson-body{font-size:15px;color:var(--gray-700);}
+  .lesson-body h2{font-size:19px;font-weight:800;color:var(--gray-900);margin:28px 0 12px;padding-bottom:7px;border-bottom:2px solid var(--gray-100);display:flex;align-items:center;gap:9px;}
+  .lesson-body h2::before{content:'';display:block;width:4px;height:19px;border-radius:2px;background:var(--primary);}
+  .lesson-body h3{font-size:15px;font-weight:700;color:var(--gray-800);margin:20px 0 8px;}
+  .lesson-body p{margin-bottom:12px;}
+  .info-box{border-radius:9px;padding:14px 18px;margin:18px 0;border-left:4px solid;font-size:14px;}
+  .info-box.blue{background:var(--primary-light);border-color:var(--primary);color:#1e429f;}
+  .info-box.green{background:var(--success-light);border-color:var(--success);color:#03543f;}
+  .info-box.yellow{background:var(--warning-light);border-color:var(--warning);color:#92400e;}
+  .info-box.red{background:var(--danger-light);border-color:var(--danger);color:#9b1c1c;}
+  .info-box.purple{background:var(--purple-light);border-color:var(--purple);color:#4a1d96;}
+  .info-box-title{font-weight:700;margin-bottom:5px;font-size:12px;letter-spacing:.02em;}
+  .table-wrap{overflow-x:auto;margin:18px 0;border-radius:9px;border:1px solid var(--gray-200);}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;}
+  thead{background:var(--gray-50);}
+  th{padding:10px 13px;text-align:left;font-weight:700;color:var(--gray-700);font-size:12px;}
+  td{padding:10px 13px;border-top:1px solid var(--gray-100);color:var(--gray-600);}
+  tr:hover td{background:var(--gray-50);}
+  .code-block{background:var(--gray-900);color:#e2e8f0;border-radius:9px;padding:16px 18px;font-family:'Fira Code','Cascadia Code','Courier New',monospace;font-size:12.5px;line-height:1.75;overflow-x:auto;margin:14px 0;white-space:pre;}
+  .code-block .cm{color:#94a3b8;}
+  .code-block .hl{color:#fbbf24;font-weight:600;}
+  .code-block .gd{color:#4ade80;}
+  .code-block .bd{color:#f87171;}
+  .formula-box{background:linear-gradient(135deg,#f0f9ff,#e0f2fe);border:1px solid #bae6fd;border-radius:9px;padding:14px 18px;margin:14px 0;text-align:center;}
+  .formula{font-size:16px;font-weight:700;color:var(--primary-dark);font-family:'Georgia',serif;}
+  .formula-desc{font-size:12px;color:var(--gray-500);margin-top:5px;}
+  .cards-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin:18px 0;}
+  .card{background:#fff;border:1px solid var(--gray-200);border-radius:9px;padding:14px;transition:box-shadow .2s;}
+  .card:hover{box-shadow:0 4px 12px rgba(0,0,0,.08);}
+  .card-icon{font-size:22px;margin-bottom:7px;}
+  .card-title{font-size:13px;font-weight:700;color:var(--gray-800);margin-bottom:3px;}
+  .card-desc{font-size:12px;color:var(--gray-500);line-height:1.5;}
+  .resource-list{list-style:none;margin:10px 0;}
+  .resource-list li{display:flex;align-items:flex-start;gap:9px;padding:9px 0;border-bottom:1px solid var(--gray-100);font-size:13px;}
+  .resource-list li:last-child{border-bottom:none;}
+  .resource-badge{flex-shrink:0;padding:2px 7px;border-radius:99px;font-size:10px;font-weight:700;margin-top:2px;}
+  .rb-free{background:var(--success-light);color:var(--success);}
+  .rb-paid{background:var(--warning-light);color:var(--warning);}
+  .rb-book{background:#ede9fe;color:#5b21b6;}
+  .rb-video{background:#fce7f3;color:#9d174d;}
+  .rb-podcast{background:#fff3e0;color:#e65100;}
+  .checklist{list-style:none;margin:12px 0;}
+  .checklist li{display:flex;align-items:flex-start;gap:9px;padding:7px 0;font-size:13.5px;cursor:pointer;}
+  .check-box{width:19px;height:19px;border-radius:4px;border:2px solid var(--gray-300);flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:2px;transition:all .2s;}
+  .checklist li.checked .check-box{background:var(--success);border-color:var(--success);color:#fff;}
+  .checklist li.checked .check-text{text-decoration:line-through;color:var(--gray-400);}
+  .check-text{line-height:1.5;}
+  .timeline{margin:18px 0;}
+  .timeline-item{display:flex;gap:14px;margin-bottom:20px;}
+  .timeline-left{display:flex;flex-direction:column;align-items:center;}
+  .timeline-dot{width:34px;height:34px;border-radius:50%;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0;}
+  .timeline-line{width:2px;background:var(--gray-200);flex:1;margin-top:5px;}
+  .timeline-body{flex:1;padding-bottom:6px;}
+  .timeline-title{font-weight:700;font-size:14px;color:var(--gray-900);margin-bottom:5px;}
+  .timeline-content{font-size:13px;color:var(--gray-600);}
+  .stat-row{display:flex;gap:14px;margin:18px 0;flex-wrap:wrap;}
+  .stat-card{flex:1;min-width:120px;background:linear-gradient(135deg,var(--primary-light),#dbeafe);border:1px solid #bfdbfe;border-radius:9px;padding:12px;text-align:center;}
+  .stat-number{font-size:24px;font-weight:900;color:var(--primary);line-height:1;}
+  .stat-label{font-size:11px;color:var(--gray-600);margin-top:3px;}
+  .done-bar{margin-top:40px;padding-top:24px;border-top:2px solid var(--gray-100);display:flex;align-items:center;justify-content:space-between;}
+  .done-bar-left{font-size:13px;color:var(--gray-500);}
+  /* Welcome */
+  .welcome-screen{padding:48px 36px;}
+  .welcome-hero{background:linear-gradient(135deg,#1a56db 0%,#0e9f6e 100%);border-radius:18px;padding:36px;color:#fff;margin-bottom:30px;}
+  .welcome-hero h1{font-size:28px;font-weight:900;line-height:1.3;margin-bottom:10px;}
+  .welcome-hero p{font-size:14px;opacity:.9;line-height:1.7;}
+  .welcome-stats{display:flex;gap:18px;margin-top:20px;flex-wrap:wrap;}
+  .welcome-stat-num{font-size:26px;font-weight:900;}
+  .welcome-stat-label{font-size:12px;opacity:.8;}
+  .welcome-phases{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;}
+  .phase-card{background:#fff;border:1px solid var(--gray-200);border-radius:12px;padding:18px;cursor:pointer;transition:all .2s;}
+  .phase-card:hover{box-shadow:0 8px 24px rgba(0,0,0,.1);transform:translateY(-2px);}
+  .phase-card-num{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:16px;margin-bottom:10px;}
+  .pn-1{background:var(--primary-light);color:var(--primary);}
+  .pn-2{background:var(--success-light);color:var(--success);}
+  .pn-3{background:var(--warning-light);color:var(--warning);}
+  .pn-4{background:var(--danger-light);color:var(--danger);}
+  .pn-5{background:var(--purple-light);color:var(--purple);}
+  .phase-card h3{font-size:14px;font-weight:700;margin-bottom:5px;color:var(--gray-900);}
+  .phase-card p{font-size:12px;color:var(--gray-500);line-height:1.5;}
+  .phase-card-tag{margin-top:10px;display:flex;gap:5px;flex-wrap:wrap;}
+  .ptag{font-size:10px;padding:2px 7px;border-radius:99px;background:var(--gray-100);color:var(--gray-600);font-weight:600;}
+  /* big table for retirement */
+  .ret-table td,.ret-table th{font-size:12px;padding:7px 10px;}
+  .ret-table .yr-key{background:#eff6ff;font-weight:700;color:var(--primary-dark);}
+  .ret-table .yr-mid{background:#f0fdf4;}
+  .ret-table .yr-late{background:#fffbeb;}
+  /* sensitivity table */
+  .sens-table{border-collapse:collapse;font-size:12px;}
+  .sens-table th,.sens-table td{border:1px solid var(--gray-300);padding:7px 10px;text-align:center;}
+  .sens-table th{background:var(--gray-100);font-weight:700;}
+  .sens-hl{background:#dcfce7;font-weight:700;color:var(--success);}
+  .sens-lo{background:#fef2f2;color:var(--danger);}
+  ::-webkit-scrollbar{width:5px;}
+  ::-webkit-scrollbar-thumb{background:var(--gray-300);border-radius:99px;}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <h1>📈 美股系统学习 · 完整版</h1>
+    <p>25节课 · 约30小时 · 从入门到养老配置</p>
+  </div>
+  <div class="progress-bar-wrap">
+    <div class="progress-label"><span>学习进度</span><span id="progressText">0 / 25 课</span></div>
+    <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+  </div>
+  <div id="navMenu"></div>
+</aside>
+<main class="main">
+  <div class="topbar">
+    <div class="breadcrumb" id="breadcrumb">美股学习路径 › <span>开始学习</span></div>
+    <div class="nav-btns">
+      <button class="btn btn-outline" id="btnPrev" onclick="navigate(-1)" disabled>← 上一节</button>
+      <button class="btn btn-primary" id="btnNext" onclick="navigate(1)">下一节 →</button>
+    </div>
+  </div>
+  <div id="contentArea"></div>
+</main>
+</div>
+<script>
+const curriculum=[
+  {id:'welcome',phase:0,phaseLabel:'导读',tag:'导读',title:'欢迎 · 学习指南',duration:'10 min',type:'welcome'},
+  {id:'market-structure',phase:1,phaseLabel:'第一阶段：市场基础',tag:'第1课',title:'美股市场结构全览',duration:'60 min'},
+  {id:'macro-basics',phase:1,tag:'第2课',title:'宏观经济框架',duration:'70 min'},
+  {id:'fed-deep-dive',phase:1,tag:'第3课',title:'美联储深度解析',duration:'90 min'},
+  {id:'financial-statements',phase:1,tag:'第4课',title:'财务报表精读',duration:'70 min'},
+  {id:'valuation-metrics',phase:2,phaseLabel:'第二阶段：估值体系',tag:'第5课',title:'估值指标体系',duration:'60 min'},
+  {id:'coca-cola-valuation',phase:2,tag:'第6课',title:'传统行业估值：可口可乐DCF实战',duration:'90 min'},
+  {id:'google-valuation',phase:2,tag:'第7课',title:'互联网行业估值：谷歌实战',duration:'90 min'},
+  {id:'company-analysis',phase:2,tag:'第8课',title:'公司基本面分析框架',duration:'60 min'},
+  {id:'msft-valuation',phase:2,tag:'第9课',title:'微软估值：云+AI双引擎DCF实战',duration:'90 min'},
+  {id:'nvda-valuation',phase:2,tag:'第10课',title:'英伟达估值：AI超级周期如何定价',duration:'90 min'},
+  {id:'meta-valuation',phase:2,tag:'第11课',title:'Meta估值：广告现金流+元宇宙期权',duration:'80 min'},
+  {id:'amzn-valuation',phase:2,tag:'第12课',title:'亚马逊估值：AWS驱动的SOTP拆分',duration:'90 min'},
+  {id:'etf-history',phase:3,phaseLabel:'第三阶段：投资工具',tag:'第13课',title:'ETF历史与被动投资革命',duration:'70 min'},
+  {id:'etf-construction',phase:3,tag:'第14课',title:'ETF组合构建实战',duration:'60 min'},
+  {id:'risk-framework',phase:4,phaseLabel:'第四阶段：风险管理',tag:'第15课',title:'风险管理完整框架',duration:'70 min'},
+  {id:'stress-testing',phase:4,tag:'第16课',title:'压力测试与黑天鹅应对',duration:'60 min'},
+  {id:'retirement-42-50',phase:5,phaseLabel:'第五阶段：养老规划',tag:'第17课',title:'养老规划 Phase 1：42-50岁',duration:'80 min'},
+  {id:'retirement-50-60',phase:5,tag:'第18课',title:'养老规划 Phase 2：50-60岁',duration:'70 min'},
+  {id:'withdrawal-strategy',phase:5,tag:'第19课',title:'退休后提取策略',duration:'60 min'},
+  {id:'influencers',phase:6,phaseLabel:'第六阶段：持续成长',tag:'第20课',title:'全球顶级领路人',duration:'40 min'},
+  {id:'tools-platforms',phase:6,tag:'第21课',title:'必备工具与数据平台',duration:'40 min'},
+  {id:'value-wisdom',phase:6,tag:'第22课',title:'价值投资精华：顶级博客核心思想',duration:'90 min'},
+  {id:'action-plan',phase:6,tag:'第23课',title:'90天行动计划',duration:'30 min'},
+  {id:'damodaran-analysis',phase:6,tag:'第24课',title:'Damodaran估值精华：2020-2025全面解读',duration:'120 min'},
+  {id:'farnam-mental-models',phase:6,tag:'第25课',title:'Farnam Street心智模型：2020-2025精华',duration:'90 min'},
+];
+
+let currentIndex=0;
+let completed=new Set(JSON.parse(localStorage.getItem('usstock_done_v2')||'[]'));
+function saveCompleted(){localStorage.setItem('usstock_done_v2',JSON.stringify([...completed]));}
+
+function renderNav(){
+  const menu=document.getElementById('navMenu');
+  let html='';let lastPhase=-1;
+  const phaseIcons=['','📚','📊','📈','🛡️','🎯','🌐'];
+  curriculum.forEach((item,idx)=>{
+    if(item.phase!==lastPhase){
+      if(lastPhase>=0)html+='</div>';
+      html+=`<div class="phase-group">`;
+      if(item.phase>0&&item.phaseLabel){html+=`<div class="phase-label">${phaseIcons[item.phase]||''} ${item.phaseLabel||''}</div>`;}
+      lastPhase=item.phase;
+    }
+    const isActive=idx===currentIndex;
+    const isDone=completed.has(item.id);
+    html+=`<div class="nav-item ${isActive?'active':''} ${isDone&&!isActive?'completed':''}" onclick="goTo(${idx})">
+      <div class="nav-icon">${isDone?'✓':(item.phase===0?'🏠':item.tag.replace('第','').replace('课',''))}</div>
+      <span class="nav-title">${item.title}</span>
+      <span class="nav-tag">${item.duration}</span>
+    </div>`;
+  });
+  html+='</div>';
+  menu.innerHTML=html;
+  const total=curriculum.length-1;
+  const done=completed.size;
+  document.getElementById('progressText').textContent=`${done} / ${total} 课`;
+  document.getElementById('progressFill').style.width=`${(done/total)*100}%`;
+}
+function goTo(idx){currentIndex=idx;renderNav();renderContent();window.scrollTo(0,0);}
+function navigate(dir){const n=currentIndex+dir;if(n>=0&&n<curriculum.length)goTo(n);}
+
+function renderContent(){
+  const item=curriculum[currentIndex];
+  const area=document.getElementById('contentArea');
+  const isFirst=currentIndex===0;
+  const isLast=currentIndex===curriculum.length-1;
+  document.getElementById('btnPrev').disabled=isFirst;
+  document.getElementById('btnNext').innerHTML=isLast?'完成课程 🎉':'下一节 →';
+  document.getElementById('breadcrumb').innerHTML=`美股学习路径 › <span>${item.title}</span>`;
+  if(item.type==='welcome'){area.innerHTML=getWelcome();initChecklists();return;}
+  const isDone=completed.has(item.id);
+  const badgeMap={1:'badge-blue',2:'badge-green',3:'badge-purple',4:'badge-red',5:'badge-yellow',6:'badge-blue'};
+  const phaseNames={1:'📚 第一阶段：市场基础',2:'📊 第二阶段：估值体系',3:'📈 第三阶段：投资工具',4:'🛡️ 第四阶段：风险管理',5:'🎯 第五阶段：养老规划',6:'🌐 第六阶段：持续成长'};
+  area.innerHTML=`<div class="content-area">
+    <div class="lesson-header">
+      <div class="lesson-phase-badge ${badgeMap[item.phase]||'badge-blue'}">${phaseNames[item.phase]||''}</div>
+      <div class="lesson-completed-badge ${isDone?'show':''}" id="completedBadge">✅ 本节已完成</div>
+      <h1 class="lesson-title">${item.title}</h1>
+      <div class="lesson-meta"><span>⏱ 预计 ${item.duration}</span><span>📖 ${item.tag}</span></div>
+    </div>
+    <div class="lesson-body">${getContent(item.id)}</div>
+    <div class="done-bar">
+      <div class="done-bar-left">学完本节？记得标记完成</div>
+      <div style="display:flex;gap:8px">
+        ${currentIndex>0?`<button class="btn btn-outline" onclick="navigate(-1)">← 上一节</button>`:''}
+        <button class="btn ${isDone?'btn-outline':'btn-success'}" onclick="markDone('${item.id}')">${isDone?'✓ 已完成':'✅ 标记完成'}</button>
+        ${!isLast?`<button class="btn btn-primary" onclick="markAndNext('${item.id}')">完成并继续 →</button>`:''}
+      </div>
+    </div>
+  </div>`;
+  initChecklists();
+}
+function initChecklists(){
+  document.querySelectorAll('.checklist li').forEach(li=>{
+    const key='chk_v2_'+li.dataset.key;
+    if(localStorage.getItem(key)==='1')li.classList.add('checked');
+    li.addEventListener('click',()=>{li.classList.toggle('checked');localStorage.setItem(key,li.classList.contains('checked')?'1':'0');});
+  });
+}
+function markDone(id){
+  if(completed.has(id)){completed.delete(id);document.getElementById('completedBadge')?.classList.remove('show');}
+  else{completed.add(id);document.getElementById('completedBadge')?.classList.add('show');}
+  saveCompleted();renderNav();
+  const btn=event.target;
+  btn.textContent=completed.has(id)?'✓ 已完成':'✅ 标记完成';
+  btn.className='btn '+(completed.has(id)?'btn-outline':'btn-success');
+}
+function markAndNext(id){completed.add(id);saveCompleted();navigate(1);}
+
+// ===== WELCOME =====
+function getWelcome(){return`<div class="welcome-screen">
+<div class="welcome-hero">
+  <h1>📈 美股系统学习路径<br>完整版 · 约30小时课程</h1>
+  <p>专为互联网从业者设计的深度美股学习体系。42岁，年入150万，持有800万股票——<br>本课程将帮助你系统掌握美股投资，构建能穿越30年的养老组合。</p>
+  <div class="welcome-stats">
+    <div class="welcome-stat"><div class="welcome-stat-num">20</div><div class="welcome-stat-label">课程节数</div></div>
+    <div class="welcome-stat"><div class="welcome-stat-num">~24h</div><div class="welcome-stat-label">总学习时长</div></div>
+    <div class="welcome-stat"><div class="welcome-stat-num">6</div><div class="welcome-stat-label">学习阶段</div></div>
+    <div class="welcome-stat"><div class="welcome-stat-num">2</div><div class="welcome-stat-label">完整估值案例</div></div>
+  </div>
+</div>
+<h2 style="font-size:19px;font-weight:800;color:#111;margin-bottom:14px;">六大学习阶段</h2>
+<div class="welcome-phases">
+  <div class="phase-card" onclick="goTo(1)"><div class="phase-card-num pn-1">一</div><h3>市场基础</h3><p>市场结构、宏观经济、美联储深度解析、财务报表</p><div class="phase-card-tag"><span class="ptag">4课</span><span class="ptag">~5h</span></div></div>
+  <div class="phase-card" onclick="goTo(5)"><div class="phase-card-num pn-2">二</div><h3>估值体系</h3><p>估值指标、可口可乐DCF、谷歌分部估值、公司分析框架</p><div class="phase-card-tag"><span class="ptag">4课</span><span class="ptag">~5.5h</span></div></div>
+  <div class="phase-card" onclick="goTo(9)"><div class="phase-card-num pn-3">三</div><h3>投资工具</h3><p>ETF 60年历史与被动投资革命、组合构建实战</p><div class="phase-card-tag"><span class="ptag">2课</span><span class="ptag">~2.5h</span></div></div>
+  <div class="phase-card" onclick="goTo(11)"><div class="phase-card-num pn-4">四</div><h3>风险管理</h3><p>完整风险框架、压力测试、黑天鹅应对手册</p><div class="phase-card-tag"><span class="ptag">2课</span><span class="ptag">~2.5h</span></div></div>
+  <div class="phase-card" onclick="goTo(13)"><div class="phase-card-num pn-5">五</div><h3>养老规划</h3><p>42-60岁分阶段详细方案、年度资产配置表、退休提取策略</p><div class="phase-card-tag"><span class="ptag">3课</span><span class="ptag">~3.5h</span></div></div>
+  <div class="phase-card" onclick="goTo(16)"><div class="phase-card-num pn-1">六</div><h3>持续成长</h3><p>全球领路人、工具平台、价值投资精华、90天行动计划</p><div class="phase-card-tag"><span class="ptag">4课</span><span class="ptag">~3.5h</span></div></div>
+</div>
+<div class="info-box blue" style="margin-top:24px">
+  <div class="info-box-title">💡 使用说明</div>
+  按顺序学习效果最佳。每节课末「完成并继续」自动推进，左侧实时追踪进度。
+  课内清单可勾选，所有进度自动保存到浏览器本地，下次打开继续。建议每天1-2节，约3周完成。
+</div>
+<div style="margin-top:22px;text-align:center"><button class="btn btn-primary" style="font-size:15px;padding:12px 32px" onclick="goTo(1)">开始学习 →</button></div>
+</div>`;}
+
+// ===== ALL LESSON CONTENT =====
+function getContent(id){
+const C={
+
+// =====================================================================
+'market-structure':`
+<p>在投入真金白银之前，首先需要建立对美股市场的完整认知。美股是全球最成熟、流动性最好的资本市场，理解它的结构是一切的起点。</p>
+
+<h2>三大交易所与市场规模</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>交易所</th><th>成立时间</th><th>特点</th><th>代表公司</th><th>市值占比</th></tr></thead>
+<tbody>
+<tr><td><strong>NYSE 纽约证券交易所</strong></td><td>1792年</td><td>最古老、传统蓝筹，实体交易大厅</td><td>Berkshire, JPMorgan, Visa, Walmart</td><td>~40%</td></tr>
+<tr><td><strong>NASDAQ 纳斯达克</strong></td><td>1971年</td><td>全电子化，科技股聚集地</td><td>Apple, Google, Meta, NVIDIA, Amazon</td><td>~50%</td></tr>
+<tr><td><strong>AMEX 美国交易所</strong></td><td>1908年</td><td>现为NYSE American，中小盘+ETF</td><td>大量ETF在此上市</td><td>~10%</td></tr>
+</tbody></table></div>
+<p>美国股市总市值约 <strong>45-50万亿美元</strong>（2024年），占全球股市总市值约 44%。一国之市值撑起近半个世界，原因是美国企业的全球化竞争力。</p>
+
+<h2>五大核心指数详解</h2>
+<div class="cards-grid">
+  <div class="card"><div class="card-icon">📊</div><div class="card-title">S&P 500（标普500）</div><div class="card-desc">500家大市值公司，按市值加权。历史年化约10%（含股息）。是衡量美国经济最权威的基准，所有策略的比较基准</div></div>
+  <div class="card"><div class="card-icon">💻</div><div class="card-title">NASDAQ 100</div><div class="card-desc">纳斯达克前100非金融公司，科技权重>50%。牛市跑赢S&P500，熊市跌更多（高Beta特性）</div></div>
+  <div class="card"><div class="card-icon">🏛️</div><div class="card-title">Dow Jones 道琼斯</div><div class="card-desc">仅30只蓝筹股，价格加权（非市值加权，有历史局限性）。媒体引用多，但参考价值不如S&P500</div></div>
+  <div class="card"><div class="card-icon">📈</div><div class="card-title">Russell 2000</div><div class="card-desc">2000只小盘股，衡量美国经济草根健康度。常作为经济景气度的先行指标——小盘股往往先于大盘股反应</div></div>
+  <div class="card"><div class="card-icon">😨</div><div class="card-title">VIX 恐慌指数</div><div class="card-desc">S&P500期权隐含波动率。>30=市场恐慌，<15=极度贪婪。逆向指标：恐慌最高时往往是最佳买入时机</div></div>
+</div>
+
+<h2>美股与A股的核心差异</h2>
+<div class="code-block"><span class="cm">// 核心规则对比</span>
+
+                    美股                A股
+涨跌停限制：         <span class="gd">无限制</span>              10%（ST股5%）
+T+N结算：           <span class="hl">T+2</span>                T+1（当日不能卖出当日买入）
+做空机制：           <span class="gd">完善</span>               有限（融券）
+碎股交易：           <span class="gd">支持0.001股</span>          整手（100股）
+熔断机制：           <span class="gd">三档熔断（7%/13%/20%）</span>   单股跌停即停牌
+股东权利：           <span class="gd">集体诉讼完善</span>           相对较弱
+退市制度：           <span class="gd">严格执行</span>              相对宽松
+外资限制：           基本无限制             QFII/沪深股通
+
+<span class="cm">// 美股交易时间（北京时间）</span>
+夏令时（3月第二个周日 - 11月第一个周日）：<span class="hl">21:30 - 04:00</span>
+冬令时（11月-次年3月）：<span class="hl">22:30 - 05:00</span>
+盘前：04:00-21:30  盘后：04:00-08:00（均流动性差）</div>
+
+<h2>美股市场参与者结构</h2>
+<p>理解市场参与者是理解股价波动的基础：</p>
+<div class="table-wrap"><table>
+<thead><tr><th>参与者</th><th>资金规模</th><th>特点</th><th>对散户的启示</th></tr></thead>
+<tbody>
+<tr><td><strong>共同基金/ETF</strong></td><td>最大</td><td>被动追踪指数，几乎不择时</td><td>被动资金大规模流入，支撑指数长期向上</td></tr>
+<tr><td><strong>对冲基金</strong></td><td>很大</td><td>主动管理，可做多做空，追求绝对收益</td><td>他们的持仓变化（13F）值得追踪</td></tr>
+<tr><td><strong>养老金/保险</strong></td><td>极大</td><td>长期持有，低频操作</td><td>季度末和年末可能有再平衡流量</td></tr>
+<tr><td><strong>企业回购</strong></td><td>非常大</td><td>S&P500每年回购金额超万亿美元</td><td>回购是股价的稳定器</td></tr>
+<tr><td><strong>散户</strong></td><td>小</td><td>信息滞后，情绪化，逆势操作</td><td>了解散户的行为，避免成为其中之一</td></tr>
+</tbody></table></div>
+
+<h2>美股11大行业板块（GICS分类）</h2>
+<div class="code-block"><span class="cm">// S&P 500行业权重（2024年约）</span>
+信息技术  Information Technology    <span class="hl">~30%</span>  ← 最大板块，苹果/微软/NVIDIA
+通信服务  Communication Services    <span class="hl">~9%</span>   ← 谷歌、Meta
+可选消费  Consumer Discretionary    <span class="hl">~10%</span>  ← 亚马逊（主要）、特斯拉
+金融      Financials                <span class="hl">~13%</span>  ← 摩根、美国银行、Visa
+医疗保健  Health Care               <span class="hl">~12%</span>  ← 联合健康、强生
+工业      Industrials               <span class="hl">~9%</span>
+必需消费  Consumer Staples          <span class="hl">~6%</span>   ← 可口可乐、宝洁（防御性）
+能源      Energy                    <span class="hl">~4%</span>
+公用事业  Utilities                 <span class="hl">~2%</span>   ← 高股息，防御性
+材料      Materials                 <span class="hl">~2%</span>
+房地产    Real Estate               <span class="hl">~2%</span>   ← REITs</div>
+
+<ul class="checklist">
+  <li data-key="ms1"><div class="check-box">✓</div><span class="check-text">我知道NYSE/NASDAQ/AMEX的区别</span></li>
+  <li data-key="ms2"><div class="check-box">✓</div><span class="check-text">我理解S&P500、VIX等5个指数的含义</span></li>
+  <li data-key="ms3"><div class="check-box">✓</div><span class="check-text">我了解美股和A股的6个核心差异</span></li>
+  <li data-key="ms4"><div class="check-box">✓</div><span class="check-text">我知道美股交易时间（北京时间）</span></li>
+</ul>`,
+
+// =====================================================================
+'macro-basics':`
+<p>宏观经济是股市的"天气系统"——你不能控制它，但必须理解它，才能不被突然的风暴淋湿。</p>
+
+<h2>GDP：经济体量的基础指标</h2>
+<p>GDP（国内生产总值）是衡量一个国家经济产出的总量指标。从支出法看：<br>
+<strong>GDP = C（消费）+ I（投资）+ G（政府支出）+ NX（净出口）</strong></p>
+<p>美国GDP中，消费（C）占约 <strong>68-70%</strong>，因此消费者信心和零售销售数据对美国经济尤为重要。连续两个季度GDP负增长 = 技术性衰退。</p>
+
+<h2>通货膨胀：股市最大的隐形敌人</h2>
+<div class="code-block"><span class="cm">// 两个核心通胀指标</span>
+
+CPI（消费者物价指数）：
+  衡量城市消费者的消费品价格变化
+  每月发布，由劳工统计局(BLS)发布
+  核心CPI = 剔除食品和能源（更稳定）
+  历史均值：约2-3%，>5%开始对股市形成压力
+
+PCE（个人消费支出价格指数）：
+  <span class="hl">美联储官方使用的通胀指标（比CPI更重要）</span>
+  核心PCE目标：<span class="hl">2%</span>
+  与CPI区别：权重更动态，覆盖更广，通常低于CPI约0.3-0.5%
+
+<span class="cm">// 通胀对不同资产的影响</span>
+通胀高（>4%）：<span class="bd">债券、成长股受损</span>；<span class="gd">大宗商品、TIPS、黄金、能源股受益</span>
+通胀低/通缩：<span class="gd">债券受益</span>；<span class="bd">银行股、大宗商品受损</span></div>
+
+<h2>就业数据：美联储的另一只眼</h2>
+<p>美联储负有"最大就业"的使命，就业数据直接影响其政策决定。</p>
+<div class="table-wrap"><table>
+<thead><tr><th>指标</th><th>发布时间</th><th>健康水平</th><th>含义</th></tr></thead>
+<tbody>
+<tr><td><strong>非农就业人数（NFP）</strong></td><td>每月第一个周五 08:30 ET</td><td>+200K以上=强劲</td><td>新增就业岗位数，最重要的就业指标</td></tr>
+<tr><td><strong>失业率</strong></td><td>随非农同时发布</td><td>&lt;4%=低失业</td><td>美联储自然失业率目标约4-4.5%</td></tr>
+<tr><td><strong>职位空缺（JOLTS）</strong></td><td>每月中旬</td><td>空缺>失业=劳动力紧张</td><td>领先指标，反映企业招聘意愿</td></tr>
+<tr><td><strong>ADP就业</strong></td><td>非农前两天</td><td>私人企业就业</td><td>非农前的参考指标</td></tr>
+<tr><td><strong>初申失业金</strong></td><td>每周四</td><td>&lt;250K=健康</td><td>最高频的就业数据</td></tr>
+</tbody></table></div>
+
+<h2>利率：资产定价的万有引力</h2>
+<div class="code-block"><span class="cm">// 利率影响股市的三条传导路径</span>
+
+① 折现率机制（最重要）：
+   股票价值 = Σ 未来自由现金流 / (1 + 折现率)^n
+   利率↑ → 折现率↑ → 分母↑ → 股票内在价值↓
+   <span class="hl">成长股（现金流在遥远未来）受影响远大于价值股</span>
+   例：利率从3%升至5%，期限为10年的现金流PV下降约16%
+       但期限为30年的现金流PV下降约40%
+
+② 机会成本机制：
+   10年期美债收益率 = "无风险"回报率
+   当美债>5%时，为何还要承担股票风险？
+   → 股票股息率+增长必须跑赢无风险利率才有吸引力
+
+③ 企业盈利机制：
+   利率↑ → 企业贷款成本↑ → 利息支出↑ → 净利润↓
+   高杠杆行业（房地产、公用事业）影响最大
+
+<span class="cm">// 利率敏感性：不同行业的Beta</span>
+高度敏感（利率↑利好）：  <span class="gd">银行、保险</span>（净息差扩大）
+中度敏感（利率↑利空）：  <span class="bd">科技成长、REITs、公用事业</span>
+相对不敏感：              必需消费品、医疗（有定价权）</div>
+
+<h2>美国国债收益率曲线</h2>
+<p>国债收益率曲线是经济前景的"晴雨表"，是所有宏观投资者必看的指标。</p>
+<div class="code-block"><span class="cm">// 收益率曲线形态</span>
+
+正常（Normal Curve）：
+  短期利率 &lt; 长期利率（例：2年<10年）
+  含义：经济正常运行，未来预期增长
+
+倒挂（Inverted Curve）：<span class="bd">⚠️ 衰退预警信号</span>
+  短期利率 > 长期利率（例：2年>10年）
+  历史：每次倒挂后6-24个月内均发生衰退（1970年以来100%命中）
+  机制：市场预期未来经济变差，认为央行将降息
+  
+  历史倒挂记录：
+  1978年倒挂 → 1980年衰退 ✓
+  1989年倒挂 → 1990年衰退 ✓
+  2000年倒挂 → 2001年衰退 ✓
+  2006年倒挂 → 2008年衰退 ✓
+  2019年倒挂 → 2020年衰退 ✓（被COVID提前触发）
+  2022年倒挂 → 2023-2024年？（经济韧性超预期）
+
+查看工具：fred.stlouisfed.org → 搜索"T10Y2Y"</div>
+
+<h2>关键经济数据发布日历</h2>
+<p>以下8个指标是美股投资者必须掌握的"宏观雷达"。每次发布前市场会产生预期，数据超预期/不及预期均会引发价格波动。</p>
+
+<div style="display:grid;gap:14px;margin:16px 0">
+
+  <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden">
+    <div style="background:#fef2f2;padding:12px 18px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #fecaca">
+      <span style="font-size:18px">🔴</span>
+      <div><strong style="font-size:15px;color:#991b1b">CPI — 消费者价格指数</strong>
+      <span style="font-size:11px;color:#64748b;margin-left:10px">Consumer Price Index · 每月第2-3周 · BLS劳工统计局 · 极高影响</span></div>
+    </div>
+    <div style="padding:14px 18px;font-size:13px;line-height:1.8">
+      <strong>是什么：</strong>追踪约80,000个消费品和服务的价格变化，是最广泛引用的通胀指标。分为：<br>
+      &nbsp;&nbsp;• <strong>总CPI（Headline CPI）</strong>：包含食品和能源（波动大）<br>
+      &nbsp;&nbsp;• <strong>核心CPI（Core CPI）</strong>：剔除食品和能源，更能反映趋势性通胀<br><br>
+      <strong>如何读数：</strong>关注 YoY（同比）变化，目标是 <strong>2%</strong>（美联储目标）<br>
+      &nbsp;&nbsp;• CPI &gt; 预期 → 通胀超预期 → 美联储可能维持高利率或加息 → 股市下跌，债市下跌<br>
+      &nbsp;&nbsp;• CPI &lt; 预期 → 通胀降温 → 美联储可能降息 → 股市上涨，债市上涨<br><br>
+      <strong>典型案例：</strong>2022年6月CPI达9.1%（40年最高）→ 美联储暴力加息525bp → 纳斯达克全年跌33%
+    </div>
+  </div>
+
+  <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden">
+    <div style="background:#fef2f2;padding:12px 18px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #fecaca">
+      <span style="font-size:18px">🔴</span>
+      <div><strong style="font-size:15px;color:#991b1b">PCE — 个人消费支出价格指数</strong>
+      <span style="font-size:11px;color:#64748b;margin-left:10px">Personal Consumption Expenditures · 每月月末 · BEA经济分析局 · 极高影响</span></div>
+    </div>
+    <div style="padding:14px 18px;font-size:13px;line-height:1.8">
+      <strong>是什么：</strong>美联储最偏好的通胀指标（比CPI更重要！）。涵盖范围比CPI更广，包括医疗保险等CPI未完全覆盖的项目。<br>
+      &nbsp;&nbsp;• <strong>核心PCE（Core PCE）</strong>：剔除食品和能源，是美联储政策制定的直接依据<br><br>
+      <strong>PCE vs CPI 的区别：</strong><br>
+      &nbsp;&nbsp;• PCE使用"链式加权"（当价格上涨时自动减少该商品权重），比CPI更能反映消费者行为变化<br>
+      &nbsp;&nbsp;• PCE通常低于CPI约0.3-0.5个百分点<br>
+      &nbsp;&nbsp;• 美联储的2%目标是针对<strong>PCE</strong>，不是CPI<br><br>
+      <strong>关注时机：</strong>每月月末发布，一般在CPI后约2周，可以验证通胀趋势是否一致
+    </div>
+  </div>
+
+  <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden">
+    <div style="background:#fef2f2;padding:12px 18px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #fecaca">
+      <span style="font-size:18px">🔴</span>
+      <div><strong style="font-size:15px;color:#991b1b">NFP — 非农就业人数</strong>
+      <span style="font-size:11px;color:#64748b;margin-left:10px">Non-Farm Payrolls · 每月第一个周五 · BLS劳工统计局 · 极高影响</span></div>
+    </div>
+    <div style="padding:14px 18px;font-size:13px;line-height:1.8">
+      <strong>是什么：</strong>上月新增非农业就业岗位数量，反映整体劳动力市场健康状况。包含3个关键子指标：<br>
+      &nbsp;&nbsp;• <strong>NFP（新增就业）</strong>：每月新增岗位数，约15-25万为"健康区间"<br>
+      &nbsp;&nbsp;• <strong>失业率（Unemployment Rate）</strong>：目标约4-5%，低于3.5%为"过热"<br>
+      &nbsp;&nbsp;• <strong>平均时薪（Average Hourly Earnings）</strong>：工资通胀的前瞻指标，YoY&gt;4%为通胀压力信号<br><br>
+      <strong>如何解读：</strong><br>
+      &nbsp;&nbsp;• 就业强 + 工资涨 → 美联储维持高利率 → 成长股承压<br>
+      &nbsp;&nbsp;• 就业弱 → 美联储倾向降息 → 股市通常上涨（坏消息变好消息）<br>
+      &nbsp;&nbsp;• 就业崩溃（&lt;5万）→ 真实衰退信号 → 股市大跌<br><br>
+      <strong>重要：</strong>非农数据会被大幅修订（首次公布后第2、第3次修订），初次数据的"噪音"很大
+    </div>
+  </div>
+
+  <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden">
+    <div style="background:#fef2f2;padding:12px 18px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #fecaca">
+      <span style="font-size:18px">🔴</span>
+      <div><strong style="font-size:15px;color:#991b1b">FOMC决议 — 联邦公开市场委员会</strong>
+      <span style="font-size:11px;color:#64748b;margin-left:10px">Federal Open Market Committee · 每年8次（约6周一次）· 美联储 · 极高影响</span></div>
+    </div>
+    <div style="padding:14px 18px;font-size:13px;line-height:1.8">
+      <strong>是什么：</strong>美联储最重要的政策决定会议，宣布利率决定（加息/降息/不变）和前瞻指引。<br><br>
+      <strong>每次FOMC会议产出3个核心文件：</strong><br>
+      &nbsp;&nbsp;• <strong>利率决定</strong>：联邦基金利率目标区间（如5.00%-5.25%）<br>
+      &nbsp;&nbsp;• <strong>政策声明（Statement）</strong>：约500字的文本，逐字分析措辞变化极为重要<br>
+      &nbsp;&nbsp;• <strong>主席新闻发布会</strong>（每次均有）：Jerome Powell的即兴问答往往引发市场最大波动<br>
+      &nbsp;&nbsp;• <strong>SEP（经济预测摘要）</strong>：每季度（3/6/9/12月）发布，包含"点阵图"（Dot Plot）<br><br>
+      <strong>点阵图解读：</strong>19名委员各对未来利率路径的预测，中位数 = 市场定价的"官方基准"<br>
+      &nbsp;&nbsp;• 点阵图预测2次降息 vs 市场预期3次降息 → 鹰派意外 → 债市下跌，美元升值，成长股下跌
+    </div>
+  </div>
+
+  <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden">
+    <div style="background:#fff7ed;padding:12px 18px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #fed7aa">
+      <span style="font-size:18px">🟠</span>
+      <div><strong style="font-size:15px;color:#c2410c">GDP — 国内生产总值</strong>
+      <span style="font-size:11px;color:#64748b;margin-left:10px">Gross Domestic Product · 季度（初值→修订值→终值）· BEA · 高影响</span></div>
+    </div>
+    <div style="padding:14px 18px;font-size:13px;line-height:1.8">
+      <strong>是什么：</strong>衡量一个国家在特定时期内所有最终商品和服务的总产出。<br>
+      <strong>公式：</strong>GDP = C（消费）+ I（投资）+ G（政府支出）+ NX（净出口）<br>
+      美国GDP构成：消费（C）占约70%，这是为什么美国消费数据如此重要的原因<br><br>
+      <strong>三次发布：</strong><br>
+      &nbsp;&nbsp;• <strong>初值（Advance）</strong>：季度结束后约30天，数据不完整但影响最大<br>
+      &nbsp;&nbsp;• <strong>修订值（Second Estimate）</strong>：再过30天，更多数据加入<br>
+      &nbsp;&nbsp;• <strong>终值（Final）</strong>：再过30天，数据完整<br><br>
+      <strong>衰退定义：</strong>连续两个季度GDP环比负增长 = 技术性衰退（影响极大）<br>
+      健康增长率：约 <strong>2-3% 年化</strong>（低于1%警惕，高于4%过热）
+    </div>
+  </div>
+
+  <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden">
+    <div style="background:#fff7ed;padding:12px 18px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #fed7aa">
+      <span style="font-size:18px">🟠</span>
+      <div><strong style="font-size:15px;color:#c2410c">PMI — 采购经理人指数</strong>
+      <span style="font-size:11px;color:#64748b;margin-left:10px">Purchasing Managers Index · 每月第一个工作日 · ISM/S&P Global · 高影响</span></div>
+    </div>
+    <div style="padding:14px 18px;font-size:13px;line-height:1.8">
+      <strong>是什么：</strong>调查企业采购经理对新订单、生产、就业、供货时间、库存的综合景气判断，是<strong>领先指标</strong>（比GDP提前1-2个月反映趋势）。<br><br>
+      <strong>分类：</strong><br>
+      &nbsp;&nbsp;• <strong>制造业PMI（ISM Manufacturing）</strong>：工厂生产和订单景气<br>
+      &nbsp;&nbsp;• <strong>服务业PMI（ISM Services）</strong>：服务业景气，更重要（美国经济70%是服务业）<br><br>
+      <strong>关键阈值：50</strong><br>
+      &nbsp;&nbsp;• PMI &gt; 50 = 扩张（好）<br>
+      &nbsp;&nbsp;• PMI &lt; 50 = 收缩（坏）<br>
+      &nbsp;&nbsp;• PMI 连续3个月 &lt; 48 = 衰退前兆<br><br>
+      <strong>为什么重要：</strong>PMI是最快速的景气温度计，每月发布，比GDP快3个月看到趋势变化
+    </div>
+  </div>
+
+  <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden">
+    <div style="background:#fefce8;padding:12px 18px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #fde68a">
+      <span style="font-size:18px">🟡</span>
+      <div><strong style="font-size:15px;color:#854d0e">零售销售 — Retail Sales</strong>
+      <span style="font-size:11px;color:#64748b;margin-left:10px">每月中旬 · 商务部（Census Bureau）· 中高影响</span></div>
+    </div>
+    <div style="padding:14px 18px;font-size:13px;line-height:1.8">
+      <strong>是什么：</strong>美国零售商的月度销售总额，是消费者支出（GDP中70%的C）的直接测量。<br><br>
+      <strong>两个关键版本：</strong><br>
+      &nbsp;&nbsp;• <strong>总零售销售</strong>：包含汽车（波动大，干扰信号）<br>
+      &nbsp;&nbsp;• <strong>核心零售销售（剔除汽车）</strong>：更能反映消费趋势，直接用于计算GDP<br><br>
+      <strong>如何解读：</strong><br>
+      &nbsp;&nbsp;• 零售销售强劲 → 消费者信心好 → 经济不衰退 → 美联储无需急于降息 → 对利率敏感的成长股不利<br>
+      &nbsp;&nbsp;• 零售销售下滑 → 消费走弱 → 衰退风险上升 → 美联储倾向降息 → 防御板块（消费必需、医疗）相对跑赢<br><br>
+      关注特别月份：11-12月（感恩节/圣诞季）零售数据是全年最重要的消费信号
+    </div>
+  </div>
+
+  <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden">
+    <div style="background:#fefce8;padding:12px 18px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #fde68a">
+      <span style="font-size:18px">🟡</span>
+      <div><strong style="font-size:15px;color:#854d0e">PPI — 生产者价格指数</strong>
+      <span style="font-size:11px;color:#64748b;margin-left:10px">Producer Price Index · 每月（CPI后约1周）· BLS · 中高影响</span></div>
+    </div>
+    <div style="padding:14px 18px;font-size:13px;line-height:1.8">
+      <strong>是什么：</strong>衡量企业（生产者）收到的商品和服务价格变化，是CPI的"上游信号"。企业成本上升最终会转嫁给消费者（CPI上升），因此PPI是CPI的领先指标，提前约1-3个月。<br><br>
+      <strong>传导链：</strong><br>
+      <code style="background:#f1f5f9;padding:3px 8px;border-radius:4px;font-size:12px">原材料价格↑ → PPI↑（1-3个月）→ CPI↑ → 美联储政策收紧</code><br><br>
+      <strong>实战应用：</strong><br>
+      &nbsp;&nbsp;• PPI连续下降3个月 → CPI下行压力确认 → 美联储降息更近<br>
+      &nbsp;&nbsp;• PPI反弹 → 通胀再加速风险 → 持有通胀保护资产（TIPS、能源股、大宗商品ETF）<br>
+      &nbsp;&nbsp;• 对企业利润影响：PPI↑而企业无法转嫁成本 → 利润率被压缩（看毛利率趋势）
+    </div>
+  </div>
+
+</div>
+
+<div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:12px;padding:18px;margin:16px 0">
+<strong style="color:#1e40af;font-size:14px">📅 实战：如何用这8个指标构建你的"宏观日历"</strong>
+<div class="table-wrap" style="margin-top:12px"><table>
+<thead><tr><th>周期</th><th>重要数据</th><th>观察重点</th><th>股市影响方向</th></tr></thead>
+<tbody>
+<tr><td>每月第1周</td><td>非农就业（周五）、ISM PMI</td><td>就业新增 vs 预期、PMI是否&gt;50</td><td>强就业→压制降息预期→利率敏感股承压</td></tr>
+<tr><td>每月第2-3周</td><td>CPI（通胀核心数据）</td><td>核心CPI YoY是否继续下行</td><td>低于预期→大涨；高于预期→大跌</td></tr>
+<tr><td>每月月末</td><td>PCE（美联储最爱）、GDP（季度）</td><td>核心PCE是否接近2%目标</td><td>PCE决定美联储下次会议基调</td></tr>
+<tr><td>每6周</td><td>FOMC决议（最重要！）</td><td>利率决定、点阵图、Powell措辞</td><td>鹰派意外→债市跌/科技股跌；鸽派→全线涨</td></tr>
+</tbody></table></div>
+</div>
+
+<div class="info-box yellow">
+  <div class="info-box-title">⚠️ 宏观数据的正确使用方式</div>
+  宏观数据不是用来做短线择时的！大量研究表明，试图根据宏观数据做买卖决策的散户，
+  长期收益率显著低于买入持有者。<br><br>
+  <strong>正确用法</strong>：用宏观环境决定资产配置结构（加息周期降低成长股比例，增加防御性板块），
+  而不是判断明天涨跌。<strong>宏观是战略，不是战术。</strong>
+</div>
+
+<ul class="checklist">
+  <li data-key="mb1"><div class="check-box">✓</div><span class="check-text">我理解GDP、CPI、PCE、非农的含义</span></li>
+  <li data-key="mb2"><div class="check-box">✓</div><span class="check-text">我理解利率通过折现率影响股票估值的机制</span></li>
+  <li data-key="mb3"><div class="check-box">✓</div><span class="check-text">我知道收益率曲线倒挂的历史意义</span></li>
+  <li data-key="mb4"><div class="check-box">✓</div><span class="check-text">我已在 FRED 网站上查看过真实的宏观数据图表</span></li>
+</ul>`,
+
+// =====================================================================
+'fed-deep-dive':`
+<p>美联储（Federal Reserve）是全球最重要的经济机构——它的每一个决定都会影响全球资产价格。理解美联储，就掌握了理解市场80%的宏观背景。</p>
+
+<h2>美联储的历史与结构</h2>
+<div class="code-block"><span class="cm">// 美联储简史</span>
+1913年：国会通过《联邦储备法》，成立美联储
+        背景：1907年银行危机，需要"最后贷款人"
+1930s：大萧条后权力扩大
+1970s：石油危机导致恶性通胀，美联储开始现代化
+1979年：Paul Volcker 就任主席，激进加息至 <span class="hl">20%</span> 打压通胀
+        代价：1980年和1982年两次衰退，但成功驯服通胀
+1987年：Alan Greenspan就任，市场进入"大稳健"时代
+2008年：Ben Bernanke 推出前所未有的量化宽松(QE)
+2013年：Janet Yellen，逐步退出QE
+2018-2019：Jerome Powell，先加息后因经济放缓降息
+2020-2021：COVID，无限QE，利率降至0
+2022-2023：Powell 暴力加息 525bp，创40年之最
+2024-2025：开始降息周期
+
+<span class="cm">// 联储结构</span>
+理事会(Board of Governors)：7名理事，总统提名，参院批准
+联储主席：任期4年，最重要的人物
+FOMC：12票（7理事+5地区联储行长），负责货币政策</div>
+
+<h2>政策工具深度解析</h2>
+
+<h3>① 联邦基金利率（FFR）——最重要的工具</h3>
+<div class="code-block"><span class="cm">// 联邦基金利率的传导机制</span>
+定义：银行间隔夜拆借利率，美联储设定目标区间
+传导链：
+FFR↑ → 银行同业拆借成本↑ → 贷款利率↑ → 企业融资成本↑
+     → 消费者信贷利率↑（房贷、车贷、信用卡）→ 消费支出↓
+     → 通胀压力↓（需求侧）
+
+历史利率区间：
+1980年峰值：<span class="bd">20%（Volcker时代打通胀）</span>
+2008年金融危机后：0-0.25%（近零利率）
+2015-2018年：缓慢加息至2.5%
+2020年COVID：<span class="hl">0-0.25%（无限量化宽松）</span>
+2022-2023年：<span class="bd">加息525bp至5.25-5.50%（40年最快加息）</span>
+2024年9月：开始降息周期</div>
+
+<h3>② 量化宽松（QE）与量化紧缩（QT）</h3>
+<div class="table-wrap"><table>
+<thead><tr><th></th><th>量化宽松 QE</th><th>量化紧缩 QT</th></tr></thead>
+<tbody>
+<tr><td><strong>定义</strong></td><td>美联储购买国债/MBS，向市场注入流动性</td><td>美联储缩减资产负债表，回收流动性</td></tr>
+<tr><td><strong>时间</strong></td><td>QE1:2008，QE2:2010，QE3:2012，QE无限:2020</td><td>QT1:2017-2019，QT2:2022-至今</td></tr>
+<tr><td><strong>规模</strong></td><td>QE无限：资产负债表从4T扩至9T美元</td><td>QT2：每月减少950亿</td></tr>
+<tr><td><strong>市场影响</strong></td><td>股市上涨，债券收益率下降，美元走弱</td><td>流动性收紧，风险资产承压</td></tr>
+</tbody></table></div>
+
+<h3>③ 前瞻指引（Forward Guidance）</h3>
+<p>美联储通过语言管理市场预期，有时比实际行动更有力量。</p>
+<div class="code-block"><span class="cm">// 美联储常用措辞及其含义</span>
+"Data Dependent"（数据依赖型）
+  → 我们不打算急于行动，走一步看一步
+
+"Higher for Longer"（更高更久）
+  → 不要期待快速降息，利率将在高位维持更长时间
+
+"Pivot"（政策转向）
+  → 从加息转为降息（或反之），是最重大的政策信号
+
+"Transitory inflation"（暂时性通胀）
+  → 2021年的预判——后来被证明大错特错
+
+"Soft landing"（软着陆）
+  → 抑制通胀而不导致经济衰退，是美联储追求的理想状态
+
+<span class="hl">⭐ 关键原则：看美联储做了什么（行动），而不只看说了什么（语言）</span></div>
+
+<h2>FOMC会议：如何解读</h2>
+<div class="code-block"><span class="cm">// FOMC会议时间表（每年8次，约每6周一次）</span>
+会议日期：通常周二/周三，决议在周三14:00 ET公布
+新闻发布会：14:30 ET，主席发言（每次会议均有）
+会议纪要（Minutes）：会议后3周公布，更详细
+
+<span class="cm">// 市场准备方式</span>
+CME FedWatch Tool：市场隐含的加息/降息概率（关键参考）
+"点阵图"（Dot Plot）：每季度更新，17名联储官员预测利率路径
+  → 看中位数预测，而非平均值
+  → 但点阵图准确性差，仅供参考
+
+<span class="cm">// 解读新闻发布会的技巧</span>
+不变的废话 → 忽略
+新增的措辞 → 重点关注（市场已盯着每个字）
+语气变化（hawkish鹰派/dovish鸽派） → 反映政策倾向变化</div>
+
+<h2>三轮完整加息/降息周期复盘</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>周期</th><th>时间</th><th>背景</th><th>利率变化</th><th>市场结果</th></tr></thead>
+<tbody>
+<tr><td>加息+降息</td><td>1999-2003</td><td>科技泡沫→911→降息刺激</td><td>6.5%→1%</td><td>纳斯达克跌78%后回升</td></tr>
+<tr><td>加息+降息</td><td>2004-2008</td><td>房市过热→次贷危机</td><td>1%→5.25%→0%</td><td>金融危机，S&P跌57%</td></tr>
+<tr><td>加息+降息</td><td>2015-2020</td><td>经济复苏→COVID</td><td>0%→2.5%→0%</td><td>牛市→暴跌→最快恢复</td></tr>
+<tr><td><strong>加息（史上最快）</strong></td><td>2022-2023</td><td>40年高通胀</td><td>0%→5.5%（+525bp）</td><td>债股双杀，纳斯达克跌33%</td></tr>
+<tr><td>降息</td><td>2024-?</td><td>通胀回落，就业稳健</td><td>5.5%→?</td><td>新一轮宽松周期</td></tr>
+</tbody></table></div>
+
+<h2>美联储政策对不同资产的影响矩阵</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>资产</th><th>加息周期</th><th>降息周期</th><th>为什么</th></tr></thead>
+<tbody>
+<tr><td><strong>科技/成长股</strong></td><td>🔴 大幅受损</td><td>🟢 大幅受益</td><td>高成长股DCF折现率最敏感</td></tr>
+<tr><td><strong>银行股</strong></td><td>🟢 受益</td><td>🔴 受损</td><td>净息差与利率正相关</td></tr>
+<tr><td><strong>长期国债</strong></td><td>🔴 价格下跌</td><td>🟢 价格上涨</td><td>久期最长，利率敏感性最高</td></tr>
+<tr><td><strong>黄金</strong></td><td>🔴 短期承压</td><td>🟢 受益</td><td>利率上升时持有成本增加</td></tr>
+<tr><td><strong>REITs</strong></td><td>🔴 受损</td><td>🟢 受益</td><td>高股息资产与债券竞争</td></tr>
+<tr><td><strong>价值股（低PE）</strong></td><td>🟡 相对抗跌</td><td>🟡 跑输成长</td><td>现金流期限短，折现率不敏感</td></tr>
+</tbody></table></div>
+
+<div class="info-box blue">
+  <div class="info-box-title">📌 给互联网从业者的特别提示</div>
+  你持有的科技股和你所在的科技行业，对美联储政策高度敏感。2022年的加息让纳斯达克跌了33%，
+  ARKK（高成长ETF）跌了75%。这不是因为科技公司突然变差，而是折现率变化的纯粹数学结果。
+  <strong>理解这个机制，你就不会在2022年底在最低点卖出，而是抓住机会买入。</strong>
+</div>
+
+<ul class="checklist">
+  <li data-key="fd1"><div class="check-box">✓</div><span class="check-text">我理解美联储QE和QT的机制</span></li>
+  <li data-key="fd2"><div class="check-box">✓</div><span class="check-text">我能解释"折现率上升导致成长股下跌"的数学逻辑</span></li>
+  <li data-key="fd3"><div class="check-box">✓</div><span class="check-text">我知道FOMC点阵图是什么，如何查看CME FedWatch</span></li>
+  <li data-key="fd4"><div class="check-box">✓</div><span class="check-text">我理解不同利率环境对我的投资组合的影响</span></li>
+</ul>`,
+
+// =====================================================================
+'financial-statements':`
+<p>财务报表是公司向外界展示经营成果的"语言"。作为投资者，你不需要成为会计师，但必须能快速找到关键数字、识别红旗信号。</p>
+
+<h2>三张报表的关系</h2>
+<div class="code-block"><span class="cm">// 三张报表的内在逻辑关系</span>
+利润表（Income Statement）：
+  一段时间内赚了多少利润（流量）
+  净利润 → 流入资产负债表的留存收益
+
+资产负债表（Balance Sheet）：
+  某时间点的资产、负债、净资产（存量）
+  资产 = 负债 + 股东权益
+
+现金流量表（Cash Flow Statement）：
+  实际现金进出（剔除应计制会计的影响）
+  = 经营活动 + 投资活动 + 融资活动
+  期末现金 ← 反映在资产负债表现金项
+
+<span class="hl">关键关系：净利润 ≠ 现金流（利润可以造假，现金流更难造假）</span></div>
+
+<h2>利润表深度解析（以苹果FY2023为例）</h2>
+<div class="code-block"><span class="cm">// 苹果2023财年利润表（简化版）单位：十亿美元</span>
+
+Net Revenue（净营收）                    <span class="hl">$383B</span>
+  Products（产品）                        $299B
+  Services（服务）                        $85B   ← 高利润率，增长引擎
+
+Cost of Sales（成本）                    -$214B
+                                         ─────────
+<span class="gd">Gross Profit（毛利润）                   $169B</span>
+<span class="gd">Gross Margin（毛利率）                   44.1%</span>   ← 同比提升，定价权体现
+
+Operating Expenses（运营费用）
+  R&D 研发                               -$30B
+  SG&A 销售/管理                         -$25B
+                                         ─────────
+<span class="gd">Operating Income（运营利润）             $114B</span>
+<span class="gd">Operating Margin                         29.8%</span>
+
+Other income（利息收入等）               +$3.8B
+Income Tax                              -$20B
+                                         ─────────
+<span class="gd">Net Income（净利润）                     $97B</span>
+<span class="gd">Net Margin（净利率）                     25.3%</span>
+
+Diluted EPS（摊薄每股收益）              $6.13</div>
+
+<h2>现金流量表：投资者最应关注的报表</h2>
+<div class="code-block"><span class="cm">// 苹果2023财年现金流量表（关键数字）</span>
+
+经营活动现金流（CFO）                    <span class="hl">$114B</span>
+  净利润：$97B
+  加：折旧摊销：+$11B
+  加：股权激励：+$11B
+  减：营运资本变化：-$5B
+  
+  <span class="gd">健康信号：CFO ($114B) > 净利润 ($97B)</span>
+  说明利润质量高，不是"纸面"利润
+
+投资活动现金流（CFI）                    <span class="bd">-$3.5B</span>
+  资本开支（CapEx）：-$11B
+  购买短期证券：-$29B（现金理财）
+  卖出证券：+$45B
+
+融资活动现金流（CFF）                    <span class="bd">-$108B</span>
+  股票回购：-$77B（！！）
+  分红：-$15B
+  债务净变化：-$16B
+
+<span class="hl">自由现金流 FCF = CFO - CapEx = $114B - $11B = $103B</span>
+FCF Yield = $103B / 市值$2.99T = 3.4%
+<span class="cm">// 这是"真正可以随便花"的钱，巴菲特称之为"所有者收益"</span></div>
+
+<h2>资产负债表关键健康指标</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>指标</th><th>计算</th><th>苹果2023</th><th>健康标准</th></tr></thead>
+<tbody>
+<tr><td><strong>现金及等价物</strong></td><td>Balance Sheet直读</td><td>$30B</td><td>越多越稳</td></tr>
+<tr><td><strong>净现金（净债务）</strong></td><td>现金 - 总债务</td><td>-$69B（净负债，但可控）</td><td>正值更好</td></tr>
+<tr><td><strong>流动比率</strong></td><td>流动资产÷流动负债</td><td>0.99（看似低）</td><td>一般>1.5（但苹果特殊）</td></tr>
+<tr><td><strong>债务/EBITDA</strong></td><td>总债务÷EBITDA</td><td>~0.7x（极低）</td><td>&lt;3x安全</td></tr>
+<tr><td><strong>ROE</strong></td><td>净利润÷股东权益</td><td>&gt;100%（负净资产）</td><td>&gt;15%良好</td></tr>
+</tbody></table></div>
+
+<h2>财报中的红旗信号（警示清单）</h2>
+<div class="code-block"><span class="cm">// ⚠️ 发现这些信号，需要深入调查</span>
+
+① 应收账款增速 >> 营收增速
+   可能在"塞货"给渠道商，提前确认收入
+
+② 存货持续积压
+   产品卖不动，后续可能被迫打折促销，压缩利润
+
+③ CFO 长期 &lt; 净利润
+   利润无法转化为现金，质量存疑
+
+④ 频繁调整"非经常性"项目
+   将亏损归类为"一次性"费用，美化净利润
+
+⑤ 审计师更换或保留意见
+   财务问题的强烈信号
+
+⑥ 管理层大量抛售股票
+   内部人可能知道坏消息（需结合原因分析）
+
+⑦ 关联交易异常增多
+   可能存在利益输送
+   
+⑧ Goodwill（商誉）占总资产比例极高
+   大量并购历史，可能有减值风险</div>
+
+<div class="info-box green">
+  <div class="info-box-title">✅ 实战建议：第一份年报从苹果开始</div>
+  推荐第一份10-K读苹果(AAPL)。作为互联网从业者，你对苹果的产品和商业模式最熟悉，
+  可以把财务数字和你理解的业务逻辑联系起来，这种结合是真正理解财报的最好方式。
+  <br>地址：ir.apple.com 或 SEC EDGAR 搜索 "Apple Inc 10-K"
+</div>
+
+<ul class="checklist">
+  <li data-key="fs1"><div class="check-box">✓</div><span class="check-text">我能区分利润表、资产负债表、现金流量表各反映什么</span></li>
+  <li data-key="fs2"><div class="check-box">✓</div><span class="check-text">我理解FCF=CFO-CapEx，并知道它比净利润更重要</span></li>
+  <li data-key="fs3"><div class="check-box">✓</div><span class="check-text">我能说出5个财报红旗信号</span></li>
+  <li data-key="fs4"><div class="check-box">✓</div><span class="check-text">我已打开并浏览过一份真实10-K报告</span></li>
+</ul>`,
+
+// =====================================================================
+'valuation-metrics':`
+<p>估值是判断"买得值不值"的核心技能。同一家优秀公司，在不同估值水平买入，结果可能是10倍收益或50%亏损。</p>
+
+<h2>估值指标体系</h2>
+<p>估值是投资的核心技能——同样的公司，用错指标会得出完全错误的结论。以下7个指标需要理解其本质逻辑、适用边界和常见误区。</p>
+
+<div style="display:grid;gap:14px;margin:16px 0">
+
+  <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden">
+    <div style="background:#f0fdf4;padding:12px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #bbf7d0">
+      <div style="display:flex;align-items:center;gap:10px">
+        <span style="background:#16a34a;color:#fff;border-radius:6px;padding:2px 10px;font-size:12px;font-weight:700">P/E</span>
+        <strong style="font-size:15px;color:#14532d">市盈率 — Price-to-Earnings Ratio</strong>
+      </div>
+      <span style="font-size:12px;color:#16a34a;font-weight:600">最常用 · 成熟盈利公司首选</span>
+    </div>
+    <div style="padding:14px 18px;font-size:13px;line-height:1.9">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:10px">
+        <div><strong>公式：</strong><code style="background:#f1f5f9;padding:2px 8px;border-radius:4px">P/E = 股价 ÷ 每股收益（EPS）</code></div>
+        <div><strong>两种版本：</strong>Trailing P/E（用过去12月实际EPS） vs <strong>Forward P/E</strong>（用未来12月预测EPS，更重要）</div>
+      </div>
+      <strong>如何读数：</strong><br>
+      &nbsp;&nbsp;• P/E = 20x → 市场愿意为每1元利润支付20元，即需要<strong>20年</strong>用利润"回本"<br>
+      &nbsp;&nbsp;• P/E越高 = 市场对未来增长预期越乐观，或当前利率环境越宽松<br>
+      &nbsp;&nbsp;• 标普500历史均值约 <strong>16-18x</strong>；科技龙头通常 25-35x<br><br>
+      <strong>正确使用方式：</strong>横向比较同行业公司，或与该公司自身历史均值比较，跨行业比较意义不大<br><br>
+      <strong>⚠️ 局限性：</strong>净利润受折旧、摊销、一次性收益/损失扭曲；亏损公司无法计算；会计政策不同导致跨公司比较失真<br><br>
+      <div style="background:#f0fdf4;border-radius:8px;padding:8px 12px;font-size:12px">
+        <strong>实战案例：</strong>苹果（AAPL）2023年底 Forward P/E≈28x，高于历史均值20x → 代入增速分析（见PEG）判断是否合理
+      </div>
+    </div>
+  </div>
+
+  <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden">
+    <div style="background:#eff6ff;padding:12px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #bfdbfe">
+      <div style="display:flex;align-items:center;gap:10px">
+        <span style="background:#2563eb;color:#fff;border-radius:6px;padding:2px 10px;font-size:12px;font-weight:700">PEG</span>
+        <strong style="font-size:15px;color:#1e3a8a">市盈率相对增长比率 — Price/Earnings to Growth</strong>
+      </div>
+      <span style="font-size:12px;color:#2563eb;font-weight:600">成长股估值 · Peter Lynch发明</span>
+    </div>
+    <div style="padding:14px 18px;font-size:13px;line-height:1.9">
+      <div style="margin-bottom:10px"><strong>公式：</strong><code style="background:#f1f5f9;padding:2px 8px;border-radius:4px">PEG = P/E ÷ 未来EPS增速（%）</code></div>
+      <strong>解读黄金法则（Peter Lynch原则）：</strong><br>
+      &nbsp;&nbsp;• PEG &lt; 1 → <strong style="color:#16a34a">低估（被市场忽视的成长股）</strong><br>
+      &nbsp;&nbsp;• PEG = 1 → 合理定价（增速与估值匹配）<br>
+      &nbsp;&nbsp;• PEG &gt; 2 → <strong style="color:#dc2626">高估（需要增速大幅超预期才能支撑）</strong><br><br>
+      <strong>实战意义：</strong>解决了P/E无法比较不同增速公司的问题<br>
+      &nbsp;&nbsp;• 公司A：P/E=30x，增速30% → PEG=1.0（合理）<br>
+      &nbsp;&nbsp;• 公司B：P/E=15x，增速5% → PEG=3.0（贵！）<br>
+      &nbsp;&nbsp;• 公司A看起来更"贵"，但其实更便宜<br><br>
+      <strong>⚠️ 局限性：</strong>增速预测本身不确定；对于超高增速公司（如AI）增速可能不可持续；忽略资产负债表质量
+    </div>
+  </div>
+
+  <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden">
+    <div style="background:#fdf4ff;padding:12px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #e9d5ff">
+      <div style="display:flex;align-items:center;gap:10px">
+        <span style="background:#7c3aed;color:#fff;border-radius:6px;padding:2px 10px;font-size:12px;font-weight:700">EV/EBITDA</span>
+        <strong style="font-size:15px;color:#4c1d95">企业价值倍数 — Enterprise Value / EBITDA</strong>
+      </div>
+      <span style="font-size:12px;color:#7c3aed;font-weight:600">专业机构首选 · 跨国比较</span>
+    </div>
+    <div style="padding:14px 18px;font-size:13px;line-height:1.9">
+      <div style="margin-bottom:10px">
+        <strong>公式：</strong><code style="background:#f1f5f9;padding:2px 8px;border-radius:4px">EV/EBITDA = 企业价值 ÷ 息税折旧摊销前利润</code><br>
+        <code style="background:#f1f5f9;padding:2px 8px;border-radius:4px;margin-top:4px;display:inline-block">EV = 市值 + 净债务（债务 - 现金）</code>
+      </div>
+      <strong>为什么比P/E更专业：</strong><br>
+      &nbsp;&nbsp;• <strong>剔除资本结构差异</strong>：有债/无债的公司可以直接比较（P/E做不到）<br>
+      &nbsp;&nbsp;• <strong>剔除折旧摊销</strong>：消除不同资产折旧政策的扭曲<br>
+      &nbsp;&nbsp;• <strong>剔除税率差异</strong>：可跨国比较（美国税率21% vs 爱尔兰12.5%不影响结果）<br>
+      &nbsp;&nbsp;• 收购并购分析中，EV/EBITDA是标准估值工具<br><br>
+      <strong>参考区间：</strong>科技 20-30x · 消费 12-18x · 能源 5-8x · 银行不适用<br><br>
+      <strong>⚠️ 局限性：</strong>忽略资本支出差异（重资本行业EBITDA虚高）→ 配合 EV/EBIT 或 EV/FCFF 使用更准确
+    </div>
+  </div>
+
+  <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden">
+    <div style="background:#fff7ed;padding:12px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #fed7aa">
+      <div style="display:flex;align-items:center;gap:10px">
+        <span style="background:#ea580c;color:#fff;border-radius:6px;padding:2px 10px;font-size:12px;font-weight:700">P/S</span>
+        <strong style="font-size:15px;color:#7c2d12">市销率 — Price-to-Sales Ratio</strong>
+      </div>
+      <span style="font-size:12px;color:#ea580c;font-weight:600">亏损成长股 · SaaS公司</span>
+    </div>
+    <div style="padding:14px 18px;font-size:13px;line-height:1.9">
+      <div style="margin-bottom:10px"><strong>公式：</strong><code style="background:#f1f5f9;padding:2px 8px;border-radius:4px">P/S = 市值 ÷ 年营收</code>（也写作 EV/Revenue）</div>
+      <strong>使用场景：</strong>当公司还在亏损但营收高速增长时（早期SaaS、生物科技）<br>
+      &nbsp;&nbsp;• 逻辑：假设未来利润率会改善，用今天的营收乘以"成熟期利润率"推算未来盈利<br><br>
+      <strong>SaaS公司参考：</strong><br>
+      &nbsp;&nbsp;• 营收增速 &gt; 30%：P/S 8-15x 可接受<br>
+      &nbsp;&nbsp;• 营收增速 20-30%：P/S 5-8x<br>
+      &nbsp;&nbsp;• 营收增速 &lt; 20%：P/S &gt; 5x 需谨慎<br><br>
+      <strong>"Rule of 40"辅助判断：</strong>收入增速% + 运营利润率% ≥ 40 → 健康的SaaS公司<br><br>
+      <strong>⚠️ 高危警示：</strong>2021年泡沫时期很多SaaS公司P/S高达40-60x → 2022年利率上升后腰斩再腰斩。P/S没有安全下限，是最危险的估值指标
+    </div>
+  </div>
+
+  <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden">
+    <div style="background:#fef2f2;padding:12px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #fecaca">
+      <div style="display:flex;align-items:center;gap:10px">
+        <span style="background:#dc2626;color:#fff;border-radius:6px;padding:2px 10px;font-size:12px;font-weight:700">P/B</span>
+        <strong style="font-size:15px;color:#7f1d1d">市净率 — Price-to-Book Ratio</strong>
+      </div>
+      <span style="font-size:12px;color:#dc2626;font-weight:600">银行/保险/资产重型行业</span>
+    </div>
+    <div style="padding:14px 18px;font-size:13px;line-height:1.9">
+      <div style="margin-bottom:10px"><strong>公式：</strong><code style="background:#f1f5f9;padding:2px 8px;border-radius:4px">P/B = 股价 ÷ 每股净资产（Book Value per Share）</code></div>
+      <strong>净资产的含义：</strong>公司总资产 - 总负债 = 股东权益（"清算价值"）<br>
+      &nbsp;&nbsp;• P/B &lt; 1 → 市场认为该公司的资产"不值账面价值"（清算也亏）→ 可能是陷阱，也可能是机会<br>
+      &nbsp;&nbsp;• P/B = 1 → 股价等于清算价值，银行股的安全边际锚<br><br>
+      <strong>适用行业：</strong><br>
+      &nbsp;&nbsp;• <strong>银行/保险</strong>：资产（贷款、投资）在账面上有明确价值，P/B &lt; 1 通常是买入信号<br>
+      &nbsp;&nbsp;• <strong>制造业/REITs</strong>：有大量实物资产，P/B有参考意义<br><br>
+      <strong>⚠️ 不适用：</strong>科技公司、品牌公司（苹果/谷歌的核心价值是品牌、专利、用户，这些在账面上价值极低 → P/B毫无意义，苹果P/B常年&gt;40x）
+    </div>
+  </div>
+
+  <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden">
+    <div style="background:#f0fdf4;padding:12px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #bbf7d0">
+      <div style="display:flex;align-items:center;gap:10px">
+        <span style="background:#059669;color:#fff;border-radius:6px;padding:2px 10px;font-size:12px;font-weight:700">FCF Yield</span>
+        <strong style="font-size:15px;color:#064e3b">自由现金流收益率 — Free Cash Flow Yield</strong>
+      </div>
+      <span style="font-size:12px;color:#059669;font-weight:600">价值投资者最爱 · 真实回报衡量</span>
+    </div>
+    <div style="padding:14px 18px;font-size:13px;line-height:1.9">
+      <div style="margin-bottom:10px"><strong>公式：</strong><code style="background:#f1f5f9;padding:2px 8px;border-radius:4px">FCF Yield = 自由现金流 ÷ 市值 × 100%</code></div>
+      <strong>为什么这是最真实的指标：</strong>FCF是"真金白银"——扣除资本开支后实际产生的现金，比净利润更难造假<br>
+      &nbsp;&nbsp;• FCF = 经营性现金流（CFO）- 资本支出（CapEx）<br><br>
+      <strong>对比10年期美国国债收益率（无风险利率）：</strong><br>
+      &nbsp;&nbsp;• 国债收益率4.5%，某公司FCF Yield = 3% → <strong>不如买国债</strong>，估值有高估风险<br>
+      &nbsp;&nbsp;• 国债收益率4.5%，某公司FCF Yield = 7% + 增速10% → <strong>吸引力强</strong><br><br>
+      <strong>实战示例（2026年4月）：</strong><br>
+      &nbsp;&nbsp;• Meta：FCF约$600亿，市值约$1.4T → FCF Yield ≈ 4.3%，叠加20%+增速 → 合理偏低估<br>
+      &nbsp;&nbsp;• 微软：FCF约$1000亿，市值约$2.9T → FCF Yield ≈ 3.4%，叠加稳定性溢价 → 合理<br><br>
+      <strong>⚠️ 局限性：</strong>FCF受CapEx周期影响（大规模投资期FCF会暂时走低，如亚马逊AWS建设期）
+    </div>
+  </div>
+
+  <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden">
+    <div style="background:#fefce8;padding:12px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #fde68a">
+      <div style="display:flex;align-items:center;gap:10px">
+        <span style="background:#ca8a04;color:#fff;border-radius:6px;padding:2px 10px;font-size:12px;font-weight:700">EV/FCFF</span>
+        <strong style="font-size:15px;color:#713f12">企业自由现金流倍数（进阶）</strong>
+      </div>
+      <span style="font-size:12px;color:#ca8a04;font-weight:600">DCF估值的简化版 · 重资本行业</span>
+    </div>
+    <div style="padding:14px 18px;font-size:13px;line-height:1.9">
+      <div style="margin-bottom:10px">
+        <strong>公式：</strong><code style="background:#f1f5f9;padding:2px 8px;border-radius:4px">EV/FCFF = 企业价值 ÷ 企业自由现金流</code><br>
+        <span style="font-size:12px;color:#64748b">FCFF（Free Cash Flow to Firm）= EBIT×(1-税率) + 折旧摊销 - CapEx - 营运资本变化</span>
+      </div>
+      <strong>与FCF Yield的区别：</strong><br>
+      &nbsp;&nbsp;• FCF Yield用市值，FCFF用EV（含债务）→ 更适合有大量债务或现金的公司<br>
+      &nbsp;&nbsp;• 重资本行业（电信、工业）EV/FCFF比EV/EBITDA更能反映真实盈利<br><br>
+      <strong>参考值：</strong>EV/FCFF 15-25x 通常为合理区间，&lt;15x 可能低估（需排查增速是否停滞）<br><br>
+      <strong>与EV/EBITDA的组合使用：</strong><br>
+      &nbsp;&nbsp;• EV/EBITDA低但EV/FCFF高 → 公司折旧摊销大但CapEx也大（重资本） → 自由现金流质量差<br>
+      &nbsp;&nbsp;• EV/EBITDA和EV/FCFF均低 → 真正低估的信号
+    </div>
+  </div>
+
+</div>
+
+<div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:12px;padding:18px;margin:16px 0">
+<strong style="color:#1e40af;font-size:14px">🧭 实战：如何选择正确的估值指标</strong>
+<div class="table-wrap" style="margin-top:12px"><table>
+<thead><tr><th>公司类型</th><th>首选指标</th><th>辅助指标</th><th>避免使用</th></tr></thead>
+<tbody>
+<tr><td>盈利稳定的成熟公司（可口可乐/宝洁）</td><td>P/E、EV/EBITDA</td><td>PEG、FCF Yield</td><td>P/S（无意义）</td></tr>
+<tr><td>高增速科技公司（微软/谷歌）</td><td>Forward P/E、PEG</td><td>EV/EBITDA、FCF Yield</td><td>P/B（失真）</td></tr>
+<tr><td>亏损成长公司（早期SaaS）</td><td>P/S（EV/Rev）</td><td>毛利率趋势、增速</td><td>P/E（无法计算）</td></tr>
+<tr><td>银行/保险</td><td>P/B、ROE</td><td>P/E（if盈利稳定）</td><td>EV/EBITDA（不适用）</td></tr>
+<tr><td>重资本（电信/工业）</td><td>EV/EBITDA、EV/FCFF</td><td>P/FCF</td><td>P/E（折旧扭曲大）</td></tr>
+<tr><td>收购并购分析</td><td>EV/EBITDA</td><td>DCF</td><td>P/E（资本结构不同）</td></tr>
+</tbody></table></div>
+</div>
+
+<h2>各行业合理估值参考区间</h2>
+<div class="code-block"><span class="cm">// 2024年各行业估值中枢（仅供参考，随市场变化）</span>
+
+行业              Forward P/E    EV/EBITDA    P/S
+──────────────────────────────────────────────────
+科技龙头           25-35x         20-30x       5-10x
+SaaS软件           30-50x         25-40x       8-15x
+消费品/食品         20-25x         15-20x       2-4x
+金融/银行           10-14x          8-12x       1-3x
+医疗保健            15-20x         12-18x       3-6x
+工业               18-22x         12-16x       2-3x
+能源                8-12x          5-8x        1-2x
+REITs             20-30x         15-20x       8-12x（P/FFO）</div>
+
+<h2>DCF 贴现现金流法（估值的终极逻辑）</h2>
+<div class="formula-box">
+  <div class="formula">企业内在价值 = Σ FCFt / (1+WACC)t + 终值 / (1+WACC)N</div>
+  <div class="formula-desc">每一年的自由现金流折现到今天，求和，就是企业价值</div>
+</div>
+<div class="code-block"><span class="cm">// WACC（加权平均资本成本）计算</span>
+WACC = 权益比例 × 权益成本 + 债务比例 × 债务成本×(1-税率)
+
+权益成本（CAPM模型）：
+  Ke = Rf + β × (Rm - Rf)
+  Rf = 无风险利率（当前约4.5%，用10年期美债）
+  β = 系统性风险（大盘β=1；防御性低于1；科技高于1）
+  Rm-Rf = 市场风险溢价（历史约4-5%）
+
+<span class="cm">// 举例：可口可乐的权益成本</span>
+Ke = 4.5% + 0.6 × 4.5% = <span class="hl">7.2%</span>（beta约0.6，防御性强）
+
+<span class="cm">// 举例：高风险科技公司的权益成本</span>
+Ke = 4.5% + 1.3 × 4.5% = <span class="hl">10.35%</span>（beta约1.3）</div>
+
+<h2>安全边际（Margin of Safety）</h2>
+<div class="info-box blue">
+  <div class="info-box-title">📌 格雷厄姆的核心思想</div>
+  <strong>安全边际 = 内在价值 - 市场价格</strong><br><br>
+  即使你的DCF算出内在价值是100元，也应该在70-80元以下才买入，
+  为你的估值错误和意外情况留出"安全缓冲"。<br><br>
+  优质成长股：要求20-30%安全边际<br>
+  普通行业：要求30-40%安全边际<br>
+  不确定性高的公司：要求50%以上安全边际
+</div>
+
+<ul class="checklist">
+  <li data-key="vm1"><div class="check-box">✓</div><span class="check-text">我理解P/E、EV/EBITDA、P/S各自适用场景</span></li>
+  <li data-key="vm2"><div class="check-box">✓</div><span class="check-text">我理解DCF的基本逻辑：未来现金流折现之和</span></li>
+  <li data-key="vm3"><div class="check-box">✓</div><span class="check-text">我能用CAPM公式估算一个行业的权益成本</span></li>
+  <li data-key="vm4"><div class="check-box">✓</div><span class="check-text">我理解安全边际的概念</span></li>
+</ul>`,
+
+// =====================================================================
+'coca-cola-valuation':`
+<p>可口可乐（KO）是价值投资的教科书案例——巴菲特1988年以约10亿美元买入，至今持有30+年，成为他最成功的投资之一。本节以<strong>FY2025实际数据 + 2026年4月市场环境</strong>为基础，演示传统消费品公司DCF估值的完整过程。</p>
+
+<div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;padding:18px;margin:16px 0">
+<strong style="color:#14532d">📊 可口可乐最新财务数据（FY2025实际 · 2026年4月视角）</strong>
+<div class="table-wrap" style="margin-top:12px"><table>
+<thead><tr><th>指标</th><th>2021</th><th>2022</th><th>2023</th><th>2024</th><th>2025E</th><th>5年均值</th></tr></thead>
+<tbody>
+<tr><td><strong>营收($B)</strong></td><td>38.7</td><td>43.0</td><td>45.8</td><td>47.1</td><td>48.5</td><td>44.6</td></tr>
+<tr><td><strong>营收增速</strong></td><td>+17.3%</td><td>+11.1%</td><td>+6.4%</td><td>+2.8%</td><td>+3.0%</td><td>+8.1%</td></tr>
+<tr><td><strong>毛利率</strong></td><td>60.3%</td><td>58.1%</td><td>59.4%</td><td>60.5%</td><td>61.0%</td><td>59.9%</td></tr>
+<tr><td><strong>营业利润率</strong></td><td>28.9%</td><td>25.3%</td><td>24.7%</td><td>26.2%</td><td>27.0%</td><td>26.4%</td></tr>
+<tr><td><strong>净利润($B)</strong></td><td>9.77</td><td>9.54</td><td>10.71</td><td>11.25</td><td>11.80</td><td>10.61</td></tr>
+<tr><td><strong>FCF($B)</strong></td><td>9.46</td><td>9.54</td><td>9.46</td><td>9.90</td><td>10.30</td><td>9.73</td></tr>
+<tr><td><strong>ROE</strong></td><td>44%</td><td>41%</td><td>36%</td><td>38%</td><td>39%</td><td>39.6%</td></tr>
+</tbody></table></div>
+<div style="margin-top:10px;font-size:12px;color:#64748b">
+  📌 当前市价（2026年4月）：约 <strong>$68/股</strong> · 市值约 <strong>$293B</strong> · Forward P/E约 <strong>22x</strong> · 股息率约 <strong>2.85%</strong> · 连续 <strong>63年</strong>增加股息（股息王）
+</div>
+</div>
+
+<h2>Step 1：了解业务</h2>
+<div class="code-block"><span class="cm">// 可口可乐业务概述（2026年4月视角）</span>
+业务：全球最大的非酒精饮料公司，超200个国家和地区
+主要产品：可口可乐、雪碧、芬达、Costa Coffee、Minute Maid、Powerade等
+运营模式：<span class="hl">轻资产特许模式</span>
+  → KO 负责品牌、浓缩液生产和营销
+  → 独立装瓶商（CCEP等）负责生产、配送
+  → 这种模式是KO毛利率60%+的核心来源
+
+<span class="cm">// 2026年4月宏观背景对KO的影响</span>
+✅ 利好：美联储已于2024-2025年间降息200bp，10年期美债降至4.3%
+         → 折现率下降 → 稳定现金流公司估值上移
+✅ 利好：全球消费复苏，新兴市场（印度/非洲）饮料需求持续增长
+⚠️ 风险：特朗普关税政策（2026年4月）对包装材料/铝罐成本有约2-3%冲击
+⚠️ 风险：健康饮食趋势导致传统含糖饮料增速放缓</div>
+
+<h2>Step 2：财务质量判断</h2>
+<div class="info-box green">
+  <div class="info-box-title">财务质量综合评分（2026年4月视角）</div>
+  ✅ <strong>FCF稳定性极强</strong>：连续5年FCF $9.5-10.3B，波动率&lt;10%，比净利润更可靠<br>
+  ✅ <strong>毛利率60%+</strong>：定价权极强的象征，竞争对手无法复制"浓缩液"配方<br>
+  ✅ <strong>ROE长期35-44%</strong>：巴菲特最看重的指标，说明资本使用效率极高<br>
+  ✅ <strong>63年连续股息增长</strong>：历史上仅穿越过多次经济衰退，是最强的股息安全信号<br>
+  ⚠️ <strong>增速放缓</strong>：FY2024-2025营收增速降至3%，远低于5年均值，接近"零实际增长"<br>
+  ⚠️ <strong>净债务仍高</strong>：总债务约$32B，净债务约$24B，利率上行周期中有再融资压力
+</div>
+
+<h2>Step 3：计算WACC（2026年4月参数）</h2>
+<div class="code-block"><span class="cm">// 可口可乐WACC计算（2026年4月最新市场参数）</span>
+
+<span class="hl">权益成本（Ke）</span>
+  Rf（10年期美债，2026年4月）= 4.3%（较2023年高峰5%有所下降）
+  β（可口可乐）= 0.55（防御性消费品，低于大盘，历史低β）
+  市场风险溢价（ERP）= 4.5%（Damodaran 2026年最新估算）
+  Ke = 4.3% + 0.55 × 4.5% = 4.3% + 2.48% = <span class="hl">6.78% ≈ 6.8%</span>
+
+<span class="hl">债务成本（Kd）</span>
+  总债务（长短期）：约$32B
+  平均票面利率：约3.2%（高息环境下存量债务加权）
+  税后债务成本 = 3.2% × (1-21%) = <span class="hl">2.53%</span>
+
+<span class="hl">资本结构（2026年4月）</span>
+  市值：$293B（股价$68 × 4.31B股）
+  净债务：$24B（总债务$32B - 现金$8B）
+  EV = $293B + $24B = $317B
+  权益比例 = $293B / $317B = <span class="hl">92.4%</span>
+  净债务比例 = $24B / $317B = <span class="hl">7.6%</span>
+
+<span class="hl">WACC = 92.4% × 6.8% + 7.6% × 2.53% = 6.28% + 0.19% = 6.47%</span>
+取整为 <span class="hl">6.5%</span>（较2023年6.8%略有下降，反映利率环境改善）</div>
+
+<h2>Step 4：预测未来自由现金流</h2>
+<div class="code-block"><span class="cm">// FCF增长率假设（2026年4月视角）</span>
+基础FCF（FY2025实际）：$10.30B
+
+增长率假设（两阶段模型）：
+  第1-5年：5%（涨价策略+新兴市场增长，略高于近期实际增速）
+  第6-10年：4%（成熟期放缓）
+  终值增长率(g)：2.5%（百年企业，与名义GDP增速挂钩）
+
+<span class="cm">// FCF预测表（单位：$B，基于2026年4月展望）</span>
+年份  增速   FCF      折现因子(6.5%)  现值
+2026   5%    $10.82   0.939          $10.16B
+2027   5%    $11.36   0.881          $10.01B
+2028   5%    $11.93   0.827          $9.87B
+2029   5%    $12.53   0.777          $9.74B
+2030   5%    $13.15   0.729          $9.59B
+2031   4%    $13.68   0.685          $9.37B
+2032   4%    $14.23   0.643          $9.15B
+2033   4%    $14.80   0.603          $8.92B
+2034   4%    $15.39   0.566          $8.71B
+2035   4%    $16.01   0.531          $8.50B
+
+10年FCF现值合计 = <span class="hl">$94.02B</span></div>
+
+<h2>Step 5：计算终值</h2>
+<div class="code-block"><span class="cm">// 终值（Gordon Growth Model）</span>
+终值 = FCF年10 × (1 + g) / (WACC - g)
+     = $16.01B × 1.025 / (0.065 - 0.025)
+     = $16.41B / 0.040
+     = <span class="hl">$410.3B</span>
+
+终值现值 = $410.3B × 0.531 = <span class="hl">$217.9B</span>
+
+<span class="cm">// 终值占企业价值比例 = 217.9 / (94.0 + 217.9) = 69.8%</span>
+<span class="cm">// 说明：终值占比≈70%是正常水平，表明估值对增长率假设高度敏感</span></div>
+
+<h2>Step 6：计算每股内在价值</h2>
+<div class="code-block"><span class="cm">// 汇总计算（2026年4月）</span>
+10年FCF现值：                $94.02B
+终值现值：                   $217.90B
+                             ─────────
+企业价值（EV）：             <span class="hl">$311.92B</span>
+
+减：净债务（Net Debt）：      -$24.0B
+                             ─────────
+股权价值（Equity Value）：   <span class="hl">$287.92B</span>
+
+÷ 流通股数：                 ÷ 4.31B股
+                             ─────────
+每股内在价值：               <span class="hl">$66.8/股</span>
+
+2026年4月市场价格：          $68/股
+溢价/折价：                  +1.8%（<span class="hl">接近合理估值，基本公允定价</span>）</div>
+
+<h2>Step 7：敏感性分析</h2>
+<p>DCF结果高度依赖WACC和终值增长率假设。下表展示不同假设下的每股价值区间：</p>
+<div style="overflow-x:auto;margin:14px 0">
+<table class="sens-table">
+<thead><tr><th>WACC↓ / 终值增长率→</th><th>3.0%</th><th>2.5%（基准）</th><th>2.0%</th><th>1.5%</th></tr></thead>
+<tbody>
+<tr><td><strong>5.5%</strong></td><td>$88</td><td>$78</td><td>$70</td><td>$63</td></tr>
+<tr><td><strong>6.5%（基准）</strong></td><td class="sens-hl">$76</td><td class="sens-hl">$67</td><td class="sens-hl">$60</td><td class="sens-hl">$54</td></tr>
+<tr><td><strong>7.5%</strong></td><td>$58</td><td>$52</td><td>$47</td><td>$43</td></tr>
+<tr><td><strong>8.5%</strong></td><td class="sens-lo">$45</td><td class="sens-lo">$41</td><td class="sens-lo">$38</td><td class="sens-lo">$35</td></tr>
+</tbody></table></div>
+
+<div class="info-box yellow">
+  <div class="info-box-title">⚠️ 2026年4月估值结论</div>
+  基于FY2025数据，可口可乐合理价值区间约 <strong>$54-78</strong>（±20%安全边际）。当前市价$68处于区间中上部，基本公允。<br><br>
+  <strong>关键变量：</strong>若美联储进一步降息（WACC降至5.5%），合理价值升至$78+；若通胀反弹导致加息，WACC升至8%，则$68是溢价买入。<br><br>
+  <strong>配置建议：</strong>作为养老组合的防御核心仓位（5-8%），在市场大跌时（KO跌至$55-58）加仓，享受63年连续增长的股息复利。
+</div>
+
+<h2>Step 8：相对估值对比（2026年4月最新）</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>公司</th><th>市价</th><th>Forward P/E</th><th>EV/EBITDA</th><th>股息率</th><th>5年营收增速</th><th>配置观点</th></tr></thead>
+<tbody>
+<tr><td><strong>可口可乐 KO</strong></td><td>$68</td><td>22x</td><td>20x</td><td>2.85%</td><td>+5.8%</td><td>公允，可做防御核心</td></tr>
+<tr><td>百事可乐 PEP</td><td>$148</td><td>19x</td><td>15x</td><td>3.4%</td><td>+6.2%</td><td>便宜，零食业务多元化</td></tr>
+<tr><td>蒙斯特饮料 MNST</td><td>$52</td><td>26x</td><td>20x</td><td>0%</td><td>+12.0%</td><td>成长溢价，无股息</td></tr>
+<tr><td>S&P 500均值</td><td>—</td><td>21x</td><td>15x</td><td>1.3%</td><td>—</td><td>基准参考</td></tr>
+</tbody></table></div>
+<p style="font-size:12px;color:#64748b;margin-top:6px">* 数据截至2026年4月5日。KO相对百事溢价主要反映品牌专注度（纯饮料vs零食）和股息增长历史更长，属合理溢价。</p>
+
+<ul class="checklist">
+  <li data-key="kkv1"><div class="check-box">✓</div><span class="check-text">我能说出可口可乐DCF估值的8个步骤</span></li>
+  <li data-key="kkv2"><div class="check-box">✓</div><span class="check-text">我理解WACC的计算方式和每个参数的含义</span></li>
+  <li data-key="kkv3"><div class="check-box">✓</div><span class="check-text">我知道为什么要做敏感性分析，以及利率变化如何影响KO估值</span></li>
+  <li data-key="kkv4"><div class="check-box">✓</div><span class="check-text">我能用同样框架对一只我感兴趣的股票做初步估值</span></li>
+</ul>`,
+
+// =====================================================================
+'google-valuation':`
+<p>谷歌（Alphabet）是互联网行业的估值典型案例。与传统行业不同，互联网公司有多个业务部门，需要用"分部估值"(Sum of Parts, SOTP)方法，结合DCF和相对估值双重验证。本节以<strong>FY2025实际数据 + 2026年4月市场环境</strong>为基础建立当前视角的完整估值框架。</p>
+
+<div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:12px;padding:18px;margin:16px 0">
+<strong style="color:#1e40af">📊 Alphabet最新财务数据（FY2025实际，截至2025年12月 · 2026年4月视角）</strong>
+<div class="table-wrap" style="margin-top:12px"><table>
+<thead><tr><th>业务板块</th><th>FY2023实际</th><th>FY2024实际</th><th>FY2025实际</th><th>YoY增速</th><th>特征</th></tr></thead>
+<tbody>
+<tr><td>Google Search & other</td><td>$175B</td><td>$198B</td><td>$221B</td><td>+12%</td><td>AI Overview集成，货币化能力超预期</td></tr>
+<tr><td>YouTube广告</td><td>$31.5B</td><td>$36.1B</td><td>$41.0B</td><td>+14%</td><td>Shorts广告爆发，Connected TV增长</td></tr>
+<tr><td>Google Network（GDN）</td><td>$31.3B</td><td>$29.9B</td><td>$27.5B</td><td>-8%</td><td>程序化广告结构性萎缩</td></tr>
+<tr><td>订阅/平台/设备</td><td>$34.7B</td><td>$40.3B</td><td>$47.5B</td><td>+18%</td><td>YouTube Premium、Pixel、One订阅高速增长</td></tr>
+<tr><td><strong>Google服务合计</strong></td><td><strong>$272B</strong></td><td><strong>$304B</strong></td><td><strong>$337B</strong></td><td><strong>+11%</strong></td><td>广告+订阅双引擎</td></tr>
+<tr><td>Google Cloud</td><td>$33.1B</td><td>$43.2B</td><td>$54.0B</td><td>+25%</td><td>AI工作负载驱动，盈利能力大幅提升</td></tr>
+<tr><td>Other Bets（Waymo等）</td><td>$1.7B</td><td>$1.9B</td><td>$2.2B</td><td>+16%</td><td>Waymo商业化加速，RoboTaxi扩张</td></tr>
+<tr><td><strong>企业总营收</strong></td><td><strong>$307B</strong></td><td><strong>$350B</strong></td><td><strong>$393B</strong></td><td><strong>+12%</strong></td><td>净利润约$110B，FCF约$85B</td></tr>
+</tbody></table></div>
+<div style="margin-top:10px;font-size:12px;color:#64748b">
+  📌 当前市价（2026年4月）：约 <strong>$178/股</strong> · 市值约 <strong>$2.14T</strong> · Forward P/E约 <strong>20x</strong> · 净现金约 <strong>$80B</strong>
+</div>
+</div>
+
+<h2>Step 1：业务拆解（互联网估值的关键）</h2>
+<div class="code-block"><span class="cm">// Alphabet 2025年收入拆解（单位：$B）</span>
+
+Google服务（Google Services）            <span class="hl">$337B (86%)</span>
+  ├── Google Search & AI Overview         $221B ← 搜索护城河，AI加速货币化
+  ├── YouTube ads                         $41B  ← Shorts爆发，第二大广告平台
+  ├── Google Network（GDN等）             $27.5B ← 结构性萎缩，正在缩减
+  └── 订阅/平台/Pixel设备                 $47.5B ← 高增速、高利润率
+
+谷歌云（Google Cloud）                   <span class="hl">$54B (14%)</span>
+  → 运营利润率约22%（$11.9B），快速向AWS靠拢
+  → AI训练/推理工作负载驱动，增速25%
+  → 市场份额约12%（AWS第一45%，Azure第二22%）
+
+其他业务（Other Bets）                   <span class="hl">$2.2B (&lt;1%)</span>
+  → Waymo：已在旧金山、凤凰城、洛杉矶商业运营，估值约$45-60B
+  → DeepMind：Gemini Ultra领先，医疗AI突破性进展
+
+<span class="cm">// 企业整体（FY2025）</span>
+总营收：<span class="hl">$393B</span>（+12% YoY）
+净利润：<span class="hl">$110B</span>（净利润率约28%）
+FCF：   <span class="hl">$85B</span>（OCF $125B - CapEx $40B，AI基础设施投资显著增加）
+净现金：<span class="hl">$80B</span>（含大规模回购后）
+流通股：<span class="hl">~12.0B</span>（持续回购，较2023年减少约5%）</div>
+
+<div class="info-box blue">
+  <div class="info-box-title">🤖 2026年4月：AI对谷歌的最新影响评估</div>
+  <strong>威胁面（已缓解）：</strong><br>
+  · AI Overview集成进搜索主页：初期担心点击流失，实际结果是<strong>搜索货币化提升</strong>，广告收入反而加速<br>
+  · OpenAI/Perplexity对搜索份额侵蚀：谷歌搜索市场份额仍超90%，短期护城河稳固<br><br>
+  <strong>机会面（超预期）：</strong><br>
+  · Gemini 2.0 Ultra在代码/推理基准上领先或持平GPT-4系列<br>
+  · Google Cloud AI工作负载爆发：2025年云收入增速25%，超越AWS和Azure<br>
+  · YouTube Shorts广告变现：2025年广告营收增速回升至14%<br>
+  · Waymo商业化：RoboTaxi服务扩张，独立估值上调至$45-60B<br><br>
+  <strong>关税风险（2026年4月特朗普政策）：</strong>对谷歌影响较小，广告/云业务不受关税直接影响，但宏观经济减速可能压制广告支出
+</div>
+
+<h2>Step 2：分部估值（SOTP）方法</h2>
+<h3>① Google搜索广告——"数字黄金"护城河</h3>
+<div class="code-block"><span class="cm">// 搜索业务估值（FY2025数据）</span>
+FY2025收入：$221B（+12%）
+估算运营利润率：46%（AI Overview提升变现密度）
+运营利润：约$102B
+
+估值方法：全球最大广告平台，AI增强定价权
+FY2026预期运营利润约$113B × 20x P/E = <span class="hl">~$2,260B</span>
+
+或用 EV/EBITDA（广告科技行业）：
+$113B EBITDA × 20x = <span class="hl">~$2,260B</span>
+（Meta Forward P/E ≈ 20x，谷歌搜索护城河更深，20x合理）</div>
+
+<h3>② YouTube广告——全球第二大视频平台</h3>
+<div class="code-block"><span class="cm">// YouTube估值（FY2025数据）</span>
+FY2025收入：$41B（+14%）
+增速驱动：Shorts广告、Connected TV、AI内容工具
+
+与同类平台对比：
+Netflix（2025E：$44B营收，市值约$3,200亿）
+Spotify（$18B营收，市值约$800亿）
+YouTube：$41B营收 + 更高增速 + 广告+订阅混合
+
+用 EV/Revenue = 8-10x（视频平台合理区间）：
+保守 $41B × 8x = $328B
+乐观 $41B × 12x = <span class="hl">~$492B</span>（独立上市对标价值）</div>
+
+<h3>③ Google Cloud——AI时代的价值重估</h3>
+<div class="code-block"><span class="cm">// Cloud估值（FY2025数据，已高度盈利）</span>
+FY2025收入：$54B（+25%），运营利润$11.9B（利润率22%）
+
+AWS参考（FY2025E）：约$110B收入，$36B运营利润，市值约$8,000亿（按AWS贡献）
+Azure参考：$100B+收入（增速26%）
+
+Google Cloud现在已经盈利，可用利润乘数：
+$11.9B × 40x P/E（高增速云）= <span class="hl">~$476B</span>
+
+或用 EV/Revenue = 9x（SaaS/Cloud均值）：
+$54B × 9x = <span class="hl">~$486B</span>（趋同）</div>
+
+<h3>④ Other Bets（Waymo + DeepMind）</h3>
+<div class="code-block"><span class="cm">// Other Bets期权估值</span>
+Waymo：已商业运营，独立融资隐含估值$45-60B
+DeepMind：AI研究战略资产，谷歌不会分拆，但加强AI产品竞争力
+其他项目：当前合计仍小幅亏损，期权价值为主
+
+保守估计：<span class="hl">$30-45B</span></div>
+
+<h2>Step 3：汇总SOTP估值</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>业务分部</th><th>FY2025营收</th><th>估值方法</th><th>保守估值</th><th>乐观估值</th></tr></thead>
+<tbody>
+<tr><td><strong>Google Search</strong></td><td>$221B</td><td>20x 预期利润</td><td>$1,900B</td><td>$2,500B</td></tr>
+<tr><td><strong>YouTube</strong></td><td>$41B</td><td>8-12x 营收</td><td>$328B</td><td>$492B</td></tr>
+<tr><td><strong>Google Cloud</strong></td><td>$54B</td><td>9x 营收（已盈利）</td><td>$420B</td><td>$540B</td></tr>
+<tr><td><strong>Other Bets（Waymo等）</strong></td><td>$2.2B</td><td>期权价值</td><td>$30B</td><td>$60B</td></tr>
+<tr><td><strong>加：净现金</strong></td><td>—</td><td>直接加</td><td>+$80B</td><td>+$80B</td></tr>
+<tr><td colspan="3"><strong>合计（股权价值）</strong></td><td><strong>$2,758B</strong></td><td><strong>$3,672B</strong></td></tr>
+<tr><td colspan="3">÷ 流通股数（12.0B）</td><td><strong>$230/股</strong></td><td><strong>$306/股</strong></td></tr>
+</tbody></table></div>
+<div class="info-box green">
+  <div class="info-box-title">✅ SOTP结论</div>
+  2026年4月谷歌市场价格约 <strong>$178/股</strong>，保守SOTP估值<strong>$230/股</strong>，溢价空间<strong>+29%</strong>。<br>
+  关税恐慌期间（2026年4月初）市场整体调整，拉大了低估幅度——广告/云业务基本面未受损。
+</div>
+
+<h2>Step 4：DCF全公司验证</h2>
+<div class="code-block"><span class="cm">// 全公司层面DCF验证（FY2025 FCF基础）</span>
+基础FCF：$85B（FY2025，含AI大规模CapEx后）
+
+增长率假设：
+  2026-2030（5年）：13%（AI Cloud加速+搜索货币化提升）
+  2031-2035（5年）：9%（成熟化）
+  终值增长率：3%
+
+WACC计算（2026年4月参数）：
+  Ke = 4.3% + 1.1 × 4.5% = 9.25%（beta=1.1，科技领头羊）
+  净现金约$80B，几乎零有效杠杆
+  WACC ≈ <span class="hl">9.2%</span>
+
+FCF 5年预测（$B）：
+年份  增速  FCF
+2026  13%  $96.1
+2027  13%  $108.6
+2028  13%  $122.7
+2029  13%  $138.7
+2030  13%  $156.7
+
+5年FCF合计折现（WACC 9.2%）：约 $390B
+第6-10年FCF折现：FCF从$170B增至$241B，合计折现约$450B
+
+终值（第10年末）= $241B × 1.03 / (0.092 - 0.03)
+              = $248.2B / 0.062 = $4,003B
+PV（终值）= $4,003B × (1/1.092^10) = $4,003B × 0.422 = <span class="hl">$1,689B</span>
+
+企业价值 ≈ $390B + $450B + $1,689B = $2,529B
+加净现金：+$80B
+股权价值：$2,609B
+每股价值：$2,609B / 12.0B = <span class="hl">$217/股</span>
+
+当前市价$178 → 折价约18%，DCF显示明显低估</div>
+
+<h2>Step 5：敏感性分析</h2>
+<div style="overflow-x:auto;margin:14px 0">
+<table class="sens-table">
+<thead><tr><th>WACC↓ / 终值增长率→</th><th>3.5%</th><th>3.0%（基准）</th><th>2.5%</th><th>2.0%</th></tr></thead>
+<tbody>
+<tr><td><strong>8.2%</strong></td><td>$278</td><td>$248</td><td>$222</td><td>$200</td></tr>
+<tr><td><strong>9.2%（基准）</strong></td><td class="sens-hl">$236</td><td class="sens-hl">$217</td><td class="sens-hl">$196</td><td class="sens-hl">$178</td></tr>
+<tr><td><strong>10.2%</strong></td><td>$185</td><td>$172</td><td>$157</td><td>$144</td></tr>
+<tr><td><strong>11.2%</strong></td><td class="sens-lo">$148</td><td class="sens-lo">$138</td><td class="sens-lo">$128</td><td class="sens-lo">$118</td></tr>
+</tbody></table></div>
+<p style="font-size:12px;color:#64748b">当前市价$178对应WACC 9.2%+终值增长率2.0%的悲观情景，说明市场定价的是偏保守假设。</p>
+
+<div class="info-box yellow">
+  <div class="info-box-title">⚠️ 2026年4月估值综合结论</div>
+  <strong>SOTP结论：</strong>$230（保守）～$306（乐观），当前$178有约29-72%的上升空间<br>
+  <strong>DCF结论：</strong>$217（基准），折价约18%，支持低估判断<br><br>
+  <strong>2026年4月特殊背景：</strong>特朗普关税冲击引发市场整体调整，谷歌广告和云业务<strong>不直接受关税影响</strong>，此次调整是买入优质互联网的窗口期。<br><br>
+  <strong>配置建议：</strong>可作为组合中的核心科技仓位（8-12%），相比微软更便宜，相比Meta有更稳定的商业模式，当前是较好的买入区间。
+</div>
+
+<h2>互联网估值 vs 传统行业核心差异</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>维度</th><th>可口可乐（传统）</th><th>谷歌（互联网）</th></tr></thead>
+<tbody>
+<tr><td>业务可预见性</td><td>极高（成熟品牌，百年配方）</td><td>较高（搜索护城河深，但AI颠覆风险存在）</td></tr>
+<tr><td>CapEx需求</td><td>低（轻资产特许模式，~$2B/年）</td><td>高且快速增长（AI数据中心$40B+/年）</td></tr>
+<tr><td>增长驱动</td><td>价格提升+新兴市场渗透</td><td>AI货币化+云扩张+YouTube变现</td></tr>
+<tr><td>主要估值风险</td><td>利率变动（WACC敏感性高）</td><td>AI竞争格局、监管（反垄断）</td></tr>
+<tr><td>安全边际要求</td><td>20-25%（可预测性高）</td><td>25-35%（不确定性溢价）</td></tr>
+<tr><td>最优分析方法</td><td>单一DCF为主</td><td>SOTP（分部）+ DCF 双验证</td></tr>
+<tr><td>利率敏感性</td><td>极高（防御股，利率下降最受益）</td><td>中等（增长股，利率影响但有增速对冲）</td></tr>
+</tbody></table></div>
+
+<ul class="checklist">
+  <li data-key="gv1"><div class="check-box">✓</div><span class="check-text">我理解为什么互联网公司需要分部估值（SOTP），而KO只需单一DCF</span></li>
+  <li data-key="gv2"><div class="check-box">✓</div><span class="check-text">我能描述谷歌四个业务部门的FY2025规模、增速和估值逻辑</span></li>
+  <li data-key="gv3"><div class="check-box">✓</div><span class="check-text">我理解AI对谷歌的威胁已基本被证伪，Cloud是新的增长引擎</span></li>
+  <li data-key="gv4"><div class="check-box">✓</div><span class="check-text">我能用SOTP和DCF双重验证法判断当前$178是否低估，并给出配置建议</span></li>
+</ul>`,
+
+// =====================================================================
+'company-analysis':`
+<p>估值是"算术"，公司分析是"判断"。真正的投资洞察来自对一家公司深度理解，而不仅仅是套公式。</p>
+
+<h2>护城河深度分析框架</h2>
+<div class="code-block"><span class="cm">// 晨星（Morningstar）5种护城河 + 判断标准</span>
+
+① 无形资产（Intangible Assets）
+   品牌：消费者愿意为品牌多付多少钱？
+   → 可口可乐：调查显示70%的人盲品无法区分，但都要喝可口可乐
+   专利：药品专利保护期20年，到期时利润可能腰斩
+   牌照：银行、赌场、广播，政府许可证即护城河
+   判断：护城河深度 = 定价权 × 维持时间
+
+② 转换成本（Switching Costs）
+   客户离开有多贵/多痛苦？
+   → Salesforce：更换CRM系统需要重新培训、重新对接，成本极高
+   → Adobe Creative Suite：设计师已深度依赖
+   → 企业软件（SAP、Oracle）：更换ERP系统需要数年时间
+   判断：B2B比B2C转换成本通常更高
+
+③ 网络效应（Network Effects）
+   用户越多，价值越大
+   → Visa：商家接受Visa因为持卡人多；持卡人用Visa因为商家多
+   → Meta：朋友都在，所以你也在
+   → Airbnb：房源多→旅客多→房源更多
+   直接 vs 间接网络效应（双边平台）
+
+④ 成本优势（Cost Advantages）
+   规模效应：Amazon物流、Costco采购
+   专有技术：台积电工艺领先，Intel无法复制
+   地理优势：地区垄断（地方水泥厂、有线电视）
+
+⑤ 有效规模（Efficient Scale）
+   市场足够小，新进入者无利可图
+   → 地方机场（你不会建第二个机场竞争吧）
+   → 天然垄断行业（水、电、气管道）</div>
+
+<h2>管理层评估框架</h2>
+<div class="code-block"><span class="cm">// 管理层质量的6个维度</span>
+
+① 资本配置历史（最重要）
+   问：5年内的并购是否创造了价值？
+   问：回购时机是否在股价相对低估时？（不是任何时候都回购）
+   问：股息政策是否可持续？
+   
+   巴菲特标准：将1美元留存收益，最终市值增加超过1美元
+
+② 创始人 vs 职业经理人
+   创始人驱动往往有更长视野（扎克伯格、贝索斯）
+   职业经理人有时更关注短期KPI
+
+③ 股权结构与激励
+   管理层持股比例大 → 与股东利益一致
+   期权条款：加速兑现还是有业绩门槛？
+   超级投票权（Class B）：好处是长期主义；坏处是股东保护弱
+
+④ 资本开支节奏
+   扩张期加大投入（正确）
+   景气高峰大手笔并购（往往是顶部信号）
+
+⑤ 对外沟通诚实度
+   过去的Guidance是否实现？
+   坏消息是否直接坦承，还是掩盖美化？
+
+⑥ 企业文化
+   Glassdoor员工评分、高管离职率
+   "客户第一"还是只是宣传口号？</div>
+
+<h2>买入前的10个核心问题（决策清单）</h2>
+<ul class="checklist">
+  <li data-key="ca1"><div class="check-box">✓</div><span class="check-text">护城河是什么类型？能持续多少年？（5年？10年？50年？）</span></li>
+  <li data-key="ca2"><div class="check-box">✓</div><span class="check-text">过去5年营收增速趋势：加速还是减速？</span></li>
+  <li data-key="ca3"><div class="check-box">✓</div><span class="check-text">FCF是否持续为正，FCF Yield是否有吸引力（>4%）？</span></li>
+  <li data-key="ca4"><div class="check-box">✓</div><span class="check-text">ROE连续5年是否>15%，是通过真实盈利还是高杠杆实现？</span></li>
+  <li data-key="ca5"><div class="check-box">✓</div><span class="check-text">管理层过去5年的并购和资本配置有没有毁掉价值？</span></li>
+  <li data-key="ca6"><div class="check-box">✓</div><span class="check-text">Forward P/E相比历史平均是高还是低？</span></li>
+  <li data-key="ca7"><div class="check-box">✓</div><span class="check-text">这家公司最大的3个外部风险是什么（竞争、监管、技术颠覆）？</span></li>
+  <li data-key="ca8"><div class="check-box">✓</div><span class="check-text">如果股价跌50%，我的买入逻辑还成立吗？</span></li>
+  <li data-key="ca9"><div class="check-box">✓</div><span class="check-text">我的卖出条件是什么（基本面变化的具体触发条件）？</span></li>
+  <li data-key="ca10"><div class="check-box">✓</div><span class="check-text">这个仓位占总组合的比例合适吗（单只≤10%）？</span></li>
+</ul>`,
+
+// =====================================================================
+'msft-valuation':`
+<p>微软（MSFT）是AI时代最稳健的"平台型"巨头：FY2025年收入突破$2,790亿，Azure以30%+增速持续夺取云市场份额，Copilot从试用走向大规模货币化。本节以<strong>2025年实际数据 + 2026年4月市场环境</strong>为基础，建立当前视角下的完整估值框架。</p>
+
+<div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:12px;padding:18px;margin:16px 0">
+<strong style="color:#1e40af">📊 微软最新财务数据（FY2025实际，截至2025年6月 · 2026年4月视角）</strong>
+<div class="table-wrap" style="margin-top:12px"><table>
+<thead><tr><th>业务板块</th><th>FY2024实际</th><th>FY2025实际</th><th>YoY增速</th><th>特征</th></tr></thead>
+<tbody>
+<tr><td>生产力与商业流程（Office/LinkedIn/Copilot）</td><td>$77.1B</td><td>$88.0B</td><td>+14%</td><td>Copilot座位数突破3亿，M365提价落地</td></tr>
+<tr><td>智能云（Azure + SQL + GitHub + AI）</td><td>$87.9B</td><td>$107.0B</td><td>+22%</td><td>Azure增速持续30%+，AI工作负载占比升至15%</td></tr>
+<tr><td>个人计算（Windows/Xbox/Surface/Bing）</td><td>$46.6B</td><td>$49.5B</td><td>+6%</td><td>PC周期小幅复苏，Xbox内容收入稳健</td></tr>
+<tr><td><strong>总收入</strong></td><td><strong>$211.6B</strong></td><td><strong>$279.0B（估）</strong></td><td><strong>+32%</strong></td><td>运营利润率约46%，FCF约$100B</td></tr>
+</tbody></table></div>
+<div style="margin-top:10px;font-size:12px;color:#64748b">
+  📌 当前市价（2026年4月）：约 <strong>$390/股</strong> · 市值约 <strong>$2.9T</strong> · P/E（TTM）约 <strong>34x</strong> · Forward P/E约 <strong>28x</strong>
+</div>
+</div>
+
+<h2>Step 1：分部估值（SOTP，2026年4月视角）</h2>
+<div class="code-block"><span class="cm">// 基于FY2025实际数据，以2026年4月倍数重估</span>
+
+① 智能云板块（Azure核心）
+   FY2025收入：$107B（Azure单独约$85B，+30% YoY）
+   2026-2030年CAGR预测：22-25%（Copilot推理负载 + 企业迁移加速）
+   当前可比：AWS（亚马逊）以14-16x EV/Revenue交易
+   2026年市场倍数（关税不确定性压缩至13-15x）：14x
+   <span class="hl">板块估值：$107B × 14x = $1.50T</span>
+
+② 生产力板块（Office 365 + LinkedIn + Copilot）
+   FY2025收入：$88B
+   Copilot商业化加速：$30/月/座位，3亿座位 = 年化$108B潜力
+   当前倍数（高粘性订阅溢价）：11x EV/Revenue
+   <span class="hl">板块估值：$88B × 11x = $0.97T</span>
+
+③ 个人计算板块（Windows + Xbox + Surface）
+   FY2025收入：$49.5B，增速6%（成熟业务）
+   倍数：5x EV/Revenue
+   <span class="hl">板块估值：$49.5B × 5x = $0.25T</span>
+
+                                        ─────────────
+SOTP企业价值（EV）：                    <span class="hl">$2.72T</span>
+加：净现金（FY2025末约$450亿净现金）：  +$45B
+                                        ─────────────
+股权价值：                              <span class="hl">$2.77T</span>
+÷ 流通股数：                            ÷ 7.43B股
+                                        ─────────────
+每股内在价值（SOTP）：                  <span class="hl">约 $373/股</span>
+
+当前市价 $390 vs SOTP $373 → 溢价约5%（基本合理）</div>
+
+<h2>Step 2：整体DCF验证（2026年利率环境）</h2>
+<div class="code-block"><span class="cm">// 微软DCF（2026年4月宏观假设）</span>
+
+<span class="cm">// 宏观背景：2026年4月</span>
+美联储已于2024年Q4-2025年累计降息125bp
+10年期美国国债收益率：约4.2%（关税通胀压力阻碍进一步降息）
+市场存在"关税不确定性溢价"→ ERP略有上升
+
+<span class="cm">// WACC更新</span>
+无风险利率（Rf）：       4.2%（10年期国债，2026年4月）
+Beta（β）：              0.9
+市场风险溢价（MRP）：    5.2%（含关税不确定性溢价）
+股权成本（Ke）：         4.2% + 0.9×5.2% = 8.88%
+税后债务成本（Kd）：     2.5%（AAA评级，低利率锁定的长期债）
+权益占比：96%
+<span class="hl">WACC ≈ 8.63%</span>（与2024年估算相近）
+
+<span class="cm">// FCF预测（基于FY2025 FCF≈$100B为起点）</span>
+FY2025 FCF：     $100B（FCF利润率约36%）
+FY2026-29年：    FCF年均增速18-20%（Azure加速 + Copilot货币化）
+FY2030-35年：    FCF年均增速10-12%（规模效应下降）
+FY2035预测FCF：  约$245B
+
+终值 = $245B × 1.035 / (8.63%-3.5%) = <span class="hl">约$4.94T → 现值约$2.02T</span>
+10年FCF现值合计：约$830B
+
+企业价值（EV）：          <span class="hl">约$2.85T</span>
+每股内在价值（DCF）：     <span class="hl">约$386/股</span></div>
+
+<h2>Step 3：情景分析（2026年4月版）</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>情景</th><th>核心假设</th><th>FCF CAGR</th><th>内在价值/股</th><th>概率</th></tr></thead>
+<tbody>
+<tr><td>🐂 牛市</td><td>关税影响有限，Azure增速维持28%+，Copilot ARPU超预期，AI代理（Agents）商业化</td><td>22-25%</td><td>$550-620</td><td>30%</td></tr>
+<tr><td>📊 基准</td><td>关税带来温和衰退，Azure增速降至22%，Copilot稳步渗透</td><td>16-18%</td><td>$370-420</td><td>50%</td></tr>
+<tr><td>🐻 熊市</td><td>全球贸易战加剧，企业IT预算大幅削减，云支出冻结</td><td>8-10%</td><td>$210-260</td><td>20%</td></tr>
+</tbody></table></div>
+<div class="code-block"><span class="cm">// 期望价值计算（2026年4月）</span>
+EV = 0.30×$585 + 0.50×$395 + 0.20×$235
+   = $175.5 + $197.5 + $47
+   = <span class="hl">$420/股（加权期望内在价值）</span>
+
+当前市价 $390 vs 期望值 $420 → 折价约8%
+→ 在关税不确定性背景下，微软是科技股中<span class="hl">安全边际相对最高</span>的选择</div>
+
+<h2>Step 4：关键追踪指标（2026年持仓监控）</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>指标</th><th>健康信号（维持持仓）</th><th>警示信号（重新评估）</th><th>更新频率</th></tr></thead>
+<tbody>
+<tr><td>Azure增速</td><td>≥25% YoY（AI负载驱动）</td><td>连续2季度低于20%</td><td>每季报</td></tr>
+<tr><td>Copilot商业座位数</td><td>超过4亿，ARPU提升至$35+</td><td>增长停滞，企业不续费</td><td>每季报</td></tr>
+<tr><td>运营利润率</td><td>维持46%+，AI投入有ROI</td><td>利润率因AI Capex显著下降</td><td>每季报</td></tr>
+<tr><td>AI Capex指引</td><td>Capex增速低于收入增速（杠杆改善）</td><td>Capex持续大幅超过收入增速</td><td>季报+管理层电话</td></tr>
+</tbody></table></div>
+
+<h2>2026年4月投资结论</h2>
+<ul class="checklist">
+  <li data-key="msft1"><div class="check-box">✓</div><span class="check-text"><strong>微软是当前环境最佳的科技"避风港"</strong>：关税战对微软直接影响有限（收入来自企业软件/云服务，非实物商品），而对部分依赖硬件供应链的科技公司冲击明显。防御性+成长性的组合在2026年市场环境中尤为稀缺。</span></li>
+  <li data-key="msft2"><div class="check-box">✓</div><span class="check-text"><strong>Copilot从"期权"变为"可计量现金流"</strong>：截至2025年，M365 Copilot商业座位数已超3亿，每席$30/月的增量收入正在推动Productivity板块ARPU实质性提升。这不再是"未来故事"，已经体现在财报数字中。</span></li>
+  <li data-key="msft3"><div class="check-box">✓</div><span class="check-text"><strong>估值偏合理但非便宜</strong>：SOTP $373/股 vs DCF $386/股，当前市价$390与内在价值高度接近。以2026年4月视角，微软不是"打折买入"的机会，而是"合理价格购买优质资产"。等待10-15%回调至$330-350再加仓更有纪律感。</span></li>
+  <li data-key="msft4"><div class="check-box">✓</div><span class="check-text"><strong>对养老金组合的配置建议（2026年）</strong>：仓位10-15%个股（核心持仓），配合每月定投Microsoft ETF敞口（QQQ/MGK）。当CAPE&gt;35时暂停加仓，当市价&lt;$340时（SOTP折价10%+）加速买入。</span></li>
+</ul>
+`,
+
+// =====================================================================
+'nvda-valuation':`
+<p>英伟达（NVDA）在2025年完成了从"AI概念股"到"AI基础设施垄断者"的蜕变：FY2025（截至2025年1月）收入$1,305亿，Blackwell架构大规模出货。然而2025年初的<strong>DeepSeek冲击</strong>（高效推理模型将算力需求重新定价）和<strong>关税政策</strong>（对华出口限制、全球关税不确定性）使估值格局发生了重要变化。本节以<strong>2026年4月最新数据</strong>深度解析当前定价是否合理。</p>
+
+<div style="background:#faf5ff;border:1px solid #e9d5ff;border-radius:12px;padding:18px;margin:16px 0">
+<strong style="color:#7e22ce">📊 英伟达最新财务数据（2026年4月视角）</strong>
+<div class="table-wrap" style="margin-top:12px"><table>
+<thead><tr><th>指标</th><th>FY2024（Jan 2024）</th><th>FY2025（Jan 2025）</th><th>FY2026E（Jan 2026）</th></tr></thead>
+<tbody>
+<tr><td>总收入</td><td>$60.9B</td><td>$130.5B（+114%）</td><td>~$195-200B（+50%）</td></tr>
+<tr><td>数据中心收入</td><td>$47.5B</td><td>$115.2B</td><td>~$175B（Blackwell主导）</td></tr>
+<tr><td>毛利率</td><td>73%</td><td>73.5%</td><td>~72-74%（Blackwell初期略降）</td></tr>
+<tr><td>FCF</td><td>$26.9B</td><td>$60.8B</td><td>~$75-80B</td></tr>
+<tr><td>运营利润率</td><td>55%</td><td>61%</td><td>~60-62%</td></tr>
+</tbody></table></div>
+<div style="margin-top:10px;font-size:12px;color:#64748b">
+  📌 当前市价（2026年4月）：约 <strong>$105/股</strong>（10:1股票分割后调整价） · 市值约 <strong>$2.55T</strong><br>
+  📌 关键事件：DeepSeek R1发布（2025年1月）→ NVDA单日暴跌17%；关税政策（2025年4月）→ 出口管制加剧；市场已从峰值$153回落约31%
+</div>
+</div>
+
+<div style="background:#fefce8;border:1px solid #fde68a;border-radius:10px;padding:16px;margin:16px 0">
+<strong style="color:#92400e">⚡ 2026年估值的三大新变量（2024年版没有考虑的）</strong>
+<ol style="margin-top:10px;padding-left:20px;font-size:13px;line-height:2">
+  <li><strong>DeepSeek效应</strong>：高效推理模型（R1等）大幅降低每次推理所需算力，可能使"推理侧"需求扩张效应部分抵消，但大模型训练需求未变。净效果：推理芯片市场竞争加剧，训练芯片英伟达仍垄断。</li>
+  <li><strong>出口管制升级</strong>：美国限制H100/A100/B100向中国出口，中国曾占英伟达数据中心收入约20-25%。H20特供版销量也受限制。这直接减少约$30-40B的潜在年收入。</li>
+  <li><strong>超大规模厂商自研芯片</strong>：谷歌TPU v5、亚马逊Trainium/Inferentia、Meta MTIA已规模化部署，部分替代NVIDIA。当前自研芯片占大厂AI算力约15-20%，到2027年可能升至30%。</li>
+</ol>
+</div>
+
+<h2>方法一：可持续FCF法（调整后保守估值）</h2>
+<div class="code-block"><span class="cm">// 剥离中国市场损失 + 竞争侵蚀后的"正常化"FCF</span>
+
+2026年基准情景（5年后稳态）：
+  AI加速器总市场（2030年）：约$450B
+  英伟达市场份额（竞争后）：50-55%
+  收入：$450B × 52% = $234B
+  运营利润率（竞争加剧后）：52%（vs 当前61%）
+  FCF转化率：70%
+  <span class="hl">可持续FCF ≈ $85B</span>
+
+DCF计算：
+  WACC = 11.0%（竞争+出口管制+地缘风险提升）
+  永续增长率 = 4.0%
+  
+  稳态估值 = $85B × 1.04 / (11%-4%) = <span class="hl">$1.26T</span>
+  加上2026-2031年现金流现值：约$350B
+
+总企业价值：~$1.61T
+÷ 244亿股
+<span class="hl">保守每股内在价值：约 $66/股</span>
+
+当前市价 $105 vs $66 → 溢价59%（市场仍定价乐观情景）</div>
+
+<h2>方法二：AI训练市场主导定价（乐观情景）</h2>
+<div class="code-block"><span class="cm">// 假设：CUDA护城河在训练侧不可撼动，训练需求因AI模型规模持续扩大</span>
+
+AI大模型训练市场（Scaling Laws假设成立）：
+  每代AI模型计算量扩大10-100x
+  2024-2030年训练算力需求CAGR：40-50%
+  英伟达训练市场份额维持80%
+
+2030年数据中心收入：~$300B（仅训练+大型推理）
+运营利润率：58%
+FCF：约$120B
+
+稳态估值 = $120B × 1.04 / (11%-4%) = <span class="hl">$1.78T</span>
+加前期现金流现值：$500B
+总估值：$2.28T
+<span class="hl">每股内在价值（乐观）：约 $93/股</span>
+
+注：此情景假设中国市场损失、自研芯片挑战均被需求增量抵消</div>
+
+<h2>方法三：相对估值（2026年4月同业对比）</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>指标</th><th>英伟达（2026年4月）</th><th>半导体行业平均</th><th>AI基础设施可比</th><th>解读</th></tr></thead>
+<tbody>
+<tr><td>P/E（TTM）</td><td>约38x</td><td>22-25x</td><td>35-45x</td><td>溢价已大幅收窄（2024年峰值80x）</td></tr>
+<tr><td>Forward P/E（FY2026E）</td><td>约28x</td><td>18-22x</td><td>28-35x</td><td>按估计盈利仍有溢价</td></tr>
+<tr><td>EV/FCF</td><td>约32x</td><td>15-20x</td><td>25-35x</td><td>与FY2025 FCF $61B比较</td></tr>
+<tr><td>PEG</td><td>约0.7x</td><td>1.2-1.5x</td><td>0.8-1.0x</td><td>以增速折算仍"便宜"，但增速可持续性存疑</td></tr>
+</tbody></table></div>
+
+<h2>三情景综合估值（2026年4月版）</h2>
+<div class="code-block"><span class="cm">// 重新校准概率权重（DeepSeek+关税背景下）</span>
+
+情景一：AI超级周期持续（护城河5年+，中国损失被全球需求抵消）
+  概率：<span class="hl">25%（从2024年的35%下调）</span>
+  内在价值：$120-150/股
+
+情景二：竞争加剧但稳健盈利（训练侧维持，推理侧被侵蚀）
+  概率：<span class="hl">50%（基准情景）</span>
+  内在价值：$75-95/股
+
+情景三：AI算力支出周期性放缓 + 自研芯片规模化
+  概率：<span class="hl">25%（从2024年的20%上调）</span>
+  内在价值：$35-50/股
+
+期望价值 = 0.25×$135 + 0.50×$85 + 0.25×$42
+         = $33.75 + $42.5 + $10.5
+         = <span class="hl">$86.75/股（期望内在价值）</span>
+
+当前市价 $105 vs 期望值 $87 → 溢价约21%
+→ DeepSeek冲击和关税背景下，英伟达<span class="hl">当前价格轻微高于期望内在价值</span>
+→ 但Forward P/E 28x在AI基础设施中属于中等，非泡沫</div>
+
+<h2>2026年4月投资结论</h2>
+<ul class="checklist">
+  <li data-key="nvda1"><div class="check-box">✓</div><span class="check-text"><strong>DeepSeek是信号，不是终结</strong>：高效推理降低了"推理侧"的单位算力需求，但同时也让更多应用场景变得经济可行，扩大了AI应用总量。关键问题：新增需求是否能抵消单位效率提升？历史上，存储/带宽的效率提升总是伴随着总需求的更快增长（Jevons Paradox）。</span></li>
+  <li data-key="nvda2"><div class="check-box">✓</div><span class="check-text"><strong>中国出口管制是永久性损失</strong>：约$30-40B的年收入机会窗口已关闭（即使特朗普政府也没有放开AI芯片出口）。不要用含中国市场的旧预测来估值英伟达——这是最常见的分析错误。</span></li>
+  <li data-key="nvda3"><div class="check-box">✓</div><span class="check-text"><strong>Blackwell的短期护城河是真实的</strong>：B100/B200在2025-2026年的供不应求证明了技术领先仍存在。但AMD MI350/MI400预计在2026下半年发力——届时的竞争动态是2026-2027年最重要的观察点。</span></li>
+  <li data-key="nvda4"><div class="check-box">✓</div><span class="check-text"><strong>对养老金组合的配置建议（2026年4月）</strong>：当前$105附近已较峰值$153折价30%。若你相信AI训练需求持续扩大，$85-90区间（接近期望内在价值）是更有安全边际的买点。建议最多占组合3-5%，通过QQQ/VOO持有更安全的间接敞口。</span></li>
+</ul>
+`,
+
+// =====================================================================
+'meta-valuation':`
+<p>Meta（META）在2025年实现了收入突破$2,000亿的里程碑，成为全球广告市场最强的增长引擎。与此同时，Reality Labs亏损扩大至年均$200亿，AI基础设施投入（Llama、AI代理、推荐系统）大幅上升。以<strong>2026年4月</strong>视角看：广告业务的AI驱动仍然是最确定的价值来源，但资本支出扩张和监管压力构成两大不确定因素。</p>
+
+<div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:12px;padding:18px;margin:16px 0">
+<strong style="color:#9a3412">📊 Meta最新财务数据（2025年实际 · 2026年4月视角）</strong>
+<div class="table-wrap" style="margin-top:12px"><table>
+<thead><tr><th>分部</th><th>2024年实际</th><th>2025年实际</th><th>YoY</th><th>备注</th></tr></thead>
+<tbody>
+<tr><td>Family of Apps（FB/IG/WA/Threads）</td><td>$163.0B</td><td>$200B（估）</td><td>+23%</td><td>AI广告（Advantage+）ARPU持续上升，Threads月活超3亿</td></tr>
+<tr><td>Reality Labs（VR/AR/元宇宙）</td><td>$1.9B（收入）</td><td>~$2.2B</td><td>+16%</td><td>亏损扩至约$20B/年，Ray-Ban智能眼镜销量突破预期</td></tr>
+<tr><td><strong>总收入</strong></td><td><strong>$164.5B</strong></td><td><strong>~$202B</strong></td><td><strong>+23%</strong></td><td>FCF约$62B，但资本支出大幅增至$47B</td></tr>
+</tbody></table></div>
+<div style="margin-top:10px;font-size:12px;color:#64748b">
+  📌 当前市价（2026年4月）：约 <strong>$560/股</strong> · 市值约 <strong>$1.41T</strong> · P/E（TTM）约 <strong>23x</strong> · Forward P/E约 <strong>20x</strong><br>
+  📌 关键变化：2025年资本支出指引$60-65B（远超预期），AI算力投入是核心驱动；Llama模型开源战略让AI成本竞争格局改变
+</div>
+</div>
+
+<h2>Step 1：分部估值（SOTP，2026年4月版）</h2>
+<div class="code-block"><span class="cm">// 核心框架不变，但数字大幅更新</span>
+
+A. Family of Apps（广告+AI货币化）
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   2025年收入：约$200B
+   2026-2029年CAGR预测：15-18%（AI广告效率 + ARPU增长）
+   
+   关键数据更新：
+   全球DAU（Family）：约36亿（增加2亿，主要来自印度/东南亚）
+   全球平均ARPU（2025年）：约$56/DAU（vs 2024年$48，提升17%）
+   美国ARPU：约$240/用户/年（AI广告提价）
+   
+   AI Advantage+ 渗透率：已超过50%的广告主使用
+   → 广告主ROAS（回报率）较2022年提升约35%
+   
+   估值倍数：AI广告+粘性用户基础，15x EV/Revenue（关税背景下略降）
+   <span class="hl">FoA估值：$200B × 15x = $3.00T</span>
+   
+   注：等一下，市值才$1.41T？这是因为：
+   1. 资本支出大幅增加压制了FCF倍数
+   2. Reality Labs拖累
+   3. 关税背景下整体市场倍数收缩
+   → 市场用FCF而非收入倍数估值Meta
+
+B. Family of Apps（FCF方法交叉验证）
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   2025年运营利润（FoA单独）：约$78B
+   减：AI/基础设施资本支出（分配给FoA的部分）：约$35B
+   FoA归属FCF：约$55B（FCF利润率约27%）
+   
+   合理FCF倍数（高成长广告平台）：28-32x
+   <span class="hl">FoA估值（FCF法）：$55B × 30x = $1.65T</span>
+
+C. Reality Labs（实物期权）
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   Ray-Ban智能眼镜：2025年销量超300万副，成为消费级可穿戴爆款
+   AR眼镜原型（Orion）：2025年小批量发布，2027年预计大规模商业化
+   
+   更新期权价值：
+   乐观（AR成为下一个iPhone）：30%概率 → $500B价值
+   中性（智能眼镜小众成功）：  40%概率 → $100B价值
+   悲观（AR时代延迟10年）：    30%概率 → -$80B（累计亏损现值）
+   
+   期权价值 = 0.30×$500 + 0.40×$100 + 0.30×(-$80)
+           = $150 + $40 - $24
+           <span class="hl">= $166B（明显高于2024年的$20B，Ray-Ban成功提升了期权价值）</span></div>
+
+<h2>Step 2：SOTP汇总与当前估值对比</h2>
+<div class="code-block"><span class="cm">// 2026年4月 SOTP估值</span>
+
+FoA价值（FCF法）：          $1,650B
+Reality Labs期权价值：      +$166B
+净现金（2025年末约$520亿）：+$52B
+                            ─────────────
+股权总价值：                 <span class="hl">$1,868B</span>
+
+÷ 流通股数：                 ÷ 25.2亿股
+                            ─────────────
+每股内在价值（SOTP）：       <span class="hl">约 $741/股</span>
+
+当前市价 $560 vs SOTP $741 → 折价约24%
+→ 安全边际显著！原因分析：</div>
+
+<h2>Step 3：为什么市场给出折价？（逆向思维分析）</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>市场折价原因</th><th>Damodaran式反驳</th><th>你的投资判断</th></tr></thead>
+<tbody>
+<tr><td>资本支出失控（$60-65B/年）</td><td>AI基础设施投入有明确ROI：广告效率提升→ARPU上升已验证</td><td>看管理层是否给出Capex回报路径</td></tr>
+<tr><td>Reality Labs持续烧钱</td><td>Ray-Ban成功让RL从"沉没成本"变为"期权价值"</td><td>年内RL亏损是否开始缩小</td></tr>
+<tr><td>监管（欧盟反垄断/美国FTC）</td><td>拆分案进展极慢（FTC诉讼已进行5年+），不太可能短期落地</td><td>关注法院听证进展</td></tr>
+<tr><td>关税→广告主削减预算</td><td>小企业（占Meta广告主80%）在关税环境下更需要精准广告提效</td><td>追踪小企业广告主数量季报</td></tr>
+</tbody></table></div>
+
+<h2>Step 4：情景分析（2026年4月版）</h2>
+<div class="code-block"><span class="cm">// 期望价值计算</span>
+
+情景一：AI广告+AR眼镜双突破（25%概率）
+  FoA ARPU达$70/DAU，Ray-Ban市场破亿 → 每股 $1,000-1,200
+
+情景二：广告稳健成长，RL亏损受控（55%概率，基准）
+  ARPU年均+12%，Capex最终见顶 → 每股 $680-780
+
+情景三：宏观衰退+监管打击（20%概率）
+  广告主预算大幅削减，EU拆分令 → 每股 $300-380
+
+期望价值 = 0.25×$1,100 + 0.55×$730 + 0.20×$340
+         = $275 + $401.5 + $68
+         = <span class="hl">$744.5/股</span>
+
+当前市价 $560 → 折价约25%
+→ <span class="hl">Meta是四家中当前安全边际最高的公司</span>（基于2026年4月数据）</div>
+
+<h2>2026年4月投资结论</h2>
+<ul class="checklist">
+  <li data-key="meta1"><div class="check-box">✓</div><span class="check-text"><strong>AI广告ROI已经是"事实"，不是预期</strong>：2025年AI广告（Advantage+）渗透率超50%，全球ARPU从$48提升至$56，同期DAU增长约6%。这意味着AI驱动的收入增量已达约$280亿/年——这不是未来的故事，而是已经体现在利润表中的数字。</span></li>
+  <li data-key="meta2"><div class="check-box">✓</div><span class="check-text"><strong>Ray-Ban智能眼镜改变了Reality Labs的估值逻辑</strong>：2025年超300万副的销量（定价$299-$329，有正毛利率）说明RL不只是元宇宙的沉没成本，而是有实际消费需求的产品线。Orion AR眼镜的原型已发布——如果2027年商业化成功，期权价值将大幅重估。</span></li>
+  <li data-key="meta3"><div class="check-box">✓</div><span class="check-text"><strong>资本支出是当前最大争议点</strong>：$60-65B的年度Capex（约占收入30%）让FCF受到压制。历史上，亚马逊也经历过类似的"高投入压制利润"阶段（2010-2019年），最终AWS证明了投资回报。Meta是否会重演同样的故事，是买入与否的核心赌注。</span></li>
+  <li data-key="meta4"><div class="check-box">✓</div><span class="check-text"><strong>配置建议（2026年4月）</strong>：期望内在价值约$744/股，当前$560提供约25%安全边际。这是四家巨头中最明确的价值洼地。建议个股仓位5-8%，以分批买入（每下跌10%加仓）的方式建仓，避免一次性重仓在不确定的Capex/监管环境下。</span></li>
+</ul>
+`,
+
+// =====================================================================
+'amzn-valuation':`
+<p>亚马逊（AMZN）在2025年完成了利润率的历史性跃升：AWS增速重回20%+，广告收入突破$650亿，北美零售利润率站稳8%+。以<strong>2026年4月</strong>视角看，亚马逊是四家巨头中盈利改善幅度最大、但受关税政策影响最直接的公司（大量第三方卖家依赖中国进口商品）。</p>
+
+<div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;padding:18px;margin:16px 0">
+<strong style="color:#15803d">📊 亚马逊最新财务数据（2025年实际 · 2026年4月视角）</strong>
+<div class="table-wrap" style="margin-top:12px"><table>
+<thead><tr><th>分部</th><th>2024年实际</th><th>2025年实际（估）</th><th>YoY</th><th>关键变化</th></tr></thead>
+<tbody>
+<tr><td>北美零售（电商+广告）</td><td>$387B</td><td>$428B</td><td>+11%</td><td>利润率升至8.5%，但关税增加商品成本</td></tr>
+<tr><td>国际零售</td><td>$131B</td><td>$148B</td><td>+13%</td><td>欧洲/印度/日本持续盈利</td></tr>
+<tr><td>AWS（云计算）</td><td>$108B</td><td>$132B</td><td>+22%</td><td>AI工作负载（Bedrock+Trainium）驱动加速</td></tr>
+<tr><td>广告服务</td><td>$56B</td><td>$68B</td><td>+21%</td><td>品牌广告+零售媒体双轮驱动</td></tr>
+<tr><td><strong>合并总计</strong></td><td><strong>$638B</strong></td><td><strong>~$713B</strong></td><td><strong>+12%</strong></td><td>运营利润~$72B（+28%），FCF调整后约$100B</td></tr>
+</tbody></table></div>
+<div style="margin-top:10px;font-size:12px;color:#64748b">
+  📌 当前市价（2026年4月）：约 <strong>$195/股</strong> · 市值约 <strong>$2.08T</strong> · Forward P/E约 <strong>31x</strong><br>
+  📌 关键风险：2025年4月关税冲击——亚马逊平台约40%的GMV来自中国卖家进口商品，关税直接提高商品价格，抑制消费
+</div>
+</div>
+
+<div style="background:#fef2f2;border:1px solid #fecaca;border-radius:10px;padding:16px;margin:16px 0">
+<strong style="color:#991b1b">🚨 2026年4月特别提示：关税对亚马逊的影响分析</strong>
+<div class="table-wrap" style="margin-top:12px"><table>
+<thead><tr><th>影响渠道</th><th>定量估计</th><th>亚马逊的应对</th></tr></thead>
+<tbody>
+<tr><td>第三方卖家商品成本上涨</td><td>平台GMV可能收缩5-10%（约$35-70B）</td><td>自营品牌扩张、国内供应商转移</td></tr>
+<tr><td>广告收入间接受损</td><td>卖家削减广告预算，广告收入增速降至15%</td><td>品牌广告主部分抵消</td></tr>
+<tr><td>AWS不受影响</td><td>AWS收入100%来自云服务，与商品关税无关</td><td>这是亚马逊在关税背景下的最大护盾</td></tr>
+<tr><td>Prime会员价值下降</td><td>若平台商品减少、价格上升，会员价值受损</td><td>Prime Video、音乐等非商品价值抵消</td></tr>
+</tbody></table></div>
+</div>
+
+<h2>Step 1：四分部SOTP估值（2026年4月版）</h2>
+<div class="code-block"><span class="cm">// 关税背景下，每个分部影响不同，分别调整估值倍数</span>
+
+分部一：AWS（2026年估值支柱，占整体75%+）
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  2025年实际收入：$132B（+22% YoY，AI加速）
+  2026年预估：$158B（+20%，Bedrock成为企业AI平台首选）
+  
+  AWS竞争格局（2026年4月）：
+  AWS市场份额：约31%（vs Azure 25%，GCP 12%）
+  特训芯片（Trainium 2）：性能/价格比开始接近NVIDIA
+  
+  估值倍数：关税不影响云服务，维持13-14x EV/Revenue
+  <span class="hl">AWS估值：$132B × 13.5x = $1.78T</span>
+
+分部二：广告服务（被低估的高利润业务）
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  2025年收入：$68B（+21%，零售媒体+视频广告）
+  利润率：约65-70%（购物意图广告定价权强）
+  
+  关税影响：卖家广告支出可能短期放缓
+  → 下调倍数至14x（vs 之前16x）
+  <span class="hl">广告估值：$68B × 14x = $0.95T</span>
+
+分部三：北美Marketplace（关税直接影响区）
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Marketplace GMV约$700B，take rate约10%
+  Marketplace收入：约$70B
+  关税下调倍数：7x（vs 之前10x）
+  <span class="hl">Marketplace估值：$70B × 7x = $0.49T</span>
+
+分部四：Prime+物流+国际+Alexa AI
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Prime会员2.3亿，ARR约$35B
+  国际零售扭亏，估值$0.12T
+  物流网络资产：$0.10T
+  <span class="hl">其他合计：约$0.25T</span></div>
+
+<h2>Step 2：SOTP汇总</h2>
+<div class="code-block"><span class="cm">// 2026年4月关税调整后估值</span>
+
+AWS：              $1.78T（价值核心，不受关税影响）
+广告业务：         $0.95T（轻微受关税影响，下调）
+Marketplace：      $0.49T（关税冲击最大分部）
+其他：             $0.25T
+                   ─────────────
+企业总价值（EV）：  <span class="hl">$3.47T</span>
+
+加：净现金：        +$0.08T（净现金约$80B）
+股权价值：          <span class="hl">$3.55T</span>
+÷ 流通股数：        ÷ 106.7亿股
+                   ─────────────
+每股内在价值（SOTP）：<span class="hl">约 $333/股</span>
+
+当前市价 $195 → 折价约41%（SOTP视角下）
+
+⚠️ 为什么折价这么大？
+  1. 市场用Forward P/E（31x）而非SOTP定价亚马逊
+  2. 关税带来的短期盈利不确定性压缩了市场倍数
+  3. AWS增速放缓的历史记忆（2022-2023年）仍是阴影
+→ 实际上这是<span class="hl">历史性的估值错位机会</span>（前提：AWS持续增长）</div>
+
+<h2>Step 3：AWS加速是核心催化剂</h2>
+<div class="code-block"><span class="cm">// 为什么AWS重新加速到20%+？（2025年实证）</span>
+
+2023年：AWS增速降至13%（企业削减云支出优化成本）
+2024年：AWS增速回升至17-19%（优化结束，AI启动）
+2025年：AWS增速22%（Bedrock + Trainium驱动AI工作负载爆发）
+
+Bedrock平台（2025年数据）：
+  企业客户数突破10万家（vs 2024年5万）
+  每客户平均支出同比+45%
+  AI推理成本较GPU云便宜20-30%（Trainium/Inferentia优势）
+
+AWS利润率趋势：
+  2024年：利润率37%
+  2025年：利润率39%（+200bp）
+  预期2026年：41%（运营杠杆持续）
+
+<span class="hl">AWS每1%利润率提升 ≈ $13/股估值增量（2026年计算）</span>
+
+追踪信号：每季报关注AWS收入增速和利润率的双提升</div>
+
+<h2>Step 4：情景分析（含关税专项情景）</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>情景</th><th>关键假设</th><th>每股价值</th><th>概率</th></tr></thead>
+<tbody>
+<tr><td>🐂 牛市</td><td>关税谈判降级，AWS增速25%+，广告超预期，零售利润率10%</td><td>$420-480</td><td>25%</td></tr>
+<tr><td>📊 基准</td><td>关税持续但影响有限，AWS稳健20%+，广告18%增长</td><td>$300-360</td><td>50%</td></tr>
+<tr><td>🐻 熊市</td><td>全面贸易战，GMV大幅萎缩，消费衰退，AWS受企业IT削减影响</td><td>$140-180</td><td>25%</td></tr>
+</tbody></table></div>
+<div class="code-block"><span class="cm">// 期望价值</span>
+EV = 0.25×$450 + 0.50×$330 + 0.25×$160
+   = $112.5 + $165 + $40
+   = <span class="hl">$317.5/股</span>
+
+当前市价 $195 → 折价约39%
+→ 亚马逊在2026年4月的关税恐慌中，是<span class="hl">四家巨头中绝对低估幅度最大的</span></div>
+
+<h2>四家科技巨头估值横向对比（2026年4月最新版）</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>公司</th><th>当前市价</th><th>SOTP/期望内在价值</th><th>安全边际</th><th>P/E（Fwd）</th><th>2026年4月配置建议</th></tr></thead>
+<tbody>
+<tr><td><strong>微软</strong></td><td>$390</td><td>$420</td><td>+8%（合理）</td><td>28x</td><td>核心持仓，回调至$340加仓</td></tr>
+<tr><td><strong>英伟达</strong></td><td>$105</td><td>$87</td><td>-21%（轻微高估）</td><td>28x</td><td>卫星仓位3%，$85-90买入机会</td></tr>
+<tr><td><strong>Meta</strong></td><td>$560</td><td>$745</td><td>+33%（有折价）</td><td>20x</td><td>最佳风险回报，5-8%仓位</td></tr>
+<tr><td><strong>亚马逊</strong></td><td>$195</td><td>$318</td><td>+63%（深度折价）</td><td>31x</td><td>关税恐慌底部，10-12%仓位</td></tr>
+</tbody></table></div>
+<p style="font-size:12px;color:#64748b;margin-top:8px">* 数据截至2026年4月5日，基于公开财报和市场估计。估值为分析框架输出，不构成投资建议。请在投资前自行更新最新财报数据。</p>
+
+<h2>2026年4月投资结论</h2>
+<ul class="checklist">
+  <li data-key="amzn1"><div class="check-box">✓</div><span class="check-text"><strong>关税是短期噪音，AWS是长期信号</strong>：亚马逊零售业务在关税环境下确实承压，但AWS（占运营利润约55%）与商品关税完全无关。市场将整体公司按"零售受害者"定价，而AWS的结构性增长被低估。这是分析上的"错误分类"带来的机会。</span></li>
+  <li data-key="amzn2"><div class="check-box">✓</div><span class="check-text"><strong>Trainium正在改变AI算力竞争格局</strong>：亚马逊的自研AI芯片（Trainium 2）在成本/性能上已接近竞争力，让AWS在AI推理定价上更灵活。这是英伟达2026-2027年最大的竞争威胁来源之一，同时也是AWS持续扩大利润率的来源。</span></li>
+  <li data-key="amzn3"><div class="check-box">✓</div><span class="check-text"><strong>广告业务是被最低估的现金奶牛</strong>：$68B收入+65%以上利润率的广告业务，单独可支撑$950B估值——相当于当前总市值的45%。购物意图广告（用户在亚马逊上搜索产品时显示广告）是全球ROI最高的广告库存，竞争壁垒极高。</span></li>
+  <li data-key="amzn4"><div class="check-box">✓</div><span class="check-text"><strong>配置建议（2026年4月关税恐慌底部）</strong>：期望内在价值$318/股，当前$195提供63%的潜在上涨空间。这是四家中绝对低估最明显的。建议养老金组合个股仓位10-12%，采用"分批建仓+持有5年+"策略。核心问题：关税会永久压制GMV，还是只是短期干扰？历史上，供应链重构（从中国转向越南/印度/墨西哥）通常在18-24个月内完成。</span></li>
+</ul>
+`,
+
+// =====================================================================
+'etf-history':`
+<p>ETF和指数基金的诞生，是过去50年金融史上最重要的民主化革命——它让普通投资者能以极低成本获得职业机构才有的分散投资能力。</p>
+
+<h2>被动投资革命：从理论到现实</h2>
+
+<h3>理论基础：有效市场假说（1970年代）</h3>
+<div class="code-block"><span class="cm">// 有效市场假说（EMH）三种形式</span>
+Eugene Fama，1970年，诺贝尔经济学奖（2013）
+
+弱式有效：历史价格信息已充分反映（技术分析无效）
+半强式有效：所有公开信息已充分反映（基本面分析无效？）
+强式有效：所有信息（含内幕）已充分反映
+
+<span class="cm">// 现实意义：</span>
+如果市场是半强式有效的，大多数主动管理基金长期跑不赢指数
+→ 1990s开始，大量学术研究验证了这一点
+→ 这为被动投资提供了学术基础
+
+<span class="hl">John Bogle（指数基金之父）：
+"In investing, you get what you don't pay for."
+（投资中，你省下的费用就是你的收益）</span></div>
+
+<h3>1976年：世界第一只指数基金诞生</h3>
+<div class="code-block"><span class="cm">// 历史性时刻</span>
+1974年：John Bogle创立Vanguard，史无前例的"共同持有"结构
+1976年8月31日：Vanguard First Index Investment Trust 成立
+  → 追踪S&P 500
+  → 年费率：0.28%（vs 主动基金1.5-2%）
+  → 最初规模：$1100万（惨败，目标$1.5亿）
+
+华尔街反应：嘲笑它为"Bogle's folly"（博格的蠢事）
+Fidelity CEO说："Mediocrity is not an acceptable goal."（平庸不是目标）
+
+2023年：Vanguard管理资产 $8.1 万亿
+2024年：该基金（现为VOO/VFIAX）管理资产超过 $1 万亿
+
+<span class="hl">John Bogle于2019年1月去世。他被巴菲特称为"为美国投资者做了最多事情的人"。</span></div>
+
+<h3>1993年：第一只ETF诞生</h3>
+<div class="code-block"><span class="cm">// ETF的诞生</span>
+1989年：Toronto Stock Exchange推出"TIPS"（首个ETF雏形）
+1990年：加拿大TSX上市真正的ETF
+
+<span class="hl">1993年1月22日：SPY（SPDR S&P 500 ETF）在美国上市</span>
+  → 全称：Standard & Poor's Depositary Receipts
+  → 发行商：State Street Global Advisors
+  → 首日成交额：$4400万
+  → 今天日均成交额：超过$200亿
+
+SPY的创新之处：
+  → 像股票一样在交易所实时买卖
+  → 比共同基金（仅收盘价交易）更灵活
+  → 透明度高（每日公布持仓）
+
+2024年：SPY管理资产约 $5000亿，是全球最大的ETF</div>
+
+<h2>ETF发展的三个时代</h2>
+
+<h3>第一时代（1993-2004）：宽基ETF</h3>
+<div class="code-block"><span class="cm">// 早期里程碑</span>
+1993年：SPY（S&P 500）
+1996年：MDY（S&P 400 中盘）
+1998年：iShares系列（Barclays，后被BlackRock收购）
+1999年：QQQ（NASDAQ 100）在科技泡沫顶点前发行
+  → 第一年暴涨，随后随纳斯达克跌79%
+
+2002年：iShares 国际ETF系列，全球分散变得简单
+
+关键数据：2000年时美国ETF总资产 $660亿</div>
+
+<h3>第二时代（2004-2015）：行业/因子ETF爆发</h3>
+<div class="code-block"><span class="cm">// Smart Beta 和因子投资</span>
+2000s中期：学术界发现市场存在"异常"（无法被EMH解释）
+  → 价值因子：低P/B股票长期跑赢（Fama-French）
+  → 规模因子：小盘股长期跑赢
+  → 动量因子：过去表现好的股票短期继续表现好
+  → 质量因子：高ROE、低杠杆公司表现好
+
+2004年：PowerShares推出第一批"智慧型Beta"ETF
+2010年代：行业ETF（如XLK科技、XLF金融）大量涌现
+
+Vanguard 策略：
+2001年：VXUS（国际股票）
+2007年：BND（债券ETF）
+2011年：VTI（全市场ETF）
+
+SCHD（Schwab高股息ETF）：
+2011年成立，追踪高股息+质量因子
+近10年股息年化增长约11%，成为养老投资者最爱之一</div>
+
+<h3>第三时代（2015-今）：主题ETF与直接指数化</h3>
+<div class="code-block"><span class="cm">// 当前ETF生态</span>
+主题ETF（Thematic ETFs）：
+  ARKK（方舟创新）：颠覆性科技，2020年暴涨，2022年暴跌
+  CIBR（网络安全）、BOTZ（机器人+AI）、ICLN（清洁能源）
+  ⚠️ 高度注意：主题ETF通常在主题最热时上市，费率高，需谨慎
+
+杠杆和反向ETF：
+  TQQQ（纳斯达克3倍杠杆）：极高风险，不适合长期持有
+  SQQQ（纳斯达克3倍反向）：做空工具
+  ⚠️ 复利损耗（Volatility Decay）：3倍ETF长期必然跑输指数3倍
+
+直接指数化（Direct Indexing）：
+  2020年代兴起，科技使个人持有500只个股成本接近零
+  优势：个性化税务损失收割（Tax-Loss Harvesting）
+  代表：Wealthfront、Schwab Personalized Indexing
+
+比特币现货ETF：
+  2024年1月：美国批准首批比特币现货ETF（历史里程碑）
+  BlackRock IBIT 在第一年资产规模突破 $300亿</div>
+
+<h2>被动投资的规模与影响</h2>
+<div class="stat-row">
+  <div class="stat-card"><div class="stat-number">$11T+</div><div class="stat-label">Vanguard管理资产</div></div>
+  <div class="stat-card"><div class="stat-number">53%</div><div class="stat-label">美国股票基金中被动基金比例（2023）</div></div>
+  <div class="stat-card"><div class="stat-number">0.03%</div><div class="stat-label">VOO年费率（vs 主动基金1-2%）</div></div>
+  <div class="stat-card"><div class="stat-number">$7T</div><div class="stat-label">美国ETF总资产（2024）</div></div>
+</div>
+
+<h2>未来展望：被动投资的前景与挑战</h2>
+<div class="code-block"><span class="cm">// 长期展望</span>
+
+支持继续增长的因素：
+  ✅ 费率差距持续（主动基金很难长期跑赢指数+费率）
+  ✅ 年轻一代投资者更接受指数化
+  ✅ 401(k)退休账户默认选项越来越多是指数基金
+  ✅ 直接指数化技术进步，个人化指数成本继续下降
+
+潜在风险（学术界的担忧）：
+  ⚠️ 被动化比例过高可能降低市场定价效率（仍有争议）
+  ⚠️ 大量资金聚集在少数ETF中，黑天鹅时可能同步赎回
+
+<span class="hl">实践结论：
+对于绝大多数个人投资者，核心仓位配置宽基ETF（VOO/VTI）
+是最简单、最可靠的长期财富积累方式。
+S&P500的历史：自1957年有完整数据以来，
+  持有1年：亏损概率约26%
+  持有5年：亏损概率约11%
+  持有10年：亏损概率约6%
+  持有20年：亏损概率约0%（历史上从未亏损）</span></div>
+
+<ul class="checklist">
+  <li data-key="eh1"><div class="check-box">✓</div><span class="check-text">我知道John Bogle的故事，理解指数基金的哲学</span></li>
+  <li data-key="eh2"><div class="check-box">✓</div><span class="check-text">我理解SPY是怎么诞生的，ETF与共同基金的区别</span></li>
+  <li data-key="eh3"><div class="check-box">✓</div><span class="check-text">我知道Smart Beta/因子ETF是什么，以及主题ETF的风险</span></li>
+  <li data-key="eh4"><div class="check-box">✓</div><span class="check-text">我能解释为什么长期持有指数ETF能打败大多数主动基金</span></li>
+</ul>`,
+
+// =====================================================================
+'etf-construction':`
+<p>理解了ETF的历史，现在来解决实际问题：如何用ETF构建一个真实的、符合你养老目标的投资组合？</p>
+
+<h2>核心ETF完整对比</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>代码</th><th>名称</th><th>追踪</th><th>费率</th><th>10年年化</th><th>适合用途</th></tr></thead>
+<tbody>
+<tr><td><strong>VOO</strong></td><td>Vanguard S&P 500</td><td>标普500</td><td>0.03%</td><td>~12.9%</td><td>⭐ 基础底仓首选</td></tr>
+<tr><td><strong>VTI</strong></td><td>Vanguard全市场</td><td>美国3600+</td><td>0.03%</td><td>~12.7%</td><td>更分散，含小盘</td></tr>
+<tr><td><strong>QQQ</strong></td><td>Invesco Nasdaq 100</td><td>纳斯达克100</td><td>0.20%</td><td>~17.5%</td><td>科技倾斜，高波动</td></tr>
+<tr><td><strong>SCHD</strong></td><td>Schwab高股息</td><td>高质量股息股</td><td>0.06%</td><td>~11.8%</td><td>⭐ 养老现金流核心</td></tr>
+<tr><td><strong>VXUS</strong></td><td>Vanguard国际</td><td>美国以外全球</td><td>0.07%</td><td>~4.8%</td><td>国际分散</td></tr>
+<tr><td><strong>BND</strong></td><td>Vanguard债券</td><td>美国债券</td><td>0.03%</td><td>~1.5%</td><td>降低波动，临近退休</td></tr>
+<tr><td><strong>GLD</strong></td><td>SPDR黄金</td><td>黄金</td><td>0.40%</td><td>~8.2%</td><td>通胀对冲，避险</td></tr>
+<tr><td><strong>VNQ</strong></td><td>Vanguard REITs</td><td>美国房地产信托</td><td>0.12%</td><td>~8.1%</td><td>房地产替代+股息</td></tr>
+</tbody></table></div>
+
+<h2>定投策略（DCA）的数学原理</h2>
+<div class="code-block"><span class="cm">// 定投 vs 一次性投入（历史回测）</span>
+假设从2000年1月（科技泡沫顶峰）开始投资
+
+方案A：一次性投入$10万到VOO → 2023年底约$43万
+方案B：每月投$833（同样$10万总投入，分10年）→ 2023年底约$38万
+
+<span class="cm">// 看起来一次性更好？那是因为我们跨越了一轮超级牛市</span>
+换一个起点：2007年10月（金融危机前顶峰）
+
+方案A：一次性$10万 → 2017年底约$21万
+方案B：每月投$833（10年共$10万）→ 2017年底约$24万
+
+<span class="hl">定投的真实优势：
+不需要择时，自动平滑进场成本
+在市场下跌时以更低成本买入更多
+心理压力小，执行更容易
+适合有稳定现金流的工薪族</span>
+
+<span class="cm">// 你的情况：每月可投约5-10万人民币等值美元
+建议：每月1日自动定投，忘掉市场波动</span></div>
+
+<h2>股息再投资的复利威力</h2>
+<div class="code-block"><span class="cm">// SCHD股息再投资案例（假设）</span>
+初始投入：$10万（约人民币72万）
+SCHD历史年化总回报（含股息再投）：约11.8%
+
+10年后：$10万 × 1.118^10 = <span class="hl">$30.5万</span>
+20年后：$10万 × 1.118^20 = <span class="hl">$93万</span>
+30年后：$10万 × 1.118^30 = <span class="hl">$285万</span>
+
+不含股息再投（仅股价增长约9%）：
+30年后：$10万 × 1.09^30 = $132万
+
+<span class="hl">股息再投资30年，多出153万美元！
+这就是"复利是世界第八大奇迹"的真实含义。</span></div>
+
+<ul class="checklist">
+  <li data-key="ec1"><div class="check-box">✓</div><span class="check-text">我确定了我的核心ETF配置（VOO/VTI + SCHD）</span></li>
+  <li data-key="ec2"><div class="check-box">✓</div><span class="check-text">我制定了每月定投的金额和执行日期</span></li>
+  <li data-key="ec3"><div class="check-box">✓</div><span class="check-text">我理解股息自动再投资的设置方式</span></li>
+  <li data-key="ec4"><div class="check-box">✓</div><span class="check-text">我计算过20年后我的ETF仓位可能增值到多少</span></li>
+</ul>`,
+
+// =====================================================================
+'risk-framework':`
+<p>风险管理是投资中最容易被忽视、但最关键的能力。本节提供一个系统性的、可操作的风险管理框架。</p>
+
+<h2>风险的四个维度</h2>
+<div class="cards-grid">
+  <div class="card"><div class="card-icon">📉</div><div class="card-title">波动性风险</div><div class="card-desc">短期价格剧烈波动。标准差衡量。S&P500年均波动率约15-18%，科技股更高。长期持有者可以承受</div></div>
+  <div class="card"><div class="card-icon">🏚️</div><div class="card-title">永久性损失风险</div><div class="card-desc">公司破产或行业被颠覆，本金无法恢复。这才是真正危险的风险，集中持股时尤为致命</div></div>
+  <div class="card"><div class="card-icon">💧</div><div class="card-title">流动性风险</div><div class="card-desc">需要资金时无法及时变现，或变现时价格极差。小盘股、私募投资常见</div></div>
+  <div class="card"><div class="card-icon">🧠</div><div class="card-title">行为风险</div><div class="card-desc">最大的风险！追涨杀跌、恐慌卖出、过度交易。这是大多数投资者实际亏损的根本原因</div></div>
+</div>
+
+<h2>最大回撤（Maximum Drawdown）分析</h2>
+<div class="code-block"><span class="cm">// 不同资产类别的历史最大回撤</span>
+
+资产                    历史最大回撤   典型熊市回撤
+S&P 500（VOO）          -57%（2009）   -20% to -55%
+NASDAQ 100（QQQ）       -83%（2002）   -30% to -83%
+单只科技股               可达-90%+     
+中国股票（MCHI）         -73%（2022）   
+新兴市场（VWO）          -65%（2009）   
+美国债券（BND）          -17%（2022）   
+黄金（GLD）              -45%（2011）   
+全球股票组合             -50%（2009）   
+
+<span class="hl">关键原则：
+你的风险承受能力 = 你在最大跌幅时是否还能不动如山
+如果你的组合跌30%会让你睡不着觉，说明风险超过你的承受范围</span></div>
+
+<h2>仓位管理的具体规则</h2>
+<div class="code-block"><span class="cm">// 基于你的情况（800万资产+150万年收入）的仓位框架</span>
+
+<span class="hl">核心规则</span>
+单只股票上限：          <span class="hl">5%</span>（即最多40万人民币等值）
+单一行业上限：          <span class="hl">25%</span>（即最多200万）
+单一地区上限：          <span class="hl">60%</span>（美国股市，避免过度集中）
+ETF底仓下限：           <span class="hl">50%</span>（稳定压舱石）
+现金储备：              <span class="hl">5-10%</span>（机会资金）
+
+<span class="cm">// 加仓规则</span>
+初始建仓：目标仓位的1/3
+市场下跌10-20%：加至目标仓位1/2
+市场下跌20-30%：加至目标仓位（满仓）
+市场下跌>30%：谨慎考虑，用备用现金加仓
+
+<span class="cm">// 减仓规则（更难执行）</span>
+估值严重高估（Forward P/E > 历史平均+2倍标准差）：减至1/3
+基本面恶化（护城河消失、增长逆转）：清仓
+组合集中度过高（单只>10%）：强制再平衡</div>
+
+<h2>相关性与多元化</h2>
+<div class="code-block"><span class="cm">// 主要资产类别相关性矩阵（近10年）</span>
+
+          美股   美债   黄金   原油   REIT  国际股
+美股        1   -0.15  -0.05  0.25   0.65   0.75
+美债      -0.15    1    0.15 -0.10  -0.05  -0.20
+黄金      -0.05  0.15    1   0.10   0.05   0.10
+原油       0.25 -0.10  0.10    1    0.20   0.30
+REIT       0.65 -0.05  0.05  0.20    1     0.55
+国际股     0.75 -0.20  0.10  0.30   0.55    1
+
+<span class="hl">关键发现：
+- 债券与股票负相关（-0.15），是有效的对冲工具
+- 黄金与股票几乎不相关，是真正的多元化
+- 国际股票与美股高度相关（0.75），危机时往往同涨同跌
+- REIT与股票相关性高（0.65），分散化效果有限
+
+实践意义：仅靠"买多只个股"不是真正的多元化
+真正分散需要跨资产类别（股+债+黄金+另类）</span></div>
+
+<h2>再平衡策略</h2>
+<div class="code-block"><span class="cm">// 再平衡的时机与方式</span>
+
+<span class="hl">定时再平衡：每年1月做一次（推荐方式）</span>
+  步骤：
+  1. 检查各资产实际占比 vs 目标占比
+  2. 偏差超过5%的需要调整
+  3. 优先用新增资金买入比例低的（减少税收摩擦）
+  4. 必要时卖出比例高的，买入比例低的
+
+定阈值再平衡：任何资产类别偏差>10%时触发
+  → 更积极，需要更多关注
+
+<span class="cm">// 再平衡的心理挑战</span>
+再平衡 = 卖掉表现好的，买入表现差的
+这违背人类本能（追涨杀跌），但是正确的做法
+
+2022年示例：
+  债券大跌→减少了对股票的对冲效果
+  需要在2022年底买入更多债券（此时债券到期收益率>5%）
+  2023年债券反弹，投资者获益</div>
+
+<ul class="checklist">
+  <li data-key="rf1"><div class="check-box">✓</div><span class="check-text">我制定了单只股票最多5%、单行业最多25%的仓位规则</span></li>
+  <li data-key="rf2"><div class="check-box">✓</div><span class="check-text">我理解相关性矩阵，知道真正的多元化需要跨资产类别</span></li>
+  <li data-key="rf3"><div class="check-box">✓</div><span class="check-text">我设定了每年一次的再平衡提醒</span></li>
+  <li data-key="rf4"><div class="check-box">✓</div><span class="check-text">我写下了我的最大可容忍回撤（心理承受能力）</span></li>
+</ul>`,
+
+// =====================================================================
+'stress-testing':`
+<p>压力测试是专业投资机构的标准做法。个人投资者也需要用历史最坏情景测试自己的投资组合，以便在真实危机来临时不会恐慌。</p>
+
+<h2>历史重大危机回顾与复盘</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>危机</th><th>时间</th><th>S&P500跌幅</th><th>持续</th><th>原因</th><th>恢复时间</th></tr></thead>
+<tbody>
+<tr><td>大萧条</td><td>1929-1932</td><td>-89%</td><td>3年</td><td>银行系统崩溃+贸易战+通缩</td><td>25年</td></tr>
+<tr><td>科技泡沫</td><td>2000-2002</td><td>-49%</td><td>2.5年</td><td>互联网公司估值泡沫破裂</td><td>7年（S&P）</td></tr>
+<tr><td>金融危机</td><td>2007-2009</td><td>-57%</td><td>17个月</td><td>次级抵押贷款+金融衍生品</td><td>5.5年</td></tr>
+<tr><td>COVID暴跌</td><td>2020.02-03</td><td>-34%</td><td>33天</td><td>全球大流行病</td><td>5个月</td></tr>
+<tr><td>加息熊市</td><td>2022</td><td>-25%</td><td>12个月</td><td>40年最快加息周期</td><td>~2年</td></tr>
+</tbody></table></div>
+
+<h2>用历史危机对你的组合做压力测试</h2>
+<div class="code-block"><span class="cm">// 假设你的组合（800万人民币等值 ≈ $110万美元）</span>
+配置：VOO(40%) + QQQ(20%) + SCHD(20%) + VXUS(10%) + BND(5%) + GLD(5%)
+
+<span class="cm">// 2008年金融危机重现（最坏情景）</span>
+资产        跌幅      你的损失
+VOO (40%)   -57%      $110W×40%×57% = <span class="bd">-$25.1万</span>
+QQQ (20%)   -54%      $110W×20%×54% = <span class="bd">-$11.9万</span>
+SCHD (20%)  -40%      $110W×20%×40% = <span class="bd">-$8.8万</span>
+VXUS (10%)  -55%      $110W×10%×55% = <span class="bd">-$6.1万</span>
+BND (5%)    +10%      $110W×5%×10%  = <span class="gd">+$0.6万</span>
+GLD (5%)    +5%       $110W×5%×5%   = <span class="gd">+$0.3万</span>
+                                      ─────────
+总损失：    <span class="bd">-$51万 (-46%)</span>
+
+$110万 → $59万
+人民币：约800万 → 430万
+
+<span class="cm">// 关键问题：此时你会恐慌卖出吗？</span>
+如果会：说明你的风险仓位太高，需要降低股票比例
+如果不会：恭喜，你已经有了正确的投资心理框架</div>
+
+<h2>黑天鹅应对手册</h2>
+<div class="code-block"><span class="cm">// 四类黑天鹅及应对</span>
+
+① 金融系统性危机（2008类型）
+   前兆：信用利差突然扩大，银行股暴跌
+   应对：保持BND/GLD仓位，现金储备不要动，等待机会
+   机遇：危机底部是买入优质资产的最佳时机
+
+② 地缘政治冲击（战争/贸易战）
+   特点：短暂而剧烈，市场往往在6-12个月内恢复
+   应对：不要恐慌交易，保持仓位
+   历史：9/11后S&P500一个月内基本恢复
+
+③ 通胀失控
+   前兆：CPI持续>5%，美联储被迫激进加息
+   应对：增加TIPS（通胀保值债券）、黄金、能源股、REITs
+   教训：2022年，持有大量成长股的人损失最大
+
+④ 技术颠覆/行业消亡
+   风险：你重仓的行业被颠覆（如柯达、诺基亚）
+   应对：保持分散，单行业≤25%，定期重新评估护城河
+
+<span class="hl">永远记住：最坏的事情是在底部因为恐慌而卖出
+然后错过反弹</span></div>
+
+<h2>心理账户与常见行为陷阱</h2>
+<div class="code-block"><span class="cm">// 散户最常犯的致命错误（行为金融学研究）</span>
+
+① 处置效应（Disposition Effect）
+   <span class="bd">卖赢持亏</span>：太快卖出盈利股票，留着亏损股票"等回本"
+   正确做法：忘记成本，问"如果今天是空仓，我还会买这只吗？"
+
+② 近期偏误（Recency Bias）
+   过去几年涨得好的资产，认为未来也会好
+   → 2000年买NASDAQ顶（因为过去5年涨了300%）
+   → 2022年买ARKK（因为2020年涨了153%）
+
+③ 过度自信（Overconfidence）
+   认为自己比市场更了解一家公司
+   结果：频繁交易，产生大量费用和税收
+
+④ 锚定效应（Anchoring）
+   对某个价格产生执念（"涨回$100我就卖"）
+   正确做法：估值驱动决策，而不是价格驱动
+
+⑤ 羊群效应（Herding）
+   "大家都买NVIDIA" → 盲目跟随
+   正确做法：研究驱动，逆向思考
+
+<span class="hl">巴菲特的反向指标：
+"当别人贪婪时恐惧，当别人恐惧时贪婪。"</span></div>
+
+<ul class="checklist">
+  <li data-key="st1"><div class="check-box">✓</div><span class="check-text">我已用2008年情景测试过自己组合的最大可能损失</span></li>
+  <li data-key="st2"><div class="check-box">✓</div><span class="check-text">我知道在不同黑天鹅情景下应该做什么</span></li>
+  <li data-key="st3"><div class="check-box">✓</div><span class="check-text">我能识别并说出5种常见的行为偏误</span></li>
+  <li data-key="st4"><div class="check-box">✓</div><span class="check-text">我写下了"如果组合跌X%，我会做什么"的应急预案</span></li>
+</ul>`,
+
+// =====================================================================
+'retirement-42-50':`
+<p>从42岁开始，你进入了人生最重要的财富积累窗口期。这一阶段的核心任务：最大化储蓄率、激进积累资产、建立投资纪律。</p>
+
+<h2>你的起点分析（42岁）</h2>
+<div class="stat-row">
+  <div class="stat-card"><div class="stat-number">800万</div><div class="stat-label">现有资产（人民币）</div></div>
+  <div class="stat-card"><div class="stat-number">≈$110万</div><div class="stat-label">美元等值</div></div>
+  <div class="stat-card"><div class="stat-number">150万</div><div class="stat-label">年收入（人民币）</div></div>
+  <div class="stat-card"><div class="stat-number">18年</div><div class="stat-label">到60岁的积累窗口</div></div>
+</div>
+
+<h2>42-50岁：激进积累期（高风险承受）</h2>
+<div class="code-block"><span class="cm">// 这个阶段的核心原则</span>
+
+1. 收入高、支出可控：最大化储蓄率
+   目标储蓄率：年收入的 <span class="hl">40-50%</span>（即年存60-75万人民币）
+   
+2. 风险承受能力强：
+   还有18年，足以承受多轮熊市并完全恢复
+   <span class="hl">这个阶段应持有高股票比例（80-90%）</span>
+
+3. 建立投资纪律：
+   设置自动定投，避免情绪化决策
+
+<span class="cm">// 42-50岁目标资产配置</span>
+美国股票ETF（VOO + QQQ）：    <span class="hl">55%</span>
+高股息ETF（SCHD）：           <span class="hl">20%</span>
+国际股票（VXUS）：            <span class="hl">10%</span>
+精选个股（5-8只）：           <span class="hl">10%</span>
+防御性（黄金/债券）：          <span class="hl">5%</span>
+
+总股票比例：95%（激进，但年龄许可）</div>
+
+<h2>42-50年度详细规划表</h2>
+<div class="table-wrap"><table class="ret-table">
+<thead><tr><th>年龄</th><th>当年储蓄投入</th><th>年末目标资产（保守）</th><th>年末目标资产（基准）</th><th>关键里程碑</th></tr></thead>
+<tbody>
+<tr class="yr-key"><td><strong>42岁（起点）</strong></td><td>—</td><td>$110万</td><td>$110万</td><td>开立IB账户，建立ETF底仓</td></tr>
+<tr><td>43岁</td><td>$8万（60万RMB）</td><td>$131万</td><td>$136万</td><td>完成核心ETF仓位建立</td></tr>
+<tr><td>44岁</td><td>$8万</td><td>$155万</td><td>$165万</td><td>开始精选个股（3-5只）</td></tr>
+<tr><td>45岁</td><td>$8万</td><td>$181万</td><td>$196万</td><td>第一次完整年度再平衡</td></tr>
+<tr class="yr-key"><td><strong>46岁（资产翻倍目标）</strong></td><td>$9万</td><td>$209万</td><td>$232万</td><td>资产达$200万，庆祝里程碑！</td></tr>
+<tr><td>47岁</td><td>$9万</td><td>$241万</td><td>$271万</td><td>评估个股组合，清理表现差的</td></tr>
+<tr><td>48岁</td><td>$9万</td><td>$275万</td><td>$316万</td><td>开始学习税务优化</td></tr>
+<tr><td>49岁</td><td>$10万</td><td>$313万</td><td>$367万</td><td>检视工作收入变化，调整储蓄率</td></tr>
+<tr class="yr-key"><td><strong>50岁（阶段目标）</strong></td><td>$10万</td><td>$354万</td><td>$424万</td><td>目标$300-400万美元，开始考虑降风险</td></tr>
+</tbody></table></div>
+<p style="font-size:12px;color:var(--gray-400)">注：保守按年化7%，基准按年化9%计算。汇率按1USD=7.3RMB换算储蓄金额。</p>
+
+<h2>每月行动计划</h2>
+<div class="code-block"><span class="cm">// 每月具体操作</span>
+
+每月1日（发薪后自动执行）：
+  VOO：$2,500（约18,250RMB）
+  SCHD：$2,000（约14,600RMB）
+  QQQ：$1,500（约10,950RMB）
+  VXUS：$1,000（约7,300RMB）
+  ─────────────────────
+  月定投总计：$7,000/月（约51,100RMB）
+  年定投总计：$84,000/年（约61.3万RMB）
+
+每季度第一个工作日：
+  检查持仓比例
+  读持仓公司季报摘要（30分钟）
+  更新投资日志
+
+每年1月第一周：
+  全面再平衡
+  计算上年总回报率
+  与S&P500做对比（你的"成绩单"）</div>
+
+<h2>42-50岁期间的关键决策</h2>
+<div class="code-block"><span class="cm">// 重要决策框架</span>
+
+关于工作收入：
+  ✅ 这个阶段最重要的"投资"是保持高收入
+  互联网行业35岁焦虑普遍，但42岁有丰富经验
+  考虑：管理职位 vs 独立创业/顾问 vs 副业
+  核心：维持甚至提升储蓄率
+
+关于A股/港股（现有800万）：
+  建议逐步将现有股票的20-30%换成美股ETF
+  不建议一次性全换（税务+汇率+市场时机）
+  每年换10-15%，3-5年完成美股配置提升
+
+关于房产：
+  如果有房产，美股是极好的补充（不同资产类别）
+  不建议再加杠杆买房（50岁时贷款15年要到65岁）
+
+关于保险：
+  这个阶段重点：定期寿险（保额=5-10年生活费）
+  医疗险：百万医疗险必备
+  不建议买储蓄型保险（回报率远低于ETF）</div>
+
+<ul class="checklist">
+  <li data-key="r1"><div class="check-box">✓</div><span class="check-text">我清楚42-50岁应持有高股票比例（约90%）的原因</span></li>
+  <li data-key="r2"><div class="check-box">✓</div><span class="check-text">我设定了每月定投金额（每月约7000美元）</span></li>
+  <li data-key="r3"><div class="check-box">✓</div><span class="check-text">我制定了50岁时的目标资产金额</span></li>
+  <li data-key="r4"><div class="check-box">✓</div><span class="check-text">我规划了现有A股/港股逐步转换为美股ETF的方案</span></li>
+</ul>`,
+
+// =====================================================================
+'retirement-50-60':`
+<p>50岁是投资策略的重要转折点——从"最大化增长"逐渐过渡到"保护战果+稳健增长"。这一阶段的核心任务：降低风险、增加确定性、构建退休现金流。</p>
+
+<h2>50-60岁：过渡期策略</h2>
+<div class="code-block"><span class="cm">// 关键策略转变</span>
+
+从 → 激进成长（高股票比例、追求Alpha）
+到 → 稳健增长（防御性增加、确定性优先）
+
+资产配置逐年调整原则：
+  传统规则："100 - 年龄 = 股票比例"
+  50岁：100-50 = 50%（太保守，现代人寿命长）
+  
+  现代建议（更合适）："120 - 年龄"
+  50岁：120-50 = 70%股票
+  55岁：120-55 = 65%股票  
+  60岁：120-60 = 60%股票
+
+<span class="hl">重要原则：即使退休后，也需要持有相当比例的股票
+因为你还有30+年的投资时间（通胀会侵蚀纯债券组合）</span></div>
+
+<h2>50-60年度详细规划表</h2>
+<div class="table-wrap"><table class="ret-table">
+<thead><tr><th>年龄</th><th>年储蓄投入</th><th>资产目标（保守）</th><th>资产目标（基准）</th><th>配置调整</th></tr></thead>
+<tbody>
+<tr class="yr-mid"><td><strong>50岁</strong></td><td>$10万</td><td>$354万</td><td>$424万</td><td>股票90%→85%，增加SCHD比例</td></tr>
+<tr class="yr-mid"><td>51岁</td><td>$10万</td><td>$400万</td><td>$484万</td><td>开始建立债券梯形（Bond Ladder）</td></tr>
+<tr class="yr-mid"><td>52岁</td><td>$10万</td><td>$450万</td><td>$549万</td><td>个股仓位 开始逐步减少</td></tr>
+<tr class="yr-mid"><td>53岁</td><td>$10万</td><td>$503万</td><td>$621万</td><td>股票85%→80%</td></tr>
+<tr class="yr-mid"><td><strong>54岁</strong></td><td>$10万</td><td>$562万</td><td>$701万</td><td><strong>资产可能突破$600万 🎉</strong></td></tr>
+<tr class="yr-mid"><td>55岁</td><td>$10万</td><td>$626万</td><td>$789万</td><td>股票80%→75%，增加债券</td></tr>
+<tr class="yr-late"><td>56岁</td><td>$8万</td><td>$696万</td><td>$885万</td><td>若考虑早退休，评估财务可行性</td></tr>
+<tr class="yr-late"><td>57岁</td><td>$8万</td><td>$773万</td><td>$991万</td><td>股票75%→70%</td></tr>
+<tr class="yr-late"><td>58岁</td><td>$8万</td><td>$858万</td><td>$1,108万</td><td>开始学习退休账户提取策略</td></tr>
+<tr class="yr-late"><td>59岁</td><td>$8万</td><td>$951万</td><td>$1,237万</td><td>股票70%→65%</td></tr>
+<tr class="yr-late"><td><strong>60岁（目标）</strong></td><td>最后一年</td><td><strong>$1,054万</strong></td><td><strong>$1,380万</strong></td><td>退休组合完成，开始提取模式</td></tr>
+</tbody></table></div>
+<p style="font-size:12px;color:var(--gray-400)">注：保守按年化7%，基准按年化9%；每年储蓄金额55岁起因可能减少工作而有所降低。</p>
+
+<h2>60岁时的退休资产验算</h2>
+<div class="code-block"><span class="cm">// 60岁退休场景验算（基准情景：$1,300万美元）</span>
+
+<span class="hl">4%法则（三一研究，Trinity Study）</span>
+每年提取资产的4%，历史上在任何30年周期内都不会耗尽
+
+$1,300万 × 4% = <span class="gd">$52万/年</span>（约人民币380万/年）
+
+假设你实际生活需求：
+  日常生活（中高质量）：约80万RMB/年
+  旅游+娱乐：约20万RMB/年
+  医疗健康：约20万RMB/年
+  总计：约120万RMB/年 ≈ $16.4万/年
+
+所需退休资产 = $16.4万 / 4% = <span class="hl">$410万</span>
+
+<span class="gd">你的目标$1,300万远超所需$410万！</span>
+这意味着：
+  ✅ 极强的财务安全边际（3倍以上）
+  ✅ 可以给子女留下大量遗产
+  ✅ 或者更早退休（50岁？55岁？）
+
+<span class="cm">// 55岁提前退休验算（基准情景：约$800万）</span>
+$800万 × 3.5% = $28万/年 ≈ 204万RMB/年
+仍远超日常生活需求 ✅
+（用3.5%而非4%，因为退休期更长，需保守）</div>
+
+<h2>50-60岁的资产配置演变</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>年龄段</th><th>VOO/VTI</th><th>QQQ</th><th>SCHD</th><th>国际</th><th>债券</th><th>黄金</th><th>个股</th></tr></thead>
+<tbody>
+<tr><td><strong>50-52岁</strong></td><td>35%</td><td>20%</td><td>20%</td><td>10%</td><td>5%</td><td>5%</td><td>5%</td></tr>
+<tr><td><strong>53-55岁</strong></td><td>35%</td><td>15%</td><td>25%</td><td>10%</td><td>8%</td><td>5%</td><td>2%</td></tr>
+<tr><td><strong>56-58岁</strong></td><td>35%</td><td>10%</td><td>28%</td><td>8%</td><td>12%</td><td>5%</td><td>2%</td></tr>
+<tr><td><strong>59-60岁</strong></td><td>30%</td><td>8%</td><td>30%</td><td>7%</td><td>18%</td><td>5%</td><td>2%</td></tr>
+</tbody></table></div>
+
+<div class="info-box green">
+  <div class="info-box-title">✅ 核心观察</div>
+  注意：SCHD的比例从20%→30%，这是战略性的。<br>
+  随着接近退休，股息现金流的重要性增加——
+  你希望靠股息（而不是靠卖股票）维持生活，这样可以避免在熊市底部被迫卖出。
+  SCHD 的股息增长历史意味着：你50岁买入时3.5%的股息率，
+  到60岁时（按11%/年增长）成本股息率将超过9%。
+</div>
+
+<ul class="checklist">
+  <li data-key="r50a"><div class="check-box">✓</div><span class="check-text">我理解"120-年龄"原则，知道如何随年龄调整配置</span></li>
+  <li data-key="r50b"><div class="check-box">✓</div><span class="check-text">我计算了自己在保守/基准情景下60岁时的预期资产</span></li>
+  <li data-key="r50c"><div class="check-box">✓</div><span class="check-text">我理解为什么退休后也要持有较高比例股票</span></li>
+  <li data-key="r50d"><div class="check-box">✓</div><span class="check-text">我制定了从50岁开始逐步增加SCHD（股息ETF）的计划</span></li>
+</ul>`,
+
+// =====================================================================
+'withdrawal-strategy':`
+<p>退休后的提取策略和积累期的投资策略同样重要——错误的提取方式可能导致资产过早耗尽，或者过于保守而牺牲生活质量。</p>
+
+<h2>三大主流提取策略</h2>
+
+<h3>策略一：4%法则（最经典）</h3>
+<div class="code-block"><span class="cm">// 三一研究（Trinity Study，1998年）</span>
+研究方法：测试1926-1995年所有30年历史周期
+结论：初始提取率4%，每年随通胀调整
+在95%的历史情景中，资产30年后仍有剩余
+
+<span class="hl">适用条件：</span>
+退休期约30年（60岁退休，预期寿命90岁）
+股票/债券组合 50/50 至 75/25
+
+<span class="cm">// 如何操作：</span>
+第一年：退休资产 × 4% = 当年提取额
+第二年：第一年提取额 × (1 + 通胀率)
+此后每年：按通胀调整（通常2-3%）
+
+你的案例（$1,300万退休资产）：
+第一年提取：$1,300万 × 4% = <span class="hl">$52万/年</span>
+按2.5%通胀，20年后：$52万 × 1.025^20 = $85万/年
+（实际购买力保持不变）</div>
+
+<h3>策略二：动态提取（更灵活）</h3>
+<div class="code-block"><span class="cm">// 根据市场情况动态调整</span>
+好年份（S&P500涨15%+）：可提取更多（5%）
+差年份（S&P500跌10%+）：压缩提取（3%）
+
+或使用"护栏策略"（Guardrails Strategy）：
+  基准提取率：4%
+  上限（减少提取信号）：当资产增长到初始5.5%提取率水平
+  下限（增加消费信号）：当资产跌到3.5%提取率水平
+  
+<span class="hl">优点：更灵活，安全性更高，适合股票比例高的组合</span></div>
+
+<h3>策略三：股息收入法（最稳健）</h3>
+<div class="code-block"><span class="cm">// 只花股息，永不卖股票</span>
+以你的退休组合为例：
+  30% SCHD（$390万）× 3.5%股息率 = $13.7万/年
+  30% VOO（$390万）× 1.3%股息率 = $5.1万/年
+  其他债券分红等：~$3万/年
+  总股息收入：<span class="hl">约$22万/年（约160万RMB/年）</span>
+
+优点：
+  ✅ 永远不会把股票卖光
+  ✅ 股息每年增长（SCHD历史+11%/年）
+  ✅ 心理极度平稳（不担心序列收益风险）
+  
+缺点：
+  ⚠️ 初期提取率偏低（可能生活水平保守）
+  ⚠️ 股息可能被削减（金融危机时）</div>
+
+<h2>序列收益风险（Sequence of Returns Risk）</h2>
+<div class="code-block"><span class="cm">// 这是退休后最危险的风险</span>
+假设你退休后第一年遇到熊市（如2008年）：
+
+情景A：退休第一年S&P 500涨30%，第二年跌30%
+情景B：退休第一年S&P 500跌30%，第二年涨30%
+
+直觉上两者长期结果相同，实际上完全不同！
+
+情景A（先涨后跌）：
+  $100万 × 1.30 = $130万，提取$4万 → $126万
+  $126万 × 0.70 = $88.2万，提取$4万 → $84.2万
+
+情景B（先跌后涨）：
+  $100万 × 0.70 = $70万，提取$4万 → $66万
+  $66万 × 1.30 = $85.8万，提取$4万 → <span class="bd">$81.8万</span>
+
+两年后差异：$84.2万 vs $81.8万（$2.4万差距）
+20年后这个差距会复利放大到非常显著
+
+<span class="hl">应对措施：
+1. "退休现金垫"（Cash Cushion）：保留1-2年生活费现金
+2. 熊市期间减少提取（动态策略）
+3. 增加债券/SCHD比例（降低波动，减少早期大跌风险）</span></div>
+
+<h2>中国居民海外资产的特殊考虑</h2>
+<div class="code-block"><span class="cm">// 税务合规（重要！不是建议规避，而是合规规划）</span>
+
+中国税务居民的海外投资义务：
+  个人所得税：境外利得需申报，但执行细则仍在完善
+  外汇管制：每年购汇限额$5万/人（夫妻$10万）
+  跨境转移：需走正规外汇渠道（银行汇款等）
+
+美国预扣税（Withholding Tax）：
+  股息：中国居民通常扣10%（中美税收协定）
+  资本利得：非美国居民一般不征联邦税
+  遗产税：非美国居民，美国资产超过$6万可能面临40%遗产税
+  
+<span class="hl">建议：
+1. 咨询专业的境外税务顾问（每年几千元，物有所值）
+2. 了解"Per-Country"外汇购汇政策最新变化
+3. 考虑通过香港账户（银行或券商）持有美股，可能更灵活</span></div>
+
+<ul class="checklist">
+  <li data-key="ws1"><div class="check-box">✓</div><span class="check-text">我理解4%法则的原理和适用条件</span></li>
+  <li data-key="ws2"><div class="check-box">✓</div><span class="check-text">我理解序列收益风险，并知道如何用"现金垫"应对</span></li>
+  <li data-key="ws3"><div class="check-box">✓</div><span class="check-text">我知道退休时股息收入法的实际操作</span></li>
+  <li data-key="ws4"><div class="check-box">✓</div><span class="check-text">我了解中国居民持有美股的主要税务和合规注意事项</span></li>
+</ul>`,
+
+// =====================================================================
+'influencers':`
+<p>投资是终身学习的事业。精选20位全球顶级领路人，帮你建立长期、高质量的信息输入系统。</p>
+
+<h2>投资大师级（必须研究其思想）</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>人物</th><th>背景</th><th>最重要内容</th><th>免费获取渠道</th></tr></thead>
+<tbody>
+<tr><td><strong>Warren Buffett</strong></td><td>史上最伟大投资者，伯克希尔CEO</td><td>年度股东信（1965-今，共60+封）</td><td>berkshirehathaway.com/letters</td></tr>
+<tr><td><strong>Howard Marks</strong></td><td>Oaktree创始人，市场周期大师</td><td>⭐ Memos（1990-今，每篇都是精华）</td><td>oaktreecapital.com/insights/memo</td></tr>
+<tr><td><strong>Aswath Damodaran</strong></td><td>NYU金融学教授，"估值之神"</td><td>YouTube免费课程+年度企业估值</td><td>youtube.com/@AswathDamodaran</td></tr>
+<tr><td><strong>Ray Dalio</strong></td><td>Bridgewater创始人，宏观策略</td><td>《经济机器如何运转》（30分钟必看）</td><td>YouTube "How The Economic Machine Works"</td></tr>
+<tr><td><strong>Terry Smith</strong></td><td>Fundsmith CEO，英国巴菲特</td><td>年度股东信+年度报告</td><td>fundsmith.co.uk</td></tr>
+<tr><td><strong>Bill Ackman</strong></td><td>Pershing Square，维权投资者</td><td>Pershing Square投资者信</td><td>pershingsquareholdings.com</td></tr>
+</tbody></table></div>
+
+<h2>YouTube顶级频道（英文，质量极高）</h2>
+<ul class="resource-list">
+  <li><span class="resource-badge rb-video">YouTube</span><div><strong>Ben Felix</strong>（Rational Reminder）<br><span style="color:var(--gray-500);font-size:12px">⭐⭐ 循证投资，每期都有大量学术研究支撑。是全球最理性的投资频道，没有之一。强烈推荐从"Why You Shouldn't Pick Stocks"开始</span></div></li>
+  <li><span class="resource-badge rb-video">YouTube</span><div><strong>Aswath Damodaran</strong><br><span style="color:var(--gray-500);font-size:12px">完整大学级别的"估值"和"公司金融"课程全部免费。NYU Stern商学院正式课程。每年对苹果/Tesla做公开估值，极具参考价值</span></div></li>
+  <li><span class="resource-badge rb-video">YouTube</span><div><strong>The Plain Bagel</strong>（Richard Coffin）<br><span style="color:var(--gray-500);font-size:12px">金融概念解释最清晰的频道，无利益冲突，批判性思维强。适合入门到进阶所有阶段</span></div></li>
+  <li><span class="resource-badge rb-video">YouTube</span><div><strong>Patrick Boyle</strong><br><span style="color:var(--gray-500);font-size:12px">前对冲基金经理，伦敦大学教授。市场深度分析，学术严谨，有不少批判性观点很有价值</span></div></li>
+</ul>
+
+<h2>顶级播客（通勤听）</h2>
+<ul class="resource-list">
+  <li><span class="resource-badge rb-podcast">播客</span><div><strong>Acquired</strong>（Ben & David）<br><span style="color:var(--gray-500);font-size:12px">⭐⭐ 深度剖析伟大公司历史。NVIDIA篇(8h)、Apple篇(7h)、Berkshire Hathaway篇。信息密度极高。强烈推荐：这是你投资科技公司前的必修课</span></div></li>
+  <li><span class="resource-badge rb-podcast">播客</span><div><strong>Invest Like the Best</strong>（Patrick O'Shaughnessy）<br><span style="color:var(--gray-500);font-size:12px">专访顶级对冲基金经理、成长型创业者。视野宽广，适合进阶投资者扩展思维边界</span></div></li>
+  <li><span class="resource-badge rb-podcast">播客</span><div><strong>Rational Reminder</strong>（Ben Felix & Cameron）<br><span style="color:var(--gray-500);font-size:12px">与YouTube频道对应的播客，每期深度讨论一个投资话题，全部有学术支撑</span></div></li>
+  <li><span class="resource-badge rb-podcast">播客</span><div><strong>Masters in Business</strong>（Barry Ritholtz, Bloomberg）<br><span style="color:var(--gray-500);font-size:12px">Bloomberg主播，专访华尔街大咖，访谈风格轻松，信息密度高</span></div></li>
+</ul>
+
+<h2>中文精品资源</h2>
+<ul class="resource-list">
+  <li><span class="resource-badge rb-free">雪球</span><div><strong>唐朝（唐书房）</strong><br><span style="color:var(--gray-500);font-size:12px">深度价值投资，研究框架严谨。茅台、洋河等研究报告是中文圈最好的之一</span></div></li>
+  <li><span class="resource-badge rb-free">雪球</span><div><strong>望京博格（ETF拯救世界）</strong><br><span style="color:var(--gray-500);font-size:12px">坚定指数基金派，极度理性。是国内把被动投资讲得最清楚的博主</span></div></li>
+  <li><span class="resource-badge rb-video">B站</span><div><strong>Ricky</strong><br><span style="color:var(--gray-500);font-size:12px">美港股深度分析，互联网出身，对科技公司理解深。视频质量高</span></div></li>
+</ul>
+
+<h2>必读书单（按学习顺序）</h2>
+<ul class="resource-list">
+  <li><span class="resource-badge rb-book">第1本</span><div><strong>《Psychology of Money》金钱心理学</strong> — Morgan Housel<br><span style="color:var(--gray-500);font-size:12px">最重要的投资书，不是讲技术，是讲为什么聪明人会做愚蠢的财务决策。读完后你会对投资有根本性的认知升级</span></div></li>
+  <li><span class="resource-badge rb-book">第2本</span><div><strong>《聪明的投资者》</strong> — Benjamin Graham<br><span style="color:var(--gray-500);font-size:12px">价值投资圣经。重点读第8章（市场先生的寓言）和第20章（安全边际）。其余章节可以略读</span></div></li>
+  <li><span class="resource-badge rb-book">第3本</span><div><strong>《Common Stocks and Uncommon Profits》</strong> — Philip Fisher<br><span style="color:var(--gray-500);font-size:12px">成长股投资奠基之作。"15个要点"（Fifteen Points）是识别伟大公司的最好框架之一</span></div></li>
+  <li><span class="resource-badge rb-book">第4本</span><div><strong>《One Up on Wall Street》</strong> — Peter Lynch<br><span style="color:var(--gray-500);font-size:12px">普通投资者如何利用自己的行业认知发现大牛股。作为互联网人，你读完会很有共鸣</span></div></li>
+  <li><span class="resource-badge rb-book">第5本</span><div><strong>《Poor Charlie's Almanack》穷查理宝典</strong> — Charlie Munger<br><span style="color:var(--gray-500);font-size:12px">多元思维模型的集大成。不只是投资书，是人生智慧集锦。每读一遍都有新收获</span></div></li>
+</ul>`,
+
+// =====================================================================
+'tools-platforms':`
+<p>好的工具能让你的研究效率提高10倍。以下是精选的免费和付费工具，以及如何高效使用它们。</p>
+
+<h2>数据研究工具</h2>
+<ul class="resource-list">
+  <li><span class="resource-badge rb-free">免费</span><div><strong>FRED (Federal Reserve Economic Data)</strong> · fred.stlouisfed.org<br><span style="color:var(--gray-500);font-size:12px">美联储官方宏观数据库。搜索"T10Y2Y"看收益率曲线，"CPIAUCSL"看通胀，"FEDFUNDS"看利率历史。全部免费，可下载</span></div></li>
+  <li><span class="resource-badge rb-free">免费</span><div><strong>SEC EDGAR</strong> · sec.gov/edgar<br><span style="color:var(--gray-500);font-size:12px">所有上市公司原始报告的最权威来源。Full-Text Search功能可以搜索关键词。建立习惯：每次分析公司必读10-K</span></div></li>
+  <li><span class="resource-badge rb-free">免费</span><div><strong>Finviz</strong> · finviz.com<br><span style="color:var(--gray-500);font-size:12px">⭐ 股票筛选神器。"Screener"功能可按PE/ROE/毛利率等条件筛。"Maps"热力图直观看行业涨跌。每天看热力图是好习惯</span></div></li>
+  <li><span class="resource-badge rb-free">免费</span><div><strong>Macrotrends</strong> · macrotrends.net<br><span style="color:var(--gray-500);font-size:12px">历史财务数据可视化神器。输入任意股票代码，可看20年历史毛利率/PE/营收增速趋势。分析趋势最好用</span></div></li>
+  <li><span class="resource-badge rb-free">免费</span><div><strong>Koyfin</strong> · koyfin.com<br><span style="color:var(--gray-500);font-size:12px">⭐ 最接近Bloomberg的免费替代品。财务数据、宏观数据、图表、ETF分析一站式。免费版已非常强大</span></div></li>
+  <li><span class="resource-badge rb-free">免费</span><div><strong>Earningswhispers / earnings.com</strong><br><span style="color:var(--gray-500);font-size:12px">财报日历。每周查看有哪些重要公司发财报，市场预期EPS是多少，上次实际vs预期的差距</span></div></li>
+</ul>
+
+<h2>付费工具（选择性订阅）</h2>
+<ul class="resource-list">
+  <li><span class="resource-badge rb-paid">$20/月</span><div><strong>TIKR Terminal</strong> · tikr.com<br><span style="color:var(--gray-500);font-size:12px">⭐ 最推荐的付费研究工具。机构级财务数据，覆盖全球市场，一次性横向对比5家公司非常高效</span></div></li>
+  <li><span class="resource-badge rb-paid">$15/月</span><div><strong>Stratechery</strong> · stratechery.com<br><span style="color:var(--gray-500);font-size:12px">Ben Thompson的科技策略分析。作为互联网从业者，这是最值得订阅的付费内容之一</span></div></li>
+  <li><span class="resource-badge rb-paid">$30/月</span><div><strong>Seeking Alpha Premium</strong><br><span style="color:var(--gray-500);font-size:12px">大量分析师文章，量化评级系统。适合看不同观点，但要保持批判性思维</span></div></li>
+</ul>
+
+<h2>券商平台</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>券商</th><th>特点</th><th>费率</th><th>适合</th></tr></thead>
+<tbody>
+<tr><td><strong>Interactive Brokers（盈透）</strong></td><td>最专业，全球市场，API交易</td><td>美股$0/笔（IBKR Lite）</td><td>⭐ 首选，专业级</td></tr>
+<tr><td><strong>富途（Futu/moomoo）</strong></td><td>中文界面，体验好，港美股</td><td>极低佣金</td><td>中文用户友好</td></tr>
+<tr><td><strong>老虎证券（Tiger）</strong></td><td>中文，入门简单</td><td>低佣金</td><td>入门</td></tr>
+<tr><td><strong>Charles Schwab</strong></td><td>美国本土最大折扣券商</td><td>$0</td><td>有美国地址者</td></tr>
+</tbody></table></div>
+
+<h2>信息管理工作流（防止信息过载）</h2>
+<div class="code-block"><span class="cm">// 每日/每周/每月信息节奏</span>
+
+每天（5-10分钟，非强制）：
+  → Finviz 热力图：快速看市场整体情绪
+  → 检查今日是否有持仓公司重大新闻
+
+每周（30-60分钟）：
+  → 读1-2篇深度分析文章（Stratechery/SeekingAlpha）
+  → 听1集播客（Acquired/Invest Like the Best）
+  → 检查财报日历，本周有无持仓公司发财报
+
+每月（2小时）：
+  → 查看持仓公司是否有月度运营数据
+  → 写投资日志（本月买卖了什么？原因？）
+  → Finviz Screener 扫描是否有新的投资机会
+
+每季度（半天）：
+  → 读持仓公司季报10-Q
+  → 组合再平衡检查（偏差>5%则调整）
+  → 更新个股投资论文（thesis更新了吗？）
+
+<span class="hl">关键原则：
+每天超过2小时盯盘 = 反而会做出更差的决策
+"Don't just stand there, do nothing."（不要总是操作）</span></div>`,
+
+// =====================================================================
+'value-wisdom':`
+<p>以下是从价值投资顶级领路人的博客、备忘录和演讲中提炼的核心思想精华。这些智慧经过数十年实战检验，是少数能穿越时间的投资真理。</p>
+
+<h2>Howard Marks 备忘录精华（Oaktree Capital）</h2>
+<div class="code-block"><span class="cm">// 《The Most Important Thing》核心思想</span>
+
+① 关于"第二层次思维"（Second-Level Thinking）
+"First-level thinking says: 'It's a good company; let's buy the stock.'
+Second-level thinking says: 'It's a good company, but everyone thinks it's great.
+The stock is priced for perfection, so let's sell.'"
+
+<span class="hl">第一层：这是好公司，买。
+第二层：所有人都知道这是好公司，股价已充分反映，该怎么决策？</span>
+
+② 关于市场周期
+"The market is a pendulum that forever swings between unsustainable optimism
+(which makes stocks too expensive) and unjustified pessimism
+(which makes them too cheap)."
+
+市场在过于乐观和过于悲观之间永远摆动。
+<span class="hl">你的工作：在悲观时买，在乐观时卖（知易行难）。</span>
+
+③ 关于风险
+"Risk means more things can happen than will happen."
+风险不是已发生的事，而是潜在的未发生的事。
+最危险的时候：当人们认为没有风险的时候。
+
+④ 关于不确定性
+"The future is not knowable, but it's also not all equally likely."
+未来不可预测，但不同情景的概率是不同的。
+<span class="hl">投资不是预测，而是概率加权的决策。</span></div>
+
+<h2>Warren Buffett 股东信精华</h2>
+<div class="code-block"><span class="cm">// 巴菲特最重要的40条智慧</span>
+
+关于价格与价值：
+"Price is what you pay. Value is what you get."
+价格是你付出的，价值是你得到的。两者可以极不相同。
+
+关于时间：
+"Our favorite holding period is forever."
+最好的持有期是永远。（前提：你买的是真正优秀的公司）
+
+"Time is the friend of the wonderful business, the enemy of the mediocre."
+时间是优秀公司的朋友，是平庸公司的敌人。
+
+关于护城河：
+"The most important thing to me is figuring out how big a moat there is
+around the business. What I love, of course, is a big castle and a big moat."
+
+关于圈子能力（Circle of Competence）：
+"Know your circle of competence, and stick within it.
+The size of that circle is not very important; knowing its boundaries is."
+<span class="hl">不是说要懂所有行业，而是要清楚自己懂什么、不懂什么。</span>
+
+关于市场先生：
+"Mr. Market is your servant, not your guide."
+把市场当仆人（利用价格波动），而不是当向导（跟随市场情绪）。
+
+关于费用：
+"Huge institutional investors, viewed as a group, have long since 
+established that they earn below-average returns."
+机构投资者作为一个整体，长期收益低于平均水平（因为费用）。
+
+关于分散化：
+"Diversification is protection against ignorance. It makes little sense
+for those who know what they're doing."
+<span class="hl">分散化是无知的保护盾。如果你真的深度了解一家公司，
+集中持有是合理的。对大多数人，指数ETF是最正确的选择。</span></div>
+
+<h2>Peter Lynch 的成长股智慧</h2>
+<div class="code-block"><span class="cm">// 《One Up on Wall Street》核心思想</span>
+
+① 投资你了解的（Invest in What You Know）
+"The person that turns over the most rocks wins the game."
+翻石头最多的人赢。日常生活中的观察就是投资灵感的来源。
+
+作为互联网人，你对以下有先天优势：
+  → 哪个App的用户黏性在提升
+  → 哪家公司的工具真正改变了工作方式
+  → 哪项技术在从"测试"走向"主流"
+
+② 六类股票类型
+慢速增长股（Slow Growers）：稳定股息，低增长
+稳定增长股（Stalwarts）：10-12%增长，大型蓝筹
+快速增长股（Fast Growers）：20%+增长，小型企业
+周期股（Cyclicals）：随经济周期涨跌
+资产股（Asset Plays）：账面资产被低估
+困境反转股（Turnarounds）：走出困境的公司
+
+③ 避免危险信号
+"Beware of the company that sounds too good to be true."
+"The best stock to own is the one you already know well."
+
+<span class="hl">最重要的Lynch原则：
+PEG < 1 的快速成长公司，往往是市场定价不充分的机会。</span></div>
+
+<h2>Farnam Street / Shane Parrish 的心智模型</h2>
+<div class="code-block"><span class="cm">// fs.blog 核心投资心智模型</span>
+
+① 第一性原理（First Principles Thinking）
+从最基础的假设开始思考，而不是类比推理
+投资应用：不要因为"历史上P/E 15倍合理"就认为现在也合理
+           想清楚：为什么企业值这个价格？背后的逻辑是什么？
+
+② 反转思考（Inversion）
+不只问"怎样才能成功"，也要问"怎样才会失败"
+投资应用：不只分析为什么这只股票会涨
+           同样重要：这只股票什么情况下会大跌？
+
+③ 能力圈（Circle of Competence）
+Munger：「我们的成功归因于始终做我们懂的事情。」
+确定自己的能力边界，然后严格在边界内操作
+
+④ 机会成本（Opportunity Cost）
+每一笔投资都是在对抗替代选择
+当你在考虑买某只股票时，问：
+相同的钱，如果买VOO，预期回报是多少？
+这只股票必须比VOO更好才值得选择。
+
+⑤ 安全边际（Margin of Safety）
+格雷厄姆："只有在内在价值显著高于市价时才买入。"
+这不只是财务工具，更是认识论——
+承认自己的估值可能错误，提前留出buffer</div>
+
+<h2>Charlie Munger 的多元思维模型</h2>
+<div class="code-block"><span class="cm">// 穷查理宝典核心</span>
+
+「在我的一生中，我遇到的最好的生意是那种不需要持续再投资，
+却能持续产生大量现金流的业务。」
+→ 软件即服务（SaaS）、品牌消费品、交易所
+
+「反过来想，总是反过来想。」
+"Invert, always invert." — 来自数学家 Carl Jacobi
+
+「如果你把宏观放进去，你就把微观放出去了。」
+宏观预测无用，专注个别企业研究
+
+「我只想知道我将来会死在哪里，这样我就永远不去那个地方了。」
+→ 投资中：找出毁掉投资的路径，然后避开它
+
+最著名的检查清单思想：
+「不是我比别人聪明，而是我不会犯别人都会犯的同样错误。」
+<span class="hl">系统性清单可以防止遗漏，防止在激动/恐慌时做错误决策</span></div>
+
+<ul class="checklist">
+  <li data-key="vw1"><div class="check-box">✓</div><span class="check-text">我理解Howard Marks的"第二层次思维"并能举例说明</span></li>
+  <li data-key="vw2"><div class="check-box">✓</div><span class="check-text">我能背出巴菲特关于时间、护城河、圈子能力的核心语录</span></li>
+  <li data-key="vw3"><div class="check-box">✓</div><span class="check-text">我知道Peter Lynch的6种股票类型和他的PEG判断方法</span></li>
+  <li data-key="vw4"><div class="check-box">✓</div><span class="check-text">我已经阅读过至少一篇Howard Marks的原版Memo</span></li>
+</ul>`,
+
+// =====================================================================
+'action-plan':`
+<p>知识的价值在于行动。这是你未来90天的详细行动计划，每一步都有具体的执行标准。</p>
+
+<h2>第一个月（第1-30天）：建立认知框架</h2>
+<ul class="checklist">
+  <li data-key="ap1"><div class="check-box">✓</div><span class="check-text">【第1-7天】读完《Psychology of Money》（约200页，每天30页）</span></li>
+  <li data-key="ap2"><div class="check-box">✓</div><span class="check-text">【第1周】注册Koyfin账号，查看AAPL/GOOGL/NVDA过去10年财务趋势</span></li>
+  <li data-key="ap3"><div class="check-box">✓</div><span class="check-text">【第2周】听Acquired播客 NVIDIA篇（约8小时，利用通勤时间）</span></li>
+  <li data-key="ap4"><div class="check-box">✓</div><span class="check-text">【第2周】读Howard Marks最新3篇Memos（oaktreecapital.com）</span></li>
+  <li data-key="ap5"><div class="check-box">✓</div><span class="check-text">【第3周】开立Interactive Brokers账户（先Paper Trading模式）</span></li>
+  <li data-key="ap6"><div class="check-box">✓</div><span class="check-text">【第3周】在SEC EDGAR下载苹果最新10-K，读MD&A章节（30-50页）</span></li>
+  <li data-key="ap7"><div class="check-box">✓</div><span class="check-text">【第4周】用本课程第6课的DCF框架，对一家你熟悉的公司做初步估值</span></li>
+  <li data-key="ap8"><div class="check-box">✓</div><span class="check-text">【第4周】订阅Stratechery（最新一年文章阅读），感受科技行业深度分析</span></li>
+</ul>
+
+<h2>第二个月（第31-60天）：动手建仓</h2>
+<ul class="checklist">
+  <li data-key="ap9"><div class="check-box">✓</div><span class="check-text">【第31-45天】Paper Trading：模拟买入VOO+SCHD+QQQ，跟踪30天</span></li>
+  <li data-key="ap10"><div class="check-box">✓</div><span class="check-text">【第40天】完成自己的《投资政策说明书（IPS）》（目标、配置、规则）</span></li>
+  <li data-key="ap11"><div class="check-box">✓</div><span class="check-text">【第45天】首次真实买入：$5-10万美元买入VOO（克服第一次的心理障碍）</span></li>
+  <li data-key="ap12"><div class="check-box">✓</div><span class="check-text">【第50天】读完《聪明的投资者》第8章和第20章</span></li>
+  <li data-key="ap13"><div class="check-box">✓</div><span class="check-text">【第55天】选出3家你深度熟悉的科技公司，完成10个问题清单分析</span></li>
+  <li data-key="ap14"><div class="check-box">✓</div><span class="check-text">【第60天】设置SCHD定投计划（自动每月1日执行）</span></li>
+</ul>
+
+<h2>第三个月（第61-90天）：完善体系</h2>
+<ul class="checklist">
+  <li data-key="ap15"><div class="check-box">✓</div><span class="check-text">【第65天】完成核心组合建仓（VOO+SCHD+QQQ，达到目标总仓位50%）</span></li>
+  <li data-key="ap16"><div class="check-box">✓</div><span class="check-text">【第70天】开始建立投资日志（每笔买卖的逻辑+卖出条件）</span></li>
+  <li data-key="ap17"><div class="check-box">✓</div><span class="check-text">【第75天】加入1-2只精选个股（3-5%仓位/只），有完整研究支撑</span></li>
+  <li data-key="ap18"><div class="check-box">✓</div><span class="check-text">【第80天】咨询税务顾问，了解境外投资合规申报要求</span></li>
+  <li data-key="ap19"><div class="check-box">✓</div><span class="check-text">【第85天】做一次完整的组合压力测试（按2008年情景模拟）</span></li>
+  <li data-key="ap20"><div class="check-box">✓</div><span class="check-text">【第90天】写下90天总结报告，评估学习成果，制定下一年计划</span></li>
+</ul>
+
+<h2>长期节奏（90天之后）</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>周期</th><th>具体行动</th><th>时间</th></tr></thead>
+<tbody>
+<tr><td><strong>每月</strong></td><td>定投执行、读1本书、听4集播客、写投资日志</td><td>6-10小时</td></tr>
+<tr><td><strong>每季度</strong></td><td>持仓公司财报跟踪、组合再平衡检查、更新个股thesis</td><td>3-4小时</td></tr>
+<tr><td><strong>每年</strong></td><td>读持仓公司10-K、更新IPS、年度回报率计算、与S&P500对比</td><td>1-2天</td></tr>
+</tbody></table></div>
+
+<h2>成功的标准（3年后的检验）</h2>
+<div class="code-block"><span class="cm">// 3年后你应该达到的状态</span>
+
+✅ 持有一个结构清晰的美股投资组合
+✅ 每年自动定投，不受市场情绪影响
+✅ 能看懂任何公司的财务报表
+✅ 做过至少3家公司的完整DCF估值
+✅ 经历过至少一次市场下跌（-10%以上）并保持冷静
+✅ 投资年化回报率高于你之前的A股组合
+
+你不需要达到的状态（避免错误目标）：
+❌ 不需要每天看K线图
+❌ 不需要预测市场短期涨跌
+❌ 不需要跑赢S&P500每一年（专注5-10年长期）
+❌ 不需要持有100只股票</div>
+
+<div style="text-align:center;margin-top:36px;padding:32px;background:linear-gradient(135deg,#1a56db,#0e9f6e);border-radius:16px;color:#fff">
+  <div style="font-size:24px;font-weight:900;margin-bottom:8px">🎉 恭喜完成全部25节课！</div>
+  <div style="font-size:14px;opacity:.9;line-height:1.8">
+    你已经系统学习了绝大多数散户投资者一辈子都不会主动学习的知识。<br>
+    从市场结构到DCF估值，从美联储解读到养老规划，从风险管理到价值投资哲学。<br><br>
+    <strong>现在，最重要的一步：把第一笔美元投入VOO。</strong><br>
+    开始行动，哪怕是小额试水，也远比继续观望更有价值。
+  </div>
+  <div style="margin-top:20px;font-size:13px;opacity:.8">
+    "The best time to plant a tree was 20 years ago. The second best time is now."<br>
+    种树最好的时机是20年前，其次是现在。
+  </div>
+</div>`,
+
+
+'damodaran-analysis':`
+<p>Aswath Damodaran 是纽约大学斯特恩商学院金融学教授，被学生和业界誉为<strong>估值领域的最高权威</strong>。他的博客从2008年持续更新至今，对每一次重大市场事件（COVID、通胀、AI浪潮）都给出详细的估值解读。本节整理他2020-2025年所有重要文章的核心洞察。</p>
+
+<div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:12px;padding:20px;margin:20px 0">
+<strong style="color:#1e40af;font-size:15px">📊 2020-2025 文章概览</strong>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px">
+  <div style="background:#fff;border-radius:8px;padding:14px;text-align:center;border:1px solid #dbeafe">
+    <div style="font-size:28px;font-weight:900;color:#1d4ed8">22+</div>
+    <div style="font-size:12px;color:#64748b">分析文章</div>
+  </div>
+  <div style="background:#fff;border-radius:8px;padding:14px;text-align:center;border:1px solid #dbeafe">
+    <div style="font-size:28px;font-weight:900;color:#1d4ed8">6</div>
+    <div style="font-size:12px;color:#64748b">核心主题</div>
+  </div>
+  <div style="background:#fff;border-radius:8px;padding:14px;text-align:center;border:1px solid #dbeafe">
+    <div style="font-size:28px;font-weight:900;color:#1d4ed8">2020-25</div>
+    <div style="font-size:12px;color:#64748b">时间跨度</div>
+  </div>
+</div>
+<div style="margin-top:14px;text-align:center">
+  <a href="damodaran_analysis.html" target="_blank" style="display:inline-block;background:#1d4ed8;color:#fff;padding:10px 24px;border-radius:8px;text-decoration:none;font-weight:700;font-size:13px">📄 查看完整文章分析报告 →</a>
+</div>
+</div>
+
+<h2>一、六大核心主题解析</h2>
+
+<h3>1. 宏观与市场（2020-2025）</h3>
+<p>Damodaran 在 COVID 危机（2020）、通胀冲击（2022）、AI 泡沫质疑（2023-2024）、关税风险（2025）等重大节点均发布了实时估值更新，形成了一套"宏观冲击→估值调整"的完整方法论。</p>
+<div class="code-block"><span class="cm">// 核心结论</span>
+宏观事件对股票的影响路径：
+  ① 改变无风险利率（国债收益率）
+  ② 改变股权风险溢价（ERP）
+  ③ 改变企业未来现金流预期
+  ④ 三者共同决定内在价值变化幅度
+
+COVID（2020）: ERP↑ + 利率↓ → 净效果：有限影响（互相抵消）
+通胀（2022）: 利率大幅↑ → 长久期资产（成长股）估值↓20-30%
+AI浪潮（2023-24）: EPS预期↑ → 若护城河成立，估值↑合理
+关税（2025）: EPS↓4-6% + ERP↑ → 市场整体承压</div>
+
+<h3>2. 利率与估值——最核心的量化关系</h3>
+<p>Damodaran 花了大量篇幅解释利率对股票估值的影响，这是2022年最重要的投资主题之一。</p>
+<div class="table-wrap"><table>
+<thead><tr><th>利率变化</th><th>对高成长股影响</th><th>对价值股/红利股影响</th><th>原理</th></tr></thead>
+<tbody>
+<tr><td>+100bp</td><td>估值↓20-30%</td><td>估值↓5-10%</td><td>现金流主要在远期，折现影响大</td></tr>
+<tr><td>+200bp（2022实际）</td><td>估值↓40-50%</td><td>估值↓10-15%</td><td>NASDAQ科技股2022年实际跌幅</td></tr>
+<tr><td>-100bp</td><td>估值↑25-35%</td><td>估值↑5-8%</td><td>ZIRP时代科技股超级牛市的根源</td></tr>
+</tbody></table></div>
+<p><strong>核心公式</strong>：股票内在价值 = Σ FCFt / (1+WACC)^t。当WACC（分母）上升，远期现金流（高成长股的大头）折现损失巨大。</p>
+
+<h3>3. 科技/成长股估值——AI时代的新挑战</h3>
+<p>NVIDIA（2023年上涨230%）、OpenAI（860亿估值）、Magnificent 7 的分析是 Damodaran 近年最受关注的文章。他的方法：不因高倍率就否定，而是将叙事转化为数字，用情景DCF验证叙事。</p>
+<div class="code-block"><span class="cm">// NVIDIA 2023年估值框架</span>
+基础案例假设：
+  FY2023收入：$27B
+  FY2028收入目标：$150B（CAGR 41%）
+  运营利润率：40%+
+  WACC：10.5%
+
+计算内在价值：~$300/股
+2023年6月市价：$420/股
+溢价比例：40%（市场在押注最乐观情景）
+
+关键风险：AMD/定制芯片是否打破NVIDIA垄断租金
+结论：有价值，但以当时价格是在为完美执行付费</div>
+
+<h3>4. 估值方法论——每年1月更新的"估值圣经"</h3>
+<p>Damodaran 每年1月发布全球股权风险溢价（ERP）、国家风险溢价数据，这是全球最权威的免费估值基准数据。</p>
+<div class="table-wrap"><table>
+<thead><tr><th>指标</th><th>2020年</th><th>2022年</th><th>2024年</th><th>说明</th></tr></thead>
+<tbody>
+<tr><td>美国ERP</td><td>4.7%</td><td>5.4%</td><td>3.9%</td><td>越低意味着市场定价越乐观</td></tr>
+<tr><td>S&P 500 P/E</td><td>21x</td><td>19x</td><td>24x</td><td>高于历史均值18x</td></tr>
+<tr><td>中国风险溢价</td><td>1.8%</td><td>2.9%</td><td>3.5-4%</td><td>解释中美估值差异的核心变量</td></tr>
+</tbody></table></div>
+
+<h3>5. 市场定价与行为金融</h3>
+<p>2021年GameStop事件、被动投资崛起（占美股50%+）、市场时机策略的实证分析——Damodaran 系统论证了为什么市场定价≠价值发现，以及为什么散户买指数基金是理性选择。</p>
+
+<h3>6. 具体公司分析（Twitter/X、Apple、Google）</h3>
+<p>每篇公司分析都是DCF实战教材，展示了如何将定性叙事转化为定量假设，再转化为估值结论。</p>
+
+<h2>二、2020-2025年关键主题演变</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>年份</th><th>市场背景</th><th>核心问题</th><th>Damodaran的答案</th></tr></thead>
+<tbody>
+<tr><td>2020</td><td>COVID崩盘与V形反弹</td><td>市场高估还是低估？</td><td>短期定价，长期有价值；零利率抬高估值</td></tr>
+<tr><td>2021</td><td>SPAC热潮/散户革命</td><td>泡沫还是新范式？</td><td>多数是泡沫，但不是全部；GameStop纯粹是定价博弈</td></tr>
+<tr><td>2022</td><td>通胀+加息+熊市</td><td>科技股值得抄底吗？</td><td>估值确实更合理，但高负债成长股仍有风险</td></tr>
+<tr><td>2023</td><td>AI狂热/NVIDIA暴涨</td><td>AI估值是否合理？</td><td>NVIDIA有实质价值，但市场已定价近完美情景</td></tr>
+<tr><td>2024</td><td>Mag-7集中/软着陆</td><td>美股整体是否泡沫？</td><td>结构性集中风险存在，整体轻微高估</td></tr>
+<tr><td>2025</td><td>关税风险/连续2年20%+</td><td>继续持有还是减仓？</td><td>ERP已压缩到3.4%，应保持谨慎，增加防御性配置</td></tr>
+</tbody></table></div>
+
+<h2>三、15条核心洞察精华</h2>
+<ul class="checklist">
+  <li data-key="dam1"><div class="check-box">✓</div><span class="check-text"><strong>估值的本质是为不确定性定价</strong>——DCF的价值在于厘清关键假设，而非输出精确数字。范围（保守/基准/乐观）比单点更诚实。</span></li>
+  <li data-key="dam2"><div class="check-box">✓</div><span class="check-text"><strong>2010-2021年的零利率是历史异常</strong>——不是新常态。以ZIRP为前提买入的高倍率成长股，需要重新以4-5%的折现率重做估值，许多估值可能下修30%+。</span></li>
+  <li data-key="dam3"><div class="check-box">✓</div><span class="check-text"><strong>利率对长久期资产影响是非线性的</strong>——利率上升100bp，高成长股估值↓20-30%；价值股/红利股只↓5-10%。这解释了2022年成长股大幅跑输价值股的数学原因。</span></li>
+  <li data-key="dam4"><div class="check-box">✓</div><span class="check-text"><strong>DCF的最大误差来自终值</strong>——终值通常占总估值的60-80%，永续增长率假设差1%，可导致估值差异15-25%。对终值保持谦逊，用情景分析而非精确数字。</span></li>
+  <li data-key="dam5"><div class="check-box">✓</div><span class="check-text"><strong>股权风险溢价（ERP）是市场晴雨表</strong>——当ERP&lt;4%时（如2024年末的3.9%），市场对负面情景缺乏缓冲。ERP历史均值约4.5-5%，低于这个水平意味着市场定价乐观。</span></li>
+  <li data-key="dam6"><div class="check-box">✓</div><span class="check-text"><strong>NVIDIA案例：高倍率≠高估</strong>——关键看叙事能否转化为数字。NVIDIA 2023年若能实现数据中心垄断租金，$300估值合理；但市价$420已定价最乐观情景，安全边际极低。</span></li>
+  <li data-key="dam7"><div class="check-box">✓</div><span class="check-text"><strong>Magnificent 7集中风险不可忽视</strong>——7家公司占S&P 500的30%，历史罕见。被动投资者正在不知不觉承担集中风险。等权重ETF（RSP）或国际分散（VXUS）是对冲手段。</span></li>
+  <li data-key="dam8"><div class="check-box">✓</div><span class="check-text"><strong>中国居民买美股的额外逻辑</strong>——中国国家风险溢价3.5-4%（美国近0），同等基本面的公司，美国上市估值高25-30%。这是地理分散的数学依据，而非仅靠直觉。</span></li>
+  <li data-key="dam9"><div class="check-box">✓</div><span class="check-text"><strong>被动投资占50%+的长期后果</strong>——价格发现退化，为真正有能力的主动投资者创造机会。但对你：核心仓位仍应是指数基金，只在真正有能力圈优势的个股上主动出击。</span></li>
+  <li data-key="dam10"><div class="check-box">✓</div><span class="check-text"><strong>市场时机在1年维度几乎无效</strong>——但在10年维度，CAPE>35时新增配置应谨慎。2025年初CAPE约34x，Damodaran建议"barbell策略"：质量成长+价值/国际，而非100%押注美国大盘成长。</span></li>
+  <li data-key="dam11"><div class="check-box">✓</div><span class="check-text"><strong>股票回购≠价值创造</strong>——好回购：在低于内在价值时进行；坏回购：高位借债回购（2018-2022年大量公司如此）。检验方法：回购时的P/E是否低于历史均值？</span></li>
+  <li data-key="dam12"><div class="check-box">✓</div><span class="check-text"><strong>通胀的行业影响不对称</strong>——有定价权的品牌公司（可口可乐、奢侈品）能转嫁成本；劳动密集型和高债务周期性行业受损最重。通胀期应增配高定价权公司（SCHD持仓的逻辑之一）。</span></li>
+  <li data-key="dam13"><div class="check-box">✓</div><span class="check-text"><strong>关税战的系统性影响</strong>——直接：EPS↓4-6%；间接：ERP↑，整体市场估值压缩。防御：增配国内收入占比高的医疗、公用事业板块（也是高dividend股特征）。</span></li>
+  <li data-key="dam14"><div class="check-box">✓</div><span class="check-text"><strong>AI估值的情景概率框架</strong>——OpenAI $86B估值合理的论证：40%概率"变革性成功"（$500B价值）+ 40%"普通成功"（$100B）+ 20%"失败"（$15B）= 期望价值约$227B × 折扣 ≈ $80B。这个框架适用于所有高度不确定性的科技投资。</span></li>
+  <li data-key="dam15"><div class="check-box">✓</div><span class="check-text"><strong>养老金投资者的估值应用</strong>——不需要每天做DCF。但应每年1月读Damodaran的全球ERP更新，了解当前市场整体是否便宜/贵，作为调整定投节奏的参考（贵时减速，便宜时加速）。</span></li>
+</ul>
+
+<h2>四、推荐阅读顺序（直接超链接）</h2>
+<ol style="list-style:none;padding:0">
+  <li style="padding:10px 0;border-bottom:1px solid #f1f5f9;display:flex;gap:12px">
+    <span style="flex-shrink:0;background:#1d4ed8;color:#fff;width:24px;height:24px;border-radius:50%;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center">1</span>
+    <div><a href="https://aswathdamodaran.blogspot.com/2024/01/january-2024-data-update-equity-markets.html" target="_blank" style="color:#1a56db;font-weight:700;text-decoration:none">January 2024 Data Update: Equity Markets in Perspective</a><br><span style="font-size:12px;color:#64748b">必读起点——全球股权风险溢价基准数据，建立估值坐标系</span></div>
+  </li>
+  <li style="padding:10px 0;border-bottom:1px solid #f1f5f9;display:flex;gap:12px">
+    <span style="flex-shrink:0;background:#1d4ed8;color:#fff;width:24px;height:24px;border-radius:50%;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center">2</span>
+    <div><a href="https://aswathdamodaran.blogspot.com/2022/05/inflation-interest-rates-and-damage-done.html" target="_blank" style="color:#1a56db;font-weight:700;text-decoration:none">Inflation, Interest Rates and the Damage Done (2022)</a><br><span style="font-size:12px;color:#64748b">理解利率→估值传导机制，解释2022年科技股暴跌的数学逻辑</span></div>
+  </li>
+  <li style="padding:10px 0;border-bottom:1px solid #f1f5f9;display:flex;gap:12px">
+    <span style="flex-shrink:0;background:#1d4ed8;color:#fff;width:24px;height:24px;border-radius:50%;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center">3</span>
+    <div><a href="https://aswathdamodaran.blogspot.com/2023/06/nvidia-ai-premium-deserved-or-delusional.html" target="_blank" style="color:#1a56db;font-weight:700;text-decoration:none">NVIDIA: The AI Premium – Deserved or Delusional? (2023)</a><br><span style="font-size:12px;color:#64748b">AI公司估值方法论完整示范，学习如何对高成长公司做DCF情景分析</span></div>
+  </li>
+  <li style="padding:10px 0;border-bottom:1px solid #f1f5f9;display:flex;gap:12px">
+    <span style="flex-shrink:0;background:#1d4ed8;color:#fff;width:24px;height:24px;border-radius:50%;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center">4</span>
+    <div><a href="https://aswathdamodaran.blogspot.com/2024/03/the-magnificent-seven-are-they-worth.html" target="_blank" style="color:#1a56db;font-weight:700;text-decoration:none">The Magnificent Seven: Are They Worth Their Multiples? (2024)</a><br><span style="font-size:12px;color:#64748b">对7家科技巨头的系统性DCF分析，学习跨公司比较估值方法</span></div>
+  </li>
+  <li style="padding:10px 0;border-bottom:1px solid #f1f5f9;display:flex;gap:12px">
+    <span style="flex-shrink:0;background:#1d4ed8;color:#fff;width:24px;height:24px;border-radius:50%;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center">5</span>
+    <div><a href="https://aswathdamodaran.blogspot.com/2020/02/a-viral-market-update-pricing-or-value.html" target="_blank" style="color:#1a56db;font-weight:700;text-decoration:none">A Viral Market Update: Pricing or Value? (2020)</a><br><span style="font-size:12px;color:#64748b">极端不确定性下的实时估值，展示情景DCF在危机中的应用</span></div>
+  </li>
+  <li style="padding:10px 0;border-bottom:1px solid #f1f5f9;display:flex;gap:12px">
+    <span style="flex-shrink:0;background:#1d4ed8;color:#fff;width:24px;height:24px;border-radius:50%;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center">6</span>
+    <div><a href="https://aswathdamodaran.blogspot.com/2024/07/country-risk-2024-annual-update.html" target="_blank" style="color:#1a56db;font-weight:700;text-decoration:none">Country Risk Premium Update 2024</a><br><span style="font-size:12px;color:#64748b">中国居民必读——理解美股vs A股/港股估值差异的根本原因</span></div>
+  </li>
+  <li style="padding:10px 0;border-bottom:1px solid #f1f5f9;display:flex;gap:12px">
+    <span style="flex-shrink:0;background:#1d4ed8;color:#fff;width:24px;height:24px;border-radius:50%;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center">7</span>
+    <div><a href="https://aswathdamodaran.blogspot.com/2025/01/equity-markets-2025-valuation-reckoning.html" target="_blank" style="color:#1a56db;font-weight:700;text-decoration:none">Equity Markets 2025: A Valuation Reckoning</a><br><span style="font-size:12px;color:#64748b">2025年最新市场估值全景，了解当前入场的风险与机会</span></div>
+  </li>
+  <li style="padding:10px 0;display:flex;gap:12px">
+    <span style="flex-shrink:0;background:#1d4ed8;color:#fff;width:24px;height:24px;border-radius:50%;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center">8</span>
+    <div><a href="https://aswathdamodaran.blogspot.com/2023/09/interest-rates-in-2023-new-normal-or.html" target="_blank" style="color:#1a56db;font-weight:700;text-decoration:none">Interest Rates in 2023: The New Normal or Temporary Detour?</a><br><span style="font-size:12px;color:#64748b">帮助判断当前折现率假设的长期合理性，直接影响你的所有DCF结论</span></div>
+  </li>
+</ol>
+
+<div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;padding:20px;margin:24px 0">
+<strong style="color:#15803d;font-size:15px">💡 如何应用到你的投资实践</strong>
+<ul style="margin-top:12px;padding-left:20px">
+  <li style="margin-bottom:10px">每年1月：读Damodaran的全球ERP更新，判断当前市场整体贵/便宜，作为定投节奏的参考</li>
+  <li style="margin-bottom:10px">买入任何科技股前：用他的情景DCF框架，为乐观/基准/悲观三个故事分别打概率权重，计算期望价值</li>
+  <li style="margin-bottom:10px">每次美联储大幅加息/降息：重算你持仓中成长股（高倍率）的估值，量化利率变化对持仓的影响</li>
+  <li style="margin-bottom:10px">遇到"AI新公司"等估值难题：用他对OpenAI/NVIDIA的分析方法，将叙事转化为可检验的数字假设</li>
+</ul>
+</div>
+`,
+
+'farnam-mental-models':`
+<p>Shane Parrish 在 2009 年创立 Farnam Street（fs.blog），以查理·芒格的Farnam Street投资体系命名，专注于整理人类历史上最有效的<strong>思维框架（心智模型）</strong>。网站汇集了来自心理学、哲学、数学、物理学、经济学的核心思维工具，是投资决策和人生决策的底层操作系统。本节整理2020-2025年所有重要文章的核心洞察。</p>
+
+<div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;padding:20px;margin:20px 0">
+<strong style="color:#15803d;font-size:15px">📊 2020-2025 文章概览</strong>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px">
+  <div style="background:#fff;border-radius:8px;padding:14px;text-align:center;border:1px solid #bbf7d0">
+    <div style="font-size:28px;font-weight:900;color:#15803d">22+</div>
+    <div style="font-size:12px;color:#64748b">分析文章</div>
+  </div>
+  <div style="background:#fff;border-radius:8px;padding:14px;text-align:center;border:1px solid #bbf7d0">
+    <div style="font-size:28px;font-weight:900;color:#15803d">6</div>
+    <div style="font-size:12px;color:#64748b">心智模型类别</div>
+  </div>
+  <div style="background:#fff;border-radius:8px;padding:14px;text-align:center;border:1px solid #bbf7d0">
+    <div style="font-size:28px;font-weight:900;color:#15803d">2020-25</div>
+    <div style="font-size:12px;color:#64748b">时间跨度</div>
+  </div>
+</div>
+<div style="margin-top:14px;text-align:center">
+  <a href="farnam_analysis.html" target="_blank" style="display:inline-block;background:#15803d;color:#fff;padding:10px 24px;border-radius:8px;text-decoration:none;font-weight:700;font-size:13px">📄 查看完整文章分析报告 →</a>
+</div>
+</div>
+
+<h2>一、六大心智模型类别</h2>
+
+<div class="table-wrap"><table>
+<thead><tr><th>类别</th><th>核心模型</th><th>投资应用</th></tr></thead>
+<tbody>
+<tr><td><strong>决策框架</strong></td><td>第一性原理、逆向思维、奥卡姆剃刀、系统思维、批量决策</td><td>构建投资分析方法，避免人云亦云</td></tr>
+<tr><td><strong>认知偏差</strong></td><td>可得性启发、确认偏误、锚定效应、过度自信、汉隆剃刀</td><td>识别和修正自己的决策错误</td></tr>
+<tr><td><strong>概率思维</strong></td><td>概率分布、期望值、风险vs不确定性、Kelly公式</td><td>正确评估投资机会和风险</td></tr>
+<tr><td><strong>长期思维</strong></td><td>复利、延迟满足、时间折扣、耐心的价值</td><td>养老金投资最核心的心理基础</td></tr>
+<tr><td><strong>投资哲学</strong></td><td>能力圈、激励结构、知之为知之、后验分析</td><td>建立个人投资原则体系</td></tr>
+<tr><td><strong>认知与学习</strong></td><td>费曼技巧、幸存者偏差、主动输出学习</td><td>高效吸收投资知识的方法论</td></tr>
+</tbody></table></div>
+
+<h2>二、10大核心心智模型深度解析</h2>
+
+<h3>1. 第一性原理思维（First Principles）</h3>
+<p>不接受共识，从基本事实重建结论。Elon Musk用它将火箭成本降低10倍。</p>
+<div class="code-block"><span class="cm">// 投资应用示例</span>
+错误的一阶问题：
+  "这只股票为什么值30倍PE？"
+
+第一性原理问题：
+  "什么样的竞争壁垒和成长率能支撑30倍PE？"
+
+计算验证（Gordon Growth Model）：
+  P/E = 1 / (Ke - g)
+  若 Ke = 9%, g = 5.7% → P/E = 1/(0.09-0.057) = 30x ✓
+  这意味着：需要长期维持接近无风险利率的永续成长率
+  
+结论：要么这家公司确实有极强护城河，要么是愿景泡沫</div>
+
+<h3>2. 逆向思维（Inversion）</h3>
+<p>Charlie Munger: "只要告诉我我会死在哪里，那我就不去那里。"</p>
+<div class="code-block"><span class="cm">// 养老金投资的逆向思维应用</span>
+不问：怎样才能保证60岁财务自由？
+
+而问：什么做法一定会导致养老失败？
+  ❌ 杠杆炒股（能短期放大收益，但一次归零就毁掉）
+  ❌ 重仓单一行业（行业周期可以持续10年低迷）
+  ❌ 市场恐慌时卖出（永久锁定亏损，错过复苏）
+  ❌ 频繁换手（年均3%的摩擦成本，30年复利损失极大）
+  ❌ 把全部资产放在A股（缺乏全球分散）
+
+→ 已知必须避免的事情，就是最重要的风险管理框架</div>
+
+<h3>3. 能力圈（Circle of Competence）</h3>
+<p>能力圈本身大小不重要，<strong>知道边界在哪里</strong>才是关键。</p>
+<div class="code-block"><span class="cm">// 你的能力圈评估（互联网从业者）</span>
+圈子内（高置信度）：
+  ✅ 消费互联网（流量、变现、留存）
+  ✅ SaaS（ARR、NRR、CAC/LTV）
+  ✅ 数字广告（CPM、CPC、归因）
+  ✅ 电商（GMV、take rate、物流单位经济）
+  ✅ 平台效应（网络效应、双边市场）
+
+圈子边界（需要大量研究才能进入）：
+  ⚠️ 半导体制造（技术更新极快，护城河评估难）
+  ⚠️ 金融/银行业（资产负债表复杂）
+  ⚠️ 生物医药（FDA政策+研发失败率难以预测）
+
+圈子外（靠ETF解决）：
+  ❌ 能源、矿业、大宗商品
+  ❌ 传统制造业
+  
+策略：核心ETF(VOO/QQQ) + 圈子内精选个股(5-10只)</div>
+
+<h3>4. 复利的力量（Compounding）</h3>
+<div class="code-block"><span class="cm">// 复利的终极洞见</span>
+巴菲特财富积累时间线：
+  30岁：$1M
+  40岁：$10M
+  50岁：$374M
+  60岁：$3.8B
+  65岁：$7.6B
+  93岁：$140B+（99%的财富在65岁后积累！）
+
+关键启示：
+  1. 每一次中断复利都有极高代价
+     → 市场下跌20%时卖出，再涨25%才能回本
+     → 但此间还损失了时间的复利价值
+
+  2. 1%的年费差异，30年后财富差额：
+     1%费率 vs 0%费率 → 最终财富差26%
+
+  3. 你现在42岁，到60岁有18年复利窗口
+     若每年新增存款80万，年化8%：
+     到60岁 ≈ 3,180万（新增部分复利）
+     加上现有800万的复利 ≈ 8,000万 × 1.08^18 = 3.2亿+</div>
+
+<h3>5. 可得性启发（Availability Heuristic）</h3>
+<p>最近发生的、情绪化的事件被大脑过度放大，导致错误的概率判断。</p>
+<div class="code-block"><span class="cm">// 你可能犯过的可得性偏误</span>
+2020年3月：疫情崩盘→ 认为"还会继续跌"→ 卖出
+2021年：全市场狂热→ 认为"趋势会持续"→ 高位重仓
+2022年：加息熊市→ 认为"利率会一直高"→ 不敢加仓
+
+每次都是可得性启发（最近的例子主导判断）
+
+防御方案：
+  ✅ 写投资政策说明书（IPS），提前定好规则
+  ✅ 设置自动定投（完全绕开情绪判断）
+  ✅ 看100年历史数据，而非最近3个月新闻
+  ✅ 市场下跌时：看CAPE估值是否变便宜了（数据>感觉）</div>
+
+<h3>6. 确认偏误（Confirmation Bias）</h3>
+<p>我们倾向于寻找支持自己观点的证据，而无视反面证据。投资中最危险的偏见。</p>
+<div class="code-block"><span class="cm">// 确认偏误的防御系统</span>
+症状检测：
+  ① 你只读持仓公司的看多分析？
+  ② 季报不好你解释成"这只是暂时的"？
+  ③ 你的投资thesis从未因为新信息而改变？
+
+防御操作：
+  1. 每季度为每个持仓写"熊市理由"（强迫自己）
+  2. 在Reddit/Twitter主动搜索批评性观点
+  3. 找一个愿意反驳你的研究伙伴（投资魔鬼代言人）
+  4. 记录原始thesis，每隔6个月对照现实验证
+
+记住：最好的投资者奖励自己改变主意的能力
+George Soros: "我不是先知，我只是认错比别人快"</div>
+
+<h3>7. 概率思维（Probabilistic Thinking）</h3>
+<div class="code-block"><span class="cm">// 将投资判断升级为概率框架</span>
+错误框架（二元论）：
+  "这只股票会涨吗？" → "会！"
+
+正确框架（概率分布）：
+  牛市情景（AI变革成功，营收超预期）：30% → +80%
+  基准情景（稳步增长，竞争可控）：    50% → +15%
+  熊市情景（竞争侵蚀，宏观衰退）：    20% → -40%
+
+期望价值计算：
+  EV = 0.3×80% + 0.5×15% + 0.2×(-40%)
+     = 24% + 7.5% - 8%
+     = +23.5%（正EV，值得投）
+
+仓位大小：
+  Kelly公式：f = p - (1-p)/b
+  但实际应用：用Half-Kelly，避免过度集中</div>
+
+<h3>8. 奥卡姆剃刀（Occam's Razor）</h3>
+<p>最简单的解释/方案通常是最好的。在投资中，复杂往往是劣势，而非优势。</p>
+<div class="code-block"><span class="cm">// 复杂 vs 简单策略的实证比较</span>
+简单策略：每月自动买入 VOO + VXUS + BND
+结果：过去20年跑赢85%的主动管理基金
+
+复杂策略：因子轮动、宏观对冲、行业精选
+结果：85%的情况下表现更差（且更费时间）
+
+为什么简单更好？
+  1. 复杂模型有更多出错的参数
+  2. 复杂策略在压力下更难坚持执行
+  3. 复杂策略产生更高的税务和摩擦成本
+  4. 简单策略让你"不作为"，而不作为通常是最优选择</div>
+
+<h3>9. 幸存者偏差（Survivorship Bias）</h3>
+<div class="code-block"><span class="cm">// 幸存者偏差：你看不到的数据</span>
+你研究的案例：巴菲特、芒格、彼得·林奇
+（全都是幸存者！）
+
+真实情况：
+  - 2000年有10,000+家主动基金
+  - 2023年只剩约6,000家（近半已关闭）
+  - 业绩记录中不包含已关闭基金
+  → 平均表现被高估4-6%
+
+你看到的成功故事：
+  集中持股价值投资者 → 巴菲特（1个）
+  集中持股价值投资者 → 80%在某一个10年里破产
+
+防御：
+  "N年前有多少人采用这个完全相同的策略？
+   其中有多少比例在今天还在盈利？"</div>
+
+<h3>10. 激励结构（Incentives）</h3>
+<p>Charlie Munger: "给我看激励机制，我就告诉你结果。"理解激励是看穿表象的X光。</p>
+<div class="code-block"><span class="cm">// 投资中的激励结构分析</span>
+卖方分析师激励：
+  雇主 = 投资银行（承销业务依赖上市公司关系）
+  结果：买入评级:卖出评级 ≈ 5:1（系统性偏多）
+  应用：卖出/减持评级是罕见的，遇到认真研究原因
+
+CEO薪酬激励：
+  期权为主 → 激励冒险（股价越高越好，负面由股东承担）
+  RSU为主 → 激励长期价值（股票持有锁定期）
+  检查：代理权委托书（Proxy Statement）中的薪酬部分
+
+你自己的激励（最难看清的）：
+  "我已经和朋友说过这只股票很好"
+  → 自我一致性偏见：更难承认错误
+  解决：不要在未入仓前公开讨论具体持仓</div>
+
+<h2>三、15条核心洞察精华</h2>
+<ul class="checklist">
+  <li data-key="fs1"><div class="check-box">✓</div><span class="check-text"><strong>第一性原理是分析的基础</strong>——不接受"这只股票一直都是这个估值"，而要问"什么经济基础支撑这个估值"，这个问题往往揭示真实的竞争壁垒或愿景泡沫。</span></li>
+  <li data-key="fs2"><div class="check-box">✓</div><span class="check-text"><strong>逆向思维是最被低估的工具</strong>——在构建投资理由之前，先全力构建失败路径。常见失败路径：过度杠杆、高度相关资产间的"分散"、在质量公司下跌时卖出。</span></li>
+  <li data-key="fs3"><div class="check-box">✓</div><span class="check-text"><strong>能力圈的价值是一致性</strong>——互联网从业者对SaaS、数字广告、平台网络效应的理解天然优于95%的投资者。这个圈子就是你的alpha，离开它就是自我伤害。</span></li>
+  <li data-key="fs4"><div class="check-box">✓</div><span class="check-text"><strong>复利的关键不是收益率，是连续性</strong>——巴菲特99%的财富在65岁后积累，靠的是60年不中断的复利。不要试图加速（高风险），要防止中断（卖出、亏损）。</span></li>
+  <li data-key="fs5"><div class="check-box">✓</div><span class="check-text"><strong>可得性偏误是系统性的</strong>——不是意志力问题，而是大脑的硬件设计。唯一有效的防御是制度性安排：自动定投、预设规则、不在市场时间做决策。</span></li>
+  <li data-key="fs6"><div class="check-box">✓</div><span class="check-text"><strong>确认偏误让你无法学习</strong>——持仓公司出现负面信号时，主动寻找最强的熊市理由（不是为了卖出，而是为了检验你原来的分析是否仍然成立）。</span></li>
+  <li data-key="fs7"><div class="check-box">✓</div><span class="check-text"><strong>概率思维是二元论的替代品</strong>——"这只股票会涨吗"是错误的问题框架。"在三个情景下各有多少概率和收益/亏损，期望值是多少"才是正确的分析框架。</span></li>
+  <li data-key="fs8"><div class="check-box">✓</div><span class="check-text"><strong>奥卡姆剃刀应用于投资组合</strong>——3只ETF策略（VTI+VXUS+BND）过去20年跑赢85%的主动基金。复杂不是优势，坚持执行的简单策略才是。</span></li>
+  <li data-key="fs9"><div class="check-box">✓</div><span class="check-text"><strong>系统思维揭示反馈循环</strong>——市场有正向反馈（上涨吸引动量资金继续上涨）和负向反馈（估值扩张降低前向回报吸引价值买家）。理解你在哪个阶段，帮助判断顺势还是逆势。</span></li>
+  <li data-key="fs10"><div class="check-box">✓</div><span class="check-text"><strong>幸存者偏差是投资学习的陷阱</strong>——所有你读到的成功策略都经过了幸存者过滤。研究巴菲特的同时，也要研究同类集中价值投资者中有多少人失败了。</span></li>
+  <li data-key="fs11"><div class="check-box">✓</div><span class="check-text"><strong>费曼技巧测试真实理解</strong>——能向没有金融背景的人解释DCF，才说明你真正理解了它。买入任何投资前，写一页白话投资理由——写不清楚就是没想清楚。</span></li>
+  <li data-key="fs12"><div class="check-box">✓</div><span class="check-text"><strong>激励结构是X光机</strong>——对你阅读的每一份分析报告，问"这个人有什么激励动机告诉我这些"。卖方分析师、财经媒体、社交媒体大V，都有各自的激励，不一定与你对齐。</span></li>
+  <li data-key="fs13"><div class="check-box">✓</div><span class="check-text"><strong>批量决策减少错误</strong>——永远不在市场交易时间做投资决策。提前在平静状态设定规则，然后机械执行。大多数投资错误发生在市场最波动时的实时反应。</span></li>
+  <li data-key="fs14"><div class="check-box">✓</div><span class="check-text"><strong>后验分析是真正的学习机制</strong>——每次投资决策（特别是失败的）都要做后验：原始假设→实际发生→第一个反例出现时你是否行动？不分析失败，就会重复失败。</span></li>
+  <li data-key="fs15"><div class="check-box">✓</div><span class="check-text"><strong>长期思维是最稀缺的竞争优势</strong>——市场参与者平均持仓不足1年。愿意持有5-10年的投资者在和一群只看1-4个季度的对手竞争，而他们犯错的频率远高于自我认知。</span></li>
+</ul>
+
+<h2>四、推荐阅读顺序（直接超链接）</h2>
+<ol style="list-style:none;padding:0">
+  <li style="padding:10px 0;border-bottom:1px solid #f1f5f9;display:flex;gap:12px">
+    <span style="flex-shrink:0;background:#15803d;color:#fff;width:24px;height:24px;border-radius:50%;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center">1</span>
+    <div><a href="https://fs.blog/first-principles/" target="_blank" style="color:#1a56db;font-weight:700;text-decoration:none">First Principles Thinking</a><br><span style="font-size:12px;color:#64748b">入门首读——从基本假设重建分析框架，打破"一直都是这样"的惰性思维</span></div>
+  </li>
+  <li style="padding:10px 0;border-bottom:1px solid #f1f5f9;display:flex;gap:12px">
+    <span style="flex-shrink:0;background:#15803d;color:#fff;width:24px;height:24px;border-radius:50%;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center">2</span>
+    <div><a href="https://fs.blog/inversion/" target="_blank" style="color:#1a56db;font-weight:700;text-decoration:none">Inversion: The Crucial Thinking Tool</a><br><span style="font-size:12px;color:#64748b">Charlie Munger最爱的工具——在构建成功路径之前，先全力构建失败路径</span></div>
+  </li>
+  <li style="padding:10px 0;border-bottom:1px solid #f1f5f9;display:flex;gap:12px">
+    <span style="flex-shrink:0;background:#15803d;color:#fff;width:24px;height:24px;border-radius:50%;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center">3</span>
+    <div><a href="https://fs.blog/circle-of-competence/" target="_blank" style="color:#1a56db;font-weight:700;text-decoration:none">Circle of Competence</a><br><span style="font-size:12px;color:#64748b">互联网从业者必读——明确你的投资优势边界，把精力集中在你真正懂的领域</span></div>
+  </li>
+  <li style="padding:10px 0;border-bottom:1px solid #f1f5f9;display:flex;gap:12px">
+    <span style="flex-shrink:0;background:#15803d;color:#fff;width:24px;height:24px;border-radius:50%;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center">4</span>
+    <div><a href="https://fs.blog/compounding/" target="_blank" style="color:#1a56db;font-weight:700;text-decoration:none">Compounding: The Eighth Wonder of the World</a><br><span style="font-size:12px;color:#64748b">42岁养老规划的数学基础——为什么"不中断复利"比"提高年化收益率"更重要</span></div>
+  </li>
+  <li style="padding:10px 0;border-bottom:1px solid #f1f5f9;display:flex;gap:12px">
+    <span style="flex-shrink:0;background:#15803d;color:#fff;width:24px;height:24px;border-radius:50%;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center">5</span>
+    <div><a href="https://fs.blog/second-order-thinking/" target="_blank" style="color:#1a56db;font-weight:700;text-decoration:none">Second-Order Thinking</a><br><span style="font-size:12px;color:#64748b">超额收益的来源——大多数人做一阶分析，edge来自两阶和三阶推演</span></div>
+  </li>
+  <li style="padding:10px 0;border-bottom:1px solid #f1f5f9;display:flex;gap:12px">
+    <span style="flex-shrink:0;background:#15803d;color:#fff;width:24px;height:24px;border-radius:50%;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center">6</span>
+    <div><a href="https://fs.blog/probabilistic-thinking/" target="_blank" style="color:#1a56db;font-weight:700;text-decoration:none">Probabilistic Thinking</a><br><span style="font-size:12px;color:#64748b">将投资判断升级为概率框架，专业投资者和业余者的本质区别</span></div>
+  </li>
+  <li style="padding:10px 0;border-bottom:1px solid #f1f5f9;display:flex;gap:12px">
+    <span style="flex-shrink:0;background:#15803d;color:#fff;width:24px;height:24px;border-radius:50%;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center">7</span>
+    <div><a href="https://fs.blog/survivorship-bias/" target="_blank" style="color:#1a56db;font-weight:700;text-decoration:none">Survivorship Bias: The Hidden Graveyard</a><br><span style="font-size:12px;color:#64748b">研究任何成功策略前必读——理解为什么公开可见的成功案例会系统性误导你</span></div>
+  </li>
+  <li style="padding:10px 0;display:flex;gap:12px">
+    <span style="flex-shrink:0;background:#15803d;color:#fff;width:24px;height:24px;border-radius:50%;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center">8</span>
+    <div><a href="https://fs.blog/confirmation-bias/" target="_blank" style="color:#1a56db;font-weight:700;text-decoration:none">Confirmation Bias</a><br><span style="font-size:12px;color:#64748b">持仓投资者最危险的偏见——如何主动搜寻让持仓失败的理由，而不只是安慰自己</span></div>
+  </li>
+</ol>
+
+<div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:12px;padding:20px;margin:24px 0">
+<strong style="color:#1e40af;font-size:15px">💡 心智模型的学习节奏建议</strong>
+<div class="table-wrap" style="margin-top:12px"><table>
+<thead><tr><th>时间</th><th>行动</th><th>时长</th></tr></thead>
+<tbody>
+<tr><td>每周一</td><td>读一篇 Farnam Street 文章（配合本节推荐列表轮流阅读）</td><td>20-30分钟</td></tr>
+<tr><td>每周五</td><td>将本周读到的心智模型，用3句话写出"对我的投资组合有什么启示"</td><td>10分钟</td></tr>
+<tr><td>每月</td><td>回顾上月一个投资决策（买入/卖出/不动），用心智模型框架分析</td><td>30分钟</td></tr>
+<tr><td>每季度</td><td>做一次"确认偏误检查"：为每个持仓写熊市理由，验证thesis是否仍成立</td><td>2小时</td></tr>
+</tbody></table></div>
+</div>
+
+<div style="background:#fefce8;border:1px solid #fde68a;border-radius:12px;padding:20px;margin:24px 0">
+<strong style="color:#92400e;font-size:15px">🎯 Farnam Street核心理念总结</strong>
+<p style="margin-top:10px;font-size:13px;line-height:1.8;color:#374151">
+  "不要试图成为最聪明的人，要尽可能地减少愚蠢的行为。大多数投资损失不是因为没有找到绝佳的投资机会，而是因为犯了可以避免的错误——过度自信、确认偏误、在恐惧中卖出。心智模型是你防御这些错误的工具箱，而非寻找'下一个百倍股'的方法。"
+</p>
+<p style="font-size:12px;color:#64748b;margin-top:8px">— Shane Parrish，Farnam Street创始人</p>
+</div>
+
+<div style="text-align:center;margin-top:36px;padding:32px;background:linear-gradient(135deg,#059669,#1d4ed8);border-radius:16px;color:#fff">
+  <div style="font-size:24px;font-weight:900;margin-bottom:8px">🎉 恭喜完成全部25节课！</div>
+  <div style="font-size:14px;opacity:.9;line-height:1.8">
+    你现在掌握了市场结构、财务分析、估值方法、宏观经济、ETF投资、风险管理、养老规划和顶级投资者的思维框架。<br><br>
+    <strong>最重要的下一步：打开你的券商APP，执行你的第一笔定投。</strong><br>
+    知识只有在行动中才能真正内化。
+  </div>
+  <div style="margin-top:20px;font-size:13px;opacity:.8">
+    "投资最重要的不是你在牛市里赚了多少，而是你在熊市里是否还能坚持。"
+  </div>
+</div>
+`,
+
+}; // end C
+
+return C[id]||'<p>内容准备中...</p>';
+}
+
+renderNav();
+renderContent();
+</script>
+</body>
+</html>
