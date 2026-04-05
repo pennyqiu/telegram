@@ -24,7 +24,6 @@ router = APIRouter(
     dependencies=[Depends(verify_admin_token)],
 )
 
-# 登录接口单独使用无鉴权的 router（FastAPI router 级 dependencies 无法被路由级 dependencies=[] 覆盖）
 public_router = APIRouter(prefix="/admin", tags=["admin"])
 
 

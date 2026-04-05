@@ -7,8 +7,8 @@ from telegram.ext import Application, CommandHandler, CallbackQueryHandler
 from app.core.config import settings
 from app.core.database import engine, Base, AsyncSessionLocal
 from app.api.routes import clubs, players, admin
-from app.models import league, club, player, transfer, admin_user  # noqa: F401 确保所有模型注册到 Base.metadata
 from app.api.routes.admin import public_router as admin_public_router
+from app.models import league, club, player, transfer, admin_user
 
 _bot_app: Application | None = None
 
