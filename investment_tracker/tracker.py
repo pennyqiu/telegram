@@ -88,11 +88,15 @@ def fetch_prices(tickers: list) -> dict:
 
 
 def fetch_earnings_calendar(tickers: list, days_ahead: int = 30) -> list:
-    """获取未来 N 天内有财报的持仓"""
+    """获取未来 N 天内有财报的持仓（ETF 没有财报日历，自动跳过）"""
+    # ETF 和黄金不会有财报，直接跳过避免 404 警告
+    ETF_SKIP = {"VOO", "VTI", "QQQ", "SCHD", "VYM", "DGRO", "GLD", "BND", "IEF", "TLT", "VXUS"}
     events = []
     today = datetime.today().date()
     cutoff = today + timedelta(days=days_ahead)
     for t in tickers:
+        if t in ETF_SKIP:
+            continue
         try:
             info = yf.Ticker(t).calendar
             if info is None:
