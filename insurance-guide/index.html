@@ -547,6 +547,23 @@
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: var(--gray-300); border-radius: 3px; }
+
+  /* ── 内向者实战手册：内嵌分页标签 ── */
+  .itab-nav{display:flex;gap:0;border-bottom:2px solid #e5e7eb;margin:24px 0 0;overflow-x:auto;scrollbar-width:none}
+  .itab-nav::-webkit-scrollbar{display:none}
+  .itab-btn{flex-shrink:0;padding:10px 16px;font-size:13px;font-weight:600;color:#6b7280;background:none;border:none;border-bottom:3px solid transparent;cursor:pointer;white-space:nowrap;margin-bottom:-2px;transition:color .15s,border-color .15s}
+  .itab-btn:hover{color:#4f46e5}
+  .itab-btn.active{color:#4f46e5;border-bottom-color:#4f46e5}
+  .itab-panel{display:none;padding-top:20px;animation:fadeIn .2s ease}
+  .itab-panel.active{display:block}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  /* 学习路径卡片 */
+  .stage-card{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:18px 20px;margin-bottom:12px;border-left:4px solid}
+  .stage-card h4{font-size:14px;font-weight:700;margin:0 0 8px;display:flex;align-items:center;gap:8px}
+  .stage-card p{font-size:13px;color:#6b7280;margin:0 0 10px;line-height:1.7}
+  .stage-links{display:flex;flex-wrap:wrap;gap:6px}
+  .stage-link{font-size:12px;padding:4px 10px;border-radius:16px;text-decoration:none;font-weight:600;transition:opacity .15s}
+  .stage-link:hover{opacity:.8}
   </style>
 </head>
 <body>
@@ -609,11 +626,12 @@
       <span class="num">6</span> 内向者专属策略
     </a>
     <div class="nav-sub">
-      <a class="nav-sub-item" onclick="showSection('introvert',null,'#introvert-script')">话术脚本库</a>
-      <a class="nav-sub-item" onclick="showSection('introvert',null,'#introvert-moments')">朋友圈发文模板</a>
-      <a class="nav-sub-item" onclick="showSection('introvert',null,'#introvert-content')">内容创作模板</a>
-      <a class="nav-sub-item" onclick="showSection('introvert',null,'#introvert-alliance')">专业联盟开拓</a>
-      <a class="nav-sub-item" onclick="showSection('introvert',null,'#introvert-30days')">30天计划</a>
+      <a class="nav-sub-item" onclick="showSection('introvert',null);switchITab(1)">认知建立</a>
+      <a class="nav-sub-item" onclick="showSection('introvert',null);switchITab(2)">话术脚本库</a>
+      <a class="nav-sub-item" onclick="showSection('introvert',null);switchITab(3)">朋友圈发文模板</a>
+      <a class="nav-sub-item" onclick="showSection('introvert',null);switchITab(4)">文章资源库</a>
+      <a class="nav-sub-item" onclick="showSection('introvert',null);switchITab(5)">专业联盟开拓</a>
+      <a class="nav-sub-item" onclick="showSection('introvert',null);switchITab(6)">30天计划</a>
     </div>
   </nav>
 </div>
@@ -2068,6 +2086,131 @@
     <h2 class="section-title">06 · 内向型从业者实战手册</h2>
     <div class="section-subtitle">不讲方向，只给模板——每一段话术都可以直接复制修改后使用</div>
 
+    <!-- ── 内嵌分页导航 ── -->
+    <nav class="itab-nav" id="introvert-tabs">
+      <button class="itab-btn active" onclick="switchITab(0)">📖 学习路径</button>
+      <button class="itab-btn" onclick="switchITab(1)">🧠 认知建立</button>
+      <button class="itab-btn" onclick="switchITab(2)">💬 话术脚本</button>
+      <button class="itab-btn" onclick="switchITab(3)">📱 朋友圈内容</button>
+      <button class="itab-btn" onclick="switchITab(4)">📚 文章资源库</button>
+      <button class="itab-btn" onclick="switchITab(5)">🤝 联盟拓客</button>
+      <button class="itab-btn" onclick="switchITab(6)">📅 30天计划</button>
+    </nav>
+
+    <!-- ══════════ Tab 0: 学习路径 ══════════ -->
+    <div class="itab-panel active" id="itab-0">
+      <div class="callout tip">
+        <div class="callout-icon"></div>
+        <div class="callout-body"><strong>怎么用这本手册：</strong>按阶段推进，每个阶段目标清晰，不要跳读。内容由易到难，由建立认知到输出内容，再到系统执行。</div>
+      </div>
+
+      <!-- 阶段一 -->
+      <div class="stage-card" style="border-color:#6366f1">
+        <h4><span style="background:#6366f1;color:#fff;border-radius:6px;padding:2px 10px;font-size:12px">阶段一</span> 入行第 1–2 周：先解决心理，再开口</h4>
+        <p>刚入行最大的障碍是心理，不是技能。先把认知障碍清零，再学第一句话怎么说。</p>
+        <div class="stage-links">
+          <button class="stage-link" style="background:#ede9fe;color:#6d28d9" onclick="switchITab(1)">🧠 认知建立 →</button>
+          <button class="stage-link" style="background:#ede9fe;color:#6d28d9" onclick="switchITab(2)">💬 第一句话怎么说 →</button>
+        </div>
+        <div style="margin-top:12px;font-size:13px;font-weight:700;color:#374151">📖 推荐先读这几篇文章（最基础）</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">
+          <a href="articles/xhs-01-hospital-cost.html" style="background:#f5f3ff;border:1px solid #ddd6fe;border-radius:8px;padding:10px 12px;text-decoration:none;display:block"><div style="font-size:12.5px;font-weight:700;color:#4f46e5">公立 vs 私家医院费用</div><div style="font-size:11px;color:#9ca3af">医疗篇① · 5分钟</div></a>
+          <a href="articles/xhs-04-ci-vs-medical.html" style="background:#f5f3ff;border:1px solid #ddd6fe;border-radius:8px;padding:10px 12px;text-decoration:none;display:block"><div style="font-size:12.5px;font-weight:700;color:#4f46e5">危疾险和医疗险的区别</div><div style="font-size:11px;color:#9ca3af">医疗篇④ · 5分钟</div></a>
+          <a href="articles/xhs-02-vhis-detail.html" style="background:#f5f3ff;border:1px solid #ddd6fe;border-radius:8px;padding:10px 12px;text-decoration:none;display:block"><div style="font-size:12.5px;font-weight:700;color:#4f46e5">VHIS 自愿医保详解</div><div style="font-size:11px;color:#9ca3af">医疗篇② · 5分钟</div></a>
+          <a href="articles/xhs-05-irr.html" style="background:#f5f3ff;border:1px solid #ddd6fe;border-radius:8px;padding:10px 12px;text-decoration:none;display:block"><div style="font-size:12.5px;font-weight:700;color:#4f46e5">什么是 IRR？</div><div style="font-size:11px;color:#9ca3af">储蓄篇⑤ · 5分钟</div></a>
+        </div>
+      </div>
+
+      <!-- 阶段二 -->
+      <div class="stage-card" style="border-color:#0ea5e9">
+        <h4><span style="background:#0ea5e9;color:#fff;border-radius:6px;padding:2px 10px;font-size:12px">阶段二</span> 第 2–3 周：能跟客户对话，开始输出内容</h4>
+        <p>掌握朋友圈发帖技巧，开始用内容建立专业形象，同时深化产品知识，能回答常见问题。</p>
+        <div class="stage-links">
+          <button class="stage-link" style="background:#e0f2fe;color:#0369a1" onclick="switchITab(3)">📱 朋友圈发帖模板 →</button>
+          <button class="stage-link" style="background:#e0f2fe;color:#0369a1" onclick="switchITab(4)">📚 文章资源库 →</button>
+        </div>
+        <div style="margin-top:12px;font-size:13px;font-weight:700;color:#374151">📖 这一阶段要读的文章（解答常见问题）</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">
+          <a href="articles/xhs-03-policy-clauses.html" style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:8px;padding:10px 12px;text-decoration:none;display:block"><div style="font-size:12.5px;font-weight:700;color:#0369a1">医疗险4个必看条款</div><div style="font-size:11px;color:#9ca3af">医疗篇③ · 避坑必读</div></a>
+          <a href="articles/xhs-07-surrender.html" style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:8px;padding:10px 12px;text-decoration:none;display:block"><div style="font-size:12.5px;font-weight:700;color:#0369a1">提前退保损失多少？</div><div style="font-size:11px;color:#9ca3af">储蓄篇⑦ · 避坑必读</div></a>
+          <a href="articles/xhs-09-unionpay.html" style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:8px;padding:10px 12px;text-decoration:none;display:block"><div style="font-size:12.5px;font-weight:700;color:#0369a1">银联卡能刷多少？</div><div style="font-size:11px;color:#9ca3af">储蓄篇⑨ · 实操指南</div></a>
+          <a href="articles/xhs-10-claim-inland.html" style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:8px;padding:10px 12px;text-decoration:none;display:block"><div style="font-size:12.5px;font-weight:700;color:#0369a1">内地理赔真实流程</div><div style="font-size:11px;color:#9ca3af">储蓄篇⑩ · 理赔实战</div></a>
+        </div>
+      </div>
+
+      <!-- 阶段三 -->
+      <div class="stage-card" style="border-color:#10b981">
+        <h4><span style="background:#10b981;color:#fff;border-radius:6px;padding:2px 10px;font-size:12px">阶段三</span> 第 3–4 周：建立专业联盟，能服务高净值客户</h4>
+        <p>开始接触会计师、律师等专业人脉，同时深化高净值客户需要的话题知识（分红实现率、资产隔离等）。</p>
+        <div class="stage-links">
+          <button class="stage-link" style="background:#d1fae5;color:#065f46" onclick="switchITab(5)">🤝 专业联盟模板 →</button>
+          <button class="stage-link" style="background:#d1fae5;color:#065f46" onclick="switchITab(4)">📚 进阶文章库 →</button>
+        </div>
+        <div style="margin-top:12px;font-size:13px;font-weight:700;color:#374151">📖 高净值客户专题文章（进阶）</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">
+          <a href="articles/xhs-06-guarantee-vs-dividend.html" style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:10px 12px;text-decoration:none;display:block"><div style="font-size:12.5px;font-weight:700;color:#15803d">分红实现率数据对比</div><div style="font-size:11px;color:#9ca3af">储蓄篇⑥ · 专业数据</div></a>
+          <a href="articles/xhs-08-edu-fund.html" style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:10px 12px;text-decoration:none;display:block"><div style="font-size:12.5px;font-weight:700;color:#15803d">子女教育金规划</div><div style="font-size:11px;color:#9ca3af">储蓄篇⑧ · 家庭规划</div></a>
+          <a href="articles/xhs-11-why-rich.html" style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:10px 12px;text-decoration:none;display:block"><div style="font-size:12.5px;font-weight:700;color:#15803d">有钱人为何买储蓄险？</div><div style="font-size:11px;color:#9ca3af">储蓄篇⑪ · 高净值洞察</div></a>
+          <a href="articles/xhs-12-hk-vs-mainland.html" style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:10px 12px;text-decoration:none;display:block"><div style="font-size:12.5px;font-weight:700;color:#15803d">港险 vs 内地险对比</div><div style="font-size:11px;color:#9ca3af">储蓄篇⑫ · 深度对比</div></a>
+        </div>
+      </div>
+
+      <!-- 阶段四 -->
+      <div class="stage-card" style="border-color:#f59e0b">
+        <h4><span style="background:#f59e0b;color:#fff;border-radius:6px;padding:2px 10px;font-size:12px">阶段四</span> 第 4 周起：系统化执行，形成可持续节奏</h4>
+        <p>把前三周的内容整合成稳定的日常节奏。跟着 30 天计划逐步推进，不要冲刺，要持续。</p>
+        <div class="stage-links">
+          <button class="stage-link" style="background:#fef3c7;color:#92400e" onclick="switchITab(6)">📅 30天逐日计划 →</button>
+        </div>
+      </div>
+
+      <!-- 文章总览 -->
+      <div style="background:#f8fafc;border-radius:12px;padding:20px 22px;margin-top:24px">
+        <div style="font-size:14px;font-weight:700;color:#374151;margin-bottom:14px">📋 全部文章资源一览（24篇，按学习阶段排序）</div>
+        <div style="display:grid;gap:6px">
+          <div style="font-size:12px;font-weight:700;color:#6366f1;padding:6px 0 2px;border-bottom:1px dashed #e5e7eb">🔵 阶段一：基础认知（刚入行必读）</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;padding:6px 0">
+            <a href="articles/xhs-01-hospital-cost.html" style="font-size:12px;background:#ede9fe;color:#6d28d9;padding:3px 10px;border-radius:12px;text-decoration:none">医疗① 医院费用</a>
+            <a href="articles/xhs-02-vhis-detail.html" style="font-size:12px;background:#ede9fe;color:#6d28d9;padding:3px 10px;border-radius:12px;text-decoration:none">医疗② VHIS详解</a>
+            <a href="articles/xhs-04-ci-vs-medical.html" style="font-size:12px;background:#ede9fe;color:#6d28d9;padding:3px 10px;border-radius:12px;text-decoration:none">医疗④ 危疾vs医疗</a>
+            <a href="articles/xhs-05-irr.html" style="font-size:12px;background:#ede9fe;color:#6d28d9;padding:3px 10px;border-radius:12px;text-decoration:none">储蓄⑤ IRR入门</a>
+          </div>
+          <div style="font-size:12px;font-weight:700;color:#0369a1;padding:6px 0 2px;border-bottom:1px dashed #e5e7eb">🔷 阶段二：解答常见问题</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;padding:6px 0">
+            <a href="articles/xhs-03-policy-clauses.html" style="font-size:12px;background:#dbeafe;color:#1d4ed8;padding:3px 10px;border-radius:12px;text-decoration:none">医疗③ 条款避坑</a>
+            <a href="articles/xhs-07-surrender.html" style="font-size:12px;background:#dbeafe;color:#1d4ed8;padding:3px 10px;border-radius:12px;text-decoration:none">储蓄⑦ 退保损失</a>
+            <a href="articles/xhs-09-unionpay.html" style="font-size:12px;background:#dbeafe;color:#1d4ed8;padding:3px 10px;border-radius:12px;text-decoration:none">储蓄⑨ 银联刷卡</a>
+            <a href="articles/xhs-10-claim-inland.html" style="font-size:12px;background:#dbeafe;color:#1d4ed8;padding:3px 10px;border-radius:12px;text-decoration:none">储蓄⑩ 内地理赔</a>
+          </div>
+          <div style="font-size:12px;font-weight:700;color:#065f46;padding:6px 0 2px;border-bottom:1px dashed #e5e7eb">🟢 阶段三：高净值客户话题</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;padding:6px 0">
+            <a href="articles/xhs-06-guarantee-vs-dividend.html" style="font-size:12px;background:#d1fae5;color:#065f46;padding:3px 10px;border-radius:12px;text-decoration:none">储蓄⑥ 分红实现率</a>
+            <a href="articles/xhs-08-edu-fund.html" style="font-size:12px;background:#d1fae5;color:#065f46;padding:3px 10px;border-radius:12px;text-decoration:none">储蓄⑧ 教育金规划</a>
+            <a href="articles/xhs-11-why-rich.html" style="font-size:12px;background:#d1fae5;color:#065f46;padding:3px 10px;border-radius:12px;text-decoration:none">储蓄⑪ 高净值逻辑</a>
+            <a href="articles/xhs-12-hk-vs-mainland.html" style="font-size:12px;background:#d1fae5;color:#065f46;padding:3px 10px;border-radius:12px;text-decoration:none">储蓄⑫ 港险vs内地</a>
+          </div>
+          <div style="font-size:12px;font-weight:700;color:#7c3aed;padding:6px 0 2px;border-bottom:1px dashed #e5e7eb">📰 公众号深度版（12篇，可直接发布）</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;padding:6px 0">
+            <a href="wechat-copy/wx-01-hospital-cost.html" style="font-size:12px;background:#f3e8ff;color:#7c3aed;padding:3px 10px;border-radius:12px;text-decoration:none">医疗① 公众号版</a>
+            <a href="wechat-copy/wx-02-vhis-detail.html" style="font-size:12px;background:#f3e8ff;color:#7c3aed;padding:3px 10px;border-radius:12px;text-decoration:none">医疗② 公众号版</a>
+            <a href="wechat-copy/wx-03-policy-clauses.html" style="font-size:12px;background:#f3e8ff;color:#7c3aed;padding:3px 10px;border-radius:12px;text-decoration:none">医疗③ 公众号版</a>
+            <a href="wechat-copy/wx-04-ci-vs-medical.html" style="font-size:12px;background:#f3e8ff;color:#7c3aed;padding:3px 10px;border-radius:12px;text-decoration:none">医疗④ 公众号版</a>
+            <a href="wechat-copy/wx-05-irr.html" style="font-size:12px;background:#f3e8ff;color:#7c3aed;padding:3px 10px;border-radius:12px;text-decoration:none">储蓄⑤ 公众号版</a>
+            <a href="wechat-copy/wx-06-guarantee-vs-dividend.html" style="font-size:12px;background:#f3e8ff;color:#7c3aed;padding:3px 10px;border-radius:12px;text-decoration:none">储蓄⑥ 公众号版</a>
+            <a href="wechat-copy/wx-07-surrender.html" style="font-size:12px;background:#f3e8ff;color:#7c3aed;padding:3px 10px;border-radius:12px;text-decoration:none">储蓄⑦ 公众号版</a>
+            <a href="wechat-copy/wx-08-edu-fund.html" style="font-size:12px;background:#f3e8ff;color:#7c3aed;padding:3px 10px;border-radius:12px;text-decoration:none">储蓄⑧ 公众号版</a>
+            <a href="wechat-copy/wx-09-unionpay.html" style="font-size:12px;background:#f3e8ff;color:#7c3aed;padding:3px 10px;border-radius:12px;text-decoration:none">储蓄⑨ 公众号版</a>
+            <a href="wechat-copy/wx-10-claim-inland.html" style="font-size:12px;background:#f3e8ff;color:#7c3aed;padding:3px 10px;border-radius:12px;text-decoration:none">储蓄⑩ 公众号版</a>
+            <a href="wechat-copy/wx-11-why-rich.html" style="font-size:12px;background:#f3e8ff;color:#7c3aed;padding:3px 10px;border-radius:12px;text-decoration:none">储蓄⑪ 公众号版</a>
+            <a href="wechat-copy/wx-12-hk-vs-mainland.html" style="font-size:12px;background:#f3e8ff;color:#7c3aed;padding:3px 10px;border-radius:12px;text-decoration:none">储蓄⑫ 公众号版</a>
+          </div>
+        </div>
+      </div>
+    </div><!-- /itab-0 -->
+
+    <!-- ══════════ Tab 1: 认知建立 ══════════ -->
+    <div class="itab-panel" id="itab-1">
+
     <!-- 核心认知 -->
     <div class="callout tip">
       <div class="callout-icon"></div>
@@ -2077,7 +2220,7 @@
     </div>
 
     <!-- ══ 一、认知重构 ══ -->
-    <h3 class="block-title">一、先解决一个心理障碍：佣金带来的内疚感</h3>
+    <h3 id="introvert-script" class="block-title">一、先解决一个心理障碍：佣金带来的内疚感</h3>
     <p class="body-text">内向者最大的障碍不是不会说话，而是：<strong>「我收了佣金，所以我的建议是不纯粹的。」</strong></p>
     <div class="compare-grid">
       <div class="compare-box minus">
@@ -2103,6 +2246,11 @@
       <div class="callout-icon"></div>
       <div class="callout-body"><strong>一个有帮助的思维框架：</strong>你的工作不是"说服对方买保险"，而是"确保对方在做决定前获得了准确的信息"。买不买是他们的权利，告知是你的职责。</div>
     </div>
+
+    </div><!-- /itab-1 -->
+
+    <!-- ══════════ Tab 2: 话术脚本 ══════════ -->
+    <div class="itab-panel" id="itab-2">
 
     <!-- ══ 二、话术脚本库 ══ -->
     <h3 id="introvert-script" class="block-title">二、话术脚本库（可直接复制）</h3>
@@ -2278,6 +2426,11 @@
     </div>
 
     <!-- ══ 三、朋友圈模板 ══ -->
+    </div><!-- /itab-2 -->
+
+    <!-- ══════════ Tab 3: 朋友圈/社交内容 ══════════ -->
+    <div class="itab-panel" id="itab-3">
+
     <h3 id="introvert-moments" class="block-title">三、朋友圈发文模板（5 种类型，可直接修改使用）</h3>
     <div class="callout info">
       <div class="callout-icon"></div>
@@ -2398,6 +2551,11 @@
     </div>
 
     <!-- ══ 四、内容创作模板 ══ -->
+    </div><!-- /itab-3 -->
+
+    <!-- ══════════ Tab 4: 文章资源库 ══════════ -->
+    <div class="itab-panel" id="itab-4">
+
     <h3 id="introvert-content" class="block-title">四、内容创作模板（公众号 / 小红书 / 知乎）</h3>
 
     <h4 class="sub-title">公众号文章结构模板（3 种高转化结构）</h4>
@@ -2850,6 +3008,11 @@
     </div>
 
     <!-- ══ 五、专业联盟 ══ -->
+    </div><!-- /itab-4 -->
+
+    <!-- ══════════ Tab 5: 联盟拓客 ══════════ -->
+    <div class="itab-panel" id="itab-5">
+
     <h3 id="introvert-alliance" class="block-title">五、专业联盟开拓：第一条消息模板</h3>
     <p class="body-text">与会计师、律师等专业人士合作，是内向者最高效的获客路径——一旦建立，源源不断。但第一步往往是最难的。以下是针对不同对象的初次接触模板：</p>
 
@@ -2921,6 +3084,11 @@
     </div>
 
     <!-- ══ 六、30天计划 ══ -->
+    </div><!-- /itab-5 -->
+
+    <!-- ══════════ Tab 6: 30天计划 ══════════ -->
+    <div class="itab-panel" id="itab-6">
+
     <h3 id="introvert-30days" class="block-title">六、30 天逐日行动计划</h3>
     <div class="callout info">
       <div class="callout-icon"></div>
@@ -3373,11 +3541,25 @@
       </div>
     </div>
 
+    </div><!-- /itab-6 -->
+
   </div>
 
 </div><!-- end #main -->
 
 <script>
+  function switchITab(idx) {
+    document.querySelectorAll('#sec-introvert .itab-btn').forEach((btn, i) => {
+      btn.classList.toggle('active', i === idx);
+    });
+    document.querySelectorAll('#sec-introvert .itab-panel').forEach((panel, i) => {
+      panel.classList.toggle('active', i === idx);
+    });
+    // 滚动到 tab 导航位置
+    const nav = document.getElementById('introvert-tabs');
+    if (nav) nav.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
   function showSection(id, navEl, anchor) {
     // Hide all sections
     document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
