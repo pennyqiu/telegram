@@ -2,7 +2,13 @@
 """
 Investment Monitoring Automation
 每日/每周/每月自动生成投资简报 HTML
-运行方式：python tracker.py [daily|weekly|monthly|rebalance]
+
+本地运行：
+  python tracker.py daily
+
+服务器运行（输出到 Nginx web 目录）：
+  python tracker.py daily --output /var/www/briefing
+  或设置环境变量：BRIEFING_OUTPUT=/var/www/briefing python tracker.py daily
 """
 
 import sys
@@ -49,6 +55,10 @@ REBALANCE_THRESHOLD = 5.0  # 偏差超过5%触发提醒
 
 # 输出目录
 OUTPUT_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# 服务器模式：通过环境变量或命令行 --output 指定固定输出目录
+# 服务器上设置：export BRIEFING_OUTPUT=/var/www/briefing
+SERVER_OUTPUT = os.environ.get("BRIEFING_OUTPUT", "")
 
 # ============================================================
 # 数据获取
@@ -226,6 +236,8 @@ def _chg_str(v: float) -> str:
 def build_html(mode: str, prices: dict, earnings: list,
                news: list, rebalance: list, dividends: dict) -> str:
     ts = datetime.now().strftime("%Y-%m-%d %H:%M")
+    next_map = {"daily": "明日同一时间", "weekly": "下周一", "monthly": "下月1日", "rebalance": "手动触发"}
+    next_update = next_map.get(mode, "—")
     mode_label = {"daily": "每日简报", "weekly": "每周简报",
                   "monthly": "每月简报", "rebalance": "再平衡检查"}.get(mode, "投资简报")
 
@@ -400,7 +412,8 @@ def build_html(mode: str, prices: dict, earnings: list,
   {journal_html}
 
   <div style="text-align:center;color:#94a3b8;font-size:11px;margin-top:12px">
-    由 investment_tracker.py 自动生成 · 数据来源：Yahoo Finance / Google News RSS
+    由 investment_tracker.py 自动生成 · 数据来源：Yahoo Finance / Google News RSS<br>
+    下次更新：{next_update}
   </div>
 </div>
 </body>
@@ -412,11 +425,30 @@ def build_html(mode: str, prices: dict, earnings: list,
 # ============================================================
 
 def main():
-    mode = sys.argv[1] if len(sys.argv) > 1 else "daily"
+    # 解析参数：python tracker.py [mode] [--output /path/to/dir]
+    args = sys.argv[1:]
+    mode = "daily"
+    output_dir = None
+
+    i = 0
+    while i < len(args):
+        if args[i] == "--output" and i + 1 < len(args):
+            output_dir = args[i + 1]
+            i += 2
+        elif not args[i].startswith("--"):
+            mode = args[i]
+            i += 1
+        else:
+            i += 1
+
     valid = {"daily", "weekly", "monthly", "rebalance"}
     if mode not in valid:
-        print(f"用法：python tracker.py [{'|'.join(valid)}]")
+        print(f"用法：python tracker.py [{'|'.join(valid)}] [--output /path/to/dir]")
         sys.exit(1)
+
+    # 确定输出目录（优先级：命令行 > 环境变量 > 脚本同目录）
+    out_dir = output_dir or SERVER_OUTPUT or OUTPUT_DIR
+    os.makedirs(out_dir, exist_ok=True)
 
     tickers = list(PORTFOLIO.keys())
     print(f"[{mode.upper()}] 正在获取数据...")
@@ -438,15 +470,29 @@ def main():
 
     html = build_html(mode, prices, earnings, news, rebalance, dividends)
 
-    fname = os.path.join(OUTPUT_DIR, f"briefing_{mode}_{datetime.now().strftime('%Y%m%d_%H%M')}.html")
+    # 服务器模式：输出固定文件名（index.html），Nginx 直接服务
+    # 本地模式：带时间戳文件名，方便对比历史
+    is_server = bool(output_dir or SERVER_OUTPUT)
+    if is_server:
+        fname = os.path.join(out_dir, "index.html")
+        # 同时保留带日期的历史快照
+        snapshot = os.path.join(out_dir, f"briefing_{mode}_{datetime.now().strftime('%Y%m%d')}.html")
+        with open(snapshot, "w", encoding="utf-8") as f:
+            f.write(html)
+    else:
+        fname = os.path.join(out_dir, f"briefing_{mode}_{datetime.now().strftime('%Y%m%d_%H%M')}.html")
+
     with open(fname, "w", encoding="utf-8") as f:
         f.write(html)
 
     print(f"\n✅ 简报已生成：{fname}")
-    print("   用浏览器打开即可查看。")
+    if is_server:
+        print(f"   历史快照：{snapshot}")
+    else:
+        print("   用浏览器打开即可查看。")
 
     # 自动在 macOS 上用默认浏览器打开
-    if sys.platform == "darwin":
+    if sys.platform == "darwin" and not is_server:
         os.system(f'open "{fname}"')
 
 
