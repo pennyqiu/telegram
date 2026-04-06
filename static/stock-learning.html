@@ -2860,30 +2860,6 @@ $110万 → $59万
 </tbody></table></div>
 <p style="font-size:12px;color:var(--gray-400)">注：保守按年化7%，基准按年化9%计算。人民币按1 USD = 7.3 RMB换算，汇率波动会影响实际数值。</p>
 
-<script>
-function switchCurrency(mode) {
-  const usdEls = document.querySelectorAll('.v-usd');
-  const cnyEls = document.querySelectorAll('.v-cny');
-  const btnUsd = document.getElementById('btn-usd');
-  const btnCny = document.getElementById('btn-cny');
-  if (mode === 'cny') {
-    usdEls.forEach(el => el.style.display = 'none');
-    cnyEls.forEach(el => el.style.display = 'inline');
-    btnCny.style.background = '#dc2626';
-    btnCny.style.color = '#fff';
-    btnUsd.style.background = 'transparent';
-    btnUsd.style.color = '#64748b';
-  } else {
-    usdEls.forEach(el => el.style.display = 'inline');
-    cnyEls.forEach(el => el.style.display = 'none');
-    btnUsd.style.background = '#2563eb';
-    btnUsd.style.color = '#fff';
-    btnCny.style.background = 'transparent';
-    btnCny.style.color = '#64748b';
-  }
-}
-</script>
-
 <h2>每月行动计划</h2>
 <div class="code-block"><span class="cm">// 每月具体操作</span>
 
@@ -3130,30 +3106,6 @@ function switchCurrency(mode) {
   <td>退休组合完成，开始提取模式</td></tr>
 </tbody></table></div>
 <p style="font-size:12px;color:var(--gray-400)">注：保守按年化7%，基准按年化9%；55岁起储蓄投入因可能减少工作而有所降低。人民币按1 USD = 7.3 RMB换算，汇率波动会影响实际数值。</p>
-
-<script>
-function switchCurrency2(mode) {
-  const usdEls = document.querySelectorAll('.w-usd');
-  const cnyEls = document.querySelectorAll('.w-cny');
-  const btnUsd = document.getElementById('btn2-usd');
-  const btnCny = document.getElementById('btn2-cny');
-  if (mode === 'cny') {
-    usdEls.forEach(el => el.style.display = 'none');
-    cnyEls.forEach(el => el.style.display = 'inline');
-    btnCny.style.background = '#dc2626';
-    btnCny.style.color = '#fff';
-    btnUsd.style.background = 'transparent';
-    btnUsd.style.color = '#64748b';
-  } else {
-    usdEls.forEach(el => el.style.display = 'inline');
-    cnyEls.forEach(el => el.style.display = 'none');
-    btnUsd.style.background = '#2563eb';
-    btnUsd.style.color = '#fff';
-    btnCny.style.background = 'transparent';
-    btnCny.style.color = '#64748b';
-  }
-}
-</script>
 
 <h2>60岁时的退休资产验算</h2>
 
@@ -4710,6 +4662,44 @@ return C[id]||'<p>内容准备中...</p>';
 
 renderNav();
 renderContent();
+
+// 货币切换函数（全局定义，供 retirement-42-50 课程调用）
+function switchCurrency(mode) {
+  const usdEls = document.querySelectorAll('.v-usd');
+  const cnyEls = document.querySelectorAll('.v-cny');
+  const btnUsd = document.getElementById('btn-usd');
+  const btnCny = document.getElementById('btn-cny');
+  if (mode === 'cny') {
+    usdEls.forEach(el => el.style.display = 'none');
+    cnyEls.forEach(el => el.style.display = 'inline');
+    if(btnCny){btnCny.style.background='#dc2626';btnCny.style.color='#fff';}
+    if(btnUsd){btnUsd.style.background='transparent';btnUsd.style.color='#64748b';}
+  } else {
+    usdEls.forEach(el => el.style.display = 'inline');
+    cnyEls.forEach(el => el.style.display = 'none');
+    if(btnUsd){btnUsd.style.background='#2563eb';btnUsd.style.color='#fff';}
+    if(btnCny){btnCny.style.background='transparent';btnCny.style.color='#64748b';}
+  }
+}
+
+// 货币切换函数2（全局定义，供 retirement-50-60 课程调用）
+function switchCurrency2(mode) {
+  const usdEls = document.querySelectorAll('.w-usd');
+  const cnyEls = document.querySelectorAll('.w-cny');
+  const btnUsd = document.getElementById('btn2-usd');
+  const btnCny = document.getElementById('btn2-cny');
+  if (mode === 'cny') {
+    usdEls.forEach(el => el.style.display = 'none');
+    cnyEls.forEach(el => el.style.display = 'inline');
+    if(btnCny){btnCny.style.background='#dc2626';btnCny.style.color='#fff';}
+    if(btnUsd){btnUsd.style.background='transparent';btnUsd.style.color='#64748b';}
+  } else {
+    usdEls.forEach(el => el.style.display = 'inline');
+    cnyEls.forEach(el => el.style.display = 'none');
+    if(btnUsd){btnUsd.style.background='#2563eb';btnUsd.style.color='#fff';}
+    if(btnCny){btnCny.style.background='transparent';btnCny.style.color='#64748b';}
+  }
+}
 </script>
 </body>
 </html>
