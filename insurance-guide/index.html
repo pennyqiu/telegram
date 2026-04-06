@@ -1,0 +1,3358 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>香港保险从业者入门全指南</title>
+  <style>
+    :root {
+      --primary: #1a56db;
+      --primary-light: #e8f0fe;
+      --primary-dark: #1240a8;
+      --accent: #0ea5e9;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --gray-50: #f9fafb;
+      --gray-100: #f3f4f6;
+      --gray-200: #e5e7eb;
+      --gray-300: #d1d5db;
+      --gray-400: #9ca3af;
+      --gray-500: #6b7280;
+      --gray-600: #4b5563;
+      --gray-700: #374151;
+      --gray-800: #1f2937;
+      --gray-900: #111827;
+      --sidebar-width: 280px;
+      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--gray-50);
+      color: var(--gray-800);
+      line-height: 1.7;
+    }
+
+    /* ─── SIDEBAR ─── */
+    #sidebar {
+      position: fixed;
+      top: 0; left: 0;
+      width: var(--sidebar-width);
+      height: 100vh;
+      background: var(--gray-900);
+      color: #fff;
+      overflow-y: auto;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar-header {
+      padding: 24px 20px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .sidebar-header .logo {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--gray-400);
+      margin-bottom: 8px;
+    }
+
+    .sidebar-header h2 {
+      font-size: 15px;
+      font-weight: 600;
+      color: #fff;
+      line-height: 1.4;
+    }
+
+    .sidebar-nav { padding: 12px 0; flex: 1; }
+
+    .nav-group-label {
+      padding: 12px 20px 4px;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: var(--gray-500);
+      font-weight: 600;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 20px;
+      font-size: 13.5px;
+      color: var(--gray-300);
+      cursor: pointer;
+      border-left: 3px solid transparent;
+      transition: all 0.18s;
+      text-decoration: none;
+    }
+
+    .nav-item:hover { background: rgba(255,255,255,0.05); color: #fff; }
+    .nav-item.active { background: rgba(26,86,219,0.18); color: #60a5fa; border-left-color: #60a5fa; }
+
+    .nav-item .num {
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.08);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .nav-sub { padding: 4px 0; }
+    .nav-sub-item {
+      display: block;
+      padding: 5px 20px 5px 50px;
+      font-size: 12px;
+      color: var(--gray-500);
+      cursor: pointer;
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .nav-sub-item:hover { color: var(--gray-300); }
+
+    /* ─── MAIN ─── */
+    #main {
+      margin-left: var(--sidebar-width);
+      min-height: 100vh;
+    }
+
+    /* ─── TOP BAR ─── */
+    .topbar {
+      background: #fff;
+      border-bottom: 1px solid var(--gray-200);
+      padding: 14px 48px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--gray-500);
+    }
+    .topbar .breadcrumb-sep { color: var(--gray-300); }
+
+    /* ─── SECTIONS ─── */
+    .section {
+      display: none;
+      padding: 48px;
+      max-width: 900px;
+    }
+    .section.active { display: block; }
+
+    /* ─── HERO ─── */
+    .hero {
+      background: linear-gradient(135deg, #1240a8 0%, #1a56db 50%, #0ea5e9 100%);
+      border-radius: 16px;
+      padding: 48px;
+      color: #fff;
+      margin-bottom: 40px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 280px; height: 280px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -40px; left: 100px;
+      width: 180px; height: 180px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.04);
+    }
+    .hero .tag {
+      display: inline-block;
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 20px;
+      padding: 4px 12px;
+      font-size: 12px;
+      margin-bottom: 16px;
+      backdrop-filter: blur(4px);
+    }
+    .hero h1 {
+      font-size: 30px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      line-height: 1.3;
+    }
+    .hero p { font-size: 15px; opacity: 0.88; max-width: 560px; }
+
+    /* ─── CARD GRID ─── */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin: 24px 0;
+    }
+    .card-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+    .card {
+      background: #fff;
+      border: 1px solid var(--gray-200);
+      border-radius: 12px;
+      padding: 20px;
+      transition: box-shadow 0.2s, transform 0.2s;
+      cursor: pointer;
+    }
+    .card:hover {
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+      transform: translateY(-2px);
+    }
+    .card .card-icon {
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+      margin-bottom: 12px;
+    }
+    .card h3 { font-size: 14px; font-weight: 600; margin-bottom: 6px; color: var(--gray-800); }
+    .card p { font-size: 12.5px; color: var(--gray-500); line-height: 1.55; }
+
+    /* ─── SECTION HEADING ─── */
+    h2.section-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--gray-900);
+      margin-bottom: 4px;
+    }
+    .section-subtitle {
+      font-size: 14px;
+      color: var(--gray-500);
+      margin-bottom: 32px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--gray-200);
+    }
+
+    h3.block-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--gray-900);
+      margin: 32px 0 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    h3.block-title::before {
+      content: '';
+      width: 4px; height: 18px;
+      background: var(--primary);
+      border-radius: 2px;
+    }
+
+    h4.sub-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--gray-700);
+      margin: 20px 0 8px;
+    }
+
+    /* ─── TABLE ─── */
+    .table-wrap { overflow-x: auto; margin: 16px 0; border-radius: 10px; border: 1px solid var(--gray-200); }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13.5px;
+    }
+    thead { background: var(--gray-50); }
+    th {
+      padding: 11px 16px;
+      text-align: left;
+      font-weight: 600;
+      color: var(--gray-600);
+      border-bottom: 1px solid var(--gray-200);
+      white-space: nowrap;
+    }
+    td {
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--gray-100);
+      color: var(--gray-700);
+      vertical-align: top;
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--gray-50); }
+
+    /* ─── CALLOUT ─── */
+    .callout {
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin: 16px 0;
+      display: flex;
+      gap: 12px;
+      font-size: 13.5px;
+    }
+    .callout-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+    .callout.info { background: #eff6ff; border-left: 4px solid #3b82f6; }
+    .callout.info .callout-icon::before { content: 'ℹ️'; }
+    .callout.tip { background: #f0fdf4; border-left: 4px solid #22c55e; }
+    .callout.tip .callout-icon::before { content: '💡'; }
+    .callout.warning { background: #fffbeb; border-left: 4px solid #f59e0b; }
+    .callout.warning .callout-icon::before { content: '⚠️'; }
+    .callout.key { background: var(--primary-light); border-left: 4px solid var(--primary); }
+    .callout.key .callout-icon::before { content: '🔑'; }
+    .callout-body { line-height: 1.6; color: var(--gray-700); }
+    .callout-body strong { color: var(--gray-900); }
+
+    /* ─── STAT CARDS ─── */
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin: 20px 0;
+    }
+    .stat-card {
+      background: #fff;
+      border: 1px solid var(--gray-200);
+      border-radius: 10px;
+      padding: 16px;
+      text-align: center;
+    }
+    .stat-value {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--primary);
+      line-height: 1.2;
+    }
+    .stat-label {
+      font-size: 11.5px;
+      color: var(--gray-500);
+      margin-top: 4px;
+      line-height: 1.4;
+    }
+
+    /* ─── BADGE ─── */
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .badge-blue { background: #dbeafe; color: #1d4ed8; }
+    .badge-green { background: #dcfce7; color: #15803d; }
+    .badge-yellow { background: #fef9c3; color: #a16207; }
+    .badge-red { background: #fee2e2; color: #b91c1c; }
+    .badge-purple { background: #f3e8ff; color: #7c3aed; }
+    .badge-gray { background: var(--gray-100); color: var(--gray-600); }
+
+    /* ─── TIMELINE ─── */
+    .timeline { margin: 20px 0; }
+    .timeline-item {
+      display: flex;
+      gap: 16px;
+      padding-bottom: 28px;
+      position: relative;
+    }
+    .timeline-item:not(:last-child)::before {
+      content: '';
+      position: absolute;
+      left: 19px;
+      top: 40px;
+      bottom: 0;
+      width: 2px;
+      background: var(--gray-200);
+    }
+    .timeline-dot {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .timeline-content { flex: 1; padding-top: 8px; }
+    .timeline-period {
+      font-size: 12px;
+      color: var(--primary);
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .timeline-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--gray-900);
+      margin-bottom: 8px;
+    }
+    .timeline-body {
+      font-size: 13.5px;
+      color: var(--gray-600);
+      line-height: 1.6;
+    }
+
+    /* ─── CHECKLIST ─── */
+    .checklist { list-style: none; margin: 12px 0; }
+    .checklist li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 6px 0;
+      font-size: 13.5px;
+      color: var(--gray-700);
+      border-bottom: 1px solid var(--gray-100);
+    }
+    .checklist li:last-child { border-bottom: none; }
+    .checklist li::before {
+      content: '✓';
+      width: 20px; height: 20px;
+      background: #dcfce7;
+      color: #15803d;
+      border-radius: 50%;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* ─── COMPARISON ─── */
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 16px 0;
+    }
+    .compare-box {
+      border-radius: 10px;
+      padding: 20px;
+    }
+    .compare-box.plus { background: #f0fdf4; border: 1px solid #bbf7d0; }
+    .compare-box.minus { background: #fef2f2; border: 1px solid #fecaca; }
+    .compare-box h4 {
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .compare-box.plus h4 { color: #15803d; }
+    .compare-box.minus h4 { color: #b91c1c; }
+    .compare-box li {
+      font-size: 13px;
+      color: var(--gray-700);
+      margin-bottom: 6px;
+      padding-left: 14px;
+      position: relative;
+    }
+    .compare-box li::before {
+      content: '•';
+      position: absolute;
+      left: 0;
+    }
+
+    /* ─── STEP BOX ─── */
+    .step-list { margin: 16px 0; }
+    .step-item {
+      display: flex;
+      gap: 14px;
+      padding: 14px 16px;
+      background: #fff;
+      border: 1px solid var(--gray-200);
+      border-radius: 10px;
+      margin-bottom: 8px;
+    }
+    .step-num {
+      width: 28px; height: 28px;
+      background: var(--primary);
+      color: #fff;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .step-text { font-size: 13.5px; color: var(--gray-700); padding-top: 3px; line-height: 1.5; }
+    .step-text strong { color: var(--gray-900); display: block; margin-bottom: 2px; }
+
+    /* ─── CODE / QUOTE ─── */
+    .quote-block {
+      background: var(--gray-800);
+      color: #e5e7eb;
+      border-radius: 10px;
+      padding: 20px 24px;
+      font-size: 13.5px;
+      line-height: 1.7;
+      margin: 16px 0;
+      font-family: "SF Mono", "Fira Code", monospace;
+    }
+
+    .highlight-quote {
+      border-left: 4px solid var(--primary);
+      background: var(--primary-light);
+      padding: 16px 20px;
+      border-radius: 0 10px 10px 0;
+      font-size: 15px;
+      font-style: italic;
+      color: var(--gray-700);
+      margin: 20px 0;
+      line-height: 1.6;
+    }
+
+    /* ─── PROGRESS ─── */
+    .stars { color: #fbbf24; font-size: 14px; }
+    .star-empty { color: var(--gray-300); }
+
+    /* ─── TAGS ─── */
+    .tag-list { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0; }
+    .tag-pill {
+      display: inline-block;
+      padding: 4px 10px;
+      background: var(--gray-100);
+      border-radius: 20px;
+      font-size: 12px;
+      color: var(--gray-600);
+    }
+
+    /* ─── SIMPLE LIST ─── */
+    .simple-list { padding-left: 20px; margin: 10px 0; }
+    .simple-list li {
+      font-size: 13.5px;
+      color: var(--gray-700);
+      margin-bottom: 6px;
+      line-height: 1.6;
+    }
+
+    p.body-text {
+      font-size: 14px;
+      color: var(--gray-700);
+      line-height: 1.75;
+      margin: 10px 0;
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 768px) {
+      #sidebar { transform: translateX(-100%); }
+      #main { margin-left: 0; }
+      .section { padding: 24px 20px; }
+      .stat-grid { grid-template-columns: repeat(2, 1fr); }
+      .card-grid { grid-template-columns: 1fr; }
+      .compare-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ─── SCROLL ─── */
+    html { scroll-behavior: smooth; }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--gray-300); border-radius: 3px; }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════ SIDEBAR ═══════════════════════════════════ -->
+<div id="sidebar">
+  <div class="sidebar-header">
+    <div class="logo">香港保险从业者</div>
+    <h2>入门全指南</h2>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-group-label">开始</div>
+    <a class="nav-item active" onclick="showSection('home', this)">
+      <span class="num">🏠</span> 总览
+    </a>
+    <a class="nav-item" onclick="showSection('resources', this)">
+      <span class="num">📚</span> 优质资源库
+    </a>
+
+    <div class="nav-group-label">知识体系</div>
+    <a class="nav-item" onclick="showSection('basics', this)">
+      <span class="num">1</span> 基础知识
+    </a>
+    <div class="nav-sub">
+      <a class="nav-sub-item" onclick="showSection('basics',null,'#basics-license')">牌照体系</a>
+      <a class="nav-sub-item" onclick="showSection('basics',null,'#basics-products')">产品分类</a>
+      <a class="nav-sub-item" onclick="showSection('basics',null,'#basics-contract')">合同原则</a>
+      <a class="nav-sub-item" onclick="showSection('basics',null,'#basics-commission')">佣金结构</a>
+    </div>
+
+    <a class="nav-item" onclick="showSection('market', this)">
+      <span class="num">2</span> 市场分析
+    </a>
+    <div class="nav-sub">
+      <a class="nav-sub-item" onclick="showSection('market',null,'#market-now')">当前现状</a>
+      <a class="nav-sub-item" onclick="showSection('market',null,'#market-future')">未来展望</a>
+    </div>
+
+    <a class="nav-item" onclick="showSection('hk', this)">
+      <span class="num">3</span> 香港独特优劣势
+    </a>
+
+    <a class="nav-item" onclick="showSection('axa', this)" style="border-left:3px solid transparent">
+      <span class="num" style="background:rgba(220,38,38,0.2);color:#fca5a5">★</span> 安盛 AXA 深度介绍
+    </a>
+    <div class="nav-sub">
+      <a class="nav-sub-item" onclick="showSection('axa',null,'#axa-profile')">公司画像</a>
+      <a class="nav-sub-item" onclick="showSection('axa',null,'#axa-products')">核心竞争产品</a>
+      <a class="nav-sub-item" onclick="showSection('axa',null,'#axa-agent')">代理人优势</a>
+    </div>
+
+    <div class="nav-group-label">成长路径</div>
+    <a class="nav-item" onclick="showSection('roadmap', this)">
+      <span class="num">4</span> 学习路线图
+    </a>
+    <a class="nav-item" onclick="showSection('accounting', this)">
+      <span class="num">5</span> 会计背景优劣势
+    </a>
+    <a class="nav-item" onclick="showSection('introvert', this)">
+      <span class="num">6</span> 内向者专属策略
+    </a>
+    <div class="nav-sub">
+      <a class="nav-sub-item" onclick="showSection('introvert',null,'#introvert-script')">话术脚本库</a>
+      <a class="nav-sub-item" onclick="showSection('introvert',null,'#introvert-moments')">朋友圈发文模板</a>
+      <a class="nav-sub-item" onclick="showSection('introvert',null,'#introvert-content')">内容创作模板</a>
+      <a class="nav-sub-item" onclick="showSection('introvert',null,'#introvert-alliance')">专业联盟开拓</a>
+      <a class="nav-sub-item" onclick="showSection('introvert',null,'#introvert-30days')">30天计划</a>
+    </div>
+  </nav>
+</div>
+
+<!-- ═══════════════════════════════════ MAIN ═══════════════════════════════════ -->
+<div id="main">
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <span id="breadcrumb-chapter">总览</span>
+  </div>
+
+  <!-- ═══ HOME ═══ -->
+  <div id="sec-home" class="section active" style="max-width:900px">
+
+    <div class="hero">
+      <div class="tag">安盛 AXA · 香港保险</div>
+      <h1>香港保险从业者<br/>入门全指南</h1>
+      <p>专为初入香港保险行业的从业者撰写，尤其适合具有会计财务背景、性格内向的新人。系统覆盖基础知识、市场分析、成长路径与实战策略。</p>
+    </div>
+
+    <h3 class="block-title">七大核心模块</h3>
+    <div class="card-grid">
+      <div class="card" onclick="showSection('basics', document.querySelector('[onclick*=basics]'))">
+        <div class="card-icon" style="background:#eff6ff">📋</div>
+        <h3>01 · 基础知识</h3>
+        <p>监管框架、牌照体系、产品分类、合同五大原则、佣金结构、合规底线</p>
+      </div>
+      <div class="card" onclick="showSection('market', document.querySelector('[onclick*=market]'))">
+        <div class="card-icon" style="background:#f0fdf4">📊</div>
+        <h3>02 · 市场分析</h3>
+        <p>6000 亿港元市场规模、内地访客数据、竞争格局、2030 年展望与趋势</p>
+      </div>
+      <div class="card" onclick="showSection('hk', document.querySelector('[onclick*=hk]'))">
+        <div class="card-icon" style="background:#fefce8">🏙️</div>
+        <h3>03 · 香港优劣势</h3>
+        <p>一国两制结构性优势、资金自由、政策风险、与新加坡对比分析</p>
+      </div>
+      <div class="card" onclick="showSection('axa', document.querySelector('[onclick*=axa]'))" style="border:2px solid #fca5a5;background:#fff5f5">
+        <div class="card-icon" style="background:#fee2e2">⭐</div>
+        <h3 style="color:#b91c1c">安盛 AXA 深度介绍</h3>
+        <p>全球画像、香港市场地位、核心竞争产品详解、代理人独特优势</p>
+      </div>
+      <div class="card" onclick="showSection('roadmap', document.querySelector('[onclick*=roadmap]'))">
+        <div class="card-icon" style="background:#fdf4ff">🗺️</div>
+        <h3>04 · 学习路线图</h3>
+        <p>分四阶段（考牌→首单→系统化→晋升），每阶段具体行动清单</p>
+      </div>
+      <div class="card" onclick="showSection('accounting', document.querySelector('[onclick*=accounting]'))">
+        <div class="card-icon" style="background:#fff7ed">🧮</div>
+        <h3>05 · 会计背景优势</h3>
+        <p>IRR 精算、税务规划、企业市场切入，从市场角度分析差异化竞争力</p>
+      </div>
+      <div class="card" onclick="showSection('introvert', document.querySelector('[onclick*=introvert]'))">
+        <div class="card-icon" style="background:#f0f9ff">🌱</div>
+        <h3>06 · 内向者策略</h3>
+        <p>获客渠道全图谱、内容驱动替代冷接触、低压话术框架、30 天行动计划</p>
+      </div>
+    </div>
+
+    <h3 class="block-title">快速导读建议</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>你的情况</th><th>优先阅读顺序</th></tr></thead>
+        <tbody>
+          <tr><td>第一天入职</td><td>01 基础知识 → 03 香港优劣势 → 04 学习路线图</td></tr>
+          <tr><td>有会计 / 财务背景</td><td>重点读 <strong>05 会计背景优势</strong>，这是你的核心差异化指南</td></tr>
+          <tr><td>比较内向、担心面子问题</td><td>重点读 <strong>06 内向者策略</strong>，有专门针对性的系统建议</td></tr>
+          <tr><td>想了解市场全貌</td><td>02 市场分析 → 03 香港优劣势</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout info">
+      <div class="callout-icon"></div>
+      <div class="callout-body">
+        <strong>关于安盛（AXA）</strong>：安盛是全球最大保险集团之一，总部巴黎，在香港深耕多年，产品线覆盖人寿、医疗、储蓄、投资连结保险，在高净值客户和跨境服务方面具有显著品牌优势。加入安盛是进入香港保险市场的优质起点。
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ RESOURCES ═══ -->
+  <div id="sec-resources" class="section" style="max-width:960px">
+    <h2 class="section-title">优质资源库</h2>
+    <div class="section-subtitle">基于实地抓取与分析——真实内容、真实数据、对从业者真正有用的结论</div>
+
+    <!-- 市场最新数据 -->
+    <div style="background:linear-gradient(135deg,#1e3a5f,#1a56db,#0ea5e9);border-radius:14px;padding:24px 28px;margin-bottom:24px;color:#fff">
+      <div style="font-size:12px;opacity:0.75;margin-bottom:6px;text-transform:uppercase;letter-spacing:1px">2025 年最新市场数据（来源：香港保监局 + hkinsu.com）</div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:12px">
+        <div style="background:rgba(255,255,255,0.12);border-radius:10px;padding:14px 16px">
+          <div style="font-size:22px;font-weight:800">1,737亿</div>
+          <div style="font-size:11.5px;opacity:0.85;margin-top:4px;line-height:1.5">2025年上半年香港保险新造保单总保费（港元）</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.12);border-radius:10px;padding:14px 16px">
+          <div style="font-size:22px;font-weight:800">+50.3%</div>
+          <div style="font-size:11.5px;opacity:0.85;margin-top:4px;line-height:1.5">同比增速——香港保险市场处于历史性增长周期</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.12);border-radius:10px;padding:14px 16px">
+          <div style="font-size:22px;font-weight:800">6.5%</div>
+          <div style="font-size:11.5px;opacity:0.85;margin-top:4px;line-height:1.5">AIA最新储蓄险「环宇盈活」30年期演示回报（2025年7月发布）</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.12);border-radius:10px;padding:14px 16px">
+          <div style="font-size:22px;font-weight:800">180年</div>
+          <div style="font-size:11.5px;opacity:0.85;margin-top:4px;line-height:1.5">香港保险行业历史底蕴，1840年代起步于国际贸易港口</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── 独立博客 ── -->
+    <!-- ══ 分红实现率专题 ══ -->
+    <div style="background:linear-gradient(135deg,#0f172a,#1e3a5f);border-radius:14px;padding:20px 24px;margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px">
+      <div>
+        <div style="font-size:18px;font-weight:800;color:#fff;margin-bottom:6px">📊 香港各保险公司分红实现率分析报告</div>
+        <div style="font-size:13px;color:#94a3b8;line-height:1.6">覆盖 15 家主要保险公司 · 539 条产品记录 · 2023年官方数据 · 含排名对比、产品明细、各类型均值</div>
+      </div>
+      <a href="dividend-rates.html" style="background:#1d4ed8;color:#fff;padding:10px 22px;border-radius:10px;text-decoration:none;font-size:13px;font-weight:700;white-space:nowrap;flex-shrink:0">查看完整分析报告 →</a>
+    </div>
+
+    <!-- ══ 本地文章库 ══ -->
+    <h3 class="block-title">本地文章库 — 直接点开阅读（已下载至本地）</h3>
+    <p class="body-text">以下文章均已基于原始内容整理并保存在本地，点击标题即可直接阅读，无需联网，也不需要再去网站找。每篇均附有「对你的价值」说明，方便快速决定先读哪篇。</p>
+
+    <div style="display:grid;gap:10px;margin:16px 0">
+
+      <!-- Tony Wong 文章 -->
+      <div style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden">
+        <div style="background:linear-gradient(135deg,#1e3a5f,#1a56db);padding:10px 16px;display:flex;align-items:center;gap:10px">
+          <div style="width:24px;height:24px;background:rgba(255,255,255,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff">T</div>
+          <span style="font-size:13px;font-weight:700;color:#fff">Tony Wong 文章（hkinsu.com 专栏 + 个人博客）</span>
+        </div>
+        <div style="padding:6px 0">
+          <a href="articles/tw-01-savings-worth-buying.html" style="display:flex;align-items:center;justify-content:space-between;padding:11px 18px;text-decoration:none;border-bottom:1px solid #f3f4f6;transition:background 0.15s" onmouseover="this.style.background='#f0f9ff'" onmouseout="this.style.background=''">
+            <div>
+              <div style="font-size:13.5px;font-weight:600;color:#1a56db">香港储蓄保险值得买吗？</div>
+              <div style="font-size:12px;color:#6b7280;margin-top:2px">适合人群分析 · 与银行/基金/内地保险对比 · 从业者5大建议 · 28,600+ 阅读</div>
+            </div>
+            <span style="font-size:11px;background:#eff6ff;color:#1a56db;padding:3px 8px;border-radius:10px;white-space:nowrap;margin-left:12px">话术准备</span>
+          </a>
+          <a href="articles/tw-02-7pct-reliable.html" style="display:flex;align-items:center;justify-content:space-between;padding:11px 18px;text-decoration:none;border-bottom:1px solid #f3f4f6" onmouseover="this.style.background='#f0f9ff'" onmouseout="this.style.background=''">
+            <div>
+              <div style="font-size:13.5px;font-weight:600;color:#1a56db">香港保险7%收益靠谱吗？</div>
+              <div style="font-size:12px;color:#6b7280;margin-top:2px">收益来源拆解 · 三大误区 · 适合/不适合人群 · 14,700+ 阅读</div>
+            </div>
+            <span style="font-size:11px;background:#fef9c3;color:#854d0e;padding:3px 8px;border-radius:10px;white-space:nowrap;margin-left:12px">必读</span>
+          </a>
+          <a href="articles/tw-03-1737-premium.html" style="display:flex;align-items:center;justify-content:space-between;padding:11px 18px;text-decoration:none;border-bottom:1px solid #f3f4f6" onmouseover="this.style.background='#f0f9ff'" onmouseout="this.style.background=''">
+            <div>
+              <div style="font-size:13.5px;font-weight:600;color:#1a56db">香港保险业上半年保费收入达1737亿</div>
+              <div style="font-size:12px;color:#6b7280;margin-top:2px">2025年官方数据 · 各险企排名 · 安盛非银渠道第5名 · 17,800+ 阅读</div>
+            </div>
+            <span style="font-size:11px;background:#f0fdf4;color:#15803d;padding:3px 8px;border-radius:10px;white-space:nowrap;margin-left:12px">数据素材</span>
+          </a>
+          <a href="articles/tw-04-rmb-window.html" style="display:flex;align-items:center;justify-content:space-between;padding:11px 18px;text-decoration:none;border-bottom:1px solid #f3f4f6" onmouseover="this.style.background='#f0f9ff'" onmouseout="this.style.background=''">
+            <div>
+              <div style="font-size:13.5px;font-weight:600;color:#1a56db">人民币升值"破7"：现在还是配置香港保险的黄金窗口吗？</div>
+              <div style="font-size:12px;color:#6b7280;margin-top:2px">2026年最新热点 · 汇率逻辑 · 含朋友圈话术模板</div>
+            </div>
+            <span style="font-size:11px;background:#fef9c3;color:#854d0e;padding:3px 8px;border-radius:10px;white-space:nowrap;margin-left:12px">当前热点</span>
+          </a>
+          <a href="articles/tw-05-dsii.html" style="display:flex;align-items:center;justify-content:space-between;padding:11px 18px;text-decoration:none;border-bottom:1px solid #f3f4f6" onmouseover="this.style.background='#f0f9ff'" onmouseout="this.style.background=''">
+            <div>
+              <div style="font-size:13.5px;font-weight:600;color:#1a56db">从"大而不能倒"到"可监管可承责"：香港保险业D-SII制度解读</div>
+              <div style="font-size:12px;color:#6b7280;margin-top:2px">监管框架 · 友邦/保诚被列D-SII · 对保单持有人意味着什么 · 8,780+ 阅读</div>
+            </div>
+            <span style="font-size:11px;background:#eff6ff;color:#1a56db;padding:3px 8px;border-radius:10px;white-space:nowrap;margin-left:12px">专业背书</span>
+          </a>
+          <a href="articles/tw-06-court-judgment.html" style="display:flex;align-items:center;justify-content:space-between;padding:11px 18px;text-decoration:none" onmouseover="this.style.background='#f0f9ff'" onmouseout="this.style.background=''">
+            <div>
+              <div style="font-size:13.5px;font-weight:600;color:#1a56db">香港保险会被内地法院强制执行吗？（附真实案例）</div>
+              <div style="font-size:12px;color:#6b7280;margin-top:2px">司法隔离属性 · 三种情景分析 · 资产保护话题切入点 · 48,000+ 阅读</div>
+            </div>
+            <span style="font-size:11px;background:#fef9c3;color:#854d0e;padding:3px 8px;border-radius:10px;white-space:nowrap;margin-left:12px">必读</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Tony Wong 博客文章 -->
+      <div style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden">
+        <div style="background:linear-gradient(135deg,#1e40af,#3b82f6);padding:10px 16px;display:flex;align-items:center;gap:10px">
+          <div style="width:24px;height:24px;background:rgba(255,255,255,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff">T</div>
+          <span style="font-size:13px;font-weight:700;color:#fff">Tony Wong 个人博客（tonywonghk.com）</span>
+        </div>
+        <div style="padding:6px 0">
+          <a href="articles/tw-07-autism-claim.html" style="display:flex;align-items:center;justify-content:space-between;padding:11px 18px;text-decoration:none" onmouseover="this.style.background='#f0f9ff'" onmouseout="this.style.background=''">
+            <div>
+              <div style="font-size:13.5px;font-weight:600;color:#1a56db">【真实理赔案例】2岁幼儿自闭症赔付全程记录</div>
+              <div style="font-size:12px;color:#6b7280;margin-top:2px">孕期购险保障先天疾病 · 准父母客群切入话术 · 理赔案例写作模板</div>
+            </div>
+            <span style="font-size:11px;background:#fef9c3;color:#854d0e;padding:3px 8px;border-radius:10px;white-space:nowrap;margin-left:12px">案例参考</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- 港险随记 Jason 文章 -->
+      <div style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden">
+        <div style="background:linear-gradient(135deg,#14532d,#16a34a);padding:10px 16px;display:flex;align-items:center;gap:10px">
+          <div style="width:24px;height:24px;background:rgba(255,255,255,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff">J</div>
+          <span style="font-size:13px;font-weight:700;color:#fff">港险随记 Jason（hongkongbx.com）— 全部3篇</span>
+        </div>
+        <div style="padding:6px 0">
+          <a href="articles/jason-01-how-choose.html" style="display:flex;align-items:center;justify-content:space-between;padding:11px 18px;text-decoration:none;border-bottom:1px solid #f3f4f6" onmouseover="this.style.background='#f0fdf4'" onmouseout="this.style.background=''">
+            <div>
+              <div style="font-size:13.5px;font-weight:600;color:#16a34a">如何挑选保险产品：评估保险公司的完整方法论</div>
+              <div style="font-size:12px;color:#6b7280;margin-top:2px">历史底蕴评估 · 16家保司分红实现率对比 · 8年以上保单的重要性</div>
+            </div>
+            <span style="font-size:11px;background:#dcfce7;color:#14532d;padding:3px 8px;border-radius:10px;white-space:nowrap;margin-left:12px">数据工具</span>
+          </a>
+          <a href="articles/jason-02-yield-structure.html" style="display:flex;align-items:center;justify-content:space-between;padding:11px 18px;text-decoration:none;border-bottom:1px solid #f3f4f6" onmouseover="this.style.background='#f0fdf4'" onmouseout="this.style.background=''">
+            <div>
+              <div style="font-size:13.5px;font-weight:600;color:#16a34a">港险保单利益结构对比：95%代理只推荐终期红利高的产品</div>
+              <div style="font-size:12px;color:#6b7280;margin-top:2px">5种利益结构 · 安盛挚汇/安盛盛利在列 · 差异化销售核心知识</div>
+            </div>
+            <span style="font-size:11px;background:#fef9c3;color:#854d0e;padding:3px 8px;border-radius:10px;white-space:nowrap;margin-left:12px">必读</span>
+          </a>
+          <a href="articles/jason-03-function-compare.html" style="display:flex;align-items:center;justify-content:space-between;padding:11px 18px;text-decoration:none" onmouseover="this.style.background='#f0fdf4'" onmouseout="this.style.background=''">
+            <div>
+              <div style="font-size:13.5px;font-weight:600;color:#16a34a">港险产品功能梳理：12家保司关键功能横向对比</div>
+              <div style="font-size:12px;color:#6b7280;margin-top:2px">更换受保人·货币转换·保单拆分·价值锁定·回本时间全对比</div>
+            </div>
+            <span style="font-size:11px;background:#dcfce7;color:#14532d;padding:3px 8px;border-radius:10px;white-space:nowrap;margin-left:12px">面谈工具</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Billy Ng -->
+      <div style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden">
+        <div style="background:linear-gradient(135deg,#701a75,#a21caf);padding:10px 16px;display:flex;align-items:center;gap:10px">
+          <div style="width:24px;height:24px;background:rgba(255,255,255,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff">B</div>
+          <span style="font-size:13px;font-weight:700;color:#fff">Billy Ng 吴民雄（billyng.com）</span>
+        </div>
+        <div style="padding:6px 0">
+          <a href="articles/billy-01-wkol.html" style="display:flex;align-items:center;justify-content:space-between;padding:11px 18px;text-decoration:none" onmouseover="this.style.background='#fdf4ff'" onmouseout="this.style.background=''">
+            <div>
+              <div style="font-size:13.5px;font-weight:600;color:#a21caf">Billy Ng 成长路径与核心理念：内向者做保险的最佳标杆</div>
+              <div style="font-size:12px;color:#6b7280;margin-top:2px">WKOL体系 · 自动引流系统 · 两本著作摘要 · 无压力理财服务2.0</div>
+            </div>
+            <span style="font-size:11px;background:#fae8ff;color:#86198f;padding:3px 8px;border-radius:10px;white-space:nowrap;margin-left:12px">内向者必读</span>
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <div style="background:#f8fafc;border:1px solid #e5e7eb;border-radius:10px;padding:14px 16px;margin-bottom:24px;font-size:13px;color:#374151">
+      <strong>阅读建议：</strong>先读标注「必读」的 3 篇（7% 收益、法院执行、利益结构），再根据你当天面谈的客户类型选择对应文章温习。每篇末尾都有「如何用在客户沟通中」的实操指引。
+    </div>
+
+    <!-- ══ 核心洞察 ══ -->
+    <h3 class="block-title">研究总结：从这三位从业者身上提炼的 5 个核心洞察</h3>
+    <p class="body-text">以下内容基于对 Tony Wong、港险随记 Jason、Billy Ng 网站的实地抓取与分析，整理出对新人最有价值的行业认知。</p>
+
+    <div style="display:grid;gap:12px;margin:16px 0">
+
+      <div style="background:#fff;border-left:4px solid #dc2626;border-radius:0 10px 10px 0;padding:16px 20px;box-shadow:0 1px 4px rgba(0,0,0,0.06)">
+        <div style="font-size:13px;font-weight:700;color:#dc2626;margin-bottom:6px">洞察 1：95% 的销售只推荐同一类产品——这是你的差异化机会</div>
+        <div style="font-size:13px;color:#374151;line-height:1.7">来源：港险随记 Jason。香港储蓄险产品至少分 5 种结构（按「保证 / 现金红利 / 终期红利」比例设计），但市场上 <strong>95% 的代理只推荐终期红利占比高的一类</strong>，原因是这类数字"看起来最漂亮"。这导致大量客户买了并不最适合自己的产品。如果你能读懂各类产品结构、按客户真实需求推荐，将是显著的专业差异。<br><em style="color:#6b7280;font-size:12px">参考工具：hongkongbx.com 的「保单利益结构对比」可视化工具，涵盖安盛挚汇、安盛盛利等 20 款主流产品对比</em></div>
+      </div>
+
+      <div style="background:#fff;border-left:4px solid #d97706;border-radius:0 10px 10px 0;padding:16px 20px;box-shadow:0 1px 4px rgba(0,0,0,0.06)">
+        <div style="font-size:13px;font-weight:700;color:#d97706;margin-bottom:6px">洞察 2：理赔案例是最有说服力的内容，绝大多数代理不写</div>
+        <div style="font-size:13px;color:#374151;line-height:1.7">来源：Tony Wong 博客。他的真实案例（例：为 2 岁幼儿理赔自闭症危疾，因父母在孕期第 22 周已购买「首护摯寶」系列）解释了一个关键认知：<strong>先天疾病可以通过「孕期购险」实现保障</strong>，而这是绝大多数客户和代理都不了解的产品功能。一个具体的赔付故事，比 10 张产品 PPT 更能打动准父母客群。</div>
+      </div>
+
+      <div style="background:#fff;border-left:4px solid #16a34a;border-radius:0 10px 10px 0;padding:16px 20px;box-shadow:0 1px 4px rgba(0,0,0,0.06)">
+        <div style="font-size:13px;font-weight:700;color:#16a34a;margin-bottom:6px">洞察 3：个人品牌 = 自动引流系统，内向者最适合这条路</div>
+        <div style="font-size:13px;color:#374151;line-height:1.7">来源：Billy Ng 著作《WKOL：网红保险理财顾问》。Billy 以 4.5 年晋升 AIA 区域总监（行业最快之一），连续 8 年 MDRT，其核心策略是「理财服务 2.0」——<strong>无压力式理财咨询 + 自动引流系统</strong>。他的名言："社会上不缺乏保险及理财的知识，缺乏的是让人们安心了解的方法。"这一理念与内向者策略高度吻合——不靠 hard sell，靠内容建立信任后让客户主动来找你。<br><em style="color:#6b7280;font-size:12px">参考资源：《WKOL》HK$128、《0至100：用两年建立100人团队》HK$118，均可在 billyng.com 购买</em></div>
+      </div>
+
+      <div style="background:#fff;border-left:4px solid #1a56db;border-radius:0 10px 10px 0;padding:16px 20px;box-shadow:0 1px 4px rgba(0,0,0,0.06)">
+        <div style="font-size:13px;font-weight:700;color:#1a56db;margin-bottom:6px">洞察 4：分红实现率是选择公司最客观的数据，但几乎没人讲透</div>
+        <div style="font-size:13px;color:#374151;line-height:1.7">来源：港险随记 Jason + 香港保险资讯网 Chris Lee。现行市场存在一个系统性信息不对称：<strong>保单刚发售的前几年分红金额较低，公司可通过补贴人为推高实现率，所以真正应该看"8年以上保单的平均实现率"</strong>。Jason 整理了包括安盛在内的 16 家保险公司分红实现率 Excel 对比表（2025年1月版），是目前最完整的独立数据源。你懂这个，客户会觉得你比别人专业很多。</div>
+      </div>
+
+      <div style="background:#fff;border-left:4px solid #7c3aed;border-radius:0 10px 10px 0;padding:16px 20px;box-shadow:0 1px 4px rgba(0,0,0,0.06)">
+        <div style="font-size:13px;font-weight:700;color:#7c3aed;margin-bottom:6px">洞察 5：2026 年是内容创作的「入场黄金窗口」，竞争还不激烈</div>
+        <div style="font-size:13px;color:#374151;line-height:1.7">来源：hkinsu.com 热门文章数据（香港分红储蓄险四大核心优势阅读量超 113 万次）。市场对香港保险内容的需求极大，但中文优质内容生产者仍然稀缺。人民币升值创造了"配置美元资产折扣窗口"的讨论热点，2025年上半年市场同比增长 50.3%，大量准客户正在主动搜索信息。<strong>此刻入场做内容，比 3 年后竞争更激烈时容易 10 倍。</strong></div>
+      </div>
+
+    </div>
+
+    <!-- ══ 从业者深度档案 ══ -->
+    <h3 class="block-title">独立博客与从业者深度档案</h3>
+
+    <div style="display:grid;gap:14px;margin:14px 0">
+
+      <!-- Tony Wong -->
+      <div style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden">
+        <div style="background:linear-gradient(135deg,#1e3a5f,#1a56db);padding:14px 20px;display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <div style="font-size:16px;font-weight:700;color:#fff">Tony Wong</div>
+            <div style="font-size:12px;color:rgba(255,255,255,0.75);margin-top:2px">tonywonghk.com · hkinsu.com 专栏作者</div>
+          </div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <span style="background:rgba(255,255,255,0.15);color:#fff;padding:3px 8px;border-radius:10px;font-size:11px">RFC 国际认证</span>
+            <span style="background:rgba(255,255,255,0.15);color:#fff;padding:3px 8px;border-radius:10px;font-size:11px">双平台作者</span>
+          </div>
+        </div>
+        <div style="padding:16px 20px">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+            <div>
+              <div style="font-size:12px;font-weight:600;color:#6b7280;margin-bottom:8px">实际产出的内容（已核实）</div>
+              <ul style="font-size:13px;color:#374151;line-height:1.7;list-style:none;padding:0">
+                <li>· 真实理赔案例：2岁幼儿自闭症赔付全程记录</li>
+                <li>· 孕期购险保障先天疾病的产品逻辑解析</li>
+                <li>· 大埔火灾事件→家居保险价值深度拆解</li>
+                <li>· AIA「环宇盈活」6.5% 新品深度解读（2025年7月）</li>
+                <li>· 每月发布 AIA 投资洞察市场简报</li>
+                <li>· 香港保险7%收益是否靠谱（hkinsu.com，14.7K阅读）</li>
+                <li>· 2025年上半年保费1737亿增速50.3%数据解读</li>
+              </ul>
+            </div>
+            <div>
+              <div style="font-size:12px;font-weight:600;color:#6b7280;margin-bottom:8px">内容写作风格</div>
+              <ul style="font-size:13px;color:#374151;line-height:1.7;list-style:none;padding:0">
+                <li>· 以真实事件/新闻作为引子切入</li>
+                <li>· 从客户视角提问，再从专业角度解答</li>
+                <li>· 数据支撑充分，不夸大也不回避风险</li>
+                <li>· 结尾有明确的行动引导</li>
+              </ul>
+              <div style="margin-top:10px;background:#eff6ff;border-radius:8px;padding:10px 12px;font-size:12px;color:#1e40af">
+                <strong>可学习的模板：</strong>找一个最近发生的社会事件（火灾、疾病新闻），结合一个保险赔付案例写成文章，这是 Tony 最高效的选题公式。
+              </div>
+            </div>
+          </div>
+          <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+            <a href="https://www.tonywonghk.com/blog" target="_blank" style="display:inline-block;background:#1a56db;color:#fff;padding:6px 14px;border-radius:6px;font-size:12px;text-decoration:none">访问个人博客</a>
+            <a href="https://www.hkinsu.com/zhuanlan/tong/" target="_blank" style="display:inline-block;background:#374151;color:#fff;padding:6px 14px;border-radius:6px;font-size:12px;text-decoration:none">查看 hkinsu 专栏</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 港险随记 -->
+      <div style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden">
+        <div style="background:linear-gradient(135deg,#14532d,#16a34a);padding:14px 20px;display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <div style="font-size:16px;font-weight:700;color:#fff">港险随记 · Jason</div>
+            <div style="font-size:12px;color:rgba(255,255,255,0.75);margin-top:2px">hongkongbx.com · 微信公众号「港险药丸」</div>
+          </div>
+          <div style="display:flex;gap:6px">
+            <span style="background:rgba(255,255,255,0.15);color:#fff;padding:3px 8px;border-radius:10px;font-size:11px">独立研究者</span>
+            <span style="background:rgba(255,255,255,0.15);color:#fff;padding:3px 8px;border-radius:10px;font-size:11px">含交互工具</span>
+          </div>
+        </div>
+        <div style="padding:16px 20px">
+
+          <!-- 核心发现框 -->
+          <div style="background:#fef9c3;border:1px solid #fde047;border-radius:8px;padding:12px 16px;margin-bottom:14px">
+            <div style="font-size:12px;font-weight:700;color:#854d0e;margin-bottom:6px">Jason 的核心研究发现（直接影响你的销售策略）</div>
+            <p style="font-size:13px;color:#713f12;line-height:1.7;margin:0">「香港保险公司精算师至少设计了 <strong>5 种不同利益结构</strong>的储蓄险产品（按保证/现金红利/终期红利占比区分）。但 <strong>95% 的保险销售，只会推荐终期红利占比高的那一类产品</strong>——因为数字看起来最好看。这导致大量客户错过了与其真实需求（短期流动性、稳定性、传承）更匹配的选择。」</p>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+            <div>
+              <div style="font-size:12px;font-weight:600;color:#6b7280;margin-bottom:8px">三篇已发布文章（完整核实）</div>
+              <ul style="font-size:13px;color:#374151;line-height:1.7;list-style:none;padding:0">
+                <li>· <strong>「如何挑选保险产品」</strong>：评估保险公司的方法论，含16家公司分红实现率对比表</li>
+                <li>· <strong>「港险保单利益结构对比」</strong>：可视化对比安盛/友邦/宏利等20款产品结构</li>
+                <li>· <strong>「港险产品功能梳理」</strong>：12家保险公司产品功能横向对比工具</li>
+              </ul>
+            </div>
+            <div>
+              <div style="font-size:12px;font-weight:600;color:#6b7280;margin-bottom:8px">16家公司分红实现率数据（2025年1月版）</div>
+              <div style="font-size:13px;color:#374151;line-height:1.6">覆盖：万通、中国人寿海外、中银人寿、保诚、友邦、周大福、太平人寿、太平洋、<strong>安盛</strong>、安达、宏利、富卫、忠意、永明、立桥共 15 家 + 汇总表。关注公众号「港险药丸」可获完整 Excel 文件。</div>
+              <div style="margin-top:8px;background:#f0fdf4;border-radius:6px;padding:8px 10px;font-size:12px;color:#374151">
+                <strong>会计背景加分点：</strong>你能读懂这些 Excel 并发现规律，大多数代理做不到这件事。
+              </div>
+            </div>
+          </div>
+          <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+            <a href="http://www.hongkongbx.com/" target="_blank" style="display:inline-block;background:#16a34a;color:#fff;padding:6px 14px;border-radius:6px;font-size:12px;text-decoration:none">访问博客</a>
+            <span style="display:inline-block;background:#f3f4f6;color:#374151;padding:6px 14px;border-radius:6px;font-size:12px">微信搜索：港险药丸</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- BillyNg -->
+      <div style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden">
+        <div style="background:linear-gradient(135deg,#701a75,#a21caf);padding:14px 20px;display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <div style="font-size:16px;font-weight:700;color:#fff">Billy Ng · 吴民雄</div>
+            <div style="font-size:12px;color:rgba(255,255,255,0.75);margin-top:2px">billyng.com · AIA 区域总监 · MDRT 8年连续成员</div>
+          </div>
+          <div style="display:flex;gap:6px">
+            <span style="background:rgba(255,255,255,0.15);color:#fff;padding:3px 8px;border-radius:10px;font-size:11px">著作作者</span>
+            <span style="background:rgba(255,255,255,0.15);color:#fff;padding:3px 8px;border-radius:10px;font-size:11px">内向者标杆</span>
+          </div>
+        </div>
+        <div style="padding:16px 20px">
+
+          <!-- 成就数字 -->
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px">
+            <div style="background:#fdf4ff;border-radius:8px;padding:10px;text-align:center">
+              <div style="font-size:18px;font-weight:800;color:#a21caf">4.5年</div>
+              <div style="font-size:11px;color:#6b7280;line-height:1.4;margin-top:2px">晋升区域总监（行业最年轻之一）</div>
+            </div>
+            <div style="background:#fdf4ff;border-radius:8px;padding:10px;text-align:center">
+              <div style="font-size:18px;font-weight:800;color:#a21caf">8年</div>
+              <div style="font-size:11px;color:#6b7280;line-height:1.4;margin-top:2px">MDRT连续成员（2015–2022）</div>
+            </div>
+            <div style="background:#fdf4ff;border-radius:8px;padding:10px;text-align:center">
+              <div style="font-size:18px;font-weight:800;color:#a21caf">300+</div>
+              <div style="font-size:11px;color:#6b7280;line-height:1.4;margin-top:2px">管理中港团队人数</div>
+            </div>
+            <div style="background:#fdf4ff;border-radius:8px;padding:10px;text-align:center">
+              <div style="font-size:18px;font-weight:800;color:#a21caf">2本</div>
+              <div style="font-size:11px;color:#6b7280;line-height:1.4;margin-top:2px">出版著作（均有售）</div>
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+            <div>
+              <div style="font-size:12px;font-weight:600;color:#6b7280;margin-bottom:8px">核心理念（与内向者策略高度契合）</div>
+              <div style="background:#fdf4ff;border-radius:8px;padding:12px;font-size:13px;color:#374151;line-height:1.7;font-style:italic">
+                "社会上不缺乏保险及理财的知识，缺乏的是让人们安心了解的方法。"
+              </div>
+              <div style="margin-top:8px;font-size:12.5px;color:#374151;line-height:1.6">他的「理财服务2.0」模式：<strong>无压力式理财咨询 + 自动引流系统</strong>，不靠人情，靠内容让客户主动来找你。</div>
+            </div>
+            <div>
+              <div style="font-size:12px;font-weight:600;color:#6b7280;margin-bottom:8px">两本著作核心内容</div>
+              <div style="background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:10px 12px;margin-bottom:8px">
+                <div style="font-size:13px;font-weight:600;color:#111827">《WKOL：网红保险理财顾问》 HK$128</div>
+                <div style="font-size:12px;color:#6b7280;margin-top:4px;line-height:1.5">内容营销做保险的完整路径：WealthKOL 体系 + 自动引流系统 + 网络营销实操。内向者必读，等于买了一套完整操盘手册。</div>
+              </div>
+              <div style="background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:10px 12px">
+                <div style="font-size:13px;font-weight:600;color:#111827">《0至100：用两年建立100人团队》 HK$118</div>
+                <div style="font-size:12px;color:#6b7280;margin-top:4px;line-height:1.5">从 0 开始 2 年建立 100 人团队的系统方法，适合有招募团队意向时参考。</div>
+              </div>
+            </div>
+          </div>
+          <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+            <a href="https://www.billyng.com/" target="_blank" style="display:inline-block;background:#a21caf;color:#fff;padding:6px 14px;border-radius:6px;font-size:12px;text-decoration:none">访问官网</a>
+            <a href="https://www.billyng.com/shop" target="_blank" style="display:inline-block;background:#374151;color:#fff;padding:6px 14px;border-radius:6px;font-size:12px;text-decoration:none">购买著作</a>
+            <span style="display:inline-block;background:#f3f4f6;color:#374151;padding:6px 14px;border-radius:6px;font-size:12px">微信：billyng222</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── hkinsu 专栏热门文章数据 ── -->
+    <h3 class="block-title">香港保险资讯网（hkinsu.com）——热门文章数据</h3>
+    <p class="body-text">实地抓取该平台热门文章数据，以下阅读量数据可直接反映客户最关心的话题——这就是你内容选题的参考库。</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>文章标题</th><th>作者</th><th>阅读量</th><th>对你的价值</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>香港分红储蓄险四大核心优势</strong></td>
+            <td>Chris Lee</td>
+            <td style="color:#dc2626;font-weight:700">113.4 万</td>
+            <td>最高流量话题——储蓄险的核心卖点，必须烂熟于心</td>
+          </tr>
+          <tr>
+            <td><strong>2026年香港保险公司排名</strong></td>
+            <td>Chris Lee</td>
+            <td style="font-weight:600">2.64 万</td>
+            <td>客户在比较时最常看——了解安盛在排名中的位置</td>
+          </tr>
+          <tr>
+            <td><strong>香港保险业上半年保费1737亿</strong></td>
+            <td>Tony Wong</td>
+            <td style="font-weight:600">1.78 万</td>
+            <td>市场数据话题，朋友圈传播效果好</td>
+          </tr>
+          <tr>
+            <td><strong>香港保险7%收益靠谱吗？</strong></td>
+            <td>Tony Wong</td>
+            <td style="font-weight:600">1.47 万</td>
+            <td>客户最常见疑问，你必须有自己的专业答案</td>
+          </tr>
+          <tr>
+            <td><strong>香港储蓄保险：无限次更换受保人全解析</strong></td>
+            <td>Chris Lee</td>
+            <td style="font-weight:600">1.23 万</td>
+            <td>高净值客户最感兴趣的传承功能点</td>
+          </tr>
+          <tr>
+            <td><strong>人民币升值"破7"：配置香港保险的黄金窗口？</strong></td>
+            <td>Tony Wong</td>
+            <td style="font-weight:600">1.9 万</td>
+            <td>当前热点话题，汇率+保险结合选题</td>
+          </tr>
+          <tr>
+            <td><strong>安盛保险投资策略</strong></td>
+            <td>Chris Lee</td>
+            <td>—</td>
+            <td>直接关系到你的产品，建议精读并能用自己的话解释</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ── YouTube 频道 ── -->
+    <h3 class="block-title">YouTube 频道（了解客户在购险前会看什么）</h3>
+    <div class="callout info">
+      <div class="callout-icon"></div>
+      <div class="callout-body"><strong>使用逻辑：</strong>客户在决定购险前，很多人会先搜索"香港保险值不值得买""AXA安盛靠谱吗"。知道他们看了什么，你才能预判他们带着什么问题来面谈，提前准备答案。</div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin:14px 0">
+      <div style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden">
+        <div style="background:#ff0000;padding:10px 14px">
+          <div style="font-size:14px;font-weight:700;color:#fff">保险为什么</div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.8);margin-top:2px">MW Insurance Academe</div>
+        </div>
+        <div style="padding:14px">
+          <ul style="font-size:12.5px;color:#374151;line-height:1.65;list-style:none;padding:0;margin-bottom:10px">
+            <li>· 广东话为主，适合了解本地客户思维</li>
+            <li>· 深度讲保险背后的运作逻辑</li>
+            <li>· 涵盖医疗险、储蓄险、危疾险</li>
+            <li>· 400+ 期，内容量最大</li>
+          </ul>
+          <div style="background:#fff5f5;border-radius:6px;padding:8px 10px;font-size:12px;color:#374151">适合：想深入理解产品逻辑，哪怕不懂粤语看字幕也值得</div>
+          <a href="https://www.youtube.com/@MWInsuranceAcademe" target="_blank" style="display:inline-block;margin-top:10px;background:#ff0000;color:#fff;padding:5px 12px;border-radius:5px;font-size:11.5px;text-decoration:none">前往频道</a>
+        </div>
+      </div>
+
+      <div style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden">
+        <div style="background:#cc0000;padding:10px 14px">
+          <div style="font-size:14px;font-weight:700;color:#fff">保险医生 Dr.Insurance</div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.8);margin-top:2px">Kyle 主讲，普通话</div>
+        </div>
+        <div style="padding:14px">
+          <ul style="font-size:12.5px;color:#374151;line-height:1.65;list-style:none;padding:0;margin-bottom:10px">
+            <li>· 储蓄险购买指南，客户视角拆解</li>
+            <li>· 分红保单、投资型保单测评</li>
+            <li>· 普通话讲解，内地客群首选</li>
+            <li>· 2025 年持续更新</li>
+          </ul>
+          <div style="background:#fff5f5;border-radius:6px;padding:8px 10px;font-size:12px;color:#374151">适合：了解内地客户购险前的思维过程</div>
+          <a href="https://www.youtube.com/@DrInsuranceHK" target="_blank" style="display:inline-block;margin-top:10px;background:#cc0000;color:#fff;padding:5px 12px;border-radius:5px;font-size:11.5px;text-decoration:none">前往频道</a>
+        </div>
+      </div>
+
+      <div style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden">
+        <div style="background:#b91c1c;padding:10px 14px">
+          <div style="font-size:14px;font-weight:700;color:#fff">10Life 一站式保险</div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.8);margin-top:2px">精算师评分体系</div>
+        </div>
+        <div style="padding:14px">
+          <ul style="font-size:12.5px;color:#374151;line-height:1.65;list-style:none;padding:0;margin-bottom:10px">
+            <li>· 覆盖全港 1000+ 保险产品</li>
+            <li>· 精算师独立评分，有数据有逻辑</li>
+            <li>· VHIS、储蓄险、危疾险各有排行</li>
+          </ul>
+          <div style="background:#fff5f5;border-radius:6px;padding:8px 10px;font-size:12px;color:#374151">适合：日常竞品研究，了解安盛产品市场排位</div>
+          <a href="https://www.youtube.com/@10LifeHK" target="_blank" style="display:inline-block;margin-top:10px;background:#b91c1c;color:#fff;padding:5px 12px;border-radius:5px;font-size:11.5px;text-decoration:none">前往频道</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── 行业媒体 ── -->
+    <h3 class="block-title">行业官方数据来源</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>来源</th><th>内容类型</th><th>更新频率</th><th>链接</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>保险业监管局（IA）</strong></td>
+            <td>行业数据、监管动态、分红实现率官方查询入口</td>
+            <td>月度更新</td>
+            <td><a href="https://www.ia.org.hk" target="_blank" style="color:#1a56db">ia.org.hk</a></td>
+          </tr>
+          <tr>
+            <td><strong>VHIS 自愿医保官网</strong></td>
+            <td>认可产品名单、税务扣减说明、最新政策</td>
+            <td>政策更新时</td>
+            <td><a href="https://www.vhis.gov.hk" target="_blank" style="color:#1a56db">vhis.gov.hk</a></td>
+          </tr>
+          <tr>
+            <td><strong>医院管理局轮候时间</strong></td>
+            <td>公立医院各专科实时轮候数据——销售医疗险时的最佳数据话题</td>
+            <td>每周更新</td>
+            <td><a href="https://www.ha.org.hk" target="_blank" style="color:#1a56db">ha.org.hk</a></td>
+          </tr>
+          <tr>
+            <td><strong>香港经济日报（hket）</strong></td>
+            <td>市场新闻、产品动态、行业监管</td>
+            <td>每日</td>
+            <td><a href="https://wealth.hket.com/" target="_blank" style="color:#1a56db">wealth.hket.com</a></td>
+          </tr>
+          <tr>
+            <td><strong>知乎「香港保险」话题</strong></td>
+            <td>内地客户真实疑问（每周高赞问题 = 你的内容选题库）</td>
+            <td>每日</td>
+            <td><a href="https://www.zhihu.com/topic/19623680" target="_blank" style="color:#1a56db">zhihu.com</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ── 每周学习计划 ── -->
+    <h3 class="block-title">每周 30 分钟资源消化计划</h3>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0">
+      <div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:16px">
+        <div style="font-size:12px;font-weight:700;color:#1a56db;margin-bottom:8px">周一 · 10 分钟</div>
+        <div style="font-size:13px;color:#374151;line-height:1.65">看<strong>港险随记</strong>或<strong>hkinsu.com</strong>最新文章。目标：找 1 个可以改写成自己朋友圈内容的知识点，参照上方热门话题表。</div>
+      </div>
+      <div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:16px">
+        <div style="font-size:12px;font-weight:700;color:#d97706;margin-bottom:8px">周三 · 10 分钟</div>
+        <div style="font-size:13px;color:#374151;line-height:1.65">搜索<strong>知乎「香港保险」</strong>最新高赞问题。目标：找 1 个客户常问的问题，准备好自己的专业答案（参考 Tony Wong 的 7% 收益文章格式）。</div>
+      </div>
+      <div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:16px">
+        <div style="font-size:12px;font-weight:700;color:#dc2626;margin-bottom:8px">周五 · 10 分钟</div>
+        <div style="font-size:13px;color:#374151;line-height:1.65">看「保险为什么」或「保险医生」最新视频 5–10 分钟。目标：了解客户购险前会看什么内容、带什么疑问来找你，提前准备应对话术。</div>
+      </div>
+      <div style="background:#f9fafb;border:1px dashed #d1d5db;border-radius:10px;padding:16px">
+        <div style="font-size:12px;font-weight:700;color:#6b7280;margin-bottom:8px">每月一次 · 15 分钟</div>
+        <div style="font-size:13px;color:#6b7280;line-height:1.65">下载港险随记的<strong>分红实现率 Excel 表</strong>（关注「港险药丸」获取），重点看安盛 8 年以上保单数据。结合会计背景做一张小比较表，这会是你最有力的专业展示工具。</div>
+      </div>
+    </div>
+
+    <div class="callout key">
+      <div class="callout-icon"></div>
+      <div class="callout-body">
+        <strong>用这些资源的正确姿势：</strong>每次读完一篇文章，问自己两个问题——①「这说明我的客户在担心什么？」 ②「我下次面谈时如何主动提到这个，让对方觉得我很懂他？」这两个问题，是把资源转化为销售力的核心动作。
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══ BASICS ═══ -->
+  <div id="sec-basics" class="section">
+    <h2 class="section-title">01 · 香港保险行业基础知识</h2>
+    <div class="section-subtitle">监管体系、牌照、产品分类、合同原则与佣金结构全解</div>
+
+    <h3 class="block-title">监管框架</h3>
+    <p class="body-text">香港保险业自 2019 年起由<strong>保险业监管局（Insurance Authority，IA）</strong>统一监管，独立运作，直接受金融事务及库务局监督。</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>法规 / 机构</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td>《保险业条例》Cap. 41</td><td>香港保险监管的基本法律</td></tr>
+          <tr><td>《保险代理管理守则》</td><td>规范代理人行为准则</td></tr>
+          <tr><td>IIQE 考试</td><td>保险中介人资格考试，从业必须持牌</td></tr>
+          <tr><td>MCV 最低资本要求</td><td>保险公司的偿付能力规定</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 id="basics-license" class="block-title">牌照体系</h3>
+    <div class="callout tip">
+      <div class="callout-icon"></div>
+      <div class="callout-body"><strong>新人首要任务：</strong>考取 IIQE Paper 1 + Paper 3（代理人资格），如需销售投资挂钩保险再加考 Paper 5。</div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>牌照类别</th><th>适用对象</th><th>主要考试</th></tr></thead>
+        <tbody>
+          <tr><td><span class="badge badge-blue">代理人</span></td><td>代表单一保险公司销售</td><td>Paper 1 + Paper 3/5</td></tr>
+          <tr><td><span class="badge badge-purple">授权经纪</span></td><td>代表客户，可销售多家产品</td><td>Paper 1 + Paper 2 + Paper 3/5</td></tr>
+          <tr><td><span class="badge badge-gray">负责人</span></td><td>管理保险中介机构</td><td>额外资历要求</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4 class="sub-title">IIQE 考试科目</h4>
+    <div class="card-grid cols-3">
+      <div class="card"><h3>Paper 1</h3><p>保险原理与实务（必考）</p></div>
+      <div class="card"><h3>Paper 3</h3><p>长期保险（人寿 / 医疗 / 储蓄）</p></div>
+      <div class="card"><h3>Paper 5</h3><p>投资相关长期保险（ILAS）</p></div>
+    </div>
+
+    <h3 id="basics-products" class="block-title">产品分类</h3>
+    <h4 class="sub-title">长期保险（重点掌握）</h4>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>类型</th><th>产品</th><th>特点</th></tr></thead>
+        <tbody>
+          <tr><td rowspan="3"><span class="badge badge-blue">人寿险</span></td><td>定期人寿 Term Life</td><td>纯保障，保费低，无储蓄成分；适合家庭支柱做杠杆保障</td></tr>
+          <tr><td>终身寿险 Whole Life</td><td>终身保障，含现金价值，有分红版本；可传承财富</td></tr>
+          <tr><td>万能寿险 Universal Life</td><td>灵活保费，高净值客户常用；保额可调整</td></tr>
+          <tr><td><span class="badge badge-green">储蓄险</span></td><td>储蓄保险 Savings</td><td>供款 5–25 年，保证回报 + 非保证红利；常见预期收益 5–7%</td></tr>
+          <tr><td rowspan="2"><span class="badge badge-yellow">医疗险</span></td><td>自愿医保 VHIS</td><td>政府推出，可申请税务扣减；覆盖住院及手术费用</td></tr>
+          <tr><td>高端医疗险 HPMCI</td><td>覆盖全球医院网络，适合内地客户赴港就医需求</td></tr>
+          <tr><td rowspan="3"><span class="badge" style="background:#f0fdf4;color:#15803d;border:1px solid #86efac">重疾险</span></td><td>危疾保险 CI（= 重疾险）</td><td>确诊即一次性赔付，弥补收入损失及康复费用；覆盖 100+ 种疾病</td></tr>
+          <tr><td>多次赔付危疾险 Multi-CI</td><td>可多次理赔不同疾病，复发亦可赔；保障更全面</td></tr>
+          <tr><td>早期危疾险 Early CI</td><td>早期/轻症即可赔付，提前介入治疗；近年热门产品方向</td></tr>
+          <tr><td><span class="badge badge-red">投资险</span></td><td>ILAS 投资连结</td><td>结合基金与寿险，须持 Paper 5 牌；风险较高，需审慎销售</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 id="basics-contract" class="block-title">保险合同五大原则</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>原则</th><th>说明</th><th>实务要点</th></tr></thead>
+        <tbody>
+          <tr><td><strong>可保利益</strong></td><td>投保人对被保险人须有经济利益</td><td>直系亲属通常自动满足</td></tr>
+          <tr><td><strong>最大诚信</strong></td><td>双方须如实告知，不得隐瞒重要事实</td><td>健康问卷必须如实填写</td></tr>
+          <tr><td><strong>补偿原则</strong></td><td>赔付不超过实际损失</td><td>一般保险适用，人寿险无须</td></tr>
+          <tr><td><strong>代位原则</strong></td><td>赔付后保险公司取得追索权</td><td>一般保险中常见</td></tr>
+          <tr><td><strong>分摊原则</strong></td><td>多家公司按比例分担赔付</td><td>重复投保时适用</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 id="basics-commission" class="block-title">佣金结构</h3>
+    <div class="stat-grid" style="grid-template-columns: repeat(3,1fr)">
+      <div class="stat-card">
+        <div class="stat-value">30–100%</div>
+        <div class="stat-label">首年佣金（FYC）占首年保费比例</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">3–15%</div>
+        <div class="stat-label">续期佣金（第 2 年起）每年持续收取</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">MDRT</div>
+        <div class="stat-label">国际百万圆桌，专业成就认可</div>
+      </div>
+    </div>
+
+    <h3 class="block-title">合规红线（新人必知）</h3>
+    <ul class="checklist">
+      <li>不得进行误导性销售（Mis-selling）：不夸大非保证回报、不隐瞒风险</li>
+      <li>须完成需求分析（Needs Analysis）：根据客户实际需求推荐产品</li>
+      <li>KYC 要求：了解客户背景、财务状况、风险承受能力</li>
+      <li>冷静期告知义务：必须明确告知客户 21 天冷静期权利</li>
+      <li>持续进修（CPD）要求：每年须完成规定学时以维持牌照</li>
+    </ul>
+
+    <h3 class="block-title">香港 vs 内地保险核心差异</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>比较维度</th><th>香港保险</th><th>内地保险</th></tr></thead>
+        <tbody>
+          <tr><td>货币</td><td>港币 / 美元</td><td>人民币</td></tr>
+          <tr><td>监管</td><td>IA，国际标准</td><td>中国银保监会</td></tr>
+          <tr><td>理赔</td><td>宽松，高度商业化</td><td>条款较严格</td></tr>
+          <tr><td>储蓄回报</td><td>历史演示较高（含非保证）</td><td>以保证为主，较低</td></tr>
+          <tr><td>海外保障</td><td>全球通赔</td><td>通常仅限内地</td></tr>
+          <tr><td>购买门槛</td><td>须本人亲临香港签署</td><td>线上 / 线下均可</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══ MARKET ═══ -->
+  <div id="sec-market" class="section">
+    <h2 class="section-title">02 · 市场现状与未来展望</h2>
+    <div class="section-subtitle">以数据和趋势为基础，帮助从业者建立市场宏观视野</div>
+
+    <h3 class="block-title">市场规模概览</h3>
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-value">6,000亿</div>
+        <div class="stat-label">年总保费收入（港元）</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">160+</div>
+        <div class="stat-label">持牌保险公司数量</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">11万+</div>
+        <div class="stat-label">注册保险中介人</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">Top 3</div>
+        <div class="stat-label">全球人均保险密度排名</div>
+      </div>
+    </div>
+
+    <h3 class="block-title">内地访客保费贡献（关键数据）</h3>
+    <div class="callout key">
+      <div class="callout-icon"></div>
+      <div class="callout-body"><strong>关键洞察：</strong>内地客户需求是结构性的、长期的，而非周期性波动。这为具备普通话沟通能力的从业者创造了巨大机遇。</div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>时期</th><th>内地访客新造保费</th><th>占香港个人业务比例</th></tr></thead>
+        <tbody>
+          <tr><td>2019 年（疫情前高峰）</td><td>约 680 亿港元</td><td>约 26%</td></tr>
+          <tr><td>2020–2022 年（封关）</td><td>近乎归零</td><td>&lt;1%</td></tr>
+          <tr><td>2023 年（通关恢复）</td><td>约 590 亿港元</td><td>迅速反弹</td></tr>
+          <tr><td>2024 年（预估）</td><td>超过 700 亿港元</td><td>创历史新高趋势</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 id="market-now" class="block-title">主要增长驱动力</h3>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon" style="background:#eff6ff">💰</div>
+        <h3>内地高净值资产配置</h3>
+        <p>人民币贬值预期驱动美元资产配置，香港保险是合法跨境财富管理工具</p>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background:#f0fdf4">🏥</div>
+        <h3>本地医疗需求上升</h3>
+        <p>公立医院轮候时间长，VHIS 政策推动普及，危疾发病率上升</p>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background:#fefce8">👴</div>
+        <h3>人口老龄化</h3>
+        <p>MPF 积累不足，年金保险成为补充退休收入的重要工具</p>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background:#fdf4ff">📈</div>
+        <h3>利率环境有利</h3>
+        <p>高息环境使储蓄险吸引力上升，定息保险产品备受关注</p>
+      </div>
+    </div>
+
+    <h3 class="block-title">竞争格局：主要保险公司</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>公司</th><th>市场定位</th></tr></thead>
+        <tbody>
+          <tr><td><strong>友邦 AIA</strong></td><td>市场龙头，品牌最强，代理人体系完善</td></tr>
+          <tr><td><strong>安盛 AXA ⭐</strong></td><td>全球品牌，产品线丰富，高净值客户优势</td></tr>
+          <tr><td><strong>宏利 Manulife</strong></td><td>北美背景，投资产品见长</td></tr>
+          <tr><td><strong>保诚 Prudential</strong></td><td>英国系，危疾和医疗口碑佳</td></tr>
+          <tr><td><strong>富通 FWD</strong></td><td>本土新兴，数字化程度高，定价激进</td></tr>
+          <tr><td><strong>中国人寿 COLI</strong></td><td>内地背景，服务内地客群优势明显</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 id="market-future" class="block-title">未来展望（2025–2030）</h3>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon" style="background:#eff6ff">🚀</div>
+        <h3>内地访客市场持续扩张</h3>
+        <p>预测到 2030 年内地访客保费突破 <strong>1,000 亿港元/年</strong>，大湾区融合是核心驱动力</p>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background:#f0fdf4">🤖</div>
+        <h3>数字化转型加速</h3>
+        <p>AI 核保、自动理赔、数字化投保流程。纯靠"关系销售"逐步失效</p>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background:#fefce8">⚖️</div>
+        <h3>监管合规持续升级</h3>
+        <p>RBC 风险资本制度、KYC/AML 强化、产品信息披露规范更严格</p>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background:#fdf4ff">🌿</div>
+        <h3>产品创新方向</h3>
+        <p>ESG 保险、大湾区跨境医疗险、长期护理险、参数型保险等新赛道</p>
+      </div>
+    </div>
+
+    <h3 class="block-title">职业前景判断</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>维度</th><th>判断</th></tr></thead>
+        <tbody>
+          <tr><td>市场整体增速</td><td>年均 5%–8%，属稳健成长行业</td></tr>
+          <tr><td>新人机会窗口</td><td>内地访客市场为新人创造结构性机会</td></tr>
+          <tr><td>收入天花板</td><td>头部从业者年收入可达数百万港元，分化明显</td></tr>
+          <tr><td>职业稳定性</td><td>纯佣金制度，初期收入不稳定是最大风险</td></tr>
+          <tr><td>长期价值</td><td>续期佣金积累后，职业被动收入价值极高</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══ HK ═══ -->
+  <div id="sec-hk" class="section">
+    <h2 class="section-title">03 · 香港作为保险中心的独特优劣势</h2>
+    <div class="section-subtitle">深入理解香港保险市场的结构性特征，帮助从业者找准定位</div>
+
+    <h3 class="block-title">结构性优势</h3>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon" style="background:#eff6ff">🌐</div>
+        <h3>全球最自由的金融体系</h3>
+        <p>港元与美元挂钩（1983 年至今）、资金自由进出无外汇管制、普通法体系合同执行效率高</p>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background:#f0fdf4">🎯</div>
+        <h3>一国两制：无可复制的优势</h3>
+        <p>连接 13 亿内地人口的财富需求与国际金融体系，这一结构性壁垒无法被任何城市复制</p>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background:#fefce8">🏢</div>
+        <h3>国际保险公司云集</h3>
+        <p>160 余家持牌保险公司，充分竞争推动产品持续创新，保单条款宽松</p>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background:#fdf4ff">💼</div>
+        <h3>专业服务生态完备</h3>
+        <p>精算、法律、理财规划配套完善，MDRT、LOMA 等国际专业组织活跃</p>
+      </div>
+    </div>
+
+    <h3 class="block-title">内地客户购买香港保险的核心动机</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>动机</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td>美元资产配置</td><td>对冲人民币汇率风险，实现外币资产储备</td></tr>
+          <tr><td>更高保障范围</td><td>全球理赔，海外就医报销，内地保险不具备</td></tr>
+          <tr><td>遗产规划</td><td>离岸规划，受益人指定灵活，跨代传承更便捷</td></tr>
+          <tr><td>储蓄回报更高</td><td>历史演示回报（含非保证）高于内地同类产品</td></tr>
+          <tr><td>隐私保护</td><td>相对内地金融体系，隐私度更高</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="block-title">结构性劣势与挑战</h3>
+    <div class="compare-grid">
+      <div class="compare-box minus">
+        <h4>⚠️ 市场层面挑战</h4>
+        <ul>
+          <li>超过 11 万名中介，竞争极度激烈</li>
+          <li>主力储蓄险产品高度同质化</li>
+          <li>精明客户货比三家，关系销售难以为继</li>
+          <li>新人第一年淘汰率约 60–80%</li>
+        </ul>
+      </div>
+      <div class="compare-box minus">
+        <h4>⚠️ 政策与成本风险</h4>
+        <ul>
+          <li>内地外汇管制政策不确定性</li>
+          <li>银联卡购险单次上限 5,000 美元</li>
+          <li>香港生活成本极高，新人财务压力大</li>
+          <li>合规成本逐年上升，违规处罚加重</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3 class="block-title">香港 vs 新加坡 vs 澳门对比</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>比较维度</th><th>香港</th><th>新加坡</th><th>澳门</th></tr></thead>
+        <tbody>
+          <tr><td>内地客户吸引力</td><td>🌟🌟🌟🌟🌟 极高</td><td>🌟🌟🌟🌟 高</td><td>🌟🌟🌟 高</td></tr>
+          <tr><td>产品多样性</td><td>🌟🌟🌟🌟🌟 极高</td><td>🌟🌟🌟🌟 高</td><td>🌟🌟 较低</td></tr>
+          <tr><td>资金自由度</td><td>🌟🌟🌟🌟🌟 极高</td><td>🌟🌟🌟🌟🌟 极高</td><td>🌟🌟🌟🌟 较高</td></tr>
+          <tr><td>语言优势</td><td>粤语+普通话+英语</td><td>英语+普通话</td><td>粤语+普通话</td></tr>
+          <tr><td>竞争激烈程度</td><td>极度激烈</td><td>极度激烈</td><td>相对宽松</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="highlight-quote">
+      香港保险市场的核心价值，在于它是<strong>全球金融自由与中国巨量财富需求之间最重要的接口</strong>。只要这一结构性关系存在，香港保险的长期机会就不会消失。
+    </div>
+  </div>
+
+  <!-- ═══ AXA ═══ -->
+  <div id="sec-axa" class="section">
+    <h2 class="section-title">安盛（AXA）深度介绍</h2>
+    <div class="section-subtitle">了解你所代表的品牌——全球实力、香港地位与核心竞争产品全解</div>
+
+    <!-- AXA HERO -->
+    <div class="hero" style="background:linear-gradient(135deg,#7f1d1d 0%,#b91c1c 50%,#dc2626 100%)">
+      <div class="tag">全球最大保险集团之一</div>
+      <h1>安盛 AXA</h1>
+      <p>成立于 1816 年，总部法国巴黎，业务遍布全球 50+ 国家，服务超过 1 亿名客户，管理资产规模超过 <strong>9,000 亿欧元</strong>，是世界保险行业的标杆品牌。</p>
+    </div>
+
+    <h3 id="axa-profile" class="block-title">全球与香港市场画像</h3>
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-value" style="color:#dc2626">50+</div>
+        <div class="stat-label">覆盖国家与地区数量</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" style="color:#dc2626">1亿+</div>
+        <div class="stat-label">全球客户总数</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" style="color:#dc2626">9,000亿</div>
+        <div class="stat-label">管理资产规模（欧元）</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" style="color:#dc2626">1986</div>
+        <div class="stat-label">正式进入香港市场年份</div>
+      </div>
+    </div>
+
+    <h4 class="sub-title">安盛在香港的市场地位</h4>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>维度</th><th>安盛香港的表现</th></tr></thead>
+        <tbody>
+          <tr><td>市场排名</td><td>香港人寿保险市场前三甲，仅次于友邦（AIA）</td></tr>
+          <tr><td>品牌认知</td><td>全球化品牌，高净值客群及企业客户认可度高</td></tr>
+          <tr><td>产品线宽度</td><td>覆盖人寿、医疗、储蓄、投资连结、一般保险的全品类公司</td></tr>
+          <tr><td>企业保险优势</td><td>全港最大团体医疗保险供应商之一，服务大量跨国企业</td></tr>
+          <tr><td>理赔实力</td><td>全球再保险网络支撑，大额理赔偿付能力强</td></tr>
+          <tr><td>数字化</td><td>推出 MyAXA 客户 App，支持在线保单管理与理赔申请</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4 class="sub-title">安盛 vs 友邦（AIA）核心差异</h4>
+    <div class="callout info">
+      <div class="callout-icon"></div>
+      <div class="callout-body">作为安盛的代理人，你需要清楚知道与最大竞争对手友邦的差异化所在，才能在客户比较时自信应对。</div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>比较维度</th><th>安盛 AXA</th><th>友邦 AIA</th></tr></thead>
+        <tbody>
+          <tr><td>品牌根基</td><td>欧洲系，全球化程度更高，高净值与跨国客群认知强</td><td>亚太区本土品牌，香港市场渗透率极高</td></tr>
+          <tr><td>企业保险</td><td><span class="badge badge-green">明显优势</span> 团体医疗、D&O 等企业险产品更全面</td><td>个人险更强，企业险较弱</td></tr>
+          <tr><td>医疗险网络</td><td>全球医疗网络覆盖广，国际客户适用性强</td><td>香港本地医院网络更深</td></tr>
+          <tr><td>ILAS 产品</td><td>投资选择多样，基金平台较成熟</td><td>类似，略弱于安盛</td></tr>
+          <tr><td>储蓄险</td><td>高端储蓄产品更具竞争力</td><td>走量型产品保费门槛较低</td></tr>
+          <tr><td>代理人培训</td><td>欧式系统化培训，重视专业认证</td><td>本土经验丰富，销售文化强</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 id="axa-products" class="block-title">核心竞争产品详解</h3>
+    <div class="callout warning">
+      <div class="callout-icon"></div>
+      <div class="callout-body"><strong>注意：</strong>以下产品信息基于安盛香港公开资料整理，具体条款、保障范围及保费以最新版本保单为准。入职后务必通过公司内网获取官方最新产品手册。</div>
+    </div>
+
+    <!-- 储蓄险 -->
+    <div style="background:#fff5f5;border:1px solid #fecaca;border-radius:12px;padding:20px;margin:16px 0">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+        <div style="width:36px;height:36px;background:#dc2626;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px">💰</div>
+        <div>
+          <div style="font-size:11px;color:#dc2626;font-weight:600;text-transform:uppercase;letter-spacing:1px">储蓄 · 财富增值</div>
+          <div style="font-size:16px;font-weight:700;color:#1f2937">储蓄险产品系列</div>
+        </div>
+      </div>
+      <div class="table-wrap" style="margin:0">
+        <table>
+          <thead><tr><th>产品</th><th>主要特点</th><th>目标客群</th><th>核心卖点</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><strong>Wealth Excel<br/>财富卓越</strong></td>
+              <td>分红储蓄型，供款期灵活（5/10/15/20 年），美元计价</td>
+              <td>内地访港客、追求稳健储蓄的中高净值人群</td>
+              <td>保证现金价值 + 非保证分红，长期 IRR 可达 4–6%（演示）</td>
+            </tr>
+            <tr>
+              <td><strong>Goal Saver<br/>储蓄目标</strong></td>
+              <td>短供款期（5年），到期给付，保证成分较高</td>
+              <td>偏保守投资者，追求确定性回报</td>
+              <td>保证回报清晰，适合用于子女教育金规划</td>
+            </tr>
+            <tr>
+              <td><strong>Fortune Goal<br/>财富目标</strong></td>
+              <td>终身储蓄计划，含保费豁免，兼顾保障与储蓄</td>
+              <td>希望财富传承的家庭</td>
+              <td>身故赔付 ≥ 保额，保单可分拆传承给子女</td>
+            </tr>
+            <tr>
+              <td><strong>AXA ManuMaster<br/>（万能寿险）</strong></td>
+              <td>灵活保费结构，账户价值挂钩信贷利率，无固定供款期</td>
+              <td>高净值客户，用于大额财富传承或遗产规划</td>
+              <td>保额可超过 1,000 万美元，受益人架构灵活</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout tip" style="margin-top:12px;margin-bottom:0">
+        <div class="callout-icon"></div>
+        <div class="callout-body"><strong>销售话术重点：</strong>储蓄险的核心价值不是"高回报"，而是"强制储蓄 + 资产隔离 + 美元配置"三合一。对内地客户强调美元资产和离岸配置的意义。</div>
+      </div>
+    </div>
+
+    <!-- 医疗险 -->
+    <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;padding:20px;margin:16px 0">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+        <div style="width:36px;height:36px;background:#16a34a;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px">🏥</div>
+        <div>
+          <div style="font-size:11px;color:#16a34a;font-weight:600;text-transform:uppercase;letter-spacing:1px">医疗 · 健康保障</div>
+          <div style="font-size:16px;font-weight:700;color:#1f2937">医疗险产品系列</div>
+        </div>
+      </div>
+      <div class="table-wrap" style="margin:0">
+        <table>
+          <thead><tr><th>产品</th><th>主要特点</th><th>目标客群</th><th>核心卖点</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><strong>ValueChoice<br/>医疗保障</strong></td>
+              <td>VHIS 认可自愿医保，标准计划+自订计划可选，住院手术全覆盖</td>
+              <td>香港本地居民，可申请薪俸税扣减</td>
+              <td>VHIS 认可，每年最高 8,000 港元税务扣减，理赔直付医院</td>
+            </tr>
+            <tr>
+              <td><strong>MedSafe Elite</strong></td>
+              <td>私家医院实报实销，无副标准保费附加，全球紧急医疗</td>
+              <td>中高收入专业人士，重视私家医院就诊体验</td>
+              <td>无终身保障上限选项；附加危疾和住院现金 Rider</td>
+            </tr>
+            <tr>
+              <td><strong>团体医疗保险<br/>Group Medical</strong></td>
+              <td>为企业提供员工医疗保障方案，可定制保额和覆盖范围</td>
+              <td>中小企业主、HR 决策者</td>
+              <td>安盛是全港最大团险供应商之一，服务稳定，理赔效率高</td>
+            </tr>
+            <tr>
+              <td><strong>大湾区医疗延伸</strong></td>
+              <td>部分计划支持在内地指定医院就医报销</td>
+              <td>频繁往返大湾区的人士</td>
+              <td>无需回港即可在内地就医并报销，是差异化卖点</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout tip" style="margin-top:12px;margin-bottom:0">
+        <div class="callout-icon"></div>
+        <div class="callout-body"><strong>销售话术重点：</strong>香港公立医院平均轮候专科时间超过 80 周，一次私家医院住院费用轻易超过 10 万港元。医疗险是"买了就能用"的刚需保障，比储蓄险更容易触动客户。</div>
+      </div>
+    </div>
+
+    <!-- 危疾险 -->
+    <div style="background:#fefce8;border:1px solid #fde68a;border-radius:12px;padding:20px;margin:16px 0">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+        <div style="width:36px;height:36px;background:#d97706;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px">🛡️</div>
+        <div>
+          <div style="font-size:11px;color:#d97706;font-weight:600;text-transform:uppercase;letter-spacing:1px">保障 · 危疾</div>
+          <div style="font-size:16px;font-weight:700;color:#1f2937">危疾险产品系列</div>
+        </div>
+      </div>
+      <div class="table-wrap" style="margin:0">
+        <table>
+          <thead><tr><th>产品</th><th>主要特点</th><th>核心卖点</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><strong>MultiCare<br/>危疾保障计划</strong></td>
+              <td>覆盖 110+ 种疾病，支持多次赔付，分早期、中期、严重三级</td>
+              <td>同一类别疾病最多可赔付 3 次；不同类别疾病可累计赔付达 600% 保额</td>
+            </tr>
+            <tr>
+              <td><strong>早期危疾<br/>Early CI Rider</strong></td>
+              <td>早期癌症、轻微心脏病等早期状况即可赔付</td>
+              <td>现代医疗技术令早期诊断率提升，早期赔付能及时弥补收入损失</td>
+            </tr>
+            <tr>
+              <td><strong>危疾年金<br/>CI Annuity</strong></td>
+              <td>确诊后每月持续给付生活费，而非一次性赔付</td>
+              <td>针对长期慢性病（如癌症化疗期间），持续收入补偿更实用</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout tip" style="margin-top:12px;margin-bottom:0">
+        <div class="callout-icon"></div>
+        <div class="callout-body"><strong>销售话术重点：</strong>香港每 4 人中就有 1 人一生中会患癌。危疾险不是"为死亡准备"，而是"为活下来的漫长治疗和收入中断准备资金"。多次赔付的 MultiCare 是区别于竞品的核心卖点。</div>
+      </div>
+    </div>
+
+    <!-- 人寿险 -->
+    <div style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:12px;padding:20px;margin:16px 0">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+        <div style="width:36px;height:36px;background:#0284c7;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px">❤️</div>
+        <div>
+          <div style="font-size:11px;color:#0284c7;font-weight:600;text-transform:uppercase;letter-spacing:1px">人寿 · 传承规划</div>
+          <div style="font-size:16px;font-weight:700;color:#1f2937">人寿险产品系列</div>
+        </div>
+      </div>
+      <div class="table-wrap" style="margin:0">
+        <table>
+          <thead><tr><th>产品</th><th>主要特点</th><th>核心卖点</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><strong>终身寿险<br/>Whole Life</strong></td>
+              <td>终身保障，含现金价值积累，有分红版本</td>
+              <td>既有保障功能，又能作为遗产传承工具；受益人指定不受遗嘱限制</td>
+            </tr>
+            <tr>
+              <td><strong>定期人寿<br/>Term Life</strong></td>
+              <td>固定年期（10/20/30 年），高保额低保费，纯保障</td>
+              <td>家庭经济支柱的最高效保障工具；适合背负房贷的年轻家庭</td>
+            </tr>
+            <tr>
+              <td><strong>AXA Prestige<br/>高端万能寿险</strong></td>
+              <td>最低保额 100 万美元，为超高净值客户设计</td>
+              <td>全球范围内遗产规划核心工具；可设立保单持有人架构（Policy Owner Structure）实现财富隔离</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 产品选择指引 -->
+    <h3 class="block-title">按客户需求推荐产品路径</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>客户类型</th><th>首推产品</th><th>附加建议</th></tr></thead>
+        <tbody>
+          <tr><td>内地访港储蓄型客户</td><td>Wealth Excel 储蓄险（美元计价）</td><td>附加定期寿险保障</td></tr>
+          <tr><td>香港上班族（首次买保险）</td><td>ValueChoice VHIS 医疗险</td><td>同时附加危疾 Rider</td></tr>
+          <tr><td>有家庭的中产家庭</td><td>MultiCare 危疾 + MedSafe Elite 医疗</td><td>定期寿险补充</td></tr>
+          <tr><td>中小企业主</td><td>团体医疗保险（Group Medical）</td><td>关键人保险（Key Man）</td></tr>
+          <tr><td>高净值遗产规划</td><td>AXA Prestige 万能寿险</td><td>配合律师做信托架构</td></tr>
+          <tr><td>退休规划人群</td><td>Fortune Goal 终身储蓄 + 年金附加</td><td>医疗险续期保障</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 id="axa-agent" class="block-title">代表安盛的独特优势</h3>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon" style="background:#fee2e2">🌐</div>
+        <h3>全球品牌背书</h3>
+        <p>9,000 亿欧元管理资产，全球 50+ 国家布局。向客户展示安盛的财务实力，远比口头承诺更有说服力。</p>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background:#f0fdf4">🏢</div>
+        <h3>企业市场敲门砖</h3>
+        <p>安盛是全港最大团险供应商之一，以企业保险切入，再向决策者开展个人保险，是独特的 B2B2C 路径。</p>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background:#eff6ff">📱</div>
+        <h3>数字化工具完善</h3>
+        <p>MyAXA App 支持客户在线管理保单、申请理赔、查询价值，减少后期服务负担，提升客户体验。</p>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background:#fefce8">🤝</div>
+        <h3>国际客户自然认可</h3>
+        <p>欧美、东南亚等地的外籍人士在香港工作，天然熟悉 AXA 品牌，开拓外籍客群时摩擦极低。</p>
+      </div>
+    </div>
+
+    <div class="callout key">
+      <div class="callout-icon"></div>
+      <div class="callout-body">
+        <strong>代理人话术建议：</strong>"安盛不只是一家保险公司——它是一个全球金融生态系统。当您在海外出险，当您需要国际理赔，当您的子女在海外留学需要保障，安盛都能提供友邦、保诚等本土品牌无法比拟的全球一致性服务。"
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ ROADMAP ═══ -->  <div id="sec-roadmap" class="section">
+    <h2 class="section-title">04 · 从入门到专业的学习路线图</h2>
+    <div class="section-subtitle">分阶段、可执行的成长路径，帮助新人系统性建立能力体系</div>
+
+    <h3 class="block-title">四阶段成长路径</h3>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-dot">1</div>
+        <div class="timeline-content">
+          <div class="timeline-period">第 1–3 个月</div>
+          <div class="timeline-title">考牌与入门 — 打好地基</div>
+          <div class="timeline-body">
+            完成 IIQE Paper 1 + Paper 3，熟悉安盛主力产品（储蓄险、医疗险各 2–3 款），掌握需求分析表（FNA）填写流程，建立准客户名单（目标 50 人）。
+          </div>
+          <div class="tag-list" style="margin-top:10px">
+            <span class="tag-pill">Paper 1 通过</span>
+            <span class="tag-pill">Paper 3 通过</span>
+            <span class="tag-pill">熟背 3 款产品卖点</span>
+            <span class="tag-pill">50 人准客户名单</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot">2</div>
+        <div class="timeline-content">
+          <div class="timeline-period">第 4–6 个月</div>
+          <div class="timeline-title">产品深化与首批客户 — 开始产粮</div>
+          <div class="timeline-body">
+            深化 IRR 计算能力，掌握竞品对比话术，开展第一批销售面谈。目标每月出单 2–4 件，重视每次成交后的转介绍请求。
+          </div>
+          <div class="tag-list" style="margin-top:10px">
+            <span class="tag-pill">IRR 计算掌握</span>
+            <span class="tag-pill">月均 2–4 件</span>
+            <span class="tag-pill">转介系统建立</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot">3</div>
+        <div class="timeline-content">
+          <div class="timeline-period">第 7–12 个月</div>
+          <div class="timeline-title">系统化成长 — 稳定出单</div>
+          <div class="timeline-body">
+            选定 1–2 个核心客群深耕，建立内容营销体系（微信公众号/小红书），学习转介绍系统，开始 LOMA 130 或 ChFC 备考。
+          </div>
+          <div class="tag-list" style="margin-top:10px">
+            <span class="tag-pill">核心客群定位</span>
+            <span class="tag-pill">内容平台建立</span>
+            <span class="tag-pill">进阶认证备考</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot">4</div>
+        <div class="timeline-content">
+          <div class="timeline-period">第 2–3 年</div>
+          <div class="timeline-title">专业化与晋升 — 建立口碑</div>
+          <div class="timeline-body">
+            选择销售专家路径（MDRT → COT → TOT）或管理路径（主任 → 区域经理），建立专业口碑，考取 CFP 资格，开拓高净值遗产规划业务。
+          </div>
+          <div class="tag-list" style="margin-top:10px">
+            <span class="tag-pill">MDRT 申请</span>
+            <span class="tag-pill">CFP 认证</span>
+            <span class="tag-pill">高净值客户</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="block-title">核心客群选择建议</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>客群</th><th>核心需求</th><th>接触渠道</th></tr></thead>
+        <tbody>
+          <tr><td>大湾区访港内地客</td><td>美元储蓄 + 医疗保障</td><td>微信、口岸、转介</td></tr>
+          <tr><td>香港年轻专业人士</td><td>危疾 + 医疗 + 退休规划</td><td>LinkedIn、专业协会</td></tr>
+          <tr><td>中小企业主</td><td>团体医疗 + 关键人保险</td><td>商会、B2B 转介</td></tr>
+          <tr><td>新移民家庭</td><td>子女教育储蓄 + 全家医疗</td><td>社区活动、同乡会</td></tr>
+          <tr><td>高净值人士</td><td>遗产规划 + 大额储蓄</td><td>专业转介（会计师、律师）</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="block-title">进阶认证路径</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>认证</th><th>说明</th><th>推荐时机</th></tr></thead>
+        <tbody>
+          <tr><td><span class="badge badge-blue">LOMA 130/280</span></td><td>国际认可的保险管理认证</td><td>第 6–12 个月</td></tr>
+          <tr><td><span class="badge badge-green">ChFC</span></td><td>特许财务顾问，提升专业深度</td><td>第 1–2 年</td></tr>
+          <tr><td><span class="badge badge-purple">CFP</span></td><td>认证理财规划师，高净值市场敲门砖</td><td>第 2–3 年</td></tr>
+          <tr><td><span class="badge badge-yellow">MDRT</span></td><td>百万圆桌，国际认可的销售成就</td><td>达标即申请</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="block-title">每周学习习惯</h3>
+    <div class="step-list">
+      <div class="step-item"><div class="step-num">一</div><div class="step-text"><strong>周一</strong>制定本周客户拜访 / 联系计划</div></div>
+      <div class="step-item"><div class="step-num">三</div><div class="step-text"><strong>周三</strong>参加公司内部培训或产品分享会</div></div>
+      <div class="step-item"><div class="step-num">五</div><div class="step-text"><strong>周五</strong>整理本周客户跟进记录，更新 CRM</div></div>
+      <div class="step-item"><div class="step-num">双周</div><div class="step-text"><strong>每两周</strong>阅读一份行业报告或竞品分析</div></div>
+      <div class="step-item"><div class="step-num">月</div><div class="step-text"><strong>每月</strong>完成一个知识点深度学习，整理成可分享内容</div></div>
+    </div>
+  </div>
+
+  <!-- ═══ ACCOUNTING ═══ -->
+  <div id="sec-accounting" class="section">
+    <h2 class="section-title">05 · 会计背景从业者的差异化竞争力</h2>
+    <div class="section-subtitle">从市场视角，深入分析拥有会计 / 财务知识的保险从业者所具备的独特优劣势</div>
+
+    <div class="callout info">
+      <div class="callout-icon"></div>
+      <div class="callout-body">
+        <strong>行业现实：</strong>超过 11 万名保险中介人中，大多数缺乏财务分析能力。具有会计背景的从业者在<strong>专业性维度</strong>上天然具备差异化优势。
+      </div>
+    </div>
+
+    <h3 class="block-title">核心竞争优势</h3>
+    <h4 class="sub-title">优势一：财务数字的精准解读能力</h4>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>普通代理人</th><th>有会计背景的代理人</th></tr></thead>
+        <tbody>
+          <tr><td>"这份保险 20 年期满回报率约 5%"</td><td>精确计算每笔保费对应的 IRR，与其他理财工具横向比较</td></tr>
+          <tr><td>"有保证回报和非保证红利"</td><td>解释精算假设基础，分析非保证部分历史达成率的实际意义</td></tr>
+          <tr><td>"可以申请保单贷款"</td><td>量化保单贷款的实际资金成本，与银行贷款对比</td></tr>
+          <tr><td>"可以节省遗产税"</td><td>准确说明香港已无遗产税，讨论跨境遗产规划的真实结构</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4 class="sub-title">优势二：税务规划的天然敏感性</h4>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>税务场景</th><th>会计背景的价值</th></tr></thead>
+        <tbody>
+          <tr><td>VHIS 税务扣减（最高 8,000 港元/年）</td><td>精确计算客户实际节税金额，而非泛泛而谈</td></tr>
+          <tr><td>企业团体医疗保险</td><td>理解保费作为经营支出的会计处理，帮助企业主决策</td></tr>
+          <tr><td>内地客户 CRS 合规</td><td>理解共同申报准则对客户资产的影响，提供合规建议方向</td></tr>
+          <tr><td>个人所得税（薪俸税）规划</td><td>帮助客户用保险工具优化薪酬结构</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4 class="sub-title">优势三：专业人士客群的天然接触渠道</h4>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon" style="background:#eff6ff">👔</div>
+        <h3>前同事 / 会计圈</h3>
+        <p>薪资较高、储蓄需求强、专业认知强，平均保费规模显著高于普通客户</p>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background:#f0fdf4">🏢</div>
+        <h3>CFO / 财务总监人脉</h3>
+        <p>有企业保险需求 + 个人高净值需求，可切入企业团险市场</p>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background:#fefce8">📑</div>
+        <h3>审计 / 税务客户圈</h3>
+        <p>通常财务规划意识强，主动寻求专业建议，转介绍效率极高</p>
+      </div>
+    </div>
+
+    <h4 class="sub-title">优势四：企业保险市场差异化切入</h4>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>企业保险产品</th><th>会计背景的切入点</th></tr></thead>
+        <tbody>
+          <tr><td>团体医疗保险</td><td>理解 HR 预算控制，提供成本优化方案</td></tr>
+          <tr><td>关键人保险（Key Man Insurance）</td><td>用企业财务语言解释关键人身故的财务影响</td></tr>
+          <tr><td>董事 / 高管责任险（D&O）</td><td>理解公司治理和财务责任风险</td></tr>
+          <tr><td>专业责任险</td><td>针对会计师、审计师等职业风险保障</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="block-title">潜在劣势与应对策略</h3>
+    <div class="compare-grid">
+      <div class="compare-box minus">
+        <h4>⚠️ 常见劣势</h4>
+        <ul>
+          <li>分析过度，行动不足（反复研究而推迟拜访）</li>
+          <li>过度理性，情感连接不足（忽略情感触发）</li>
+          <li>"会计人"与"销售人"形象冲突的心理障碍</li>
+        </ul>
+      </div>
+      <div class="compare-box plus">
+        <h4>✅ 应对方法</h4>
+        <ul>
+          <li>分析超过 2 小时即行动，接受"足够好的方案"</li>
+          <li>先问情感性问题，再导入数字分析</li>
+          <li>认知重构：定位为"Financial Advisor"而非销售员</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3 class="block-title">差异化定位宣言</h3>
+    <div class="highlight-quote">
+      "我不只是帮您买保险，我用会计和财务专业背景，帮您全面分析保险在整体财务规划中的最优位置——包括税务影响、资产配置比例、流动性考量，以及与退休规划的协调。"
+    </div>
+
+    <h3 class="block-title">12 个月能力建设计划</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>月份</th><th>重点学习</th><th>目标输出</th></tr></thead>
+        <tbody>
+          <tr><td>1–2 月</td><td>IIQE 考牌 + 安盛主力产品</td><td>取得执照，熟悉 3 款主力产品</td></tr>
+          <tr><td>3–4 月</td><td>保单 IRR 计算 + 竞品财务比较</td><td>能制作产品财务比较一页纸</td></tr>
+          <tr><td>5–6 月</td><td>VHIS 税务扣减 + 企业保险基础</td><td>能给企业主做简单团险方案</td></tr>
+          <tr><td>7–8 月</td><td>遗产规划基础 + CRS 合规知识</td><td>能在高净值客户面前流畅讨论</td></tr>
+          <tr><td>9–10 月</td><td>CFP 或 ChFC 备考启动</td><td>完成报名，开始系统备考</td></tr>
+          <tr><td>11–12 月</td><td>个人品牌建设（文章 / 视频）</td><td>发布 5 篇高质量专业文章</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══ INTROVERT ═══ -->
+  <div id="sec-introvert" class="section" style="max-width:960px">
+    <h2 class="section-title">06 · 内向型从业者实战手册</h2>
+    <div class="section-subtitle">不讲方向，只给模板——每一段话术都可以直接复制修改后使用</div>
+
+    <!-- 核心认知 -->
+    <div class="callout tip">
+      <div class="callout-icon"></div>
+      <div class="callout-body">
+        <strong>本章的定位：</strong>内向者不缺方向感，缺的是"第一句话说什么"。这一章不讲道理，只给你可以直接复制、修改后发出去的文字和话术脚本。
+      </div>
+    </div>
+
+    <!-- ══ 一、认知重构 ══ -->
+    <h3 class="block-title">一、先解决一个心理障碍：佣金带来的内疚感</h3>
+    <p class="body-text">内向者最大的障碍不是不会说话，而是：<strong>「我收了佣金，所以我的建议是不纯粹的。」</strong></p>
+    <div class="compare-grid">
+      <div class="compare-box minus">
+        <h4>❌ 导致你犹豫的想法</h4>
+        <ul>
+          <li>"朋友以为我在利用他"</li>
+          <li>"万一产品不适合他，我会内疚"</li>
+          <li>"被拒绝后见面会尴尬"</li>
+          <li>"他会觉得我现在做保险是混不下去了"</li>
+        </ul>
+      </div>
+      <div class="compare-box plus">
+        <h4>✅ 更准确的认知</h4>
+        <ul>
+          <li>医生收诊费不影响建议的专业性</li>
+          <li>你不推荐，朋友可能被不专业的人误导</li>
+          <li>被拒绝只是"时机不对"，不是否定你这个人</li>
+          <li>保险顾问是专业职业，不是降级</li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout key">
+      <div class="callout-icon"></div>
+      <div class="callout-body"><strong>一个有帮助的思维框架：</strong>你的工作不是"说服对方买保险"，而是"确保对方在做决定前获得了准确的信息"。买不买是他们的权利，告知是你的职责。</div>
+    </div>
+
+    <!-- ══ 二、话术脚本库 ══ -->
+    <h3 id="introvert-script" class="block-title">二、话术脚本库（可直接复制）</h3>
+    <p class="body-text">以下所有脚本，用【】标注的部分替换为实际内容即可。</p>
+
+    <!-- 场景1：第一次开口 -->
+    <h4 class="sub-title">场景 A · 向老朋友透露你入行了（最难的第一步）</h4>
+    <div class="callout warning">
+      <div class="callout-icon"></div>
+      <div class="callout-body"><strong>原则：</strong>第一条消息的目标不是卖保险，而是让对方知道你现在是"可以咨询的人"。绝对不要在第一条消息里提到"你需不需要买"。</div>
+    </div>
+
+    <div style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden;margin:12px 0">
+      <div style="background:#f3f4f6;padding:10px 16px;font-size:12px;font-weight:600;color:#6b7280;border-bottom:1px solid #e5e7eb">✉️ 私信模板 A-1｜告知入行（低压力版）</div>
+      <div style="padding:16px 20px">
+        <div style="background:#dcfce7;border-radius:10px 10px 10px 2px;padding:12px 16px;font-size:13.5px;color:#1f2937;max-width:85%;line-height:1.7">
+          嗨【朋友名】，好久不见！<br/>
+          最近换了方向，在安盛做保险顾问，现在主要帮客户做香港这边的医疗和储蓄规划。<br/>
+          不是来推销的哈😄，就是想说你身边如果有朋友对香港保险有疑问，欢迎找我，我可以帮看看他们现有的保障够不够，或者解答一些常见问题，完全免费~
+        </div>
+        <div style="margin-top:10px;font-size:12px;color:#9ca3af">💡 这条消息的逻辑：定位自己是"资源"而非"销售"；提"朋友"而非"你"，降低直接压力；"完全免费"消除第一层顾虑</div>
+      </div>
+    </div>
+
+    <div style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden;margin:12px 0">
+      <div style="background:#f3f4f6;padding:10px 16px;font-size:12px;font-weight:600;color:#6b7280;border-bottom:1px solid #e5e7eb">✉️ 私信模板 A-2｜告知入行（分享好奇版）</div>
+      <div style="padding:16px 20px">
+        <div style="background:#dcfce7;border-radius:10px 10px 10px 2px;padding:12px 16px;font-size:13.5px;color:#1f2937;max-width:85%;line-height:1.7">
+          【朋友名】你好，最近入行做香港保险了，学了很多之前不知道的东西，挺有意思的。<br/>
+          比如香港私家医院住一次可能要十几万，但很多人的医疗险根本不够用；还有很多内地朋友买香港储蓄险，但不知道IRR怎么看……<br/>
+          你在香港工作/生活，有没有系统看过自己的保障够不够？我可以帮你快速梳理一下~
+        </div>
+        <div style="margin-top:10px;font-size:12px;color:#9ca3af">💡 先分享"有趣发现"制造好奇心，再提具体问题（医疗费用），最后才是建议行动，过渡自然</div>
+      </div>
+    </div>
+
+    <!-- 场景2：对方问你怎么做保险 -->
+    <h4 class="sub-title">场景 B · 对方问你"怎么做保险了？"（最常遇到的尴尬）</h4>
+    <p class="body-text">这个问题背后通常有两层意思：一是好奇，二是想看看你会不会来推销我。以下回答消除第二层顾虑：</p>
+    <div style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden;margin:12px 0">
+      <div style="background:#f3f4f6;padding:10px 16px;font-size:12px;font-weight:600;color:#6b7280;border-bottom:1px solid #e5e7eb">💬 对话模板 B-1｜轻松化解防备</div>
+      <div style="padding:16px 20px;display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;gap:8px;align-items:flex-start">
+          <div style="background:#dbeafe;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#1d4ed8;flex-shrink:0">他</div>
+          <div style="background:#f3f4f6;border-radius:2px 10px 10px 10px;padding:10px 14px;font-size:13.5px;color:#374151">你现在做保险了啊？</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:flex-start;flex-direction:row-reverse">
+          <div style="background:#dcfce7;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#15803d;flex-shrink:0">我</div>
+          <div style="background:#dcfce7;border-radius:10px 2px 10px 10px;padding:10px 14px;font-size:13.5px;color:#1f2937;max-width:80%">对，在安盛做，主要是帮客户做保障规划。不是那种硬推销的，哈哈，我自己也不喜欢被推销😄 更多是帮人分析他们现在有没有保障缺口，或者解答一些产品疑问。你有没有在香港买过医疗险或者储蓄险？</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:flex-start">
+          <div style="background:#dbeafe;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#1d4ed8;flex-shrink:0">他</div>
+          <div style="background:#f3f4f6;border-radius:2px 10px 10px 10px;padding:10px 14px;font-size:13.5px;color:#374151">有啊，之前随便买了个…</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:flex-start;flex-direction:row-reverse">
+          <div style="background:#dcfce7;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#15803d;flex-shrink:0">我</div>
+          <div style="background:#dcfce7;border-radius:10px 2px 10px 10px;padding:10px 14px;font-size:13.5px;color:#1f2937;max-width:80%">哦那有机会可以让我帮你看看，有没有什么漏洞。不用买新东西，就是帮你了解一下现在的保障够不够用，大概15分钟就能说清楚。</div>
+        </div>
+        <div style="font-size:12px;color:#9ca3af;padding-top:4px">💡 主动说"不硬推"+"我也不喜欢被推销"，建立同理感；结尾用"15分钟说清楚"降低时间成本顾虑</div>
+      </div>
+    </div>
+
+    <!-- 场景3：被拒绝 -->
+    <h4 class="sub-title">场景 C · 被委婉拒绝后怎么回（5 种常见拒绝的应对）</h4>
+    <div class="callout info">
+      <div class="callout-icon"></div>
+      <div class="callout-body"><strong>核心原则：</strong>被拒绝后的回应目标不是反驳，而是<strong>保留关系、埋下种子</strong>。不要试图说服，接受现在的"不"，为未来的"是"留门。</div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0">
+      <div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;overflow:hidden">
+        <div style="background:#fef9c3;padding:8px 14px;font-size:12px;font-weight:600;color:#a16207">拒绝一：「我再想想」「等我有空再说」</div>
+        <div style="padding:12px 14px;font-size:13px;color:#374151;line-height:1.65">
+          「好的完全没问题！我知道这种事不急，你有需要随时找我就行。我把我的联系方式发给你，你到时候想了解什么直接问~」<br/><br/>
+          <span style="color:#9ca3af;font-size:11.5px">（3个月后跟进一次：「最近香港私家医院费用又涨了，之前我们说的医疗险你还有没有在考虑？」）</span>
+        </div>
+      </div>
+      <div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;overflow:hidden">
+        <div style="background:#fef9c3;padding:8px 14px;font-size:12px;font-weight:600;color:#a16207">拒绝二：「我已经有保险了」</div>
+        <div style="padding:12px 14px;font-size:13px;color:#374151;line-height:1.65">
+          「哦挺好的！是内地买的还是香港买的？（听完）其实我做过不少保单检视，很多人买了之后不知道自己到底保什么、有没有缺口。要不要哪天我帮你也看看你的保单，10分钟就行，万一真的够用你也放心了~」
+        </div>
+      </div>
+      <div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;overflow:hidden">
+        <div style="background:#fef9c3;padding:8px 14px;font-size:12px;font-weight:600;color:#a16207">拒绝三：「现在手头比较紧」</div>
+        <div style="padding:12px 14px;font-size:13px;color:#374151;line-height:1.65">
+          「完全理解，保险这事儿真的不用急。我想说的是哪天你觉得时机到了，找我就行，我帮你做个方案，好比较。而且我可以帮你找到预算内最合适的，不一定要买贵的~」
+        </div>
+      </div>
+      <div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;overflow:hidden">
+        <div style="background:#fef9c3;padding:8px 14px;font-size:12px;font-weight:600;color:#a16207">拒绝四：「我不太信保险」</div>
+        <div style="padding:12px 14px;font-size:13px;color:#374151;line-height:1.65">
+          「我明白，很多人有这个顾虑，尤其之前看到过一些误导销售的新闻。其实香港这边监管挺严的，合规要求比内地高很多。你担心的是哪方面？理赔难？条款不透明？我可以针对性说一下~」
+        </div>
+      </div>
+      <div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;overflow:hidden">
+        <div style="background:#fef9c3;padding:8px 14px;font-size:12px;font-weight:600;color:#a16207">拒绝五：「我老公/老婆说不要买」</div>
+        <div style="padding:12px 14px;font-size:13px;color:#374151;line-height:1.65">
+          「哦这个很正常，很多家庭需要两个人都了解才能决定。要不这样，我做一份简单的资料给你们，你回去先给他/她看看，有问题我再一起解答？这样决定也更放心~」
+        </div>
+      </div>
+      <div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;overflow:hidden">
+        <div style="background:#fef9c3;padding:8px 14px;font-size:12px;font-weight:600;color:#a16207">拒绝六：「我问一下朋友就好了」（朋友也做保险）</div>
+        <div style="padding:12px 14px;font-size:13px;color:#374151;line-height:1.65">
+          「当然！找熟悉的人最放心。我唯一想说的是，不同公司产品差距挺大的，你可以先让他做一个方案，然后再找我做一个，对比一下，最后还是你自己决定~」
+        </div>
+      </div>
+    </div>
+
+    <!-- 场景4：请求转介绍 -->
+    <h4 class="sub-title">场景 D · 请求转介绍（成交后 2–4 周使用）</h4>
+    <p class="body-text">内向者最难开口的一步。关键是：<strong>不要在刚成交时问</strong>（对方会觉得你在继续利用），等保单生效后客户满意了再问。</p>
+    <div style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden;margin:12px 0">
+      <div style="background:#f3f4f6;padding:10px 16px;font-size:12px;font-weight:600;color:#6b7280;border-bottom:1px solid #e5e7eb">✉️ 转介绍请求模板（保单生效 2–4 周后）</div>
+      <div style="padding:16px 20px">
+        <div style="background:#dcfce7;border-radius:10px 10px 10px 2px;padding:12px 16px;font-size:13.5px;color:#1f2937;max-width:90%;line-height:1.75">
+          【客户名】你好，你的保单这几周运作一切正常吧？有没有什么问题？<br/><br/>
+          我想厚着脸皮问你一件事：你身边有没有朋友，也是在香港生活、对医疗保障或者储蓄规划有疑问的？<br/><br/>
+          不需要他们已经想买——就算只是想了解一下，我可以帮他们免费做一个保障分析，30分钟，看看有没有什么盲区。<br/><br/>
+          当然，如果暂时想不到完全没关系。想到了的话，把我微信分享给他就好，剩下的我来~
+        </div>
+        <div style="margin-top:10px;font-size:12px;color:#9ca3af">💡 "厚着脸皮"是刻意示弱的技巧——降低对方的心理压力；强调"不需要已经想买"减少转介的心理负担</div>
+      </div>
+    </div>
+
+    <!-- 场景5：第一次面谈 -->
+    <h4 class="sub-title">场景 E · 第一次见面 / 视频通话的 30 分钟脚本框架</h4>
+    <div class="timeline" style="margin-top:12px">
+      <div class="timeline-item">
+        <div class="timeline-dot" style="background:#6366f1;font-size:11px">0–5</div>
+        <div class="timeline-content">
+          <div class="timeline-period">开场（0–5 分钟）：消除"被推销"的感觉</div>
+          <div class="timeline-body" style="background:#f8f7ff;border-radius:8px;padding:12px 14px;margin-top:6px">
+            「今天我的目的很简单，就是了解一下你现在的情况，看看有没有什么我可以帮到你的地方。不一定要买什么，也不会有任何压力——如果你觉得目前的保障已经够用了，我一样会告诉你，完全没关系。我大概问你几个问题，好吗？」
+          </div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot" style="background:#8b5cf6;font-size:11px">5–18</div>
+        <div class="timeline-content">
+          <div class="timeline-period">收集信息（5–18 分钟）：用问题引导，不要演讲</div>
+          <div class="timeline-body" style="background:#f8f7ff;border-radius:8px;padding:12px 14px;margin-top:6px">
+            按顺序问，每个问题后认真听，不要急着接话：<br/><br/>
+            <strong>① 基本情况：</strong>「你在香港大概住多久了？工作还是长居？」<br/>
+            <strong>② 现有保障：</strong>「你现在有没有买过医疗险或者寿险？大概是什么类型的？」<br/>
+            <strong>③ 触发需求：</strong>「你身边有没有朋友生病或者出过什么事，让你觉得保险这事要认真考虑一下？」（这个问题往往能挖出最真实的需求）<br/>
+            <strong>④ 财务目标：</strong>「除了保障，你有没有在考虑给孩子存教育金，或者自己的退休规划这些？」
+          </div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot" style="background:#a855f7;font-size:11px">18–26</div>
+        <div class="timeline-content">
+          <div class="timeline-period">呈现分析（18–26 分钟）：用他的话总结他的问题</div>
+          <div class="timeline-body" style="background:#f8f7ff;border-radius:8px;padding:12px 14px;margin-top:6px">
+            「好，根据你刚才说的，我梳理一下：你现在的情况是【重复客户说的关键词】，最担心的是【他提到的风险】，同时你还有【他的目标】这个方向想考虑。<br/><br/>
+            如果按这个出发，我觉得你最优先要补的是【医疗/危疾/储蓄】这一块，原因是……」<br/><br/>
+            <span style="color:#6b7280;font-size:12px">（注意：用他自己说过的词，不要用保险术语）</span>
+          </div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot" style="background:#c026d3;font-size:11px">26–30</div>
+        <div class="timeline-content">
+          <div class="timeline-period">结尾（26–30 分钟）：给一个具体的下一步</div>
+          <div class="timeline-body" style="background:#f8f7ff;border-radius:8px;padding:12px 14px;margin-top:6px">
+            「今天就聊到这里，我不希望你今天就做决定——这类东西需要时间想清楚。<br/><br/>
+            我接下来会帮你做一份方案，把刚才提到的保障缺口和合适的选项列出来，你回去可以慢慢看，有问题随时问我。<br/><br/>
+            你觉得我下周把方案发给你，然后再约个时间解答问题，这样可以吗？」
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ 三、朋友圈模板 ══ -->
+    <h3 id="introvert-moments" class="block-title">三、朋友圈发文模板（5 种类型，可直接修改使用）</h3>
+    <div class="callout info">
+      <div class="callout-icon"></div>
+      <div class="callout-body"><strong>发文原则：</strong>70% 有用的知识 / 20% 真实的生活状态 / 10% 产品信息。让朋友感受到你在认真学习一门专业，而不是每天刷广告。</div>
+    </div>
+
+    <div style="display:grid;gap:14px;margin:14px 0">
+      <!-- 模板1 -->
+      <div style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden">
+        <div style="background:#eff6ff;padding:8px 16px;font-size:12px;font-weight:600;color:#1d4ed8;display:flex;justify-content:space-between;align-items:center">
+          <span>📌 类型一：知识科普型（最高互动率）</span>
+          <span style="background:#dbeafe;padding:2px 8px;border-radius:10px;font-size:11px">每周 1–2 条</span>
+        </div>
+        <div style="padding:16px 20px">
+          <div style="background:#f9fafb;border-radius:8px;padding:14px 16px;font-size:13.5px;color:#374151;line-height:1.75;white-space:pre-line;border-left:3px solid #3b82f6">很多人买了香港医疗险，但不知道自己到底能报什么——
+
+真实数据：香港私家医院一晚住院费用约 5,000–15,000 港元，一次普通手术可能要 8–20 万，ICU 更是按小时计费。
+
+公立医院虽然便宜，但专科轮候时间平均超过 80 周（某些专科要等 3 年以上）。
+
+医疗险不是"可以买"的东西——在香港，它是"不买不行"的东西。
+
+如果你在港生活，不确定自己的保障够不够，欢迎找我聊，15 分钟帮你梳理一下～ 🏥</div>
+          <div style="margin-top:8px;font-size:11.5px;color:#9ca3af">💡 数据具体、结论清晰、最后给一个低门槛的行动入口</div>
+        </div>
+      </div>
+
+      <!-- 模板2 -->
+      <div style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden">
+        <div style="background:#f0fdf4;padding:8px 16px;font-size:12px;font-weight:600;color:#15803d;display:flex;justify-content:space-between;align-items:center">
+          <span>📌 类型二：真实案例型（信任感最强）</span>
+          <span style="background:#dcfce7;padding:2px 8px;border-radius:10px;font-size:11px">每月 1–2 条</span>
+        </div>
+        <div style="padding:16px 20px">
+          <div style="background:#f9fafb;border-radius:8px;padding:14px 16px;font-size:13.5px;color:#374151;line-height:1.75;white-space:pre-line;border-left:3px solid #22c55e">上周帮一个朋友做了保单检视，发现了一个很典型的问题：
+
+她 5 年前买了一份医疗险，当时觉得「每年几千块，差不多就行了」。
+
+结果仔细看条款：住院室费上限是 1,200 港元/天（现在私家医院最便宜的单人房要 3,000–5,000），手术赔付上限也远不够。
+
+她完全不知道这个——保险买了，但保障其实没到位。
+
+这种情况我见过太多次了。
+
+如果你在香港有保险，不确定够不够用，我可以帮你免费检视一下。私信我就好。</div>
+          <div style="margin-top:8px;font-size:11.5px;color:#9ca3af">💡 用"朋友的故事"代替自己推销，更真实；揭示一个"大家都可能有"的隐患，引发共鸣</div>
+        </div>
+      </div>
+
+      <!-- 模板3 -->
+      <div style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden">
+        <div style="background:#fefce8;padding:8px 16px;font-size:12px;font-weight:600;color:#a16207;display:flex;justify-content:space-between;align-items:center">
+          <span>📌 类型三：比较分析型（有会计背景的人最适合写）</span>
+          <span style="background:#fef9c3;padding:2px 8px;border-radius:10px;font-size:11px">每月 1 条</span>
+        </div>
+        <div style="padding:16px 20px">
+          <div style="background:#f9fafb;border-radius:8px;padding:14px 16px;font-size:13.5px;color:#374151;line-height:1.75;white-space:pre-line;border-left:3px solid #eab308">有人问我：香港储蓄险和银行定存，哪个更划算？
+
+用同样的钱，我帮他算了一下：
+
+银行定存（当前利率约 3.8–4%）：
+→ 保证利率，随时取，灵活性高
+→ 没有保障功能，利率随市场波动
+
+香港储蓄险（以某款 5 年缴费计划为例）：
+→ 保证现金价值 + 非保证红利，长期 IRR 约 4.5–5.5%
+→ 含有身故保障，保单可作为遗产规划工具
+→ 强制储蓄，不能随意提取（其实对不自律的人是好事）
+
+结论：两者功能不同，不是替代关系。储蓄险更适合"不需要动用这笔钱、同时想做资产配置"的场景。
+
+如果你想知道自己的情况更适合哪种，欢迎聊～</div>
+          <div style="margin-top:8px;font-size:11.5px;color:#9ca3af">💡 客观比较而非只说自家产品好，体现专业性；IRR 的计算是会计背景的天然优势</div>
+        </div>
+      </div>
+
+      <!-- 模板4 -->
+      <div style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden">
+        <div style="background:#fdf4ff;padding:8px 16px;font-size:12px;font-weight:600;color:#7c3aed;display:flex;justify-content:space-between;align-items:center">
+          <span>📌 类型四：入行感悟型（建立人设，不推销）</span>
+          <span style="background:#f3e8ff;padding:2px 8px;border-radius:10px;font-size:11px">每月 1 条</span>
+        </div>
+        <div style="padding:16px 20px">
+          <div style="background:#f9fafb;border-radius:8px;padding:14px 16px;font-size:13.5px;color:#374151;line-height:1.75;white-space:pre-line;border-left:3px solid #9333ea">做了这几个月保险顾问，最让我意外的一件事：
+
+很多客户买保险之前从来没有人帮他们做过完整的保障分析，就是一个人很冲动或者碍于面子，买了某个产品，结果根本不适合他们的实际情况。
+
+我有会计背景，所以我做的事更多是帮客户算清楚：这笔钱放在保险里，和放在其他地方相比，到底合不合算？有没有替代方案？
+
+发现这件事是可以帮到人的——这让我觉得做这份工作挺有意义的。
+
+（如果你想知道自己的保障现状，或者想对比一下香港不同产品，欢迎找我聊）</div>
+          <div style="margin-top:8px;font-size:11.5px;color:#9ca3af">💡 用第一人称分享真实感受，建立"认真、专业、不硬销"的人设；括号里的行动入口更温和</div>
+        </div>
+      </div>
+
+      <!-- 模板5 -->
+      <div style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden">
+        <div style="background:#fff1f2;padding:8px 16px;font-size:12px;font-weight:600;color:#be123c;display:flex;justify-content:space-between;align-items:center">
+          <span>📌 类型五：时效话题型（借热点增加曝光）</span>
+          <span style="background:#ffe4e6;padding:2px 8px;border-radius:10px;font-size:11px">视时机使用</span>
+        </div>
+        <div style="padding:16px 20px">
+          <div style="background:#f9fafb;border-radius:8px;padding:14px 16px;font-size:13.5px;color:#374151;line-height:1.75;white-space:pre-line;border-left:3px solid #f43f5e">【借用任何医疗相关热点新闻，格式如下】
+
+看到新闻说【热点事件，如某艺人确诊/某药物涨价/某医院收费曝光】……
+
+这件事提醒了我一个很现实的问题：在香港，一旦生病需要私家医院治疗，花费是真的很高的。
+
+公立医院每天都有几百名癌症新增患者在轮候，专科等待时间可能超过 1 年。
+
+如果你还没有一份覆盖充分的医疗险，建议真的认真考虑一下。不一定贵，一个适合的计划每月可能不到 1,000 港元。
+
+有疑问可以找我了解，帮你看看哪种最适合你的情况。</div>
+          <div style="margin-top:8px;font-size:11.5px;color:#9ca3af">💡 借时事话题提升相关性，但要真实且有建设性；不要消费他人不幸，用"提醒"而非"恐吓"</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ 四、内容创作模板 ══ -->
+    <h3 id="introvert-content" class="block-title">四、内容创作模板（公众号 / 小红书 / 知乎）</h3>
+
+    <h4 class="sub-title">公众号文章结构模板（3 种高转化结构）</h4>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:12px 0">
+      <div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:16px">
+        <div style="font-size:12px;font-weight:700;color:#1d4ed8;margin-bottom:10px;border-bottom:1px solid #e5e7eb;padding-bottom:8px">结构一：问题解决型</div>
+        <div style="font-size:12.5px;color:#374151;line-height:1.7">
+          <div style="margin-bottom:6px">📌 <strong>标题</strong>：「XXX人最容易踩的3个保险坑」</div>
+          <div style="margin-bottom:6px">① 引入痛点（真实案例或数据）</div>
+          <div style="margin-bottom:6px">② 分析每个坑的原因</div>
+          <div style="margin-bottom:6px">③ 给出具体解决方案</div>
+          <div>④ 结尾：免费检视邀请</div>
+        </div>
+      </div>
+      <div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:16px">
+        <div style="font-size:12px;font-weight:700;color:#15803d;margin-bottom:10px;border-bottom:1px solid #e5e7eb;padding-bottom:8px">结构二：对比选择型</div>
+        <div style="font-size:12.5px;color:#374151;line-height:1.7">
+          <div style="margin-bottom:6px">📌 <strong>标题</strong>：「A vs B，到底哪个适合你？」</div>
+          <div style="margin-bottom:6px">① 说明两种选择的背景</div>
+          <div style="margin-bottom:6px">② 维度对比（表格最直观）</div>
+          <div style="margin-bottom:6px">③ 适合人群分类</div>
+          <div>④ 结尾：欢迎私信咨询</div>
+        </div>
+      </div>
+      <div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:16px">
+        <div style="font-size:12px;font-weight:700;color:#d97706;margin-bottom:10px;border-bottom:1px solid #e5e7eb;padding-bottom:8px">结构三：清单指南型</div>
+        <div style="font-size:12.5px;color:#374151;line-height:1.7">
+          <div style="margin-bottom:6px">📌 <strong>标题</strong>：「来香港第一年，保险这5件事要做」</div>
+          <div style="margin-bottom:6px">① 简短背景说明</div>
+          <div style="margin-bottom:6px">② 逐条清单（加序号）</div>
+          <div style="margin-bottom:6px">③ 每条给出判断标准</div>
+          <div>④ 结尾：下载/咨询行动入口</div>
+        </div>
+      </div>
+    </div>
+
+    <h4 class="sub-title">30 个可直接使用的选题标题</h4>
+    <div style="background:#1f2937;border-radius:10px;padding:20px;margin:12px 0;column-count:2;column-gap:20px">
+      <div style="font-size:12px;color:#9ca3af;margin-bottom:10px;column-span:all">医疗险方向</div>
+      <div style="font-size:12.5px;color:#d1d5db;margin-bottom:7px;break-inside:avoid">① 香港公立医院轮候多久？私家医院一次要多少钱？</div>
+      <div style="font-size:12.5px;color:#d1d5db;margin-bottom:7px;break-inside:avoid">② VHIS 自愿医保：交 8,000 港元税扣的代价是什么？</div>
+      <div style="font-size:12.5px;color:#d1d5db;margin-bottom:7px;break-inside:avoid">③ 医疗险买了等于没买？这 4 个条款要看清楚</div>
+      <div style="font-size:12.5px;color:#d1d5db;margin-bottom:7px;break-inside:avoid">④ 危疾险和医疗险的区别，很多人分不清</div>
+      <div style="font-size:12.5px;color:#9ca3af;margin-bottom:10px;margin-top:14px">储蓄险方向</div>
+      <div style="font-size:12.5px;color:#d1d5db;margin-bottom:7px;break-inside:avoid">⑤ 什么是 IRR？看懂这个数字再决定要不要买储蓄险</div>
+      <div style="font-size:12.5px;color:#d1d5db;margin-bottom:7px;break-inside:avoid">⑥ 保证回报 vs 非保证红利：历史上兑现率是多少？</div>
+      <div style="font-size:12.5px;color:#d1d5db;margin-bottom:7px;break-inside:avoid">⑦ 储蓄险能退保吗？提前退保会损失多少？</div>
+      <div style="font-size:12.5px;color:#d1d5db;margin-bottom:7px;break-inside:avoid">⑧ 子女教育金：储蓄险 vs 基金定投，哪个更适合？</div>
+      <div style="font-size:12.5px;color:#9ca3af;margin-bottom:10px;margin-top:14px">内地客户方向</div>
+      <div style="font-size:12.5px;color:#d1d5db;margin-bottom:7px;break-inside:avoid">⑨ 内地人来香港买保险，银联卡能刷多少？</div>
+      <div style="font-size:12.5px;color:#d1d5db;margin-bottom:7px;break-inside:avoid">⑩ 香港保险在内地能理赔吗？真实流程说清楚</div>
+      <div style="font-size:12.5px;color:#d1d5db;margin-bottom:7px;break-inside:avoid">⑪ 为什么有钱人喜欢在香港买储蓄险？不只是回报高</div>
+      <div style="font-size:12.5px;color:#d1d5db;margin-bottom:7px;break-inside:avoid">⑫ 内地保险和香港保险：同样的钱，保障差在哪里？</div>
+    </div>
+
+    <h4 class="sub-title">小红书图文笔记模板</h4>
+    <div style="background:#fff;border:1px solid #fecaca;border-radius:12px;overflow:hidden;margin:12px 0">
+      <div style="background:#fff1f2;padding:8px 16px;font-size:12px;font-weight:600;color:#be123c">📕 小红书笔记模板｜避坑类（最高传播率）</div>
+      <div style="padding:16px 20px">
+        <div style="background:#f9fafb;border-radius:8px;padding:14px 16px;font-size:13.5px;color:#374151;line-height:1.75;white-space:pre-line;border-left:3px solid #f43f5e"><strong>标题格式：</strong>「⚠️ 在香港买保险，这3件事我踩坑了」
+
+<strong>正文开头（制造共鸣）：</strong>
+刚来香港的时候，我以为保险就是那种随便买买的东西……
+
+<strong>中间（分点列出坑/知识点）：</strong>
+🚨 坑一：买了医疗险不等于住院费全报
+我才知道，室费限额、手术赔付上限、除外责任……这些条款差距可以很大。
+
+🚨 坑二：VHIS 不是越贵越好
+标准计划和自订计划，差的不只是价格，而是覆盖范围……
+
+<strong>结尾（低调放行动入口）：</strong>
+如果你也在香港，不确定自己的保障够不够，可以私信我，我帮你看看～
+
+<strong>话题标签：</strong>
+#香港保险 #VHIS医疗险 #香港生活 #保险避坑 #香港新移民</div>
+        <div style="margin-top:8px;font-size:11.5px;color:#9ca3af">💡 小红书的关键：第一句话要有共鸣感；分点清晰方便截图转发；标签用真实搜索词</div>
+      </div>
+    </div>
+
+    <!-- ══ 完整示例帖 ══ -->
+    <h4 class="sub-title" style="margin-top:24px">📖 完整示例帖（可直接参考改写）</h4>
+    <p class="body-text">下面是一篇按照真实小红书爆款格式写的完整帖子示例，每个设计点都有对应逻辑，适合直接拿来改写成自己的版本。</p>
+
+    <div style="background:#fff;border:1px solid #fda4af;border-radius:14px;overflow:hidden;margin:14px 0;box-shadow:0 2px 12px rgba(244,63,94,.08)">
+      <!-- 帖子头部 -->
+      <div style="background:linear-gradient(135deg,#fff1f2,#ffe4e6);padding:14px 20px;border-bottom:1px solid #fecaca;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="width:36px;height:36px;background:#f43f5e;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;color:#fff">小</div>
+          <div>
+            <div style="font-size:13px;font-weight:700;color:#1f2937">完整示例帖 · 新移民攻略类</div>
+            <div style="font-size:11px;color:#9ca3af">参考用途 · 可直接改写</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <span style="font-size:11px;background:#fff;border:1px solid #fecaca;color:#be123c;padding:2px 8px;border-radius:10px">🔥 新移民攻略</span>
+          <span style="font-size:11px;background:#fff;border:1px solid #fecaca;color:#be123c;padding:2px 8px;border-radius:10px">📌 收藏率高</span>
+          <span style="font-size:11px;background:#fff;border:1px solid #fecaca;color:#be123c;padding:2px 8px;border-radius:10px">💬 私信引流</span>
+        </div>
+      </div>
+
+      <!-- 帖子正文 -->
+      <div style="padding:20px 24px">
+
+        <!-- 标题 -->
+        <div style="font-size:17px;font-weight:800;color:#1f2937;margin-bottom:16px;line-height:1.4">来香港第一年，保险这5件事要做 🇭🇰</div>
+
+        <!-- 正文 -->
+        <div style="font-size:14px;color:#374151;line-height:1.9;white-space:pre-wrap">去年九月拎着两个箱子来香港，
+什么都不懂，第一个月光是开银行账户就搞了半个月。
+
+后来有个朋友突然生病住院，
+账单出来那一刻我才意识到——
+<strong style="color:#dc2626">香港的公立医院是免费的，但等到你需要的时候，可能已经等了半年。</strong>
+
+从那以后我开始认真研究保险。
+踩了不少坑，也学到很多，今天整理给刚来港的你 👇
+
+</div>
+
+        <!-- 分点 -->
+        <div style="display:grid;gap:12px;margin:4px 0 16px">
+
+          <div style="background:#f0fdf4;border-radius:10px;padding:14px 16px;border-left:3px solid #22c55e">
+            <div style="font-size:13.5px;font-weight:700;color:#15803d;margin-bottom:6px">✅ 第一件事：先搞清楚自己现在"裸奔"吗</div>
+            <div style="font-size:13px;color:#374151;line-height:1.75">很多人来了香港才发现——内地买的重疾险，理赔要回内地医院确诊才算。内地的医保，在香港完全用不了。<br><br>所以你现在的保障状况很可能是：<br>🔴 公立医院 → 免费但排队 6-18 个月<br>🔴 私家医院 → 普通住院随便 3–10 万港币起<br>🔴 自己兜底 → 不想细想</div>
+          </div>
+
+          <div style="background:#eff6ff;border-radius:10px;padding:14px 16px;border-left:3px solid #3b82f6">
+            <div style="font-size:13.5px;font-weight:700;color:#1d4ed8;margin-bottom:6px">✅ 第二件事：VHIS 自愿医保，第一年必买</div>
+            <div style="font-size:13px;color:#374151;line-height:1.75">香港政府有个叫 <strong>VHIS</strong>（自愿医保计划）的东西：<br>• 买了可以抵税，最多扣 8000 港币应课税入息 💰<br>• 私家医院住院、手术、日间手术全覆盖<br>• 无需验身，直接投保<br><br>基础版大概 <strong>2000–4000 港币/年</strong>，作为过渡期兜底完全够用。<br><br><span style="background:#dbeafe;padding:2px 6px;border-radius:4px;font-size:12px">💡 第一年先买这个，省钱又抵税，等稳定了再升级</span></div>
+          </div>
+
+          <div style="background:#fdf4ff;border-radius:10px;padding:14px 16px;border-left:3px solid #a855f7">
+            <div style="font-size:13.5px;font-weight:700;color:#7e22ce;margin-bottom:6px">✅ 第三件事：危疾险（= 重疾险）要单独买</div>
+            <div style="font-size:13px;color:#374151;line-height:1.75">医疗险只报销账单，<strong>不能补偿你生病那几个月没法工作的收入损失。</strong><br><br>香港危疾险特点：确诊即赔一笔钱，钱给你随便用 ✅，覆盖 100+ 种疾病，含早期危疾赔付。<br><br>我朋友 30 岁查出甲状腺癌（早期），医疗险出了手术费，危疾险直接赔了她 <strong>50 万港币</strong>，让她安心休息整整一年。<br><br><span style="background:#f3e8ff;padding:2px 6px;border-radius:4px;font-size:12px">💡 25–35 岁是买危疾险最划算的年龄段，保费还便宜，不要等</span></div>
+          </div>
+
+          <div style="background:#fff7ed;border-radius:10px;padding:14px 16px;border-left:3px solid #f97316">
+            <div style="font-size:13.5px;font-weight:700;color:#c2410c;margin-bottom:6px">✅ 第四件事：储蓄险别急，但要了解</div>
+            <div style="font-size:13px;color:#374151;line-height:1.75">香港储蓄险一直是内地客户热门产品：<br>• 预期收益 5–7%（比内地银行理财高不少）<br>• 港元/美元计价，天然分散汇率风险<br>• 分红实现率有监管局公开披露，相对透明<br><br>但第一年先别急，储蓄险要锁定 5–25 年，先确认好自己的现金流计划。<br><br><span style="background:#ffedd5;padding:2px 6px;border-radius:4px;font-size:12px">💡 先把医疗险和危疾险买好，储蓄险作为中长期规划再考虑</span></div>
+          </div>
+
+          <div style="background:#f0fdf4;border-radius:10px;padding:14px 16px;border-left:3px solid #10b981">
+            <div style="font-size:13.5px;font-weight:700;color:#059669;margin-bottom:6px">✅ 第五件事：找代理人之前，先做这三个动作</div>
+            <div style="font-size:13px;color:#374151;line-height:1.75"><strong>① 先看香港保监局网站</strong>：每家公司的分红实现率全部公开，哪家说了100%实际只兑现80%，一查就知道（ia.org.hk）<br><br><strong>② 问代理人"你自己买的是哪款"</strong>：真心推荐的代理人自己一定也买了，答不上来的，慎重。<br><br><strong>③ 不要只问保费，要问"第3年现金价值是多少"</strong>：储蓄险前期价值很低，不问清楚急用钱退保会亏很多。<br><br><span style="background:#dcfce7;padding:2px 6px;border-radius:4px;font-size:12px">💡 这三个问题可以帮你快速筛掉只想成交、不替你着想的代理人</span></div>
+          </div>
+
+        </div>
+
+        <!-- 结尾 -->
+        <div style="font-size:13.5px;color:#374151;line-height:1.9;margin-bottom:16px">来香港是新的开始，<br>但风险不会因为换了个城市就消失。<br><br>把保障这件事提前做好，<br>才能让你更安心地在这里生活和打拼 🙌<br><br>有问题评论区留言，我看到都会回～</div>
+
+        <!-- 标签 -->
+        <div style="display:flex;flex-wrap:wrap;gap:6px;padding-top:12px;border-top:1px dashed #fecaca">
+          <span style="font-size:12px;color:#f43f5e">#香港生活</span>
+          <span style="font-size:12px;color:#f43f5e">#香港保险</span>
+          <span style="font-size:12px;color:#f43f5e">#来港必看</span>
+          <span style="font-size:12px;color:#f43f5e">#港漂生活</span>
+          <span style="font-size:12px;color:#f43f5e">#理财规划</span>
+          <span style="font-size:12px;color:#f43f5e">#VHIS</span>
+          <span style="font-size:12px;color:#f43f5e">#重疾险</span>
+          <span style="font-size:12px;color:#f43f5e">#香港新移民</span>
+        </div>
+
+      </div>
+
+      <!-- 写作备注 -->
+      <div style="background:#f9fafb;border-top:1px solid #fee2e2;padding:14px 20px">
+        <div style="font-size:12px;font-weight:700;color:#6b7280;margin-bottom:8px">📐 格式设计说明（写自己的帖时参考）</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px">
+          <div style="font-size:12px;color:#6b7280;background:#fff;border-radius:6px;padding:8px 10px;border:1px solid #f3f4f6">
+            <div style="font-weight:600;color:#374151;margin-bottom:2px">开头：制造代入感</div>
+            用个人经历开场，前3行够吸引人才不会被划走
+          </div>
+          <div style="font-size:12px;color:#6b7280;background:#fff;border-radius:6px;padding:8px 10px;border:1px solid #f3f4f6">
+            <div style="font-weight:600;color:#374151;margin-bottom:2px">结构：短句 + 分点</div>
+            不超过2行换一次，手机竖屏易读，方便截图转发
+          </div>
+          <div style="font-size:12px;color:#6b7280;background:#fff;border-radius:6px;padding:8px 10px;border:1px solid #f3f4f6">
+            <div style="font-weight:600;color:#374151;margin-bottom:2px">情绪锚点：真实案例</div>
+            朋友生病/账单的具体数字，比抽象说教更打动人
+          </div>
+          <div style="font-size:12px;color:#6b7280;background:#fff;border-radius:6px;padding:8px 10px;border:1px solid #f3f4f6">
+            <div style="font-weight:600;color:#374151;margin-bottom:2px">每条：加行动指引</div>
+            每个知识点后面加"💡所以你要做什么"，提升实用感
+          </div>
+          <div style="font-size:12px;color:#6b7280;background:#fff;border-radius:6px;padding:8px 10px;border:1px solid #f3f4f6">
+            <div style="font-weight:600;color:#374151;margin-bottom:2px">结尾：引导互动</div>
+            "评论区留言/可以私信我"，算法会推给更多人看
+          </div>
+          <div style="font-size:12px;color:#6b7280;background:#fff;border-radius:6px;padding:8px 10px;border:1px solid #f3f4f6">
+            <div style="font-weight:600;color:#374151;margin-bottom:2px">标签：5–8个精准词</div>
+            用真实搜索词，不要堆砌无关标签
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ 小红书系列文章库 ══ -->
+    <h4 class="sub-title" style="margin-top:28px">📚 小红书系列文章库（4 篇完整示例，可直接改写发布）</h4>
+    <p class="body-text">以下 4 篇文章均按照小红书爆款逻辑撰写，包含真实数据、案例、对比表和行动建议，适合直接参考改写成自己的帖子。每篇阅读约 5 分钟。</p>
+
+    <div style="display:grid;gap:10px;margin:14px 0">
+
+      <a href="articles/xhs-01-hospital-cost.html" style="display:flex;align-items:center;justify-content:space-between;background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:14px 18px;text-decoration:none;transition:box-shadow .15s;gap:12px" onmouseover="this.style.boxShadow='0 4px 16px rgba(0,0,0,.08)'" onmouseout="this.style.boxShadow=''">
+        <div style="display:flex;align-items:center;gap:14px">
+          <div style="width:44px;height:44px;background:linear-gradient(135deg,#ef4444,#f97316);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">🏥</div>
+          <div>
+            <div style="font-size:14px;font-weight:700;color:#1f2937;margin-bottom:3px">香港公立医院轮候多久？私家医院一次要多少钱？</div>
+            <div style="font-size:12px;color:#6b7280">轮候时间真实数据 · 私家医院费用对比表 · 最划算的医疗搭配方式</div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0">
+          <span style="font-size:11px;background:#fee2e2;color:#dc2626;padding:2px 8px;border-radius:10px;font-weight:600">医疗篇①</span>
+          <span style="font-size:11px;color:#9ca3af">必读基础</span>
+        </div>
+      </a>
+
+      <a href="articles/xhs-02-vhis-detail.html" style="display:flex;align-items:center;justify-content:space-between;background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:14px 18px;text-decoration:none;transition:box-shadow .15s;gap:12px" onmouseover="this.style.boxShadow='0 4px 16px rgba(0,0,0,.08)'" onmouseout="this.style.boxShadow=''">
+        <div style="display:flex;align-items:center;gap:14px">
+          <div style="width:44px;height:44px;background:linear-gradient(135deg,#3b82f6,#06b6d4);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">🧾</div>
+          <div>
+            <div style="font-size:14px;font-weight:700;color:#1f2937;margin-bottom:3px">VHIS 自愿医保：交 8,000 港元税扣的代价是什么？</div>
+            <div style="font-size:12px;color:#6b7280">实际省税计算 · 标准计划 vs 自订计划 · 赔付上限对照</div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0">
+          <span style="font-size:11px;background:#dbeafe;color:#1d4ed8;padding:2px 8px;border-radius:10px;font-weight:600">医疗篇②</span>
+          <span style="font-size:11px;color:#9ca3af">抵税话题</span>
+        </div>
+      </a>
+
+      <a href="articles/xhs-03-policy-clauses.html" style="display:flex;align-items:center;justify-content:space-between;background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:14px 18px;text-decoration:none;transition:box-shadow .15s;gap:12px" onmouseover="this.style.boxShadow='0 4px 16px rgba(0,0,0,.08)'" onmouseout="this.style.boxShadow=''">
+        <div style="display:flex;align-items:center;gap:14px">
+          <div style="width:44px;height:44px;background:linear-gradient(135deg,#f59e0b,#ef4444);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">⚠️</div>
+          <div>
+            <div style="font-size:14px;font-weight:700;color:#1f2937;margin-bottom:3px">医疗险买了等于没买？这 4 个条款要看清楚</div>
+            <div style="font-size:12px;color:#6b7280">既往症 · 等候期 · 赔付上限 · 不保事项——四大坑逐一拆解</div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0">
+          <span style="font-size:11px;background:#fef3c7;color:#a16207;padding:2px 8px;border-radius:10px;font-weight:600">医疗篇③</span>
+          <span style="font-size:11px;color:#9ca3af">避坑必读</span>
+        </div>
+      </a>
+
+      <a href="articles/xhs-04-ci-vs-medical.html" style="display:flex;align-items:center;justify-content:space-between;background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:14px 18px;text-decoration:none;transition:box-shadow .15s;gap:12px" onmouseover="this.style.boxShadow='0 4px 16px rgba(0,0,0,.08)'" onmouseout="this.style.boxShadow=''">
+        <div style="display:flex;align-items:center;gap:14px">
+          <div style="width:44px;height:44px;background:linear-gradient(135deg,#8b5cf6,#ec4899);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">🛡</div>
+          <div>
+            <div style="font-size:14px;font-weight:700;color:#1f2937;margin-bottom:3px">危疾险和医疗险的区别，很多人分不清</div>
+            <div style="font-size:12px;color:#6b7280">核心区别对比 · 真实案例数字拆解 · 不同年龄最优搭配方案</div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0">
+          <span style="font-size:11px;background:#f3e8ff;color:#7e22ce;padding:2px 8px;border-radius:10px;font-weight:600">医疗篇④</span>
+          <span style="font-size:11px;color:#9ca3af">高频问题</span>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- ══ 小红书储蓄险系列文章库 ══ -->
+    <h4 class="sub-title" style="margin-top:28px">💰 储蓄险系列文章库（8 篇完整示例，可直接改写发布）</h4>
+    <p class="body-text">以下 8 篇文章聚焦储蓄险、分红险、理财规划等核心话题，包含 IRR 计算、分红实现率数据、银联刷卡限额、内地理赔流程等实操内容。每篇阅读约 5 分钟。</p>
+
+    <div style="display:grid;gap:10px;margin:14px 0">
+
+      <a href="articles/xhs-05-irr.html" style="display:flex;align-items:center;justify-content:space-between;background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:14px 18px;text-decoration:none;transition:box-shadow .15s;gap:12px" onmouseover="this.style.boxShadow='0 4px 16px rgba(0,0,0,.08)'" onmouseout="this.style.boxShadow=''">
+        <div style="display:flex;align-items:center;gap:14px">
+          <div style="width:44px;height:44px;background:linear-gradient(135deg,#0ea5e9,#6366f1);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">📐</div>
+          <div>
+            <div style="font-size:14px;font-weight:700;color:#1f2937;margin-bottom:3px">什么是 IRR？看懂这个数字再决定要不要买储蓄险</div>
+            <div style="font-size:12px;color:#6b7280">IRR 真实含义 · 不同利率下资金增值对比 · 3 大常见误区</div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0">
+          <span style="font-size:11px;background:#dbeafe;color:#1d4ed8;padding:2px 8px;border-radius:10px;font-weight:600">储蓄篇⑤</span>
+          <span style="font-size:11px;color:#9ca3af">基础必读</span>
+        </div>
+      </a>
+
+      <a href="articles/xhs-06-guarantee-vs-dividend.html" style="display:flex;align-items:center;justify-content:space-between;background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:14px 18px;text-decoration:none;transition:box-shadow .15s;gap:12px" onmouseover="this.style.boxShadow='0 4px 16px rgba(0,0,0,.08)'" onmouseout="this.style.boxShadow=''">
+        <div style="display:flex;align-items:center;gap:14px">
+          <div style="width:44px;height:44px;background:linear-gradient(135deg,#10b981,#0ea5e9);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">📊</div>
+          <div>
+            <div style="font-size:14px;font-weight:700;color:#1f2937;margin-bottom:3px">保证回报 vs 非保证红利：历史上兑现率是多少？</div>
+            <div style="font-size:12px;color:#6b7280">各大公司分红实现率排名 · 兑现率差距实际影响 · 选产品 3 步法</div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0">
+          <span style="font-size:11px;background:#dcfce7;color:#15803d;padding:2px 8px;border-radius:10px;font-weight:600">储蓄篇⑥</span>
+          <span style="font-size:11px;color:#9ca3af">数据解析</span>
+        </div>
+      </a>
+
+      <a href="articles/xhs-07-surrender.html" style="display:flex;align-items:center;justify-content:space-between;background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:14px 18px;text-decoration:none;transition:box-shadow .15s;gap:12px" onmouseover="this.style.boxShadow='0 4px 16px rgba(0,0,0,.08)'" onmouseout="this.style.boxShadow=''">
+        <div style="display:flex;align-items:center;gap:14px">
+          <div style="width:44px;height:44px;background:linear-gradient(135deg,#f59e0b,#ef4444);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">📉</div>
+          <div>
+            <div style="font-size:14px;font-weight:700;color:#1f2937;margin-bottom:3px">储蓄险能退保吗？提前退保会损失多少？</div>
+            <div style="font-size:12px;color:#6b7280">各年度退保损失对照表 · 3 大替代方案 · 退保前必答 4 问</div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0">
+          <span style="font-size:11px;background:#fef3c7;color:#a16207;padding:2px 8px;border-radius:10px;font-weight:600">储蓄篇⑦</span>
+          <span style="font-size:11px;color:#9ca3af">避坑必读</span>
+        </div>
+      </a>
+
+      <a href="articles/xhs-08-edu-fund.html" style="display:flex;align-items:center;justify-content:space-between;background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:14px 18px;text-decoration:none;transition:box-shadow .15s;gap:12px" onmouseover="this.style.boxShadow='0 4px 16px rgba(0,0,0,.08)'" onmouseout="this.style.boxShadow=''">
+        <div style="display:flex;align-items:center;gap:14px">
+          <div style="width:44px;height:44px;background:linear-gradient(135deg,#8b5cf6,#0ea5e9);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">🎓</div>
+          <div>
+            <div style="font-size:14px;font-weight:700;color:#1f2937;margin-bottom:3px">子女教育金：储蓄险 vs 基金定投，哪个更适合？</div>
+            <div style="font-size:12px;color:#6b7280">20 年模拟数据对比 · 保费豁免核心优势 · 3 步判断适合哪种</div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0">
+          <span style="font-size:11px;background:#f3e8ff;color:#7e22ce;padding:2px 8px;border-radius:10px;font-weight:600">储蓄篇⑧</span>
+          <span style="font-size:11px;color:#9ca3af">家庭规划</span>
+        </div>
+      </a>
+
+      <a href="articles/xhs-09-unionpay.html" style="display:flex;align-items:center;justify-content:space-between;background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:14px 18px;text-decoration:none;transition:box-shadow .15s;gap:12px" onmouseover="this.style.boxShadow='0 4px 16px rgba(0,0,0,.08)'" onmouseout="this.style.boxShadow=''">
+        <div style="display:flex;align-items:center;gap:14px">
+          <div style="width:44px;height:44px;background:linear-gradient(135deg,#dc2626,#f97316);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">💳</div>
+          <div>
+            <div style="font-size:14px;font-weight:700;color:#1f2937;margin-bottom:3px">内地人来香港买保险，银联卡能刷多少？</div>
+            <div style="font-size:12px;color:#6b7280">5 万美元/年限额详解 · 超额替代方案 · 6 步来港购险流程</div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0">
+          <span style="font-size:11px;background:#fee2e2;color:#dc2626;padding:2px 8px;border-radius:10px;font-weight:600">储蓄篇⑨</span>
+          <span style="font-size:11px;color:#9ca3af">实操指南</span>
+        </div>
+      </a>
+
+      <a href="articles/xhs-10-claim-inland.html" style="display:flex;align-items:center;justify-content:space-between;background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:14px 18px;text-decoration:none;transition:box-shadow .15s;gap:12px" onmouseover="this.style.boxShadow='0 4px 16px rgba(0,0,0,.08)'" onmouseout="this.style.boxShadow=''">
+        <div style="display:flex;align-items:center;gap:14px">
+          <div style="width:44px;height:44px;background:linear-gradient(135deg,#0ea5e9,#10b981);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">📋</div>
+          <div>
+            <div style="font-size:14px;font-weight:700;color:#1f2937;margin-bottom:3px">香港保险在内地能理赔吗？真实流程说清楚</div>
+            <div style="font-size:12px;color:#6b7280">7 步完整理赔流程 · 材料清单核对 · 最易被拒赔的 5 种情况</div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0">
+          <span style="font-size:11px;background:#d1fae5;color:#065f46;padding:2px 8px;border-radius:10px;font-weight:600">储蓄篇⑩</span>
+          <span style="font-size:11px;color:#9ca3af">理赔实战</span>
+        </div>
+      </a>
+
+      <a href="articles/xhs-11-why-rich.html" style="display:flex;align-items:center;justify-content:space-between;background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:14px 18px;text-decoration:none;transition:box-shadow .15s;gap:12px" onmouseover="this.style.boxShadow='0 4px 16px rgba(0,0,0,.08)'" onmouseout="this.style.boxShadow=''">
+        <div style="display:flex;align-items:center;gap:14px">
+          <div style="width:44px;height:44px;background:linear-gradient(135deg,#f59e0b,#8b5cf6);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">💎</div>
+          <div>
+            <div style="font-size:14px;font-weight:700;color:#1f2937;margin-bottom:3px">为什么有钱人喜欢在香港买储蓄险？不只是回报高</div>
+            <div style="font-size:12px;color:#6b7280">资产隔离 · 财富传承 · 外币对冲 · 高净值客户的 5 个真实理由</div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0">
+          <span style="font-size:11px;background:#fef9c3;color:#a16207;padding:2px 8px;border-radius:10px;font-weight:600">储蓄篇⑪</span>
+          <span style="font-size:11px;color:#9ca3af">高净值洞察</span>
+        </div>
+      </a>
+
+      <a href="articles/xhs-12-hk-vs-mainland.html" style="display:flex;align-items:center;justify-content:space-between;background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:14px 18px;text-decoration:none;transition:box-shadow .15s;gap:12px" onmouseover="this.style.boxShadow='0 4px 16px rgba(0,0,0,.08)'" onmouseout="this.style.boxShadow=''">
+        <div style="display:flex;align-items:center;gap:14px">
+          <div style="width:44px;height:44px;background:linear-gradient(135deg,#6366f1,#ec4899);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">⚖️</div>
+          <div>
+            <div style="font-size:14px;font-weight:700;color:#1f2937;margin-bottom:3px">内地保险和香港保险：同样的钱，保障差在哪里？</div>
+            <div style="font-size:12px;color:#6b7280">保费 · 疾病数量 · 分红透明度 · 资产隔离 8 维度完整对比</div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0">
+          <span style="font-size:11px;background:#ede9fe;color:#5b21b6;padding:2px 8px;border-radius:10px;font-weight:600">储蓄篇⑫</span>
+          <span style="font-size:11px;color:#9ca3af">深度对比</span>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- ══ 五、专业联盟 ══ -->
+    <h3 id="introvert-alliance" class="block-title">五、专业联盟开拓：第一条消息模板</h3>
+    <p class="body-text">与会计师、律师等专业人士合作，是内向者最高效的获客路径——一旦建立，源源不断。但第一步往往是最难的。以下是针对不同对象的初次接触模板：</p>
+
+    <div style="display:grid;gap:12px;margin:14px 0">
+      <div style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden">
+        <div style="background:#eff6ff;padding:8px 16px;font-size:12px;font-weight:600;color:#1d4ed8;border-bottom:1px solid #e5e7eb">🤝 联系前同事会计师｜LinkedIn 或微信私信</div>
+        <div style="padding:16px 20px">
+          <div style="background:#dcfce7;border-radius:10px 10px 10px 2px;padding:12px 16px;font-size:13.5px;color:#1f2937;max-width:90%;line-height:1.75">
+            【名字】你好，好久不见！最近在安盛做保险顾问，主要做香港这边的高净值客户保障规划。<br/><br/>
+            我发现很多会计师的客户在做税务规划时，都会问到 VHIS 税扣、企业团险处理这些问题，但这块不一定是你专业范围内的。<br/><br/>
+            我想看看有没有机会合作——遇到客户有这方面疑问，你可以把他们介绍给我，我帮解答，我这边有保险相关需求的客户，也可以介绍给你。<br/><br/>
+            不知道你有没有兴趣，要不下周找个时间喝个咖啡聊聊？
+          </div>
+          <div style="margin-top:8px;font-size:11.5px;color:#9ca3af">💡 明确说明"你能给我什么 / 我能给你什么"，是专业联盟的核心逻辑；用"双向互利"而非单纯要求</div>
+        </div>
+      </div>
+
+      <div style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden">
+        <div style="background:#f0fdf4;padding:8px 16px;font-size:12px;font-weight:600;color:#15803d;border-bottom:1px solid #e5e7eb">🤝 联系移民顾问｜冷接触（LinkedIn）</div>
+        <div style="padding:16px 20px">
+          <div style="background:#dcfce7;border-radius:10px 10px 10px 2px;padding:12px 16px;font-size:13.5px;color:#1f2937;max-width:90%;line-height:1.75">
+            你好，我在 LinkedIn 上看到你主要做香港移民规划服务，觉得我们的业务可能有互补的地方。<br/><br/>
+            我是安盛保险的顾问，主要帮新来港人士做保障规划——医疗险、储蓄险、子女教育金这些。<br/><br/>
+            新移民刚来香港通常对本地保险体系很不熟悉，如果你的客户有这方面的问题，我可以提供专业解答或免费咨询。<br/><br/>
+            不知道你有没有兴趣建立这样的合作关系？我可以给你准备一份「新移民保险入门清单」，你可以直接给客户参考用。
+          </div>
+          <div style="margin-top:8px;font-size:11.5px;color:#9ca3af">💡 提供一个具体的免费价值（新移民保险清单），让对方有理由回应；降低拒绝的概率</div>
+        </div>
+      </div>
+
+      <div style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden">
+        <div style="background:#fefce8;padding:8px 16px;font-size:12px;font-weight:600;color:#a16207;border-bottom:1px solid #e5e7eb">🤝 联系企业 HR｜针对中小企业团险</div>
+        <div style="padding:16px 20px">
+          <div style="background:#dcfce7;border-radius:10px 10px 10px 2px;padding:12px 16px;font-size:13.5px;color:#1f2937;max-width:90%;line-height:1.75">
+            【HR 名字】你好，我是安盛的企业保险顾问，主要帮中小企业做员工团体医疗保险方案。<br/><br/>
+            最近不少企业都在审视现有的团险计划——尤其是疫情后员工对医疗保障的关注度明显上升，同时保费成本也在变化。<br/><br/>
+            我可以免费帮你们做一次现有团险的方案评估，看看有没有优化空间（可能可以在同等预算下提高保障，也可能在同等保障下降低成本）。<br/><br/>
+            不需要任何承诺，评估结果你们参考就好。方便给我 30 分钟聊聊吗？
+          </div>
+          <div style="margin-top:8px;font-size:11.5px;color:#9ca3af">💡 用"免费评估"作为入口，没有压迫感；强调"节省成本或提升保障"两个实际利益点</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 周年日/生日跟进 -->
+    <h4 class="sub-title">客户关系维护：周年日 / 生日跟进消息模板</h4>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0">
+      <div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;overflow:hidden">
+        <div style="background:#fdf4ff;padding:8px 14px;font-size:12px;font-weight:600;color:#7c3aed">保单周年日（每年一次）</div>
+        <div style="padding:12px 14px">
+          <div style="background:#f9fafb;border-radius:8px;padding:10px 12px;font-size:13px;color:#374151;line-height:1.7">
+            「【名字】你好，你的【产品名称】保单今天满一年了！🎉<br/><br/>
+            这一年保单运作正常，如果你想了解一下最新现金价值或者保单状态，欢迎告诉我，我帮你查一下。<br/><br/>
+            你生活一切都好吗？最近有没有什么变化（换工作、新添家庭成员等），如果有，我们可以看看保障是否需要调整一下。」
+          </div>
+        </div>
+      </div>
+      <div style="background:#fff;border:1px solid #e5e7eb;border-radius:10px;overflow:hidden">
+        <div style="background:#fff7ed;padding:8px 14px;font-size:12px;font-weight:600;color:#c2410c">生日问候（每年一次）</div>
+        <div style="padding:12px 14px">
+          <div style="background:#f9fafb;border-radius:8px;padding:10px 12px;font-size:13px;color:#374151;line-height:1.7">
+            「【名字】生日快乐！🎂<br/><br/>
+            祝你新一岁身体健康、一切顺利。<br/><br/>
+            （不需要在生日这天谈保险，过几天再自然跟进就好）」<br/><br/>
+            <span style="font-size:11.5px;color:#9ca3af">3 天后：「生日玩得开心吗？对了，我整理了一个最新的医院收费参考，有空发给你参考一下？」</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ 六、30天计划 ══ -->
+    <h3 id="introvert-30days" class="block-title">六、30 天逐日行动计划</h3>
+    <div class="callout info">
+      <div class="callout-icon"></div>
+      <div class="callout-body">每天只有 <strong>1–2 件核心任务</strong>，加上一个可选的"加分动作"。任务量刻意设计得不多——坚持完成比冲刺一周后放弃重要得多。</div>
+    </div>
+
+    <!-- 颜色图例 -->
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin:12px 0 20px">
+      <span style="display:flex;align-items:center;gap:5px;font-size:12px;color:#374151"><span style="width:10px;height:10px;border-radius:50%;background:#6366f1;display:inline-block"></span>建立身份</span>
+      <span style="display:flex;align-items:center;gap:5px;font-size:12px;color:#374151"><span style="width:10px;height:10px;border-radius:50%;background:#0ea5e9;display:inline-block"></span>内容创作</span>
+      <span style="display:flex;align-items:center;gap:5px;font-size:12px;color:#374151"><span style="width:10px;height:10px;border-radius:50%;background:#10b981;display:inline-block"></span>人脉接触</span>
+      <span style="display:flex;align-items:center;gap:5px;font-size:12px;color:#374151"><span style="width:10px;height:10px;border-radius:50%;background:#f59e0b;display:inline-block"></span>跟进深化</span>
+      <span style="display:flex;align-items:center;gap:5px;font-size:12px;color:#374151"><span style="width:10px;height:10px;border-radius:50%;background:#ef4444;display:inline-block"></span>复盘提升</span>
+    </div>
+
+    <!-- ── 第一周 ── -->
+    <div style="background:#f5f3ff;border-radius:12px;padding:20px 24px;margin-bottom:16px">
+      <div style="font-size:13px;font-weight:700;color:#6d28d9;margin-bottom:14px;display:flex;align-items:center;gap:8px">
+        <span style="background:#6d28d9;color:#fff;border-radius:6px;padding:3px 10px;font-size:12px">第一周</span>
+        建立专业身份，不需要出门，不需要开口推销
+      </div>
+      <div style="display:grid;gap:8px">
+
+        <div style="background:#fff;border-radius:8px;padding:12px 16px;display:flex;gap:12px;align-items:flex-start;border-left:3px solid #6366f1">
+          <div style="min-width:32px;text-align:center;font-size:12px;font-weight:700;color:#6366f1;padding-top:1px">Day<br/>1</div>
+          <div style="flex:1">
+            <div style="font-size:13.5px;color:#111827;font-weight:600;margin-bottom:4px">整理微信通讯录 · 建立客户分类标签</div>
+            <div style="font-size:12.5px;color:#4b5563;line-height:1.6">打开微信→通讯录→给每个联系人打标签。目标分三类：<strong>「潜在客户」</strong>（在香港生活/工作的朋友）、<strong>「可转介」</strong>（有人脉资源但本人可能不需要）、<strong>「专业人脉」</strong>（会计师/律师/HR等）。目标分类出 60 人。</div>
+            <div style="margin-top:6px;font-size:12px;color:#9ca3af">⚡ 加分动作：顺便看一下哪些人近半年没联系过，列出「失联待激活」名单（最多10人）</div>
+          </div>
+        </div>
+
+        <div style="background:#fff;border-radius:8px;padding:12px 16px;display:flex;gap:12px;align-items:flex-start;border-left:3px solid #6366f1">
+          <div style="min-width:32px;text-align:center;font-size:12px;font-weight:700;color:#6366f1;padding-top:1px">Day<br/>2</div>
+          <div style="flex:1">
+            <div style="font-size:13.5px;color:#111827;font-weight:600;margin-bottom:4px">更新数字名片 · 建立专业形象</div>
+            <div style="font-size:12.5px;color:#4b5563;line-height:1.6">
+              ① 微信个人说明改为：<code style="background:#f3f4f6;padding:1px 5px;border-radius:3px;font-size:12px">安盛保险顾问 | 香港医疗/储蓄/危疾规划 | 欢迎咨询，不推销</code><br/>
+              ② 微信头像换成清晰的职业照或专业感头像（非生活照）<br/>
+              ③ 如有 LinkedIn，更新职位为「Insurance Consultant · AXA HK」，写 2 句话的个人简介
+            </div>
+            <div style="margin-top:6px;font-size:12px;color:#9ca3af">⚡ 加分动作：注册一个微信公众号（服务号/订阅号均可），哪怕今天不发文，先占好名字</div>
+          </div>
+        </div>
+
+        <div style="background:#fff;border-radius:8px;padding:12px 16px;display:flex;gap:12px;align-items:flex-start;border-left:3px solid #0ea5e9">
+          <div style="min-width:32px;text-align:center;font-size:12px;font-weight:700;color:#0ea5e9;padding-top:1px">Day<br/>3</div>
+          <div style="flex:1">
+            <div style="font-size:13.5px;color:#111827;font-weight:600;margin-bottom:4px">发第一条朋友圈 · 入行感悟型（不提产品）</div>
+            <div style="font-size:12.5px;color:#4b5563;line-height:1.6">
+              直接套用本章「类型四：入行感悟型」模板，改成你自己的语气发出去。<br/>
+              <strong>注意：</strong>不要说"欢迎找我买保险"——只说"欢迎找我聊聊"。配一张香港街景或办公室的图，比纯文字效果好。
+            </div>
+            <div style="margin-top:6px;font-size:12px;color:#9ca3af">⚡ 加分动作：发完后截图保存，这是你"从业 Day 3"的记录，30天后对比看成长</div>
+          </div>
+        </div>
+
+        <div style="background:#fff;border-radius:8px;padding:12px 16px;display:flex;gap:12px;align-items:flex-start;border-left:3px solid #10b981">
+          <div style="min-width:32px;text-align:center;font-size:12px;font-weight:700;color:#10b981;padding-top:1px">Day<br/>4</div>
+          <div style="flex:1">
+            <div style="font-size:13.5px;color:#111827;font-weight:600;margin-bottom:4px">发出第一批「私信模板 A-1」· 告知 5 位老朋友</div>
+            <div style="font-size:12.5px;color:#4b5563;line-height:1.6">
+              从 Day 1 的「潜在客户」标签里，选出 5 个你最熟的朋友（选那种就算你问了什么奇怪问题也不会有芥蒂的人），发出本章「私信模板 A-1」。<br/>
+              <strong>今天不要等回复，发完就结束。</strong>不要发完立刻又发一条说"你看到了吗？"
+            </div>
+            <div style="margin-top:6px;font-size:12px;color:#9ca3af">⚡ 加分动作：在备忘录里记下这 5 个人的名字和今天发送的时间，方便后续跟进</div>
+          </div>
+        </div>
+
+        <div style="background:#fff;border-radius:8px;padding:12px 16px;display:flex;gap:12px;align-items:flex-start;border-left:3px solid #0ea5e9">
+          <div style="min-width:32px;text-align:center;font-size:12px;font-weight:700;color:#0ea5e9;padding-top:1px">Day<br/>5</div>
+          <div style="flex:1">
+            <div style="font-size:13.5px;color:#111827;font-weight:600;margin-bottom:4px">写公众号文章草稿 · 第一篇</div>
+            <div style="font-size:12.5px;color:#4b5563;line-height:1.6">
+              题目定为：<strong>「香港私家医院住一次要多少钱？数字让我惊了」</strong><br/>
+              不需要完美，先把你在公司培训里学到的真实数据整理成文字：住院室费、手术费、ICU费用范围。800字即可，用"我最近了解到……"开头，有真实数字，末尾一句"欢迎私信咨询"。今天只写草稿。
+            </div>
+            <div style="margin-top:6px;font-size:12px;color:#9ca3af">⚡ 加分动作：在知乎搜索「香港医疗险」，看看排名靠前的回答是怎么写的，记录 3 个可以借鉴的角度</div>
+          </div>
+        </div>
+
+        <div style="background:#fff;border-radius:8px;padding:12px 16px;display:flex;gap:12px;align-items:flex-start;border-left:3px solid #0ea5e9">
+          <div style="min-width:32px;text-align:center;font-size:12px;font-weight:700;color:#0ea5e9;padding-top:1px">Day<br/>6</div>
+          <div style="flex:1">
+            <div style="font-size:13.5px;color:#111827;font-weight:600;margin-bottom:4px">修改并发布第一篇文章 · 同步发朋友圈</div>
+            <div style="font-size:12.5px;color:#4b5563;line-height:1.6">
+              把 Day 5 的草稿润色，加入 2–3 张来自网络的参考图（注明来源），发布到公众号。<br/>
+              同步发一条朋友圈：不要转发封面，写一句你自己的感受，比如「整理这篇文章的时候，我自己也有点被数字震惊到……」，然后附上公众号文章链接。
+            </div>
+            <div style="margin-top:6px;font-size:12px;color:#9ca3af">⚡ 加分动作：把文章同步发布到小红书（改一下标题，配 3–4 张图），加上 #香港保险 #VHIS #香港生活 等标签</div>
+          </div>
+        </div>
+
+        <div style="background:#fff;border-radius:8px;padding:12px 16px;display:flex;gap:12px;align-items:flex-start;border-left:3px solid #f59e0b">
+          <div style="min-width:32px;text-align:center;font-size:12px;font-weight:700;color:#f59e0b;padding-top:1px">Day<br/>7</div>
+          <div style="flex:1">
+            <div style="font-size:13.5px;color:#111827;font-weight:600;margin-bottom:4px">回复 Day 4 的私信 · 第一周小复盘</div>
+            <div style="font-size:12.5px;color:#4b5563;line-height:1.6">
+              检查 Day 4 发出的 5 条私信：有没有人回复了？<br/>
+              • 有回复的：用「场景 B」话术跟进，目标是了解对方有没有买过保险<br/>
+              • 没回复的：完全正常，不要催，继续等<br/>
+              花 10 分钟写下本周的感受：哪件事做起来最顺手？哪件事最难开口？
+            </div>
+            <div style="margin-top:6px;font-size:12px;color:#9ca3af">⚡ 加分动作：在备忘录新建一个「准客户跟进表」，列出每个接触过的人的名字、接触日期、目前状态</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── 第二周 ── -->
+    <div style="background:#f0fdf4;border-radius:12px;padding:20px 24px;margin-bottom:16px">
+      <div style="font-size:13px;font-weight:700;color:#15803d;margin-bottom:14px;display:flex;align-items:center;gap:8px">
+        <span style="background:#15803d;color:#fff;border-radius:6px;padding:3px 10px;font-size:12px">第二周</span>
+        从"发消息"到"真正的对话"，第一次练习面谈
+      </div>
+      <div style="display:grid;gap:8px">
+
+        <div style="background:#fff;border-radius:8px;padding:12px 16px;display:flex;gap:12px;align-items:flex-start;border-left:3px solid #10b981">
+          <div style="min-width:32px;text-align:center;font-size:12px;font-weight:700;color:#10b981;padding-top:1px">Day<br/>8</div>
+          <div style="flex:1">
+            <div style="font-size:13.5px;color:#111827;font-weight:600;margin-bottom:4px">向第二批 5 人发「私信模板 A-2」</div>
+            <div style="font-size:12.5px;color:#4b5563;line-height:1.6">
+              从 Day 1 名单里再选 5 人（可以是稍微没那么熟的），这次用「A-2 分享好奇版」，切入点是"我最近学到了一件有趣的事……"<br/>
+              同时：给 Day 4 还没回复的 5 人发文章链接作为自然跟进，不要直接说"你看了吗"，而是说：「发了一篇文章，不知道你有没有兴趣看看 👇」
+            </div>
+            <div style="margin-top:6px;font-size:12px;color:#9ca3af">⚡ 加分动作：给 Day 1 的「失联待激活」名单里选 2 人，发一条普通的"好久不见，最近怎么样"暖场消息（不提保险）</div>
+          </div>
+        </div>
+
+        <div style="background:#fff;border-radius:8px;padding:12px 16px;display:flex;gap:12px;align-items:flex-start;border-left:3px solid #10b981">
+          <div style="min-width:32px;text-align:center;font-size:12px;font-weight:700;color:#10b981;padding-top:1px">Day<br/>9</div>
+          <div style="flex:1">
+            <div style="font-size:13.5px;color:#111827;font-weight:600;margin-bottom:4px">和 1–2 个有回复的朋友展开真实对话</div>
+            <div style="font-size:12.5px;color:#4b5563;line-height:1.6">
+              用「场景 B」的对话思路进行，但不要照本宣科，用自己的话说。<br/>
+              核心目标只有一个：<strong>弄清楚对方现在有没有买保险，买的是什么</strong>。其他的都是次要的。<br/>
+              如果对方说"有空再聊"——好的，记下来，两周后再跟进。
+            </div>
+            <div style="margin-top:6px;font-size:12px;color:#9ca3af">⚡ 加分动作：把对话截图存档，好的回应方式可以供之后参考复用</div>
+          </div>
+        </div>
+
+        <div style="background:#fff;border-radius:8px;padding:12px 16px;display:flex;gap:12px;align-items:flex-start;border-left:3px solid #0ea5e9">
+          <div style="min-width:32px;text-align:center;font-size:12px;font-weight:700;color:#0ea5e9;padding-top:1px">Day<br/>10</div>
+          <div style="flex:1">
+            <div style="font-size:13.5px;color:#111827;font-weight:600;margin-bottom:4px">发一条「知识科普型」朋友圈</div>
+            <div style="font-size:12.5px;color:#4b5563;line-height:1.6">
+              直接套用「类型一：知识科普型」模板，主题可以是：<br/>
+              <strong>「香港公立医院专科轮候要多久？一组真实数据」</strong><br/>
+              数据来源：香港医院管理局官网有公开发布的轮候时间统计。找一个让你自己也觉得"这也太久了"的专科数据，自然产生共鸣。
+            </div>
+            <div style="margin-top:6px;font-size:12px;color:#9ca3af">⚡ 加分动作：在知乎搜索"香港医疗 轮候"，看看是否有相关问题，如有，写一个专业回答</div>
+          </div>
+        </div>
+
+        <div style="background:#fff;border-radius:8px;padding:12px 16px;display:flex;gap:12px;align-items:flex-start;border-left:3px solid #10b981">
+          <div style="min-width:32px;text-align:center;font-size:12px;font-weight:700;color:#10b981;padding-top:1px">Day<br/>11</div>
+          <div style="flex:1">
+            <div style="font-size:13.5px;color:#111827;font-weight:600;margin-bottom:4px">约出第一个面谈练习对象</div>
+            <div style="font-size:12.5px;color:#4b5563;line-height:1.6">
+              从所有对话过的朋友里，选出一个态度最正面、关系最好的人，发出约见消息：<br/>
+              <code style="background:#f3f4f6;padding:2px 6px;border-radius:3px;font-size:12px;display:block;margin:6px 0">「最近在学习帮人做保障检视，想找个朋友练练手，你有没有兴趣这周找个时间聊30分钟？就是看看你现在的保障够不够，帮你整理一下，不需要买任何东西😊」</code>
+              <strong>面谈不是为了成交，是为了练习本章「30分钟脚本」。</strong>
+            </div>
+            <div style="margin-top:6px;font-size:12px;color:#9ca3af">⚡ 加分动作：把「30分钟脚本框架」打印出来或存到手机备忘录，面谈前再看一遍</div>
+          </div>
+        </div>
+
+        <div style="background:#fff;border-radius:8px;padding:12px 16px;display:flex;gap:12px;align-items:flex-start;border-left:3px solid #0ea5e9">
+          <div style="min-width:32px;text-align:center;font-size:12px;font-weight:700;color:#0ea5e9;padding-top:1px">Day<br/>12</div>
+          <div style="flex:1">
+            <div style="font-size:13.5px;color:#111827;font-weight:600;margin-bottom:4px">写第二篇文章草稿 · 对比选择型</div>
+            <div style="font-size:12.5px;color:#4b5563;line-height:1.6">
+              题目：<strong>「香港 VHIS 医疗险：标准计划 vs 自订计划，到底有什么区别？」</strong><br/>
+              这篇文章是有会计背景的你最容易写的类型——用表格对比两种计划的保额上限、税务优惠、价格差距。数据从安盛公司材料和 VHIS 官网（vhis.gov.hk）获取，今天只写大纲和数据。
+            </div>
+            <div style="margin-top:6px;font-size:12px;color:#9ca3af">⚡ 加分动作：顺便看看竞争对手（友邦、保诚）同类产品的公开资料，了解市场主流定价</div>
+          </div>
+        </div>
+
+        <div style="background:#fff;border-radius:8px;padding:12px 16px;display:flex;gap:12px;align-items:flex-start;border-left:3px solid #10b981">
+          <div style="min-width:32px;text-align:center;font-size:12px;font-weight:700;color:#10b981;padding-top:1px">Day<br/>13</div>
+          <div style="flex:1">
+            <div style="font-size:13.5px;color:#111827;font-weight:600;margin-bottom:4px">完成第一次面谈（保障检视练习）</div>
+            <div style="font-size:12.5px;color:#4b5563;line-height:1.6">
+              按「30分钟脚本」进行，重点在于：<br/>
+              • <strong>开场就说清楚目标不是成交</strong>（照着念都没关系）<br/>
+              • 认真听，用对方说的词总结他的情况<br/>
+              • 结尾只给"下一步"，不要当场催成单<br/>
+              面谈后立刻（当天晚上）写下：对方说了什么让你意外的话？你哪个环节感觉卡住了？
+            </div>
+            <div style="margin-top:6px;font-size:12px;color:#9ca3af">⚡ 加分动作：如果面谈是视频通话，问对方能否录音（仅自用）。回放一遍听听自己说话的节奏</div>
+          </div>
+        </div>
+
+        <div style="background:#fff;border-radius:8px;padding:12px 16px;display:flex;gap:12px;align-items:flex-start;border-left:3px solid #f59e0b">
+          <div style="min-width:32px;text-align:center;font-size:12px;font-weight:700;color:#f59e0b;padding-top:1px">Day<br/>14</div>
+          <div style="flex:1">
+            <div style="font-size:13.5px;color:#111827;font-weight:600;margin-bottom:4px">第一次面谈跟进 · 发送保单分析摘要</div>
+            <div style="font-size:12.5px;color:#4b5563;line-height:1.6">
+              给 Day 13 的面谈对象发一条跟进消息：<br/>
+              <code style="background:#f3f4f6;padding:2px 6px;border-radius:3px;font-size:12px;display:block;margin:6px 0">「昨天聊完，我帮你整理了一下你目前的保障现状，大概两点：[第一点] 和 [第二点]。我觉得比较值得注意的是 [具体问题]。你有空的话我可以再深入讲讲，或者你觉得暂时够用也完全没问题😊」</code>
+              <strong>不要发完整方案和报价</strong>——先发摘要，让对方觉得"你记住了他说的话"，比产品推荐更有效果。
+            </div>
+            <div style="margin-top:6px;font-size:12px;color:#9ca3af">⚡ 加分动作：整理「第二周小结」：接触了几个人、有几个进入对话、有几个约了面谈</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── 第三周 ── -->
+    <div style="background:#fffbeb;border-radius:12px;padding:20px 24px;margin-bottom:16px">
+      <div style="font-size:13px;font-weight:700;color:#b45309;margin-bottom:14px;display:flex;align-items:center;gap:8px">
+        <span style="background:#b45309;color:#fff;border-radius:6px;padding:3px 10px;font-size:12px">第三周</span>
+        扩展到专业人脉，开始系统化跟进
+      </div>
+      <div style="display:grid;gap:8px">
+
+        <div style="background:#fff;border-radius:8px;padding:12px 16px;display:flex;gap:12px;align-items:flex-start;border-left:3px solid #10b981">
+          <div style="min-width:32px;text-align:center;font-size:12px;font-weight:700;color:#10b981;padding-top:1px">Day<br/>15</div>
+          <div style="flex:1">
+            <div style="font-size:13.5px;color:#111827;font-weight:600;margin-bottom:4px">向 2 个前同事（会计/财务背景）发专业联盟消息</div>
+            <div style="font-size:12.5px;color:#4b5563;line-height:1.6">
+              套用本章「专业联盟 · 联系前同事会计师」模板，选 2 个有一定交情的前同事（不需要很熟，认识就行）。<br/>
+              <strong>关键点：</strong>消息里要提"双向互利"——你帮他补充保险专业知识，他帮你转介有需要的客户。不要只是说"帮个忙"。
+            </div>
+            <div style="margin-top:6px;font-size:12px;color:#9ca3af">⚡ 加分动作：在 LinkedIn 搜索「会计师 香港」，找 3 个有公开联系方式的人，发连接请求（不要在请求里提保险）</div>
+          </div>
+        </div>
+
+        <div style="background:#fff;border-radius:8px;padding:12px 16px;display:flex;gap:12px;align-items:flex-start;border-left:3px solid #0ea5e9">
+          <div style="min-width:32px;text-align:center;font-size:12px;font-weight:700;color:#0ea5e9;padding-top:1px">Day<br/>16</div>
+          <div style="flex:1">
+            <div style="font-size:13.5px;color:#111827;font-weight:600;margin-bottom:4px">发布第二篇文章 + 发布小红书笔记</div>
+            <div style="font-size:12.5px;color:#4b5563;line-height:1.6">
+              将 Day 12 的草稿润色发布到公众号，同时在小红书发一篇「避坑类」笔记（标题：<strong>「我帮朋友检视保单，发现她的医疗险几乎是白买了」</strong>）。小红书版本可以改成第一人称故事，更有共鸣感。
+            </div>
+            <div style="margin-top:6px;font-size:12px;color:#9ca3af">⚡ 加分动作：在小红书发布后，主动给 3–5 篇同类笔记点赞留言（真诚的），增加账号活跃度</div>
+          </div>
+        </div>
+
+        <div style="background:#fff;border-radius:8px;padding:12px 16px;display:flex;gap:12px;align-items:flex-start;border-left:3px solid #f59e0b">
+          <div style="min-width:32px;text-align:center;font-size:12px;font-weight:700;color:#f59e0b;padding-top:1px">Day<br/>17</div>
+          <div style="flex:1">
+            <div style="font-size:13.5px;color:#111827;font-weight:600;margin-bottom:4px">制作「保障缺口分析」一页纸模板</div>
+            <div style="font-size:12.5px;color:#4b5563;line-height:1.6">
+              用 Word 或 Canva 做一个简单的 A4 模板，包含：<br/>
+              ① 客户基本信息栏（年龄/家庭状况）<br/>
+              ② 现有保险一览（医疗/危疾/寿险/储蓄各一行）<br/>
+              ③ 建议保障缺口（用颜色标注：红色=缺失/黄色=不足/绿色=充足）<br/>
+              这个模板以后每次面谈后发给客户，比空口说更专业，也是你<strong>会计背景</strong>的天然优势展示。
+            </div>
+            <div style="margin-top:6px;font-size:12px;color:#9ca3af">⚡ 加分动作：为 Day 13 的面谈朋友填写这份模板，明天发给他作为跟进</div>
+          </div>
+        </div>
+
+        <div style="background:#fff;border-radius:8px;padding:12px 16px;display:flex;gap:12px;align-items:flex-start;border-left:3px solid #10b981">
+          <div style="min-width:32px;text-align:center;font-size:12px;font-weight:700;color:#10b981;padding-top:1px">Day<br/>18</div>
+          <div style="flex:1">
+            <div style="font-size:13.5px;color:#111827;font-weight:600;margin-bottom:4px">约第二次面谈（目标：另一位朋友）</div>
+            <div style="font-size:12.5px;color:#4b5563;line-height:1.6">
+              在已有的对话中，找出第二个有意向的人约面谈，这次目标是：<strong>走完整个流程，从保障检视到发方案</strong>（不一定要成交，但要尝试走完）。<br/>
+              同时，把 Day 17 制作的一页纸模板发给 Day 13 的朋友作跟进，附上一句：「整理了一下你上次的情况，你看看有没有说错的地方」
+            </div>
+            <div style="margin-top:6px;font-size:12px;color:#9ca3af">⚡ 加分动作：在公司或主管处了解安盛的「需求分析表（FNA）」填写规范，这是正式成单前必须完成的合规文件</div>
+          </div>
+        </div>
+
+        <div style="background:#fff;border-radius:8px;padding:12px 16px;display:flex;gap:12px;align-items:flex-start;border-left:3px solid #0ea5e9">
+          <div style="min-width:32px;text-align:center;font-size:12px;font-weight:700;color:#0ea5e9;padding-top:1px">Day<br/>19</div>
+          <div style="flex:1">
+            <div style="font-size:13.5px;color:#111827;font-weight:600;margin-bottom:4px">发朋友圈「真实案例型」+ 准备储蓄险 IRR 计算表</div>
+            <div style="font-size:12.5px;color:#4b5563;line-height:1.6">
+              发「类型二：真实案例型」朋友圈，主题是一个"保单检视后发现了问题"的故事（可以用你 Day 13 面谈朋友的匿名情况，当然要取得对方同意或彻底匿名化）。<br/>
+              同时用 Excel 制作一个安盛主力储蓄险（如 Wealth Excel）的 IRR 计算模板，把年缴保费、缴费年期、保证现金价值输入，自动计算 IRR。这是你<strong>会计背景最大的差异化工具</strong>。
+            </div>
+            <div style="margin-top:6px;font-size:12px;color:#9ca3af">⚡ 加分动作：在知乎发一个回答：「如何看懂香港储蓄险的保单说明书？」，展示你的 IRR 计算方法</div>
+          </div>
+        </div>
+
+        <div style="background:#fff;border-radius:8px;padding:12px 16px;display:flex;gap:12px;align-items:flex-start;border-left:3px solid #10b981">
+          <div style="min-width:32px;text-align:center;font-size:12px;font-weight:700;color:#10b981;padding-top:1px">Day<br/>20</div>
+          <div style="flex:1">
+            <div style="font-size:13.5px;color:#111827;font-weight:600;margin-bottom:4px">再向 5 人发私信 + 激活「失联」朋友</div>
+            <div style="font-size:12.5px;color:#4b5563;line-height:1.6">
+              ① 从名单里再选 5 人发私信（可以是稍微不那么熟的了），这次可以直接发文章链接作为开场：「整理了一篇关于香港医疗险的文章，不知道对你有没有参考价值，发给你看看」<br/>
+              ② 对 Day 1「失联待激活」名单里之前发过暖场消息的人，做一次自然的第二次接触
+            </div>
+            <div style="margin-top:6px;font-size:12px;color:#9ca3af">⚡ 加分动作：整理「3周联系记录表」：总共联系了多少人？有几个进入真实对话？有几个约了面谈？</div>
+          </div>
+        </div>
+
+        <div style="background:#fff;border-radius:8px;padding:12px 16px;display:flex;gap:12px;align-items:flex-start;border-left:3px solid #f59e0b">
+          <div style="min-width:32px;text-align:center;font-size:12px;font-weight:700;color:#f59e0b;padding-top:1px">Day<br/>21</div>
+          <div style="flex:1">
+            <div style="font-size:13.5px;color:#111827;font-weight:600;margin-bottom:4px">完成第二次面谈 + 走完方案发送流程</div>
+            <div style="font-size:12.5px;color:#4b5563;line-height:1.6">
+              按流程：面谈 → 填写保障缺口一页纸 → 发方案摘要 → 给"下一步"（下周约一次解答问题）。<br/>
+              <strong>不用期待今天成交</strong>，整个流程走一遍本身就是胜利。
+            </div>
+            <div style="margin-top:6px;font-size:12px;color:#9ca3af">⚡ 加分动作：给 Day 14 发过跟进消息的人做第二次跟进（间隔约一周），问"上次发的资料有没有看？有没有问题想问"</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── 第四周 ── -->
+    <div style="background:#fff1f2;border-radius:12px;padding:20px 24px;margin-bottom:16px">
+      <div style="font-size:13px;font-weight:700;color:#be123c;margin-bottom:14px;display:flex;align-items:center;gap:8px">
+        <span style="background:#be123c;color:#fff;border-radius:6px;padding:3px 10px;font-size:12px">第四周</span>
+        冲刺第一单，系统复盘，定好下个月的节奏
+      </div>
+      <div style="display:grid;gap:8px">
+
+        <div style="background:#fff;border-radius:8px;padding:12px 16px;display:flex;gap:12px;align-items:flex-start;border-left:3px solid #f59e0b">
+          <div style="min-width:32px;text-align:center;font-size:12px;font-weight:700;color:#f59e0b;padding-top:1px">Day<br/>22</div>
+          <div style="flex:1">
+            <div style="font-size:13.5px;color:#111827;font-weight:600;margin-bottom:4px">全面梳理所有进行中的对话</div>
+            <div style="font-size:12.5px;color:#4b5563;line-height:1.6">
+              打开「准客户跟进表」，把每一个人的状态更新为以下四种之一：<br/>
+              🔵 <strong>热门（有明确兴趣）</strong>→ 这周重点跟进，推进到方案阶段<br/>
+              🟡 <strong>温热（有对话但还没约面谈）</strong>→ 发一条有价值内容自然跟进<br/>
+              ⚪ <strong>冷淡（没有回应）</strong>→ 放入「1个月后再联系」队列<br/>
+              ❌ <strong>明确拒绝</strong>→ 用拒绝应对话术维持关系后，移出近期计划
+            </div>
+            <div style="margin-top:6px;font-size:12px;color:#9ca3af">⚡ 加分动作：用不同颜色给跟进表里的人标记优先级，把「热门」名单单独列出来盯着</div>
+          </div>
+        </div>
+
+        <div style="background:#fff;border-radius:8px;padding:12px 16px;display:flex;gap:12px;align-items:flex-start;border-left:3px solid #f59e0b">
+          <div style="min-width:32px;text-align:center;font-size:12px;font-weight:700;color:#f59e0b;padding-top:1px">Day<br/>23</div>
+          <div style="flex:1">
+            <div style="font-size:13.5px;color:#111827;font-weight:600;margin-bottom:4px">为「热门」准客户准备正式的产品方案</div>
+            <div style="font-size:12.5px;color:#4b5563;line-height:1.6">
+              用安盛官方系统生成正式的产品建议书（Proposal），或先用你的 IRR 分析表做一个非正式版本。<br/>
+              方案要极度简洁：<strong>只推荐 1–2 个选项</strong>，不要给太多选择让对方选择困难。每个选项说清楚：① 每月/年缴多少 ② 能得到什么保障 ③ 和他的需求的对应关系。
+            </div>
+            <div style="margin-top:6px;font-size:12px;color:#9ca3af">⚡ 加分动作：把方案发给你的主管先审一遍，确认推荐的产品和保额与客户需求相符（合规要求）</div>
+          </div>
+        </div>
+
+        <div style="background:#fff;border-radius:8px;padding:12px 16px;display:flex;gap:12px;align-items:flex-start;border-left:3px solid #10b981">
+          <div style="min-width:32px;text-align:center;font-size:12px;font-weight:700;color:#10b981;padding-top:1px">Day<br/>24</div>
+          <div style="flex:1">
+            <div style="font-size:13.5px;color:#111827;font-weight:600;margin-bottom:4px">向「温热」名单发有价值的内容跟进</div>
+            <div style="font-size:12.5px;color:#4b5563;line-height:1.6">
+              不要每次跟进都说"你考虑得怎么样了"——那是压迫感。<br/>
+              改为发一个真正有用的信息：<br/>
+              <code style="background:#f3f4f6;padding:2px 6px;border-radius:3px;font-size:12px;display:block;margin:6px 0">「刚看到一个新闻说香港私家医院今年收费又涨了X%，上次聊的时候你提到在考虑医疗险，这个信息可能对你有参考。有空聊聊吗？」</code>
+            </div>
+            <div style="margin-top:6px;font-size:12px;color:#9ca3af">⚡ 加分动作：在公众号/小红书发一条短内容：「最近帮几个朋友做了保障检视，总结出3个最常见的保障盲区」（无需细节，引发私信咨询）</div>
+          </div>
+        </div>
+
+        <div style="background:#fff;border-radius:8px;padding:12px 16px;display:flex;gap:12px;align-items:flex-start;border-left:3px solid #f59e0b">
+          <div style="min-width:32px;text-align:center;font-size:12px;font-weight:700;color:#f59e0b;padding-top:1px">Day<br/>25</div>
+          <div style="flex:1">
+            <div style="font-size:13.5px;color:#111827;font-weight:600;margin-bottom:4px">发送正式方案 · 约「方案解读」会面</div>
+            <div style="font-size:12.5px;color:#4b5563;line-height:1.6">
+              把 Day 23 准备的方案发给「热门」准客户，同时附上：<br/>
+              <code style="background:#f3f4f6;padding:2px 6px;border-radius:3px;font-size:12px;display:block;margin:6px 0">「帮你做了一个方案，发给你参考。不用现在回复，你先看看，有问题的话我们约个时间当面或者视频讲解一下？这样更清楚。」</code>
+              <strong>不要在发方案的同一天催"觉得怎么样"。</strong>给他至少 48 小时消化。
+            </div>
+            <div style="margin-top:6px;font-size:12px;color:#9ca3af">⚡ 加分动作：给 Day 15 联系的专业联盟对象做跟进，如果有回复，约一次喝咖啡</div>
+          </div>
+        </div>
+
+        <div style="background:#fff;border-radius:8px;padding:12px 16px;display:flex;gap:12px;align-items:flex-start;border-left:3px solid #f59e0b">
+          <div style="min-width:32px;text-align:center;font-size:12px;font-weight:700;color:#f59e0b;padding-top:1px">Day<br/>26</div>
+          <div style="flex:1">
+            <div style="font-size:13.5px;color:#111827;font-weight:600;margin-bottom:4px">方案解读会面（第三次面谈）</div>
+            <div style="font-size:12.5px;color:#4b5563;line-height:1.6">
+              这次面谈重点是<strong>解答问题，不是讲解方案</strong>。先问："你看了之后有没有什么问题？有没有觉得不合适的地方？"让对方主导方向。<br/>
+              常见异议按本章「场景 C」应对。<br/>
+              如果对方说"好，那就按这个来吧"——冷静接受，不要过度兴奋，立刻启动 FNA 需求分析流程。
+            </div>
+            <div style="margin-top:6px;font-size:12px;color:#9ca3af">⚡ 加分动作：如果成交，在当天晚上写下这个过程中最关键的一个转折点——下个月你的新人培训分享可以用</div>
+          </div>
+        </div>
+
+        <div style="background:#fff;border-radius:8px;padding:12px 16px;display:flex;gap:12px;align-items:flex-start;border-left:3px solid #0ea5e9">
+          <div style="min-width:32px;text-align:center;font-size:12px;font-weight:700;color:#0ea5e9;padding-top:1px">Day<br/>27</div>
+          <div style="flex:1">
+            <div style="font-size:13.5px;color:#111827;font-weight:600;margin-bottom:4px">写第三篇文章 · 储蓄险 IRR 解析（发挥会计优势）</div>
+            <div style="font-size:12.5px;color:#4b5563;line-height:1.6">
+              题目：<strong>「你买的储蓄险真实回报率是多少？教你用 IRR 算清楚」</strong><br/>
+              这是最能展示你会计背景差异化的一篇文章。把你 Day 19 制作的 IRR 计算表截图放进文章，手把手教读者计算。这类"硬核工具文"在理财人群中转发率极高。
+            </div>
+            <div style="margin-top:6px;font-size:12px;color:#9ca3af">⚡ 加分动作：文章末尾加入「欢迎私信发送你的保单，我帮你算一下真实 IRR」——这是超高转化率的行动入口</div>
+          </div>
+        </div>
+
+        <div style="background:#fff;border-radius:8px;padding:12px 16px;display:flex;gap:12px;align-items:flex-start;border-left:3px solid #ef4444">
+          <div style="min-width:32px;text-align:center;font-size:12px;font-weight:700;color:#ef4444;padding-top:1px">Day<br/>28</div>
+          <div style="flex:1">
+            <div style="font-size:13.5px;color:#111827;font-weight:600;margin-bottom:4px">发布文章 + 第四周清理跟进</div>
+            <div style="font-size:12.5px;color:#4b5563;line-height:1.6">
+              发布 Day 27 文章，配合朋友圈和小红书联动。<br/>
+              同时，对所有「温热」名单做最后一次本月跟进：发文章链接，自然、无压力。
+            </div>
+            <div style="margin-top:6px;font-size:12px;color:#9ca3af">⚡ 加分动作：对第一批发过消息但始终没有回应的 10 人，发一条完全不相关的暖场消息（分享一个有趣的事情），让关系「解冻」</div>
+          </div>
+        </div>
+
+        <div style="background:#fff;border-radius:8px;padding:12px 16px;display:flex;gap:12px;align-items:flex-start;border-left:3px solid #ef4444">
+          <div style="min-width:32px;text-align:center;font-size:12px;font-weight:700;color:#ef4444;padding-top:1px">Day<br/>29</div>
+          <div style="flex:1">
+            <div style="font-size:13.5px;color:#111827;font-weight:600;margin-bottom:4px">30 天数据复盘</div>
+            <div style="font-size:12.5px;color:#4b5563;line-height:1.6">
+              花一个小时认真填写以下数字：<br/>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px">
+                <div style="background:#f3f4f6;border-radius:6px;padding:8px 10px;font-size:12.5px">主动联系人数：___人</div>
+                <div style="background:#f3f4f6;border-radius:6px;padding:8px 10px;font-size:12.5px">有回应的人数：___人</div>
+                <div style="background:#f3f4f6;border-radius:6px;padding:8px 10px;font-size:12.5px">进行了面谈次数：___次</div>
+                <div style="background:#f3f4f6;border-radius:6px;padding:8px 10px;font-size:12.5px">发出方案的人数：___人</div>
+                <div style="background:#f3f4f6;border-radius:6px;padding:8px 10px;font-size:12.5px">发布内容条/篇数：___条</div>
+                <div style="background:#f3f4f6;border-radius:6px;padding:8px 10px;font-size:12.5px">公众号新增关注：___人</div>
+              </div>
+            </div>
+            <div style="margin-top:6px;font-size:12px;color:#9ca3af">⚡ 加分动作：把这些数字发给主管，请他帮你分析哪个环节的转化率偏低，针对性改进</div>
+          </div>
+        </div>
+
+        <div style="background:#fff;border-radius:8px;padding:12px 16px;display:flex;gap:12px;align-items:flex-start;border-left:3px solid #ef4444">
+          <div style="min-width:32px;text-align:center;font-size:12px;font-weight:700;color:#ef4444;padding-top:1px">Day<br/>30</div>
+          <div style="flex:1">
+            <div style="font-size:13.5px;color:#111827;font-weight:600;margin-bottom:4px">制定第 2 个月计划 · 确定一件要坚持的核心动作</div>
+            <div style="font-size:12.5px;color:#4b5563;line-height:1.6">
+              基于复盘数据，回答三个问题：<br/>
+              ① <strong>哪一种接触方式效果最好？</strong>（私信 / 文章引流 / 朋友圈）→ 下月加倍做这件事<br/>
+              ② <strong>哪件事我最抗拒？</strong>→ 分析是能力问题还是心理障碍，针对性处理<br/>
+              ③ <strong>下月要新增一件什么事？</strong>（建议：开始经营一个线上社群，或开始约 1 个专业联盟合作）<br/><br/>
+              最后，发一条朋友圈：<strong>入行 30 天的真实感受</strong>——不论有没有成单，真实的成长记录比任何广告都有说服力。
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div style="background:linear-gradient(135deg,#1e1b4b,#312e81,#1e40af);border-radius:14px;padding:28px 32px;margin-top:24px;color:#fff">
+      <div style="font-size:18px;font-weight:700;margin-bottom:10px">给内向者最后的话</div>
+      <div style="font-size:14px;line-height:1.8;opacity:0.9;max-width:680px">
+        所有这些模板，本质上都在做同一件事：<strong>让对方觉得你是在帮他，而不是在卖给他</strong>。<br/><br/>
+        内向者天生更擅长这件事——因为你不急着成交，你会认真听，你会仔细分析，你不会为了佣金推不合适的产品。<br/><br/>
+        把这些话术当作起点，用你自己的语气改写它们，它们才会真正属于你。
+      </div>
+    </div>
+
+  </div>
+
+</div><!-- end #main -->
+
+<script>
+  function showSection(id, navEl, anchor) {
+    // Hide all sections
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    // Show target
+    const sec = document.getElementById('sec-' + id);
+    if (sec) sec.classList.add('active');
+
+    // Update nav active
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    if (navEl) navEl.classList.add('active');
+    else {
+      // find matching nav item
+      document.querySelectorAll('.nav-item').forEach(n => {
+        if (n.getAttribute('onclick') && n.getAttribute('onclick').includes("'" + id + "'")) {
+          n.classList.add('active');
+        }
+      });
+    }
+
+    // Update breadcrumb
+    const labels = {
+      home: '总览',
+      resources: '优质资源库',
+      basics: '01 · 基础知识',
+      market: '02 · 市场分析',
+      hk: '03 · 香港优劣势',
+      axa: '安盛 AXA 深度介绍',
+      roadmap: '04 · 学习路线图',
+      accounting: '05 · 会计背景优势',
+      introvert: '06 · 内向者策略'
+    };
+    document.getElementById('breadcrumb-chapter').textContent = labels[id] || id;
+
+    // Scroll to top (or anchor)
+    window.scrollTo(0, 0);
+    if (anchor) {
+      setTimeout(() => {
+        const el = document.querySelector(anchor);
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 80);
+    }
+  }
+</script>
+
+</body>
+</html>

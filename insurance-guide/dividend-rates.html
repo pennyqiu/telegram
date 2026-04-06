@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>香港保险公司分红实现率分析报告 · 2023年数据</title>
+<style>
+:root{--bg:#f4f6fa;--card:#fff;--border:#e5e7eb;--accent:#1d4ed8;--text:#111827;--muted:#6b7280;--r:12px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif;background:var(--bg);color:var(--text)}
+.topbar{background:#1e293b;color:#fff;padding:12px 24px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100}
+.topbar a{color:#94a3b8;text-decoration:none;font-size:13px}
+.topbar a:hover{color:#fff}
+.hero{background:linear-gradient(135deg,#1e3a5f,#0f172a);color:#fff;padding:48px 24px 40px;text-align:center}
+.hero h1{font-size:clamp(20px,4vw,34px);font-weight:800;margin-bottom:10px}
+.hero p{color:#94a3b8;font-size:14px;max-width:600px;margin:0 auto 20px}
+.hero-tags{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.hero-tags span{background:rgba(255,255,255,.1);padding:5px 14px;border-radius:20px;font-size:12px;color:#cbd5e1}
+.wrap{max-width:1240px;margin:0 auto;padding:24px 16px}
+.sec-title{font-size:17px;font-weight:700;margin:32px 0 14px;display:flex;align-items:center;gap:8px}
+.badge{background:var(--accent);color:#fff;font-size:11px;padding:2px 8px;border-radius:20px}
+/* explain */
+.explain-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:24px}
+.ec{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px;border-left:4px solid}
+.ec h4{font-size:13px;font-weight:700;margin-bottom:5px}
+.ec p{font-size:12px;color:var(--muted);line-height:1.6}
+/* rank */
+.rank-box{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:16px 20px;margin-bottom:24px}
+.rrow{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid #f1f5f9}
+.rrow:last-child{border:none}
+.rrow:hover{background:#f8fafc;border-radius:6px;padding-left:4px}
+.rnum{width:26px;text-align:center;font-size:12px;color:var(--muted);flex-shrink:0;font-weight:600}
+.rname{width:100px;flex-shrink:0}
+.rname .cn{font-size:13px;font-weight:700}
+.rname .en{font-size:11px;color:var(--muted)}
+.rbar-wrap{flex:1;min-width:100px;height:24px;background:#f1f5f9;border-radius:6px;overflow:hidden;position:relative}
+.rbar{height:100%;border-radius:6px;display:flex;align-items:center;padding:0 8px}
+.rbar span{font-size:11px;color:#fff;font-weight:700;white-space:nowrap}
+.rstats{display:flex;gap:14px;flex-shrink:0}
+.rstat .v{font-size:12px;font-weight:700;text-align:center}
+.rstat .l{font-size:10px;color:var(--muted);text-align:center}
+.rpill{font-size:11px;padding:2px 8px;border-radius:12px;font-weight:600;flex-shrink:0}
+/* note */
+.note{background:#fffbeb;border:1px solid #fcd34d;border-radius:var(--r);padding:14px 16px;font-size:12px;color:#92400e;line-height:1.7;margin-bottom:24px}
+/* table */
+.tbl-wrap{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:24px;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px;min-width:700px}
+th{background:#f8fafc;padding:10px 12px;text-align:left;font-size:11px;color:var(--muted);font-weight:600;border-bottom:1px solid var(--border);white-space:nowrap}
+td{padding:10px 12px;border-bottom:1px solid #f9fafb;vertical-align:middle}
+tr:last-child td{border:none}
+tr:hover td{background:#fafbfe}
+.pill{display:inline-block;font-size:11px;padding:2px 8px;border-radius:20px;font-weight:600}
+.pill-g{background:#dcfce7;color:#15803d}
+.pill-y{background:#fef9c3;color:#a16207}
+.pill-r{background:#fee2e2;color:#b91c1c}
+/* filter */
+.fbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
+.fbar input{flex:1;min-width:180px;padding:7px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;outline:none}
+.fbar input:focus{border-color:var(--accent)}
+.fbtn{padding:6px 12px;border:1px solid var(--border);border-radius:8px;background:#fff;font-size:12px;cursor:pointer}
+.fbtn.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.fbtn:hover:not(.on){background:#f8fafc}
+/* cards */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:14px;margin-bottom:32px}
+.dcard{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
+.dcard:hover{box-shadow:0 4px 16px rgba(0,0,0,.07)}
+.dc-head{padding:12px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+.dc-logo{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;color:#fff;flex-shrink:0}
+.dc-title{font-weight:700;font-size:14px;margin-left:10px}
+.dc-eng{font-size:11px;color:var(--muted);margin-left:10px}
+.dc-avg .big{font-size:22px;font-weight:800}
+.dc-avg .lbl{font-size:10px;color:var(--muted);text-align:right}
+.dc-body{padding:12px 16px}
+.dc-3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
+.dc-3-item{background:#f8fafc;border-radius:8px;padding:7px;text-align:center}
+.dc-3-item .v{font-size:14px;font-weight:700}
+.dc-3-item .l{font-size:10px;color:var(--muted);margin-top:1px}
+.prow{display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px dashed #f1f5f9;gap:6px}
+.prow:last-child{border:none}
+.pname{font-size:12px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ptype{font-size:10px;color:var(--muted);background:#f1f5f9;padding:1px 5px;border-radius:5px;flex-shrink:0}
+.pval{font-size:12px;font-weight:700;min-width:38px;text-align:right;flex-shrink:0}
+.dc-types{display:flex;flex-wrap:wrap;gap:5px;padding-top:10px;margin-top:8px;border-top:1px solid #f1f5f9}
+.dtype{font-size:11px;background:#f1f5f9;padding:2px 7px;border-radius:6px}
+.dtype b{margin-left:3px}
+/* colors */
+.c-g{color:#059669}.c-y{color:#d97706}.c-r{color:#dc2626}
+footer{background:#1e293b;color:#64748b;text-align:center;padding:18px;font-size:12px;margin-top:32px}
+footer a{color:#94a3b8;text-decoration:none}
+@media(max-width:580px){.rstats{display:none}.card-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="index.html">← 返回指南主页</a>
+  <span style="color:#475569">·</span>
+  <span style="color:#e2e8f0;font-size:13px">香港保险公司分红实现率分析报告</span>
+  <span style="margin-left:auto;font-size:11px;color:#475569">数据来源：港险随记 · 2023年官方数据</span>
+</div>
+
+<div class="hero">
+  <h1>香港各大保险公司分红实现率</h1>
+  <p>基于 15 家主要保险公司官方披露数据，帮助你理性评估各保险公司的兑现能力与产品质量</p>
+  <div class="hero-tags">
+    <span>📊 15 家保险公司</span>
+    <span>📋 500+ 条产品记录</span>
+    <span>🗓 2023 年最新数据</span>
+    <span>📁 官方监管报告来源</span>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="sec-title">📖 如何解读分红实现率 <span class="badge">必读</span></div>
+  <div class="explain-grid">
+    <div class="ec" style="border-color:#059669">
+      <h4 style="color:#059669">≥ 100% · 超额兑现</h4>
+      <p>实际分红超过预期，说明公司投资表现优异，是选择产品的重要正向信号。</p>
+    </div>
+    <div class="ec" style="border-color:#1d4ed8">
+      <h4 style="color:#1d4ed8">90%–99% · 基本兑现</h4>
+      <p>实际分红接近预期，属于行业主流水平，公司运营稳健，可合理预期收益。</p>
+    </div>
+    <div class="ec" style="border-color:#d97706">
+      <h4 style="color:#d97706">75%–89% · 一般水平</h4>
+      <p>实际分红低于预期，可能受市场影响，需关注近年趋势是否在改善。</p>
+    </div>
+    <div class="ec" style="border-color:#dc2626">
+      <h4 style="color:#dc2626">&lt; 75% · 需注意</h4>
+      <p>实际分红明显低于预期，建议深入了解原因，避免收益预期落差过大。</p>
+    </div>
+  </div>
+
+  <div class="sec-title">🏆 各保险公司综合排名（平均分红实现率）</div>
+  <div class="rank-box" id="rankBox"></div>
+
+  <div class="note">
+    <strong>⚠️ 重要说明：</strong>本页数据整理自各保险公司 2023 年官方分红实现率报告，经港险随记（hongkongbx.com）汇总整理。
+    分红实现率 = 实际派发分红 ÷ 保单说明书预期分红 × 100%。<br>
+    <strong>使用注意：</strong>① 历史实现率不代表未来；② 产品年份越长、数据越多，参考价值越高；
+    ③ 不同红利类型（周年红利/终期红利）计算方式不同，横向对比应注意；④ "已停售"产品仍可反映公司历史兑现能力。
+  </div>
+
+  <div class="sec-title">📋 15 家公司对比总表</div>
+  <div class="fbar">
+    <input type="text" id="tSearch" placeholder="搜索公司名称…" oninput="doTSearch()">
+    <button class="fbtn on" onclick="doSort('avg',this)">按平均值排序</button>
+    <button class="fbtn" onclick="doSort('hrate',this)">按高实现率%</button>
+    <button class="fbtn" onclick="doSort('hi',this)">按最高值</button>
+    <button class="fbtn" onclick="doSort('total',this)">按产品数</button>
+  </div>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>排名</th><th>保险公司</th><th>平均实现率</th><th>最高实现率</th><th>最低实现率</th>
+          <th>≥95% 占比</th><th>产品数</th><th>分类均值</th><th>综合评级</th>
+        </tr>
+      </thead>
+      <tbody id="tBody"></tbody>
+    </table>
+  </div>
+
+  <div class="sec-title">🔍 各公司详情 · Top 5 产品</div>
+  <div class="fbar">
+    <input type="text" id="cSearch" placeholder="搜索公司或产品名称…" oninput="doCards()">
+    <button class="fbtn on" onclick="setFilter('all',this)">全部</button>
+    <button class="fbtn" onclick="setFilter('high',this)">高实现率（≥97%）</button>
+    <button class="fbtn" onclick="setFilter('mid',this)">中等（90–96%）</button>
+    <button class="fbtn" onclick="setFilter('low',this)">偏低（&lt;90%）</button>
+  </div>
+  <div class="card-grid" id="cardGrid"></div>
+
+</div>
+
+<footer>
+  数据来源：<a href="http://www.hongkongbx.com/exchange/how-choose/" target="_blank">港险随记（hongkongbx.com）</a>
+  · 各保险公司 2023 年官方分红实现率报告 ·
+  <a href="https://www.ia.org.hk/tc/fulfillment_ratio/list_of_insurer.html" target="_blank">香港保险业监管局</a>
+  <br>本页仅供参考，不构成投资或购买建议。· <a href="index.html">返回指南主页</a>
+</footer>
+
+<script>
+var DATA = [
+  {name:'忠意人寿香港',eng:'Generali',color:'#0e6655',total:7,avg:100.4,hi:103.0,lo:100.0,hrate:100.0,
+   types:{'周年红利':100.0,'终期红利':100.8},
+   prods:[{n:'丰盛税悦保延期年金',t:'终期红利',v:103.0},{n:'红宝石危疾保障计划',t:'周年红利',v:100.0},{n:'无限保',t:'周年红利',v:100.0},{n:'逸悦保',t:'周年红利',v:100.0},{n:'世纪创富保',t:'终期红利',v:100.0}]},
+  {name:'太平人寿香港',eng:'TPL HK',color:'#117a65',total:12,avg:100.2,hi:102.0,lo:100.0,hrate:100.0,
+   types:{'终期红利':100.4,'现金红利':100.0,'复归红利':100.1},
+   prods:[{n:'太平安康危疾终身保',t:'终期红利',v:102.0},{n:'太平财隽保保障计划',t:'复归红利',v:100.2},{n:'安康智选危疾终身保',t:'终期红利',v:100.0},{n:'辉煌世代储蓄计划',t:'现金红利',v:100.0},{n:'太平安康终身保(终期)',t:'终期红利',v:100.0}]},
+  {name:'太平洋香港',eng:'CPIC HK',color:'#1b4f72',total:1,avg:100.0,hi:100.0,lo:100.0,hrate:100.0,
+   types:{'终期红利':100.0},
+   prods:[{n:'颐养天年延期年金计划(终身)',t:'终期红利',v:100.0}]},
+  {name:'立桥人寿',eng:'Blue Cross',color:'#4a235a',total:3,avg:100.0,hi:100.0,lo:100.0,hrate:100.0,
+   types:{'分红':100.0},
+   prods:[{n:'息享年年储蓄保',t:'分红',v:100.0},{n:'息享年年储蓄保2',t:'分红',v:100.0},{n:'享护一生寿险计划',t:'分红',v:100.0}]},
+  {name:'安盛保险',eng:'AXA',color:'#e05c00',total:69,avg:97.0,hi:112.8,lo:69.0,hrate:71.0,
+   types:{'终期红利':100.5,'复归红利':97.4,'周年红利':92.3,'分红':86.4},
+   prods:[{n:'安进储蓄系列II跃进',t:'终期红利',v:112.5},{n:'享誉世代赏息计划',t:'终期红利',v:110.7},{n:'享未来人寿保障',t:'终期红利',v:110.0},{n:'挚爱伴侣保障计划',t:'终期红利',v:107.0},{n:'傲翔环球人寿计划',t:'终期红利',v:105.0}]},
+  {name:'万通',eng:'YF Life',color:'#145a32',total:8,avg:96.7,hi:100.0,lo:91.0,hrate:75.0,
+   types:{'复归红利':97.8,'终期红利':95.5,'额外红利':100.0},
+   prods:[{n:'富饶传承储蓄计划2',t:'复归红利',v:100.0},{n:'首选健康保1000',t:'额外红利',v:100.0},{n:'恩长之选人寿保障计划',t:'终期红利',v:97.5},{n:'首选创富储蓄保',t:'终期红利',v:96.5},{n:'隽富多元储蓄计划',t:'复归红利',v:96.5}]},
+  {name:'友邦',eng:'AIA',color:'#cc0000',total:139,avg:96.5,hi:122.0,lo:71.5,hrate:76.3,
+   types:{'终期红利':100.3,'分红':99.4,'周年红利':89.9,'复归红利':88.5},
+   prods:[{n:'才隽之选终身寿险',t:'周年红利',v:122.0},{n:'充裕未来计划3',t:'终期红利',v:116.3},{n:'储速终身保',t:'周年红利',v:105.0},{n:'简爱延续保障计划',t:'终期红利',v:105.0},{n:'挚爱孩子教育计划',t:'终期红利',v:105.0}]},
+  {name:'周大福',eng:'CTF Life',color:'#c0392b',total:85,avg:94.6,hi:118.5,lo:55.5,hrate:74.1,
+   types:{'复归红利':100.1,'周年红利':98.4,'终期红利':97.1,'分红':83.4},
+   prods:[{n:'盛世寿险计划(旧)',t:'周年红利',v:118.5},{n:'盛世寿险计划(新)',t:'周年红利',v:113.0},{n:'守护终身医疗户口',t:'终期红利',v:105.0},{n:'康健孩子危疾保障',t:'周年红利',v:101.4},{n:'传承守护寿险计划',t:'复归红利',v:100.1}]},
+  {name:'宏利',eng:'Manulife',color:'#004c97',total:52,avg:93.0,hi:123.0,lo:52.0,hrate:53.8,
+   types:{'终期红利':104.4,'周年红利':90.5},
+   prods:[{n:'乐健无忧危疾保',t:'周年红利',v:123.0},{n:'心爱一家保',t:'终期红利',v:121.7},{n:'悠然危疾保',t:'终期红利',v:120.0},{n:'乐活无忧危疾保',t:'周年红利',v:117.2},{n:'活耀人生危疾保',t:'终期红利',v:117.0}]},
+  {name:'安达人寿',eng:'Chubb',color:'#6c3483',total:30,avg:91.0,hi:107.0,lo:66.0,hrate:50.0,
+   types:{'增保红利':100.0,'终期红利':94.3,'累积红利':89.0},
+   prods:[{n:'智灵活储蓄保障计划',t:'终期红利',v:107.0},{n:'安达百岁年年储蓄计划',t:'累积红利',v:100.0},{n:'安达传承守创储蓄保障',t:'增保红利',v:100.0},{n:'安达颐富储蓄保障计划',t:'增保红利',v:100.0},{n:'安达金御储蓄保障计划',t:'终期红利',v:97.0}]},
+  {name:'中银人寿',eng:'BOC Life',color:'#1a5276',total:42,avg:90.2,hi:100.6,lo:52.0,hrate:23.8,
+   types:{'周年红利':90.4,'终期红利':89.6},
+   prods:[{n:'随心所享储蓄保险计划',t:'周年红利',v:100.6},{n:'非凡即享年金计划',t:'周年红利',v:100.0},{n:'目标五年保险计划',t:'周年红利',v:100.0},{n:'守护未来终身寿险计划',t:'周年红利',v:100.0},{n:'百载人生保险计划',t:'周年红利',v:90.3}]},
+  {name:'保诚',eng:'Prudential',color:'#003087',total:75,avg:90.0,hi:127.5,lo:54.5,hrate:40.0,
+   types:{'特别红利':93.3,'终期红利':91.0,'归原红利':86.5},
+   prods:[{n:'创未来丰裕储蓄保障',t:'终期红利',v:127.5},{n:'写意人生入息计划',t:'终期红利',v:126.0},{n:'理想人生保障系列III',t:'特别红利',v:117.7},{n:'隽升储蓄保障计划',t:'归原红利',v:103.0},{n:'明诚储蓄保障计划',t:'归原红利',v:101.0}]},
+  {name:'永明',eng:'Sun Life',color:'#2471a3',total:22,avg:89.5,hi:110.0,lo:62.0,hrate:27.3,
+   types:{'分红':89.5},
+   prods:[{n:'传富储蓄计划',t:'归原红利',v:110.0},{n:'传爱储蓄计划',t:'归原红利',v:100.0},{n:'生命安心保',t:'周年红利',v:98.7},{n:'优月储蓄计划',t:'周年红利',v:98.0},{n:'生命利多保',t:'周年红利',v:96.7}]},
+  {name:'富卫人寿香港',eng:'FWD',color:'#d35400',total:71,avg:88.5,hi:115.0,lo:50.2,hrate:59.2,
+   types:{'特别红利':90.0,'周年红利':87.4},
+   prods:[{n:'危疾全守卫精装版',t:'特别红利',v:115.0},{n:'卫你所爱寿险计划',t:'周年红利',v:110.8},{n:'盈聚未来寿险计划卓越版',t:'特别红利',v:103.0},{n:'盈聚天下储蓄计划',t:'周年红利',v:100.0},{n:'傲珑创富储蓄计划',t:'周年红利',v:95.0}]},
+  {name:'中国人寿海外',eng:'CLIFE',color:'#8b0000',total:63,avg:87.2,hi:101.2,lo:62.7,hrate:15.9,
+   types:{'终期红利':100.0,'周年红利':85.9},
+   prods:[{n:'卫你明天终身危疾保障',t:'周年红利',v:101.2},{n:'健康卫士终身危疾保障',t:'周年红利',v:101.2},{n:'守护您终身危疾保险',t:'周年红利',v:100.4},{n:'优暇人生延期年金计划',t:'终期红利',v:100.0},{n:'招财宝储蓄保险计划',t:'周年红利',v:88.3}]}
+];
+
+// 按 avg 降序排列（定义全局排名）
+var RANKED = DATA.slice().sort(function(a,b){return b.avg-a.avg;});
+var RANKMAP = {};
+RANKED.forEach(function(d,i){RANKMAP[d.name]=i+1;});
+
+var sortKey = 'avg';
+var filterType = 'all';
+
+function cls(v){
+  if(v===null||v===undefined) return '';
+  if(v>=100) return 'c-g';
+  if(v>=90) return '';
+  if(v>=75) return 'c-y';
+  return 'c-r';
+}
+function pillCls(v){
+  return v>=95?'pill-g':v>=85?'pill-y':'pill-r';
+}
+function rating(v){
+  if(v>=100) return '★ 优秀';
+  if(v>=95) return '◎ 良好';
+  if(v>=90) return '○ 一般';
+  return '△ 待观察';
+}
+
+/* ──── 排名图 ──── */
+function buildRank(){
+  var sorted = DATA.slice().sort(function(a,b){return b.avg-a.avg;});
+  var html = '';
+  for(var i=0;i<sorted.length;i++){
+    var d = sorted[i];
+    var pct = d.avg;
+    var bw = Math.round(Math.max(pct/130*100,8));
+    var vc = cls(pct);
+    var pc = pct>=100?'pill-g':pct>=95?'pill-g':'pill-y';
+    if(pct<90) pc='pill-r';
+    html += '<div class="rrow">';
+    html += '<div class="rnum" style="color:'+(i<3?d.color:'#9ca3af')+'">'+(i+1)+'</div>';
+    html += '<div class="rname"><div class="cn" style="color:'+d.color+'">'+d.name+'</div><div class="en">'+d.eng+'</div></div>';
+    html += '<div class="rbar-wrap"><div class="rbar" style="width:'+bw+'%;background:'+d.color+'"><span>'+pct+'%</span></div></div>';
+    html += '<div class="rstats">';
+    html += '<div class="rstat"><div class="v '+vc+'">'+d.hi+'%</div><div class="l">最高</div></div>';
+    html += '<div class="rstat"><div class="v">'+d.total+'</div><div class="l">产品数</div></div>';
+    html += '<div class="rstat"><div class="v">'+d.hrate+'%</div><div class="l">≥95%占比</div></div>';
+    html += '</div>';
+    html += '<span class="rpill '+pc+'">'+rating(pct)+'</span>';
+    html += '</div>';
+  }
+  document.getElementById('rankBox').innerHTML = html;
+}
+
+/* ──── 汇总表 ──── */
+var tableData = DATA.slice();
+function buildTable(){
+  var sorted = tableData.slice().sort(function(a,b){
+    if(sortKey==='avg') return b.avg-a.avg;
+    if(sortKey==='hrate') return b.hrate-a.hrate;
+    if(sortKey==='hi') return b.hi-a.hi;
+    if(sortKey==='total') return b.total-a.total;
+    return 0;
+  });
+  var html = '';
+  for(var i=0;i<sorted.length;i++){
+    var d = sorted[i];
+    var tc = '';
+    for(var k in d.types){
+      tc += '<span style="font-size:11px;background:#f1f5f9;padding:1px 5px;border-radius:5px;margin:1px 2px;display:inline-block">'+k+' <b class="'+cls(d.types[k])+'">'+d.types[k]+'%</b></span>';
+    }
+    html += '<tr>';
+    html += '<td><b style="color:'+d.color+'">#'+RANKMAP[d.name]+'</b></td>';
+    html += '<td><b>'+d.name+'</b><br><span style="font-size:11px;color:#6b7280">'+d.eng+'</span></td>';
+    html += '<td><b class="'+cls(d.avg)+'" style="font-size:15px">'+d.avg+'%</b></td>';
+    html += '<td class="'+cls(d.hi)+'">'+d.hi+'%</td>';
+    html += '<td class="'+cls(d.lo)+'">'+d.lo+'%</td>';
+    html += '<td><span class="pill '+(d.hrate>=70?'pill-g':d.hrate>=50?'pill-y':'pill-r')+'">'+d.hrate+'%</span></td>';
+    html += '<td>'+d.total+'</td>';
+    html += '<td>'+tc+'</td>';
+    html += '<td><span class="pill '+pillCls(d.avg)+'">'+rating(d.avg)+'</span></td>';
+    html += '</tr>';
+  }
+  document.getElementById('tBody').innerHTML = html;
+}
+function doSort(key,btn){
+  sortKey=key;
+  btn.parentElement.querySelectorAll('.fbtn').forEach(function(b){b.classList.remove('on');});
+  btn.classList.add('on');
+  buildTable();
+}
+function doTSearch(){
+  var q=document.getElementById('tSearch').value.trim().toLowerCase();
+  tableData=DATA.filter(function(d){return !q||d.name.indexOf(q)>=0||d.eng.toLowerCase().indexOf(q)>=0;});
+  buildTable();
+}
+
+/* ──── 卡片 ──── */
+function buildCards(){
+  var q=document.getElementById('cSearch').value.trim().toLowerCase();
+  var list=DATA.filter(function(d){
+    var typeOk=filterType==='all'||(filterType==='high'&&d.avg>=97)||(filterType==='mid'&&d.avg>=90&&d.avg<97)||(filterType==='low'&&d.avg<90);
+    var srchOk=!q||d.name.indexOf(q)>=0||d.eng.toLowerCase().indexOf(q)>=0||d.prods.some(function(p){return p.n.indexOf(q)>=0;});
+    return typeOk&&srchOk;
+  });
+  var html='';
+  for(var i=0;i<list.length;i++){
+    var d=list[i];
+    var tc='';
+    for(var k in d.types){
+      tc+='<span class="dtype">'+k+'<b class="'+cls(d.types[k])+'"> '+d.types[k]+'%</b></span>';
+    }
+    var pr='';
+    for(var j=0;j<d.prods.length;j++){
+      var p=d.prods[j];
+      pr+='<div class="prow"><span class="pname" title="'+p.n+'">'+p.n+'</span><span class="ptype">'+p.t+'</span><span class="pval '+cls(p.v)+'">'+p.v+'%</span></div>';
+    }
+    html+='<div class="dcard">';
+    html+='<div class="dc-head">';
+    html+='<div style="display:flex;align-items:center">';
+    html+='<div class="dc-logo" style="background:'+d.color+'">'+d.name[0]+'</div>';
+    html+='<div><div class="dc-title">'+d.name+'</div><div class="dc-eng">'+d.eng+'</div></div>';
+    html+='</div>';
+    html+='<div class="dc-avg"><div class="big '+cls(d.avg)+'">'+d.avg+'%</div><div class="lbl">平均实现率</div></div>';
+    html+='</div>';
+    html+='<div class="dc-body">';
+    html+='<div class="dc-3">';
+    html+='<div class="dc-3-item"><div class="v '+cls(d.hi)+'">'+d.hi+'%</div><div class="l">最高实现率</div></div>';
+    html+='<div class="dc-3-item"><div class="v">'+d.hrate+'%</div><div class="l">≥95% 占比</div></div>';
+    html+='<div class="dc-3-item"><div class="v">'+d.total+'</div><div class="l">统计产品数</div></div>';
+    html+='</div>';
+    html+='<div style="font-size:12px;color:#6b7280;margin-bottom:5px;font-weight:600">Top 产品实现率</div>';
+    html+=pr;
+    html+='<div class="dc-types">'+tc+'</div>';
+    html+='</div>';
+    html+='</div>';
+  }
+  document.getElementById('cardGrid').innerHTML = html || '<p style="color:#9ca3af;padding:24px">无匹配结果</p>';
+}
+function setFilter(type,btn){
+  filterType=type;
+  btn.parentElement.querySelectorAll('.fbtn').forEach(function(b){b.classList.remove('on');});
+  btn.classList.add('on');
+  buildCards();
+}
+function doCards(){buildCards();}
+
+/* ──── Init ──── */
+buildRank();
+buildTable();
+buildCards();
+</script>
+</body>
+</html>

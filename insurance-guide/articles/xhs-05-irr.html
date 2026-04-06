@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>什么是 IRR？看懂这个数字再决定要不要买储蓄险</title>
+<link rel="stylesheet" href="_style.css">
+<style>
+.xhs-tip{background:#f0fdf4;border-left:3px solid #22c55e;border-radius:0 8px 8px 0;padding:10px 14px;font-size:13px;color:#15803d;margin:12px 0}
+.warn-tip{background:#fff7ed;border-left:3px solid #f97316;border-radius:0 8px 8px 0;padding:10px 14px;font-size:13px;color:#c2410c;margin:12px 0}
+.emoji-title{font-size:15px;font-weight:700;color:#1f2937;margin:22px 0 8px}
+.num-card{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:16px 20px;margin:14px 0}
+.irr-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px dashed #f1f5f9}
+.irr-row:last-child{border:none}
+.irr-pct{width:60px;text-align:center;font-size:20px;font-weight:800;flex-shrink:0}
+.irr-bar{flex:1;height:20px;border-radius:6px;display:flex;align-items:center;padding-left:8px}
+.irr-bar span{font-size:12px;color:#fff;font-weight:700}
+.irr-val{width:80px;text-align:right;font-size:13px;flex-shrink:0}
+.myth-card{background:#fff1f2;border:1px solid #fecaca;border-radius:10px;padding:14px 16px;margin:10px 0}
+.myth-card .q{font-size:13.5px;font-weight:700;color:#be123c;margin-bottom:6px}
+.myth-card .a{font-size:13px;color:#374151;line-height:1.75}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div class="top-bar-inner">
+    <a href="../index.html" class="back-btn">← 返回指南主页</a>
+    <span class="source-tag">小红书风格示例帖 · 储蓄险篇⑤</span>
+  </div>
+</div>
+
+<article>
+  <div class="article-meta">
+    <div class="article-meta-top">
+      <div class="author-badge">
+        <div class="author-avatar" style="background:#0ea5e9">储</div>
+        <span class="author-name">香港保险入门系列</span>
+      </div>
+      <div class="meta-stats">
+        <div class="meta-stat"><div class="meta-stat-num">储蓄篇</div><div class="meta-stat-label">系列⑤</div></div>
+        <div class="meta-stat"><div class="meta-stat-num">2025</div><div class="meta-stat-label">整理</div></div>
+      </div>
+    </div>
+    <div class="article-title-main">什么是 IRR？<br>看懂这个数字再决定要不要买储蓄险</div>
+    <div class="article-summary">代理人给你看的保单演示里，有一个数字叫 IRR（内部收益率），它才是真正衡量储蓄险回报的标准。但很多人从来没被解释清楚过这是什么意思。这篇文章帮你彻底搞懂。</div>
+  </div>
+
+  <div class="callout">
+    💡 如果代理人只跟你说"这款产品 20 年后会有多少钱"，而没有告诉你 IRR 是多少——你至少要自己算出来，才能判断值不值得买。
+  </div>
+
+  <div class="emoji-title">😕 先说说大家的困惑</div>
+  <p>储蓄险的保单说明书里，通常有一张表格，写着：</p>
+  <div class="num-card" style="background:#f8fafc;font-family:monospace;font-size:13px">
+    <div style="color:#6b7280;margin-bottom:8px">📄 某款储蓄险保单示例（每年供款 10 万港元，供 5 年）</div>
+    <table style="width:100%;font-size:12.5px">
+      <thead><tr><th>保单年度</th><th>保证现金价值</th><th>非保证红利</th><th>总现金价值</th></tr></thead>
+      <tbody>
+        <tr><td>第 5 年末</td><td>40.2 万</td><td>4.1 万</td><td>44.3 万</td></tr>
+        <tr><td>第 10 年末</td><td>54.8 万</td><td>18.6 万</td><td>73.4 万</td></tr>
+        <tr><td>第 20 年末</td><td>78.3 万</td><td>62.1 万</td><td>140.4 万</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="margin-top:10px">看到这里很多人会想：<strong>"投 50 万，20 年后变 140 万，翻了接近 3 倍，不错啊！"</strong></p>
+  <p style="margin-top:8px">但问题来了——这 3 倍是花了 20 年时间换来的。年化到底是多少？这就是 IRR 要回答的问题。</p>
+
+  <div class="emoji-title">📐 IRR 是什么意思？</div>
+  <p><strong>IRR（Internal Rate of Return，内部收益率）</strong>：把你所有的现金流入和流出，折算成等效的年化复利回报率。</p>
+  <p style="margin-top:10px">简单理解：<strong>IRR 就是这笔钱每年实际"长"了多少利息。</strong></p>
+
+  <div class="num-card" style="border-color:#bae6fd;background:#f0f9ff">
+    <div style="font-size:13px;font-weight:700;color:#0369a1;margin-bottom:10px">🔢 用上面那个例子算 IRR</div>
+    <p style="font-size:13px;color:#374151;line-height:1.8">每年供款 10 万港元，共 5 年，总投入 50 万元。<br>20 年末（从开始算）总现金价值 140.4 万元。<br><br>用财务计算器 / Excel 的 XIRR 函数计算：<br><strong style="font-size:16px;color:#0ea5e9">IRR ≈ 5.2%</strong>（按非保证部分全额实现计算）<br>若只计保证部分（78.3 万）：<strong style="color:#6b7280">IRR ≈ 2.8%</strong></p>
+  </div>
+
+  <div class="emoji-title">📊 不同 IRR 数字意味着什么？</div>
+  <p>以下是同等本金（每年 10 万，供 5 年，持有 20 年）在不同 IRR 下的结果对比：</p>
+
+  <div class="num-card">
+    <div class="irr-row">
+      <div class="irr-pct" style="color:#6b7280">2%</div>
+      <div class="irr-bar" style="width:30%;background:#d1d5db"><span>73 万</span></div>
+      <div class="irr-val" style="color:#6b7280">约同银行定存</div>
+    </div>
+    <div class="irr-row">
+      <div class="irr-pct" style="color:#f97316">4%</div>
+      <div class="irr-bar" style="width:52%;background:#fb923c"><span>110 万</span></div>
+      <div class="irr-val" style="color:#f97316">市场中等水平</div>
+    </div>
+    <div class="irr-row">
+      <div class="irr-pct" style="color:#0ea5e9">5%</div>
+      <div class="irr-bar" style="width:65%;background:#0ea5e9"><span>128 万</span></div>
+      <div class="irr-val" style="color:#0ea5e9">香港储蓄险主流</div>
+    </div>
+    <div class="irr-row">
+      <div class="irr-pct" style="color:#059669">6%</div>
+      <div class="irr-bar" style="width:78%;background:#10b981"><span>149 万</span></div>
+      <div class="irr-val" style="color:#059669">优秀产品</div>
+    </div>
+    <div class="irr-row">
+      <div class="irr-pct" style="color:#7c3aed">7%</div>
+      <div class="irr-bar" style="width:90%;background:#8b5cf6"><span>173 万</span></div>
+      <div class="irr-val" style="color:#7c3aed">顶尖/部分非保证</div>
+    </div>
+    <div style="font-size:11px;color:#9ca3af;margin-top:8px">注：以上为模拟示意数字，实际以保单条款为准</div>
+  </div>
+
+  <div class="emoji-title">⚠️ 关于 IRR 的 3 个常见误区</div>
+
+  <div class="myth-card">
+    <div class="q">🚨 误区一：「回报率 6.5%」就是 IRR 6.5%？</div>
+    <div class="a">不是。很多产品说的"预期回报率"是<strong>保单成熟时</strong>某一年的回报，不是全程的年化。IRR 要把前几年退保会亏损的情况也算进去。真实 IRR 通常比宣传数字低 1–2 个百分点。</div>
+  </div>
+
+  <div class="myth-card">
+    <div class="q">🚨 误区二：IRR 越高越好，直接选最高的？</div>
+    <div class="a">要区分<strong>保证 IRR</strong> 和<strong>总 IRR（含非保证）</strong>。高 IRR 往往更多依赖非保证红利，而非保证红利的实现依赖保险公司的投资能力。选产品要同时看两个数字，不能只看总 IRR。</div>
+  </div>
+
+  <div class="myth-card">
+    <div class="q">🚨 误区三：持有时间越长，IRR 一定越高？</div>
+    <div class="a">不一定。大部分储蓄险的 IRR 在<strong>第 10–20 年</strong>达到峰值后会逐渐稳定甚至略微下降。最佳持有年限是你需要重点关注的变量之一。</div>
+  </div>
+
+  <div class="emoji-title">🔧 怎么自己算 IRR？</div>
+  <p>用 Excel 或 Google Sheets 的 <code style="background:#f1f5f9;padding:2px 6px;border-radius:4px">XIRR</code> 函数：</p>
+
+  <div class="num-card" style="background:#f8fafc;font-size:13px">
+    <div style="font-weight:700;color:#374151;margin-bottom:8px">Excel 操作步骤：</div>
+    <ol style="padding-left:20px;line-height:2;color:#374151">
+      <li>A 列：每次现金流发生的<strong>日期</strong>（每年 1 月 1 日）</li>
+      <li>B 列：每次的<strong>现金流金额</strong>（投入为负数，取出为正数）</li>
+      <li>第 1–5 年每年填 <strong>-100,000</strong>（供款）</li>
+      <li>第 20 年末填 <strong>+1,404,000</strong>（退保取回）</li>
+      <li>在空格输入：<code>=XIRR(B1:B21, A1:A21)</code></li>
+      <li>得出的百分比数字就是 <strong>IRR</strong></li>
+    </ol>
+  </div>
+
+  <div class="emoji-title">📌 买储蓄险前，一定要问这两个数字</div>
+  <div style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:16px 20px;margin:12px 0">
+    <div style="font-size:13.5px;color:#374151;line-height:2">
+      <strong>问题一：第 10 年末 / 第 20 年末的保证 IRR 是多少？</strong><br>
+      （只看保证现金价值，不算非保证红利）<br><br>
+      <strong>问题二：按照保单演示的分红全额实现，总 IRR 是多少？</strong><br>
+      （这是最乐观情况下的数字）<br><br>
+      两个数字的差距越小，产品越稳健；差距越大，你承担的不确定性越高。
+    </div>
+  </div>
+
+  <div class="xhs-tip">
+    一个好的储蓄险顾问，应该能当场打开 Excel，用你的具体供款方案算出真实的 IRR 给你看——而不是只展示保单演示里那张漂亮的数字表格。
+  </div>
+
+  <div class="key-insight">
+    <div class="key-insight-title">💡 从业者视角</div>
+    <p>很多客户被"20 年变 3 倍"这个说法打动，但没有意识到年化只有 5%。这本身不是坏事，5% 的稳定复利在当前市场已经不错——但客户应该是在<strong>清楚知道是 5%</strong> 的情况下做的决定，而不是被模糊的"3 倍"数字引导。帮客户算出 IRR，才是真正的透明销售。</p>
+  </div>
+
+  <div class="section-end">
+    <a href="../index.html">← 返回指南主页</a> &nbsp;·&nbsp;
+    <a href="xhs-06-guarantee-vs-dividend.html">下一篇：保证回报 vs 非保证红利 →</a>
+  </div>
+</article>
+</body>
+</html>
