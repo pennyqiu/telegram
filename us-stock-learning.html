@@ -3156,31 +3156,126 @@ function switchCurrency2(mode) {
 </script>
 
 <h2>60岁时的退休资产验算</h2>
-<div class="code-block"><span class="cm">// 60岁退休场景验算（基准情景：$1,300万美元）</span>
 
-<span class="hl">4%法则（三一研究，Trinity Study）</span>
-每年提取资产的4%，历史上在任何30年周期内都不会耗尽
+<div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;padding:20px;margin:16px 0;font-size:13px;line-height:1.9">
+<strong style="color:#14532d;font-size:15px">📐 4%法则：从学术论文到你的退休账户</strong>
 
-$1,300万 × 4% = <span class="gd">$52万/年</span>（约人民币380万/年）
+<div style="margin-top:14px">
+<strong style="color:#14532d">① 理论来源：Trinity Study（1998年）</strong><br>
+由美国三一大学三位金融学教授 Philip Cooley、Carl Hubbard、Daniel Walz 发表。<br>
+研究了1925-1995年间<strong>所有30年滚动周期</strong>，不同股债配置下各种提取率的"成功率"（投资组合在30年内不耗尽的概率）：<br><br>
 
-假设你实际生活需求：
-  日常生活（中高质量）：约80万RMB/年
-  旅游+娱乐：约20万RMB/年
-  医疗健康：约20万RMB/年
-  总计：约120万RMB/年 ≈ $16.4万/年
+<div class="table-wrap"><table>
+<thead><tr><th>年提取率</th><th>100%股票</th><th>75%股票+25%债券</th><th>50%股票+50%债券</th></tr></thead>
+<tbody>
+<tr><td><strong>3%</strong></td><td>100%</td><td>100%</td><td>100%</td></tr>
+<tr><td><strong>4%</strong></td><td>100%</td><td>98%</td><td>95%</td></tr>
+<tr><td><strong>5%</strong></td><td>80%</td><td>78%</td><td>68%</td></tr>
+<tr><td><strong>6%</strong></td><td>67%</td><td>63%</td><td>52%</td></tr>
+</tbody></table></div>
+→ <strong>结论：以4%提取率，持有75%+股票，30年成功率98%。</strong><br><br>
 
-所需退休资产 = $16.4万 / 4% = <span class="hl">$410万</span>
+<strong style="color:#14532d">② 4%法则的运作机制（直觉理解）</strong><br>
+假设你有 <strong>¥1,000万</strong> 退休资产，按4%法则提取：<br>
+&nbsp;&nbsp;• 第1年取出 ¥40万，剩余 ¥960万 继续投资<br>
+&nbsp;&nbsp;• 假设组合年化收益7%：¥960万 × 1.07 = ¥1,027万<br>
+&nbsp;&nbsp;• 第2年再取 ¥40万（根据通胀调整，约¥41.2万）后，剩余 ¥986万<br>
+&nbsp;&nbsp;• 关键：<strong>资产增长速度 > 提取速度</strong>，本金不断扩大，可以永续<br><br>
 
-<span class="gd">你的目标$1,300万远超所需$410万！</span>
-这意味着：
-  ✅ 极强的财务安全边际（3倍以上）
-  ✅ 可以给子女留下大量遗产
-  ✅ 或者更早退休（50岁？55岁？）
+<div style="background:#fff;border-radius:8px;padding:12px 16px;border:1px solid #bbf7d0">
+<strong>核心数学：为什么是4%而不是3%或5%？</strong><br>
+长期股市年化收益约 <strong>10%</strong>（S&P 500历史均值）<br>
+长期通胀约 <strong>3%</strong><br>
+实际年化收益 ≈ 10% - 3% = <strong>7%</strong><br>
+安全提取率 = 实际收益 × 安全系数（约0.57）≈ <strong>4%</strong><br>
+→ 预留3%缓冲应对熊市序列风险（详见下方）
+</div>
+</div>
+</div>
 
-<span class="cm">// 55岁提前退休验算（基准情景：约$800万）</span>
-$800万 × 3.5% = $28万/年 ≈ 204万RMB/年
-仍远超日常生活需求 ✅
-（用3.5%而非4%，因为退休期更长，需保守）</div>
+<div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:12px;padding:20px;margin:16px 0;font-size:13px;line-height:1.9">
+<strong style="color:#c2410c;font-size:14px">⚠️ 4%法则最大的隐患：序列回报风险（Sequence of Returns Risk）</strong><br><br>
+
+<strong>什么是序列回报风险：</strong>同样的平均收益率，退休初期遭遇熊市 vs 晚期遭遇熊市，结果天差地别。<br><br>
+
+<strong>真实对比案例（均从$100万开始退休，每年取$4万）：</strong>
+<div class="table-wrap" style="margin-top:8px"><table>
+<thead><tr><th>年份</th><th>场景A（运气好：牛市先）收益率</th><th>场景A资产</th><th>场景B（运气差：熊市先）收益率</th><th>场景B资产</th></tr></thead>
+<tbody>
+<tr><td>退休第1年</td><td>+30%</td><td>$126万</td><td>-30%</td><td>$66万</td></tr>
+<tr><td>退休第2年</td><td>+25%</td><td>$153.5万</td><td>-20%</td><td>$48.8万</td></tr>
+<tr><td>退休第3年</td><td>+15%</td><td>$172.5万</td><td>+15%</td><td>$52.1万</td></tr>
+<tr><td>退休第5年</td><td>-20%</td><td>$171万</td><td>+25%</td><td>$79万</td></tr>
+<tr><td>退休第10年</td><td>平均+7%</td><td><strong style="color:#16a34a">$210万</strong></td><td>平均+7%</td><td><strong style="color:#dc2626">$51万（濒临耗尽）</strong></td></tr>
+</tbody></table></div>
+→ 相同的<strong>平均年化收益7%</strong>，但顺序不同，10年后资产相差4倍！<br><br>
+
+<strong>应对序列风险的3个工具：</strong><br>
+&nbsp;&nbsp;• <strong>现金缓冲（Cash Cushion）</strong>：退休时保留2年生活费的现金，熊市期间不卖股票，从现金取用<br>
+&nbsp;&nbsp;• <strong>动态提取法</strong>：牛市多取一点（4.5%），熊市少取一点（3%），而不是机械4%<br>
+&nbsp;&nbsp;• <strong>SCHD股息覆盖</strong>：靠股息收入支付日常开支，不需要卖股票，完美规避序列风险
+</div>
+
+<div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:12px;padding:20px;margin:16px 0;font-size:13px;line-height:1.9">
+<strong style="color:#1e40af;font-size:14px">🧮 你的个人退休推演（基于目标资产）</strong><br><br>
+
+<strong>场景一：60岁退休（基准目标 ¥1亿 ≈ $1,380万）</strong>
+<div class="table-wrap" style="margin-top:8px"><table>
+<thead><tr><th>提取率</th><th>每年可取（美元）</th><th>每年可取（人民币）</th><th>对应生活品质</th></tr></thead>
+<tbody>
+<tr><td>3%（极保守）</td><td>$41.4万</td><td>¥302万</td><td>超高品质，有大量剩余留给子女</td></tr>
+<tr><td><strong>4%（标准）</strong></td><td><strong>$55.2万</strong></td><td><strong>¥403万</strong></td><td><strong>年均¥33万/月，极为充裕</strong></td></tr>
+<tr><td>5%（略激进）</td><td>$69万</td><td>¥504万</td><td>30年成功率约80%，需动态调整</td></tr>
+</tbody></table></div>
+
+<strong>场景二：55岁提前退休（基准约 ¥5,760万 ≈ $789万）</strong>
+<div class="table-wrap" style="margin-top:8px"><table>
+<thead><tr><th>提取率</th><th>每年可取（美元）</th><th>每年可取（人民币）</th><th>备注</th></tr></thead>
+<tbody>
+<tr><td>3.5%（推荐，退休期长）</td><td>$27.6万</td><td>¥202万</td><td>月均¥16.8万，仍非常充裕</td></tr>
+<tr><td>4%</td><td>$31.6万</td><td>¥231万</td><td>月均¥19.2万，成功率约90%（35年）</td></tr>
+</tbody></table></div>
+
+<strong>你的实际生活支出估算（2060年代物价水平，通胀3%/年调整）：</strong>
+<div style="background:#fff;border-radius:8px;padding:10px 14px;margin:8px 0;border:1px solid #bfdbfe">
+日常生活（中高品质）：¥80-100万/年<br>
+旅游+兴趣爱好：¥30万/年<br>
+医疗健康（60岁后增加）：¥30-50万/年<br>
+子女/孙辈支持（可选）：¥20万/年<br>
+<strong>合计：¥160-200万/年</strong><br><br>
+→ 4%法则下你每年可取 <strong>¥403万</strong>，是实际需求的 <strong>2倍以上</strong><br>
+→ <strong style="color:#16a34a">结论：你的财务自由度极高，有大量盈余可以传承、慈善或提前享受</strong>
+</div>
+</div>
+
+<div style="background:#fef2f2;border:1px solid #fecaca;border-radius:12px;padding:16px;margin:16px 0;font-size:13px;line-height:1.9">
+<strong style="color:#991b1b;font-size:14px">🔄 4%法则在中国语境下的特殊考虑</strong><br><br>
+&nbsp;&nbsp;• <strong>汇率风险</strong>：资产以美元计价，生活支出是人民币——若人民币升值，实际购买力下降。建议保留15%港股+人民币资产对冲<br>
+&nbsp;&nbsp;• <strong>医疗成本</strong>：中国医疗费用通胀约8-10%/年，高于通胀均值，60岁后需专门预算<br>
+&nbsp;&nbsp;• <strong>社保补充</strong>：国内社保养老金约¥3,000-8,000/月，是额外的安全垫，4%法则计算中未纳入<br>
+&nbsp;&nbsp;• <strong>遗产税风险</strong>：美国目前遗产税豁免约$1,360万（2026年），持有美股资产需关注政策变化
+</div>
+
+<div class="code-block"><span class="cm">// 实操：60岁退休后的第一年提取计划</span>
+
+假设60岁时总资产 $1,380万（¥1亿），4%法则：
+年度提取额 = $55.2万 ≈ ¥403万
+
+季度提取建议（减少序列风险）：
+  Q1（1月）：提取 ¥100万，放入现金账户
+  Q2（4月）：提取 ¥100万，补充现金
+  Q3（7月）：提取 ¥100万，补充现金
+  Q4（10月）：提取 ¥103万，补充现金
+
+现金缓冲账户（另存）：¥300万（约2年生活费）
+  → 熊市期间（跌幅>20%）暂停提取，从缓冲账户支出
+  → 牛市恢复后补充缓冲账户
+
+SCHD股息自动覆盖（目标）：
+  如60岁时SCHD仓位¥3,000万（成本股息率约9%）
+  每年自动股息收入 ≈ ¥270万
+  → 股息直接覆盖日常生活支出，资本金几乎不动
+  → 真正实现"不卖股票也能活"</div>
 
 <h2>50-60岁的资产配置演变</h2>
 <div class="table-wrap"><table>
