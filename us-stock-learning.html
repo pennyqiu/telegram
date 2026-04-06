@@ -2775,20 +2775,114 @@ $110万 → $59万
 总股票比例：95%（激进，但年龄许可）</div>
 
 <h2>42-50年度详细规划表</h2>
+
+<div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+  <span style="font-size:13px;color:#475569;font-weight:500">计价货币：</span>
+  <div style="display:flex;background:#f1f5f9;border-radius:8px;padding:3px;gap:2px" id="currencyToggle">
+    <button onclick="switchCurrency('usd')" id="btn-usd"
+      style="padding:5px 16px;border-radius:6px;border:none;cursor:pointer;font-size:13px;font-weight:600;background:#2563eb;color:#fff;transition:all 0.2s">
+      🇺🇸 美元 USD
+    </button>
+    <button onclick="switchCurrency('cny')" id="btn-cny"
+      style="padding:5px 16px;border-radius:6px;border:none;cursor:pointer;font-size:13px;font-weight:600;background:transparent;color:#64748b;transition:all 0.2s">
+      🇨🇳 人民币 RMB
+    </button>
+  </div>
+  <span style="font-size:12px;color:#94a3b8" id="fxHint">汇率参考：1 USD = 7.3 RMB</span>
+</div>
+
 <div class="table-wrap"><table class="ret-table">
 <thead><tr><th>年龄</th><th>当年储蓄投入</th><th>年末目标资产（保守）</th><th>年末目标资产（基准）</th><th>关键里程碑</th></tr></thead>
 <tbody>
-<tr class="yr-key"><td><strong>42岁（起点）</strong></td><td>—</td><td>$110万</td><td>$110万</td><td>开立IB账户，建立ETF底仓</td></tr>
-<tr><td>43岁</td><td>$8万（60万RMB）</td><td>$131万</td><td>$136万</td><td>完成核心ETF仓位建立</td></tr>
-<tr><td>44岁</td><td>$8万</td><td>$155万</td><td>$165万</td><td>开始精选个股（3-5只）</td></tr>
-<tr><td>45岁</td><td>$8万</td><td>$181万</td><td>$196万</td><td>第一次完整年度再平衡</td></tr>
-<tr class="yr-key"><td><strong>46岁（资产翻倍目标）</strong></td><td>$9万</td><td>$209万</td><td>$232万</td><td>资产达$200万，庆祝里程碑！</td></tr>
-<tr><td>47岁</td><td>$9万</td><td>$241万</td><td>$271万</td><td>评估个股组合，清理表现差的</td></tr>
-<tr><td>48岁</td><td>$9万</td><td>$275万</td><td>$316万</td><td>开始学习税务优化</td></tr>
-<tr><td>49岁</td><td>$10万</td><td>$313万</td><td>$367万</td><td>检视工作收入变化，调整储蓄率</td></tr>
-<tr class="yr-key"><td><strong>50岁（阶段目标）</strong></td><td>$10万</td><td>$354万</td><td>$424万</td><td>目标$300-400万美元，开始考虑降风险</td></tr>
+<tr class="yr-key">
+  <td><strong>42岁（起点）</strong></td>
+  <td>—</td>
+  <td><span class="v-usd">$110万</span><span class="v-cny" style="display:none">¥803万</span></td>
+  <td><span class="v-usd">$110万</span><span class="v-cny" style="display:none">¥803万</span></td>
+  <td>开立IB账户，建立ETF底仓</td>
+</tr>
+<tr>
+  <td>43岁</td>
+  <td><span class="v-usd">$8万（60万RMB）</span><span class="v-cny" style="display:none">¥58万</span></td>
+  <td><span class="v-usd">$131万</span><span class="v-cny" style="display:none">¥956万</span></td>
+  <td><span class="v-usd">$136万</span><span class="v-cny" style="display:none">¥993万</span></td>
+  <td>完成核心ETF仓位建立</td>
+</tr>
+<tr>
+  <td>44岁</td>
+  <td><span class="v-usd">$8万</span><span class="v-cny" style="display:none">¥58万</span></td>
+  <td><span class="v-usd">$155万</span><span class="v-cny" style="display:none">¥1,132万</span></td>
+  <td><span class="v-usd">$165万</span><span class="v-cny" style="display:none">¥1,205万</span></td>
+  <td>开始精选个股（3-5只）</td>
+</tr>
+<tr>
+  <td>45岁</td>
+  <td><span class="v-usd">$8万</span><span class="v-cny" style="display:none">¥58万</span></td>
+  <td><span class="v-usd">$181万</span><span class="v-cny" style="display:none">¥1,321万</span></td>
+  <td><span class="v-usd">$196万</span><span class="v-cny" style="display:none">¥1,431万</span></td>
+  <td>第一次完整年度再平衡</td>
+</tr>
+<tr class="yr-key">
+  <td><strong>46岁（资产翻倍目标）</strong></td>
+  <td><span class="v-usd">$9万</span><span class="v-cny" style="display:none">¥66万</span></td>
+  <td><span class="v-usd">$209万</span><span class="v-cny" style="display:none">¥1,526万</span></td>
+  <td><span class="v-usd">$232万</span><span class="v-cny" style="display:none">¥1,694万</span></td>
+  <td>资产达$200万，庆祝里程碑！</td>
+</tr>
+<tr>
+  <td>47岁</td>
+  <td><span class="v-usd">$9万</span><span class="v-cny" style="display:none">¥66万</span></td>
+  <td><span class="v-usd">$241万</span><span class="v-cny" style="display:none">¥1,760万</span></td>
+  <td><span class="v-usd">$271万</span><span class="v-cny" style="display:none">¥1,978万</span></td>
+  <td>评估个股组合，清理表现差的</td>
+</tr>
+<tr>
+  <td>48岁</td>
+  <td><span class="v-usd">$9万</span><span class="v-cny" style="display:none">¥66万</span></td>
+  <td><span class="v-usd">$275万</span><span class="v-cny" style="display:none">¥2,008万</span></td>
+  <td><span class="v-usd">$316万</span><span class="v-cny" style="display:none">¥2,307万</span></td>
+  <td>开始学习税务优化</td>
+</tr>
+<tr>
+  <td>49岁</td>
+  <td><span class="v-usd">$10万</span><span class="v-cny" style="display:none">¥73万</span></td>
+  <td><span class="v-usd">$313万</span><span class="v-cny" style="display:none">¥2,285万</span></td>
+  <td><span class="v-usd">$367万</span><span class="v-cny" style="display:none">¥2,679万</span></td>
+  <td>检视工作收入变化，调整储蓄率</td>
+</tr>
+<tr class="yr-key">
+  <td><strong>50岁（阶段目标）</strong></td>
+  <td><span class="v-usd">$10万</span><span class="v-cny" style="display:none">¥73万</span></td>
+  <td><span class="v-usd">$354万</span><span class="v-cny" style="display:none">¥2,584万</span></td>
+  <td><span class="v-usd">$424万</span><span class="v-cny" style="display:none">¥3,095万</span></td>
+  <td>目标$300-400万美元，开始考虑降风险</td>
+</tr>
 </tbody></table></div>
-<p style="font-size:12px;color:var(--gray-400)">注：保守按年化7%，基准按年化9%计算。汇率按1USD=7.3RMB换算储蓄金额。</p>
+<p style="font-size:12px;color:var(--gray-400)">注：保守按年化7%，基准按年化9%计算。人民币汇率按1 USD = 7.3 RMB换算，汇率波动会影响实际数值。</p>
+
+<script>
+function switchCurrency(mode) {
+  const usdEls = document.querySelectorAll('.v-usd');
+  const cnyEls = document.querySelectorAll('.v-cny');
+  const btnUsd = document.getElementById('btn-usd');
+  const btnCny = document.getElementById('btn-cny');
+  if (mode === 'cny') {
+    usdEls.forEach(el => el.style.display = 'none');
+    cnyEls.forEach(el => el.style.display = 'inline');
+    btnCny.style.background = '#dc2626';
+    btnCny.style.color = '#fff';
+    btnUsd.style.background = 'transparent';
+    btnUsd.style.color = '#64748b';
+  } else {
+    usdEls.forEach(el => el.style.display = 'inline');
+    cnyEls.forEach(el => el.style.display = 'none');
+    btnUsd.style.background = '#2563eb';
+    btnUsd.style.color = '#fff';
+    btnCny.style.background = 'transparent';
+    btnCny.style.color = '#64748b';
+  }
+}
+</script>
 
 <h2>每月行动计划</h2>
 <div class="code-block"><span class="cm">// 每月具体操作</span>
@@ -2865,22 +2959,106 @@ $110万 → $59万
 因为你还有30+年的投资时间（通胀会侵蚀纯债券组合）</span></div>
 
 <h2>50-60年度详细规划表</h2>
+
+<div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+  <span style="font-size:13px;color:#475569;font-weight:500">计价货币：</span>
+  <div style="display:flex;background:#f1f5f9;border-radius:8px;padding:3px;gap:2px">
+    <button onclick="switchCurrency2('usd')" id="btn2-usd"
+      style="padding:5px 16px;border-radius:6px;border:none;cursor:pointer;font-size:13px;font-weight:600;background:#2563eb;color:#fff;transition:all 0.2s">
+      🇺🇸 美元 USD
+    </button>
+    <button onclick="switchCurrency2('cny')" id="btn2-cny"
+      style="padding:5px 16px;border-radius:6px;border:none;cursor:pointer;font-size:13px;font-weight:600;background:transparent;color:#64748b;transition:all 0.2s">
+      🇨🇳 人民币 RMB
+    </button>
+  </div>
+  <span style="font-size:12px;color:#94a3b8">汇率参考：1 USD = 7.3 RMB</span>
+</div>
+
 <div class="table-wrap"><table class="ret-table">
 <thead><tr><th>年龄</th><th>年储蓄投入</th><th>资产目标（保守）</th><th>资产目标（基准）</th><th>配置调整</th></tr></thead>
 <tbody>
-<tr class="yr-mid"><td><strong>50岁</strong></td><td>$10万</td><td>$354万</td><td>$424万</td><td>股票90%→85%，增加SCHD比例</td></tr>
-<tr class="yr-mid"><td>51岁</td><td>$10万</td><td>$400万</td><td>$484万</td><td>开始建立债券梯形（Bond Ladder）</td></tr>
-<tr class="yr-mid"><td>52岁</td><td>$10万</td><td>$450万</td><td>$549万</td><td>个股仓位 开始逐步减少</td></tr>
-<tr class="yr-mid"><td>53岁</td><td>$10万</td><td>$503万</td><td>$621万</td><td>股票85%→80%</td></tr>
-<tr class="yr-mid"><td><strong>54岁</strong></td><td>$10万</td><td>$562万</td><td>$701万</td><td><strong>资产可能突破$600万 🎉</strong></td></tr>
-<tr class="yr-mid"><td>55岁</td><td>$10万</td><td>$626万</td><td>$789万</td><td>股票80%→75%，增加债券</td></tr>
-<tr class="yr-late"><td>56岁</td><td>$8万</td><td>$696万</td><td>$885万</td><td>若考虑早退休，评估财务可行性</td></tr>
-<tr class="yr-late"><td>57岁</td><td>$8万</td><td>$773万</td><td>$991万</td><td>股票75%→70%</td></tr>
-<tr class="yr-late"><td>58岁</td><td>$8万</td><td>$858万</td><td>$1,108万</td><td>开始学习退休账户提取策略</td></tr>
-<tr class="yr-late"><td>59岁</td><td>$8万</td><td>$951万</td><td>$1,237万</td><td>股票70%→65%</td></tr>
-<tr class="yr-late"><td><strong>60岁（目标）</strong></td><td>最后一年</td><td><strong>$1,054万</strong></td><td><strong>$1,380万</strong></td><td>退休组合完成，开始提取模式</td></tr>
+<tr class="yr-mid"><td><strong>50岁</strong></td>
+  <td><span class="w-usd">$10万</span><span class="w-cny" style="display:none">¥73万</span></td>
+  <td><span class="w-usd">$354万</span><span class="w-cny" style="display:none">¥2,584万</span></td>
+  <td><span class="w-usd">$424万</span><span class="w-cny" style="display:none">¥3,095万</span></td>
+  <td>股票90%→85%，增加SCHD比例</td></tr>
+<tr class="yr-mid"><td>51岁</td>
+  <td><span class="w-usd">$10万</span><span class="w-cny" style="display:none">¥73万</span></td>
+  <td><span class="w-usd">$400万</span><span class="w-cny" style="display:none">¥2,920万</span></td>
+  <td><span class="w-usd">$484万</span><span class="w-cny" style="display:none">¥3,533万</span></td>
+  <td>开始建立债券梯形（Bond Ladder）</td></tr>
+<tr class="yr-mid"><td>52岁</td>
+  <td><span class="w-usd">$10万</span><span class="w-cny" style="display:none">¥73万</span></td>
+  <td><span class="w-usd">$450万</span><span class="w-cny" style="display:none">¥3,285万</span></td>
+  <td><span class="w-usd">$549万</span><span class="w-cny" style="display:none">¥4,008万</span></td>
+  <td>个股仓位 开始逐步减少</td></tr>
+<tr class="yr-mid"><td>53岁</td>
+  <td><span class="w-usd">$10万</span><span class="w-cny" style="display:none">¥73万</span></td>
+  <td><span class="w-usd">$503万</span><span class="w-cny" style="display:none">¥3,672万</span></td>
+  <td><span class="w-usd">$621万</span><span class="w-cny" style="display:none">¥4,533万</span></td>
+  <td>股票85%→80%</td></tr>
+<tr class="yr-mid"><td><strong>54岁</strong></td>
+  <td><span class="w-usd">$10万</span><span class="w-cny" style="display:none">¥73万</span></td>
+  <td><span class="w-usd">$562万</span><span class="w-cny" style="display:none">¥4,103万</span></td>
+  <td><span class="w-usd">$701万</span><span class="w-cny" style="display:none">¥5,117万</span></td>
+  <td><strong>资产可能突破$600万 🎉</strong></td></tr>
+<tr class="yr-mid"><td>55岁</td>
+  <td><span class="w-usd">$10万</span><span class="w-cny" style="display:none">¥73万</span></td>
+  <td><span class="w-usd">$626万</span><span class="w-cny" style="display:none">¥4,570万</span></td>
+  <td><span class="w-usd">$789万</span><span class="w-cny" style="display:none">¥5,760万</span></td>
+  <td>股票80%→75%，增加债券</td></tr>
+<tr class="yr-late"><td>56岁</td>
+  <td><span class="w-usd">$8万</span><span class="w-cny" style="display:none">¥58万</span></td>
+  <td><span class="w-usd">$696万</span><span class="w-cny" style="display:none">¥5,081万</span></td>
+  <td><span class="w-usd">$885万</span><span class="w-cny" style="display:none">¥6,461万</span></td>
+  <td>若考虑早退休，评估财务可行性</td></tr>
+<tr class="yr-late"><td>57岁</td>
+  <td><span class="w-usd">$8万</span><span class="w-cny" style="display:none">¥58万</span></td>
+  <td><span class="w-usd">$773万</span><span class="w-cny" style="display:none">¥5,643万</span></td>
+  <td><span class="w-usd">$991万</span><span class="w-cny" style="display:none">¥7,234万</span></td>
+  <td>股票75%→70%</td></tr>
+<tr class="yr-late"><td>58岁</td>
+  <td><span class="w-usd">$8万</span><span class="w-cny" style="display:none">¥58万</span></td>
+  <td><span class="w-usd">$858万</span><span class="w-cny" style="display:none">¥6,263万</span></td>
+  <td><span class="w-usd">$1,108万</span><span class="w-cny" style="display:none">¥8,088万</span></td>
+  <td>开始学习退休账户提取策略</td></tr>
+<tr class="yr-late"><td>59岁</td>
+  <td><span class="w-usd">$8万</span><span class="w-cny" style="display:none">¥58万</span></td>
+  <td><span class="w-usd">$951万</span><span class="w-cny" style="display:none">¥6,942万</span></td>
+  <td><span class="w-usd">$1,237万</span><span class="w-cny" style="display:none">¥9,030万</span></td>
+  <td>股票70%→65%</td></tr>
+<tr class="yr-late"><td><strong>60岁（目标）</strong></td>
+  <td>最后一年</td>
+  <td><span class="w-usd"><strong>$1,054万</strong></span><span class="w-cny" style="display:none"><strong>¥7,694万</strong></span></td>
+  <td><span class="w-usd"><strong>$1,380万</strong></span><span class="w-cny" style="display:none"><strong>¥1亿零74万</strong></span></td>
+  <td>退休组合完成，开始提取模式</td></tr>
 </tbody></table></div>
-<p style="font-size:12px;color:var(--gray-400)">注：保守按年化7%，基准按年化9%；每年储蓄金额55岁起因可能减少工作而有所降低。</p>
+<p style="font-size:12px;color:var(--gray-400)">注：保守按年化7%，基准按年化9%；每年储蓄金额55岁起因可能减少工作而有所降低。人民币按1 USD = 7.3 RMB换算，汇率波动会影响实际数值。</p>
+
+<script>
+function switchCurrency2(mode) {
+  const usdEls = document.querySelectorAll('.w-usd');
+  const cnyEls = document.querySelectorAll('.w-cny');
+  const btnUsd = document.getElementById('btn2-usd');
+  const btnCny = document.getElementById('btn2-cny');
+  if (mode === 'cny') {
+    usdEls.forEach(el => el.style.display = 'none');
+    cnyEls.forEach(el => el.style.display = 'inline');
+    btnCny.style.background = '#dc2626';
+    btnCny.style.color = '#fff';
+    btnUsd.style.background = 'transparent';
+    btnUsd.style.color = '#64748b';
+  } else {
+    usdEls.forEach(el => el.style.display = 'inline');
+    cnyEls.forEach(el => el.style.display = 'none');
+    btnUsd.style.background = '#2563eb';
+    btnUsd.style.color = '#fff';
+    btnCny.style.background = 'transparent';
+    btnCny.style.color = '#64748b';
+  }
+}
+</script>
 
 <h2>60岁时的退休资产验算</h2>
 <div class="code-block"><span class="cm">// 60岁退休场景验算（基准情景：$1,300万美元）</span>
