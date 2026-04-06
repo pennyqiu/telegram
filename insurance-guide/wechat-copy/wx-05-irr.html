@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><title>看懂IRR，才能判断储蓄险值不值得买</title></head>
+<body style="margin:0;padding:0;font-family:'PingFang SC','微软雅黑',sans-serif;font-size:15px;color:#333;background:#fff">
+<section style="max-width:677px;margin:0 auto;padding:0 16px">
+
+<section style="background:linear-gradient(135deg,#0277bd,#01579b);border-radius:12px;padding:32px 24px;margin:20px 0;text-align:center">
+  <p style="font-size:13px;color:rgba(255,255,255,.7);margin:0 0 8px">香港保险入门 · 储蓄篇⑤</p>
+  <h1 style="font-size:24px;font-weight:800;color:#fff;margin:0 0 12px;line-height:1.4">看懂 IRR<br>才能判断一份储蓄险值不值得买</h1>
+  <p style="font-size:14px;color:rgba(255,255,255,.85);margin:0;line-height:1.7">内部收益率是什么 · 怎么用 Excel 自己算 · 3 大误区避坑</p>
+</section>
+
+<p style="line-height:1.9;margin:20px 0">代理人给你展示保单演示时，通常会说一句话：<strong>"你投 50 万，20 年后变 140 万，翻了接近 3 倍！"</strong></p>
+<p style="line-height:1.9;margin:16px 0">这句话没有撒谎，但它隐藏了一个关键信息：这 3 倍是花了 20 年时间换来的，<strong>年化回报到底是多少？</strong>这就是 IRR 要回答的问题。</p>
+<p style="line-height:1.9;margin:16px 0">如果你不懂 IRR，就无法判断一份储蓄险是否值得买，也无法比较不同产品之间的真实差距。</p>
+
+<section style="border-top:2px solid #0277bd;margin:28px 0"></section>
+
+<h2 style="font-size:18px;font-weight:700;color:#0277bd;margin:24px 0 12px;padding-left:12px;border-left:4px solid #0277bd">一、IRR 是什么？一个例子说清楚</h2>
+
+<p style="line-height:1.9;margin:16px 0"><strong>IRR（Internal Rate of Return，内部收益率）</strong>是把你所有的现金流入和流出，折算成等效的年化复利回报率。简单说：<strong>就是这笔钱每年实际"长"了多少利息。</strong></p>
+
+<section style="background:#e1f5fe;border-radius:8px;padding:18px 20px;margin:16px 0">
+  <p style="margin:0 0 8px;font-size:14px;font-weight:700;color:#01579b">🔢 用刚才那个例子来算</p>
+  <p style="margin:0;font-size:14px;line-height:1.9;color:#0d47a1">每年供款 <strong>10 万港元</strong>，供 5 年，总投入 <strong>50 万元</strong><br>20 年末总现金价值（含非保证红利）：<strong>140.4 万港元</strong><br><br>
+  用 XIRR 函数计算得出：<br>
+  ✅ 若非保证红利全额实现：<strong style="font-size:17px">IRR ≈ 5.2%</strong><br>
+  ⚪ 若只计算保证部分（约78万）：<strong>保证 IRR ≈ 2.8%</strong></p>
+</section>
+
+<p style="line-height:1.9;margin:16px 0">看到这里，你可能会说："5.2% 也不算高啊。"——这个判断本身就是正确的态度。但 5.2% 的稳定复利，在当前利率环境下其实并不差，关键是你要<strong>在知道真实数字的情况下做决定</strong>，而不是被"翻 3 倍"这个模糊说法所驱动。</p>
+
+<h2 style="font-size:18px;font-weight:700;color:#0277bd;margin:28px 0 12px;padding-left:12px;border-left:4px solid #0277bd">二、不同 IRR，20 年后差多少钱？</h2>
+
+<p style="line-height:1.9;margin:16px 0">同样是每年投 10 万，供 5 年，持有 20 年，不同 IRR 下的结果对比（模拟数据）：</p>
+
+<section style="border:1px solid #b3e5fc;border-radius:8px;overflow:hidden;margin:16px 0">
+  <table style="width:100%;border-collapse:collapse;font-size:14px">
+    <thead><tr style="background:#0277bd;color:#fff">
+      <th style="padding:10px 14px;text-align:left">IRR</th>
+      <th style="padding:10px 14px;text-align:left">20 年后金额</th>
+      <th style="padding:10px 14px;text-align:left">参考</th>
+    </tr></thead>
+    <tbody>
+      <tr style="background:#f0f9ff"><td style="padding:9px 14px;border-bottom:1px solid #b3e5fc">2%</td><td style="padding:9px 14px;border-bottom:1px solid #b3e5fc">约 73 万</td><td style="padding:9px 14px;border-bottom:1px solid #b3e5fc;color:#999">约等于银行定存</td></tr>
+      <tr><td style="padding:9px 14px;border-bottom:1px solid #b3e5fc">4%</td><td style="padding:9px 14px;border-bottom:1px solid #b3e5fc">约 110 万</td><td style="padding:9px 14px;border-bottom:1px solid #b3e5fc;color:#f57c00">市场中等水平</td></tr>
+      <tr style="background:#f0f9ff"><td style="padding:9px 14px;border-bottom:1px solid #b3e5fc"><strong>5%</strong></td><td style="padding:9px 14px;border-bottom:1px solid #b3e5fc"><strong>约 128 万</strong></td><td style="padding:9px 14px;border-bottom:1px solid #b3e5fc;color:#0277bd"><strong>港险主流水平 ⭐</strong></td></tr>
+      <tr><td style="padding:9px 14px;border-bottom:1px solid #b3e5fc">6%</td><td style="padding:9px 14px;border-bottom:1px solid #b3e5fc">约 149 万</td><td style="padding:9px 14px;border-bottom:1px solid #b3e5fc;color:#2e7d32">优质产品</td></tr>
+      <tr style="background:#f0f9ff"><td style="padding:9px 14px">7%</td><td style="padding:9px 14px">约 173 万</td><td style="padding:9px 14px;color:#7b1fa2">顶尖（含高比例非保证）</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<p style="line-height:1.9;margin:16px 0">5% 和 7% 看起来只差 2 个百分点，但 20 年后相差 <strong>45 万港元</strong>。这就是复利的力量，也是 IRR 数字为什么如此重要。</p>
+
+<h2 style="font-size:18px;font-weight:700;color:#0277bd;margin:28px 0 12px;padding-left:12px;border-left:4px solid #0277bd">三、关于 IRR 的 3 个常见误区</h2>
+
+<p style="line-height:1.9;margin:16px 0"><strong>误区一："回报率 6.5%" 就是 IRR 6.5%？</strong></p>
+<section style="background:#fff3e0;border-left:4px solid #ff9800;border-radius:0 8px 8px 0;padding:14px 16px;margin:10px 0 20px">
+  <p style="margin:0;font-size:14px;line-height:1.8;color:#e65100">不是。代理人说的"预期回报率"通常是保单成熟时某一年的年化收益，而 IRR 要把前几年现金价值低于投入的损耗也算进去。真实 IRR 通常比宣传数字低 1–2 个百分点。</p>
+</section>
+
+<p style="line-height:1.9;margin:16px 0"><strong>误区二：直接选 IRR 最高的产品就对了？</strong></p>
+<section style="background:#fff3e0;border-left:4px solid #ff9800;border-radius:0 8px 8px 0;padding:14px 16px;margin:10px 0 20px">
+  <p style="margin:0;font-size:14px;line-height:1.8;color:#e65100">要区分"保证 IRR"和"总 IRR（含非保证）"。IRR 高的产品，往往是非保证红利占比更高——这意味着你承担了更大的不确定性。应该同时看两个数字，不能只看总 IRR。</p>
+</section>
+
+<p style="line-height:1.9;margin:16px 0"><strong>误区三：持有时间越长，IRR 一定越高？</strong></p>
+<section style="background:#fff3e0;border-left:4px solid #ff9800;border-radius:0 8px 8px 0;padding:14px 16px;margin:10px 0 20px">
+  <p style="margin:0;font-size:14px;line-height:1.8;color:#e65100">不一定。大多数储蓄险在持有 10–20 年后 IRR 达到峰值，之后趋于平稳甚至略微下降。了解"最佳退出年份"，有助于更好地规划使用这笔资金的时机。</p>
+</section>
+
+<h2 style="font-size:18px;font-weight:700;color:#0277bd;margin:28px 0 12px;padding-left:12px;border-left:4px solid #0277bd">四、如何用 Excel 自己算 IRR？</h2>
+
+<p style="line-height:1.9;margin:16px 0">不需要专业知识，只需用 Excel 或 Google Sheets 的 <strong>XIRR 函数</strong>：</p>
+
+<section style="background:#f0f9ff;border:1px solid #b3e5fc;border-radius:8px;padding:18px 20px;margin:16px 0">
+  <p style="margin:0 0 8px;font-size:14px;font-weight:700;color:#01579b">操作步骤：</p>
+  <p style="margin:0;font-size:14px;line-height:2.1;color:#0d47a1">
+  ① A 列输入每次现金流的日期（每年 1 月 1 日）<br>
+  ② B 列输入现金流金额（投入为<strong>负数</strong>，取出为正数）<br>
+  ③ 第 1–5 年每年输入 <strong>-100,000</strong>（供款）<br>
+  ④ 第 20 年末输入 <strong>+1,404,000</strong>（退保取回金额）<br>
+  ⑤ 空白格输入公式：<strong>=XIRR(B1:B21, A1:A21)</strong><br>
+  ⑥ 得出百分比 = 你的真实 IRR ✅
+  </p>
+</section>
+
+<h2 style="font-size:18px;font-weight:700;color:#0277bd;margin:28px 0 12px;padding-left:12px;border-left:4px solid #0277bd">五、购买储蓄险前，必须问的 2 个问题</h2>
+
+<section style="background:#e1f5fe;border-radius:8px;padding:18px 20px;margin:16px 0">
+  <p style="margin:0 0 10px;font-size:14px;line-height:1.9;color:#01579b">
+  <strong>问题一：</strong>第 10 年 / 第 20 年末，只计算保证现金价值的 IRR 是多少？<br>
+  （这是你的"兜底回报"，无论市场好坏都能拿到的）<br><br>
+  <strong>问题二：</strong>按照保单演示的分红全额实现，总 IRR 是多少？<br>
+  （这是最乐观情况下的数字）<br><br>
+  两个数字的差距越小，产品越稳健；差距越大，不确定性越高。
+  </p>
+</section>
+
+<section style="background:#e8f0fe;border-radius:10px;padding:20px 22px;margin:24px 0">
+  <p style="margin:0 0 10px;font-size:15px;font-weight:700;color:#1a237e">📌 本文核心要点</p>
+  <p style="margin:0;font-size:14px;line-height:2;color:#283593">
+  · IRR 是衡量储蓄险回报最准确的指标，而非"翻几倍"<br>
+  · 保证 IRR 和总 IRR 都要关注，缺一不可<br>
+  · 用 Excel XIRR 函数可以自己验算<br>
+  · 5% 的稳定年化并非"不好"，关键是在知情状态下选择
+  </p>
+</section>
+
+<section style="background:#f5f5f5;border-radius:10px;padding:20px 22px;margin:28px 0;text-align:center">
+  <p style="margin:0 0 8px;font-size:15px;font-weight:700;color:#333">如果这篇文章对你有帮助</p>
+  <p style="margin:0 0 12px;font-size:14px;color:#666;line-height:1.7">欢迎转发给有需要的朋友 🙏<br>关注我们，持续更新香港保险、理财规划干货</p>
+  <p style="margin:0;font-size:13px;color:#999">下一篇：香港各大保险公司分红实现率，数据全在这里</p>
+</section>
+
+</section>
+</body>
+</html>
