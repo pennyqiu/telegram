@@ -2298,8 +2298,102 @@ SPY的创新之处：
   → 价值因子：低P/B股票长期跑赢（Fama-French）
   → 规模因子：小盘股长期跑赢
   → 动量因子：过去表现好的股票短期继续表现好
-  → 质量因子：高ROE、低杠杆公司表现好
+  → 质量因子：高ROE、低杠杆公司表现好</div>
 
+<div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:12px;padding:18px;margin:14px 0;font-size:13px;line-height:1.9">
+<strong style="color:#1e40af;font-size:14px">📚 四大因子的学术证据（为什么"不敢相信"是正常的）</strong>
+<p style="color:#475569;margin:8px 0 14px">这些结论都有数十年实证数据支撑，但每个因子也都有"反驳期"，理解背后的机制比死记结论更重要。</p>
+
+<div style="display:grid;gap:12px">
+
+  <div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;overflow:hidden">
+    <div style="background:#f0fdf4;padding:10px 14px;border-bottom:1px solid #bbf7d0">
+      <strong style="color:#14532d">① 价值因子（Value Premium）— Fama &amp; French 1992</strong>
+    </div>
+    <div style="padding:12px 14px">
+      <strong>原始论文：</strong>"The Cross-Section of Expected Stock Returns" — Eugene Fama &amp; Kenneth French，<em>Journal of Finance</em> 1992<br>
+      这篇论文让 Fama 在2013年获得诺贝尔经济学奖。<br><br>
+      <strong>核心数据（1963-1990年美股）：</strong><br>
+      &nbsp;&nbsp;• 按 P/B 从低到高分成10组：<strong>最低P/B组年化回报约21%，最高P/B组约8%</strong>，差距13个百分点/年<br>
+      &nbsp;&nbsp;• 扩展至全球市场（13个国家，1975-1995年）：价值溢价依然存在<br><br>
+      <strong>为什么存在（两种解释）：</strong><br>
+      &nbsp;&nbsp;• 风险解释：低P/B公司往往是陷入困境的公司，持有它们承担更高"财务困境风险"，超额收益是风险补偿<br>
+      &nbsp;&nbsp;• 行为解释：投资者系统性地对"无聊的便宜公司"过度悲观，对"明星成长公司"过度乐观，价值股被低估<br><br>
+      <strong>近年的挑战：</strong>2010-2020年价值因子跑输成长股长达10年（科技革命导致低P/B公司确实质量更差），但2022年利率上升后价值因子大幅回归。
+    </div>
+  </div>
+
+  <div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;overflow:hidden">
+    <div style="background:#fdf4ff;padding:10px 14px;border-bottom:1px solid #e9d5ff">
+      <strong style="color:#4c1d95">② 规模因子（Size Premium）— Banz 1981</strong>
+    </div>
+    <div style="padding:12px 14px">
+      <strong>原始论文：</strong>"The Relationship Between Return and Market Value of Common Stocks" — Rolf Banz，<em>Journal of Financial Economics</em> 1981<br><br>
+      <strong>核心数据（1926-1975年美股，约50年）：</strong><br>
+      &nbsp;&nbsp;• 小盘股（最小20%市值）年化回报约<strong>19.8%</strong><br>
+      &nbsp;&nbsp;• 大盘股（最大20%市值）年化回报约<strong>14.0%</strong><br>
+      &nbsp;&nbsp;• 长期溢价约 <strong>+5.8%/年</strong>（但波动极大）<br><br>
+      <strong>Fama-French 三因子模型（1993）将其正式化：</strong><br>
+      <code style="background:#f1f5f9;padding:2px 8px;border-radius:4px;font-size:12px">预期收益 = 无风险利率 + β×市场溢价 + s×规模溢价（SMB）+ h×价值溢价（HML）</code><br>
+      SMB = Small Minus Big（小盘减大盘收益差）<br><br>
+      <strong>为什么存在：</strong><br>
+      &nbsp;&nbsp;• 小公司流动性差，机构难以大量持有，散户投资者风险补偿<br>
+      &nbsp;&nbsp;• 小公司信息不透明，研究覆盖少，定价效率低<br><br>
+      <strong>近年的挑战：</strong>2010年后规模溢价基本消失，部分学者认为是被发现后套利消失（因子衰减）；但"质量小盘"（QMJ+SMB）依然有效。
+    </div>
+  </div>
+
+  <div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;overflow:hidden">
+    <div style="background:#fff7ed;padding:10px 14px;border-bottom:1px solid #fed7aa">
+      <strong style="color:#7c2d12">③ 动量因子（Momentum）— Jegadeesh &amp; Titman 1993</strong>
+    </div>
+    <div style="padding:12px 14px">
+      <strong>原始论文：</strong>"Returns to Buying Winners and Selling Losers" — Narasimhan Jegadeesh &amp; Sheridan Titman，<em>Journal of Finance</em> 1993<br>
+      这篇论文被认为是对 EMH 最强的实证挑战之一。<br><br>
+      <strong>核心数据：</strong><br>
+      &nbsp;&nbsp;• 策略：买入过去3-12个月涨幅最高的前10%股票，做空跌幅最大的10%<br>
+      &nbsp;&nbsp;• 1965-1989年美股数据：该策略<strong>年化超额收益约12%</strong>，持续显著<br>
+      &nbsp;&nbsp;• 后被 AQR 的 Cliff Asness 证实在40多个国家和多种资产类别（商品、货币、债券）中均存在<br><br>
+      <strong>为什么存在（行为金融学解释）：</strong><br>
+      &nbsp;&nbsp;• <strong>信息扩散慢</strong>：好消息不会立刻被所有人知道，价格渐进上涨（Under-reaction）<br>
+      &nbsp;&nbsp;• <strong>追涨行为</strong>：投资者看到上涨后才跟进，形成自我强化（Over-reaction的反面）<br>
+      &nbsp;&nbsp;• <strong>机构行为</strong>：基金经理季末买入涨势好的股票美化组合（Window dressing）<br><br>
+      <strong>风险：</strong>动量因子在市场急速反转时会崩溃（"动量崩盘"）。2009年3月美股反弹初期，动量策略单月亏损约40%。
+    </div>
+  </div>
+
+  <div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;overflow:hidden">
+    <div style="background:#f0fdf4;padding:10px 14px;border-bottom:1px solid #bbf7d0">
+      <strong style="color:#064e3b">④ 质量因子（Quality/Profitability）— Novy-Marx 2013 &amp; AQR</strong>
+    </div>
+    <div style="padding:12px 14px">
+      <strong>原始论文：</strong>"The Other Side of Value: The Gross Profitability Premium" — Robert Novy-Marx，<em>Journal of Financial Economics</em> 2013<br><br>
+      <strong>核心数据：</strong><br>
+      &nbsp;&nbsp;• 按毛利率（Gross Profit/Assets）排名：<strong>高毛利率公司年化超额收益约+3.8%</strong><br>
+      &nbsp;&nbsp;• AQR 将其扩展为"QMJ因子"（Quality Minus Junk）：高质量公司（高盈利、低杠杆、稳定增长）vs 垃圾公司<br>
+      &nbsp;&nbsp;• 1957-2012年美股：QMJ因子年化超额收益 <strong>+4.6%</strong>，夏普比率约0.45<br>
+      &nbsp;&nbsp;• 同样在全球24个股市中均有效（AQR，2019）<br><br>
+      <strong>为什么存在：</strong><br>
+      &nbsp;&nbsp;• 投资者错误地将"高质量"与"高估值"画等号，回避质量股（认为已被定价）<br>
+      &nbsp;&nbsp;• 机构被追踪基准束缚，无法充分超配质量股<br><br>
+      <strong>与价值因子的关系：</strong>质量因子与价值因子存在<strong>负相关</strong>（便宜的公司往往质量差）。<br>
+      "Quality at a Reasonable Price"（QARP）= 同时筛选质量+合理估值，是巴菲特核心策略的学术表达。
+    </div>
+  </div>
+
+</div>
+
+<div style="margin-top:14px;padding:12px 16px;background:#fefce8;border-radius:8px;border:1px solid #fde68a;font-size:12px;color:#78350f">
+  <strong>⚠️ 重要警示：因子投资的"观测者效应"</strong><br>
+  学者 McLean &amp; Pontiff（2016年）在 <em>Journal of Finance</em> 发表研究，分析了97种"市场异常"：<br>
+  &nbsp;&nbsp;• 论文发表<strong>前</strong>：异常因子平均超额收益约9.4%/年<br>
+  &nbsp;&nbsp;• 论文发表<strong>后</strong>：超额收益平均衰减约58%（降至约4%）<br>
+  &nbsp;&nbsp;→ 因子被发现 → 套利资金涌入 → 溢价缩小，这是市场效率的体现。<br>
+  &nbsp;&nbsp;→ <strong>结论：因子投资有效，但收益在学术发现后会打折，不要对超额收益预期过高。</strong>
+</div>
+</div>
+
+<div class="code-block" style="margin-top:4px">
 2004年：PowerShares推出第一批"智慧型Beta"ETF
 2010年代：行业ETF（如XLK科技、XLF金融）大量涌现
 
