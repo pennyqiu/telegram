@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>美股估值计算器 · DCF / DDM / PE 三合一</title>
+<style>
+:root{
+  --primary:#1a56db;--primary-dark:#1240a8;--primary-light:#eff6ff;
+  --success:#057a55;--success-light:#def7ec;
+  --warning:#c27803;--warning-light:#fef9c3;
+  --danger:#c81e1e;--danger-light:#fde8e8;
+  --purple:#7e3af2;--purple-light:#edebfe;
+  --gray-50:#f9fafb;--gray-100:#f3f4f6;--gray-200:#e5e7eb;
+  --gray-300:#d1d5db;--gray-400:#9ca3af;--gray-500:#6b7280;
+  --gray-600:#4b5563;--gray-700:#374151;--gray-800:#1f2937;--gray-900:#111827;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hiragino Sans GB',sans-serif;background:var(--gray-50);color:var(--gray-800);line-height:1.7;}
+.page{max-width:820px;margin:0 auto;padding:24px 20px 60px;}
+.back-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--gray-500);text-decoration:none;margin-bottom:18px;transition:color .15s;}
+.back-link:hover{color:var(--primary);}
+/* Hero */
+.hero{background:linear-gradient(135deg,#1a56db 0%,#7e3af2 100%);border-radius:16px;padding:36px 40px;color:#fff;margin-bottom:28px;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;top:-50px;right:-50px;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,.07);}
+.hero-tag{display:inline-block;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);border-radius:20px;padding:3px 12px;font-size:12px;margin-bottom:14px;}
+.hero h1{font-size:26px;font-weight:800;margin-bottom:8px;line-height:1.3;}
+.hero p{font-size:14px;opacity:.88;line-height:1.7;}
+/* Tabs */
+.tabs{display:flex;gap:6px;background:#fff;border:1px solid var(--gray-200);border-radius:12px;padding:5px;margin-bottom:20px;}
+.tab{flex:1;text-align:center;padding:10px 8px;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;color:var(--gray-500);transition:all .2s;border:none;background:none;}
+.tab.active{background:var(--primary);color:#fff;}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+/* Card */
+.card{background:#fff;border:1px solid var(--gray-200);border-radius:14px;padding:28px;margin-bottom:20px;}
+.card-title{font-size:16px;font-weight:700;color:var(--gray-900);margin-bottom:18px;display:flex;align-items:center;gap:8px;}
+.card-title::before{content:'';width:4px;height:18px;background:var(--primary);border-radius:2px;display:block;}
+/* Form */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.form-group{display:flex;flex-direction:column;gap:6px;}
+.form-group.full{grid-column:1/-1;}
+label{font-size:13px;font-weight:600;color:var(--gray-700);}
+.label-hint{font-weight:400;color:var(--gray-400);font-size:11px;margin-left:4px;}
+input[type=number],select{padding:10px 14px;border:1.5px solid var(--gray-200);border-radius:9px;font-size:14px;color:var(--gray-800);transition:border-color .15s;width:100%;background:#fff;}
+input:focus,select:focus{outline:none;border-color:var(--primary);}
+.input-suffix{position:relative;}
+.input-suffix input{padding-right:44px;}
+.input-suffix .suffix{position:absolute;right:13px;top:50%;transform:translateY(-50%);font-size:12px;color:var(--gray-400);}
+.slider-row{display:flex;align-items:center;gap:12px;}
+.slider-row input[type=range]{flex:1;accent-color:var(--primary);}
+.slider-val{min-width:52px;text-align:right;font-size:14px;font-weight:700;color:var(--primary);}
+/* Button */
+.calc-btn{width:100%;padding:13px;background:var(--primary);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;transition:background .15s;margin-top:18px;}
+.calc-btn:hover{background:var(--primary-dark);}
+/* Result */
+.result-block{display:none;}
+.result-block.show{display:block;}
+/* Gauge */
+.gauge-wrap{text-align:center;padding:20px 0;}
+.gauge-title{font-size:13px;color:var(--gray-500);margin-bottom:14px;}
+.gauge-svg-wrap{position:relative;display:inline-block;}
+.gauge-label{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);text-align:center;}
+.gauge-price{font-size:28px;font-weight:900;line-height:1;}
+.gauge-sub{font-size:12px;color:var(--gray-500);margin-top:2px;}
+/* Value Band */
+.band{margin:20px 0;}
+.band-title{font-size:13px;font-weight:600;color:var(--gray-700);margin-bottom:12px;}
+.band-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.band-name{font-size:12px;color:var(--gray-600);width:90px;flex-shrink:0;}
+.band-track{flex:1;height:20px;background:var(--gray-100);border-radius:6px;overflow:hidden;position:relative;}
+.band-fill{height:100%;border-radius:6px;transition:width .6s ease;}
+.band-val{font-size:13px;font-weight:700;width:70px;text-align:right;flex-shrink:0;}
+.current-price-line{position:absolute;top:0;bottom:0;width:2px;background:#1f2937;z-index:2;}
+/* Key Stats */
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0;}
+.stat-box{background:var(--gray-50);border:1px solid var(--gray-200);border-radius:10px;padding:14px;text-align:center;}
+.stat-num{font-size:20px;font-weight:800;color:var(--primary);}
+.stat-label{font-size:11px;color:var(--gray-500);margin-top:2px;}
+/* Callout */
+.callout{border-radius:10px;padding:14px 18px;margin:14px 0;font-size:13.5px;border-left:4px solid;line-height:1.65;}
+.callout.yellow{background:var(--warning-light);border-color:#d97706;color:#78350f;}
+.callout.blue{background:var(--primary-light);border-color:var(--primary);color:#1e3a8a;}
+.callout.green{background:var(--success-light);border-color:var(--success);color:#064e3b;}
+.callout.red{background:var(--danger-light);border-color:var(--danger);color:#7f1d1d;}
+.callout strong{font-weight:700;}
+/* DCF Steps */
+.step-list{margin:16px 0;}
+.step-item{display:flex;gap:12px;margin-bottom:12px;align-items:flex-start;}
+.step-num{width:26px;height:26px;border-radius:50%;background:var(--primary);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;}
+.step-body{flex:1;}
+.step-title{font-size:13px;font-weight:700;color:var(--gray-800);}
+.step-desc{font-size:12px;color:var(--gray-500);line-height:1.5;}
+/* PE Band Table */
+.pe-table{width:100%;border-collapse:collapse;font-size:13px;}
+.pe-table th{padding:9px 14px;text-align:left;background:var(--gray-50);font-weight:600;color:var(--gray-600);border-bottom:1px solid var(--gray-200);}
+.pe-table td{padding:9px 14px;border-bottom:1px solid var(--gray-100);}
+.pe-table .row-bear td{background:#fef2f2;}
+.pe-table .row-base td{background:#eff6ff;font-weight:700;color:var(--primary);}
+.pe-table .row-bull td{background:#f0fdf4;}
+/* Sensitivity */
+.sens-wrap{overflow-x:auto;margin:16px 0;}
+.sens-table{border-collapse:collapse;font-size:12px;min-width:360px;}
+.sens-table th,.sens-table td{border:1px solid var(--gray-200);padding:7px 11px;text-align:center;}
+.sens-table th{background:var(--gray-50);font-weight:600;font-size:11px;}
+.sens-hl{background:#dcfce7;font-weight:700;color:#166534;}
+.sens-lo{background:#fee2e2;font-weight:700;color:#991b1b;}
+.sens-mid{background:#eff6ff;font-weight:700;color:var(--primary);}
+/* Preset buttons */
+.preset-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;}
+.preset-btn{padding:5px 12px;border:1.5px solid var(--gray-200);border-radius:20px;font-size:12px;cursor:pointer;background:#fff;color:var(--gray-700);font-weight:600;transition:all .15s;}
+.preset-btn:hover{border-color:var(--primary);color:var(--primary);}
+@media(max-width:600px){
+  .form-grid{grid-template-columns:1fr;}
+  .stats-row{grid-template-columns:1fr 1fr;}
+  .hero{padding:24px 20px;}
+  .hero h1{font-size:20px;}
+  .card{padding:18px;}
+  .tabs{flex-wrap:wrap;}
+}
+</style>
+</head>
+<body>
+<div class="page">
+  <a href="us-stock-learning.html" class="back-link">← 返回美股学习路径</a>
+
+  <div class="hero">
+    <div class="hero-tag">美股工具 · 估值计算器</div>
+    <h1>美股估值计算器</h1>
+    <p>DCF 现金流折现 · DDM 股息折现 · PE 估值区间 · 三种方法交叉验证，为你的持仓提供合理价值锚点</p>
+  </div>
+
+  <!-- 方法选择 -->
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab(0)">💰 DCF 现金流折现</button>
+    <button class="tab" onclick="switchTab(1)">📮 DDM 股息折现</button>
+    <button class="tab" onclick="switchTab(2)">📊 PE 估值区间</button>
+  </div>
+
+  <!-- ========== TAB 0: DCF ========== -->
+  <div class="tab-panel active" id="panel-0">
+    <div class="card">
+      <div class="card-title">DCF 现金流折现模型</div>
+
+      <div class="preset-row">
+        <span style="font-size:12px;color:var(--gray-500);margin-right:4px;">快速填入：</span>
+        <button class="preset-btn" onclick="dcfPreset('AAPL')">🍎 AAPL</button>
+        <button class="preset-btn" onclick="dcfPreset('MSFT')">💻 MSFT</button>
+        <button class="preset-btn" onclick="dcfPreset('GOOGL')">🔍 GOOGL</button>
+        <button class="preset-btn" onclick="dcfPreset('NVDA')">🖥 NVDA</button>
+        <button class="preset-btn" onclick="dcfPreset('custom')">✏️ 自定义</button>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label>当前自由现金流 FCF <span class="label-hint">（百万美元）</span></label>
+          <div class="input-suffix">
+            <input type="number" id="dcf_fcf" value="110000" min="1">
+            <span class="suffix">百万</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>流通股数 <span class="label-hint">（百万股）</span></label>
+          <div class="input-suffix">
+            <input type="number" id="dcf_shares" value="15400" min="1">
+            <span class="suffix">百万</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>高增长阶段年数</label>
+          <div class="input-suffix">
+            <input type="number" id="dcf_stage1_years" value="5" min="1" max="15">
+            <span class="suffix">年</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>高增长阶段 FCF 增速</label>
+          <div class="slider-row">
+            <input type="range" min="-10" max="40" step="0.5" value="10" id="dcf_g1" oninput="sync('dcf_g1','dcf_g1_val')">
+            <span class="slider-val" id="dcf_g1_val">10%</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>过渡阶段年数</label>
+          <div class="input-suffix">
+            <input type="number" id="dcf_stage2_years" value="5" min="0" max="15">
+            <span class="suffix">年</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>过渡阶段 FCF 增速</label>
+          <div class="slider-row">
+            <input type="range" min="-5" max="20" step="0.5" value="5" id="dcf_g2" oninput="sync('dcf_g2','dcf_g2_val')">
+            <span class="slider-val" id="dcf_g2_val">5%</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>永续增长率（Terminal g）</label>
+          <div class="slider-row">
+            <input type="range" min="0" max="5" step="0.1" value="2.5" id="dcf_tg" oninput="sync('dcf_tg','dcf_tg_val')">
+            <span class="slider-val" id="dcf_tg_val">2.5%</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>折现率 / WACC</label>
+          <div class="slider-row">
+            <input type="range" min="5" max="20" step="0.1" value="10" id="dcf_wacc" oninput="sync('dcf_wacc','dcf_wacc_val')">
+            <span class="slider-val" id="dcf_wacc_val">10%</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>净现金（净债务用负数）<span class="label-hint">（百万美元）</span></label>
+          <div class="input-suffix">
+            <input type="number" id="dcf_cash" value="67000">
+            <span class="suffix">百万</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>当前股价 <span class="label-hint">（用于对比）</span></label>
+          <div class="input-suffix">
+            <input type="number" id="dcf_price" value="195" step="0.01">
+            <span class="suffix">USD</span>
+          </div>
+        </div>
+      </div>
+
+      <button class="calc-btn" onclick="calcDCF()">📐 计算内在价值</button>
+    </div>
+
+    <div class="result-block" id="dcf_result">
+      <div class="card">
+        <div class="card-title">DCF 估值结果</div>
+        <div class="gauge-wrap">
+          <div class="gauge-title">内在价值 vs 当前股价</div>
+          <div style="position:relative;height:160px;">
+            <canvas id="dcfGauge" width="320" height="160" style="display:block;margin:0 auto;"></canvas>
+            <div class="gauge-label">
+              <div class="gauge-price" id="dcfIntrinsic">—</div>
+              <div class="gauge-sub">每股内在价值</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="stats-row">
+          <div class="stat-box"><div class="stat-num" id="dcfUpside">—</div><div class="stat-label">上行空间/下行风险</div></div>
+          <div class="stat-box"><div class="stat-num" id="dcfTerminalPct">—</div><div class="stat-label">终值占总估值比</div></div>
+          <div class="stat-box"><div class="stat-num" id="dcfFCFYield">—</div><div class="stat-label">当前 FCF Yield</div></div>
+        </div>
+
+        <div id="dcfCallout"></div>
+
+        <div class="band" style="margin-top:20px">
+          <div class="band-title">牛/基/熊情景价值区间</div>
+          <div id="dcfBands"></div>
+        </div>
+
+        <h4 style="font-size:14px;font-weight:700;margin:20px 0 10px;color:var(--gray-700);">敏感性分析：增速 × WACC → 内在价值</h4>
+        <div class="sens-wrap">
+          <table class="sens-table" id="dcfSens"></table>
+        </div>
+
+        <div class="callout yellow" style="margin-top:16px">
+          <strong>DCF 局限：</strong>模型高度依赖增速和折现率假设，±1% 的变动可导致估值相差 20–40%。建议结合 DDM 和 PE 法进行交叉验证，并留有足够的安全边际（≥30%）。
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== TAB 1: DDM ========== -->
+  <div class="tab-panel" id="panel-1">
+    <div class="card">
+      <div class="card-title">DDM 股息折现模型</div>
+      <div class="callout blue" style="margin-bottom:16px">
+        DDM 适用于<strong>稳定付股息的公司</strong>（如消费品、公用事业、银行）。成长型科技股通常不适合用 DDM 估值。
+      </div>
+      <div class="preset-row">
+        <span style="font-size:12px;color:var(--gray-500);margin-right:4px;">快速填入：</span>
+        <button class="preset-btn" onclick="ddmPreset('KO')">🥤 KO 可口可乐</button>
+        <button class="preset-btn" onclick="ddmPreset('JNJ')">💊 JNJ 强生</button>
+        <button class="preset-btn" onclick="ddmPreset('PG')">🧴 PG 宝洁</button>
+        <button class="preset-btn" onclick="ddmPreset('custom')">✏️ 自定义</button>
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>最近一年每股股息 D₀ <span class="label-hint">（USD）</span></label>
+          <div class="input-suffix">
+            <input type="number" id="ddm_d0" value="1.94" step="0.01">
+            <span class="suffix">USD</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>当前股价</label>
+          <div class="input-suffix">
+            <input type="number" id="ddm_price" value="63" step="0.01">
+            <span class="suffix">USD</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>高增长阶段股息增速 g₁</label>
+          <div class="slider-row">
+            <input type="range" min="0" max="20" step="0.5" value="5" id="ddm_g1" oninput="sync('ddm_g1','ddm_g1_val')">
+            <span class="slider-val" id="ddm_g1_val">5%</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>高增长年数</label>
+          <div class="input-suffix">
+            <input type="number" id="ddm_years" value="5" min="1" max="20">
+            <span class="suffix">年</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>永续增速 g∞</label>
+          <div class="slider-row">
+            <input type="range" min="0" max="6" step="0.1" value="3" id="ddm_tg" oninput="sync('ddm_tg','ddm_tg_val')">
+            <span class="slider-val" id="ddm_tg_val">3%</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>股权要求回报率 r（CAPM）</label>
+          <div class="slider-row">
+            <input type="range" min="4" max="16" step="0.1" value="8" id="ddm_r" oninput="sync('ddm_r','ddm_r_val')">
+            <span class="slider-val" id="ddm_r_val">8%</span>
+          </div>
+        </div>
+      </div>
+      <button class="calc-btn" onclick="calcDDM()">📐 计算公平价值</button>
+    </div>
+
+    <div class="result-block" id="ddm_result">
+      <div class="card">
+        <div class="card-title">DDM 估值结果</div>
+        <div class="stats-row">
+          <div class="stat-box"><div class="stat-num" id="ddmFairPrice">—</div><div class="stat-label">DDM 公平价值</div></div>
+          <div class="stat-box"><div class="stat-num" id="ddmDivYield">—</div><div class="stat-label">当前股息率</div></div>
+          <div class="stat-box"><div class="stat-num" id="ddmPayout">—</div><div class="stat-label">隐含上行/下行</div></div>
+        </div>
+        <div id="ddmCallout"></div>
+        <div class="band" style="margin-top:20px">
+          <div class="band-title">不同永续增速下的公平价值</div>
+          <div id="ddmBands"></div>
+        </div>
+        <div class="callout yellow" style="margin-top:14px">
+          <strong>DDM 局限：</strong>r 与 g 之差（利差）极度敏感。若 r−g &lt; 1%，估值会趋向无穷大，需谨慎。建议 r 至少比 g 高出 3 个百分点。
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== TAB 2: PE ========== -->
+  <div class="tab-panel" id="panel-2">
+    <div class="card">
+      <div class="card-title">PE 估值区间法</div>
+      <div class="preset-row">
+        <span style="font-size:12px;color:var(--gray-500);margin-right:4px;">快速填入：</span>
+        <button class="preset-btn" onclick="pePreset('AAPL')">🍎 AAPL</button>
+        <button class="preset-btn" onclick="pePreset('MSFT')">💻 MSFT</button>
+        <button class="preset-btn" onclick="pePreset('GOOGL')">🔍 GOOGL</button>
+        <button class="preset-btn" onclick="pePreset('META')">📘 META</button>
+        <button class="preset-btn" onclick="pePreset('custom')">✏️ 自定义</button>
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>当前/预测 EPS <span class="label-hint">（USD/股）</span></label>
+          <div class="input-suffix">
+            <input type="number" id="pe_eps" value="6.43" step="0.01">
+            <span class="suffix">USD</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>当前股价</label>
+          <div class="input-suffix">
+            <input type="number" id="pe_price" value="195" step="0.01">
+            <span class="suffix">USD</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>EPS 年增速预测</label>
+          <div class="slider-row">
+            <input type="range" min="-10" max="40" step="0.5" value="10" id="pe_epsg" oninput="sync('pe_epsg','pe_epsg_val')">
+            <span class="slider-val" id="pe_epsg_val">10%</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>预测年数</label>
+          <div class="input-suffix">
+            <input type="number" id="pe_years" value="3" min="1" max="10">
+            <span class="suffix">年</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>熊市 PE（历史低位）</label>
+          <div class="input-suffix">
+            <input type="number" id="pe_bear" value="20" min="1">
+            <span class="suffix">×</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>基准 PE（历史中枢）</label>
+          <div class="input-suffix">
+            <input type="number" id="pe_base" value="28" min="1">
+            <span class="suffix">×</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>牛市 PE（历史高位）</label>
+          <div class="input-suffix">
+            <input type="number" id="pe_bull" value="35" min="1">
+            <span class="suffix">×</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>目标年限回报率（年化）</label>
+          <div class="slider-row">
+            <input type="range" min="5" max="20" step="0.5" value="10" id="pe_target_r" oninput="sync('pe_target_r','pe_target_r_val')">
+            <span class="slider-val" id="pe_target_r_val">10%</span>
+          </div>
+        </div>
+      </div>
+      <button class="calc-btn" onclick="calcPE()">📐 计算价格区间</button>
+    </div>
+
+    <div class="result-block" id="pe_result">
+      <div class="card">
+        <div class="card-title">PE 估值区间结果</div>
+        <div style="overflow:auto;border-radius:10px;border:1px solid var(--gray-200);margin-bottom:16px;">
+          <table class="pe-table">
+            <thead><tr><th>情景</th><th>预测 EPS</th><th>PE 倍数</th><th>目标股价</th><th>vs 当前股价</th><th>年化回报</th></tr></thead>
+            <tbody id="peTableBody"></tbody>
+          </table>
+        </div>
+
+        <div class="band">
+          <div class="band-title">价格区间可视化</div>
+          <div id="peBandVis"></div>
+        </div>
+
+        <div id="peCallout"></div>
+
+        <h4 style="font-size:14px;font-weight:700;margin:20px 0 10px;color:var(--gray-700);">EPS 增速 × PE 倍数 → 年化回报率（基准情景）</h4>
+        <div class="sens-wrap">
+          <table class="sens-table" id="peSens"></table>
+        </div>
+        <div class="callout yellow" style="margin-top:14px">
+          <strong>PE 法说明：</strong>历史 PE 区间因公司所处阶段不同差异较大。成长股 PE 收缩是常见风险，EPS 高增长不代表股价一定上涨。
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── Utility ───────────────────────────────────────────────────
+function sync(sliderId, valId) {
+  const v = parseFloat(document.getElementById(sliderId).value);
+  document.getElementById(valId).textContent = v.toFixed(1) + '%';
+}
+function switchTab(n) {
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', i===n));
+  document.querySelectorAll('.tab-panel').forEach((p,i) => p.classList.toggle('active', i===n));
+}
+function fmtUSD(n) { return '$' + n.toFixed(2); }
+function fmtPct(n) { return (n*100).toFixed(1) + '%'; }
+function fmtPctSigned(n) {
+  const s = (n*100).toFixed(1) + '%';
+  return n >= 0 ? '+' + s : s;
+}
+
+// ─── DCF Presets ───────────────────────────────────────────────
+const dcfPresets = {
+  AAPL: { fcf:110000, shares:15400, g1:8, g2:4, tg:2.5, wacc:9, cash:67000, price:195 },
+  MSFT: { fcf:75000, shares:7440, g1:13, g2:7, tg:3, wacc:9, cash:80000, price:415 },
+  GOOGL:{ fcf:72000, shares:12200, g1:12, g2:6, tg:2.5, wacc:9.5, cash:100000, price:170 },
+  NVDA: { fcf:60000, shares:24400, g1:25, g2:12, tg:3, wacc:11, cash:26000, price:875 },
+};
+function dcfPreset(k) {
+  const p = dcfPresets[k]; if(!p) return;
+  document.getElementById('dcf_fcf').value = p.fcf;
+  document.getElementById('dcf_shares').value = p.shares;
+  document.getElementById('dcf_g1').value = p.g1; sync('dcf_g1','dcf_g1_val');
+  document.getElementById('dcf_g2').value = p.g2; sync('dcf_g2','dcf_g2_val');
+  document.getElementById('dcf_tg').value = p.tg; sync('dcf_tg','dcf_tg_val');
+  document.getElementById('dcf_wacc').value = p.wacc; sync('dcf_wacc','dcf_wacc_val');
+  document.getElementById('dcf_cash').value = p.cash;
+  document.getElementById('dcf_price').value = p.price;
+}
+
+// ─── DDM Presets ───────────────────────────────────────────────
+const ddmPresets = {
+  KO: { d0:1.94, price:63, g1:5, years:5, tg:3, r:8 },
+  JNJ:{ d0:4.76, price:155, g1:4, years:5, tg:2.5, r:7.5 },
+  PG: { d0:3.76, price:165, g1:5, years:5, tg:3, r:7.5 },
+};
+function ddmPreset(k) {
+  const p = ddmPresets[k]; if(!p) return;
+  document.getElementById('ddm_d0').value = p.d0;
+  document.getElementById('ddm_price').value = p.price;
+  document.getElementById('ddm_g1').value = p.g1; sync('ddm_g1','ddm_g1_val');
+  document.getElementById('ddm_years').value = p.years;
+  document.getElementById('ddm_tg').value = p.tg; sync('ddm_tg','ddm_tg_val');
+  document.getElementById('ddm_r').value = p.r; sync('ddm_r','ddm_r_val');
+}
+
+// ─── PE Presets ────────────────────────────────────────────────
+const pePresets = {
+  AAPL: { eps:6.43, price:195, epsg:10, years:3, bear:20, base:28, bull:35 },
+  MSFT: { eps:12.05, price:415, epsg:13, years:3, bear:25, base:32, bull:40 },
+  GOOGL:{ eps:8.04, price:170, epsg:12, years:3, bear:18, base:24, bull:30 },
+  META: { eps:23.86, price:500, epsg:15, years:3, bear:16, base:22, bull:28 },
+};
+function pePreset(k) {
+  const p = pePresets[k]; if(!p) return;
+  document.getElementById('pe_eps').value = p.eps;
+  document.getElementById('pe_price').value = p.price;
+  document.getElementById('pe_epsg').value = p.epsg; sync('pe_epsg','pe_epsg_val');
+  document.getElementById('pe_years').value = p.years;
+  document.getElementById('pe_bear').value = p.bear;
+  document.getElementById('pe_base').value = p.base;
+  document.getElementById('pe_bull').value = p.bull;
+}
+
+// ─── DCF Calculation ───────────────────────────────────────────
+function calcDCF() {
+  const fcf = parseFloat(document.getElementById('dcf_fcf').value);
+  const shares = parseFloat(document.getElementById('dcf_shares').value);
+  const g1 = parseFloat(document.getElementById('dcf_g1').value) / 100;
+  const g2 = parseFloat(document.getElementById('dcf_g2').value) / 100;
+  const tg = parseFloat(document.getElementById('dcf_tg').value) / 100;
+  const wacc = parseFloat(document.getElementById('dcf_wacc').value) / 100;
+  const cash = parseFloat(document.getElementById('dcf_cash').value);
+  const currentPrice = parseFloat(document.getElementById('dcf_price').value);
+  const s1y = parseInt(document.getElementById('dcf_stage1_years').value);
+  const s2y = parseInt(document.getElementById('dcf_stage2_years').value);
+
+  function dcfCalc(fcf0, g1, g2, tg, wacc, s1y, s2y) {
+    let pv = 0, cf = fcf0;
+    // Stage 1
+    for (let t = 1; t <= s1y; t++) {
+      cf *= (1 + g1);
+      pv += cf / Math.pow(1 + wacc, t);
+    }
+    // Stage 2
+    let cf2 = cf;
+    for (let t = 1; t <= s2y; t++) {
+      cf2 *= (1 + g2);
+      pv += cf2 / Math.pow(1 + wacc, s1y + t);
+    }
+    // Terminal
+    const termYear = s1y + s2y;
+    const termVal = cf2 * (1 + tg) / (wacc - tg);
+    const pvTerminal = termVal / Math.pow(1 + wacc, termYear);
+    return { pv, pvTerminal, total: pv + pvTerminal };
+  }
+
+  const base = dcfCalc(fcf, g1, g2, tg, wacc, s1y, s2y);
+  const bear = dcfCalc(fcf, g1*0.6, g2*0.6, tg*0.8, wacc*1.05, s1y, s2y);
+  const bull = dcfCalc(fcf, g1*1.4, g2*1.3, tg*1.1, wacc*0.95, s1y, s2y);
+
+  const eq = base.total + cash;
+  const intrinsic = eq / shares;
+  const upside = (intrinsic - currentPrice) / currentPrice;
+  const termPct = base.pvTerminal / base.total;
+  const fcfYield = (fcf / shares) / (currentPrice * shares / shares) / 1e6 * shares; // = FCF per share / price
+  const fcfPerShare = fcf / shares;
+  const fcfYieldPct = fcfPerShare / currentPrice;
+
+  document.getElementById('dcfIntrinsic').textContent = fmtUSD(intrinsic);
+  document.getElementById('dcfUpside').textContent = fmtPctSigned(upside);
+  document.getElementById('dcfTerminalPct').textContent = fmtPct(termPct);
+  document.getElementById('dcfFCFYield').textContent = fmtPct(fcfYieldPct);
+
+  // Color
+  const up = document.getElementById('dcfUpside');
+  up.style.color = upside > 0 ? 'var(--success)' : 'var(--danger)';
+
+  // Callout
+  let callout = '';
+  if (upside > 0.3) callout = `<div class="callout green">当前股价相比 DCF 内在价值低估约 <strong>${fmtPct(upside)}</strong>，存在较明显的安全边际，或值得重点关注。</div>`;
+  else if (upside > 0) callout = `<div class="callout blue">内在价值略高于当前股价（+${fmtPct(upside)}），安全边际有限，建议等待更好的买入时机或结合其他估值方法。</div>`;
+  else callout = `<div class="callout red">当前股价高于 DCF 内在价值约 <strong>${fmtPct(Math.abs(upside))}</strong>，股价已包含较乐观预期，需要更高增速才能支撑估值。</div>`;
+  document.getElementById('dcfCallout').innerHTML = callout;
+
+  // Bands
+  const scenarios = [
+    { name: '🐻 熊市情景', val: (bear.total + cash)/shares, color: '#ef4444', w: 0.6 },
+    { name: '📊 基准情景', val: intrinsic, color: '#1a56db', w: 0.8 },
+    { name: '🚀 牛市情景', val: (bull.total + cash)/shares, color: '#10b981', w: 1.0 },
+  ];
+  const maxVal = Math.max(...scenarios.map(s=>s.val), currentPrice) * 1.05;
+  document.getElementById('dcfBands').innerHTML = scenarios.map(s => {
+    const pct = (s.val / maxVal * 100).toFixed(1);
+    const cpPct = (currentPrice / maxVal * 100).toFixed(1);
+    return `<div class="band-row">
+      <div class="band-name">${s.name}</div>
+      <div class="band-track">
+        <div class="band-fill" style="width:${pct}%;background:${s.color};opacity:.7"></div>
+        <div class="current-price-line" style="left:${cpPct}%" title="当前股价 ${fmtUSD(currentPrice)}"></div>
+      </div>
+      <div class="band-val" style="color:${s.color}">${fmtUSD(s.val)}</div>
+    </div>`;
+  }).join('') + `<div style="font-size:11px;color:var(--gray-400);margin-top:6px">▏= 当前股价 ${fmtUSD(currentPrice)}</div>`;
+
+  // Sensitivity table
+  const growths = [-5,0,5,10,15,20];
+  const waccs = [8,9,10,11,12];
+  let sensHtml = '<tr><th>增速↓ WACC→</th>' + waccs.map(w=>`<th>${w}%</th>`).join('') + '</tr>';
+  growths.forEach(g => {
+    sensHtml += `<tr><th>${g}%</th>`;
+    waccs.forEach(w => {
+      const r = dcfCalc(fcf, g/100, Math.max(g/100/2,0.01), tg, w/100, s1y, s2y);
+      const iv = (r.total + cash) / shares;
+      const diff = iv - currentPrice;
+      const cls = diff > currentPrice*0.2 ? 'sens-hl' : diff < -currentPrice*0.1 ? 'sens-lo' : (Math.abs(iv-intrinsic)<5 ? 'sens-mid' : '');
+      sensHtml += `<td class="${cls}">${fmtUSD(iv)}</td>`;
+    });
+    sensHtml += '</tr>';
+  });
+  document.getElementById('dcfSens').innerHTML = sensHtml;
+
+  // Draw gauge
+  drawGauge('dcfGauge', intrinsic, currentPrice);
+
+  document.getElementById('dcf_result').classList.add('show');
+  document.getElementById('dcf_result').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+// ─── DDM Calculation ───────────────────────────────────────────
+function calcDDM() {
+  const d0 = parseFloat(document.getElementById('ddm_d0').value);
+  const price = parseFloat(document.getElementById('ddm_price').value);
+  const g1 = parseFloat(document.getElementById('ddm_g1').value) / 100;
+  const years = parseInt(document.getElementById('ddm_years').value);
+  const tg = parseFloat(document.getElementById('ddm_tg').value) / 100;
+  const r = parseFloat(document.getElementById('ddm_r').value) / 100;
+
+  if (r <= tg) {
+    alert('要求回报率 r 必须大于永续增速 g，否则模型无意义');
+    return;
+  }
+
+  function ddmCalc(d0, g1, tg, r, years) {
+    let pv = 0, d = d0;
+    for (let t = 1; t <= years; t++) {
+      d *= (1 + g1);
+      pv += d / Math.pow(1 + r, t);
+    }
+    const terminal = d * (1 + tg) / (r - tg) / Math.pow(1 + r, years);
+    return pv + terminal;
+  }
+
+  const fairPrice = ddmCalc(d0, g1, tg, r, years);
+  const upside = (fairPrice - price) / price;
+  const divYield = d0 * (1 + g1) / price;
+
+  document.getElementById('ddmFairPrice').textContent = fmtUSD(fairPrice);
+  document.getElementById('ddmDivYield').textContent = fmtPct(divYield);
+  document.getElementById('ddmPayout').textContent = fmtPctSigned(upside);
+  document.getElementById('ddmPayout').style.color = upside>0?'var(--success)':'var(--danger)';
+
+  let callout = '';
+  if (upside > 0.2) callout = `<div class="callout green">股息折现价值 <strong>${fmtUSD(fairPrice)}</strong> 远高于当前股价，对于长期持有以收息为目的的投资者而言，当前价格具有吸引力。</div>`;
+  else if (upside > 0) callout = `<div class="callout blue">DDM 估值略高于当前股价（+${fmtPct(upside)}），接近公允价值，持有获取股息回报是合理策略。</div>`;
+  else callout = `<div class="callout red">当前股价相对 DDM 估值溢价 <strong>${fmtPct(Math.abs(upside))}</strong>，单凭股息收益率难以支撑股价，需成长预期配合。</div>`;
+  document.getElementById('ddmCallout').innerHTML = callout;
+
+  // Bands: different tg
+  const tgs = [1,2,3,3.5,4];
+  const maxBand = Math.max(...tgs.map(g=>ddmCalc(d0,g1,g/100,r,years)), price)*1.1;
+  document.getElementById('ddmBands').innerHTML = tgs.map(g => {
+    const val = ddmCalc(d0, g1, g/100, r, years);
+    const pct = (val/maxBand*100).toFixed(1);
+    const cpPct = (price/maxBand*100).toFixed(1);
+    const isBase = Math.abs(g - tg*100) < 0.1;
+    return `<div class="band-row">
+      <div class="band-name">g∞ = ${g}%${isBase?' ⭐':''}</div>
+      <div class="band-track">
+        <div class="band-fill" style="width:${pct}%;background:${isBase?'#1a56db':'#94a3b8'};opacity:.7"></div>
+        <div class="current-price-line" style="left:${cpPct}%"></div>
+      </div>
+      <div class="band-val" style="color:${isBase?'var(--primary)':'var(--gray-600)'}">${fmtUSD(val)}</div>
+    </div>`;
+  }).join('') + `<div style="font-size:11px;color:var(--gray-400);margin-top:6px">▏= 当前股价 ${fmtUSD(price)}</div>`;
+
+  document.getElementById('ddm_result').classList.add('show');
+  document.getElementById('ddm_result').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+// ─── PE Calculation ────────────────────────────────────────────
+function calcPE() {
+  const eps = parseFloat(document.getElementById('pe_eps').value);
+  const price = parseFloat(document.getElementById('pe_price').value);
+  const epsg = parseFloat(document.getElementById('pe_epsg').value) / 100;
+  const years = parseInt(document.getElementById('pe_years').value);
+  const peBear = parseFloat(document.getElementById('pe_bear').value);
+  const peBase = parseFloat(document.getElementById('pe_base').value);
+  const peBull = parseFloat(document.getElementById('pe_bull').value);
+  const targetR = parseFloat(document.getElementById('pe_target_r').value) / 100;
+
+  const currentPE = price / eps;
+  const fwdEPS = eps * Math.pow(1 + epsg, years);
+
+  const scenarios = [
+    { name: '🐻 熊市', pe: peBear, color:'#ef4444', cls:'row-bear' },
+    { name: '📊 基准', pe: peBase, color:'#1a56db', cls:'row-base' },
+    { name: '🚀 牛市', pe: peBull, color:'#10b981', cls:'row-bull' },
+  ];
+
+  const rows = scenarios.map(s => {
+    const targetPrice = fwdEPS * s.pe;
+    const totalReturn = targetPrice / price - 1;
+    const annualReturn = Math.pow(1 + totalReturn, 1/years) - 1;
+    return { ...s, targetPrice, totalReturn, annualReturn, fwdEPS };
+  });
+
+  const tbody = document.getElementById('peTableBody');
+  tbody.innerHTML = rows.map(r => {
+    const diff = r.targetPrice - price;
+    const diffBadge = diff >= 0
+      ? `<span style="color:#166534;background:#dcfce7;padding:1px 7px;border-radius:99px;font-size:11px;font-weight:700">+${fmtPct((r.targetPrice-price)/price)}</span>`
+      : `<span style="color:#991b1b;background:#fee2e2;padding:1px 7px;border-radius:99px;font-size:11px;font-weight:700">${fmtPct((r.targetPrice-price)/price)}</span>`;
+    return `<tr class="${r.cls}">
+      <td>${r.name}</td>
+      <td>${fmtUSD(r.fwdEPS)}</td>
+      <td>${r.pe.toFixed(0)}×</td>
+      <td><strong>${fmtUSD(r.targetPrice)}</strong></td>
+      <td>${diffBadge}</td>
+      <td style="color:${r.annualReturn>=targetR?'var(--success)':'var(--danger)';}">${fmtPct(r.annualReturn)}</td>
+    </tr>`;
+  }).join('');
+
+  // Band
+  const maxBand = Math.max(...rows.map(r=>r.targetPrice), price) * 1.1;
+  document.getElementById('peBandVis').innerHTML = rows.map(r => {
+    const pct = (r.targetPrice/maxBand*100).toFixed(1);
+    const cpPct = (price/maxBand*100).toFixed(1);
+    return `<div class="band-row">
+      <div class="band-name">${r.name}</div>
+      <div class="band-track">
+        <div class="band-fill" style="width:${pct}%;background:${r.color};opacity:.7"></div>
+        <div class="current-price-line" style="left:${cpPct}%"></div>
+      </div>
+      <div class="band-val" style="color:${r.color}">${fmtUSD(r.targetPrice)}</div>
+    </div>`;
+  }).join('') + `<div style="font-size:11px;color:var(--gray-400);margin-top:6px">▏= 当前股价 ${fmtUSD(price)}，当前PE = ${currentPE.toFixed(1)}×</div>`;
+
+  // Callout
+  const baseRow = rows[1];
+  let callout = '';
+  if (baseRow.annualReturn >= targetR + 0.03) callout = `<div class="callout green">基准情景下年化回报率 <strong>${fmtPct(baseRow.annualReturn)}</strong>，超过你设定的 ${fmtPct(targetR)} 目标，若 EPS 增速预测成立，当前股价具有较好的赔率。</div>`;
+  else if (baseRow.annualReturn >= targetR) callout = `<div class="callout blue">基准情景下年化回报率 <strong>${fmtPct(baseRow.annualReturn)}</strong>，接近目标回报率，股价基本合理，但不确定性较大。</div>`;
+  else callout = `<div class="callout red">基准情景下年化回报率仅 <strong>${fmtPct(baseRow.annualReturn)}</strong>，低于目标 ${fmtPct(targetR)}。若 PE 收缩（当前 ${currentPE.toFixed(1)}×→${peBase}×），即使 EPS 增长也可能拖累股价。</div>`;
+  document.getElementById('peCallout').innerHTML = callout;
+
+  // Sensitivity: EPS growth × PE
+  const growths2 = [0,5,10,15,20,25];
+  const pes = [15,20,25,30,35,40];
+  let sensHtml = '<tr><th>增速↓ PE→</th>' + pes.map(p=>`<th>${p}×</th>`).join('') + '</tr>';
+  growths2.forEach(g => {
+    sensHtml += `<tr><th>${g}%</th>`;
+    pes.forEach(pe => {
+      const fe = eps * Math.pow(1 + g/100, years);
+      const tp = fe * pe;
+      const ar = Math.pow(tp/price, 1/years) - 1;
+      const cls = ar >= targetR + 0.03 ? 'sens-hl' : ar < 0 ? 'sens-lo' : Math.abs(ar - baseRow.annualReturn) < 0.02 ? 'sens-mid' : '';
+      sensHtml += `<td class="${cls}">${fmtPct(ar)}</td>`;
+    });
+    sensHtml += '</tr>';
+  });
+  document.getElementById('peSens').innerHTML = sensHtml;
+
+  document.getElementById('pe_result').classList.add('show');
+  document.getElementById('pe_result').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+// ─── Gauge Canvas ──────────────────────────────────────────────
+function drawGauge(canvasId, intrinsic, currentPrice) {
+  const canvas = document.getElementById(canvasId);
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  ctx.clearRect(0, 0, W, H);
+
+  const cx = W/2, cy = H - 20, r = 110;
+  const startAngle = Math.PI;
+  const endAngle = 2 * Math.PI;
+
+  // Draw arc segments
+  const segments = [
+    { from: 0, to: 0.33, color: '#fee2e2' },
+    { from: 0.33, to: 0.55, color: '#fef9c3' },
+    { from: 0.55, to: 0.75, color: '#bbf7d0' },
+    { from: 0.75, to: 1, color: '#6ee7b7' },
+  ];
+  segments.forEach(s => {
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, Math.PI + s.from * Math.PI, Math.PI + s.to * Math.PI);
+    ctx.lineWidth = 18;
+    ctx.strokeStyle = s.color;
+    ctx.stroke();
+  });
+
+  // Needle
+  const ratio = Math.min(Math.max(intrinsic / (currentPrice * 2), 0), 1);
+  const needleAngle = Math.PI + ratio * Math.PI;
+  ctx.beginPath();
+  ctx.moveTo(cx, cy);
+  ctx.lineTo(cx + (r - 25) * Math.cos(needleAngle), cy + (r - 25) * Math.sin(needleAngle));
+  ctx.lineWidth = 3;
+  ctx.strokeStyle = '#1f2937';
+  ctx.lineCap = 'round';
+  ctx.stroke();
+
+  // Center dot
+  ctx.beginPath();
+  ctx.arc(cx, cy, 6, 0, 2*Math.PI);
+  ctx.fillStyle = '#1f2937';
+  ctx.fill();
+
+  // Labels
+  ctx.font = '11px sans-serif';
+  ctx.fillStyle = '#9ca3af';
+  ctx.textAlign = 'center';
+  ctx.fillText('低估', cx - 95, cy - 5);
+  ctx.fillText('高估', cx + 95, cy - 5);
+  ctx.fillText(`当前 ${fmtUSD(currentPrice)}`, cx, cy - r + 8);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>保险需求自测问卷 · 找到最适合你的险种组合</title>
+<style>
+:root{
+  --primary:#1a56db;--primary-dark:#1240a8;--primary-light:#eff6ff;
+  --success:#057a55;--success-light:#def7ec;
+  --warning:#c27803;--warning-light:#fef9c3;
+  --danger:#c81e1e;--danger-light:#fde8e8;
+  --purple:#7e3af2;--purple-light:#edebfe;
+  --teal:#0891b2;--teal-light:#e0f2fe;
+  --orange:#ea580c;--orange-light:#fff7ed;
+  --gray-50:#f9fafb;--gray-100:#f3f4f6;--gray-200:#e5e7eb;
+  --gray-300:#d1d5db;--gray-400:#9ca3af;--gray-500:#6b7280;
+  --gray-600:#4b5563;--gray-700:#374151;--gray-800:#1f2937;--gray-900:#111827;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hiragino Sans GB',sans-serif;background:var(--gray-50);color:var(--gray-800);line-height:1.7;min-height:100vh;}
+.page{max-width:680px;margin:0 auto;padding:24px 20px 60px;}
+.back-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--gray-500);text-decoration:none;margin-bottom:18px;transition:color .15s;}
+.back-link:hover{color:var(--primary);}
+/* Hero */
+.hero{background:linear-gradient(135deg,#0ea5e9 0%,#6366f1 100%);border-radius:16px;padding:36px 40px;color:#fff;margin-bottom:28px;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;top:-50px;right:-50px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.07);}
+.hero-tag{display:inline-block;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);border-radius:20px;padding:3px 12px;font-size:12px;margin-bottom:14px;}
+.hero h1{font-size:26px;font-weight:800;margin-bottom:8px;line-height:1.3;}
+.hero p{font-size:14px;opacity:.88;line-height:1.7;}
+/* Progress */
+.progress-wrap{background:#fff;border:1px solid var(--gray-200);border-radius:12px;padding:16px 20px;margin-bottom:20px;}
+.progress-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.progress-title{font-size:13px;font-weight:700;color:var(--gray-700);}
+.progress-count{font-size:12px;color:var(--gray-400);}
+.progress-track{height:6px;background:var(--gray-200);border-radius:99px;overflow:hidden;}
+.progress-fill{height:100%;background:linear-gradient(90deg,#0ea5e9,#6366f1);border-radius:99px;transition:width .4s ease;}
+.step-dots{display:flex;gap:6px;margin-top:10px;}
+.step-dot{width:8px;height:8px;border-radius:50%;background:var(--gray-200);transition:all .2s;}
+.step-dot.done{background:var(--primary);}
+.step-dot.current{background:var(--primary);box-shadow:0 0 0 3px var(--primary-light);}
+/* Card */
+.card{background:#fff;border:1px solid var(--gray-200);border-radius:14px;padding:30px;margin-bottom:16px;display:none;}
+.card.active{display:block;}
+.q-num{font-size:11px;font-weight:700;color:var(--primary);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;}
+.q-title{font-size:20px;font-weight:800;color:var(--gray-900);margin-bottom:6px;line-height:1.3;}
+.q-sub{font-size:14px;color:var(--gray-500);margin-bottom:24px;line-height:1.6;}
+/* Options */
+.options{display:grid;gap:10px;}
+.option{display:flex;align-items:center;gap:14px;padding:14px 18px;border:2px solid var(--gray-200);border-radius:11px;cursor:pointer;transition:all .2s;background:#fff;}
+.option:hover{border-color:var(--primary);background:var(--primary-light);}
+.option.selected{border-color:var(--primary);background:var(--primary-light);}
+.option-icon{font-size:22px;flex-shrink:0;width:32px;text-align:center;}
+.option-body{flex:1;}
+.option-label{font-size:14px;font-weight:700;color:var(--gray-800);}
+.option-desc{font-size:12px;color:var(--gray-500);margin-top:2px;line-height:1.4;}
+.option.selected .option-label{color:var(--primary);}
+.option-check{width:22px;height:22px;border-radius:50%;border:2px solid var(--gray-300);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s;font-size:11px;}
+.option.selected .option-check{background:var(--primary);border-color:var(--primary);color:#fff;}
+/* Nav Buttons */
+.nav-row{display:flex;gap:10px;margin-top:20px;}
+.btn{padding:11px 24px;border-radius:10px;border:none;font-size:14px;font-weight:700;cursor:pointer;transition:all .15s;}
+.btn-prev{background:#fff;border:1.5px solid var(--gray-200);color:var(--gray-700);flex:0;}
+.btn-prev:hover{border-color:var(--primary);color:var(--primary);}
+.btn-next{background:var(--primary);color:#fff;flex:1;}
+.btn-next:hover{background:var(--primary-dark);}
+.btn-next:disabled{opacity:.5;cursor:not-allowed;}
+/* Result */
+.result-wrap{display:none;}
+.result-wrap.show{display:block;}
+.result-hero{border-radius:14px;padding:30px;margin-bottom:20px;text-align:center;}
+.result-profile{font-size:13px;font-weight:700;opacity:.85;margin-bottom:8px;}
+.result-title{font-size:24px;font-weight:900;margin-bottom:8px;}
+.result-sub{font-size:14px;opacity:.88;line-height:1.6;}
+/* Recommendations */
+.rec-list{display:grid;gap:14px;margin-bottom:20px;}
+.rec-card{background:#fff;border:1px solid var(--gray-200);border-radius:13px;padding:22px;display:flex;gap:16px;}
+.rec-icon{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.rec-body{flex:1;}
+.rec-name{font-size:15px;font-weight:800;color:var(--gray-900);margin-bottom:3px;}
+.rec-reason{font-size:13px;color:var(--gray-600);margin-bottom:8px;line-height:1.5;}
+.rec-tags{display:flex;flex-wrap:wrap;gap:6px;}
+.rec-tag{font-size:11px;padding:2px 9px;border-radius:99px;font-weight:700;}
+.priority-high{background:#fde8e8;color:#9b1c1c;}
+.priority-med{background:#fef9c3;color:#78350f;}
+.priority-low{background:#def7ec;color:#03543f;}
+/* Action items */
+.action-card{background:#fff;border:1px solid var(--gray-200);border-radius:13px;padding:22px;margin-bottom:16px;}
+.action-title{font-size:15px;font-weight:800;color:var(--gray-900);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.action-title::before{content:'';width:4px;height:18px;background:var(--primary);border-radius:2px;display:block;}
+.action-list{list-style:none;}
+.action-item{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid var(--gray-100);font-size:13px;align-items:flex-start;}
+.action-item:last-child{border-bottom:none;}
+.action-num{width:22px;height:22px;border-radius:50%;background:var(--primary);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.action-text{color:var(--gray-700);line-height:1.5;}
+/* Budget */
+.budget-box{background:var(--gray-50);border-radius:10px;padding:16px;margin-bottom:14px;}
+.budget-title{font-size:13px;font-weight:700;color:var(--gray-700);margin-bottom:10px;}
+.budget-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;font-size:13px;}
+.budget-label{color:var(--gray-600);}
+.budget-val{font-weight:700;color:var(--gray-800);}
+/* Restart */
+.restart-btn{width:100%;padding:13px;background:#fff;border:1.5px solid var(--primary);color:var(--primary);border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;transition:all .15s;margin-top:10px;}
+.restart-btn:hover{background:var(--primary-light);}
+@media(max-width:560px){
+  .hero{padding:24px 20px;}
+  .hero h1{font-size:20px;}
+  .card{padding:20px;}
+}
+</style>
+</head>
+<body>
+<div class="page">
+  <a href="index.html" class="back-link">← 返回保险指南首页</a>
+
+  <div class="hero">
+    <div class="hero-tag">保险工具 · 需求自测</div>
+    <h1>保险需求自测问卷</h1>
+    <p>8 个问题 · 约 2 分钟 · 根据你的年龄、家庭、收入和风险偏好，生成个性化险种优先级建议</p>
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-wrap" id="progressWrap">
+    <div class="progress-header">
+      <span class="progress-title" id="progressTitle">第 1 步，共 8 步</span>
+      <span class="progress-count" id="progressCount">1 / 8</span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:12.5%"></div></div>
+    <div class="step-dots" id="stepDots"></div>
+  </div>
+
+  <!-- Questions -->
+  <div id="questions">
+    <!-- Q1 -->
+    <div class="card active" id="q1">
+      <div class="q-num">问题 01 / 08</div>
+      <div class="q-title">你目前的年龄段？</div>
+      <div class="q-sub">年龄影响保险需求的侧重点：年轻人重保障，中年人重储蓄+保障，接近退休更需医疗兜底</div>
+      <div class="options">
+        <div class="option" onclick="select(1,'25以下')">
+          <div class="option-icon">🌱</div>
+          <div class="option-body"><div class="option-label">25 岁以下</div><div class="option-desc">刚入职场，保费预算有限，保障优先</div></div>
+          <div class="option-check"></div>
+        </div>
+        <div class="option" onclick="select(1,'25-35')">
+          <div class="option-icon">🚀</div>
+          <div class="option-body"><div class="option-label">25–35 岁</div><div class="option-desc">事业上升期，开始考虑家庭保障</div></div>
+          <div class="option-check"></div>
+        </div>
+        <div class="option" onclick="select(1,'35-45')">
+          <div class="option-icon">🏡</div>
+          <div class="option-body"><div class="option-label">35–45 岁</div><div class="option-desc">家庭责任最重，收入高峰期</div></div>
+          <div class="option-check"></div>
+        </div>
+        <div class="option" onclick="select(1,'45-55')">
+          <div class="option-icon">⏳</div>
+          <div class="option-body"><div class="option-label">45–55 岁</div><div class="option-desc">保费开始上升，需提前规划退休</div></div>
+          <div class="option-check"></div>
+        </div>
+        <div class="option" onclick="select(1,'55以上')">
+          <div class="option-icon">🌅</div>
+          <div class="option-body"><div class="option-label">55 岁以上</div><div class="option-desc">医疗需求增大，侧重养老规划</div></div>
+          <div class="option-check"></div>
+        </div>
+      </div>
+      <div class="nav-row">
+        <button class="btn btn-next" onclick="nextQ(1)" id="next1" disabled>下一步 →</button>
+      </div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="card" id="q2">
+      <div class="q-num">问题 02 / 08</div>
+      <div class="q-title">你的家庭结构？</div>
+      <div class="q-sub">抚养人口越多，对收入中断的风险越敏感，寿险和重疾险的优先级越高</div>
+      <div class="options">
+        <div class="option" onclick="select(2,'单身')">
+          <div class="option-icon">🧑</div>
+          <div class="option-body"><div class="option-label">单身，无抚养负担</div><div class="option-desc">重点保护自身，医疗+重疾为主</div></div>
+          <div class="option-check"></div>
+        </div>
+        <div class="option" onclick="select(2,'已婚无孩')">
+          <div class="option-icon">👫</div>
+          <div class="option-body"><div class="option-label">已婚，暂无子女</div><div class="option-desc">双方互相保障，提前布局储蓄险</div></div>
+          <div class="option-check"></div>
+        </div>
+        <div class="option" onclick="select(2,'已婚有孩')">
+          <div class="option-icon">👨‍👩‍👧</div>
+          <div class="option-body"><div class="option-label">已婚，有子女（18岁以下）</div><div class="option-desc">家庭责任最重，寿险必备</div></div>
+          <div class="option-check"></div>
+        </div>
+        <div class="option" onclick="select(2,'赡养父母')">
+          <div class="option-icon">👨‍👩‍👦‍👦</div>
+          <div class="option-body"><div class="option-label">需赡养父母 / 高龄长辈</div><div class="option-desc">收入中断风险影响面广，需加大保障</div></div>
+          <div class="option-check"></div>
+        </div>
+      </div>
+      <div class="nav-row">
+        <button class="btn btn-prev" onclick="prevQ(2)">← 上一步</button>
+        <button class="btn btn-next" onclick="nextQ(2)" id="next2" disabled>下一步 →</button>
+      </div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="card" id="q3">
+      <div class="q-num">问题 03 / 08</div>
+      <div class="q-title">你的年收入大概在哪个区间？</div>
+      <div class="q-sub">收入决定了你的家庭对你的依赖程度，也影响合理的保险保额和保费预算</div>
+      <div class="options">
+        <div class="option" onclick="select(3,'20以下')">
+          <div class="option-icon">💼</div>
+          <div class="option-body"><div class="option-label">20 万人民币以下</div><div class="option-desc">保障优先，重疾+医疗是最高性价比选择</div></div>
+          <div class="option-check"></div>
+        </div>
+        <div class="option" onclick="select(3,'20-50')">
+          <div class="option-icon">📈</div>
+          <div class="option-body"><div class="option-label">20–50 万人民币</div><div class="option-desc">保障+储蓄均衡配置</div></div>
+          <div class="option-check"></div>
+        </div>
+        <div class="option" onclick="select(3,'50-100')">
+          <div class="option-icon">💰</div>
+          <div class="option-body"><div class="option-label">50–100 万人民币</div><div class="option-desc">有一定配置能力，可考虑港险储蓄</div></div>
+          <div class="option-check"></div>
+        </div>
+        <div class="option" onclick="select(3,'100以上')">
+          <div class="option-icon">🏦</div>
+          <div class="option-body"><div class="option-label">100 万人民币以上</div><div class="option-desc">资产配置角度，境外储蓄+传承规划</div></div>
+          <div class="option-check"></div>
+        </div>
+      </div>
+      <div class="nav-row">
+        <button class="btn btn-prev" onclick="prevQ(3)">← 上一步</button>
+        <button class="btn btn-next" onclick="nextQ(3)" id="next3" disabled>下一步 →</button>
+      </div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="card" id="q4">
+      <div class="q-num">问题 04 / 08</div>
+      <div class="q-title">你目前已有哪些保险保障？</div>
+      <div class="q-sub">了解已有覆盖，避免重复投保，优先填补空缺</div>
+      <div class="options">
+        <div class="option" onclick="select(4,'几乎没有')">
+          <div class="option-icon">❌</div>
+          <div class="option-body"><div class="option-label">几乎没有保险</div><div class="option-desc">仅有社保/公积金</div></div>
+          <div class="option-check"></div>
+        </div>
+        <div class="option" onclick="select(4,'有社保医疗')">
+          <div class="option-icon">🏥</div>
+          <div class="option-body"><div class="option-label">有社保 + 单位补充医疗</div><div class="option-desc">医疗有基础，重疾、寿险仍缺口大</div></div>
+          <div class="option-check"></div>
+        </div>
+        <div class="option" onclick="select(4,'有重疾医疗')">
+          <div class="option-icon">🛡</div>
+          <div class="option-body"><div class="option-label">有重疾险 + 商业医疗险</div><div class="option-desc">基础保障已具备，考虑储蓄/养老规划</div></div>
+          <div class="option-check"></div>
+        </div>
+        <div class="option" onclick="select(4,'配置齐全')">
+          <div class="option-icon">✅</div>
+          <div class="option-body"><div class="option-label">重疾、医疗、寿险均有</div><div class="option-desc">保障齐全，重点评估储蓄/年金/境外险</div></div>
+          <div class="option-check"></div>
+        </div>
+      </div>
+      <div class="nav-row">
+        <button class="btn btn-prev" onclick="prevQ(4)">← 上一步</button>
+        <button class="btn btn-next" onclick="nextQ(4)" id="next4" disabled>下一步 →</button>
+      </div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="card" id="q5">
+      <div class="q-num">问题 05 / 08</div>
+      <div class="q-title">你最担心哪类风险？</div>
+      <div class="q-sub">明确核心痛点，优先解决最迫切的保障需求</div>
+      <div class="options">
+        <div class="option" onclick="select(5,'重大疾病')">
+          <div class="option-icon">🏥</div>
+          <div class="option-body"><div class="option-label">重大疾病（癌症、心梗等）</div><div class="option-desc">治疗费高昂 + 收入中断的双重冲击</div></div>
+          <div class="option-check"></div>
+        </div>
+        <div class="option" onclick="select(5,'意外身故')">
+          <div class="option-icon">☂️</div>
+          <div class="option-body"><div class="option-label">意外或早逝，家人无依靠</div><div class="option-desc">家庭经济支柱的最大风险</div></div>
+          <div class="option-check"></div>
+        </div>
+        <div class="option" onclick="select(5,'医疗费用')">
+          <div class="option-icon">💊</div>
+          <div class="option-body"><div class="option-label">日常医疗 / 住院费用</div><div class="option-desc">小病大病都要钱，想要更好的就医</div></div>
+          <div class="option-check"></div>
+        </div>
+        <div class="option" onclick="select(5,'退休养老')">
+          <div class="option-icon">🌅</div>
+          <div class="option-body"><div class="option-label">退休后收入不足 / 长寿风险</div><div class="option-desc">活得久但钱不够用</div></div>
+          <div class="option-check"></div>
+        </div>
+        <div class="option" onclick="select(5,'资产传承')">
+          <div class="option-icon">🏛</div>
+          <div class="option-body"><div class="option-label">资产保全与财富传承</div><div class="option-desc">希望财富定向留给指定人</div></div>
+          <div class="option-check"></div>
+        </div>
+      </div>
+      <div class="nav-row">
+        <button class="btn btn-prev" onclick="prevQ(5)">← 上一步</button>
+        <button class="btn btn-next" onclick="nextQ(5)" id="next5" disabled>下一步 →</button>
+      </div>
+    </div>
+
+    <!-- Q6 -->
+    <div class="card" id="q6">
+      <div class="q-num">问题 06 / 08</div>
+      <div class="q-title">你对香港保险的了解程度？</div>
+      <div class="q-sub">了解你的起点，以便推荐合适的学习路径和产品类型</div>
+      <div class="options">
+        <div class="option" onclick="select(6,'完全不了解')">
+          <div class="option-icon">🆕</div>
+          <div class="option-body"><div class="option-label">完全不了解</div><div class="option-desc">第一次听说，想从基础开始</div></div>
+          <div class="option-check"></div>
+        </div>
+        <div class="option" onclick="select(6,'基本了解')">
+          <div class="option-icon">📖</div>
+          <div class="option-body"><div class="option-label">基本了解，看过一些文章</div><div class="option-desc">知道港险优势，但不知从哪入手</div></div>
+          <div class="option-check"></div>
+        </div>
+        <div class="option" onclick="select(6,'有对比')">
+          <div class="option-icon">🔍</div>
+          <div class="option-body"><div class="option-label">已在对比具体产品</div><div class="option-desc">看过演示文件，正在做决策</div></div>
+          <div class="option-check"></div>
+        </div>
+        <div class="option" onclick="select(6,'已持有')">
+          <div class="option-icon">✅</div>
+          <div class="option-body"><div class="option-label">已持有港险，想继续加配</div><div class="option-desc">希望优化现有保单结构</div></div>
+          <div class="option-check"></div>
+        </div>
+      </div>
+      <div class="nav-row">
+        <button class="btn btn-prev" onclick="prevQ(6)">← 上一步</button>
+        <button class="btn btn-next" onclick="nextQ(6)" id="next6" disabled>下一步 →</button>
+      </div>
+    </div>
+
+    <!-- Q7 -->
+    <div class="card" id="q7">
+      <div class="q-num">问题 07 / 08</div>
+      <div class="q-title">你能承受的风险程度？</div>
+      <div class="q-sub">影响保单中「保证收益」与「非保证红利」的配比偏好</div>
+      <div class="options">
+        <div class="option" onclick="select(7,'保守')">
+          <div class="option-icon">🪨</div>
+          <div class="option-body"><div class="option-label">非常保守，只要保证的</div><div class="option-desc">宁愿少一点，但要确定能拿到</div></div>
+          <div class="option-check"></div>
+        </div>
+        <div class="option" onclick="select(7,'稳健')">
+          <div class="option-icon">⚖️</div>
+          <div class="option-body"><div class="option-label">稳健，可接受小部分非保证</div><div class="option-desc">保证部分为主，非保证为辅</div></div>
+          <div class="option-check"></div>
+        </div>
+        <div class="option" onclick="select(7,'平衡')">
+          <div class="option-icon">🌊</div>
+          <div class="option-body"><div class="option-label">平衡型，保证+非保证各一半</div><div class="option-desc">追求相对较高的预期回报</div></div>
+          <div class="option-check"></div>
+        </div>
+        <div class="option" onclick="select(7,'积极')">
+          <div class="option-icon">🚀</div>
+          <div class="option-body"><div class="option-label">可接受较高非保证比例</div><div class="option-desc">愿意为更高 IRR 承担不确定性</div></div>
+          <div class="option-check"></div>
+        </div>
+      </div>
+      <div class="nav-row">
+        <button class="btn btn-prev" onclick="prevQ(7)">← 上一步</button>
+        <button class="btn btn-next" onclick="nextQ(7)" id="next7" disabled>下一步 →</button>
+      </div>
+    </div>
+
+    <!-- Q8 -->
+    <div class="card" id="q8">
+      <div class="q-num">问题 08 / 08</div>
+      <div class="q-title">你预期持有保单多少年？</div>
+      <div class="q-sub">储蓄险通常持有越久 IRR 越高，短期资金需求会影响产品选择</div>
+      <div class="options">
+        <div class="option" onclick="select(8,'5年以内')">
+          <div class="option-icon">⚡</div>
+          <div class="option-body"><div class="option-label">5 年以内，资金流动性要求高</div><div class="option-desc">更适合定存、货基，储蓄险不适合短持</div></div>
+          <div class="option-check"></div>
+        </div>
+        <div class="option" onclick="select(8,'5-10年')">
+          <div class="option-icon">📅</div>
+          <div class="option-body"><div class="option-label">5–10 年（中期规划）</div><div class="option-desc">可考虑部分储蓄险，选择退保灵活的产品</div></div>
+          <div class="option-check"></div>
+        </div>
+        <div class="option" onclick="select(8,'10-20年')">
+          <div class="option-icon">🌳</div>
+          <div class="option-body"><div class="option-label">10–20 年（教育/养老规划）</div><div class="option-desc">储蓄险 IRR 进入最优区间，推荐核心配置</div></div>
+          <div class="option-check"></div>
+        </div>
+        <div class="option" onclick="select(8,'20年以上')">
+          <div class="option-icon">🏛</div>
+          <div class="option-body"><div class="option-label">20 年以上（传承规划）</div><div class="option-desc">复利效果最大化，适合传承型保单</div></div>
+          <div class="option-check"></div>
+        </div>
+      </div>
+      <div class="nav-row">
+        <button class="btn btn-prev" onclick="prevQ(8)">← 上一步</button>
+        <button class="btn btn-next" onclick="showResult()" id="next8" disabled>查看我的保险建议 →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Result -->
+  <div class="result-wrap" id="resultWrap">
+    <div class="result-hero" id="resultHero">
+      <div class="result-profile" id="resultProfile"></div>
+      <div class="result-title" id="resultTitle"></div>
+      <div class="result-sub" id="resultSub"></div>
+    </div>
+
+    <h3 style="font-size:16px;font-weight:800;color:var(--gray-900);margin-bottom:14px;padding-left:2px;">🎯 推荐险种优先级</h3>
+    <div class="rec-list" id="recList"></div>
+
+    <div class="action-card" id="actionCard">
+      <div class="action-title">建议下一步行动</div>
+      <ul class="action-list" id="actionList"></ul>
+    </div>
+
+    <div class="budget-box" id="budgetBox">
+      <div class="budget-title">💰 参考保费预算（占年收入比例建议）</div>
+      <div id="budgetContent"></div>
+    </div>
+
+    <div style="background:#fff;border:1px solid var(--gray-200);border-radius:13px;padding:20px;margin-bottom:16px;">
+      <div style="font-size:14px;font-weight:700;color:var(--gray-900);margin-bottom:8px;">📚 建议阅读</div>
+      <div id="readingList"></div>
+    </div>
+
+    <button class="restart-btn" onclick="restart()">🔄 重新测试</button>
+  </div>
+</div>
+
+<script>
+const answers = {};
+const totalQ = 8;
+
+function updateProgress(current) {
+  const pct = (current / totalQ * 100).toFixed(0);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressTitle').textContent = `第 ${current} 步，共 ${totalQ} 步`;
+  document.getElementById('progressCount').textContent = `${current} / ${totalQ}`;
+
+  const dots = document.getElementById('stepDots');
+  dots.innerHTML = Array.from({length:totalQ}, (_,i) => {
+    const cls = i+1 < current ? 'done' : i+1 === current ? 'current' : '';
+    return `<div class="step-dot ${cls}"></div>`;
+  }).join('');
+}
+
+function select(q, val) {
+  answers[q] = val;
+  const card = document.getElementById('q'+q);
+  card.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+  // Find clicked option
+  card.querySelectorAll('.option').forEach(o => {
+    if (o.getAttribute('onclick') === `select(${q},'${val}')`) {
+      o.classList.add('selected');
+      o.querySelector('.option-check').textContent = '✓';
+    } else {
+      o.querySelector('.option-check').textContent = '';
+    }
+  });
+  document.getElementById('next'+q).disabled = false;
+}
+
+function nextQ(current) {
+  if (!answers[current]) return;
+  document.getElementById('q'+current).classList.remove('active');
+  document.getElementById('q'+(current+1)).classList.add('active');
+  updateProgress(current+1);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function prevQ(current) {
+  document.getElementById('q'+current).classList.remove('active');
+  document.getElementById('q'+(current-1)).classList.add('active');
+  updateProgress(current-1);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function showResult() {
+  document.getElementById('questions').style.display = 'none';
+  document.getElementById('progressWrap').style.display = 'none';
+  buildResult();
+  document.getElementById('resultWrap').classList.add('show');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function restart() {
+  Object.keys(answers).forEach(k => delete answers[k]);
+  document.querySelectorAll('.card').forEach(c => {
+    c.classList.remove('active');
+    c.querySelectorAll('.option').forEach(o => {
+      o.classList.remove('selected');
+      o.querySelector('.option-check').textContent = '';
+    });
+    c.querySelectorAll('button.btn-next').forEach(b => b.disabled = true);
+  });
+  document.getElementById('q1').classList.add('active');
+  document.getElementById('questions').style.display = 'block';
+  document.getElementById('progressWrap').style.display = 'block';
+  document.getElementById('resultWrap').classList.remove('show');
+  updateProgress(1);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ─── Result Logic ─────────────────────────────────────────────
+function buildResult() {
+  const a = answers;
+  const age = a[1], family = a[2], income = a[3], existing = a[4];
+  const concern = a[5], knowledge = a[6], risk = a[7], horizon = a[8];
+
+  // Profile label
+  const ageLabel = { '25以下':'职场新人', '25-35':'成长期', '35-45':'家庭顶梁柱', '45-55':'退休前规划期', '55以上':'退休过渡期' };
+  const profileLabel = `${ageLabel[age] || ''} · ${family === '单身' ? '单身' : family.includes('无孩') ? '二人世界' : family.includes('有孩') ? '有孩家庭' : '多代同堂'}`;
+
+  // Score each insurance type
+  const scores = {
+    term_life: 0,       // 定期寿险
+    ci: 0,              // 重疾险
+    medical_hk: 0,      // 香港高端医疗
+    savings: 0,         // 储蓄险（港险）
+    annuity: 0,         // 年金险
+    legacy: 0,          // 传承型保单
+  };
+
+  // Age scoring
+  if (['25以下','25-35','35-45'].includes(age)) { scores.term_life += 3; scores.ci += 3; }
+  if (['35-45','45-55'].includes(age)) { scores.savings += 3; scores.annuity += 2; }
+  if (['45-55','55以上'].includes(age)) { scores.medical_hk += 3; scores.annuity += 3; }
+  if (age === '55以上') { scores.legacy += 3; }
+
+  // Family
+  if (family === '已婚有孩' || family === '赡养父母') { scores.term_life += 3; scores.ci += 2; }
+  if (family === '已婚无孩') { scores.savings += 2; }
+  if (family === '单身') { scores.medical_hk += 1; }
+
+  // Income
+  if (['50-100','100以上'].includes(income)) { scores.savings += 3; scores.medical_hk += 2; }
+  if (income === '100以上') { scores.legacy += 3; scores.annuity += 2; }
+  if (income === '20以下') { scores.term_life += 2; scores.ci += 2; }
+
+  // Existing coverage
+  if (existing === '几乎没有') { scores.ci += 3; scores.term_life += 3; scores.medical_hk += 2; }
+  if (existing === '有社保医疗') { scores.ci += 3; scores.term_life += 2; }
+  if (existing === '有重疾医疗') { scores.savings += 3; scores.annuity += 2; }
+  if (existing === '配置齐全') { scores.savings += 3; scores.legacy += 2; scores.annuity += 2; }
+
+  // Primary concern
+  if (concern === '重大疾病') scores.ci += 4;
+  if (concern === '意外身故') scores.term_life += 4;
+  if (concern === '医疗费用') scores.medical_hk += 4;
+  if (concern === '退休养老') { scores.annuity += 4; scores.savings += 2; }
+  if (concern === '资产传承') { scores.legacy += 4; scores.savings += 2; }
+
+  // Horizon
+  if (horizon === '5年以内') { scores.savings -= 3; scores.term_life += 1; }
+  if (['10-20年','20年以上'].includes(horizon)) { scores.savings += 3; scores.annuity += 2; }
+  if (horizon === '20年以上') scores.legacy += 3;
+
+  // Sort by score
+  const allTypes = [
+    {
+      key: 'ci', name: '重疾险', icon: '🛡️', iconBg: '#fde8e8',
+      desc: '确诊指定重大疾病（癌症、心梗、脑卒中等）即赔付一笔钱，用于治疗及收入补偿',
+      tags: ['保障型', '必要性高', '趁年轻买'],
+      articles: [{ text: '重疾险 vs 医疗险，应该怎么搭？', href: 'articles/xhs-04-ci-vs-medical.html' }]
+    },
+    {
+      key: 'term_life', name: '定期寿险', icon: '☂️', iconBg: '#fef9c3',
+      desc: '在保障期内身故/全残赔付保额，成本极低但保障高，是家庭顶梁柱的首选',
+      tags: ['保障型', '高杠杆', '性价比之王'],
+      articles: [{ text: '定期寿险：年收入 × 10 倍的购买逻辑', href: 'articles/mainland-xhs-04-term-life.html' }]
+    },
+    {
+      key: 'medical_hk', name: '香港高端医疗险（VHIS）', icon: '🏥', iconBg: '#e0f2fe',
+      desc: '覆盖香港及海外医院，报销比例高、可自选医生，解决「有钱但没有好的就医渠道」的问题',
+      tags: ['医疗保障', '香港专属', '高净值适合'],
+      articles: [{ text: '香港医疗险 VHIS 详解', href: 'articles/xhs-02-vhis-detail.html' }]
+    },
+    {
+      key: 'savings', name: '香港储蓄险（分红险）', icon: '💎', iconBg: '#ede9fe',
+      desc: '缴费 3–10 年，长期持有（15–30 年）获得稳定复利，IRR 约 4.5–6%，适合财富增值',
+      tags: ['储蓄型', '港险核心', '复利增值'],
+      articles: [
+        { text: '如何看懂 IRR 判断储蓄险值不值', href: 'irr-calculator.html' },
+        { text: '保证 vs 非保证，哪种产品适合你', href: 'articles/xhs-06-guarantee-vs-dividend.html' }
+      ]
+    },
+    {
+      key: 'annuity', name: '年金险（养老规划）', icon: '🌅', iconBg: '#dcfce7',
+      desc: '定期缴费，退休后每年领取固定金额，解决长寿风险，与储蓄险组合使用效果最佳',
+      tags: ['养老型', '现金流稳定', '长期锁定'],
+      articles: [{ text: '税延养老年金：税务优化 + 养老规划一举两得', href: 'articles/mainland-xhs-07-tax-annuity.html' }]
+    },
+    {
+      key: 'legacy', name: '传承型保单（大额储蓄/万能险）', icon: '🏛️', iconBg: '#fef9c3',
+      desc: '保单受益人可绕过遗产程序直接领取，结合人寿功能实现财富定向传承',
+      tags: ['传承型', '高净值专属', 'CRS合规'],
+      articles: [
+        { text: '用保险实现财富代际传承', href: 'articles/mainland-xhs-18-inheritance.html' },
+        { text: '香港保险与 CRS 合规解析', href: 'articles/mainland-xhs-17-crs.html' }
+      ]
+    },
+  ];
+
+  const sorted = allTypes.sort((a,b) => (scores[b.key]||0) - (scores[a.key]||0));
+  const top3 = sorted.slice(0,3);
+
+  const priorities = ['🔴 最高优先', '🟡 次要优先', '🟢 可选配置'];
+  const priorityClasses = ['priority-high', 'priority-med', 'priority-low'];
+
+  // Profile hero
+  let heroGrad, heroTitle, heroSub;
+  if (concern === '重大疾病' || concern === '意外身故') {
+    heroGrad = 'linear-gradient(135deg,#dc2626,#7c3aed)';
+    heroTitle = '保障缺口需要优先填补';
+    heroSub = '你的核心需求是风险保障，建议先把保障型险种配齐，再考虑储蓄型产品';
+  } else if (concern === '退休养老' || concern === '资产传承') {
+    heroGrad = 'linear-gradient(135deg,#059669,#0ea5e9)';
+    heroTitle = '财富增值与传承是你的方向';
+    heroSub = '你的基础保障相对完善，重点配置储蓄型、年金型或传承型保单';
+  } else if (concern === '医疗费用') {
+    heroGrad = 'linear-gradient(135deg,#0891b2,#6366f1)';
+    heroTitle = '优质医疗保障是首要目标';
+    heroSub = '建议从高端医疗险出发，同时补充重疾险形成双重医疗保障';
+  } else {
+    heroGrad = 'linear-gradient(135deg,#1a56db,#7e3af2)';
+    heroTitle = '均衡配置，保障与储蓄并重';
+    heroSub = '建议按「保障优先，储蓄其次」的原则，逐步搭建完整的保险组合';
+  }
+  document.getElementById('resultHero').style.background = heroGrad;
+  document.getElementById('resultHero').style.color = '#fff';
+  document.getElementById('resultProfile').textContent = profileLabel;
+  document.getElementById('resultTitle').textContent = heroTitle;
+  document.getElementById('resultSub').textContent = heroSub;
+
+  // Recommendations
+  document.getElementById('recList').innerHTML = top3.map((t, i) => `
+    <div class="rec-card">
+      <div class="rec-icon" style="background:${t.iconBg}">${t.icon}</div>
+      <div class="rec-body">
+        <div class="rec-name">${t.name}</div>
+        <div class="rec-reason">${t.desc}</div>
+        <div class="rec-tags">
+          <span class="rec-tag ${priorityClasses[i]}">${priorities[i]}</span>
+          ${t.tags.map(tag=>`<span class="rec-tag" style="background:var(--gray-100);color:var(--gray-600)">${tag}</span>`).join('')}
+        </div>
+      </div>
+    </div>
+  `).join('');
+
+  // Actions
+  const actions = [];
+  if (existing === '几乎没有' || existing === '有社保医疗') {
+    actions.push('优先配置重疾险（建议保额 = 年收入 × 5–10 倍），趁年轻保费低');
+    if (family === '已婚有孩' || family === '赡养父母') {
+      actions.push('同步配置定期寿险（保额 = 年收入 × 10 倍），保障家人在你身故后 10 年的生活');
+    }
+  }
+  if (['50-100','100以上'].includes(income) && ['10-20年','20年以上'].includes(horizon)) {
+    actions.push('考虑香港储蓄险：建议年缴保费不超过家庭年收入的 20%，持有 15 年以上效果最佳');
+  }
+  if (knowledge === '完全不了解' || knowledge === '基本了解') {
+    actions.push('先读完本站保险基础 5 篇文章，再与代理人沟通时有基本判断力');
+  }
+  if (knowledge === '有对比') {
+    actions.push('用本站 IRR 计算器 验证代理人给你的演示文件，确认真实年化回报率');
+  }
+  if (concern === '退休养老') {
+    actions.push('为退休规划单独设立「储蓄险 + 年金险」组合账户，与保障型险种分开管理');
+  }
+  actions.push('每年复检一次保单：随收入增加、家庭变化，保额和险种配比需要更新');
+
+  document.getElementById('actionList').innerHTML = actions.slice(0,5).map((a,i) => `
+    <li class="action-item">
+      <div class="action-num">${i+1}</div>
+      <div class="action-text">${a}</div>
+    </li>
+  `).join('');
+
+  // Budget
+  const incomeMap = { '20以下':'约 2–3 万/年', '20-50':'约 4–8 万/年', '50-100':'约 10–18 万/年', '100以上':'约 20 万以上/年' };
+  const budgetPct = { '20以下':'10–15%', '20-50':'10–15%', '50-100':'15–20%', '100以上':'20–30%' };
+  document.getElementById('budgetContent').innerHTML = `
+    <div class="budget-row"><div class="budget-label">建议总保费投入</div><div class="budget-val">${incomeMap[income] || '—'}</div></div>
+    <div class="budget-row"><div class="budget-label">占年收入比例</div><div class="budget-val">${budgetPct[income] || '—'}</div></div>
+    <div class="budget-row"><div class="budget-label">保障型 : 储蓄型</div><div class="budget-val">${existing === '配置齐全' ? '3 : 7' : existing === '有重疾医疗' ? '4 : 6' : '7 : 3'}</div></div>
+  `;
+
+  // Reading list
+  const allLinks = top3.flatMap(t => t.articles);
+  document.getElementById('readingList').innerHTML = allLinks.map(l => `
+    <a href="${l.href}" style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--gray-100);text-decoration:none;font-size:13px;color:var(--primary)">
+      <span style="color:var(--gray-400)">→</span>${l.text}
+    </a>
+  `).join('');
+}
+
+// Init
+updateProgress(1);
+</script>
+</body>
+</html>

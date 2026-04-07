@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>储蓄险 IRR 计算器 · 判断一份保单值不值得买</title>
+<style>
+:root {
+  --primary:#1a56db;--primary-dark:#1240a8;--primary-light:#eff6ff;
+  --success:#057a55;--success-light:#def7ec;
+  --warning:#c27803;--warning-light:#fef9c3;
+  --danger:#c81e1e;--danger-light:#fde8e8;
+  --purple:#7e3af2;--purple-light:#edebfe;
+  --gray-50:#f9fafb;--gray-100:#f3f4f6;--gray-200:#e5e7eb;
+  --gray-300:#d1d5db;--gray-400:#9ca3af;--gray-500:#6b7280;
+  --gray-600:#4b5563;--gray-700:#374151;--gray-800:#1f2937;--gray-900:#111827;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hiragino Sans GB',sans-serif;background:var(--gray-50);color:var(--gray-800);line-height:1.7;}
+.page{max-width:780px;margin:0 auto;padding:24px 20px 60px;}
+/* Header */
+.hero{background:linear-gradient(135deg,#0277bd 0%,#01579b 100%);border-radius:16px;padding:36px 40px;color:#fff;margin-bottom:28px;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;top:-40px;right:-40px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.07);}
+.hero-tag{display:inline-block;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);border-radius:20px;padding:3px 12px;font-size:12px;margin-bottom:14px;}
+.hero h1{font-size:26px;font-weight:800;margin-bottom:8px;line-height:1.3;}
+.hero p{font-size:14px;opacity:.88;line-height:1.7;}
+.back-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--gray-500);text-decoration:none;margin-bottom:18px;transition:color .15s;}
+.back-link:hover{color:var(--primary);}
+/* Card */
+.card{background:#fff;border:1px solid var(--gray-200);border-radius:14px;padding:28px;margin-bottom:20px;}
+.card-title{font-size:16px;font-weight:700;color:var(--gray-900);margin-bottom:18px;display:flex;align-items:center;gap:8px;}
+.card-title::before{content:'';width:4px;height:18px;background:var(--primary);border-radius:2px;display:block;}
+/* Form */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.form-group{display:flex;flex-direction:column;gap:6px;}
+.form-group.full{grid-column:1/-1;}
+label{font-size:13px;font-weight:600;color:var(--gray-700);}
+.label-hint{font-weight:400;color:var(--gray-400);font-size:11px;margin-left:4px;}
+input[type=number]{padding:10px 14px;border:1.5px solid var(--gray-200);border-radius:9px;font-size:14px;color:var(--gray-800);transition:border-color .15s;width:100%;}
+input[type=number]:focus{outline:none;border-color:var(--primary);}
+.input-suffix{position:relative;}
+.input-suffix input{padding-right:40px;}
+.input-suffix .suffix{position:absolute;right:13px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--gray-400);pointer-events:none;}
+.divider-label{display:flex;align-items:center;gap:10px;margin:6px 0;font-size:11px;font-weight:700;color:var(--gray-400);text-transform:uppercase;letter-spacing:.05em;}
+.divider-label::before,.divider-label::after{content:'';flex:1;height:1px;background:var(--gray-200);}
+/* Button */
+.calc-btn{width:100%;padding:14px;background:var(--primary);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;transition:background .15s;margin-top:20px;}
+.calc-btn:hover{background:var(--primary-dark);}
+/* Result */
+.result-panel{display:none;}
+.result-panel.show{display:block;}
+.irr-display{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;}
+.irr-card{border-radius:12px;padding:22px;text-align:center;}
+.irr-card.guaranteed{background:linear-gradient(135deg,#e0f2fe,#bae6fd);border:1px solid #7dd3fc;}
+.irr-card.total{background:linear-gradient(135deg,#eff6ff,#dbeafe);border:1px solid #93c5fd;}
+.irr-label{font-size:12px;font-weight:700;color:var(--gray-600);margin-bottom:6px;}
+.irr-number{font-size:36px;font-weight:900;line-height:1;}
+.irr-number.bad{color:#dc2626;}
+.irr-number.fair{color:#d97706;}
+.irr-number.good{color:#0277bd;}
+.irr-number.great{color:#057a55;}
+.irr-sublabel{font-size:11px;color:var(--gray-500);margin-top:4px;}
+/* Rating */
+.rating-bar{margin:20px 0;}
+.rating-title{font-size:13px;font-weight:600;color:var(--gray-700);margin-bottom:10px;}
+.bar-track{height:10px;background:linear-gradient(90deg,#fee2e2 0%,#fef9c3 30%,#bbf7d0 65%,#a7f3d0 100%);border-radius:99px;position:relative;margin-bottom:6px;}
+.bar-pointer{position:absolute;top:-3px;width:16px;height:16px;background:#1f2937;border-radius:50%;transform:translateX(-50%);transition:left .6s cubic-bezier(.34,1.56,.64,1);border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.3);}
+.bar-labels{display:flex;justify-content:space-between;font-size:10px;color:var(--gray-500);}
+.rating-badge{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:99px;font-size:13px;font-weight:700;margin-top:10px;}
+/* Compare Table */
+.compare-table{width:100%;border-collapse:collapse;font-size:13px;}
+.compare-table th{padding:9px 14px;text-align:left;font-weight:600;color:var(--gray-600);background:var(--gray-50);border-bottom:1px solid var(--gray-200);}
+.compare-table td{padding:9px 14px;border-bottom:1px solid var(--gray-100);color:var(--gray-700);}
+.compare-table tr.highlight td{background:#eff6ff;font-weight:700;color:var(--primary);}
+.compare-table tr:last-child td{border-bottom:none;}
+.diff-badge{display:inline-block;font-size:11px;padding:1px 7px;border-radius:99px;font-weight:700;}
+.diff-plus{background:#dcfce7;color:#166534;}
+.diff-minus{background:#fee2e2;color:#991b1b;}
+/* Callout */
+.callout{border-radius:10px;padding:14px 18px;margin:16px 0;font-size:13.5px;border-left:4px solid;}
+.callout.yellow{background:var(--warning-light);border-color:#d97706;color:#78350f;}
+.callout.blue{background:var(--primary-light);border-color:var(--primary);color:#1e3a8a;}
+.callout.green{background:var(--success-light);border-color:var(--success);color:#064e3b;}
+.callout strong{font-weight:700;}
+/* Breakdown */
+.breakdown{margin-top:20px;}
+.breakdown-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--gray-100);}
+.breakdown-item:last-child{border-bottom:none;}
+.breakdown-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.breakdown-label{font-size:13px;color:var(--gray-600);flex:1;}
+.breakdown-val{font-size:14px;font-weight:700;color:var(--gray-800);}
+/* Tips */
+.tips-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:16px;}
+.tip-item{background:#fff;border:1px solid var(--gray-200);border-radius:10px;padding:14px;}
+.tip-icon{font-size:20px;margin-bottom:8px;}
+.tip-title{font-size:12px;font-weight:700;color:var(--gray-800);margin-bottom:4px;}
+.tip-desc{font-size:11.5px;color:var(--gray-500);line-height:1.5;}
+@media(max-width:600px){
+  .form-grid{grid-template-columns:1fr;}
+  .irr-display{grid-template-columns:1fr;}
+  .tips-grid{grid-template-columns:1fr;}
+  .hero{padding:24px 20px;}
+  .hero h1{font-size:20px;}
+  .card{padding:18px;}
+}
+</style>
+</head>
+<body>
+<div class="page">
+  <a href="index.html" class="back-link">← 返回保险指南首页</a>
+
+  <div class="hero">
+    <div class="hero-tag">保险工具 · IRR 计算器</div>
+    <h1>储蓄险 IRR 计算器</h1>
+    <p>输入保单参数，秒算保证/总体内部收益率，与存款、基金横向对比，让数字说话</p>
+  </div>
+
+  <!-- 输入卡片 -->
+  <div class="card">
+    <div class="card-title">输入保单参数</div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>每年保费 <span class="label-hint">（港元 / 人民币）</span></label>
+        <div class="input-suffix">
+          <input type="number" id="annualPremium" value="100000" min="1">
+          <span class="suffix">元</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>缴费年期</label>
+        <div class="input-suffix">
+          <input type="number" id="paymentYears" value="5" min="1" max="30">
+          <span class="suffix">年</span>
+        </div>
+      </div>
+
+      <div class="divider-label full">保单持有期</div>
+
+      <div class="form-group">
+        <label>计算至第几年 <span class="label-hint">（如 20 年）</span></label>
+        <div class="input-suffix">
+          <input type="number" id="holdYears" value="20" min="2" max="60">
+          <span class="suffix">年</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>该年度现金价值（保证部分）</label>
+        <div class="input-suffix">
+          <input type="number" id="guaranteedValue" value="780000" min="0">
+          <span class="suffix">元</span>
+        </div>
+      </div>
+
+      <div class="divider-label full">非保证红利</div>
+
+      <div class="form-group full">
+        <label>该年度总现金价值 <span class="label-hint">（保证 + 非保证，若无则与保证值相同）</span></label>
+        <div class="input-suffix">
+          <input type="number" id="totalValue" value="1404000" min="0">
+          <span class="suffix">元</span>
+        </div>
+      </div>
+
+      <div class="form-group full">
+        <label>期间有无额外现金流？<span class="label-hint">（如年金每年返还，留空则为0）</span></label>
+        <div class="input-suffix">
+          <input type="number" id="annualReturn" value="0" min="0">
+          <span class="suffix">元/年（返还从第几年起）</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>年金返还起始年</label>
+        <div class="input-suffix">
+          <input type="number" id="returnStartYear" value="6" min="1" max="60">
+          <span class="suffix">年起</span>
+        </div>
+      </div>
+    </div>
+
+    <button class="calc-btn" onclick="calculate()">📊 立即计算 IRR</button>
+  </div>
+
+  <!-- 结果 -->
+  <div class="result-panel" id="resultPanel">
+    <div class="card">
+      <div class="card-title">计算结果</div>
+
+      <div class="irr-display">
+        <div class="irr-card guaranteed">
+          <div class="irr-label">🔒 保证 IRR</div>
+          <div class="irr-number" id="guaranteedIRR">—</div>
+          <div class="irr-sublabel">仅计算保证现金价值</div>
+        </div>
+        <div class="irr-card total">
+          <div class="irr-label">📈 总体 IRR（含非保证）</div>
+          <div class="irr-number" id="totalIRR">—</div>
+          <div class="irr-sublabel">含非保证红利全额实现</div>
+        </div>
+      </div>
+
+      <!-- 评级条 -->
+      <div class="rating-bar">
+        <div class="rating-title">总体 IRR 评级</div>
+        <div class="bar-track">
+          <div class="bar-pointer" id="barPointer" style="left:50%"></div>
+        </div>
+        <div class="bar-labels">
+          <span>0%</span><span>2%</span><span>4%</span><span>5.5%</span><span>7%+</span>
+        </div>
+        <div id="ratingBadge"></div>
+      </div>
+
+      <!-- 明细 -->
+      <div class="breakdown">
+        <div class="breakdown-item">
+          <div class="breakdown-dot" style="background:#0277bd"></div>
+          <div class="breakdown-label">总投入保费</div>
+          <div class="breakdown-val" id="bTotal">—</div>
+        </div>
+        <div class="breakdown-item">
+          <div class="breakdown-dot" style="background:#10b981"></div>
+          <div class="breakdown-label">保证现金价值</div>
+          <div class="breakdown-val" id="bGuaranteed">—</div>
+        </div>
+        <div class="breakdown-item">
+          <div class="breakdown-dot" style="background:#6366f1"></div>
+          <div class="breakdown-label">总现金价值（含非保证）</div>
+          <div class="breakdown-val" id="bTotal2">—</div>
+        </div>
+        <div class="breakdown-item">
+          <div class="breakdown-dot" style="background:#f59e0b"></div>
+          <div class="breakdown-label">非保证占比</div>
+          <div class="breakdown-val" id="bNonGuaRatio">—</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 对比表 -->
+    <div class="card">
+      <div class="card-title">与其他投资方式对比</div>
+      <div style="overflow-x:auto;border-radius:10px;border:1px solid var(--gray-200);">
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th>投资方式</th>
+              <th>参考年化收益率</th>
+              <th>同等投入 <span id="holdYearsLabel">20</span> 年后</th>
+              <th>与本保单差距</th>
+            </tr>
+          </thead>
+          <tbody id="compareTableBody"></tbody>
+        </table>
+      </div>
+      <div class="callout yellow" style="margin-top:14px">
+        <strong>注意：</strong>对比表为简化模型（一次性总投入复利计算），实际储蓄险为分期缴款，真实差距需用 IRR 对比。表格仅供数量级参考。
+      </div>
+    </div>
+
+    <!-- 风险提示 -->
+    <div class="card">
+      <div class="card-title">读懂这份结果</div>
+      <div id="irrInterpretation"></div>
+      <div class="tips-grid">
+        <div class="tip-item">
+          <div class="tip-icon">⚠️</div>
+          <div class="tip-title">IRR ≠ 宣传收益率</div>
+          <div class="tip-desc">代理人说的「年化 6.5%」是某一年的数据，IRR 将前期现金价值偏低的损耗纳入计算，实际往往低 1–2 个百分点</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-icon">🔍</div>
+          <div class="tip-title">保证 vs 非保证</div>
+          <div class="tip-desc">非保证红利占比越高，IRR 越亮眼，但不确定性也越大。建议同时关注保证 IRR，作为最低预期底线</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-icon">📅</div>
+          <div class="tip-title">找到最佳退出年</div>
+          <div class="tip-desc">大多数储蓄险在 15–25 年后 IRR 达到峰值。建议用保单不同年份的现金价值，分别计算哪一年退出最合算</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// IRR 计算：二分法求解 NPV = 0 的利率
+function calcIRR(cashFlows) {
+  // cashFlows: [{t: 年份(0-indexed从1起), cf: 现金流}]
+  // 负数=支出，正数=收入
+  const npv = (r) => {
+    return cashFlows.reduce((sum, {t, cf}) => sum + cf / Math.pow(1 + r, t), 0);
+  };
+
+  let lo = -0.5, hi = 3.0;
+  if (npv(lo) * npv(hi) > 0) return null; // 无解
+
+  for (let i = 0; i < 200; i++) {
+    const mid = (lo + hi) / 2;
+    if (Math.abs(hi - lo) < 1e-8) return mid;
+    if (npv(lo) * npv(mid) <= 0) hi = mid;
+    else lo = mid;
+  }
+  return (lo + hi) / 2;
+}
+
+function fmt(n) {
+  if (n === null || isNaN(n)) return 'N/A';
+  return (n * 100).toFixed(2) + '%';
+}
+
+function fmtMoney(n) {
+  if (n >= 10000) return (n / 10000).toFixed(1) + '万';
+  return n.toLocaleString();
+}
+
+function calculate() {
+  const annualPremium = parseFloat(document.getElementById('annualPremium').value) || 0;
+  const paymentYears = parseInt(document.getElementById('paymentYears').value) || 0;
+  const holdYears = parseInt(document.getElementById('holdYears').value) || 0;
+  const guaranteedValue = parseFloat(document.getElementById('guaranteedValue').value) || 0;
+  const totalValue = parseFloat(document.getElementById('totalValue').value) || 0;
+  const annualReturn = parseFloat(document.getElementById('annualReturn').value) || 0;
+  const returnStartYear = parseInt(document.getElementById('returnStartYear').value) || 6;
+
+  if (!annualPremium || !paymentYears || !holdYears || !guaranteedValue) {
+    alert('请填写完整参数');
+    return;
+  }
+
+  // 构造现金流（guaranteed）
+  const buildCF = (finalVal) => {
+    const cfs = [];
+    // 缴费期支出
+    for (let t = 1; t <= paymentYears; t++) {
+      cfs.push({ t, cf: -annualPremium });
+    }
+    // 年金返还（如有）
+    if (annualReturn > 0) {
+      for (let t = returnStartYear; t <= holdYears; t++) {
+        cfs.push({ t, cf: annualReturn });
+      }
+    }
+    // 最终现金价值（收入）
+    cfs.push({ t: holdYears, cf: finalVal });
+    // 合并同年
+    const merged = {};
+    cfs.forEach(({t, cf}) => { merged[t] = (merged[t] || 0) + cf; });
+    return Object.entries(merged).map(([t, cf]) => ({ t: parseInt(t), cf }));
+  };
+
+  const cfGuaranteed = buildCF(guaranteedValue);
+  const cfTotal = buildCF(totalValue);
+
+  const irrGuaranteed = calcIRR(cfGuaranteed);
+  const irrTotal = calcIRR(cfTotal);
+
+  const totalPremium = annualPremium * paymentYears;
+  const nonGuaRatio = totalValue > 0 ? ((totalValue - guaranteedValue) / totalValue * 100).toFixed(1) : 0;
+
+  // 显示结果
+  const gEl = document.getElementById('guaranteedIRR');
+  const tEl = document.getElementById('totalIRR');
+
+  const rateClass = (r) => {
+    if (r === null) return 'bad';
+    if (r < 0.02) return 'bad';
+    if (r < 0.035) return 'fair';
+    if (r < 0.05) return 'good';
+    return 'great';
+  };
+
+  gEl.textContent = fmt(irrGuaranteed);
+  gEl.className = 'irr-number ' + rateClass(irrGuaranteed);
+  tEl.textContent = fmt(irrTotal);
+  tEl.className = 'irr-number ' + rateClass(irrTotal);
+
+  // 评级条
+  const pct = irrTotal !== null ? Math.min(Math.max(irrTotal / 0.08, 0), 1) * 100 : 50;
+  document.getElementById('barPointer').style.left = pct + '%';
+
+  const ratingData = {
+    bad:   { text: '⚠️ 偏低', color: '#dc2626', bg: '#fee2e2' },
+    fair:  { text: '🔶 一般', color: '#d97706', bg: '#fef9c3' },
+    good:  { text: '✅ 良好', color: '#0277bd', bg: '#eff6ff' },
+    great: { text: '⭐ 优秀', color: '#057a55', bg: '#dcfce7' },
+  };
+  const rc = rateClass(irrTotal);
+  const rd = ratingData[rc];
+  document.getElementById('ratingBadge').innerHTML = `<span class="rating-badge" style="background:${rd.bg};color:${rd.color}">${rd.text}：总体 IRR ${fmt(irrTotal)}${irrTotal && irrTotal >= 0.05 ? '，处于港险主流水平' : irrTotal && irrTotal >= 0.035 ? '，中等水平' : '，低于市场均值'}</span>`;
+
+  // 明细
+  document.getElementById('bTotal').textContent = fmtMoney(totalPremium) + ' 元';
+  document.getElementById('bGuaranteed').textContent = fmtMoney(guaranteedValue) + ' 元';
+  document.getElementById('bTotal2').textContent = fmtMoney(totalValue) + ' 元';
+  document.getElementById('bNonGuaRatio').textContent = nonGuaRatio + '% 为非保证红利';
+
+  // 对比表
+  document.getElementById('holdYearsLabel').textContent = holdYears;
+  const refs = [
+    { name: '内地银行定存（3年）', rate: 0.015 },
+    { name: '内地货币基金', rate: 0.02 },
+    { name: '内地国债', rate: 0.026 },
+    { name: '港元定存', rate: 0.04 },
+    { name: '本保单（保证IRR）', rate: irrGuaranteed, highlight: true },
+    { name: '本保单（总体IRR）', rate: irrTotal, highlight: true },
+    { name: 'S&P 500 历史平均', rate: 0.10 },
+  ];
+
+  const fv = (r, pv, n) => pv * Math.pow(1 + (r||0), n);
+
+  const tbody = document.getElementById('compareTableBody');
+  tbody.innerHTML = refs.map(r => {
+    const endVal = fv(r.rate, totalPremium, holdYears);
+    const diff = totalValue - endVal;
+    const diffSign = diff >= 0 ? `<span class="diff-badge diff-plus">+${fmtMoney(Math.abs(diff))}</span>` : `<span class="diff-badge diff-minus">-${fmtMoney(Math.abs(diff))}</span>`;
+    return `<tr${r.highlight ? ' class="highlight"' : ''}>
+      <td>${r.name}</td>
+      <td>${r.rate !== null ? (r.rate*100).toFixed(2)+'%' : 'N/A'}</td>
+      <td>${r.rate !== null ? fmtMoney(Math.round(endVal))+'元' : '—'}</td>
+      <td>${r.highlight ? '—' : diffSign}</td>
+    </tr>`;
+  }).join('');
+
+  // 解读
+  const interp = document.getElementById('irrInterpretation');
+  const lines = [];
+  if (irrTotal !== null && irrTotal >= 0.05) {
+    lines.push(`<div class="callout green">本保单总体 IRR <strong>${fmt(irrTotal)}</strong>，处于港险主流水平（4.5%–6%），在当前利率环境下属于相对稳健的长期资产。</div>`);
+  } else if (irrTotal !== null && irrTotal >= 0.03) {
+    lines.push(`<div class="callout blue">本保单总体 IRR <strong>${fmt(irrTotal)}</strong>，处于市场中等水平。建议与同类产品横向比较，确认是否为最优选择。</div>`);
+  } else {
+    lines.push(`<div class="callout yellow">本保单总体 IRR 仅 <strong>${fmt(irrTotal)}</strong>，低于市场均值。建议重新核实保单演示数据，或对比其他产品。</div>`);
+  }
+  if (nonGuaRatio > 40) {
+    lines.push(`<div class="callout yellow">非保证部分占比高达 <strong>${nonGuaRatio}%</strong>。高 IRR 背后依赖分红实现率，务必向代理人索取近 10 年分红实现率记录。</div>`);
+  }
+  interp.innerHTML = lines.join('');
+
+  document.getElementById('resultPanel').classList.add('show');
+  document.getElementById('resultPanel').scrollIntoView({behavior:'smooth',block:'start'});
+}
+</script>
+</body>
+</html>
