@@ -728,7 +728,7 @@ function calcPE() {
       <td>${r.pe.toFixed(0)}×</td>
       <td><strong>${fmtUSD(r.targetPrice)}</strong></td>
       <td>${diffBadge}</td>
-      <td style="color:${r.annualReturn>=targetR?'var(--success)':'var(--danger)';}">${fmtPct(r.annualReturn)}</td>
+      <td style="color:${r.annualReturn>=targetR?'var(--success)':'var(--danger)'}">${fmtPct(r.annualReturn)}</td>
     </tr>`;
   }).join('');
 
