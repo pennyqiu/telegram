@@ -15,7 +15,7 @@ set -e
 
 # ── 可修改的配置 ────────────────────────────────────────────
 GITHUB_REPO="https://github.com/pennyqiu/telegram.git"
-APP_DIR="/opt/telegram"                       # 代码目录
+APP_DIR="/app/telegram"                       # 代码目录
 BRIEFING_DIR="/var/www/briefing"              # 简报输出目录
 WEBSITE_DIR="/var/www/website"                # 网站静态文件目录
 API_PORT=8001                                 # price_api 监听端口
@@ -210,7 +210,7 @@ echo -e "\n[+] ${BOLD}配置 Cron 定时任务...${RESET}"
 # 配置 cron 更新网站文件的辅助脚本
 cat > /usr/local/bin/update-website.sh << 'SYNC'
 #!/bin/bash
-APP_DIR="/opt/telegram"
+APP_DIR="/app/telegram"
 WEBSITE_DIR="/var/www/website"
 git -C "$APP_DIR" pull --ff-only 2>&1
 rsync -a --delete "$APP_DIR"/ "$WEBSITE_DIR"/ \
