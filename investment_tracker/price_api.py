@@ -7,6 +7,7 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 import yfinance as yf
+import datetime as dt
 
 app = FastAPI()
 app.add_middleware(
@@ -92,7 +93,9 @@ async def get_calendar(symbol: str):
             for d in raw_dates:
                 try:
                     if hasattr(d, "strftime"):
-                        dates.append({"raw": 0, "fmt": str(d)})
+                        # 转成 Unix 时间戳（毫秒，与前端 daysUntil 兼容）
+                        ts = int(dt.datetime.combine(d, dt.time.min).timestamp()) * 1000
+                        dates.append({"raw": ts, "fmt": str(d)})
                 except Exception:
                     pass
             return {"earningsDate": dates}

@@ -369,7 +369,14 @@ function fmtPrice(v) { return v > 0 ? `$${v.toFixed(2)}` : '—'; }
 function chgClass(v) { return v > 0 ? 'up' : v < 0 ? 'dn' : 'neutral'; }
 
 function daysUntil(ts) {
-  const ms = (ts * 1000) - Date.now();
+  const ms = ts - Date.now();  // raw 已经是毫秒
+  return Math.ceil(ms / 86400000);
+}
+
+// 用日期字符串计算天数（兜底方案）
+function daysUntilFmt(fmt) {
+  const target = new Date(fmt + 'T00:00:00');
+  const ms = target - new Date().setHours(0, 0, 0, 0);
   return Math.ceil(ms / 86400000);
 }
 
@@ -492,7 +499,7 @@ async function renderEarnings(portfolio) {
   await Promise.allSettled(stocks.map(async p => {
     const dates = await fetchCalendar(p.ticker);
     dates.forEach(d => {
-      const days = daysUntil(d.raw);
+      const days = d.raw ? daysUntil(d.raw) : daysUntilFmt(d.fmt);
       if (days >= 0 && days <= 30) {
         events.push({ ticker: p.ticker, name: p.name, days, date: d.fmt });
       }
