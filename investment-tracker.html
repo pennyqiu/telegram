@@ -216,6 +216,43 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC',sans-
     <div id="quickLinks"><div class="empty">加载持仓后显示</div></div>
   </div>
 
+  <!-- VPS 自动生成简报入口 -->
+  <div class="card">
+    <div class="card-title">📋 自动生成简报（VPS 定时任务）</div>
+    <p style="font-size:13px;color:var(--gray-600);margin-bottom:16px;">
+      由 VPS 每日/每周/每月自动运行 <code style="background:var(--gray-100);padding:1px 5px;border-radius:4px;">tracker.py</code> 生成，包含 Google News 新闻抓取（浏览器版因 CORS 无法直接抓取新闻）。
+    </p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;">
+      <a href="http://202.182.104.186/briefing/daily.html" target="_blank"
+        style="display:flex;flex-direction:column;gap:4px;padding:16px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border:1px solid #93c5fd;border-radius:12px;text-decoration:none;">
+        <span style="font-size:20px;">📅</span>
+        <span style="font-size:14px;font-weight:700;color:#1d4ed8;">每日简报</span>
+        <span style="font-size:11px;color:#3b82f6;">每天 16:00 自动更新</span>
+      </a>
+      <a href="http://202.182.104.186/briefing/weekly.html" target="_blank"
+        style="display:flex;flex-direction:column;gap:4px;padding:16px;background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:1px solid #86efac;border-radius:12px;text-decoration:none;">
+        <span style="font-size:20px;">📊</span>
+        <span style="font-size:14px;font-weight:700;color:#15803d;">每周简报</span>
+        <span style="font-size:11px;color:#16a34a;">每周一 16:00 自动更新</span>
+      </a>
+      <a href="http://202.182.104.186/briefing/monthly.html" target="_blank"
+        style="display:flex;flex-direction:column;gap:4px;padding:16px;background:linear-gradient(135deg,#fdf4ff,#fae8ff);border:1px solid #e9d5ff;border-radius:12px;text-decoration:none;">
+        <span style="font-size:20px;">📈</span>
+        <span style="font-size:14px;font-weight:700;color:#7e22ce;">月度简报</span>
+        <span style="font-size:11px;color:#9333ea;">每月1日 16:00 自动更新</span>
+      </a>
+      <a href="http://202.182.104.186/briefing/" target="_blank"
+        style="display:flex;flex-direction:column;gap:4px;padding:16px;background:var(--gray-50);border:1px solid var(--gray-200);border-radius:12px;text-decoration:none;">
+        <span style="font-size:20px;">📁</span>
+        <span style="font-size:14px;font-weight:700;color:var(--gray-700);">历史快照</span>
+        <span style="font-size:11px;color:var(--gray-500);">所有历史简报</span>
+      </a>
+    </div>
+    <div style="margin-top:12px;padding:10px 14px;background:#fef9c3;border-radius:8px;font-size:12px;color:#854d0e;">
+      💡 首次访问需要输入账号密码（admin / admin123），由 Nginx Basic Auth 保护
+    </div>
+  </div>
+
   <!-- 本地自动化脚本指引 -->
   <div class="card">
     <div class="card-title">🤖 本地自动化脚本（tracker.py）</div>
