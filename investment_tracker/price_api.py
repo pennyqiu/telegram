@@ -81,10 +81,32 @@ async def get_calendar(symbol: str):
         cal = yf.Ticker(sym).calendar
         if cal is None:
             return {"earningsDate": []}
-        if hasattr(cal, "columns") and "Earnings Date" in cal.columns:
-            dates = [{"raw": int(d.timestamp()), "fmt": str(d.date())}
-                     for d in cal["Earnings Date"] if hasattr(d, "timestamp")]
+
+        dates = []
+
+        # 新格式：dict，如 {'Earnings Date': [datetime.date(2026, 4, 29)], ...}
+        if isinstance(cal, dict) and "Earnings Date" in cal:
+            raw_dates = cal["Earnings Date"]
+            if not isinstance(raw_dates, list):
+                raw_dates = [raw_dates]
+            for d in raw_dates:
+                try:
+                    if hasattr(d, "strftime"):
+                        dates.append({"raw": 0, "fmt": str(d)})
+                except Exception:
+                    pass
             return {"earningsDate": dates}
+
+        # 旧格式：DataFrame
+        if hasattr(cal, "columns") and "Earnings Date" in cal.columns:
+            for d in cal["Earnings Date"]:
+                try:
+                    if hasattr(d, "timestamp"):
+                        dates.append({"raw": int(d.timestamp()), "fmt": str(d.date())})
+                except Exception:
+                    pass
+            return {"earningsDate": dates}
+
     except Exception:
         pass
     return {"earningsDate": []}

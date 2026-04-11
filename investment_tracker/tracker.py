@@ -85,8 +85,8 @@ def fetch_prices(tickers: list) -> dict:
 
 
 def fetch_earnings_calendar(tickers: list, days_ahead: int = 30) -> list:
+def fetch_earnings_calendar(tickers: list, days_ahead: int = 30) -> list:
     """获取未来 N 天内有财报的持仓（ETF 没有财报日历，自动跳过）"""
-    # ETF 和黄金不会有财报，直接跳过避免 404 警告
     ETF_SKIP = {"VOO", "VTI", "QQQ", "QQQM", "SCHD", "VYM", "DGRO", "GLD", "BND", "IEF", "TLT", "VXUS", "SPYM", "SPY", "IVV"}
     events = []
     today = datetime.today().date()
@@ -98,17 +98,19 @@ def fetch_earnings_calendar(tickers: list, days_ahead: int = 30) -> list:
             info = yf.Ticker(t).calendar
             if info is None:
                 continue
-            # yfinance calendar 返回 DataFrame
-            if hasattr(info, "columns") and "Earnings Date" in info.columns:
+            # 新格式：dict，Earnings Date 是 list of date
+            if isinstance(info, dict) and "Earnings Date" in info:
+                raw_dates = info["Earnings Date"]
+                if not isinstance(raw_dates, list):
+                    raw_dates = [raw_dates]
+                for ed in raw_dates:
+                    if hasattr(ed, "date"):
+                        ed = ed.date()
+                    if today <= ed <= cutoff:
+                        events.append({"ticker": t, "date": str(ed)})
+            # 旧格式：DataFrame
+            elif hasattr(info, "columns") and "Earnings Date" in info.columns:
                 ed = info["Earnings Date"].iloc[0]
-                if hasattr(ed, "date"):
-                    ed = ed.date()
-                if today <= ed <= cutoff:
-                    events.append({"ticker": t, "date": str(ed)})
-            elif isinstance(info, dict) and "Earnings Date" in info:
-                ed = info["Earnings Date"]
-                if isinstance(ed, list):
-                    ed = ed[0]
                 if hasattr(ed, "date"):
                     ed = ed.date()
                 if today <= ed <= cutoff:
