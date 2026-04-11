@@ -3798,5 +3798,220 @@
   }
 </script>
 
+<!-- ═══════════════════════════════════════════════════════════
+     登录弹框 Modal
+═══════════════════════════════════════════════════════════ -->
+<div id="auth-modal" style="display:none;position:fixed;inset:0;z-index:9999;align-items:center;justify-content:center;">
+  <!-- 遮罩 -->
+  <div id="auth-backdrop" onclick="closeAuthModal()" style="position:absolute;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);"></div>
+  <!-- 弹框主体 -->
+  <div style="position:relative;width:100%;max-width:400px;margin:20px;background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.25);">
+    <!-- 顶部装饰条 -->
+    <div style="background:linear-gradient(135deg,#1a56db,#0ea5e9);padding:28px 32px 24px;">
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:rgba(255,255,255,.65);margin-bottom:8px;">香港保险从业者指南</div>
+      <div style="font-size:22px;font-weight:800;color:#fff;line-height:1.3;">登录以查看完整内容</div>
+      <div style="font-size:13px;color:rgba(255,255,255,.75);margin-top:6px;">IRR 计算器、需求评估工具、分红实现率报告</div>
+    </div>
+    <!-- 表单区域 -->
+    <div style="padding:28px 32px 32px;">
+      <div id="auth-error" style="display:none;background:#fef2f2;border:1px solid #fecaca;border-radius:10px;padding:10px 14px;font-size:13px;color:#dc2626;margin-bottom:18px;"></div>
+      <div style="margin-bottom:16px;">
+        <label style="display:block;font-size:13px;font-weight:600;color:#374151;margin-bottom:6px;">用户名</label>
+        <input id="auth-username" type="text" placeholder="请输入用户名" autocomplete="username"
+          style="width:100%;padding:11px 14px;border:1.5px solid #e5e7eb;border-radius:10px;font-size:14px;color:#111827;outline:none;transition:border-color .15s;"
+          onfocus="this.style.borderColor='#1a56db'" onblur="this.style.borderColor='#e5e7eb'"
+          onkeydown="if(event.key==='Enter')document.getElementById('auth-password').focus()">
+      </div>
+      <div style="margin-bottom:22px;">
+        <label style="display:block;font-size:13px;font-weight:600;color:#374151;margin-bottom:6px;">密码</label>
+        <input id="auth-password" type="password" placeholder="请输入密码" autocomplete="current-password"
+          style="width:100%;padding:11px 14px;border:1.5px solid #e5e7eb;border-radius:10px;font-size:14px;color:#111827;outline:none;transition:border-color .15s;"
+          onfocus="this.style.borderColor='#1a56db'" onblur="this.style.borderColor='#e5e7eb'"
+          onkeydown="if(event.key==='Enter')submitLogin()">
+      </div>
+      <button id="auth-submit-btn" onclick="submitLogin()"
+        style="width:100%;padding:13px;background:#1a56db;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;transition:background .15s;display:flex;align-items:center;justify-content:center;gap:8px;"
+        onmouseover="this.style.background='#1240a8'" onmouseout="this.style.background='#1a56db'">
+        <span id="auth-btn-text">登录</span>
+      </button>
+      <div style="text-align:center;margin-top:16px;font-size:12px;color:#9ca3af;">
+        登录后 Token 有效期 8 小时 &nbsp;·&nbsp; <a href="#" onclick="closeAuthModal();return false;" style="color:#6b7280;text-decoration:none;">稍后再说</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 侧边栏用户状态区（动态插入到 sidebar） -->
+<div id="sidebar-user-badge" style="display:none;padding:12px 16px;margin:8px 12px;background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.25);border-radius:10px;">
+  <div style="font-size:11px;color:#6ee7b7;margin-bottom:3px;">已登录</div>
+  <div style="display:flex;align-items:center;justify-content:space-between;">
+    <span id="sidebar-username" style="font-size:13px;font-weight:600;color:#fff;"></span>
+    <a href="#" onclick="doLogout();return false;" style="font-size:11px;color:#9ca3af;text-decoration:none;padding:2px 8px;border:1px solid rgba(255,255,255,.15);border-radius:6px;"
+      onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#9ca3af'">退出</a>
+  </div>
+</div>
+
+<script>
+// ── 受保护页面列表 ────────────────────────────────────────────────
+const PROTECTED = new Set(['irr-calculator.html', 'needs-assessment.html', 'dividend-rates.html']);
+const TOKEN_KEY = 'hk_ins_token';
+const USER_KEY  = 'hk_ins_user';
+
+// ── 工具函数 ──────────────────────────────────────────────────────
+function getToken() { return localStorage.getItem(TOKEN_KEY); }
+
+function saveAuth(token, user) {
+  localStorage.setItem(TOKEN_KEY, token);
+  localStorage.setItem(USER_KEY, JSON.stringify(user));
+}
+
+function clearAuth() {
+  localStorage.removeItem(TOKEN_KEY);
+  localStorage.removeItem(USER_KEY);
+}
+
+function getUser() {
+  try { return JSON.parse(localStorage.getItem(USER_KEY)); } catch { return null; }
+}
+
+// ── 侧边栏用户状态 ────────────────────────────────────────────────
+function updateSidebarUser() {
+  const badge = document.getElementById('sidebar-user-badge');
+  const sidebar = document.getElementById('sidebar');
+  const user = getUser();
+  if (!badge || !sidebar) return;
+  if (user && getToken()) {
+    badge.style.display = 'block';
+    document.getElementById('sidebar-username').textContent = user.display_name || user.username;
+    if (!sidebar.contains(badge)) {
+      const nav = sidebar.querySelector('.sidebar-nav');
+      if (nav) sidebar.insertBefore(badge, nav); else sidebar.prepend(badge);
+    }
+  } else {
+    badge.style.display = 'none';
+  }
+}
+
+// ── 打开 / 关闭弹框 ───────────────────────────────────────────────
+let _pendingUrl = null;
+
+function openAuthModal(redirectUrl) {
+  _pendingUrl = redirectUrl || null;
+  const modal = document.getElementById('auth-modal');
+  modal.style.display = 'flex';
+  document.getElementById('auth-error').style.display = 'none';
+  document.getElementById('auth-username').value = '';
+  document.getElementById('auth-password').value = '';
+  setTimeout(() => document.getElementById('auth-username').focus(), 80);
+}
+
+function closeAuthModal() {
+  document.getElementById('auth-modal').style.display = 'none';
+  _pendingUrl = null;
+}
+
+// ── 提交登录 ─────────────────────────────────────────────────────
+async function submitLogin() {
+  const username = document.getElementById('auth-username').value.trim();
+  const password = document.getElementById('auth-password').value;
+  const errBox   = document.getElementById('auth-error');
+  const btnText  = document.getElementById('auth-btn-text');
+  const btn      = document.getElementById('auth-submit-btn');
+
+  if (!username || !password) {
+    errBox.textContent = '请填写用户名和密码';
+    errBox.style.display = 'block';
+    return;
+  }
+
+  btn.disabled = true;
+  btnText.textContent = '验证中…';
+
+  try {
+    const res = await fetch('/api/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password }),
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      errBox.textContent = data.detail || '登录失败，请检查账号密码';
+      errBox.style.display = 'block';
+      return;
+    }
+    saveAuth(data.token, { username: data.username, display_name: data.display_name });
+    closeAuthModal();
+    updateSidebarUser();
+    if (_pendingUrl) window.location.href = _pendingUrl;
+  } catch (e) {
+    errBox.textContent = '网络错误，请稍后重试';
+    errBox.style.display = 'block';
+  } finally {
+    btn.disabled = false;
+    btnText.textContent = '登录';
+  }
+}
+
+// ── 登出 ─────────────────────────────────────────────────────────
+function doLogout() {
+  clearAuth();
+  updateSidebarUser();
+}
+
+// ── 拦截受保护页面的点击 ──────────────────────────────────────────
+function interceptProtectedLinks() {
+  // 拦截所有 <a> 标签
+  document.addEventListener('click', function(e) {
+    const anchor = e.target.closest('a[href]');
+    if (!anchor) return;
+    const href = anchor.getAttribute('href');
+    if (!href) return;
+    const filename = href.split('/').pop().split('?')[0];
+    if (!PROTECTED.has(filename)) return;
+
+    if (!getToken()) {
+      e.preventDefault();
+      openAuthModal(href);
+    }
+  }, true);
+
+  // 拦截 onclick="window.open(...)" 的卡片
+  document.querySelectorAll('[onclick]').forEach(el => {
+    const orig = el.getAttribute('onclick');
+    if (!orig) return;
+    const m = orig.match(/window\.open\(['"]([^'"]+)['"]/);
+    if (!m) return;
+    const filename = m[1].split('/').pop().split('?')[0];
+    if (!PROTECTED.has(filename)) return;
+
+    el.removeAttribute('onclick');
+    el.style.cursor = 'pointer';
+    el.addEventListener('click', function() {
+      if (!getToken()) {
+        openAuthModal(m[1]);
+      } else {
+        window.open(m[1], '_blank');
+      }
+    });
+  });
+}
+
+// ── 检查 URL 参数，自动弹出弹框 ──────────────────────────────────
+function checkUrlParams() {
+  const params = new URLSearchParams(window.location.search);
+  const requireLogin = params.get('require_login');
+  if (requireLogin && !getToken()) {
+    openAuthModal(requireLogin);
+  }
+}
+
+// ── 页面初始化 ────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', function() {
+  updateSidebarUser();
+  interceptProtectedLinks();
+  checkUrlParams();
+});
+</script>
+
 </body>
 </html>

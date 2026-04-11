@@ -91,6 +91,15 @@ footer a{color:#94a3b8;text-decoration:none}
 </style>
 </head>
 <body>
+<script>
+(function(){
+  var token = localStorage.getItem('hk_ins_token');
+  if (!token) {
+    document.documentElement.style.visibility = 'hidden';
+    window.location.href = 'index.html?require_login=' + encodeURIComponent(location.pathname.split('/').pop());
+  }
+})();
+</script>
 
 <div class="topbar">
   <a href="index.html">← 返回指南主页</a>

@@ -106,6 +106,15 @@ input[type=number]:focus{outline:none;border-color:var(--primary);}
 </style>
 </head>
 <body>
+<script>
+(function(){
+  var token = localStorage.getItem('hk_ins_token');
+  if (!token) {
+    document.documentElement.style.visibility = 'hidden';
+    window.location.href = 'index.html?require_login=' + encodeURIComponent(location.pathname.split('/').pop());
+  }
+})();
+</script>
 <div class="page">
   <a href="index.html" class="back-link">← 返回保险指南首页</a>
 
