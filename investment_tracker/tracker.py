@@ -33,17 +33,14 @@ except ImportError:
 # 配置区：修改这里来匹配你的实际持仓
 # ============================================================
 PORTFOLIO = {
-    "VOO":   {"name": "Vanguard S&P 500",      "target_pct": 30.0, "shares": 0},
-    "SCHD":  {"name": "Schwab Dividend ETF",    "target_pct": 30.0, "shares": 0},
-    "QQQ":   {"name": "Invesco QQQ",            "target_pct":  8.0, "shares": 0},
-    "MSFT":  {"name": "Microsoft",              "target_pct":  5.0, "shares": 0},
-    "AAPL":  {"name": "Apple",                  "target_pct":  4.0, "shares": 0},
-    "GOOGL": {"name": "Alphabet",               "target_pct":  4.0, "shares": 0},
-    "NVDA":  {"name": "NVIDIA",                 "target_pct":  4.0, "shares": 0},
-    "AMZN":  {"name": "Amazon",                 "target_pct":  5.0, "shares": 0},
-    # 黄金+债券合并处理，用 GLD/BND 代替
-    "GLD":   {"name": "SPDR Gold Shares",       "target_pct":  5.0, "shares": 0},
-    "BND":   {"name": "Vanguard Total Bond",    "target_pct":  5.0, "shares": 0},
+    "MSFT":  {"name": "Microsoft",               "target_pct": 35.0, "shares": 256},
+    "META":  {"name": "Meta Platforms",           "target_pct": 15.0, "shares": 61},
+    "TSM":   {"name": "Taiwan Semiconductor",     "target_pct": 12.0, "shares": 82},
+    "NVDA":  {"name": "NVIDIA",                   "target_pct": 11.0, "shares": 155},
+    "SPYM":  {"name": "SPDR S&P 500 High Income", "target_pct": 10.0, "shares": 350},
+    "QQQM":  {"name": "Invesco NASDAQ 100",       "target_pct": 10.0, "shares": 100},
+    "GOOG":  {"name": "Alphabet (Google)",        "target_pct":  6.0, "shares": 50},
+    "IBKR":  {"name": "Interactive Brokers",      "target_pct":  1.0, "shares": 15},
 }
 
 # 持仓总市值（人民币，用于显示）—— 如果 shares=0，用这个估算
@@ -90,7 +87,7 @@ def fetch_prices(tickers: list) -> dict:
 def fetch_earnings_calendar(tickers: list, days_ahead: int = 30) -> list:
     """获取未来 N 天内有财报的持仓（ETF 没有财报日历，自动跳过）"""
     # ETF 和黄金不会有财报，直接跳过避免 404 警告
-    ETF_SKIP = {"VOO", "VTI", "QQQ", "SCHD", "VYM", "DGRO", "GLD", "BND", "IEF", "TLT", "VXUS"}
+    ETF_SKIP = {"VOO", "VTI", "QQQ", "QQQM", "SCHD", "VYM", "DGRO", "GLD", "BND", "IEF", "TLT", "VXUS", "SPYM", "SPY", "IVV"}
     events = []
     today = datetime.today().date()
     cutoff = today + timedelta(days=days_ahead)
