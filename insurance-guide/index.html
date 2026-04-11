@@ -3911,7 +3911,7 @@ function closeAuthModal() {
 }
 
 // ── 提交登录 ─────────────────────────────────────────────────────
-function submitLogin() {
+async function submitLogin() {
   const username = document.getElementById('auth-username').value.trim();
   const password = document.getElementById('auth-password').value;
   const errBox   = document.getElementById('auth-error');
@@ -3927,22 +3927,28 @@ function submitLogin() {
   btn.disabled = true;
   btnText.textContent = '验证中…';
 
-  // 纯前端验证，无需后端服务器，兼容 GitHub Pages 静态托管
+  // 纯前端验证（SHA-256 哈希），兼容 GitHub Pages 静态托管
+  // 密码以 SHA-256 哈希形式存储，源码中不含明文密码
   const ACCOUNTS = {
-    'admin':  { password: 'admin123', display_name: '管理员' },
-    'demo':   { password: 'demo2024', display_name: '演示账号' },
+    'admin': { hash: '240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9', display_name: '管理员' },
+    'demo':  { hash: '3fb59388d9fcc5f7b965bc0f1747bea74c0f59102e733e1a7279911899e2879b', display_name: '演示账号' },
   };
 
-  setTimeout(function() {
+  // 用 Web Crypto API 计算输入密码的 SHA-256
+  async function sha256(str) {
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+
+  sha256(password).then(function(inputHash) {
     const account = ACCOUNTS[username];
-    if (!account || account.password !== password) {
+    if (!account || account.hash !== inputHash) {
       errBox.textContent = '用户名或密码错误';
       errBox.style.display = 'block';
       btn.disabled = false;
       btnText.textContent = '登录';
       return;
     }
-    // 生成简单 session token（时间戳 + 随机数）
     const token = btoa(username + ':' + Date.now() + ':' + Math.random().toString(36).slice(2));
     saveAuth(token, { username: username, display_name: account.display_name });
     closeAuthModal();
@@ -3950,7 +3956,7 @@ function submitLogin() {
     if (_pendingUrl) window.location.href = _pendingUrl;
     btn.disabled = false;
     btnText.textContent = '登录';
-  }, 300);
+  });
 }
 
 // ── 登出 ─────────────────────────────────────────────────────────
