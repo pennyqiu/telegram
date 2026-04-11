@@ -3754,6 +3754,14 @@
   }
 
   function showSection(id, navEl, anchor) {
+    // 受保护的 section，需要登录才能查看
+    const PROTECTED_SECTIONS = new Set(['roadmap', 'accounting', 'introvert', 'axa', 'mainland']);
+    if (PROTECTED_SECTIONS.has(id) && !getToken()) {
+      openAuthModal(null);
+      // 登录成功后自动跳转到目标 section
+      _pendingSection = { id, navEl, anchor };
+      return;
+    }
     // Hide all sections
     document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
     // Show target
@@ -3894,6 +3902,7 @@ function updateSidebarUser() {
 
 // ── 打开 / 关闭弹框 ───────────────────────────────────────────────
 let _pendingUrl = null;
+let _pendingSection = null;
 
 function openAuthModal(redirectUrl) {
   _pendingUrl = redirectUrl || null;
@@ -3908,6 +3917,7 @@ function openAuthModal(redirectUrl) {
 function closeAuthModal() {
   document.getElementById('auth-modal').style.display = 'none';
   _pendingUrl = null;
+  _pendingSection = null;
 }
 
 // ── 提交登录 ─────────────────────────────────────────────────────
@@ -3953,7 +3963,13 @@ async function submitLogin() {
     saveAuth(token, { username: username, display_name: account.display_name });
     closeAuthModal();
     updateSidebarUser();
-    if (_pendingUrl) window.location.href = _pendingUrl;
+    if (_pendingUrl) {
+      window.location.href = _pendingUrl;
+    } else if (_pendingSection) {
+      const s = _pendingSection;
+      _pendingSection = null;
+      showSection(s.id, s.navEl, s.anchor);
+    }
     btn.disabled = false;
     btnText.textContent = '登录';
   });
