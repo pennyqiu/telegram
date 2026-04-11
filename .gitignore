@@ -1,0 +1,39 @@
+# ── 环境变量（包含密钥，严禁提交）──────────────────────────────
+.env
+.env.*
+*.env
+
+# ── Python ──────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+env/
+
+# ── Node.js ─────────────────────────────────────────────────────
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ── 构建产物（由 CI/CD 生成，不纳入版本控制）────────────────────
+tg-club/admin-web/dist/
+tg-club/mini-app/dist/
+
+# ── 编辑器 & 系统 ───────────────────────────────────────────────
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo
+Thumbs.db
+
+# ── 日志 ────────────────────────────────────────────────────────
+*.log
+logs/

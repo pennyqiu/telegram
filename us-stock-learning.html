@@ -5449,6 +5449,16 @@ function stockOpenModal() {
   setTimeout(() => document.getElementById('stock-auth-username').focus(), 80);
 }
 
+// 页面加载时检查 require_login 参数，自动弹出登录框
+(function() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('require_login') && !stockGetToken()) {
+    window.addEventListener('DOMContentLoaded', function() {
+      stockOpenModal();
+    });
+  }
+})();
+
 function stockCloseModal() {
   document.getElementById('stock-auth-modal').style.display = 'none';
   _stockPendingIdx = null;
@@ -5489,6 +5499,14 @@ async function stockSubmitLogin() {
   localStorage.setItem(STOCK_TOKEN_KEY, token);
   localStorage.setItem(STOCK_USER_KEY, JSON.stringify({ username, display_name: account.display_name }));
   stockCloseModal();
+
+  // 处理外部页面跳转（如从 investment-tracker.html 重定向过来）
+  const urlParams = new URLSearchParams(window.location.search);
+  const redirectTo = urlParams.get('require_login');
+  if (redirectTo) {
+    window.location.href = redirectTo;
+    return;
+  }
 
   if (_stockPendingIdx !== null) {
     const idx = _stockPendingIdx;
