@@ -339,9 +339,13 @@ function savePortfolioData(data) {
   localStorage.setItem(PORTFOLIO_KEY, JSON.stringify(data));
 }
 
-// ── Yahoo Finance API ─────────────────────────────────────────────
+// ── VPS API 地址（修改为你的 VPS IP 或域名） ─────────────────────
+const VPS_API = 'http://202.182.104.186';
+
+// ── Yahoo Finance API（备用，可能受 CORS 限制） ─────────────────
 async function fetchQuotes(symbols) {
-  const url = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${symbols.join(',')}&corsDomain=finance.yahoo.com&region=US&lang=en-US`;
+  // 优先走 VPS 代理，无 CORS 问题
+  const url = `${VPS_API}/api/quote?symbols=${symbols.join(',')}`;
   const res = await fetch(url);
   const data = await res.json();
   return data.quoteResponse?.result || [];
@@ -349,10 +353,10 @@ async function fetchQuotes(symbols) {
 
 async function fetchCalendar(symbol) {
   try {
-    const url = `https://query2.finance.yahoo.com/v10/finance/quoteSummary/${symbol}?modules=calendarEvents`;
+    const url = `${VPS_API}/api/calendar/${symbol}`;
     const res = await fetch(url);
     const data = await res.json();
-    return data.quoteSummary?.result?.[0]?.calendarEvents?.earnings?.earningsDate || [];
+    return (data.earningsDate || []);
   } catch { return []; }
 }
 
