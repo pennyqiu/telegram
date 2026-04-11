@@ -5365,7 +5365,7 @@ function switchCurrency2(mode) {
 
 // ── 拦截 goTo：phase 5（养老规划）需要登录 ─────────────────────────
 const _origGoTo = goTo;
-function goTo(idx) {
+window.goTo = function(idx) {
   const item = curriculum[idx];
   if (item && item.phase === 5 && !stockGetToken()) {
     _stockPendingIdx = idx;
@@ -5373,7 +5373,7 @@ function goTo(idx) {
     return;
   }
   _origGoTo(idx);
-}
+};
 </script>
 
 <!-- ═══ 登录弹框 Modal ════════════════════════════════════════════ -->
