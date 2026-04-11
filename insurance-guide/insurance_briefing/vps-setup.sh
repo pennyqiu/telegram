@@ -197,7 +197,7 @@ EOF
 setup_cron() {
     print_step "7/8" "配置 Cron 定时任务..."
     
-    # 创建更新脚本
+    # 创建更新脚本（使用演示数据）
     cat > /usr/local/bin/update-insurance-briefing.sh << 'EOF'
 #!/bin/bash
 # 保险资讯周报自动更新脚本
@@ -206,7 +206,14 @@ cd /app/telegram
 git pull -q
 
 cd /app/telegram/insurance-guide/insurance_briefing
-python3 briefing_generator.py --output /var/www/insurance-briefing >> /var/log/insurance-briefing.log 2>&1
+
+# 使用演示数据生成
+python3 demo.py --output /var/www/insurance-briefing >> /var/log/insurance-briefing.log 2>&1
+
+# 复制为 weekly.html
+if [ -f /var/www/insurance-briefing/demo_weekly.html ]; then
+    cp /var/www/insurance-briefing/demo_weekly.html /var/www/insurance-briefing/weekly.html
+fi
 EOF
     
     chmod +x /usr/local/bin/update-insurance-briefing.sh
@@ -227,15 +234,26 @@ EOF
 create_manual_scripts() {
     print_step "8/8" "创建管理脚本..."
     
-    # 手动生成简报脚本
+    # 手动生成简报脚本（使用演示数据）
     cat > /usr/local/bin/generate-briefing << 'EOF'
 #!/bin/bash
-# 手动生成保险简报
+# 手动生成保险简报（使用演示数据）
 
-echo "🔄 正在生成保险资讯周报..."
+echo "🔄 正在生成保险资讯周报（演示数据）..."
 cd /app/telegram/insurance-guide/insurance_briefing
-python3 briefing_generator.py --output /var/www/insurance-briefing
-echo "✅ 完成！访问：http://$(hostname -I | awk '{print $1}')/insurance-briefing/"
+
+# 使用 demo.py 生成演示简报
+python3 demo.py --output /var/www/insurance-briefing
+
+# 复制 demo_weekly.html 为 weekly.html
+if [ -f /var/www/insurance-briefing/demo_weekly.html ]; then
+    cp /var/www/insurance-briefing/demo_weekly.html /var/www/insurance-briefing/weekly.html
+    echo "✅ 简报已生成！"
+else
+    echo "⚠️  简报生成失败"
+fi
+
+echo "访问：http://$(hostname -I | awk '{print $1}')/insurance-briefing/"
 EOF
     
     # 手动添加内容脚本
