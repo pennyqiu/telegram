@@ -5362,6 +5362,129 @@ function switchCurrency2(mode) {
     if(btnCny){btnCny.style.background='transparent';btnCny.style.color='#64748b';}
   }
 }
+
+// ── 拦截 goTo：phase 5（养老规划）需要登录 ─────────────────────────
+const _origGoTo = goTo;
+function goTo(idx) {
+  const item = curriculum[idx];
+  if (item && item.phase === 5 && !stockGetToken()) {
+    _stockPendingIdx = idx;
+    stockOpenModal();
+    return;
+  }
+  _origGoTo(idx);
+}
+</script>
+
+<!-- ═══ 登录弹框 Modal ════════════════════════════════════════════ -->
+<div id="stock-auth-modal" style="display:none;position:fixed;inset:0;z-index:9999;align-items:center;justify-content:center;">
+  <div onclick="stockCloseModal()" style="position:absolute;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);"></div>
+  <div style="position:relative;width:100%;max-width:400px;margin:20px;background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.25);">
+    <div style="background:linear-gradient(135deg,#1e3a5f,#2563eb);padding:28px 32px 24px;">
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:rgba(255,255,255,.6);margin-bottom:8px;">美股系统学习</div>
+      <div style="font-size:22px;font-weight:800;color:#fff;line-height:1.3;">登录以查看养老规划</div>
+      <div style="font-size:13px;color:rgba(255,255,255,.72);margin-top:6px;">第五阶段内容：42-60岁分阶段方案 · 退休提取策略</div>
+    </div>
+    <div style="padding:28px 32px 32px;">
+      <div id="stock-auth-error" style="display:none;background:#fef2f2;border:1px solid #fecaca;border-radius:10px;padding:10px 14px;font-size:13px;color:#dc2626;margin-bottom:18px;"></div>
+      <div style="margin-bottom:16px;">
+        <label style="display:block;font-size:13px;font-weight:600;color:#374151;margin-bottom:6px;">用户名</label>
+        <input id="stock-auth-username" type="text" placeholder="请输入用户名" autocomplete="username"
+          style="width:100%;padding:11px 14px;border:1.5px solid #e5e7eb;border-radius:10px;font-size:14px;color:#111827;outline:none;transition:border-color .15s;"
+          onfocus="this.style.borderColor='#2563eb'" onblur="this.style.borderColor='#e5e7eb'"
+          onkeydown="if(event.key==='Enter')document.getElementById('stock-auth-password').focus()">
+      </div>
+      <div style="margin-bottom:22px;">
+        <label style="display:block;font-size:13px;font-weight:600;color:#374151;margin-bottom:6px;">密码</label>
+        <input id="stock-auth-password" type="password" placeholder="请输入密码" autocomplete="current-password"
+          style="width:100%;padding:11px 14px;border:1.5px solid #e5e7eb;border-radius:10px;font-size:14px;color:#111827;outline:none;transition:border-color .15s;"
+          onfocus="this.style.borderColor='#2563eb'" onblur="this.style.borderColor='#e5e7eb'"
+          onkeydown="if(event.key==='Enter')stockSubmitLogin()">
+      </div>
+      <button id="stock-auth-btn" onclick="stockSubmitLogin()"
+        style="width:100%;padding:13px;background:#2563eb;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;transition:background .15s;"
+        onmouseover="this.style.background='#1d4ed8'" onmouseout="this.style.background='#2563eb'">
+        <span id="stock-auth-btn-text">登录</span>
+      </button>
+      <div style="text-align:center;margin-top:16px;font-size:12px;color:#9ca3af;">
+        Token 有效期 8 小时 &nbsp;·&nbsp;
+        <a href="#" onclick="stockCloseModal();return false;" style="color:#6b7280;text-decoration:none;">稍后再说</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const STOCK_TOKEN_KEY = 'us_stock_token';
+const STOCK_USER_KEY  = 'us_stock_user';
+let _stockPendingIdx  = null;
+
+// 账号（SHA-256 哈希，与保险指南共用同一组账号）
+const STOCK_ACCOUNTS = {
+  'admin': { hash: '240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9', display_name: '管理员' },
+  'demo':  { hash: '3fb59388d9fcc5f7b965bc0f1747bea74c0f59102e733e1a7279911899e2879b', display_name: '演示账号' },
+};
+
+function stockGetToken() { return localStorage.getItem(STOCK_TOKEN_KEY); }
+
+function stockOpenModal() {
+  const m = document.getElementById('stock-auth-modal');
+  m.style.display = 'flex';
+  document.getElementById('stock-auth-error').style.display = 'none';
+  document.getElementById('stock-auth-username').value = '';
+  document.getElementById('stock-auth-password').value = '';
+  setTimeout(() => document.getElementById('stock-auth-username').focus(), 80);
+}
+
+function stockCloseModal() {
+  document.getElementById('stock-auth-modal').style.display = 'none';
+  _stockPendingIdx = null;
+}
+
+async function sha256stock(str) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+async function stockSubmitLogin() {
+  const username = document.getElementById('stock-auth-username').value.trim();
+  const password = document.getElementById('stock-auth-password').value;
+  const errBox   = document.getElementById('stock-auth-error');
+  const btn      = document.getElementById('stock-auth-btn');
+  const btnText  = document.getElementById('stock-auth-btn-text');
+
+  if (!username || !password) {
+    errBox.textContent = '请填写用户名和密码';
+    errBox.style.display = 'block';
+    return;
+  }
+  btn.disabled = true;
+  btnText.textContent = '验证中…';
+
+  const inputHash = await sha256stock(password);
+  const account = STOCK_ACCOUNTS[username];
+
+  if (!account || account.hash !== inputHash) {
+    errBox.textContent = '用户名或密码错误';
+    errBox.style.display = 'block';
+    btn.disabled = false;
+    btnText.textContent = '登录';
+    return;
+  }
+
+  const token = btoa(username + ':' + Date.now() + ':' + Math.random().toString(36).slice(2));
+  localStorage.setItem(STOCK_TOKEN_KEY, token);
+  localStorage.setItem(STOCK_USER_KEY, JSON.stringify({ username, display_name: account.display_name }));
+  stockCloseModal();
+
+  if (_stockPendingIdx !== null) {
+    const idx = _stockPendingIdx;
+    _stockPendingIdx = null;
+    _origGoTo(idx);
+  }
+  btn.disabled = false;
+  btnText.textContent = '登录';
+}
 </script>
 </body>
 </html>
