@@ -339,12 +339,18 @@ function savePortfolioData(data) {
   localStorage.setItem(PORTFOLIO_KEY, JSON.stringify(data));
 }
 
-// ── VPS API 地址（修改为你的 VPS IP 或域名） ─────────────────────
-const VPS_API = 'http://202.182.104.186';
+// ── VPS API 地址 ──────────────────────────────────────────────────
+// 从 VPS IP 或 localhost 直接访问时用相对路径（同源，无 CORS/混合内容问题）
+// 从 HTTPS 域名访问时，HTTP API 会被浏览器拦截，建议直接用 VPS IP 打开本页面：
+//   http://202.182.104.186/investment-tracker.html
+const VPS_IP = '202.182.104.186';
+const IS_SAME_ORIGIN = ['202.182.104.186', 'localhost', '127.0.0.1'].includes(window.location.hostname);
+const VPS_API = IS_SAME_ORIGIN ? '' : `http://${VPS_IP}`;
 
-// ── Yahoo Finance API（备用，可能受 CORS 限制） ─────────────────
 async function fetchQuotes(symbols) {
-  // 优先走 VPS 代理，无 CORS 问题
+  if (!IS_SAME_ORIGIN && window.location.protocol === 'https:') {
+    throw new Error(`HTTPS页面无法访问HTTP接口。请改用 http://${VPS_IP}/investment-tracker.html 打开本页面以获取实时数据。`);
+  }
   const url = `${VPS_API}/api/quote?symbols=${symbols.join(',')}`;
   const res = await fetch(url);
   const data = await res.json();
@@ -352,6 +358,7 @@ async function fetchQuotes(symbols) {
 }
 
 async function fetchCalendar(symbol) {
+  if (!IS_SAME_ORIGIN && window.location.protocol === 'https:') return [];
   try {
     const url = `${VPS_API}/api/calendar/${symbol}`;
     const res = await fetch(url);
@@ -558,10 +565,12 @@ async function refreshData() {
     const now = new Date().toLocaleTimeString('zh-CN', {hour:'2-digit',minute:'2-digit'});
     document.getElementById('lastUpdate').textContent = `上次更新：${now}`;
   } catch (e) {
-    // API 失败时降级展示（不显示价格，其他功能正常）
     renderPriceTable(portfolio, []);
     renderRebalance(portfolio, []);
-    document.getElementById('lastUpdate').textContent = '价格加载失败（可能被 CORS 限制，请稍后重试）';
+    const isHttpsBlock = window.location.protocol === 'https:' && !IS_SAME_ORIGIN;
+    document.getElementById('lastUpdate').innerHTML = isHttpsBlock
+      ? `⚠️ HTTPS页面无法访问HTTP接口 &nbsp;—&nbsp; 请改用 <a href="http://${VPS_IP}/investment-tracker.html" style="color:#60a5fa" target="_blank">http://${VPS_IP}/investment-tracker.html</a> 打开`
+      : `价格加载失败：${e.message || '请检查 VPS 是否正常运行'}`;
   } finally {
     spin.style.display = 'none';
   }
