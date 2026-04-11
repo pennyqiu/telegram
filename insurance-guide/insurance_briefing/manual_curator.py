@@ -102,7 +102,8 @@ def main():
                     print(f"\n{i}. {article.title}")
                     print(f"   来源: {article.source}")
                     print(f"   链接: {article.url}")
-                    print(f"   日期: {article.published.strftime('%Y-%m-%d')}")
+                    date_str = article.published.strftime("%Y-%m-%d")
+                    print(f"   日期: {date_str}")
                 print("\n" + "=" * 60 + "\n")
         
         elif choice == "3":

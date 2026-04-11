@@ -1,0 +1,277 @@
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  保险资讯周报系统 - 服务器操作序列
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎯 目标：在 VPS 上部署保险资讯周报自动化系统
+
+📋 前置条件：
+  ✓ Ubuntu/Debian 服务器 (已有)
+  ✓ Root 权限 (已有)
+  ✓ IP: 202.182.104.186 (已有)
+  ✓ Git 仓库已更新 (已完成)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+## 操作序列（复制粘贴即可）
+
+### 步骤 1：SSH 登录服务器
+```bash
+ssh root@202.182.104.186
+```
+密码：[您的 VPS 密码]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+### 步骤 2：更新代码
+```bash
+cd /app/telegram && git pull
+```
+
+预期输出：
+  remote: Enumerating objects: ...
+  Updating 368ba5c..8eed022
+  Fast-forward
+   insurance-guide/insurance_briefing/... | ...
+   12 files changed, 2155 insertions(+)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+### 步骤 3：执行一键部署
+```bash
+bash insurance-guide/insurance_briefing/vps-setup.sh
+```
+
+预期过程（约 2-3 分钟）：
+  ══════════════════════════════════════
+     保险资讯周报 · VPS 一键部署
+  ══════════════════════════════════════
+  
+  [1/8] 安装系统依赖...
+    ✓ 系统依赖安装完成
+  
+  [2/8] 安装 Python 依赖...
+    ✓ Python 依赖安装完成
+  
+  [3/8] 同步代码仓库...
+    ✓ 代码同步完成：/app/telegram
+  
+  [4/8] 配置目录...
+    ✓ 输出目录已创建：/var/www/insurance-briefing
+  
+  [5/8] 生成初始简报...
+    ✓ 初始简报已生成
+  
+  [6/8] 配置 Nginx...
+    ✓ Nginx 配置完成
+  
+  [7/8] 配置 Cron 定时任务...
+    ✓ Cron 定时任务配置完成（每周一 08:00）
+  
+  [8/8] 创建管理脚本...
+    ✓ 管理脚本创建完成
+  
+  ══════════════════════════════════════
+    ✅  部署完成！
+  ══════════════════════════════════════
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+### 步骤 4：验证部署
+```bash
+# 检查简报文件
+ls -lh /var/www/insurance-briefing/
+
+# 测试访问（带认证）
+curl -u admin:admin123 http://localhost/insurance-briefing/weekly.html | head -30
+
+# 查看 Nginx 配置
+cat /etc/nginx/sites-available/insurance-briefing
+```
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+### 步骤 5：浏览器访问测试
+在浏览器中打开：
+
+  http://202.182.104.186/insurance-briefing/
+
+账号信息：
+  - 管理员：admin / admin123
+  - 演示账号：demo / demo2024
+
+应该看到：
+  ✓ 漂亮的周报页面
+  ✓ 包含 9 篇示例文章
+  ✓ 分类：监管政策、产品动态、市场数据、优质内容、理赔案例
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+### 步骤 6：配置域名访问（可选）
+
+如果您想使用域名访问：
+
+```bash
+# 退出当前会话
+exit
+
+# 重新以域名方式部署
+ssh root@202.182.104.186
+cd /app/telegram
+DOMAIN=insurance.tgfootclub.com bash insurance-guide/insurance_briefing/vps-setup.sh
+```
+
+系统会自动：
+  ✓ 更新 Nginx 配置
+  ✓ 申请 Let's Encrypt SSL 证书
+  ✓ 启用 HTTPS
+
+访问地址变更为：
+  https://insurance.tgfootclub.com/insurance-briefing/
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+## 日常管理命令
+
+### 手动生成新简报
+```bash
+generate-briefing
+```
+
+### 手动添加优质文章
+```bash
+add-insurance-article
+```
+
+### 查看定时任务状态
+```bash
+crontab -l | grep insurance
+```
+
+### 查看生成日志
+```bash
+tail -f /var/log/insurance-briefing.log
+```
+
+### 更新代码并重新生成
+```bash
+cd /app/telegram && git pull && generate-briefing
+```
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+## 系统架构总览
+
+```
+┌─────────────────────────────────────────┐
+│  用户浏览器 (http://202.182.104.186)      │
+└───────────────┬─────────────────────────┘
+                │ Basic Auth 认证
+                ▼
+┌─────────────────────────────────────────┐
+│  Nginx 反向代理                          │
+│  /insurance-briefing/ → /var/www/...    │
+└───────────────┬─────────────────────────┘
+                │
+                ▼
+┌─────────────────────────────────────────┐
+│  HTML 静态文件                           │
+│  - weekly.html (最新周报)               │
+│  - briefing_weekly_YYYYMMDD.html (归档) │
+│  - index.html (索引)                    │
+└───────────────┬─────────────────────────┘
+                │
+                ▼
+┌─────────────────────────────────────────┐
+│  Python 简报生成系统                     │
+│  - crawler.py (爬虫)                    │
+│  - analyzer.py (分析)                   │
+│  - briefing_generator.py (生成)         │
+└───────────────┬─────────────────────────┘
+                │
+                ▼
+┌─────────────────────────────────────────┐
+│  定时任务 (每周一 08:00)                 │
+│  /usr/local/bin/update-insurance-briefing.sh │
+└─────────────────────────────────────────┘
+```
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+## 与投资监控系统对比
+
+```
+投资监控系统 (已部署)              保险简报系统 (新增)
+─────────────────────────────────────────────────────────
+URL: /investment-tracker.html      URL: /insurance-briefing/
+API: price-api (8001)               静态文件
+简报: /briefing/                    简报: /insurance-briefing/
+账号: admin/demo                    账号: admin/demo (独立)
+更新: 每天                          更新: 每周一
+数据: 股价 API                      数据: 网络爬虫
+```
+
+两个系统独立运行，互不干扰。
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+## 下一步优化建议
+
+### 短期（部署后立即可做）
+1. 修改数据源配置
+   ```bash
+   vim /app/telegram/insurance-guide/insurance_briefing/config.py
+   ```
+
+2. 手动添加优质内容
+   ```bash
+   add-insurance-article
+   ```
+
+3. 重新生成简报
+   ```bash
+   generate-briefing
+   ```
+
+### 中期（1-2周内）
+1. 添加更多 RSS 数据源
+2. 完善 HTML 爬虫
+3. 调整分类关键词
+4. 优化页面样式
+
+### 长期（1个月+）
+1. 接入 AI 生成摘要
+2. 添加 Telegram Bot 推送
+3. 实现邮件订阅
+4. 添加数据统计图表
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+## 故障排查速查表
+
+| 问题 | 排查命令 |
+|------|---------|
+| 无法访问 | `systemctl status nginx` |
+| 认证失败 | `cat /etc/nginx/.htpasswd_insurance` |
+| 文件不存在 | `ls -la /var/www/insurance-briefing/` |
+| 定时任务未执行 | `grep CRON /var/log/syslog` |
+| Python 错误 | `cat /var/log/insurance-briefing.log` |
+| 爬虫失败 | `cd /app/telegram/insurance-guide/insurance_briefing && python3 crawler.py` |
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+## 完整文档
+
+详细文档已保存在服务器：
+- 部署文档：/app/telegram/insurance-guide/insurance_briefing/DEPLOY.md
+- 使用文档：/app/telegram/insurance-guide/insurance_briefing/README.md
+- 架构说明：/app/telegram/insurance-guide/insurance_briefing/ARCHITECTURE.md
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ 准备就绪！现在可以开始在服务器上操作了。
+
+按照上面的步骤 1-5 依次执行即可完成部署。
+
+祝部署顺利！🎉
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

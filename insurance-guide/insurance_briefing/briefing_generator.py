@@ -311,7 +311,8 @@ class BriefingGenerator:
             f.write(html)
         
         # 同时保存历史快照
-        snapshot_filename = f"briefing_weekly_{datetime.now().strftime('%Y%m%d')}.html"
+        date_str = datetime.now().strftime("%Y%m%d")
+        snapshot_filename = f"briefing_weekly_{date_str}.html"
         snapshot_path = os.path.join(self.output_dir, snapshot_filename)
         with open(snapshot_path, 'w', encoding='utf-8') as f:
             f.write(html)
@@ -351,8 +352,11 @@ def main():
     html = generator.generate_weekly(analyzed_articles)
     filepath = generator.save_briefing(html)
     
+    date_str = datetime.now().strftime("%Y%m%d")
+    snapshot_file = f"briefing_weekly_{date_str}.html"
+    
     print(f"\n✅ 简报已生成：{filepath}")
-    print(f"   历史快照：{os.path.join(args.output, f'briefing_weekly_{datetime.now().strftime('%Y%m%d')}.html')}")
+    print(f"   历史快照：{os.path.join(args.output, snapshot_file)}")
     
     # 4. 生成索引页（方便浏览历史）
     generate_index(args.output)
