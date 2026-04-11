@@ -19,6 +19,7 @@ APP_DIR="/opt/telegram"                       # 代码目录
 BRIEFING_DIR="/var/www/briefing"              # 简报输出目录
 WEBSITE_DIR="/var/www/website"                # 网站静态文件目录
 API_PORT=8001                                 # price_api 监听端口
+API_DOMAIN="api.tgfootclub.com"               # API 域名（设为空则纯 IP 模式）
 ADMIN_USER="admin"                            # 简报 Basic Auth 用户名
 ADMIN_PASS="admin123"                         # 简报 Basic Auth 密码
 DEMO_USER="demo"                              # 演示账号
@@ -145,6 +146,23 @@ rm -f /etc/nginx/sites-enabled/default
 nginx -t && systemctl reload nginx
 ok "Nginx 配置完成"
 
+# ── 可选：申请 SSL 证书（需要域名已解析到本机 IP）──────────────
+if [ -n "$API_DOMAIN" ]; then
+  echo ""
+  info "检测到域名配置：$API_DOMAIN，尝试申请 SSL 证书..."
+  if apt-get install -y -qq certbot python3-certbot-nginx > /dev/null 2>&1; then
+    if certbot --nginx -d "$API_DOMAIN" \
+        --non-interactive --agree-tos \
+        -m "admin@${API_DOMAIN#*.}" \
+        --redirect 2>&1 | grep -E "Congratulations|error|failed" ; then
+      ok "SSL 证书申请成功，HTTPS 已启用：https://$API_DOMAIN"
+    else
+      warn "SSL 申请失败（可能 DNS 尚未生效），稍后可手动运行："
+      warn "  certbot --nginx -d $API_DOMAIN"
+    fi
+  fi
+fi
+
 # ════════════════════════════════════════
 # 7. 配置 price-api systemd 服务
 # ════════════════════════════════════════
@@ -239,6 +257,11 @@ echo -e "  每周简报：        ${GREEN}http://${VPS_IP}/briefing/weekly.html$
 echo -e "  月度简报：        ${GREEN}http://${VPS_IP}/briefing/monthly.html${RESET}"
 echo -e "  历史快照目录：    ${GREEN}http://${VPS_IP}/briefing/${RESET}"
 echo -e "  API 健康检查：    ${GREEN}http://${VPS_IP}/api/health${RESET}"
+if [ -n "$API_DOMAIN" ]; then
+echo ""
+echo -e "  域名 API：        ${GREEN}https://${API_DOMAIN}/api/health${RESET}"
+echo -e "  域名简报：        ${GREEN}https://${API_DOMAIN}/briefing/daily.html${RESET}"
+fi
 echo ""
 echo -e "  简报账号：  ${YELLOW}${ADMIN_USER} / ${ADMIN_PASS}${RESET}"
 echo -e "  演示账号：  ${YELLOW}${DEMO_USER} / ${DEMO_PASS}${RESET}"

@@ -340,17 +340,11 @@ function savePortfolioData(data) {
 }
 
 // ── VPS API 地址 ──────────────────────────────────────────────────
-// 从 VPS IP 或 localhost 直接访问时用相对路径（同源，无 CORS/混合内容问题）
-// 从 HTTPS 域名访问时，HTTP API 会被浏览器拦截，建议直接用 VPS IP 打开本页面：
-//   http://202.182.104.186/investment-tracker.html
-const VPS_IP = '202.182.104.186';
-const IS_SAME_ORIGIN = ['202.182.104.186', 'localhost', '127.0.0.1'].includes(window.location.hostname);
-const VPS_API = IS_SAME_ORIGIN ? '' : `http://${VPS_IP}`;
+// API 域名（已配置 HTTPS + SSL 证书，可在任何页面调用）
+const VPS_API = 'https://api.tgfootclub.com';
+const IS_SAME_ORIGIN = false;  // 统一走域名，不再区分同源
 
 async function fetchQuotes(symbols) {
-  if (!IS_SAME_ORIGIN && window.location.protocol === 'https:') {
-    throw new Error(`HTTPS页面无法访问HTTP接口。请改用 http://${VPS_IP}/investment-tracker.html 打开本页面以获取实时数据。`);
-  }
   const url = `${VPS_API}/api/quote?symbols=${symbols.join(',')}`;
   const res = await fetch(url);
   const data = await res.json();
@@ -358,7 +352,6 @@ async function fetchQuotes(symbols) {
 }
 
 async function fetchCalendar(symbol) {
-  if (!IS_SAME_ORIGIN && window.location.protocol === 'https:') return [];
   try {
     const url = `${VPS_API}/api/calendar/${symbol}`;
     const res = await fetch(url);
@@ -567,10 +560,7 @@ async function refreshData() {
   } catch (e) {
     renderPriceTable(portfolio, []);
     renderRebalance(portfolio, []);
-    const isHttpsBlock = window.location.protocol === 'https:' && !IS_SAME_ORIGIN;
-    document.getElementById('lastUpdate').innerHTML = isHttpsBlock
-      ? `⚠️ HTTPS页面无法访问HTTP接口 &nbsp;—&nbsp; 请改用 <a href="http://${VPS_IP}/investment-tracker.html" style="color:#60a5fa" target="_blank">http://${VPS_IP}/investment-tracker.html</a> 打开`
-      : `价格加载失败：${e.message || '请检查 VPS 是否正常运行'}`;
+    document.getElementById('lastUpdate').textContent = `价格加载失败：${e.message || '请检查 API 服务是否正常运行 https://api.tgfootclub.com/api/health'}`;
   } finally {
     spin.style.display = 'none';
   }
