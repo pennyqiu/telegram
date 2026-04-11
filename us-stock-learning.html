@@ -236,6 +236,26 @@ let currentIndex=0;
 let completed=new Set(JSON.parse(localStorage.getItem('usstock_done_v2')||'[]'));
 function saveCompleted(){localStorage.setItem('usstock_done_v2',JSON.stringify([...completed]));}
 
+// 从URL或localStorage恢复课程位置
+function restorePosition() {
+  const hash = window.location.hash;
+  if (hash && hash.startsWith('#lesson-')) {
+    const lessonId = hash.substring(8); // 去掉 '#lesson-'
+    const idx = curriculum.findIndex(item => item.id === lessonId);
+    if (idx !== -1) {
+      return idx;
+    }
+  }
+  // 如果URL没有，从localStorage读取上次位置
+  const saved = localStorage.getItem('usstock_current_lesson');
+  if (saved) {
+    const idx = curriculum.findIndex(item => item.id === saved);
+    if (idx !== -1) {
+      return idx;
+    }
+  }
+  return 0;
+}
 function renderNav(){
   const menu=document.getElementById('navMenu');
   let html='';let lastPhase=-1;
@@ -262,7 +282,16 @@ function renderNav(){
   document.getElementById('progressText').textContent=`${done} / ${total} 课`;
   document.getElementById('progressFill').style.width=`${(done/total)*100}%`;
 }
-function goTo(idx){currentIndex=idx;renderNav();renderContent();window.scrollTo(0,0);}
+function goTo(idx){
+  currentIndex=idx;
+  const lessonId = curriculum[idx].id;
+  // 保存到URL hash和localStorage
+  window.location.hash = 'lesson-' + lessonId;
+  localStorage.setItem('usstock_current_lesson', lessonId);
+  renderNav();
+  renderContent();
+  window.scrollTo(0,0);
+}
 function navigate(dir){const n=currentIndex+dir;if(n>=0&&n<curriculum.length)goTo(n);}
 
 function renderContent(){
@@ -5381,8 +5410,21 @@ CEO薪酬激励：
 return C[id]||'<p>内容准备中...</p>';
 }
 
+// 页面初始化：恢复上次浏览位置
+currentIndex = restorePosition();
 renderNav();
 renderContent();
+
+// 监听浏览器前进后退
+window.addEventListener('hashchange', function() {
+  const idx = restorePosition();
+  if (idx !== currentIndex) {
+    currentIndex = idx;
+    renderNav();
+    renderContent();
+    window.scrollTo(0,0);
+  }
+});
 
 // 货币切换函数（全局定义，供 retirement-42-50 课程调用）
 function switchCurrency(mode) {
