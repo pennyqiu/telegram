@@ -3755,7 +3755,7 @@
 
   function showSection(id, navEl, anchor) {
     // 受保护的 section，需要登录才能查看
-    const PROTECTED_SECTIONS = new Set(['roadmap', 'accounting', 'introvert', 'axa', 'mainland']);
+    const PROTECTED_SECTIONS = new Set(['roadmap', 'accounting', 'introvert', 'axa', 'mainland', 'resources']);
     if (PROTECTED_SECTIONS.has(id) && !getToken()) {
       openAuthModal(null);
       // 登录成功后自动跳转到目标 section
