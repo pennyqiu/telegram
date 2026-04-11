@@ -98,21 +98,42 @@ class RSSCrawler(BaseCrawler):
             articles = []
             cutoff_date = datetime.now() - timedelta(days=days)
             
+            if not feed.entries:
+                print(f"  ⚠ [{self.name}] RSS 源无内容，可能需要更新 URL")
+                return []
+            
             for entry in feed.entries:
-                # 解析发布时间
-                published = datetime(*entry.published_parsed[:6]) if hasattr(entry, 'published_parsed') else datetime.now()
-                
-                if published < cutoff_date:
+                try:
+                    # 解析发布时间（多种格式兼容）
+                    published = None
+                    if hasattr(entry, 'published_parsed') and entry.published_parsed:
+                        published = datetime(*entry.published_parsed[:6])
+                    elif hasattr(entry, 'updated_parsed') and entry.updated_parsed:
+                        published = datetime(*entry.updated_parsed[:6])
+                    else:
+                        published = datetime.now()
+                    
+                    if published < cutoff_date:
+                        continue
+                    
+                    # 提取摘要
+                    summary = ""
+                    if hasattr(entry, 'summary'):
+                        summary = entry.summary[:300]
+                    elif hasattr(entry, 'description'):
+                        summary = entry.description[:300]
+                    
+                    article = Article(
+                        title=entry.title,
+                        url=entry.link,
+                        source=self.name,
+                        published=published,
+                        summary=summary,
+                    )
+                    articles.append(article)
+                except Exception as e:
+                    # 跳过解析失败的单条记录
                     continue
-                
-                article = Article(
-                    title=entry.title,
-                    url=entry.link,
-                    source=self.name,
-                    published=published,
-                    summary=entry.get('summary', '')[:200],
-                )
-                articles.append(article)
             
             print(f"  ✓ [{self.name}] 获取到 {len(articles)} 篇文章")
             return articles
@@ -209,14 +230,56 @@ def crawl_all_sources(days: int = 7) -> Dict[str, List[Article]]:
     
     results = {}
     
+    # 加载手动添加的文章
+    try:
+        import json
+        import os
+        from config import MANUAL_ARTICLES_FILE
+        
+        if os.path.exists(MANUAL_ARTICLES_FILE):
+            with open(MANUAL_ARTICLES_FILE, 'r', encoding='utf-8') as f:
+                manual_data = json.load(f)
+                manual_articles = []
+                for item in manual_data:
+                    from datetime import datetime
+                    article = Article(
+                        title=item['title'],
+                        url=item['url'],
+                        source=item['source'],
+                        published=datetime.fromisoformat(item['published']),
+                        summary=item.get('summary', ''),
+                        category=item.get('category', '未分类'),
+                        keywords=item.get('keywords', [])
+                    )
+                    manual_articles.append(article)
+                
+                if manual_articles:
+                    results['manual'] = manual_articles
+                    print(f"  ✓ [手动添加] 加载了 {len(manual_articles)} 篇文章")
+    except Exception as e:
+        print(f"  ⚠ 加载手动文章失败: {e}")
+    
     # RSS 源爬取
-    # results['rss'] = RSSCrawler("保险时报", "https://example.com/feed").crawl(days)
+    from config import ENABLED_RSS_SOURCES
+    for source_id, source_config in ENABLED_RSS_SOURCES.items():
+        if source_config.get('enabled', True) and source_config['type'] == 'rss':
+            try:
+                crawler = RSSCrawler(source_config['name'], source_config['rss'])
+                articles = crawler.crawl(days)
+                if articles:
+                    results[source_id] = articles
+            except Exception as e:
+                print(f"  ✗ [{source_config['name']}] 爬取失败: {e}")
     
-    # 监管机构
-    results['hkia'] = HKIACrawler().crawl(days)
-    
-    # 社交媒体（需要特殊处理）
-    # results['zhihu'] = ZhihuCrawler().crawl(days)
+    # 监管机构（如果启用）
+    from config import REGULATORY_SOURCES
+    for source_id, source_config in REGULATORY_SOURCES.items():
+        if source_config.get('enabled', False):
+            try:
+                if source_id == 'hk_ia':
+                    results['hkia'] = HKIACrawler().crawl(days)
+            except Exception as e:
+                print(f"  ✗ [{source_config['name']}] 爬取失败: {e}")
     
     # 统计总数
     total = sum(len(articles) for articles in results.values())

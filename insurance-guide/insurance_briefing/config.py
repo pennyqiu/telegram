@@ -7,59 +7,60 @@
 # RSS/API 数据源配置
 # ============================================================
 
-# 监管机构官方公告
+# 启用的 RSS 数据源（真实可用）
+ENABLED_RSS_SOURCES = {
+    # 财经新闻 - 保险相关
+    "caixin_insurance": {
+        "name": "财新网-保险",
+        "rss": "https://www.caixin.com/rss/insurance.xml",
+        "type": "rss",
+        "priority": "high",
+        "keywords": ["保险", "保监会", "保费", "理赔"]
+    },
+    
+    "sina_finance": {
+        "name": "新浪财经-保险",
+        "rss": "http://finance.sina.com.cn/roll/index.d.html?cid=56588",
+        "type": "rss",
+        "priority": "medium",
+        "keywords": ["保险", "监管", "产品"]
+    },
+    
+    # 如果上述 RSS 不可用，可以使用这些备用源
+    "finance_163": {
+        "name": "网易财经-保险",
+        "rss": "http://money.163.com/special/00251LQH/rss_bx.xml",
+        "type": "rss",
+        "priority": "medium",
+        "enabled": False  # 默认禁用，可手动启用
+    },
+}
+
+# 监管机构官方公告（需要 HTML 爬虫）
 REGULATORY_SOURCES = {
     "hk_ia": {
         "name": "香港保险业监管局",
         "url": "https://www.ia.org.hk/tc/infocenter/press_releases.html",
-        "type": "html_scraper",  # 需要爬虫
-        "priority": "high"
+        "type": "html_scraper",
+        "priority": "high",
+        "enabled": False  # 默认禁用，需要完善爬虫逻辑
     },
-    # 更多来源可以逐步添加
 }
 
-# 行业新闻媒体
-NEWS_SOURCES = {
-    "insurance_times": {
-        "name": "保险时报",
-        "rss": "https://www.insurancetimes.com.hk/feed",  # 示例
-        "type": "rss",
-        "priority": "medium"
-    },
-    # 可添加更多 RSS 源
-}
-
-# 社交媒体与内容平台
+# 社交媒体与内容平台（需要 API 或特殊处理）
 SOCIAL_SOURCES = {
     "zhihu_insurance": {
         "name": "知乎保险话题",
         "url": "https://www.zhihu.com/topic/19551824/hot",
-        "type": "api",  # 需要知乎 API 或爬虫
+        "type": "api",
         "keywords": ["香港保险", "储蓄险", "重疾险", "医疗险"],
-        "priority": "medium"
+        "priority": "medium",
+        "enabled": False  # 需要登录或 API
     },
-    "wechat_articles": {
-        "name": "微信公众号精选",
-        "type": "manual_curate",  # 手动收集优质账号的文章链接
-        "accounts": [
-            "精算师八卦",
-            "保险岛",
-            # 添加您关注的优质账号
-        ],
-        "priority": "high"
-    }
 }
 
-# 数据与报告
-DATA_SOURCES = {
-    "hkfi": {
-        "name": "香港金融研究院保险报告",
-        "url": "https://www.hkfi.org.hk/publications",
-        "type": "html_scraper",
-        "frequency": "monthly",
-        "priority": "medium"
-    }
-}
+# 手动添加的文章（通过 manual_curator.py）
+MANUAL_ARTICLES_FILE = "manual_articles.json"
 
 # ============================================================
 # 关键词配置（用于内容过滤和分类）

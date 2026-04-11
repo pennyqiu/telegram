@@ -343,7 +343,11 @@ def main():
     analyzed_articles = analyze_articles(raw_articles, user_interests=args.interests)
     
     if not analyzed_articles:
-        print("⚠️  没有爬取到任何资讯，请检查数据源配置")
+        print("⚠️  没有爬取到任何资讯")
+        print("提示：")
+        print("  1. 使用 'add-insurance-article' 手动添加文章")
+        print("  2. 检查 RSS 数据源是否可用")
+        print("  3. 或使用演示数据：python3 demo.py --output /var/www/insurance-briefing")
         sys.exit(1)
     
     # 3. 生成简报
