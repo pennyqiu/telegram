@@ -474,25 +474,30 @@ def main():
 
     html = build_html(mode, prices, earnings, news, rebalance, dividends)
 
-    # 服务器模式：输出固定文件名（index.html），Nginx 直接服务
-    # 本地模式：带时间戳文件名，方便对比历史
     is_server = bool(output_dir or SERVER_OUTPUT)
     if is_server:
-        fname = os.path.join(out_dir, "index.html")
-        # 同时保留带日期的历史快照
+        # 服务器模式：输出 daily.html / weekly.html / monthly.html
+        fname    = os.path.join(out_dir, f"{mode}.html")
         snapshot = os.path.join(out_dir, f"briefing_{mode}_{datetime.now().strftime('%Y%m%d')}.html")
+        # index.html 始终指向最新一次运行的简报（方便 /briefing/ 直接打开）
+        index    = os.path.join(out_dir, "index.html")
+
+        with open(fname, "w", encoding="utf-8") as f:
+            f.write(html)
         with open(snapshot, "w", encoding="utf-8") as f:
             f.write(html)
-    else:
-        fname = os.path.join(out_dir, f"briefing_{mode}_{datetime.now().strftime('%Y%m%d_%H%M')}.html")
+        with open(index, "w", encoding="utf-8") as f:
+            f.write(html)
 
-    with open(fname, "w", encoding="utf-8") as f:
-        f.write(html)
-
-    print(f"\n✅ 简报已生成：{fname}")
-    if is_server:
+        print(f"\n✅ 简报已生成：{fname}")
         print(f"   历史快照：{snapshot}")
+        print(f"   首页索引：{index}")
     else:
+        # 本地模式：带时间戳文件名，方便对比历史
+        fname = os.path.join(out_dir, f"briefing_{mode}_{datetime.now().strftime('%Y%m%d_%H%M')}.html")
+        with open(fname, "w", encoding="utf-8") as f:
+            f.write(html)
+        print(f"\n✅ 简报已生成：{fname}")
         print("   用浏览器打开即可查看。")
 
     # 自动在 macOS 上用默认浏览器打开
