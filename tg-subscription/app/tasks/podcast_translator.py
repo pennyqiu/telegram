@@ -115,41 +115,71 @@ def fetch_rss_items(rss_url: str, limit: int = 5) -> list[dict]:
     return items
 
 
-def fetch_rr_transcript(episode_url: str) -> str:
+def fetch_rr_transcript(episode_url: str, title: str = "") -> str:
     """
     从 Rational Reminder 集数页面抓取文字稿。
-    文字稿在 <div class="show-notes"> 或 <div class="episode-show-notes"> 中，
-    也可能在 <details> 标签内。
+    优先用 rationalreminder.ca/podcast/<num> 格式的官网地址。
     """
-    try:
-        with httpx.Client(timeout=HTTP_TIMEOUT, headers=HEADERS, follow_redirects=True) as c:
-            resp = c.get(episode_url)
-            resp.raise_for_status()
-            html = resp.text
-    except Exception as e:
-        log.warning("RR transcript fetch failed %s: %s", episode_url, e)
-        return ""
+    # 从标题或 URL 提取集数号，构造官网地址
+    ep_num = ""
+    # 从标题提取 "Episode 402" 里的数字
+    m = re.search(r"Episode\s+(\d+)", title, re.IGNORECASE)
+    if m:
+        ep_num = m.group(1)
+    # 从 URL 提取末尾数字
+    if not ep_num:
+        m = re.search(r"/(\d+)[^/]*$", episode_url)
+        if m:
+            ep_num = m.group(1)
 
-    # 先尝试提取 <div class="transcript"> 或 <div class="show-notes">
-    patterns = [
-        r'class="[^"]*transcript[^"]*"[^>]*>(.*?)</div>',
-        r'class="[^"]*show.notes[^"]*"[^>]*>(.*?)</section>',
-        r'<details[^>]*>(.*?)</details>',
-    ]
-    for pat in patterns:
-        m = re.search(pat, html, re.IGNORECASE | re.DOTALL)
-        if m and len(m.group(1)) > 500:
-            text = re.sub(r"<[^>]+>", " ", m.group(1))
-            text = re.sub(r"\s{2,}", " ", text).strip()
-            if len(text) > 500:
-                return text  # 完整返回，不截断
+    urls_to_try = []
+    if ep_num:
+        urls_to_try.append(f"https://rationalreminder.ca/podcast/{ep_num}")
+    urls_to_try.append(episode_url)  # 兜底原始 URL
 
-    # 兜底：提取页面全部正文（去掉 <script>/<style>）
-    html_clean = re.sub(r"<script[^>]*>.*?</script>", "", html, flags=re.DOTALL | re.IGNORECASE)
-    html_clean = re.sub(r"<style[^>]*>.*?</style>", "", html_clean, flags=re.DOTALL | re.IGNORECASE)
-    text = re.sub(r"<[^>]+>", " ", html_clean)
-    text = re.sub(r"\s{2,}", " ", text).strip()
-    return text
+    for url in urls_to_try:
+        try:
+            with httpx.Client(timeout=HTTP_TIMEOUT, headers=HEADERS, follow_redirects=True) as c:
+                resp = c.get(url)
+                resp.raise_for_status()
+                html = resp.text
+        except Exception as e:
+            log.warning("RR transcript fetch failed %s: %s", url, e)
+            continue
+
+        # Squarespace / rationalreminder.ca 常用结构
+        patterns = [
+            r'<div[^>]+class="[^"]*sqs-block-content[^"]*"[^>]*>(.*?)</div>',
+            r'<div[^>]+class="[^"]*transcript[^"]*"[^>]*>(.*?)</(?:div|section)>',
+            r'<div[^>]+class="[^"]*show.?notes?[^"]*"[^>]*>(.*?)</(?:div|section)>',
+            r'<div[^>]+class="[^"]*entry.?content[^"]*"[^>]*>(.*?)</div>',
+            r'<article[^>]*>(.*?)</article>',
+            r'<details[^>]*>(.*?)</details>',
+            r'<div[^>]+class="[^"]*content[^"]*"[^>]*>(.*?)</div>',
+        ]
+        best = ""
+        for pat in patterns:
+            for m in re.finditer(pat, html, re.IGNORECASE | re.DOTALL):
+                text = re.sub(r"<[^>]+>", " ", m.group(1))
+                text = re.sub(r"\s{2,}", " ", text).strip()
+                if len(text) > len(best):
+                    best = text
+            if len(best) > 2000:
+                break
+
+        if len(best) > 500:
+            log.info("transcript fetched from %s: %d chars", url, len(best))
+            return best
+
+        # 兜底：去掉 script/style 后提取全部正文
+        html_clean = re.sub(r"<(?:script|style|nav|header|footer)[^>]*>.*?</(?:script|style|nav|header|footer)>", "", html, flags=re.DOTALL | re.IGNORECASE)
+        text = re.sub(r"<[^>]+>", " ", html_clean)
+        text = re.sub(r"\s{2,}", " ", text).strip()
+        if len(text) > 500:
+            log.info("transcript fallback from %s: %d chars", url, len(text))
+            return text
+
+    return ""
 
 
 def fetch_youtube_captions(video_id: str) -> str:
@@ -359,7 +389,7 @@ def process_episode(source: dict, item: dict, episodes: list[dict]) -> dict | No
 
     # 1. 获取文字稿
     if source["type"] == "rr_website":
-        transcript = fetch_rr_transcript(item["url"])
+        transcript = fetch_rr_transcript(item["url"], title=item["title"])
     elif source["type"] == "youtube_caption":
         transcript = fetch_youtube_captions(item.get("video_id", ""))
     else:
