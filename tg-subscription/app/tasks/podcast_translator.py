@@ -450,19 +450,31 @@ def translate_podcasts(self):
 
     for source in PODCAST_SOURCES:
         items = fetch_rss_items(source["rss"], limit=source["max_episodes"])
-        for item in items:
-            try:
-                meta = process_episode(source, item, episodes)
-                if meta:
-                    episodes.append(meta)
-                    new_count += 1
-            except RuntimeError as e:
-                # 额度耗尽等明确错误，记录后停止继续消耗
-                log.error("⚠️ 停止任务：%s", e)
-                save_index(r, episodes)
-                return {"new_episodes": new_count, "error": str(e), "stopped_early": True}
-            except Exception as e:
-                log.error("episode failed [%s] %s: %s", source["key"], item.get("title"), e)
+        source_episodes_to_process = [
+            (source, item) for item in items
+            if not episode_exists(episodes, f"{source['key']}_{item.get('video_id') or item.get('slug') or item['date']}")
+        ]
+
+        # 并发处理同一来源的多集（最多2个并发，避免触发 OpenAI 限速）
+        from concurrent.futures import ThreadPoolExecutor, as_completed
+        with ThreadPoolExecutor(max_workers=2) as pool:
+            futures = {
+                pool.submit(process_episode, src, itm, episodes): (src, itm)
+                for src, itm in source_episodes_to_process
+            }
+            for future in as_completed(futures):
+                src, itm = futures[future]
+                try:
+                    meta = future.result()
+                    if meta:
+                        episodes.append(meta)
+                        new_count += 1
+                except RuntimeError as e:
+                    log.error("⚠️ 停止任务：%s", e)
+                    save_index(r, episodes)
+                    return {"new_episodes": new_count, "error": str(e), "stopped_early": True}
+                except Exception as e:
+                    log.error("episode failed [%s] %s: %s", src["key"], itm.get("title"), e)
 
     save_index(r, episodes)
     log.info("translate_podcasts done: %d new episodes", new_count)
