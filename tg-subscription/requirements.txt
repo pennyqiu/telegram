@@ -11,6 +11,6 @@ httpx==0.27.2
 openai>=1.35.0
 
 # 第三方支付
-wechatpayv3==0.2.8
+wechatpayv3==2.0.2
 alipay-sdk-python-new==3.6.905
 qrcode[pil]==7.4.2
