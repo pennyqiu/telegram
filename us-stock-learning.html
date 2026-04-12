@@ -225,6 +225,7 @@ const curriculum=[
   {id:'withdrawal-strategy',phase:5,tag:'第19课',title:'退休后提取策略',duration:'60 min'},
   {id:'retirement-planner',phase:5,tag:'第20课',title:'个性化退休方案生成器',duration:'10 min'},
   {id:'retirement-cases',phase:5,tag:'第21课',title:'四类典型退休案例参考',duration:'20 min'},
+  {id:'stock-guide',phase:5,tag:'📖 标的手册',title:'核心ETF与个股深度指南',duration:'15 min'},
   {id:'cpa-tax-easter-egg',phase:5,tag:'🥚 彩蛋',title:'CPA的稀缺赛道：跨境税务深度指南',duration:'30 min'},
   {id:'influencers',phase:6,phaseLabel:'第六阶段：持续成长',tag:'第22课',title:'全球顶级领路人',duration:'40 min'},
   {id:'tools-platforms',phase:6,tag:'第23课',title:'必备工具与数据平台',duration:'40 min'},
@@ -736,113 +737,6 @@ function rpGenerate() {
       portLogic = '你是激进型，核心思路是：<strong>VOO + QQQ + SCHD + 个股的高成长组合，通过接受短期高波动换取长期最大复利回报</strong>。退休期' + horizon + '年的时间跨度是你最大的资产——历史上，S&P500任何一个30年滚动区间的年化回报均为正，激进配置在足够长的时间维度下胜率极高。';
   }
 
-  // ── 每只标的的解析 ──
-  const stockDetail = {
-    'VOO': {
-      full: 'Vanguard S&P 500 ETF',
-      what: '追踪美国500家最大上市公司（苹果、微软、英伟达、谷歌、亚马逊等），按市值加权，是美国经济的「晴雨表」。',
-      role: function(r, pref) {
-        if (r===3) return '作为整个组合的稳定底盘。即使在激进策略下，QQQ和个股可能出现剧烈波动，VOO的分散性（500只股票）起到锚定作用——它不会归零，也不会因为单一公司爆雷而受重创。';
-        if (r===1) return '在保守策略下承担核心增长功能。债券负责稳定，VOO负责增长跑赢通胀——这是最简单也是最经过历史验证的分工。';
-        return '作为组合的核心基石，提供分散化的市场回报。在SCHD、QQQ等做特定方向押注的同时，VOO保证了底仓的多元化，不把鸡蛋放在一个篮子里。';
-      },
-      stats: '股息率~1.3% · 费率0.03% · 持有500只股票 · 历史年化~10%（含股息）'
-    },
-    'QQQ': {
-      full: 'Invesco NASDAQ-100 ETF',
-      what: '追踪纳斯达克前100家非金融企业，科技权重超过50%，微软、苹果、英伟达、谷歌、Meta五巨头合计占比约40%。',
-      role: function(r, pref) {
-        if (r===3) return '作为组合的超额增长引擎。AI浪潮、云计算、半导体这三条赛道是未来10-20年最确定性的增长叙事，而这三条赛道的最顶级企业都高度集中在QQQ里。代价是波动极大——2022年最高回撤-35%，但2023年反弹+55%，这正是「时间越长越有利」的验证。';
-        return '提供高于市场平均的成长弹性。相比VOO，QQQ在牛市里通常跑赢5-10个百分点，是寻求超额回报的有效工具，但需要接受更高的波动。';
-      },
-      stats: '股息率~0.6% · 费率0.20% · 专注科技/AI · 历史年化~15%（近10年）'
-    },
-    'SCHD': {
-      full: 'Schwab US Dividend Equity ETF',
-      what: '精选100只兼顾「高股息率」和「股息持续增长」的美国蓝筹公司，包含可口可乐、强生、宝洁、洛克希德马丁等。每季度按财务质量重新筛选。',
-      role: function(r, pref) {
-        return '组合的现金流核心发动机。SCHD最大的魅力不是今天的股息率（3.5%），而是<strong>历史股息增长率约8-11%/年</strong>——意味着每10年股息接近翻一倍。今天每年能拿到的¥X万，15年后可能变成¥2X万，而你什么都不用做。这是退休组合里对抗通胀最优雅的武器。';
-      },
-      stats: '股息率~3.5% · 费率0.06% · 股息增长率~8-11%/年 · 含100只精选蓝筹'
-    },
-    'VYM': {
-      full: 'Vanguard High Dividend Yield ETF',
-      what: '追踪超过400只高股息美国公司，相比SCHD更偏重「即时股息率高」，包含大量金融、能源、消费品蓝筹。',
-      role: function(r, pref) {
-        return '与SCHD形成互补。<strong>SCHD注重股息增长，VYM注重当下股息率</strong>——两者叠加，既保证今天有足够多的现金流入账，也保证10年后股息不会被通胀吃掉。VYM还有额外分散效果：它覆盖400+只股票，而SCHD只有100只，降低了单一持仓的集中风险。';
-      },
-      stats: '股息率~2.8% · 费率0.06% · 持有400+只股票 · 侧重即时高收益'
-    },
-    'DGRO': {
-      full: 'iShares Core Dividend Growth ETF',
-      what: '专门筛选「连续5年以上持续增加股息」的公司，包含微软、苹果、强生等高质量成长型蓝筹。',
-      role: function(r, pref) {
-        return '组合里最注重「股息质量」的一块拼图。连续增加股息5年以上这个标准，过滤掉了靠高杠杆维持股息的公司，留下的都是真正盈利稳健、现金流充裕的企业。对于退休组合来说，<strong>股息的可靠性比股息率更重要</strong>——你需要的是每年都能兑付的稳定收入，而不是今年高明年砍的不稳定收益。';
-      },
-      stats: '股息率~2.2% · 费率0.08% · 专注股息连续增长5年+ · 侧重质量筛选'
-    },
-    'BND': {
-      full: 'Vanguard Total Bond Market ETF',
-      what: '持有约10,000只美国投资级债券（国债+公司债+抵押贷款证券），覆盖美国整个债券市场。',
-      role: function(r, pref) {
-        if (r===1) return '组合最重要的稳定器。股票和债券的相关性通常为负——当股市大跌时，资金会涌入债券避险，债券通常不跌反涨。这意味着你的整体组合波动远低于纯股票，让你在市场恐慌时不会因为账户大幅缩水而做出错误决策（比如恐慌卖出）。4%的债券利息也是组合的稳定现金流收入之一。';
-        return '组合的减震器。在均衡策略下，BND不是为了追求高回报，而是为了降低整体组合的波动幅度，让你在市场极端行情下仍能冷静持有。配置比例根据你的风险偏好相应调整。';
-      },
-      stats: '股息率~4% · 费率0.03% · 约10,000只债券 · 与股票相关性低'
-    },
-    'TIPS': {
-      full: 'iShares TIPS Bond ETF（通胀保值债券）',
-      what: '追踪美国财政部发行的通胀挂钩债券（TIPS）。与普通债券的关键区别：本金会随CPI（消费者价格指数）自动调整，利息也相应增加。',
-      role: function(r, pref) {
-        return '组合里针对通胀的「直接保险」。保守型退休组合面临最大的隐患不是市场崩盘（那是短期的），而是<strong>通胀的长期侵蚀</strong>——如果未来20年通胀平均3%/年，购买力会缩水将近一半。TIPS的本金随通胀自动增加，相当于政府背书的通胀对冲工具。在退休期长达' + horizon + '年的情况下，这个对冲尤为重要。';
-      },
-      stats: '股息率~2.5%（实际利率+通胀调整） · 费率0.19% · 政府信用背书 · 通胀联动'
-    },
-    'GLD': {
-      full: 'SPDR Gold Trust',
-      what: '追踪实物黄金价格，每份代表约1/10盎司黄金，不持有公司股权，只持有黄金这种实物资产。',
-      role: function(r, pref) {
-        return '组合里的「极端风险保险」。黄金平时表现平平，但在每次重大金融危机中（2008年、2020年、2022年地缘冲突）都展现出独特的避险价值。更重要的是，黄金与股票、债券的相关性极低，是真正意义上的分散化工具。配置' + (r===1?'7':'4-5') + '%并不是为了赚钱，而是为了<strong>在最坏的情况下（货币体系危机、全球股灾）守住最后一道防线</strong>。把它想成保险费——正常年份看起来是浪费，真正需要的时候是救命的。';
-      },
-      stats: '无股息 · 费率0.40% · 与股市相关性低 · 极端行情避险资产'
-    },
-    '美股个股': {
-      full: 'MSFT / AAPL / GOOGL / NVDA 等科技护城河个股',
-      what: '精选具备深度技术护城河的科技巨头：微软（AI+Azure云）、苹果（生态+服务飞轮）、谷歌（搜索垄断+Gemini AI）、英伟达（AI算力芯片垄断）。',
-      role: function(r, pref) {
-        return '组合里寻求超越指数的「超额回报来源」。ETF保证了你不会输得太惨，但个股是让你跑赢大盘的可能性所在。这几家公司的共同特点是：护城河极宽（竞争者难以撼动），AI时代的商业模式越来越有利（垄断性平台效应），且现金流充沛（不依赖外部融资）。建议单只个股不超过总仓位5%，整体个股比例不超过25%，避免过度集中。';
-      },
-      stats: '股息率~1-2% · 需要主动管理 · 建议单只≤5%仓位 · 每年重新评估护城河'
-    },
-    '现金/货基': {
-      full: '人民币/美元货币市场基金',
-      what: '持有极短期、流动性极高的金融工具（国债回购、银行存款等），随时可以赎回，约2%年化收益。',
-      role: function(r, pref) {
-        return '组合里的「机动资金」。在市场大幅回调时，这笔钱可以用来逢低买入；在汇率不利时（比如人民币强势、换汇成本高），用这笔钱垫付生活支出，等待更好的换汇时机。它的目的不是赚钱，而是给整个组合保留灵活性，避免「在最坏的时机被迫卖出核心仓位」。';
-      },
-      stats: '收益率~2% · 随时赎回 · 零波动 · 机动应急资金'
-    }
-  };
-
-  let stockCards = '';
-  portfolio.forEach(function(p) {
-    const info = stockDetail[p.n] || stockDetail['美股个股'];
-    if (!info) return;
-    const roleText = typeof info.role === 'function' ? info.role(riskLevel, portPref) : info.role;
-    stockCards +=
-      '<div style="border:1px solid #e2e8f0;border-radius:12px;padding:16px 18px;margin-bottom:12px;background:#fafafa">' +
-        '<div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px">' +
-          '<div style="background:#1e293b;color:#fff;font-size:13px;font-weight:800;padding:5px 12px;border-radius:8px;white-space:nowrap;flex-shrink:0">' + p.n + '</div>' +
-          '<div>' +
-            '<div style="font-size:12px;color:#64748b;margin-bottom:2px">' + info.full + '</div>' +
-            '<div style="font-size:12px;color:#94a3b8">' + info.stats + '</div>' +
-          '</div>' +
-        '</div>' +
-        '<div style="font-size:13px;color:#374151;line-height:1.85;margin-bottom:8px"><strong style="color:#0f172a">是什么：</strong>' + info.what + '</div>' +
-        '<div style="font-size:13px;color:#374151;line-height:1.85;background:#f0f9ff;border-left:3px solid #3b82f6;padding:8px 12px;border-radius:0 8px 8px 0"><strong style="color:#1d4ed8">在你的组合里：</strong>' + roleText + '</div>' +
-      '</div>';
-  });
-
   let incomeRows = '<tr><td>美股股息</td><td style="color:#16a34a;font-weight:600">¥' + annualDivRMB.toFixed(0) + '万</td><td>按当前组合股息率，随SCHD持续增长</td></tr>';
   if (pensionAmt > 0) incomeRows += '<tr><td>社保/养老金</td><td>¥' + pensionAmt + '万</td><td>60岁起启动（提前退休期间不计入）</td></tr>';
   if (otherAmt > 0)   incomeRows += '<tr><td>其他被动收入</td><td>¥' + otherAmt + '万</td><td>房租/股权分红等</td></tr>';
@@ -895,11 +789,7 @@ function rpGenerate() {
       '</div>' +
     '</div>' +
 
-    '<div style="margin-bottom:16px">' +
-      '<div style="font-weight:700;color:#1e293b;font-size:14px;margin-bottom:4px">🔍 组合里每只标的，为什么选它？</div>' +
-      '<div style="font-size:13px;color:#64748b;margin-bottom:14px">下面逐一解释每只 ETF / 个股在你这个组合里扮演的角色和选择原因：</div>' +
-      stockCards +
-    '</div>' +
+    '<div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:13px 16px;margin-bottom:16px;font-size:13px;color:#374151">📖 <strong>每只标的的完整解析</strong>请查看：<span onclick="goToLesson(\'stock-guide\')" style="color:#1d4ed8;cursor:pointer;font-weight:700;text-decoration:underline;margin-left:4px">📚 核心ETF与个股深度指南 →</span></div>' +
 
     '<div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:12px;padding:16px;margin-bottom:16px">' +
       '<div style="font-weight:700;color:#1e40af;font-size:14px;margin-bottom:8px">📋 推荐提取策略</div>' +
@@ -954,6 +844,11 @@ function rpSwitchCase(idx) {
       tab.style.fontWeight = i === idx ? '700' : '600';
     }
   }
+}
+
+function goToLesson(id) {
+  const idx = curriculum.findIndex(function(c){ return c.id === id; });
+  if (idx >= 0) showLesson(idx);
 }
 
 // ===== ALL LESSON CONTENT =====
@@ -5724,15 +5619,9 @@ SCHD股息自动覆盖（目标）：
     </table></div>
   </div>
 
-  <div style="margin-bottom:20px">
-    <div class="rc-section-title">🔍 每只标的，为什么选它？</div>
+  <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:13px 16px;margin-bottom:20px;font-size:13px;color:#374151">📖 <strong>每只标的的完整解析</strong>（是什么、关键数据、投资逻辑、适用场景）请查看：<span onclick="goToLesson('stock-guide')" style="color:#1d4ed8;cursor:pointer;font-weight:700;text-decoration:underline;margin-left:4px">📚 核心ETF与个股深度指南 →</span></div>
 
-    <div class="rc-stock-card">
-      <span class="rc-stock-name">VOO</span>
-      <div class="rc-stock-what"><strong>是什么：</strong>Vanguard S&P 500 ETF，追踪美国最大500家公司，包含苹果、微软、英伟达、亚马逊、谷歌等科技巨头，按市值加权，历史年化约10%（含股息），费率仅0.03%。</div>
-      <div class="rc-stock-role"><strong>为何选它：</strong>保守策略不代表放弃成长。VOO是「用最低成本买下整个美国经济」的底层资产。它的500只股票分散了个股风险，即使某家公司崩塌（如2001年安然、2008年雷曼），对VOO的影响微乎其微。20年积累期里，VOO承担「跑赢通胀+追求长期增值」的核心任务。</div>
-      <div class="rc-stats">费率0.03% · 500只股票 · 历史年化~10% · 季度分红</div>
-    </div>
+  
 
     <div class="rc-stock-card">
       <span class="rc-stock-name">SCHD</span>
@@ -5862,15 +5751,9 @@ SCHD股息自动覆盖（目标）：
     </table></div>
   </div>
 
-  <div style="margin-bottom:20px">
-    <div class="rc-section-title">🔍 每只标的，为什么选它？</div>
+  <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:13px 16px;margin-bottom:20px;font-size:13px;color:#374151">📖 <strong>每只标的的完整解析</strong>（是什么、关键数据、投资逻辑、适用场景）请查看：<span onclick="goToLesson('stock-guide')" style="color:#1d4ed8;cursor:pointer;font-weight:700;text-decoration:underline;margin-left:4px">📚 核心ETF与个股深度指南 →</span></div>
 
-    <div class="rc-stock-card">
-      <span class="rc-stock-name">VOO</span>
-      <div class="rc-stock-what"><strong>是什么：</strong>Vanguard S&P 500 ETF，持有美国500家最大上市公司，包含科技、金融、医疗、消费等所有主要行业，是美国股市最具代表性的投资工具。</div>
-      <div class="rc-stock-role"><strong>为何选它：</strong>45岁距退休仅15年，有人会担心「时间不够」。但VOO历史数据显示，任何一个15年的滚动周期，正收益概率接近100%。与其纠结「市场现在高不高」，不如持续买入VOO，用时间换取确定性回报。</div>
-      <div class="rc-stats">费率0.03% · 500只股票 · 任意15年滚动周期正收益概率~99%</div>
-    </div>
+  
 
     <div class="rc-stock-card">
       <span class="rc-stock-name">SCHD（加重配置至32%）</span>
@@ -5998,15 +5881,9 @@ SCHD股息自动覆盖（目标）：
     </table></div>
   </div>
 
-  <div style="margin-bottom:20px">
-    <div class="rc-section-title">🔍 每只标的，为什么选它？</div>
+  <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:13px 16px;margin-bottom:20px;font-size:13px;color:#374151">📖 <strong>每只标的的完整解析</strong>（是什么、关键数据、投资逻辑、适用场景）请查看：<span onclick="goToLesson('stock-guide')" style="color:#1d4ed8;cursor:pointer;font-weight:700;text-decoration:underline;margin-left:4px">📚 核心ETF与个股深度指南 →</span></div>
 
-    <div class="rc-stock-card">
-      <span class="rc-stock-name">VOO（压舱石）</span>
-      <div class="rc-stock-what"><strong>是什么：</strong>S&P 500指数ETF，追踪美国500家最大公司，分散化最好的宽基指数，是所有美股组合的基础底仓。</div>
-      <div class="rc-stock-role"><strong>为何选它：</strong>在激进组合里，VOO的作用是「心理缓冲器」。当QQQ从高点回撤30%时，VOO可能只跌15%，组合整体跌幅因此收窄。这种稳定性让你在最需要的时候坚持持有QQQ，而不是恐慌出逃。25%的VOO是激进策略的「安全带」——不影响高速行驶，但关键时刻能救命。</div>
-      <div class="rc-stats">费率0.03% · 500只股票 · 历史年化~10% · 回撤通常比QQQ小一半</div>
-    </div>
+  
 
     <div class="rc-stock-card">
       <span class="rc-stock-name">QQQ（超额收益引擎）</span>
@@ -6128,15 +6005,9 @@ SCHD股息自动覆盖（目标）：
     </table></div>
   </div>
 
-  <div style="margin-bottom:20px">
-    <div class="rc-section-title">🔍 每只标的，为什么选它？</div>
+  <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:13px 16px;margin-bottom:20px;font-size:13px;color:#374151">📖 <strong>每只标的的完整解析</strong>（是什么、关键数据、投资逻辑、适用场景）请查看：<span onclick="goToLesson('stock-guide')" style="color:#1d4ed8;cursor:pointer;font-weight:700;text-decoration:underline;margin-left:4px">📚 核心ETF与个股深度指南 →</span></div>
 
-    <div class="rc-stock-card">
-      <span class="rc-stock-name">VOO</span>
-      <div class="rc-stock-what"><strong>是什么：</strong>美国500家最大公司的综合ETF，费率0.03%，是最高效的美国股市暴露工具。</div>
-      <div class="rc-stock-role"><strong>为何选它：</strong>在激进型15年策略里，VOO的价值被放大了。当你45岁开始投资，有几年的QQQ可能是熊市，此时VOO稳定的表现能维持组合整体不太难看，防止「还没看到复利就先被套住割肉离场」的情形。VOO是激进组合里的「情绪管理工具」。</div>
-      <div class="rc-stats">费率0.03% · 历史任意15年滚动正收益概率~99% · 最大回撤约-50%（2008）</div>
-    </div>
+  
 
     <div class="rc-stock-card">
       <span class="rc-stock-name">QQQ（30%，比40岁方案略降）</span>
@@ -6211,6 +6082,467 @@ SCHD股息自动覆盖（目标）：
 </div>
 `,
 
+// =====================================================================
+'stock-guide':`
+
+<div style="background:linear-gradient(135deg,#1e293b,#0f172a);color:#f8fafc;border-radius:14px;padding:24px 28px;margin-bottom:24px">
+  <div style="font-size:12px;font-weight:700;color:#94a3b8;letter-spacing:.08em;margin-bottom:6px">📖 标的手册</div>
+  <div style="font-size:22px;font-weight:800;color:#f0fdf4;margin-bottom:6px">核心ETF与个股深度指南</div>
+  <div style="font-size:13px;color:#64748b;line-height:1.7">本手册收录退休方案中出现的全部标的。每个标的均包含：是什么、核心数据、选它的投资逻辑、适合/不适合的场景。可收藏本页作为长期参考资料。</div>
+</div>
+
+<h2 style="border-left:4px solid #3b82f6;padding-left:12px;margin-top:0">📊 一、宽基指数ETF</h2>
+<p style="color:#64748b;font-size:13px;margin-top:-8px">追踪大盘指数，提供分散化的市场回报，是所有组合的核心底仓。</p>
+
+<div style="border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;margin-bottom:16px">
+  <div style="background:#1e40af;color:#fff;padding:14px 18px;display:flex;align-items:center;gap:12px">
+    <span style="font-size:18px;font-weight:800">VOO</span>
+    <div>
+      <div style="font-size:13px;font-weight:600">Vanguard S&P 500 ETF</div>
+      <div style="font-size:11px;opacity:0.8">追踪美国标准普尔500指数 · 全球规模最大的指数ETF之一</div>
+    </div>
+    <div style="margin-left:auto;text-align:right">
+      <div style="font-size:20px;font-weight:800">1.3%</div>
+      <div style="font-size:11px;opacity:0.8">股息率</div>
+    </div>
+  </div>
+  <div style="padding:18px">
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px">
+      <div style="background:#f1f5f9;border-radius:8px;padding:10px;text-align:center">
+        <div style="font-size:13px;font-weight:700;color:#1e293b">0.03%</div>
+        <div style="font-size:11px;color:#64748b">年费率</div>
+      </div>
+      <div style="background:#f1f5f9;border-radius:8px;padding:10px;text-align:center">
+        <div style="font-size:13px;font-weight:700;color:#1e293b">500只</div>
+        <div style="font-size:11px;color:#64748b">持仓数量</div>
+      </div>
+      <div style="background:#f1f5f9;border-radius:8px;padding:10px;text-align:center">
+        <div style="font-size:13px;font-weight:700;color:#1e293b">~10%</div>
+        <div style="font-size:11px;color:#64748b">历史年化（含股息）</div>
+      </div>
+      <div style="background:#f1f5f9;border-radius:8px;padding:10px;text-align:center">
+        <div style="font-size:13px;font-weight:700;color:#1e293b">季度</div>
+        <div style="font-size:11px;color:#64748b">分红频率</div>
+      </div>
+    </div>
+    <div style="font-size:13px;color:#374151;line-height:1.9;margin-bottom:12px">
+      <strong>是什么：</strong>持有美国市值最大的500家上市公司，覆盖科技（约30%）、金融（~13%）、医疗（~12%）、消费（~10%）等全行业。苹果、微软、英伟达、亚马逊、谷歌、Meta是前六大权重股，合计约25%。按市值加权，大公司影响更大。
+    </div>
+    <div style="background:#f0f9ff;border-left:3px solid #3b82f6;padding:12px 14px;border-radius:0 8px 8px 0;font-size:13px;color:#374151;line-height:1.9;margin-bottom:12px">
+      <strong style="color:#1d4ed8">投资逻辑：</strong>巴菲特在遗嘱里指定把90%遗产投入S&P 500指数基金。原因很简单：绝大多数主动管理基金长期跑不赢S&P 500，而VOO只收0.03%费率，相当于"免费骑上美国经济的增长红利"。任意一个20年滚动期，S&P 500均为正收益。它不是最刺激的标的，但是最确定的一个。
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:13px">
+      <div style="background:#f0fdf4;border-radius:8px;padding:12px">
+        <strong style="color:#15803d">✅ 适合：</strong>作为任何组合的核心底仓；不想选股但要分享美国经济增长；长期定投20年以上
+      </div>
+      <div style="background:#fff1f2;border-radius:8px;padding:12px">
+        <strong style="color:#be123c">⚠️ 注意：</strong>科技权重较大（约30%），科技熊市时回撤可能较深；不适合追求高股息即时现金流的需求
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style="border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;margin-bottom:16px">
+  <div style="background:#7c2d12;color:#fff;padding:14px 18px;display:flex;align-items:center;gap:12px">
+    <span style="font-size:18px;font-weight:800">QQQ</span>
+    <div>
+      <div style="font-size:13px;font-weight:600">Invesco NASDAQ-100 ETF</div>
+      <div style="font-size:11px;opacity:0.8">追踪纳斯达克100非金融企业 · AI时代增长核心标的</div>
+    </div>
+    <div style="margin-left:auto;text-align:right">
+      <div style="font-size:20px;font-weight:800">0.6%</div>
+      <div style="font-size:11px;opacity:0.8">股息率</div>
+    </div>
+  </div>
+  <div style="padding:18px">
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px">
+      <div style="background:#f1f5f9;border-radius:8px;padding:10px;text-align:center">
+        <div style="font-size:13px;font-weight:700;color:#1e293b">0.20%</div>
+        <div style="font-size:11px;color:#64748b">年费率</div>
+      </div>
+      <div style="background:#f1f5f9;border-radius:8px;padding:10px;text-align:center">
+        <div style="font-size:13px;font-weight:700;color:#1e293b">100只</div>
+        <div style="font-size:11px;color:#64748b">持仓数量</div>
+      </div>
+      <div style="background:#f1f5f9;border-radius:8px;padding:10px;text-align:center">
+        <div style="font-size:13px;font-weight:700;color:#1e293b">~15%</div>
+        <div style="font-size:11px;color:#64748b">近10年年化</div>
+      </div>
+      <div style="background:#f1f5f9;border-radius:8px;padding:10px;text-align:center">
+        <div style="font-size:13px;font-weight:700;color:#1e293b">季度</div>
+        <div style="font-size:11px;color:#64748b">分红频率</div>
+      </div>
+    </div>
+    <div style="font-size:13px;color:#374151;line-height:1.9;margin-bottom:12px">
+      <strong>是什么：</strong>持有纳斯达克前100家非金融企业，苹果（约9%）、微软（约8%）、英伟达（约8%）、亚马逊（约5%）、谷歌（约5%）、Meta（约4%）合计约40%。科技/通信权重超过60%，是科技增长最集中的宽基ETF。相比VOO，QQQ在牛市通常跑赢5-10个百分点，但熊市也跌得更深。
+    </div>
+    <div style="background:#f0f9ff;border-left:3px solid #3b82f6;padding:12px 14px;border-radius:0 8px 8px 0;font-size:13px;color:#374151;line-height:1.9;margin-bottom:12px">
+      <strong style="color:#1d4ed8">投资逻辑：</strong>AI革命、云计算、半导体这三条增长赛道在未来10-20年高度确定，而这三条赛道的最顶级公司几乎都在QQQ里。与其研究单只科技股，不如买QQQ"一网打尽"。代价是高波动：2022年最高回撤-35%，但2023年反弹+55%。对有足够积累期（10年以上）、有稳定收入、不依赖这笔钱生活的投资者，这种波动是可承受的。
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:13px">
+      <div style="background:#f0fdf4;border-radius:8px;padding:12px">
+        <strong style="color:#15803d">✅ 适合：</strong>积累期≥10年；看好AI科技长期增长；能承受阶段性-30%至-40%回撤；作为VOO的成长增强
+      </div>
+      <div style="background:#fff1f2;border-radius:8px;padding:12px">
+        <strong style="color:#be123c">⚠️ 注意：</strong>科技集中风险高（科网泡沫时曾-83%）；临近退休应逐步降低比例；不适合需要即时高股息的场景
+      </div>
+    </div>
+  </div>
+</div>
+
+<h2 style="border-left:4px solid #16a34a;padding-left:12px">💰 二、股息增长ETF</h2>
+<p style="color:#64748b;font-size:13px;margin-top:-8px">专注于持续分红和股息增长的公司，是退休现金流规划的核心工具。</p>
+
+<div style="border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;margin-bottom:16px">
+  <div style="background:#166534;color:#fff;padding:14px 18px;display:flex;align-items:center;gap:12px">
+    <span style="font-size:18px;font-weight:800">SCHD</span>
+    <div>
+      <div style="font-size:13px;font-weight:600">Schwab US Dividend Equity ETF</div>
+      <div style="font-size:11px;opacity:0.8">精选100只高质量股息成长蓝筹 · 退休规划首选ETF</div>
+    </div>
+    <div style="margin-left:auto;text-align:right">
+      <div style="font-size:20px;font-weight:800">3.5%</div>
+      <div style="font-size:11px;opacity:0.8">股息率（年增8-11%）</div>
+    </div>
+  </div>
+  <div style="padding:18px">
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px">
+      <div style="background:#f1f5f9;border-radius:8px;padding:10px;text-align:center">
+        <div style="font-size:13px;font-weight:700;color:#1e293b">0.06%</div>
+        <div style="font-size:11px;color:#64748b">年费率</div>
+      </div>
+      <div style="background:#f1f5f9;border-radius:8px;padding:10px;text-align:center">
+        <div style="font-size:13px;font-weight:700;color:#1e293b">100只</div>
+        <div style="font-size:11px;color:#64748b">精选持仓</div>
+      </div>
+      <div style="background:#f1f5f9;border-radius:8px;padding:10px;text-align:center">
+        <div style="font-size:13px;font-weight:700;color:#1e293b">8-11%</div>
+        <div style="font-size:11px;color:#64748b">股息年增长率</div>
+      </div>
+      <div style="background:#f1f5f9;border-radius:8px;padding:10px;text-align:center">
+        <div style="font-size:13px;font-weight:700;color:#1e293b">季度</div>
+        <div style="font-size:11px;color:#64748b">分红频率</div>
+      </div>
+    </div>
+    <div style="font-size:13px;color:#374151;line-height:1.9;margin-bottom:12px">
+      <strong>是什么：</strong>每季度从美国大盘股中筛选100只同时满足「高股息率」+「高股息增长率」+「高现金流覆盖率」+「低负债率」的公司。可口可乐、强生、宝洁、洛克希德马丁、百事可乐是典型持仓。每季度自动剔除不达标公司，确保质量。
+    </div>
+    <div style="background:#f0fdf4;border-left:3px solid #16a34a;padding:12px 14px;border-radius:0 8px 8px 0;font-size:13px;color:#374151;line-height:1.9;margin-bottom:12px">
+      <strong style="color:#166534">投资逻辑（SCHD的魔法）：</strong>复利的真实威力在于「股息再投入」。每季度拿到的股息自动买入更多SCHD，下次分红时基数更大，循环往复。以8%年增长率计算：今天投入¥100万SCHD，15年后每年产生的股息约是今天的3.2倍；20年后约是今天的4.7倍。这意味着退休后的收入不是固定不变的，而是每年自动增加——这才是真正的通胀对冲武器。
+    </div>
+    <div style="background:#fef9c3;border-radius:8px;padding:12px;font-size:13px;margin-bottom:12px">
+      <strong>📊 SCHD股息增长示意：</strong>假设今天投入¥100万，年股息¥3.5万（3.5%）<br>
+      → 5年后：¥3.5万×(1.09)^5 ≈ <strong>¥5.4万/年</strong>（相对初始成本约5.4%）<br>
+      → 10年后：¥3.5万×(1.09)^10 ≈ <strong>¥8.3万/年</strong>（约8.3%）<br>
+      → 15年后：¥3.5万×(1.09)^15 ≈ <strong>¥12.7万/年</strong>（约12.7%）
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:13px">
+      <div style="background:#f0fdf4;border-radius:8px;padding:12px">
+        <strong style="color:#15803d">✅ 适合：</strong>退休现金流核心仓；追求股息持续增长；不想主动管理；中长期积累期（7年以上效果显著）
+      </div>
+      <div style="background:#fff1f2;border-radius:8px;padding:12px">
+        <strong style="color:#be123c">⚠️ 注意：</strong>SCHD会定期调仓，某些科技公司因股息率低而不入选；牛市期间增长不如QQQ；需配合VOO使用
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style="border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;margin-bottom:16px">
+  <div style="background:#0f766e;color:#fff;padding:14px 18px;display:flex;align-items:center;gap:12px">
+    <span style="font-size:18px;font-weight:800">VYM</span>
+    <div>
+      <div style="font-size:13px;font-weight:600">Vanguard High Dividend Yield ETF</div>
+      <div style="font-size:11px;opacity:0.8">追踪400+高股息美国公司 · SCHD的高收益互补搭档</div>
+    </div>
+    <div style="margin-left:auto;text-align:right">
+      <div style="font-size:20px;font-weight:800">2.8%</div>
+      <div style="font-size:11px;opacity:0.8">股息率</div>
+    </div>
+  </div>
+  <div style="padding:18px">
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px">
+      <div style="background:#f1f5f9;border-radius:8px;padding:10px;text-align:center">
+        <div style="font-size:13px;font-weight:700;color:#1e293b">0.06%</div>
+        <div style="font-size:11px;color:#64748b">年费率</div>
+      </div>
+      <div style="background:#f1f5f9;border-radius:8px;padding:10px;text-align:center">
+        <div style="font-size:13px;font-weight:700;color:#1e293b">400+只</div>
+        <div style="font-size:11px;color:#64748b">持仓数量</div>
+      </div>
+      <div style="background:#f1f5f9;border-radius:8px;padding:10px;text-align:center">
+        <div style="font-size:13px;font-weight:700;color:#1e293b">~3%</div>
+        <div style="font-size:11px;color:#64748b">股息年增长率</div>
+      </div>
+      <div style="background:#f1f5f9;border-radius:8px;padding:10px;text-align:center">
+        <div style="font-size:13px;font-weight:700;color:#1e293b">季度</div>
+        <div style="font-size:11px;color:#64748b">分红频率</div>
+      </div>
+    </div>
+    <div style="font-size:13px;color:#374151;line-height:1.9;margin-bottom:12px">
+      <strong>是什么：</strong>追踪FTSE High Dividend Yield指数，持有400多只高股息美国公司，比SCHD更偏重「当下股息率高」而非股息增长速度。行业覆盖更广：金融（~21%）、医疗（~15%）、消费（~13%）、工业（~12%）等，包含大量传统行业蓝筹。
+    </div>
+    <div style="background:#f0f9ff;border-left:3px solid #3b82f6;padding:12px 14px;border-radius:0 8px 8px 0;font-size:13px;color:#374151;line-height:1.9;margin-bottom:12px">
+      <strong style="color:#1d4ed8">与SCHD的区别与搭配：</strong>SCHD = 增长型股息（今天3.5%，未来越来越多）；VYM = 高即时收益型（今天就拿到更多现金，增长较慢）。两者搭配使用，既保证当下有足够现金流入账，又保证10-20年后股息不被通胀侵蚀。VYM的400+持仓也比SCHD的100只更分散，降低了单一持仓集中风险。
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:13px">
+      <div style="background:#f0fdf4;border-radius:8px;padding:12px">
+        <strong style="color:#15803d">✅ 适合：</strong>搭配SCHD使用；需要即时高现金流；增加行业分散性；保守/均衡型退休组合
+      </div>
+      <div style="background:#fff1f2;border-radius:8px;padding:12px">
+        <strong style="color:#be123c">⚠️ 注意：</strong>股息增长率较低，长期抗通胀能力弱于SCHD；不建议单独持有，最好与SCHD搭配
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style="border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;margin-bottom:16px">
+  <div style="background:#1e3a5f;color:#fff;padding:14px 18px;display:flex;align-items:center;gap:12px">
+    <span style="font-size:18px;font-weight:800">DGRO</span>
+    <div>
+      <div style="font-size:13px;font-weight:600">iShares Core Dividend Growth ETF</div>
+      <div style="font-size:11px;opacity:0.8">专注连续5年以上增发股息的公司 · 质量股息筛选器</div>
+    </div>
+    <div style="margin-left:auto;text-align:right">
+      <div style="font-size:20px;font-weight:800">2.2%</div>
+      <div style="font-size:11px;opacity:0.8">股息率</div>
+    </div>
+  </div>
+  <div style="padding:18px">
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px">
+      <div style="background:#f1f5f9;border-radius:8px;padding:10px;text-align:center">
+        <div style="font-size:13px;font-weight:700;color:#1e293b">0.08%</div>
+        <div style="font-size:11px;color:#64748b">年费率</div>
+      </div>
+      <div style="background:#f1f5f9;border-radius:8px;padding:10px;text-align:center">
+        <div style="font-size:13px;font-weight:700;color:#1e293b">400+只</div>
+        <div style="font-size:11px;color:#64748b">持仓数量</div>
+      </div>
+      <div style="background:#f1f5f9;border-radius:8px;padding:10px;text-align:center">
+        <div style="font-size:13px;font-weight:700;color:#1e293b">连续5年+</div>
+        <div style="font-size:11px;color:#64748b">股息增发资格</div>
+      </div>
+      <div style="background:#f1f5f9;border-radius:8px;padding:10px;text-align:center">
+        <div style="font-size:13px;font-weight:700;color:#1e293b">季度</div>
+        <div style="font-size:11px;color:#64748b">分红频率</div>
+      </div>
+    </div>
+    <div style="font-size:13px;color:#374151;line-height:1.9;margin-bottom:12px">
+      <strong>是什么：</strong>只持有「连续5年以上持续增加股息」的公司，并要求股息支付率合理（派息率不超过75%，确保有足够利润支撑继续增发）。微软、苹果、强生、摩根大通等大公司均在其中——它们不仅在分红，而且年年增发，从未断过。
+    </div>
+    <div style="background:#f0f9ff;border-left:3px solid #3b82f6;padding:12px 14px;border-radius:0 8px 8px 0;font-size:13px;color:#374151;line-height:1.9;margin-bottom:12px">
+      <strong style="color:#1d4ed8">投资逻辑（质量优先）：</strong>能连续5年以上增发股息，说明这家公司有稳健的盈利能力和现金流——否则靠借钱维持股息是不可持续的。DGRO的筛选标准相当于一个「财务质量过滤器」，持有的都是真正赚钱且愿意持续与股东分享的企业。对于退休组合，股息的<strong>可靠性</strong>比股息率更重要——你需要的是每年都能兑付的稳定收入。
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:13px">
+      <div style="background:#f0fdf4;border-radius:8px;padding:12px">
+        <strong style="color:#15803d">✅ 适合：</strong>偏好「质量筛选」而非单纯高股息率；保守型组合替代SCHD一部分；注重股息可持续性
+      </div>
+      <div style="background:#fff1f2;border-radius:8px;padding:12px">
+        <strong style="color:#be123c">⚠️ 注意：</strong>当前股息率（2.2%）低于SCHD（3.5%），即时收益不如SCHD；适合作为补充而非替代
+      </div>
+    </div>
+  </div>
+</div>
+
+<h2 style="border-left:4px solid #f59e0b;padding-left:12px">🛡️ 三、固定收益与防御ETF</h2>
+<p style="color:#64748b;font-size:13px;margin-top:-8px">降低组合波动性，保住本金购买力，在市场崩盘时提供心理和资金缓冲。</p>
+
+<div style="border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;margin-bottom:16px">
+  <div style="background:#92400e;color:#fff;padding:14px 18px;display:flex;align-items:center;gap:12px">
+    <span style="font-size:18px;font-weight:800">BND</span>
+    <div>
+      <div style="font-size:13px;font-weight:600">Vanguard Total Bond Market ETF</div>
+      <div style="font-size:11px;opacity:0.8">追踪美国全市场投资级债券 · 组合减震器</div>
+    </div>
+    <div style="margin-left:auto;text-align:right">
+      <div style="font-size:20px;font-weight:800">4.0%</div>
+      <div style="font-size:11px;opacity:0.8">利息率</div>
+    </div>
+  </div>
+  <div style="padding:18px">
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px">
+      <div style="background:#f1f5f9;border-radius:8px;padding:10px;text-align:center">
+        <div style="font-size:13px;font-weight:700;color:#1e293b">0.03%</div>
+        <div style="font-size:11px;color:#64748b">年费率</div>
+      </div>
+      <div style="background:#f1f5f9;border-radius:8px;padding:10px;text-align:center">
+        <div style="font-size:13px;font-weight:700;color:#1e293b">~10,000只</div>
+        <div style="font-size:11px;color:#64748b">债券数量</div>
+      </div>
+      <div style="background:#f1f5f9;border-radius:8px;padding:10px;text-align:center">
+        <div style="font-size:13px;font-weight:700;color:#1e293b">约零</div>
+        <div style="font-size:11px;color:#64748b">与股市相关性</div>
+      </div>
+      <div style="background:#f1f5f9;border-radius:8px;padding:10px;text-align:center">
+        <div style="font-size:13px;font-weight:700;color:#1e293b">月度</div>
+        <div style="font-size:11px;color:#64748b">分红频率</div>
+      </div>
+    </div>
+    <div style="font-size:13px;color:#374151;line-height:1.9;margin-bottom:12px">
+      <strong>是什么：</strong>持有约10,000只美国投资级债券，包括美国国债（约40%）、企业债（约30%）、抵押贷款支持证券（约20%）、机构债（~10%）。覆盖整个美国债券市场，分散化程度极高。月度付息，费率0.03%与VOO并列全球最低。
+    </div>
+    <div style="background:#f0f9ff;border-left:3px solid #3b82f6;padding:12px 14px;border-radius:0 8px 8px 0;font-size:13px;color:#374151;line-height:1.9;margin-bottom:12px">
+      <strong style="color:#1d4ed8">投资逻辑（减震器而非赚钱工具）：</strong>BND的价值不是「赚多少」，而是「当股市崩盘时你会怎样」。历史规律：每次股灾，资金就从股票流向债券避险，导致债券价格通常上涨或持平。2020年3月全球股市崩盘时，S&P 500单月-34%，而BND那个月涨了约4%。这个「反向保护」让你在最恐慌的时刻账面损失减半，从而避免了在最低点割肉离场的悲剧。
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:13px">
+      <div style="background:#f0fdf4;border-radius:8px;padding:12px">
+        <strong style="color:#15803d">✅ 适合：</strong>保守/均衡型组合的稳定器；临近退休5年内逐渐增加比例；需要月度稳定利息收入
+      </div>
+      <div style="background:#fff1f2;border-radius:8px;padding:12px">
+        <strong style="color:#be123c">⚠️ 注意：</strong>加息周期中债券价格下跌（如2022年BND下跌约-13%）；不抗通胀；激进型积累期中不建议配置
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style="border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;margin-bottom:16px">
+  <div style="background:#065f46;color:#fff;padding:14px 18px;display:flex;align-items:center;gap:12px">
+    <span style="font-size:18px;font-weight:800">TIPS</span>
+    <div>
+      <div style="font-size:13px;font-weight:600">iShares TIPS Bond ETF（通胀保值国债）</div>
+      <div style="font-size:11px;opacity:0.8">本金随CPI自动调整 · 退休组合的通胀保险</div>
+    </div>
+    <div style="margin-left:auto;text-align:right">
+      <div style="font-size:20px;font-weight:800">2.5%</div>
+      <div style="font-size:11px;opacity:0.8">实际收益率（+通胀）</div>
+    </div>
+  </div>
+  <div style="padding:18px">
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px">
+      <div style="background:#f1f5f9;border-radius:8px;padding:10px;text-align:center">
+        <div style="font-size:13px;font-weight:700;color:#1e293b">0.19%</div>
+        <div style="font-size:11px;color:#64748b">年费率</div>
+      </div>
+      <div style="background:#f1f5f9;border-radius:8px;padding:10px;text-align:center">
+        <div style="font-size:13px;font-weight:700;color:#1e293b">美国国债</div>
+        <div style="font-size:11px;color:#64748b">发行方</div>
+      </div>
+      <div style="background:#f1f5f9;border-radius:8px;padding:10px;text-align:center">
+        <div style="font-size:13px;font-weight:700;color:#1e293b">CPI联动</div>
+        <div style="font-size:11px;color:#64748b">本金调整机制</div>
+      </div>
+      <div style="background:#f1f5f9;border-radius:8px;padding:10px;text-align:center">
+        <div style="font-size:13px;font-weight:700;color:#1e293b">月度</div>
+        <div style="font-size:11px;color:#64748b">分红频率</div>
+      </div>
+    </div>
+    <div style="font-size:13px;color:#374151;line-height:1.9;margin-bottom:12px">
+      <strong>是什么：</strong>美国财政部发行的通胀保值国债（Treasury Inflation-Protected Securities）。与普通债券的根本区别：本金会随美国CPI（消费者价格指数）自动调整——通胀2%，本金增长2%；通胀3%，本金增长3%。利息按调整后的本金计算，因此也随通胀自动增加。
+    </div>
+    <div style="background:#f0fdf4;border-left:3px solid #16a34a;padding:12px 14px;border-radius:0 8px 8px 0;font-size:13px;color:#374151;line-height:1.9;margin-bottom:12px">
+      <strong style="color:#166534">投资逻辑（购买力保险单）：</strong>通胀是退休财富最隐蔽的杀手。假设退休后年通胀3%，30年后¥100万的购买力仅剩¥41万——缩水了59%。TIPS直接对冲这个风险：你持有的本金会跟随通胀调整，30年后依然维持当初的购买力。这是政府发行的「购买力保险单」，信用等级最高。对于退休期长达20-40年的规划，TIPS是保守型组合里最不可缺少的一环。
+    </div>
+    <div style="background:#fef9c3;border-radius:8px;padding:12px;font-size:13px;margin-bottom:12px">
+      <strong>📊 通胀侵蚀示意（3%年通胀）：</strong><br>
+      普通债券¥100万 → 30年后购买力：<strong style="color:#dc2626">¥41万</strong>（损失59%）<br>
+      TIPS ¥100万 → 30年后购买力：<strong style="color:#16a34a">¥100万</strong>（完全保值）
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:13px">
+      <div style="background:#f0fdf4;border-radius:8px;padding:12px">
+        <strong style="color:#15803d">✅ 适合：</strong>退休期≥20年的长期规划；保守型组合中替代部分BND；担心长期通胀侵蚀购买力
+      </div>
+      <div style="background:#fff1f2;border-radius:8px;padding:12px">
+        <strong style="color:#be123c">⚠️ 注意：</strong>通缩时本金不下调（下限为原始面值）；通胀补偿部分要交税；费率略高于BND
+      </div>
+    </div>
+  </div>
+</div>
+
+<h2 style="border-left:4px solid #f59e0b;padding-left:12px">🏅 四、另类资产</h2>
+
+<div style="border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;margin-bottom:16px">
+  <div style="background:#78350f;color:#fff;padding:14px 18px;display:flex;align-items:center;gap:12px">
+    <span style="font-size:18px;font-weight:800">GLD</span>
+    <div>
+      <div style="font-size:13px;font-weight:600">SPDR Gold Trust</div>
+      <div style="font-size:11px;opacity:0.8">追踪实物黄金价格 · 极端风险最终防线</div>
+    </div>
+    <div style="margin-left:auto;text-align:right">
+      <div style="font-size:20px;font-weight:800">—</div>
+      <div style="font-size:11px;opacity:0.8">无股息</div>
+    </div>
+  </div>
+  <div style="padding:18px">
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px">
+      <div style="background:#f1f5f9;border-radius:8px;padding:10px;text-align:center">
+        <div style="font-size:13px;font-weight:700;color:#1e293b">0.40%</div>
+        <div style="font-size:11px;color:#64748b">年费率</div>
+      </div>
+      <div style="background:#f1f5f9;border-radius:8px;padding:10px;text-align:center">
+        <div style="font-size:13px;font-weight:700;color:#1e293b">实物黄金</div>
+        <div style="font-size:11px;color:#64748b">背后资产</div>
+      </div>
+      <div style="background:#f1f5f9;border-radius:8px;padding:10px;text-align:center">
+        <div style="font-size:13px;font-weight:700;color:#1e293b">~零</div>
+        <div style="font-size:11px;color:#64748b">与股市相关性</div>
+      </div>
+      <div style="background:#f1f5f9;border-radius:8px;padding:10px;text-align:center">
+        <div style="font-size:13px;font-weight:700;color:#1e293b">无</div>
+        <div style="font-size:11px;color:#64748b">分红</div>
+      </div>
+    </div>
+    <div style="font-size:13px;color:#374151;line-height:1.9;margin-bottom:12px">
+      <strong>是什么：</strong>每份GLD代表约1/10盎司实物黄金，存放于伦敦金库。不持有任何公司股权，不产生利息，纯粹跟随国际黄金价格涨跌。是历史最悠久的「价值储存工具」，5000年来的稀缺性确保了其保值功能。
+    </div>
+    <div style="background:#fef3c7;border-left:3px solid #f59e0b;padding:12px 14px;border-radius:0 8px 8px 0;font-size:13px;color:#374151;line-height:1.9;margin-bottom:12px">
+      <strong style="color:#92400e">投资逻辑（保险费思维）：</strong>黄金在正常年份表现平平，常跑输股票。但在每一次系统性危机中，它都展现出与其他资产完全不同的表现：2008年金融危机全年+5.8%（S&P 500 -38%）；2020年疫情崩盘后大涨25%；2022年俄乌冲突期间黄金上涨10%。5-7%的黄金配置相当于「保险费」：99%的时间是小代价，1%的极端时刻是救命的。更重要的是，它与股票+债券的相关性极低，是真正意义上的多元化工具。
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:13px">
+      <div style="background:#f0fdf4;border-radius:8px;padding:12px">
+        <strong style="color:#15803d">✅ 适合：</strong>组合的极端风险对冲；配比5-10%；担心货币体系危机/地缘冲突/通货膨胀
+      </div>
+      <div style="background:#fff1f2;border-radius:8px;padding:12px">
+        <strong style="color:#be123c">⚠️ 注意：</strong>不产生任何收益，靠价差赚钱；费率0.40%偏高；长期持有拖累组合收益，应控制在10%以内
+      </div>
+    </div>
+  </div>
+</div>
+
+<h2 style="border-left:4px solid #8b5cf6;padding-left:12px">🏢 五、核心科技个股</h2>
+<p style="color:#64748b;font-size:13px;margin-top:-8px">具备深度护城河的科技巨头，提供超越指数的潜在超额收益。建议单只不超过5%仓位，合计不超过20%。</p>
+
+<div class="table-wrap"><table>
+  <thead><tr><th>个股</th><th>核心业务</th><th>AI时代逻辑</th><th>股息率</th><th>配置建议</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><strong>MSFT（微软）</strong></td>
+      <td>Azure云计算 + Office 365 + Copilot AI</td>
+      <td>AI助手直接嵌入全球数亿Office用户，Azure是全球第二大云平台，OpenAI最大股东，AI受益最确定</td>
+      <td>~0.8%</td>
+      <td>激进型核心个股，≤5%</td>
+    </tr>
+    <tr>
+      <td><strong>AAPL（苹果）</strong></td>
+      <td>iPhone + 服务生态（App Store/Apple Music等）</td>
+      <td>10亿+设备生态系统锁定，Apple Intelligence切入AI端侧，服务收入高毛利持续增长</td>
+      <td>~0.5%</td>
+      <td>核心持仓，≤5%</td>
+    </tr>
+    <tr>
+      <td><strong>NVDA（英伟达）</strong></td>
+      <td>GPU芯片 + AI算力基础设施</td>
+      <td>AI训练和推理的核心算力来源，全球AI数据中心约80%使用NVDA GPU，技术领先优势至少5-7年</td>
+      <td>~0.03%</td>
+      <td>激进型增长仓，≤5%，波动极大</td>
+    </tr>
+    <tr>
+      <td><strong>GOOGL（谷歌）</strong></td>
+      <td>搜索引擎 + YouTube + Google Cloud + Gemini AI</td>
+      <td>全球搜索垄断（90%市场份额），Google Cloud快速追赶，Gemini AI赋能全产品线</td>
+      <td>~0%</td>
+      <td>均衡型可选，≤5%</td>
+    </tr>
+  </tbody>
+</table></div>
+
+<div style="background:#1e293b;color:#f8fafc;border-radius:10px;padding:16px;margin-top:20px;font-size:13px;line-height:2">
+  <strong style="color:#4ade80">⚠️ 个股使用须知：</strong>个股提供超额回报机会，但需要承担比ETF更高的集中风险。<br>
+  ① 每只个股建议不超过总仓位5%，合计个股比例不超过20%<br>
+  ② 每年至少做一次护城河评估：AI地位是否仍然稳固？是否出现强力竞争者？<br>
+  ③ 个股不适合完全替代ETF，应作为ETF基础上的「超额收益增强层」<br>
+  ④ 初学者建议先只持有ETF，熟悉市场后再逐步引入个股
+</div>
+
+`,
 // =====================================================================
 'cpa-tax-easter-egg':`
 <style>
