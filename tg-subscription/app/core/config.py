@@ -4,21 +4,21 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
-    # Telegram
-    telegram_bot_token: str
-    telegram_webhook_secret: str
-    telegram_webhook_url: str
-    mini_app_url: str
+    # Telegram（app 服务必填，worker/beat 可留空）
+    telegram_bot_token: str = ""
+    telegram_webhook_secret: str = ""
+    telegram_webhook_url: str = ""
+    mini_app_url: str = ""
 
     # 数据库 / 缓存
-    database_url: str
-    redis_url: str
+    database_url: str = ""
+    redis_url: str = "redis://redis:6379/0"
 
     # 订阅配置
     grace_period_days: int = 3
     expiry_reminder_days: int = 3
     admin_telegram_ids: str = ""
-    internal_api_key: str
+    internal_api_key: str = ""
 
     # ── 微信支付 ────────────────────────────────────────────────
     wechat_appid: str = ""              # 微信公众号/小程序/开放平台 AppID
