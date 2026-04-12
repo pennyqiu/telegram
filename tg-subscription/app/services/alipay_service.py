@@ -22,7 +22,11 @@ _alipay = None
 def _get_alipay():
     global _alipay
     if _alipay is None:
-        from alipay import AliPay
+        try:
+            from alipay import AliPay
+        except ImportError:
+            logger.warning("alipay SDK not installed, alipay payments disabled")
+            return None
         _alipay = AliPay(
             appid=settings.alipay_app_id,
             app_notify_url=settings.alipay_notify_url,

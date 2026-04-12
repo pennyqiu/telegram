@@ -12,5 +12,5 @@ openai>=1.35.0
 
 # 第三方支付
 wechatpayv3>=1.2.7
-alipay-sdk-python-new>=3.0.0
+# alipay-sdk-python-new 包名在 PyPI 不存在，已移除
 qrcode[pil]==7.4.2

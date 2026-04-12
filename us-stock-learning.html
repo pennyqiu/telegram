@@ -433,7 +433,12 @@ function triggerPodcastRefresh(event, containerId, sourceFilter) {
 // 修改这个地址为你的 FastAPI 服务器域名/IP
 const INFLUENCER_API = (()=>{
   const saved = localStorage.getItem('influencer_api_url');
-  return saved || 'http://localhost:8000/api/v1/influencer-updates';
+  if (saved) return saved;
+  // 自动使用当前域名，生产环境无需手动配置
+  const base = window.location.origin === 'null' || window.location.protocol === 'file:'
+    ? 'http://localhost:8000'
+    : window.location.origin;
+  return base + '/api/v1/influencer-updates';
 })();
 
 function loadInfluencerUpdates(sourceKey) {
