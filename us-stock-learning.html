@@ -536,6 +536,256 @@ function getWelcome(){return`<div class="welcome-screen">
 <div style="margin-top:22px;text-align:center"><button class="btn btn-primary" style="font-size:15px;padding:12px 32px" onclick="goTo(1)">开始学习 →</button></div>
 </div>`;}
 
+// ===== 退休方案生成器 Retirement Planner =====
+let _rpCurrentStep = 1;
+const _rpTotalSteps = 5;
+const _rpStepTitles = ['基本财务状况','收入来源','资产结构与家庭','风险偏好','其他情况'];
+
+function rpShowStep(n) {
+  for (let i = 1; i <= _rpTotalSteps; i++) {
+    const el = document.getElementById('rp-step-' + i);
+    if (el) el.style.display = i === n ? 'block' : 'none';
+  }
+  _rpCurrentStep = n;
+  const fill = document.getElementById('rp-progress-fill');
+  if (fill) fill.style.width = (n / _rpTotalSteps * 100) + '%';
+  const lbl = document.getElementById('rp-step-label');
+  if (lbl) lbl.textContent = '第 ' + n + ' 步，共 ' + _rpTotalSteps + ' 步';
+  const ttl = document.getElementById('rp-step-title-top');
+  if (ttl) ttl.textContent = _rpStepTitles[n - 1];
+  const prev = document.getElementById('rp-btn-prev');
+  const next = document.getElementById('rp-btn-next');
+  const gen  = document.getElementById('rp-btn-generate');
+  if (prev) prev.style.display = n === 1 ? 'none' : 'inline-block';
+  if (next) next.style.display = n === _rpTotalSteps ? 'none' : 'inline-block';
+  if (gen)  gen.style.display  = n === _rpTotalSteps ? 'inline-block' : 'none';
+  const wrap = document.getElementById('rp-wrap');
+  if (wrap) wrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function rpPrev() { if (_rpCurrentStep > 1) rpShowStep(_rpCurrentStep - 1); }
+function rpNext() { if (_rpCurrentStep < _rpTotalSteps) rpShowStep(_rpCurrentStep + 1); }
+
+function _rpV(id) { const el = document.getElementById(id); return el ? el.value : ''; }
+
+function rpGenerate() {
+  const retireAge    = parseInt(_rpV('rp-age')) || 60;
+  const assetsIdx    = parseInt(_rpV('rp-assets')) || 2;
+  const usRatioIdx   = parseInt(_rpV('rp-us-ratio')) || 2;
+  const expIdx       = parseInt(_rpV('rp-expense')) || 1;
+  const pensionType  = parseInt(_rpV('rp-pension')) || 1;
+  const otherIncome  = parseInt(_rpV('rp-other-income')) || 0;
+  const partTime     = parseInt(_rpV('rp-part-time')) || 0;
+  const portPref     = _rpV('rp-portfolio-pref') || 'balanced';
+  const familyType   = _rpV('rp-family') || 'couple';
+  const bigExpense   = parseInt(_rpV('rp-big-expense')) || 0;
+  const riskPref     = _rpV('rp-risk') || 'moderate';
+  const withdrawal   = _rpV('rp-withdrawal') || 'mixed';
+  const inheritance  = _rpV('rp-inheritance') || 'partial';
+  const health       = _rpV('rp-health') || 'good';
+  const taxStatus    = _rpV('rp-tax') || 'domestic';
+  const accountType  = _rpV('rp-account') || 'hk';
+
+  const assetMid   = [300, 750, 1500, 3500, 7000][Math.min(assetsIdx, 4)];
+  const usRatioVal = [10, 30, 50, 70, 85][Math.min(usRatioIdx, 4)];
+  const expMid     = [1.5, 3, 5, 8, 14][Math.min(expIdx, 4)];
+  const usAssets   = assetMid * usRatioVal / 100;
+  const usUSD      = usAssets / 7.3;
+  const annualExp  = expMid * 12;
+
+  const pensionAmt  = [0, 5, 11, 18][Math.min(pensionType, 3)];
+  const otherAmt    = [0, 12, 15, 22][Math.min(otherIncome, 3)];
+  const ptAmt       = [0, 10, 22][Math.min(partTime, 2)];
+
+  let riskScore = riskPref === 'conservative' ? 1 : riskPref === 'moderate' ? 2 : 3;
+  if (retireAge <= 45)  riskScore = Math.min(riskScore + 0.5, 3);
+  if (retireAge >= 60)  riskScore = Math.max(riskScore - 0.3, 1);
+  if (familyType === 'kids' || familyType === 'both')  riskScore = Math.max(riskScore - 0.5, 1);
+  if (familyType === 'parents') riskScore = Math.max(riskScore - 0.3, 1);
+  if (pensionType === 0 && otherIncome === 0 && partTime === 0) riskScore = Math.max(riskScore - 0.2, 1);
+  if (assetMid >= 3500) riskScore = Math.min(riskScore + 0.2, 3);
+  if (assetMid <= 500)  riskScore = Math.max(riskScore - 0.3, 1);
+  if (bigExpense >= 2)  riskScore = Math.max(riskScore - 0.3, 1);
+  if (health === 'chronic') riskScore = Math.max(riskScore - 0.2, 1);
+  if (withdrawal === 'stable')   riskScore = Math.max(riskScore - 0.2, 1);
+  if (withdrawal === 'flexible') riskScore = Math.min(riskScore + 0.1, 3);
+  if (inheritance === 'yes')     riskScore = Math.max(riskScore - 0.2, 1);
+  const riskLevel = riskScore >= 2.4 ? 3 : riskScore >= 1.6 ? 2 : 1;
+
+  const portfolioMap = {
+    1: {
+      balanced: [{n:'VOO',r:25,y:1.3},{n:'SCHD',r:22,y:3.5},{n:'VYM',r:8,y:2.8},{n:'BND',r:28,y:4.0},{n:'TIPS',r:10,y:2.5},{n:'GLD',r:7,y:0}],
+      growth:   [{n:'VOO',r:30,y:1.3},{n:'SCHD',r:18,y:3.5},{n:'VYM',r:7,y:2.8},{n:'QQQ',r:8,y:0.6},{n:'BND',r:25,y:4.0},{n:'GLD',r:9,y:0},{n:'现金/货基',r:3,y:2.0}],
+      dividend: [{n:'VOO',r:20,y:1.3},{n:'SCHD',r:30,y:3.5},{n:'VYM',r:10,y:2.8},{n:'DGRO',r:8,y:2.2},{n:'BND',r:22,y:4.0},{n:'TIPS',r:8,y:2.5},{n:'GLD',r:2,y:0}]
+    },
+    2: {
+      balanced: [{n:'VOO',r:32,y:1.3},{n:'SCHD',r:22,y:3.5},{n:'QQQ',r:12,y:0.6},{n:'美股个股',r:6,y:1.2},{n:'BND',r:18,y:4.0},{n:'GLD',r:8,y:0},{n:'现金/货基',r:2,y:2.0}],
+      growth:   [{n:'VOO',r:28,y:1.3},{n:'QQQ',r:22,y:0.6},{n:'SCHD',r:18,y:3.5},{n:'美股个股',r:12,y:1.2},{n:'BND',r:12,y:4.0},{n:'GLD',r:6,y:0},{n:'现金/货基',r:2,y:2.0}],
+      dividend: [{n:'VOO',r:25,y:1.3},{n:'SCHD',r:30,y:3.5},{n:'DGRO',r:10,y:2.2},{n:'QQQ',r:8,y:0.6},{n:'BND',r:16,y:4.0},{n:'GLD',r:9,y:0},{n:'现金/货基',r:2,y:2.0}]
+    },
+    3: {
+      balanced: [{n:'VOO',r:28,y:1.3},{n:'SCHD',r:18,y:3.5},{n:'QQQ',r:26,y:0.6},{n:'美股个股',r:22,y:1.2},{n:'GLD',r:4,y:0},{n:'现金/货基',r:2,y:2.0}],
+      growth:   [{n:'VOO',r:22,y:1.3},{n:'QQQ',r:32,y:0.6},{n:'SCHD',r:15,y:3.5},{n:'美股个股',r:27,y:1.2},{n:'GLD',r:3,y:0},{n:'现金/货基',r:1,y:2.0}],
+      dividend: [{n:'VOO',r:28,y:1.3},{n:'SCHD',r:28,y:3.5},{n:'DGRO',r:12,y:2.2},{n:'QQQ',r:18,y:0.6},{n:'美股个股',r:10,y:1.2},{n:'GLD',r:4,y:0}]
+    }
+  };
+  const portfolio = portfolioMap[riskLevel][portPref] || portfolioMap[riskLevel]['balanced'];
+
+  let weightedYield = 0;
+  portfolio.forEach(function(p){ weightedYield += p.r * p.y / 100; });
+  weightedYield /= 100;
+  const annualDivUSD = usUSD * weightedYield;
+  const annualDivRMB = annualDivUSD * 7.3;
+
+  const safeRate    = retireAge <= 45 ? 3.5 : retireAge <= 50 ? 3.8 : 4.0;
+  const rule4Income = assetMid * safeRate / 100;
+  const totalIncome = rule4Income + pensionAmt + otherAmt + ptAmt;
+  const horizon     = 90 - retireAge;
+  const bufferYears = riskLevel === 1 ? 2 : riskLevel === 2 ? 1.5 : 1;
+  const bufferAmt   = (annualExp * bufferYears).toFixed(0);
+
+  let viabilityColor, viabilityIcon, viabilityText;
+  if (totalIncome >= annualExp) {
+    viabilityColor = '#16a34a'; viabilityIcon = '✅';
+    viabilityText = '可行性高：综合收入（¥' + totalIncome.toFixed(0) + '万/年）可覆盖支出（¥' + annualExp.toFixed(0) + '万/年），年盈余约¥' + (totalIncome - annualExp).toFixed(0) + '万';
+  } else if (totalIncome >= annualExp * 0.8) {
+    viabilityColor = '#d97706'; viabilityIcon = '⚠️';
+    viabilityText = '基本可行：收入略偏低，建议压缩支出或推迟退休1-3年、增加资产规模后再退休';
+  } else {
+    viabilityColor = '#dc2626'; viabilityIcon = '❌';
+    viabilityText = '资产不足：当前规模难以支撑设定生活水平，建议继续积累或降低支出目标';
+  }
+
+  let withdrawalRec, withdrawalDetail;
+  if (riskLevel === 1) {
+    withdrawalRec = '4%法则（建议' + safeRate + '%安全率）';
+    withdrawalDetail = '每年提取¥' + rule4Income.toFixed(0) + '万，每年随通胀调整约2-3%。市场下跌年份减少提取10-15%并动用缓冲垫补足生活支出。';
+  } else if (riskLevel === 2) {
+    withdrawalRec = '混合策略（股息 + ' + safeRate + '% 动态提取）';
+    withdrawalDetail = '股息收入约¥' + annualDivRMB.toFixed(0) + '万/年（月均¥' + (annualDivRMB/12).toFixed(1) + '万），不足部分按' + safeRate + '%法则动态卖出补充。随SCHD股息逐年增长，卖出比例持续下降。';
+  } else {
+    withdrawalRec = '纯股息法（永不卖股原则）';
+    withdrawalDetail = '当前股息¥' + annualDivRMB.toFixed(0) + '万/年，初期可能不足，需配合小额动态卖出。SCHD股息8-11%/年增长，预计10-15年后股息完全覆盖支出，且越老越充裕。';
+  }
+
+  let horizonAlert = '';
+  if (retireAge <= 45) {
+    horizonAlert = '<div style="background:#fef3c7;border:1px solid #fde047;border-radius:8px;padding:12px;margin-top:10px;font-size:13px;line-height:1.8"><strong>⏰ 超长退休期（' + horizon + '年）：</strong>需要资产支撑' + horizon + '年，通胀是最大威胁。SCHD股息增长型+成长ETF是最佳对冲，不建议过多债券配置。初期适当动用4%法则，中期转向纯股息法。</div>';
+  }
+
+  let taxAlert = '';
+  if (accountType === 'ib-us') {
+    taxAlert = '<div style="background:#fff1f2;border:1px solid #fecdd3;border-radius:8px;padding:12px;margin-top:10px;font-size:13px"><strong style="color:#be123c">⚠️ 遗产税风险：</strong>IB美国实体账户，超出$6万部分最高课40%遗产税。强烈建议迁移至IB HK或富途香港账户。</div>';
+  }
+
+  let rows = '';
+  let totalDiv = 0;
+  portfolio.forEach(function(p) {
+    const amt    = (usUSD * p.r / 100).toFixed(1);
+    const amtRMB = (usAssets * p.r / 100).toFixed(0);
+    const div    = (usUSD * p.r / 100 * p.y / 100).toFixed(2);
+    totalDiv    += parseFloat(div);
+    rows += '<tr><td><strong>' + p.n + '</strong></td><td>' + p.r + '%</td><td>$' + amt + '万（¥' + amtRMB + '万）</td><td>' + (p.y > 0 ? p.y + '%' : '—') + '</td><td>' + (p.y > 0 ? '$' + div + '万' : '—') + '</td></tr>';
+  });
+
+  const riskLabels = {1:'保守型',2:'均衡型',3:'激进型'};
+  const riskColors = {1:'#1d4ed8',2:'#0891b2',3:'#dc2626'};
+  const riskLabel  = riskLabels[riskLevel];
+  const riskColor  = riskColors[riskLevel];
+
+  let incomeRows = '<tr><td>美股股息</td><td style="color:#16a34a;font-weight:600">¥' + annualDivRMB.toFixed(0) + '万</td><td>按当前组合股息率，随SCHD持续增长</td></tr>';
+  if (pensionAmt > 0) incomeRows += '<tr><td>社保/养老金</td><td>¥' + pensionAmt + '万</td><td>60岁起启动（提前退休期间不计入）</td></tr>';
+  if (otherAmt > 0)   incomeRows += '<tr><td>其他被动收入</td><td>¥' + otherAmt + '万</td><td>房租/股权分红等</td></tr>';
+  if (ptAmt > 0)      incomeRows += '<tr><td>兼职/顾问收入</td><td>¥' + ptAmt + '万</td><td>预计持续3-5年</td></tr>';
+  if (riskLevel >= 2) {
+    const sellAmt = Math.max(0, annualExp - annualDivRMB - pensionAmt - otherAmt - ptAmt).toFixed(0);
+    if (parseFloat(sellAmt) > 0) incomeRows += '<tr><td>动态卖出补充</td><td>¥' + sellAmt + '万</td><td>补足股息缺口，逐年减少</td></tr>';
+  }
+  incomeRows += '<tr style="background:#dcfce7;font-weight:700"><td>全年收入合计</td><td style="color:#16a34a">¥' + totalIncome.toFixed(0) + '万</td><td>VS 年支出需求¥' + annualExp.toFixed(0) + '万</td></tr>';
+
+  const resultsEl = document.getElementById('rp-results');
+  if (!resultsEl) return;
+
+  resultsEl.innerHTML =
+    '<div style="background:linear-gradient(135deg,#1e293b,#0f172a);color:#f8fafc;border-radius:14px;padding:24px 28px;margin-bottom:20px">' +
+      '<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">' +
+        '<span style="background:' + riskColor + ';color:#fff;font-size:12px;font-weight:700;padding:3px 10px;border-radius:20px">' + riskLabel + '</span>' +
+        '<span style="font-size:13px;color:#94a3b8">' + retireAge + '岁退休 · 退休期约' + horizon + '年</span>' +
+      '</div>' +
+      '<h3 style="font-size:20px;font-weight:800;color:#f0fdf4;margin:8px 0 4px">你的专属退休方案</h3>' +
+      '<p style="font-size:13px;color:#64748b;margin:0">基于填写信息自动计算，仅供参考，具体操作请结合专业顾问建议</p>' +
+    '</div>' +
+
+    '<div style="background:#f0fdf4;border:1px solid #86efac;border-radius:12px;padding:16px;margin-bottom:16px">' +
+      '<div style="font-weight:700;color:#14532d;font-size:14px;margin-bottom:8px">📊 可行性评估</div>' +
+      '<div style="color:' + viabilityColor + ';font-size:14px;font-weight:600">' + viabilityIcon + ' ' + viabilityText + '</div>' +
+      horizonAlert + taxAlert +
+    '</div>' +
+
+    '<div style="margin-bottom:16px">' +
+      '<div style="font-weight:700;color:#1e293b;font-size:14px;margin-bottom:10px">💼 推荐美股组合（基于美股总资产 ¥' + usAssets.toFixed(0) + '万 ≈ $' + usUSD.toFixed(0) + '万）</div>' +
+      '<div class="table-wrap"><table>' +
+        '<thead><tr><th>持仓</th><th>配置比例</th><th>对应金额</th><th>股息率</th><th>年股息</th></tr></thead>' +
+        '<tbody>' + rows + '</tbody>' +
+        '<tfoot><tr style="background:#dcfce7;font-weight:700"><td colspan="4">合计年股息</td><td>$' + totalDiv.toFixed(2) + '万 ≈ <strong style="color:#16a34a">¥' + (totalDiv * 7.3).toFixed(0) + '万/年</strong></td></tr></tfoot>' +
+      '</table></div>' +
+    '</div>' +
+
+    '<div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:12px;padding:16px;margin-bottom:16px">' +
+      '<div style="font-weight:700;color:#1e40af;font-size:14px;margin-bottom:8px">📋 推荐提取策略</div>' +
+      '<div style="font-size:14px;font-weight:600;color:#1d4ed8;margin-bottom:6px">' + withdrawalRec + '</div>' +
+      '<div style="font-size:13px;color:#374151;line-height:1.8">' + withdrawalDetail + '</div>' +
+    '</div>' +
+
+    '<div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:12px;padding:16px;margin-bottom:16px">' +
+      '<div style="font-weight:700;color:#9a3412;font-size:14px;margin-bottom:8px">🛡️ 现金缓冲垫建议</div>' +
+      '<div style="font-size:14px;color:#374151">建议保留 <strong style="color:#c2410c">' + bufferYears + ' 年生活费（约 ¥' + bufferAmt + ' 万）</strong>作为现金缓冲垫（货币基金/短期国债），专门应对：股息削减年份补足生活支出、重大医疗支出、汇率不利时期等待换汇时机。</div>' +
+    '</div>' +
+
+    '<div style="margin-bottom:16px">' +
+      '<div style="font-weight:700;color:#1e293b;font-size:14px;margin-bottom:10px">📅 退休首年收入来源汇总</div>' +
+      '<div class="table-wrap"><table>' +
+        '<thead><tr><th>来源</th><th>年收入</th><th>说明</th></tr></thead>' +
+        '<tbody>' + incomeRows + '</tbody>' +
+      '</table></div>' +
+    '</div>' +
+
+    '<div style="background:#1e293b;color:#f8fafc;border-radius:10px;padding:14px;font-size:12px;line-height:2;margin-bottom:16px">' +
+      '<strong style="color:#4ade80">⚠️ 重要说明：</strong>以上方案基于输入数据自动估算，仅作参考。实际投资请综合考虑个人负债、税务结构、市场变化等，并咨询持牌专业顾问。建议每2-3年重新评估并调整组合。' +
+    '</div>' +
+
+    '<div style="text-align:center">' +
+      '<button onclick="rpReset()" style="background:#e2e8f0;color:#374151;border:none;border-radius:8px;padding:10px 24px;font-size:14px;font-weight:600;cursor:pointer">← 重新填写</button>' +
+    '</div>';
+
+  resultsEl.style.display = 'block';
+  const fa = document.getElementById('rp-form-area');
+  if (fa) fa.style.display = 'none';
+  resultsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function rpReset() {
+  _rpCurrentStep = 1;
+  const fa = document.getElementById('rp-form-area');
+  const rs = document.getElementById('rp-results');
+  if (fa) fa.style.display = 'block';
+  if (rs) rs.style.display = 'none';
+  rpShowStep(1);
+}
+
+function rpSwitchCase(idx) {
+  for (let i = 0; i < 4; i++) {
+    const panel = document.getElementById('rp-case-' + i);
+    const tab   = document.getElementById('rp-tab-' + i);
+    if (panel) panel.style.display = i === idx ? 'block' : 'none';
+    if (tab) {
+      tab.style.background = i === idx ? '#1e293b' : '#f1f5f9';
+      tab.style.color      = i === idx ? '#fff' : '#374151';
+      tab.style.fontWeight = i === idx ? '700' : '600';
+    }
+  }
+}
+
 // ===== ALL LESSON CONTENT =====
 function getContent(id){
 const C={
@@ -4363,6 +4613,620 @@ SCHD股息自动覆盖（目标）：
   <li><strong style="color:#16a34a">规划（5年内）：</strong>若美股仓位超过$100万，考虑咨询香港信托方案，提前做遗产规划</li>
   <li><strong style="color:#475569">持续关注：</strong>每年1月在外管局官网确认当年购汇额度政策是否有变化</li>
 </ol>
+</div>
+
+<h2>🎯 个性化退休方案生成器</h2>
+<p style="color:#475569;margin-bottom:20px;font-size:14px">根据你的实际情况，智能生成专属的退休股票组合建议与提取策略。约3分钟填写，所有计算均在本地完成，不上传任何数据。</p>
+
+<div id="rp-wrap" style="border:2px solid #e2e8f0;border-radius:16px;overflow:hidden;margin:0 0 28px 0;background:#fff;box-shadow:0 4px 16px rgba(0,0,0,0.06)">
+  <div id="rp-form-area">
+    <div style="background:linear-gradient(135deg,#1e40af,#1d4ed8);padding:20px 24px;color:#fff">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <span id="rp-step-label" style="font-size:13px;font-weight:600;opacity:0.85">第 1 步，共 5 步</span>
+        <span id="rp-step-title-top" style="font-size:12px;background:rgba(255,255,255,0.2);padding:3px 10px;border-radius:12px;font-weight:700">基本财务状况</span>
+      </div>
+      <div style="background:rgba(255,255,255,0.25);border-radius:4px;height:5px">
+        <div id="rp-progress-fill" style="background:#60a5fa;height:100%;width:20%;border-radius:4px;transition:width 0.4s ease"></div>
+      </div>
+    </div>
+
+    <div style="padding:24px">
+
+      <!-- Step 1 -->
+      <div id="rp-step-1">
+        <p style="font-size:13px;color:#64748b;margin-bottom:16px">填写你预期的退休时间、资产规模和生活支出，这是方案计算的基础数据。</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+          <div>
+            <label style="font-size:13px;font-weight:600;color:#374151;display:block;margin-bottom:6px">计划退休年龄</label>
+            <select id="rp-age" style="width:100%;padding:9px 12px;border:1.5px solid #d1d5db;border-radius:8px;font-size:13px;color:#1e293b;background:#fff">
+              <option value="40">40岁（超早退休）</option>
+              <option value="45">45岁（提前退休）</option>
+              <option value="50">50岁（较早退休）</option>
+              <option value="55">55岁（早退休）</option>
+              <option value="60" selected>60岁（标准退休）</option>
+              <option value="65">65岁（延迟退休）</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:13px;font-weight:600;color:#374151;display:block;margin-bottom:6px">退休时预计总资产（人民币）</label>
+            <select id="rp-assets" style="width:100%;padding:9px 12px;border:1.5px solid #d1d5db;border-radius:8px;font-size:13px;color:#1e293b;background:#fff">
+              <option value="0">500万以下</option>
+              <option value="1">500万 — 1000万</option>
+              <option value="2" selected>1000万 — 2000万</option>
+              <option value="3">2000万 — 5000万</option>
+              <option value="4">5000万以上</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:13px;font-weight:600;color:#374151;display:block;margin-bottom:6px">美股资产占总资产比例</label>
+            <select id="rp-us-ratio" style="width:100%;padding:9px 12px;border:1.5px solid #d1d5db;border-radius:8px;font-size:13px;color:#1e293b;background:#fff">
+              <option value="0">20%以下</option>
+              <option value="1">20% — 40%</option>
+              <option value="2" selected>40% — 60%</option>
+              <option value="3">60% — 80%</option>
+              <option value="4">80%以上</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:13px;font-weight:600;color:#374151;display:block;margin-bottom:6px">退休后月生活支出需求</label>
+            <select id="rp-expense" style="width:100%;padding:9px 12px;border:1.5px solid #d1d5db;border-radius:8px;font-size:13px;color:#1e293b;background:#fff">
+              <option value="0">2万/月以下（轻松生活）</option>
+              <option value="1" selected>2 — 4万/月（舒适生活）</option>
+              <option value="2">4 — 6万/月（品质生活）</option>
+              <option value="3">6 — 10万/月（富裕生活）</option>
+              <option value="4">10万/月以上（顶奢）</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div id="rp-step-2" style="display:none">
+        <p style="font-size:13px;color:#64748b;margin-bottom:16px">退休收入来源越多元，对股票提取的压力越小，资产也越安全。</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+          <div>
+            <label style="font-size:13px;font-weight:600;color:#374151;display:block;margin-bottom:6px">社保 / 企业年金情况</label>
+            <select id="rp-pension" style="width:100%;padding:9px 12px;border:1.5px solid #d1d5db;border-radius:8px;font-size:13px;color:#1e293b;background:#fff">
+              <option value="0">无社保（灵活就业/创业）</option>
+              <option value="1" selected>有社保，年金约3-8万/年</option>
+              <option value="2">较高社保，年金约8-15万/年</option>
+              <option value="3">高额养老金（机关/央企），15万+/年</option>
+            </select>
+            <div style="font-size:11px;color:#94a3b8;margin-top:4px">60岁起可领的国内社保+企业年金</div>
+          </div>
+          <div>
+            <label style="font-size:13px;font-weight:600;color:#374151;display:block;margin-bottom:6px">其他稳定被动收入</label>
+            <select id="rp-other-income" style="width:100%;padding:9px 12px;border:1.5px solid #d1d5db;border-radius:8px;font-size:13px;color:#1e293b;background:#fff">
+              <option value="0" selected>无其他被动收入</option>
+              <option value="1">有出租房，年租金约10-15万</option>
+              <option value="2">有股权分红，约10-20万/年</option>
+              <option value="3">多类被动收入，年合计20万+</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:13px;font-weight:600;color:#374151;display:block;margin-bottom:6px">退休后兼职/顾问收入</label>
+            <select id="rp-part-time" style="width:100%;padding:9px 12px;border:1.5px solid #d1d5db;border-radius:8px;font-size:13px;color:#1e293b;background:#fff">
+              <option value="0" selected>完全退休，无工作收入</option>
+              <option value="1">有兼职/顾问，约5-15万/年（3-5年）</option>
+              <option value="2">半退休状态，约15-30万/年（长期）</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:13px;font-weight:600;color:#374151;display:block;margin-bottom:6px">美股组合偏好</label>
+            <select id="rp-portfolio-pref" style="width:100%;padding:9px 12px;border:1.5px solid #d1d5db;border-radius:8px;font-size:13px;color:#1e293b;background:#fff">
+              <option value="balanced" selected>均衡型（VOO为主，兼顾增长与股息）</option>
+              <option value="growth">成长型（QQQ+个股，追求长期增值）</option>
+              <option value="dividend">股息型（SCHD为主，追求稳定现金流）</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div id="rp-step-3" style="display:none">
+        <p style="font-size:13px;color:#64748b;margin-bottom:16px">资产结构和家庭义务直接影响你能承受的风险和所需的现金流稳定性。</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+          <div>
+            <label style="font-size:13px;font-weight:600;color:#374151;display:block;margin-bottom:6px">是否持有港股</label>
+            <select id="rp-hk" style="width:100%;padding:9px 12px;border:1.5px solid #d1d5db;border-radius:8px;font-size:13px;color:#1e293b;background:#fff">
+              <option value="0" selected>无港股</option>
+              <option value="1">有港股（总资产5-15%）</option>
+              <option value="2">大量港股（总资产15%以上）</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:13px;font-weight:600;color:#374151;display:block;margin-bottom:6px">国内资产情况</label>
+            <select id="rp-domestic" style="width:100%;padding:9px 12px;border:1.5px solid #d1d5db;border-radius:8px;font-size:13px;color:#1e293b;background:#fff">
+              <option value="0">几乎无国内资产</option>
+              <option value="1" selected>仅有自住房（无贷款）</option>
+              <option value="2">有出租房产（稳定租金）</option>
+              <option value="3">有较多存款/理财（100万+）</option>
+              <option value="4">房产+存款均有（完整国内配置）</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:13px;font-weight:600;color:#374151;display:block;margin-bottom:6px">家庭结构</label>
+            <select id="rp-family" style="width:100%;padding:9px 12px;border:1.5px solid #d1d5db;border-radius:8px;font-size:13px;color:#1e293b;background:#fff">
+              <option value="single">单身，无赡养义务</option>
+              <option value="couple" selected>夫妻二人，子女已独立</option>
+              <option value="kids">有未成年子女需抚养/教育</option>
+              <option value="parents">需赡养年迈父母</option>
+              <option value="both">有子女 + 需赡养父母（双重义务）</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:13px;font-weight:600;color:#374151;display:block;margin-bottom:6px">居住城市</label>
+            <select id="rp-city" style="width:100%;padding:9px 12px;border:1.5px solid #d1d5db;border-radius:8px;font-size:13px;color:#1e293b;background:#fff">
+              <option value="1" selected>一线城市（北上广深）</option>
+              <option value="2">二线城市（杭州/成都等）</option>
+              <option value="3">三四线城市或乡村</option>
+              <option value="4">考虑移居海外（东南亚/欧洲等）</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div id="rp-step-4" style="display:none">
+        <p style="font-size:13px;color:#64748b;margin-bottom:16px">风险偏好决定股票/债券比例和提取策略的核心方向。</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+          <div>
+            <label style="font-size:13px;font-weight:600;color:#374151;display:block;margin-bottom:6px">大额支出计划</label>
+            <select id="rp-big-expense" style="width:100%;padding:9px 12px;border:1.5px solid #d1d5db;border-radius:8px;font-size:13px;color:#1e293b;background:#fff">
+              <option value="0" selected>无特殊大额支出计划</option>
+              <option value="1">子女出国留学（预计100万+支出）</option>
+              <option value="2">计划移居海外（购房/移民费用）</option>
+              <option value="3">留学 + 移居双重计划</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:13px;font-weight:600;color:#374151;display:block;margin-bottom:6px">对市场波动的接受度</label>
+            <select id="rp-risk" style="width:100%;padding:9px 12px;border:1.5px solid #d1d5db;border-radius:8px;font-size:13px;color:#1e293b;background:#fff">
+              <option value="conservative">保守：减少波动，睡得着觉最重要</option>
+              <option value="moderate" selected>均衡：接受适度波动，追求长期增长</option>
+              <option value="aggressive">激进：接受大幅波动，追求最大回报</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:13px;font-weight:600;color:#374151;display:block;margin-bottom:6px">偏好的提取方式</label>
+            <select id="rp-withdrawal" style="width:100%;padding:9px 12px;border:1.5px solid #d1d5db;border-radius:8px;font-size:13px;color:#1e293b;background:#fff">
+              <option value="stable">稳定现金流型（靠股息，永不卖股）</option>
+              <option value="flexible">按需提取型（4%法则，灵活变现）</option>
+              <option value="mixed" selected>混合型（股息为主，不足时补充卖出）</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:13px;font-weight:600;color:#374151;display:block;margin-bottom:6px">资产传承意愿</label>
+            <select id="rp-inheritance" style="width:100%;padding:9px 12px;border:1.5px solid #d1d5db;border-radius:8px;font-size:13px;color:#1e293b;background:#fff">
+              <option value="yes">希望留大额财富给子女/后代</option>
+              <option value="partial" selected>部分传承（留基础财富）</option>
+              <option value="no">花光为止，不强调传承</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 5 -->
+      <div id="rp-step-5" style="display:none">
+        <p style="font-size:13px;color:#64748b;margin-bottom:16px">最后几项影响风险评估与合规建议，完成后即可生成方案。</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+          <div>
+            <label style="font-size:13px;font-weight:600;color:#374151;display:block;margin-bottom:6px">健康状况</label>
+            <select id="rp-health" style="width:100%;padding:9px 12px;border:1.5px solid #d1d5db;border-radius:8px;font-size:13px;color:#1e293b;background:#fff">
+              <option value="good" selected>健康，按正常寿命规划（90岁）</option>
+              <option value="chronic">有慢性病，医疗支出较高</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:13px;font-weight:600;color:#374151;display:block;margin-bottom:6px">税务居民身份</label>
+            <select id="rp-tax" style="width:100%;padding:9px 12px;border:1.5px solid #d1d5db;border-radius:8px;font-size:13px;color:#1e293b;background:#fff">
+              <option value="domestic" selected>中国税务居民（境外所得需申报）</option>
+              <option value="overseas">已有香港/海外税务居民身份</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:13px;font-weight:600;color:#374151;display:block;margin-bottom:6px">主要生活货币</label>
+            <select id="rp-currency" style="width:100%;padding:9px 12px;border:1.5px solid #d1d5db;border-radius:8px;font-size:13px;color:#1e293b;background:#fff">
+              <option value="rmb" selected>人民币为主（国内生活）</option>
+              <option value="mixed">人民币+外币混合（跨境生活）</option>
+              <option value="abroad">主要使用外币（海外生活）</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:13px;font-weight:600;color:#374151;display:block;margin-bottom:6px">美股账户结构</label>
+            <select id="rp-account" style="width:100%;padding:9px 12px;border:1.5px solid #d1d5db;border-radius:8px;font-size:13px;color:#1e293b;background:#fff">
+              <option value="ib-us">IB美国实体账户（注意遗产税风险）</option>
+              <option value="hk" selected>香港账户（富途/IB HK，推荐）</option>
+              <option value="mixed">美国+香港混合账户</option>
+              <option value="none">尚未开户，规划中</option>
+            </select>
+          </div>
+        </div>
+        <div style="background:#f0fdf4;border:1px solid #86efac;border-radius:10px;padding:14px;margin-top:16px;font-size:13px;color:#166534;line-height:1.8">
+          <strong>已填写完毕</strong> — 点击「生成专属方案」，系统将综合以上 20 项指标，智能计算最优股票组合配置、提取策略与现金缓冲方案。
+        </div>
+      </div>
+
+      <!-- Navigation -->
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:24px;padding-top:16px;border-top:1px solid #f1f5f9">
+        <button id="rp-btn-prev" onclick="rpPrev()" style="display:none;background:#f1f5f9;color:#374151;border:none;border-radius:8px;padding:10px 20px;font-size:14px;font-weight:600;cursor:pointer">← 上一步</button>
+        <div></div>
+        <div style="display:flex;gap:10px">
+          <button id="rp-btn-next" onclick="rpNext()" style="background:#2563eb;color:#fff;border:none;border-radius:8px;padding:10px 24px;font-size:14px;font-weight:600;cursor:pointer">下一步 →</button>
+          <button id="rp-btn-generate" onclick="rpGenerate()" style="display:none;background:linear-gradient(135deg,#059669,#10b981);color:#fff;border:none;border-radius:8px;padding:10px 24px;font-size:14px;font-weight:700;cursor:pointer">生成专属方案 🎯</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="rp-results" style="display:none;padding:24px"></div>
+</div>
+
+<h2>📋 四类典型退休案例参考</h2>
+<p style="color:#64748b;font-size:14px;margin-bottom:0">四种常见退休情景的完整推演，可与上方生成器结果对照参考。</p>
+
+<div style="display:flex;gap:0;margin-top:16px;border-radius:12px 12px 0 0;overflow:hidden;border:1.5px solid #e2e8f0;border-bottom:none">
+  <button id="rp-tab-0" onclick="rpSwitchCase(0)" style="flex:1;padding:13px 8px;background:#1e293b;color:#fff;border:none;font-size:13px;font-weight:700;cursor:pointer;transition:all 0.2s">保守型 · 40岁</button>
+  <button id="rp-tab-1" onclick="rpSwitchCase(1)" style="flex:1;padding:13px 8px;background:#f1f5f9;color:#374151;border:none;border-left:1px solid #e2e8f0;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s">保守型 · 45岁</button>
+  <button id="rp-tab-2" onclick="rpSwitchCase(2)" style="flex:1;padding:13px 8px;background:#f1f5f9;color:#374151;border:none;border-left:1px solid #e2e8f0;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s">激进型 · 40岁</button>
+  <button id="rp-tab-3" onclick="rpSwitchCase(3)" style="flex:1;padding:13px 8px;background:#f1f5f9;color:#374151;border:none;border-left:1px solid #e2e8f0;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s">激进型 · 45岁</button>
+</div>
+
+<div style="border:1.5px solid #e2e8f0;border-radius:0 0 14px 14px;overflow:hidden;margin-bottom:28px">
+
+  <!-- ====== Case 0: 保守型·40岁 ====== -->
+  <div id="rp-case-0" style="padding:24px">
+    <div style="background:linear-gradient(135deg,#1e40af,#1d4ed8);border-radius:12px;padding:20px 24px;color:#fff;margin-bottom:20px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+        <span style="background:rgba(255,255,255,0.25);font-size:12px;font-weight:700;padding:3px 10px;border-radius:20px">保守型</span>
+        <span style="font-size:13px;opacity:0.8">退休期 50年 · 二线城市 · 夫妻两人</span>
+      </div>
+      <div style="font-size:20px;font-weight:800;margin-bottom:8px">40岁提前退休方案</div>
+      <div style="display:flex;gap:20px;font-size:13px;opacity:0.9">
+        <span>总资产 ¥1200万</span>
+        <span>美股55% ≈ $90万</span>
+        <span>月支出 ¥2.5万</span>
+        <span>有社保（60岁起）</span>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px">
+      <div style="background:#f8fafc;border-radius:10px;padding:16px">
+        <div style="font-size:12px;font-weight:700;color:#64748b;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.05em">核心挑战</div>
+        <ul style="font-size:13px;color:#374151;line-height:2;margin:0;padding-left:16px">
+          <li>50年超长退休期，通胀是头号威胁</li>
+          <li>40岁社保未启动，需自给自足20年</li>
+          <li>债券配置需适度，不能过于保守</li>
+          <li>需兼顾增长性防止资产被通胀蚕食</li>
+        </ul>
+      </div>
+      <div style="background:#f0fdf4;border-radius:10px;padding:16px">
+        <div style="font-size:12px;font-weight:700;color:#64748b;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.05em">核心优势</div>
+        <ul style="font-size:13px;color:#374151;line-height:2;margin:0;padding-left:16px">
+          <li>资产规模充裕，4%法则完全可行</li>
+          <li>60岁起社保启动，现金流大幅改善</li>
+          <li>有自住房，无房贷压力</li>
+          <li>夫妻两人，消费效率高</li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="margin-bottom:20px">
+      <div style="font-weight:700;color:#1e293b;font-size:14px;margin-bottom:10px">💼 推荐美股组合（美股总资产 ¥660万 ≈ $90万）</div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>持仓</th><th>比例</th><th>金额($)</th><th>股息率</th><th>年股息($)</th><th>配置逻辑</th></tr></thead>
+        <tbody>
+          <tr><td><strong>VOO</strong>（S&P500）</td><td>25%</td><td>$22.5万</td><td>1.3%</td><td>$0.29万</td><td>核心成长，跑赢通胀</td></tr>
+          <tr><td><strong>SCHD</strong>（高股息ETF）</td><td>22%</td><td>$19.8万</td><td>3.5%</td><td>$0.69万</td><td>股息增长核心仓</td></tr>
+          <tr><td><strong>VYM</strong>（Vanguard高股息）</td><td>8%</td><td>$7.2万</td><td>2.8%</td><td>$0.20万</td><td>分散SCHD集中风险</td></tr>
+          <tr><td><strong>BND</strong>（总债券市场）</td><td>28%</td><td>$25.2万</td><td>4.0%</td><td>$1.01万</td><td>保守核心，降低波动</td></tr>
+          <tr><td><strong>TIPS</strong>（通胀保护债券）</td><td>10%</td><td>$9.0万</td><td>2.5%</td><td>$0.23万</td><td>直接对冲通胀风险</td></tr>
+          <tr><td><strong>GLD</strong>（黄金ETF）</td><td>7%</td><td>$6.3万</td><td>—</td><td>—</td><td>危机对冲，稳定器</td></tr>
+          <tr style="background:#dcfce7;font-weight:700"><td colspan="4">合计</td><td><strong>$2.42万/年 ≈ ¥17.7万</strong></td><td>月均约¥1.5万</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div style="margin-bottom:20px">
+      <div style="font-weight:700;color:#1e293b;font-size:14px;margin-bottom:10px">📈 20年股息与收入增长推演</div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>年份</th><th>年龄</th><th>美股年股息（¥）</th><th>社保收入</th><th>4%法则提取</th><th>合计年收入</th><th>年支出需求</th></tr></thead>
+        <tbody>
+          <tr><td>退休首年</td><td>40岁</td><td>¥17.7万</td><td>—</td><td>¥12.3万</td><td><strong>¥30万</strong></td><td>¥30万 ✅</td></tr>
+          <tr><td>第5年</td><td>45岁</td><td>¥21万（SCHD+8%/年）</td><td>—</td><td>¥9万</td><td><strong>¥30万</strong></td><td>¥32万 ✅</td></tr>
+          <tr><td>第10年</td><td>50岁</td><td>¥26万</td><td>—</td><td>¥4万</td><td><strong>¥30万</strong></td><td>¥34万 ✅</td></tr>
+          <tr style="background:#dbeafe"><td>第20年</td><td>60岁</td><td>¥38万</td><td>¥5万/年</td><td>—</td><td><strong>¥43万</strong></td><td>¥40万 ✅✅</td></tr>
+          <tr style="background:#dcfce7"><td>第30年</td><td>70岁</td><td>¥55万</td><td>¥5万/年</td><td>—</td><td><strong>¥60万</strong></td><td>¥45万（大幅盈余）</td></tr>
+        </tbody>
+      </table></div>
+      <div style="font-size:12px;color:#64748b;margin-top:6px">注：SCHD股息按8%/年增长估算（历史为11%），总资产随市场增值，4%法则提取逐年减少直至完全靠股息生活</div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+      <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:10px;padding:14px">
+        <div style="font-weight:700;color:#9a3412;font-size:13px;margin-bottom:8px">🛡️ 缓冲垫建议</div>
+        <div style="font-size:13px;color:#374151;line-height:1.8">保留 <strong>2年生活费 ≈ ¥60万</strong>于货币基金/短债。退休前3年（37-40岁）每年存¥20万专项备用，不投入股市。</div>
+      </div>
+      <div style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:10px;padding:14px">
+        <div style="font-weight:700;color:#0c4a6e;font-size:13px;margin-bottom:8px">📋 提取策略</div>
+        <div style="font-size:13px;color:#374151;line-height:1.8"><strong>3.5%法则</strong>（安全率）+ 股息法结合：年提取¥42万（3.5%×¥1200万），股息¥17.7万自然流入，差额用动态卖出补足。</div>
+      </div>
+    </div>
+
+    <div style="background:#fef3c7;border:1px solid #fde047;border-radius:10px;padding:14px;font-size:13px;line-height:1.8">
+      <strong>⚠️ 40岁退休特殊提醒：</strong>超长退休期（50年）意味着通胀是最大威胁——30年后物价可能是现在的2.4倍。债券配置（38%）略高于激进型，但不宜再高，必须保留足够股票（VOO+SCHD+VYM共55%）的增长性来对抗通胀。每5年重新评估一次资产配置。
+    </div>
+  </div>
+
+  <!-- ====== Case 1: 保守型·45岁 ====== -->
+  <div id="rp-case-1" style="display:none;padding:24px">
+    <div style="background:linear-gradient(135deg,#0f766e,#0d9488);border-radius:12px;padding:20px 24px;color:#fff;margin-bottom:20px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+        <span style="background:rgba(255,255,255,0.25);font-size:12px;font-weight:700;padding:3px 10px;border-radius:20px">保守型</span>
+        <span style="font-size:13px;opacity:0.8">退休期 45年 · 一线城市 · 夫妻两人</span>
+      </div>
+      <div style="font-size:20px;font-weight:800;margin-bottom:8px">45岁提前退休方案</div>
+      <div style="display:flex;gap:20px;font-size:13px;opacity:0.9">
+        <span>总资产 ¥1800万</span>
+        <span>美股60% ≈ $148万</span>
+        <span>月支出 ¥3.5万</span>
+        <span>夫妻社保（60岁起合计¥9万/年）</span>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px">
+      <div style="background:#f8fafc;border-radius:10px;padding:16px">
+        <div style="font-size:12px;font-weight:700;color:#64748b;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.05em">核心挑战</div>
+        <ul style="font-size:13px;color:#374151;line-height:2;margin:0;padding-left:16px">
+          <li>一线城市生活成本高，月支出¥3.5万</li>
+          <li>15年社保空窗期（45-60岁）</li>
+          <li>45年退休期，通胀累计影响显著</li>
+          <li>汇率波动影响股息折算</li>
+        </ul>
+      </div>
+      <div style="background:#f0fdf4;border-radius:10px;padding:16px">
+        <div style="font-size:12px;font-weight:700;color:#64748b;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.05em">核心优势</div>
+        <ul style="font-size:13px;color:#374151;line-height:2;margin:0;padding-left:16px">
+          <li>资产充裕，3.5%法则年收入¥63万远超需求</li>
+          <li>夫妻双社保60岁起¥9万/年</li>
+          <li>美股¥1080万产生强劲股息流</li>
+          <li>45年复利期，SCHD股息增长极其可观</li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="margin-bottom:20px">
+      <div style="font-weight:700;color:#1e293b;font-size:14px;margin-bottom:10px">💼 推荐美股组合（美股总资产 ¥1080万 ≈ $148万）</div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>持仓</th><th>比例</th><th>金额($)</th><th>股息率</th><th>年股息($)</th><th>配置逻辑</th></tr></thead>
+        <tbody>
+          <tr><td><strong>VOO</strong>（S&P500）</td><td>25%</td><td>$37万</td><td>1.3%</td><td>$0.48万</td><td>核心成长，长期跑赢通胀</td></tr>
+          <tr><td><strong>SCHD</strong>（高股息ETF）</td><td>22%</td><td>$32.6万</td><td>3.5%</td><td>$1.14万</td><td>股息增长核心仓位</td></tr>
+          <tr><td><strong>VYM</strong>（Vanguard高股息）</td><td>8%</td><td>$11.8万</td><td>2.8%</td><td>$0.33万</td><td>分散股息来源</td></tr>
+          <tr><td><strong>BND</strong>（总债券市场）</td><td>28%</td><td>$41.4万</td><td>4.0%</td><td>$1.66万</td><td>稳定收益，降低波动</td></tr>
+          <tr><td><strong>TIPS</strong>（通胀保护债券）</td><td>10%</td><td>$14.8万</td><td>2.5%</td><td>$0.37万</td><td>对冲通胀，实际收益保障</td></tr>
+          <tr><td><strong>GLD</strong>（黄金ETF）</td><td>7%</td><td>$10.4万</td><td>—</td><td>—</td><td>危机对冲，稳定器</td></tr>
+          <tr style="background:#dcfce7;font-weight:700"><td colspan="4">合计</td><td><strong>$3.98万/年 ≈ ¥29.1万</strong></td><td>月均约¥2.4万</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div style="margin-bottom:20px">
+      <div style="font-weight:700;color:#1e293b;font-size:14px;margin-bottom:10px">📈 20年收入增长推演</div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>年份</th><th>年龄</th><th>美股年股息（¥）</th><th>社保</th><th>补充提取</th><th>合计年收入</th><th>年支出需求</th></tr></thead>
+        <tbody>
+          <tr><td>退休首年</td><td>45岁</td><td>¥29万</td><td>—</td><td>¥13万</td><td><strong>¥42万</strong></td><td>¥42万 ✅</td></tr>
+          <tr><td>第5年</td><td>50岁</td><td>¥34万</td><td>—</td><td>¥8万</td><td><strong>¥42万</strong></td><td>¥45万 ✅</td></tr>
+          <tr><td>第10年</td><td>55岁</td><td>¥41万</td><td>—</td><td>—</td><td><strong>¥41万</strong></td><td>¥48万（接近覆盖）</td></tr>
+          <tr style="background:#dbeafe"><td>第15年</td><td>60岁</td><td>¥50万</td><td>¥9万/年</td><td>—</td><td><strong>¥59万</strong></td><td>¥50万（盈余¥9万）✅✅</td></tr>
+          <tr style="background:#dcfce7"><td>第25年</td><td>70岁</td><td>¥75万</td><td>¥9万/年</td><td>—</td><td><strong>¥84万</strong></td><td>¥55万（大幅盈余）</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+      <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:10px;padding:14px">
+        <div style="font-weight:700;color:#9a3412;font-size:13px;margin-bottom:8px">🛡️ 缓冲垫建议</div>
+        <div style="font-size:13px;color:#374151;line-height:1.8">保留 <strong>2年生活费 ≈ ¥84万</strong>于货币基金。退休前3年（42-45岁）专项储备，不投股市。港元现金建议保留HK$50万对冲汇率。</div>
+      </div>
+      <div style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:10px;padding:14px">
+        <div style="font-weight:700;color:#0c4a6e;font-size:13px;margin-bottom:8px">📋 提取策略</div>
+        <div style="font-size:13px;color:#374151;line-height:1.8"><strong>3.5%法则为主</strong>：年提取¥63万（3.5%），充裕盈余¥21万/年可再投入或作为特殊支出储备。60岁后转向纯股息法。</div>
+      </div>
+    </div>
+
+    <div style="background:#ecfdf5;border:1px solid #6ee7b7;border-radius:10px;padding:14px;font-size:13px;line-height:1.8">
+      <strong style="color:#065f46">✅ 45岁保守型核心优势：</strong>资产¥1800万是最强保障，3.5%法则年收入¥63万远超¥42万需求，退休首年就有¥21万盈余。只要不遭遇连续10年熊市（历史极罕见），这个方案极为稳健。关键是60岁社保启动后，生活水平还会进一步提升。
+    </div>
+  </div>
+
+  <!-- ====== Case 2: 激进型·40岁 ====== -->
+  <div id="rp-case-2" style="display:none;padding:24px">
+    <div style="background:linear-gradient(135deg,#7f1d1d,#dc2626);border-radius:12px;padding:20px 24px;color:#fff;margin-bottom:20px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+        <span style="background:rgba(255,255,255,0.25);font-size:12px;font-weight:700;padding:3px 10px;border-radius:20px">激进型</span>
+        <span style="font-size:13px;opacity:0.8">退休期 50年 · 一线城市/考虑海外 · 无固定社保</span>
+      </div>
+      <div style="font-size:20px;font-weight:800;margin-bottom:8px">40岁超早退休方案</div>
+      <div style="display:flex;gap:20px;font-size:13px;opacity:0.9">
+        <span>总资产 ¥3000万</span>
+        <span>美股75% ≈ $308万</span>
+        <span>月支出 ¥6万</span>
+        <span>无社保，纯靠投资</span>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px">
+      <div style="background:#f8fafc;border-radius:10px;padding:16px">
+        <div style="font-size:12px;font-weight:700;color:#64748b;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.05em">核心挑战</div>
+        <ul style="font-size:13px;color:#374151;line-height:2;margin:0;padding-left:16px">
+          <li>无社保兜底，全靠投资支撑90年生命</li>
+          <li>月支出¥6万/年¥72万，压力较大</li>
+          <li>初期股息仅¥32万，缺口需动态卖出</li>
+          <li>QQQ高波动，心理承受要求高</li>
+        </ul>
+      </div>
+      <div style="background:#fff5f5;border-radius:10px;padding:16px">
+        <div style="font-size:12px;font-weight:700;color:#64748b;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.05em">核心优势</div>
+        <ul style="font-size:13px;color:#374151;line-height:2;margin:0;padding-left:16px">
+          <li>资产¥3000万，4%法则年收入¥120万远超需求</li>
+          <li>50年复利期，QQQ+个股增值潜力惊人</li>
+          <li>15年后SCHD股息增长可能完全覆盖支出</li>
+          <li>充裕盈余可持续再投入，形成正循环</li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="margin-bottom:20px">
+      <div style="font-weight:700;color:#1e293b;font-size:14px;margin-bottom:10px">💼 推荐美股组合（美股总资产 ¥2250万 ≈ $308万）</div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>持仓</th><th>比例</th><th>金额($)</th><th>股息率</th><th>年股息($)</th><th>配置逻辑</th></tr></thead>
+        <tbody>
+          <tr><td><strong>VOO</strong>（S&P500）</td><td>28%</td><td>$86万</td><td>1.3%</td><td>$1.12万</td><td>核心基石，长期稳定增长</td></tr>
+          <tr><td><strong>SCHD</strong>（高股息ETF）</td><td>18%</td><td>$55万</td><td>3.5%</td><td>$1.93万</td><td>股息增长引擎（8-11%/年）</td></tr>
+          <tr><td><strong>QQQ</strong>（纳斯达克100）</td><td>26%</td><td>$80万</td><td>0.6%</td><td>$0.48万</td><td>AI时代科技超额回报</td></tr>
+          <tr><td><strong>美股个股</strong>（MSFT/AAPL/GOOGL）</td><td>22%</td><td>$68万</td><td>1.2%</td><td>$0.82万</td><td>精选科技护城河，超额Alpha</td></tr>
+          <tr><td><strong>GLD</strong>（黄金ETF）</td><td>4%</td><td>$12万</td><td>—</td><td>—</td><td>危机对冲</td></tr>
+          <tr><td><strong>现金/货基</strong></td><td>2%</td><td>$6万</td><td>2.0%</td><td>$0.12万</td><td>机动资金，伺机加仓</td></tr>
+          <tr style="background:#dcfce7;font-weight:700"><td colspan="4">合计</td><td><strong>$4.47万/年 ≈ ¥32.6万</strong></td><td>月均约¥2.7万（初期）</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div style="margin-bottom:20px">
+      <div style="font-weight:700;color:#1e293b;font-size:14px;margin-bottom:10px">📈 50年长期增长推演（激进型最重要）</div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>年份</th><th>年龄</th><th>SCHD年股息</th><th>组合年股息（¥）</th><th>组合市值估算（¥）</th><th>备注</th></tr></thead>
+        <tbody>
+          <tr><td>退休首年</td><td>40岁</td><td>$1.93万</td><td>¥32.6万</td><td>¥3000万</td><td>4%法则补足缺口</td></tr>
+          <tr><td>第5年</td><td>45岁</td><td>$2.84万（+8%/年）</td><td>¥42万</td><td>¥3600万（估）</td><td>缺口缩小</td></tr>
+          <tr><td>第10年</td><td>50岁</td><td>$4.16万</td><td>¥58万</td><td>¥4500万（估）</td><td>基本平衡</td></tr>
+          <tr style="background:#fff5f5"><td>第15年</td><td>55岁</td><td>$6.12万</td><td>¥80万</td><td>¥5500万（估）</td><td>股息完全覆盖 ✅</td></tr>
+          <tr style="background:#dcfce7"><td>第30年</td><td>70岁</td><td>$19.4万</td><td>¥210万+</td><td>¥10000万+（估）</td><td>越老越富裕</td></tr>
+        </tbody>
+      </table></div>
+      <div style="font-size:12px;color:#64748b;margin-top:6px">注：SCHD股息增长8%/年，QQQ和VOO按历史年化10-12%增长估算，仅供参考，实际市场表现可能大幅偏离。</div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+      <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:10px;padding:14px">
+        <div style="font-weight:700;color:#9a3412;font-size:13px;margin-bottom:8px">🛡️ 缓冲垫建议</div>
+        <div style="font-size:13px;color:#374151;line-height:1.8">保留 <strong>1年生活费 ≈ ¥72万</strong>。激进型心理要强健——大跌时不止损、不卖出是铁律。缓冲垫让你在危机期不被迫卖股。</div>
+      </div>
+      <div style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:10px;padding:14px">
+        <div style="font-weight:700;color:#0c4a6e;font-size:13px;margin-bottom:8px">📋 提取策略</div>
+        <div style="font-size:13px;color:#374151;line-height:1.8"><strong>初期（40-55岁）：</strong>4%法则动态提取（¥3000万×4%=¥120万，远超需求，盈余再投入）。<br><strong>中后期（55岁+）：</strong>转向纯股息法，永不卖股。</div>
+      </div>
+    </div>
+
+    <div style="background:#fef2f2;border:1px solid #fca5a5;border-radius:10px;padding:14px;font-size:13px;line-height:1.8">
+      <strong style="color:#dc2626">⚠️ 激进型·40岁最大风险：</strong>退休前5年遭遇市场大跌（如2008年-50%）会让¥3000万变成¥1500万，但<strong>4%法则仍可提取¥60万/年</strong>，依然可行。真正危险是持续下跌+被迫在低点大量卖出。对策：严格执行缓冲垫纪律，市场大跌年份优先动用缓冲垫，绝不在低位减持核心仓位。
+    </div>
+  </div>
+
+  <!-- ====== Case 3: 激进型·45岁 ====== -->
+  <div id="rp-case-3" style="display:none;padding:24px">
+    <div style="background:linear-gradient(135deg,#4c1d95,#7c3aed);border-radius:12px;padding:20px 24px;color:#fff;margin-bottom:20px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+        <span style="background:rgba(255,255,255,0.25);font-size:12px;font-weight:700;padding:3px 10px;border-radius:20px">激进型</span>
+        <span style="font-size:13px;opacity:0.8">退休期 45年 · 一线城市 · 有顾问收入（前5年）</span>
+      </div>
+      <div style="font-size:20px;font-weight:800;margin-bottom:8px">45岁激进型退休方案</div>
+      <div style="display:flex;gap:20px;font-size:13px;opacity:0.9">
+        <span>总资产 ¥2000万</span>
+        <span>美股70% ≈ $192万</span>
+        <span>月支出 ¥5万</span>
+        <span>顾问收入¥15万/年（前5年）</span>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px">
+      <div style="background:#f8fafc;border-radius:10px;padding:16px">
+        <div style="font-size:12px;font-weight:700;color:#64748b;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.05em">核心挑战</div>
+        <ul style="font-size:13px;color:#374151;line-height:2;margin:0;padding-left:16px">
+          <li>初期股息¥20万，年支出¥60万，缺口大</li>
+          <li>顾问收入5年后消失，压力上升</li>
+          <li>社保少量或无，中期风险敞口大</li>
+          <li>QQQ+个股大幅震荡，考验持仓定力</li>
+        </ul>
+      </div>
+      <div style="background:#faf5ff;border-radius:10px;padding:16px">
+        <div style="font-size:12px;font-weight:700;color:#64748b;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.05em">核心优势</div>
+        <ul style="font-size:13px;color:#374151;line-height:2;margin:0;padding-left:16px">
+          <li>4%法则年收入¥80万远超¥60万需求</li>
+          <li>顾问收入前5年大幅缓解提取压力</li>
+          <li>45年复利期，QQQ+个股长期增值显著</li>
+          <li>激进配置20年后股息将完全覆盖生活</li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="margin-bottom:20px">
+      <div style="font-weight:700;color:#1e293b;font-size:14px;margin-bottom:10px">💼 推荐美股组合（美股总资产 ¥1400万 ≈ $192万）</div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>持仓</th><th>比例</th><th>金额($)</th><th>股息率</th><th>年股息($)</th><th>配置逻辑</th></tr></thead>
+        <tbody>
+          <tr><td><strong>VOO</strong>（S&P500）</td><td>25%</td><td>$48万</td><td>1.3%</td><td>$0.62万</td><td>基石仓位，稳定成长</td></tr>
+          <tr><td><strong>SCHD</strong>（高股息ETF）</td><td>20%</td><td>$38.4万</td><td>3.5%</td><td>$1.34万</td><td>股息增长核心</td></tr>
+          <tr><td><strong>QQQ</strong>（纳斯达克100）</td><td>28%</td><td>$53.8万</td><td>0.6%</td><td>$0.32万</td><td>AI+科技主引擎</td></tr>
+          <tr><td><strong>美股个股</strong>（MSFT/AAPL/NVDA等）</td><td>22%</td><td>$42.2万</td><td>1.2%</td><td>$0.51万</td><td>精选高质量护城河</td></tr>
+          <tr><td><strong>GLD</strong>（黄金ETF）</td><td>5%</td><td>$9.6万</td><td>—</td><td>—</td><td>对冲系统性风险</td></tr>
+          <tr style="background:#dcfce7;font-weight:700"><td colspan="4">合计</td><td><strong>$2.79万/年 ≈ ¥20.4万</strong></td><td>月均约¥1.7万（初期）</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div style="margin-bottom:20px">
+      <div style="font-weight:700;color:#1e293b;font-size:14px;margin-bottom:10px">📈 三阶段提取路径规划</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+        <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:10px;padding:14px">
+          <div style="font-weight:700;color:#9a3412;font-size:13px;margin-bottom:8px">第一阶段（45-50岁）</div>
+          <div style="font-size:13px;color:#374151;line-height:1.9">
+            股息¥20万 + 顾问¥15万 = ¥35万<br>
+            4%提取补足¥25万<br>
+            合计¥60万 = 支出需求 ✅<br>
+            <strong>顾问收入是关键缓冲</strong>
+          </div>
+        </div>
+        <div style="background:#faf5ff;border:1px solid #e9d5ff;border-radius:10px;padding:14px">
+          <div style="font-weight:700;color:#7c3aed;font-size:13px;margin-bottom:8px">第二阶段（50-60岁）</div>
+          <div style="font-size:13px;color:#374151;line-height:1.9">
+            股息¥28万（8%增长）<br>
+            4%提取补足¥32万<br>
+            合计¥60万 ✅<br>
+            <strong>QQQ+个股推动资产增值</strong>
+          </div>
+        </div>
+        <div style="background:#f0fdf4;border:1px solid #86efac;border-radius:10px;padding:14px">
+          <div style="font-weight:700;color:#15803d;font-size:13px;margin-bottom:8px">第三阶段（60岁+）</div>
+          <div style="font-size:13px;color:#374151;line-height:1.9">
+            股息¥45-60万（15年增长）<br>
+            无需卖出，纯股息生活<br>
+            合计远超¥60万 ✅✅<br>
+            <strong>越老越富裕</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+      <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:10px;padding:14px">
+        <div style="font-weight:700;color:#9a3412;font-size:13px;margin-bottom:8px">🛡️ 缓冲垫建议</div>
+        <div style="font-size:13px;color:#374151;line-height:1.8">保留 <strong>1年生活费 ≈ ¥60万</strong>。退休前（42-45岁）用顾问收入积累，不投股市。港元账户保留HK$60万（≈¥56万）对冲汇率风险。</div>
+      </div>
+      <div style="background:#f5f3ff;border:1px solid #e9d5ff;border-radius:10px;padding:14px">
+        <div style="font-weight:700;color:#6d28d9;font-size:13px;margin-bottom:8px">📋 提取策略</div>
+        <div style="font-size:13px;color:#374151;line-height:1.8"><strong>混合过渡策略：</strong>前5年靠顾问收入+小额卖出；第6-15年4%动态提取；15年后目标转为纯股息法，组合增值后自然实现。</div>
+      </div>
+    </div>
+
+    <div style="background:#f5f3ff;border:1px solid #c4b5fd;border-radius:10px;padding:14px;font-size:13px;line-height:1.8">
+      <strong style="color:#7c3aed">💡 激进型·45岁的关键洞察：</strong>4%法则退休首年即可提取¥80万，远超¥60万年支出，有¥20万/年再投入美股的「复利加速器」。只要保持投资纪律不乱动，随着QQQ和个股长期增值，10-15年后资产可能翻倍，届时完全进入股息法的「自由状态」——永远不需要再卖股票。
+    </div>
+  </div>
+
 </div>
 
 <ul class="checklist">
