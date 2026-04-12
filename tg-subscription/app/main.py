@@ -6,6 +6,7 @@ from app.core.config import settings
 from app.core.database import engine, Base, AsyncSessionLocal, get_db
 from app.api.routes import influencer
 from app.api.routes import podcast_audio
+from app.api.routes import course
 
 _bot_app = None
 
@@ -100,6 +101,7 @@ app.add_middleware(
 # 核心路由：始终加载
 app.include_router(influencer.router,    prefix="/api/v1")
 app.include_router(podcast_audio.router, prefix="/api/v1")
+app.include_router(course.router,        prefix="/api/v1")
 
 
 @app.post("/webhooks/telegram")

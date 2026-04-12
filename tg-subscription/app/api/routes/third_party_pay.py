@@ -65,18 +65,15 @@ async def _activate_subscription(db: AsyncSession, order: PaymentOrder):
                 f"感谢订阅，尽情享用吧！"
             ),
         )
-        # 发送课程访问地址
+        # 发送课程账号（含自动生成的用户名+密码）
         if settings.course_url:
-            await bot.send_message(
-                chat_id=user.telegram_id,
-                text=(
-                    f"🎓 *课程访问地址*\n\n"
-                    f"点击下方链接即可开始学习《美股系统学习》完整课程：\n\n"
-                    f"👉 {settings.course_url}\n\n"
-                    f"_请勿将链接分享他人，订阅到期后将失效。_\n\n"
-                    f"💡 建议在浏览器中打开并收藏，课程进度会自动保存。"
-                ),
-                parse_mode="Markdown",
+            from app.bot.handlers.payments import _provision_and_send
+            await _provision_and_send(
+                bot,
+                telegram_id=user.telegram_id,
+                user_id=user.id,
+                display_name=user.first_name,
+                plan=plan,
             )
     except Exception as e:
         logger.warning("通知用户失败: %s", e)

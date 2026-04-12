@@ -67,26 +67,64 @@ async def successful_payment_handler(update: Update, context: ContextTypes.DEFAU
                 )
 
     await context.bot.send_message(update.effective_user.id, text)
-    # 付费成功后发送课程访问链接
+    # 付费成功后发送课程访问链接（含自动生成的账号）
     if not payment.is_recurring:
-        await _send_course_access(context.bot, update.effective_user.id, sub.plan)
+        await _send_course_access(context.bot, update.effective_user.id, sub.user_id, sub.plan)
 
 
-async def _send_course_access(bot, telegram_id: int, plan):
-    """付款成功后私信课程访问地址"""
+async def _provision_and_send(bot, telegram_id: int, user_id: int, display_name: str, plan) -> None:
+    """调用内部 API 生成课程账号，然后发送给用户"""
     from app.core.config import settings
+    import httpx
+
     if not settings.course_url:
         return
+
+    # 调用内部 provision 接口生成账号
+    async with httpx.AsyncClient() as client:
+        resp = await client.post(
+            f"http://localhost:8000/api/v1/course/provision",
+            json={"telegram_id": telegram_id, "display_name": display_name},
+            headers={"X-Api-Key": settings.internal_api_key},
+            timeout=10,
+        )
+
+    if resp.status_code != 200:
+        # provision 失败时退回发静态链接
+        await bot.send_message(
+            chat_id=telegram_id,
+            text=f"🎓 课程地址：{settings.course_url}\n\n如遇登录问题请联系客服。",
+        )
+        return
+
+    data = resp.json()
+    login    = data["login"]
+    password = data["password"]
     is_onetime = plan.billing_cycle == "one_time"
-    validity_note = "永久有效，无需续费。" if is_onetime else "订阅有效期内可访问。"
+    validity = "永久有效，无需续费。" if is_onetime else f"订阅有效期内可访问。"
+
     await bot.send_message(
         chat_id=telegram_id,
         text=(
-            f"🎓 *课程访问地址*\n\n"
-            f"点击下方链接即可开始学习《美股系统学习》完整课程：\n\n"
-            f"👉 {settings.course_url}\n\n"
-            f"_{validity_note}_\n\n"
-            f"💡 建议在浏览器中打开并收藏，课程进度自动保存到本地。"
+            f"🎓 *课程访问信息*\n\n"
+            f"地址：{settings.course_url}\n\n"
+            f"用户名：`{login}`\n"
+            f"密码：`{password}`\n\n"
+            f"_{validity}_\n"
+            f"_请妥善保存，密码仅展示一次。_\n\n"
+            f"💡 建议在浏览器中打开并收藏，课程进度自动保存。"
         ),
         parse_mode="Markdown",
     )
+
+
+async def _send_course_access(bot, telegram_id: int, user_id: int, plan):
+    """付款成功后生成账号并私信课程访问信息"""
+    from app.core.database import AsyncSessionLocal
+    from app.models.user import User
+
+    async with AsyncSessionLocal() as db:
+        user = await db.get(User, user_id)
+        display_name = user.first_name if user else f"用户{telegram_id}"
+
+    await _provision_and_send(bot, telegram_id, user_id, display_name, plan)

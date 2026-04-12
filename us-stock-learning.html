@@ -8878,11 +8878,12 @@ function switchCurrency2(mode) {
   }
 }
 
-// ── 拦截 goTo：phase 5（养老规划）需要登录 ─────────────────────────
+// ── 拦截 goTo：需要登录才能访问付费内容（Phase 2-6）─────────────
 const _origGoTo = goTo;
 window.goTo = function(idx) {
   const item = curriculum[idx];
-  if (item && item.phase === 5 && !stockGetToken()) {
+  // Phase 0（导读）和 Phase 1（市场基础，前4课）免费开放；其余需要登录
+  if (item && item.phase >= 2 && !stockGetToken()) {
     _stockPendingIdx = idx;
     stockOpenModal();
     return;
@@ -8897,8 +8898,8 @@ window.goTo = function(idx) {
   <div style="position:relative;width:100%;max-width:400px;margin:20px;background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.25);">
     <div style="background:linear-gradient(135deg,#1e3a5f,#2563eb);padding:28px 32px 24px;">
       <div style="font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:rgba(255,255,255,.6);margin-bottom:8px;">美股系统学习</div>
-      <div style="font-size:22px;font-weight:800;color:#fff;line-height:1.3;">登录以查看养老规划</div>
-      <div style="font-size:13px;color:rgba(255,255,255,.72);margin-top:6px;">第五阶段内容：42-60岁分阶段方案 · 退休提取策略</div>
+      <div style="font-size:22px;font-weight:800;color:#fff;line-height:1.3;">登录以查看完整内容</div>
+      <div style="font-size:13px;color:rgba(255,255,255,.72);margin-top:6px;">付费后通过 Bot 获取账号，输入用户名和密码即可访问</div>
     </div>
     <div style="padding:28px 32px 32px;">
       <div id="stock-auth-error" style="display:none;background:#fef2f2;border:1px solid #fecaca;border-radius:10px;padding:10px 14px;font-size:13px;color:#dc2626;margin-bottom:18px;"></div>
@@ -8934,11 +8935,8 @@ const STOCK_TOKEN_KEY = 'us_stock_token';
 const STOCK_USER_KEY  = 'us_stock_user';
 let _stockPendingIdx  = null;
 
-// 账号（SHA-256 哈希，与保险指南共用同一组账号）
-const STOCK_ACCOUNTS = {
-  'admin': { hash: '240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9', display_name: '管理员' },
-  'demo':  { hash: '3fb59388d9fcc5f7b965bc0f1747bea74c0f59102e733e1a7279911899e2879b', display_name: '演示账号' },
-};
+// 后端 API 地址（同域部署时留空即可走相对路径）
+const COURSE_AUTH_API = '/api/v1/course/auth';
 
 function stockGetToken() { return localStorage.getItem(STOCK_TOKEN_KEY); }
 
@@ -8966,11 +8964,6 @@ function stockCloseModal() {
   _stockPendingIdx = null;
 }
 
-async function sha256stock(str) {
-  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
-  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
-}
-
 async function stockSubmitLogin() {
   const username = document.getElementById('stock-auth-username').value.trim();
   const password = document.getElementById('stock-auth-password').value;
@@ -8985,38 +8978,46 @@ async function stockSubmitLogin() {
   }
   btn.disabled = true;
   btnText.textContent = '验证中…';
+  errBox.style.display = 'none';
 
-  const inputHash = await sha256stock(password);
-  const account = STOCK_ACCOUNTS[username];
+  try {
+    const resp = await fetch(COURSE_AUTH_API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username: username.toLowerCase(), password }),
+    });
 
-  if (!account || account.hash !== inputHash) {
-    errBox.textContent = '用户名或密码错误';
+    if (!resp.ok) {
+      const data = await resp.json().catch(() => ({}));
+      errBox.textContent = data.detail || '用户名或密码错误';
+      errBox.style.display = 'block';
+      return;
+    }
+
+    const data = await resp.json();
+    localStorage.setItem(STOCK_TOKEN_KEY, data.token);
+    localStorage.setItem(STOCK_USER_KEY, JSON.stringify({
+      username,
+      display_name: data.display_name || username,
+    }));
+    stockCloseModal();
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const redirectTo = urlParams.get('require_login');
+    if (redirectTo) { window.location.href = redirectTo; return; }
+
+    if (_stockPendingIdx !== null) {
+      const idx = _stockPendingIdx;
+      _stockPendingIdx = null;
+      _origGoTo(idx);
+    }
+  } catch (e) {
+    errBox.textContent = '网络错误，请稍后重试';
     errBox.style.display = 'block';
+  } finally {
     btn.disabled = false;
     btnText.textContent = '登录';
-    return;
   }
-
-  const token = btoa(username + ':' + Date.now() + ':' + Math.random().toString(36).slice(2));
-  localStorage.setItem(STOCK_TOKEN_KEY, token);
-  localStorage.setItem(STOCK_USER_KEY, JSON.stringify({ username, display_name: account.display_name }));
-  stockCloseModal();
-
-  // 处理外部页面跳转（如从 investment-tracker.html 重定向过来）
-  const urlParams = new URLSearchParams(window.location.search);
-  const redirectTo = urlParams.get('require_login');
-  if (redirectTo) {
-    window.location.href = redirectTo;
-    return;
-  }
-
-  if (_stockPendingIdx !== null) {
-    const idx = _stockPendingIdx;
-    _stockPendingIdx = null;
-    _origGoTo(idx);
-  }
-  btn.disabled = false;
-  btnText.textContent = '登录';
 }
 </script>
 </body>
