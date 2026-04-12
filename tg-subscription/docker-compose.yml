@@ -11,7 +11,9 @@ services:
       - audio_output:/audio   # 普通话音频 MP3 共享卷
 
   worker:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.worker
     env_file: .env
     depends_on: [db, redis]
     command: celery -A app.tasks.celery_app worker -l info -Q default
@@ -20,7 +22,9 @@ services:
       - audio_output:/audio   # worker 生成 MP3，app 读取并服务
 
   beat:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.worker
     env_file: .env
     depends_on: [redis]
     command: celery -A app.tasks.celery_app beat -l info

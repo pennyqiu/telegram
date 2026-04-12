@@ -1,0 +1,14 @@
+FROM python:3.11-slim
+
+WORKDIR /code
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gcc libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY requirements-worker.txt .
+RUN pip install --no-cache-dir -r requirements-worker.txt
+
+COPY . .
+
+CMD ["celery", "-A", "app.tasks.celery_app", "worker", "-l", "info", "-Q", "default"]
