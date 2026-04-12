@@ -359,18 +359,21 @@ function initChecklists(){
 }
 
 // ===== 普通话播客播放器 =====
-const PODCAST_API = (()=>{
+// 懒计算：调用时才取 INFLUENCER_API（避免声明顺序问题）
+function getPodcastAPI() {
   const saved = localStorage.getItem('podcast_api_url');
   return saved || INFLUENCER_API.replace('/influencer-updates', '/podcast-audio');
-})();
-const AUDIO_BASE = (()=>{
+}
+function getAudioBase() {
   const saved = localStorage.getItem('audio_base_url');
   return saved || INFLUENCER_API.replace('/api/v1/influencer-updates', '/api/v1/audio');
-})();
+}
 
 function loadPodcastPlayer(containerId, sourceFilter) {
   const el = document.getElementById(containerId);
   if (!el) return;
+  const PODCAST_API = getPodcastAPI();
+  const AUDIO_BASE  = getAudioBase();
   el.innerHTML = '<div style="color:#64748b;font-size:13px;padding:12px 0">⏳ 加载普通话音频…</div>';
   const url = sourceFilter ? `${PODCAST_API}?source=${sourceFilter}` : PODCAST_API;
   fetch(url, { signal: AbortSignal.timeout(10000) })
@@ -419,6 +422,7 @@ function loadPodcastPlayer(containerId, sourceFilter) {
 
 function triggerPodcastRefresh(event, containerId, sourceFilter) {
   event.preventDefault();
+  const PODCAST_API = getPodcastAPI();
   fetch(PODCAST_API.replace('/podcast-audio', '/podcast-audio/refresh'), { method: 'POST' })
     .then(() => {
       const el = document.getElementById(containerId);
