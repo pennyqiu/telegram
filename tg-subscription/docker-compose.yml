@@ -16,10 +16,10 @@ services:
       dockerfile: Dockerfile.worker
     env_file: .env
     depends_on: [db, redis]
-    command: celery -A app.tasks.celery_app worker -l info -Q default
+    command: celery -A app.tasks.celery_app worker -l info
     volumes:
       - .:/code
-      - audio_output:/audio   # worker 生成 MP3，app 读取并服务
+      - audio_output:/audio
 
   beat:
     build:
