@@ -848,7 +848,7 @@ function rpSwitchCase(idx) {
 
 function goToLesson(id) {
   const idx = curriculum.findIndex(function(c){ return c.id === id; });
-  if (idx >= 0) showLesson(idx);
+  if (idx >= 0) goTo(idx);
 }
 
 // ===== ALL LESSON CONTENT =====
