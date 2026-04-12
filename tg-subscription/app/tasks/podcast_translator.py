@@ -49,14 +49,14 @@ PODCAST_SOURCES = [
     {
         "key": "rational_reminder",
         "name": "Rational Reminder",
-        "rss": "https://feeds.simplecast.com/5fqcCl3W",
+        "rss": "https://rationalreminder.libsyn.com/rss",
         "type": "rr_website",          # 从 rationalreminder.ca 抓取文字稿
         "max_episodes": 3,             # 每次最多处理最新 3 集
     },
     {
         "key": "ben_felix",
         "name": "Ben Felix",
-        "rss": "https://www.youtube.com/feeds/videos.xml?channel_id=UC0kgMCHN2YE0lAg95qLzEWg",
+        "rss": "https://www.youtube.com/feeds/videos.xml?channel_id=UCDXTQ8nWmx_EhZ2v-kp7QxA",
         "type": "youtube_caption",     # 抓取 YouTube 自动字幕
         "max_episodes": 2,
     },
