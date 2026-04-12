@@ -695,6 +695,154 @@ function rpGenerate() {
   const riskLabel  = riskLabels[riskLevel];
   const riskColor  = riskColors[riskLevel];
 
+  // ── 股票池构建逻辑说明 ──
+  const riskReasonParts = [];
+  if (riskPref === 'conservative') riskReasonParts.push('你明确选择了保守风格，睡得着觉优先于追求高收益');
+  else if (riskPref === 'moderate') riskReasonParts.push('你选择了均衡风格，愿意接受适度波动换取更好的长期增长');
+  else riskReasonParts.push('你选择了激进风格，愿意承受较大波动以追求最大长期回报');
+  if (retireAge <= 45) riskReasonParts.push('退休年龄仅' + retireAge + '岁，退休期长达' + horizon + '年，时间越长反而越能承受短期波动（长期复利比短期稳定更重要），因此风险得分略有上调');
+  if (familyType === 'kids' || familyType === 'both') riskReasonParts.push('家中有未成年子女，未来有确定性大额支出（教育费），现金流稳定性比收益最大化更关键，风险得分有所下调');
+  if (familyType === 'parents') riskReasonParts.push('需要赡养父母，突发医疗支出的不确定性较高，组合需要保留更多稳定性，风险得分适度下调');
+  if (pensionType === 0 && otherIncome === 0 && partTime === 0) riskReasonParts.push('你的收入来源只有美股投资，没有社保、被动收入或兼职收入作为缓冲，这意味着生活费完全依赖投资组合，波动容忍度需要适当收窄');
+  if (assetMid >= 3500) riskReasonParts.push('资产体量达¥' + assetMid + '万，即使激进配置出现30-40%的账面亏损，绝对数字依然足够覆盖生活，财富基础支撑了更高的风险容忍度');
+  if (bigExpense >= 2) riskReasonParts.push('你有海外移居或子女留学等大额支出计划，阶段性的确定性现金需求会影响仓位稳定性，因此在高波动资产上适度保守');
+  if (health === 'chronic') riskReasonParts.push('慢性病意味着医疗支出有一定不确定性，组合需要更高的流动性和稳定性');
+
+  const riskReason = riskReasonParts.length > 0
+    ? riskReasonParts.map(function(s,i){ return (i+1) + '. ' + s; }).join('<br>')
+    : '综合你的填写情况，风险评估为' + riskLabel + '。';
+
+  let portLogic = '';
+  const pref2name = {balanced:'均衡型', growth:'成长型', dividend:'股息型'};
+  const portName = pref2name[portPref] || '均衡型';
+  if (riskLevel === 1) {
+    if (portPref === 'dividend')
+      portLogic = '你是保守型 + 股息偏好的组合，核心思路是：<strong>用高质量股息资产做现金流主力，用债券做稳定器，尽量减少需要主动卖股的频率</strong>。SCHD + VYM + DGRO构成三层股息防线（增长型 + 高收益型 + 连续增长型），BND和TIPS负责压低整体波动并直接对冲通胀，GLD是最后的极端风险缓冲。';
+    else
+      portLogic = '你是保守型投资者，核心思路是：<strong>稳定压倒一切，在不承受剧烈波动的前提下，通过持有高质量资产跑赢通胀</strong>。VOO提供基础增长，SCHD负责持续增长的股息，BND + TIPS合计占近40%为组合装上了「减震器」，遇到市场大跌时这部分资产通常不跌，给你时间等待股票部分恢复。';
+  } else if (riskLevel === 2) {
+    if (portPref === 'growth')
+      portLogic = '你是均衡型 + 成长偏好，核心思路是：<strong>以VOO + QQQ做成长主引擎，SCHD负责持续产生的股息现金流，少量债券仅作极端行情缓冲，整体偏向进攻</strong>。QQQ代表科技股集群的超额增长潜力，VOO是更分散的安全底盘，SCHD则确保即使市场不涨，每年也有真实现金流入账。';
+    else if (portPref === 'dividend')
+      portLogic = '你是均衡型 + 股息偏好，核心思路是：<strong>以SCHD为核心发动机，VOO为增长底盘，QQQ和DGRO做补充，债券配置降至最低</strong>。SCHD历史股息增长约8-11%/年，复利下10年后股息可能翻一倍。这个组合的目标是：20年后生活费全部由股息支付，彻底进入"永不卖股"的理想状态。';
+    else
+      portLogic = '你是均衡型，核心思路是：<strong>成长与收入并重，VOO打地基，SCHD守现金流，QQQ寻求超额回报，BND控制整体波动幅度</strong>。这是最主流的退休组合框架之一——既不会因为全押股票而夜不能寐，也不会因为太保守而眼睁睁看着资产被通胀侵蚀。';
+  } else {
+    if (portPref === 'dividend')
+      portLogic = '你是激进型 + 股息偏好，核心思路是：<strong>VOO + SCHD + QQQ + 个股全力进攻，完全不配置债券，目标是20年内让股息覆盖全部生活费，越老越富裕</strong>。初期股息可能不足，需要配合少量动态提取，但随着SCHD股息的持续复利增长，中期将进入「股息自给自足」的状态，届时资产还在持续增长。';
+    else if (portPref === 'growth')
+      portLogic = '你是激进型 + 成长偏好，核心思路是：<strong>QQQ + 个股 + VOO组成进攻主力，追求最大化长期资产增值</strong>。这是最接近"把退休金当作长期投资组合管理"的策略。短期波动可能非常剧烈（QQQ单次回撤可达30-40%），但配合充足的现金缓冲垫，不需要在低点被迫卖出，时间站在你这一边。';
+    else
+      portLogic = '你是激进型，核心思路是：<strong>VOO + QQQ + SCHD + 个股的高成长组合，通过接受短期高波动换取长期最大复利回报</strong>。退休期' + horizon + '年的时间跨度是你最大的资产——历史上，S&P500任何一个30年滚动区间的年化回报均为正，激进配置在足够长的时间维度下胜率极高。';
+  }
+
+  // ── 每只标的的解析 ──
+  const stockDetail = {
+    'VOO': {
+      full: 'Vanguard S&P 500 ETF',
+      what: '追踪美国500家最大上市公司（苹果、微软、英伟达、谷歌、亚马逊等），按市值加权，是美国经济的「晴雨表」。',
+      role: function(r, pref) {
+        if (r===3) return '作为整个组合的稳定底盘。即使在激进策略下，QQQ和个股可能出现剧烈波动，VOO的分散性（500只股票）起到锚定作用——它不会归零，也不会因为单一公司爆雷而受重创。';
+        if (r===1) return '在保守策略下承担核心增长功能。债券负责稳定，VOO负责增长跑赢通胀——这是最简单也是最经过历史验证的分工。';
+        return '作为组合的核心基石，提供分散化的市场回报。在SCHD、QQQ等做特定方向押注的同时，VOO保证了底仓的多元化，不把鸡蛋放在一个篮子里。';
+      },
+      stats: '股息率~1.3% · 费率0.03% · 持有500只股票 · 历史年化~10%（含股息）'
+    },
+    'QQQ': {
+      full: 'Invesco NASDAQ-100 ETF',
+      what: '追踪纳斯达克前100家非金融企业，科技权重超过50%，微软、苹果、英伟达、谷歌、Meta五巨头合计占比约40%。',
+      role: function(r, pref) {
+        if (r===3) return '作为组合的超额增长引擎。AI浪潮、云计算、半导体这三条赛道是未来10-20年最确定性的增长叙事，而这三条赛道的最顶级企业都高度集中在QQQ里。代价是波动极大——2022年最高回撤-35%，但2023年反弹+55%，这正是「时间越长越有利」的验证。';
+        return '提供高于市场平均的成长弹性。相比VOO，QQQ在牛市里通常跑赢5-10个百分点，是寻求超额回报的有效工具，但需要接受更高的波动。';
+      },
+      stats: '股息率~0.6% · 费率0.20% · 专注科技/AI · 历史年化~15%（近10年）'
+    },
+    'SCHD': {
+      full: 'Schwab US Dividend Equity ETF',
+      what: '精选100只兼顾「高股息率」和「股息持续增长」的美国蓝筹公司，包含可口可乐、强生、宝洁、洛克希德马丁等。每季度按财务质量重新筛选。',
+      role: function(r, pref) {
+        return '组合的现金流核心发动机。SCHD最大的魅力不是今天的股息率（3.5%），而是<strong>历史股息增长率约8-11%/年</strong>——意味着每10年股息接近翻一倍。今天每年能拿到的¥X万，15年后可能变成¥2X万，而你什么都不用做。这是退休组合里对抗通胀最优雅的武器。';
+      },
+      stats: '股息率~3.5% · 费率0.06% · 股息增长率~8-11%/年 · 含100只精选蓝筹'
+    },
+    'VYM': {
+      full: 'Vanguard High Dividend Yield ETF',
+      what: '追踪超过400只高股息美国公司，相比SCHD更偏重「即时股息率高」，包含大量金融、能源、消费品蓝筹。',
+      role: function(r, pref) {
+        return '与SCHD形成互补。<strong>SCHD注重股息增长，VYM注重当下股息率</strong>——两者叠加，既保证今天有足够多的现金流入账，也保证10年后股息不会被通胀吃掉。VYM还有额外分散效果：它覆盖400+只股票，而SCHD只有100只，降低了单一持仓的集中风险。';
+      },
+      stats: '股息率~2.8% · 费率0.06% · 持有400+只股票 · 侧重即时高收益'
+    },
+    'DGRO': {
+      full: 'iShares Core Dividend Growth ETF',
+      what: '专门筛选「连续5年以上持续增加股息」的公司，包含微软、苹果、强生等高质量成长型蓝筹。',
+      role: function(r, pref) {
+        return '组合里最注重「股息质量」的一块拼图。连续增加股息5年以上这个标准，过滤掉了靠高杠杆维持股息的公司，留下的都是真正盈利稳健、现金流充裕的企业。对于退休组合来说，<strong>股息的可靠性比股息率更重要</strong>——你需要的是每年都能兑付的稳定收入，而不是今年高明年砍的不稳定收益。';
+      },
+      stats: '股息率~2.2% · 费率0.08% · 专注股息连续增长5年+ · 侧重质量筛选'
+    },
+    'BND': {
+      full: 'Vanguard Total Bond Market ETF',
+      what: '持有约10,000只美国投资级债券（国债+公司债+抵押贷款证券），覆盖美国整个债券市场。',
+      role: function(r, pref) {
+        if (r===1) return '组合最重要的稳定器。股票和债券的相关性通常为负——当股市大跌时，资金会涌入债券避险，债券通常不跌反涨。这意味着你的整体组合波动远低于纯股票，让你在市场恐慌时不会因为账户大幅缩水而做出错误决策（比如恐慌卖出）。4%的债券利息也是组合的稳定现金流收入之一。';
+        return '组合的减震器。在均衡策略下，BND不是为了追求高回报，而是为了降低整体组合的波动幅度，让你在市场极端行情下仍能冷静持有。配置比例根据你的风险偏好相应调整。';
+      },
+      stats: '股息率~4% · 费率0.03% · 约10,000只债券 · 与股票相关性低'
+    },
+    'TIPS': {
+      full: 'iShares TIPS Bond ETF（通胀保值债券）',
+      what: '追踪美国财政部发行的通胀挂钩债券（TIPS）。与普通债券的关键区别：本金会随CPI（消费者价格指数）自动调整，利息也相应增加。',
+      role: function(r, pref) {
+        return '组合里针对通胀的「直接保险」。保守型退休组合面临最大的隐患不是市场崩盘（那是短期的），而是<strong>通胀的长期侵蚀</strong>——如果未来20年通胀平均3%/年，购买力会缩水将近一半。TIPS的本金随通胀自动增加，相当于政府背书的通胀对冲工具。在退休期长达' + horizon + '年的情况下，这个对冲尤为重要。';
+      },
+      stats: '股息率~2.5%（实际利率+通胀调整） · 费率0.19% · 政府信用背书 · 通胀联动'
+    },
+    'GLD': {
+      full: 'SPDR Gold Trust',
+      what: '追踪实物黄金价格，每份代表约1/10盎司黄金，不持有公司股权，只持有黄金这种实物资产。',
+      role: function(r, pref) {
+        return '组合里的「极端风险保险」。黄金平时表现平平，但在每次重大金融危机中（2008年、2020年、2022年地缘冲突）都展现出独特的避险价值。更重要的是，黄金与股票、债券的相关性极低，是真正意义上的分散化工具。配置' + (r===1?'7':'4-5') + '%并不是为了赚钱，而是为了<strong>在最坏的情况下（货币体系危机、全球股灾）守住最后一道防线</strong>。把它想成保险费——正常年份看起来是浪费，真正需要的时候是救命的。';
+      },
+      stats: '无股息 · 费率0.40% · 与股市相关性低 · 极端行情避险资产'
+    },
+    '美股个股': {
+      full: 'MSFT / AAPL / GOOGL / NVDA 等科技护城河个股',
+      what: '精选具备深度技术护城河的科技巨头：微软（AI+Azure云）、苹果（生态+服务飞轮）、谷歌（搜索垄断+Gemini AI）、英伟达（AI算力芯片垄断）。',
+      role: function(r, pref) {
+        return '组合里寻求超越指数的「超额回报来源」。ETF保证了你不会输得太惨，但个股是让你跑赢大盘的可能性所在。这几家公司的共同特点是：护城河极宽（竞争者难以撼动），AI时代的商业模式越来越有利（垄断性平台效应），且现金流充沛（不依赖外部融资）。建议单只个股不超过总仓位5%，整体个股比例不超过25%，避免过度集中。';
+      },
+      stats: '股息率~1-2% · 需要主动管理 · 建议单只≤5%仓位 · 每年重新评估护城河'
+    },
+    '现金/货基': {
+      full: '人民币/美元货币市场基金',
+      what: '持有极短期、流动性极高的金融工具（国债回购、银行存款等），随时可以赎回，约2%年化收益。',
+      role: function(r, pref) {
+        return '组合里的「机动资金」。在市场大幅回调时，这笔钱可以用来逢低买入；在汇率不利时（比如人民币强势、换汇成本高），用这笔钱垫付生活支出，等待更好的换汇时机。它的目的不是赚钱，而是给整个组合保留灵活性，避免「在最坏的时机被迫卖出核心仓位」。';
+      },
+      stats: '收益率~2% · 随时赎回 · 零波动 · 机动应急资金'
+    }
+  };
+
+  let stockCards = '';
+  portfolio.forEach(function(p) {
+    const info = stockDetail[p.n] || stockDetail['美股个股'];
+    if (!info) return;
+    const roleText = typeof info.role === 'function' ? info.role(riskLevel, portPref) : info.role;
+    stockCards +=
+      '<div style="border:1px solid #e2e8f0;border-radius:12px;padding:16px 18px;margin-bottom:12px;background:#fafafa">' +
+        '<div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px">' +
+          '<div style="background:#1e293b;color:#fff;font-size:13px;font-weight:800;padding:5px 12px;border-radius:8px;white-space:nowrap;flex-shrink:0">' + p.n + '</div>' +
+          '<div>' +
+            '<div style="font-size:12px;color:#64748b;margin-bottom:2px">' + info.full + '</div>' +
+            '<div style="font-size:12px;color:#94a3b8">' + info.stats + '</div>' +
+          '</div>' +
+        '</div>' +
+        '<div style="font-size:13px;color:#374151;line-height:1.85;margin-bottom:8px"><strong style="color:#0f172a">是什么：</strong>' + info.what + '</div>' +
+        '<div style="font-size:13px;color:#374151;line-height:1.85;background:#f0f9ff;border-left:3px solid #3b82f6;padding:8px 12px;border-radius:0 8px 8px 0"><strong style="color:#1d4ed8">在你的组合里：</strong>' + roleText + '</div>' +
+      '</div>';
+  });
+
   let incomeRows = '<tr><td>美股股息</td><td style="color:#16a34a;font-weight:600">¥' + annualDivRMB.toFixed(0) + '万</td><td>按当前组合股息率，随SCHD持续增长</td></tr>';
   if (pensionAmt > 0) incomeRows += '<tr><td>社保/养老金</td><td>¥' + pensionAmt + '万</td><td>60岁起启动（提前退休期间不计入）</td></tr>';
   if (otherAmt > 0)   incomeRows += '<tr><td>其他被动收入</td><td>¥' + otherAmt + '万</td><td>房租/股权分红等</td></tr>';
@@ -731,6 +879,26 @@ function rpGenerate() {
         '<tbody>' + rows + '</tbody>' +
         '<tfoot><tr style="background:#dcfce7;font-weight:700"><td colspan="4">合计年股息</td><td>$' + totalDiv.toFixed(2) + '万 ≈ <strong style="color:#16a34a">¥' + (totalDiv * 7.3).toFixed(0) + '万/年</strong></td></tr></tfoot>' +
       '</table></div>' +
+    '</div>' +
+
+    '<div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:18px;margin-bottom:16px">' +
+      '<div style="font-weight:700;color:#1e293b;font-size:14px;margin-bottom:12px">🧠 这个组合是怎么得出来的？</div>' +
+      '<div style="font-size:13px;color:#374151;line-height:1.9;margin-bottom:14px">' +
+        '<strong style="color:#0f172a">第一步：风险评分</strong><br>' +
+        '系统根据你填写的20项指标计算综合风险评分（1-3分），最终评定为<strong style="color:' + riskColor + '">' + riskLabel + '（' + riskScore.toFixed(1) + '分）</strong>。影响评分的关键因素：<br>' +
+        '<div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:12px;margin:10px 0;font-size:13px;line-height:2">' + riskReason + '</div>' +
+        '<strong style="color:#0f172a">第二步：组合类型匹配</strong><br>' +
+        '基于风险评级（' + riskLabel + '）和你选择的偏好（' + portName + '），从预设的9种组合模板中匹配最适合的一套。<br>' +
+        '<div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:12px;margin:10px 0;font-size:13px;line-height:1.9">' + portLogic + '</div>' +
+        '<strong style="color:#0f172a">第三步：数字化计算</strong><br>' +
+        '确定组合后，系统根据你的美股资产规模（¥' + usAssets.toFixed(0) + '万）按比例分配每只标的的具体金额，并按各标的历史股息率计算年化股息收入，结合你的退休年龄、退休期长度（' + horizon + '年）评估整体可行性。' +
+      '</div>' +
+    '</div>' +
+
+    '<div style="margin-bottom:16px">' +
+      '<div style="font-weight:700;color:#1e293b;font-size:14px;margin-bottom:4px">🔍 组合里每只标的，为什么选它？</div>' +
+      '<div style="font-size:13px;color:#64748b;margin-bottom:14px">下面逐一解释每只 ETF / 个股在你这个组合里扮演的角色和选择原因：</div>' +
+      stockCards +
     '</div>' +
 
     '<div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:12px;padding:16px;margin-bottom:16px">' +
