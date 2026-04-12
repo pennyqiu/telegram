@@ -1,5 +1,5 @@
 """
-播客翻译管道：英文 → 普通话音频摘要
+播客翻译管道：英文 → 普通话音频（完整翻译）
 
 支持来源：
   1. Rational Reminder  — 官网提供完整文字稿，直接抓取
@@ -7,15 +7,10 @@
 
 流程：
   每集英文文字稿（10,000-20,000 词）
-    └→ GPT-4o-mini 压缩成 1800 字中文摘要（约 5-7 分钟音频）
-         └→ OpenAI TTS nova 声音生成 MP3
-              └→ 保存到 /static/audio/
+    └→ GPT-4o-mini 完整翻译成中文（不压缩）
+         └→ OpenAI TTS nova 声音生成 MP3（分段合并）
+              └→ 保存到 /audio/
                    └→ 元数据写入 Redis
-
-成本估算（每集）：
-  GPT-4o-mini  ~$0.02（~15,000 token 输入 + 1,800 输出）
-  TTS tts-1    ~$0.03（1,800 汉字 ≈ 5,400 char）
-  合计         ~¥0.35/集，非常低廉
 
 调度：每天 08:00 Asia/Shanghai 检查新集并生成
 """
@@ -147,14 +142,14 @@ def fetch_rr_transcript(episode_url: str) -> str:
             text = re.sub(r"<[^>]+>", " ", m.group(1))
             text = re.sub(r"\s{2,}", " ", text).strip()
             if len(text) > 500:
-                return text[:25000]   # 最多取前 25,000 字符（约 4,000 词）
+                return text  # 完整返回，不截断
 
     # 兜底：提取页面全部正文（去掉 <script>/<style>）
     html_clean = re.sub(r"<script[^>]*>.*?</script>", "", html, flags=re.DOTALL | re.IGNORECASE)
     html_clean = re.sub(r"<style[^>]*>.*?</style>", "", html_clean, flags=re.DOTALL | re.IGNORECASE)
     text = re.sub(r"<[^>]+>", " ", html_clean)
     text = re.sub(r"\s{2,}", " ", text).strip()
-    return text[:25000]
+    return text
 
 
 def fetch_youtube_captions(video_id: str) -> str:
@@ -185,7 +180,7 @@ def fetch_youtube_captions(video_id: str) -> str:
                     text = " ".join(lines)
                     text = re.sub(r"\s{2,}", " ", text)
                     if len(text) > 300:
-                        return text[:25000]
+                        return text  # 完整返回，不截断
         except Exception as e:
             log.debug("caption fetch %s failed: %s", url, e)
     return ""
@@ -195,14 +190,13 @@ def fetch_youtube_captions(video_id: str) -> str:
 # GPT 翻译 + 摘要
 # ══════════════════════════════════════════════════════════════════════════════
 
-SUMMARY_PROMPT = """你是一位金融播客编辑，擅长将英文投资播客内容转化为高质量的中文有声摘要。
+SUMMARY_PROMPT = """你是一位专业的金融翻译，请将以下英文播客文字稿**完整翻译成中文**。
 
-请将以下英文播客文字稿，整理成一份 **{chars} 字以内** 的中文摘要，要求：
-1. 保留全部核心论点、数据、引用的学术研究
-2. 语言流畅自然，适合"通勤时收听"——句子不要太长，有节奏感
-3. 开头点明本集主题，结尾给出 1-2 条行动建议
-4. 不需要翻译人名/术语，直接用英文原名（如 Fama-French、VOO、Ben Felix）
-5. **只输出摘要正文，不要加任何标题或前言**
+翻译要求：
+1. 完整翻译全部内容，不省略、不压缩
+2. 语言流畅自然，适合"通勤时收听"——句子保持节奏感
+3. 人名/品牌/术语保留英文原名（如 Fama-French、VOO、Ben Felix、ETF）
+4. **只输出译文正文，不要加任何标题或前言**
 
 原文字稿：
 ---
@@ -210,8 +204,8 @@ SUMMARY_PROMPT = """你是一位金融播客编辑，擅长将英文投资播客
 ---"""
 
 
-def gpt_summarize(transcript: str, title: str, chars: int = 1800) -> str:
-    """调用 OpenAI GPT 将英文文字稿翻译并压缩成中文摘要"""
+def gpt_summarize(transcript: str, title: str, chars: int = 0) -> str:
+    """调用 OpenAI GPT 将英文文字稿完整翻译成中文"""
     from openai import OpenAI
     from app.core.config import settings
 
@@ -220,26 +214,48 @@ def gpt_summarize(transcript: str, title: str, chars: int = 1800) -> str:
 
     client = OpenAI(api_key=settings.openai_api_key)
 
-    # 截断过长的文字稿（节省 token）
-    max_input = 12000
-    if len(transcript) > max_input:
-        transcript = transcript[:max_input] + "\n...(以下内容省略，请基于已有内容整理摘要)"
+    # GPT-4o-mini 上下文 128k token；英文字符约 4 chars/token，可处理约 500k 字符
+    # 超长文字稿分段翻译再合并
+    CHUNK_SIZE = 80000  # 每段约 20000 词，大多数播客一集能一次处理
+    if len(transcript) <= CHUNK_SIZE:
+        chunks_in = [transcript]
+    else:
+        # 按段落分割，避免截断句子
+        chunks_in = []
+        while len(transcript) > CHUNK_SIZE:
+            cut = transcript.rfind("\n", 0, CHUNK_SIZE)
+            if cut < 1000:
+                cut = CHUNK_SIZE
+            chunks_in.append(transcript[:cut])
+            transcript = transcript[cut:].lstrip()
+        if transcript:
+            chunks_in.append(transcript)
 
-    prompt = SUMMARY_PROMPT.format(transcript=transcript, chars=chars)
-    try:
-        resp = client.chat.completions.create(
-            model=settings.openai_translate_model,
-            messages=[
-                {"role": "system", "content": "你是专业的金融内容编辑，精通中英文投资领域知识。"},
-                {"role": "user", "content": prompt},
-            ],
-            temperature=0.4,
-            max_tokens=chars * 2,   # 中文 1 字 ≈ 1-2 token
-        )
-        return resp.choices[0].message.content.strip()
-    except Exception as e:
-        log.error("GPT summarize failed: %s", e)
-        raise
+    translated_parts = []
+    for i, chunk in enumerate(chunks_in):
+        prompt = SUMMARY_PROMPT.format(transcript=chunk)
+        try:
+            resp = client.chat.completions.create(
+                model=settings.openai_translate_model,
+                messages=[
+                    {"role": "system", "content": "你是专业的金融内容翻译，精通中英文投资领域知识。"},
+                    {"role": "user", "content": prompt},
+                ],
+                temperature=0.3,
+                max_tokens=16000,  # 每段最多 16000 token 输出
+            )
+            translated_parts.append(resp.choices[0].message.content.strip())
+            log.info("translated chunk %d/%d for: %s", i + 1, len(chunks_in), title)
+        except Exception as e:
+            err_str = str(e)
+            if "insufficient_quota" in err_str or "429" in err_str or "quota" in err_str.lower():
+                raise RuntimeError(
+                    "⚠️ OpenAI API 额度已用完。请前往 platform.openai.com/account/billing 充值后重试。"
+                ) from e
+            log.error("GPT translate failed: %s", e)
+            raise
+
+    return "\n\n".join(translated_parts)
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -333,7 +349,6 @@ def process_episode(source: dict, item: dict, episodes: list[dict]) -> dict | No
     处理单集：抓取文字稿 → 翻译 → TTS → 保存。
     返回新的 episode 元数据，或 None（已处理 / 无字幕）。
     """
-    from app.core.config import settings
 
     ep_id = f"{source['key']}_{item.get('video_id') or item.get('slug') or item['date']}"
     if episode_exists(episodes, ep_id):
@@ -354,11 +369,10 @@ def process_episode(source: dict, item: dict, episodes: list[dict]) -> dict | No
         log.warning("transcript too short for %s, skip", item["title"])
         return None
 
-    # 2. GPT 翻译+摘要
+    # 2. GPT 完整翻译
     summary = gpt_summarize(
         transcript,
         title=item["title"],
-        chars=settings.podcast_summary_chars,
     )
 
     # 3. TTS 生成 MP3
@@ -412,6 +426,11 @@ def translate_podcasts(self):
                 if meta:
                     episodes.append(meta)
                     new_count += 1
+            except RuntimeError as e:
+                # 额度耗尽等明确错误，记录后停止继续消耗
+                log.error("⚠️ 停止任务：%s", e)
+                save_index(r, episodes)
+                return {"new_episodes": new_count, "error": str(e), "stopped_early": True}
             except Exception as e:
                 log.error("episode failed [%s] %s: %s", source["key"], item.get("title"), e)
 

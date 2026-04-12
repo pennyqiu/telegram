@@ -40,8 +40,8 @@ class Settings(BaseSettings):
     openai_translate_model: str = "gpt-4o-mini"
     # TTS 语音：nova / shimmer / alloy / echo / fable / onyx
     openai_tts_voice: str = "nova"
-    # 每集最大摘要字数（中文），约 1500 字 ≈ 5-7 分钟音频
-    podcast_summary_chars: int = 1800
+    # 全文翻译模式：True = 完整翻译，False = 压缩成摘要
+    podcast_full_translation: bool = True
 
     @property
     def admin_ids(self) -> list[int]:
