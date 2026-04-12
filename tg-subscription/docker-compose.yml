@@ -6,13 +6,18 @@ services:
     env_file: .env
     depends_on: [db, redis]
     command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
-    volumes: [.:/code]
+    volumes:
+      - .:/code
+      - audio_output:/audio   # 普通话音频 MP3 共享卷
 
   worker:
     build: .
     env_file: .env
     depends_on: [db, redis]
     command: celery -A app.tasks.celery_app worker -l info -Q default
+    volumes:
+      - .:/code
+      - audio_output:/audio   # worker 生成 MP3，app 读取并服务
 
   beat:
     build: .
@@ -35,3 +40,4 @@ services:
 
 volumes:
   sub_pgdata:
+  audio_output:   # 持久化音频文件，重启容器不丢失

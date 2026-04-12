@@ -34,6 +34,15 @@ class Settings(BaseSettings):
     alipay_public_key: str = ""         # 支付宝公钥（用于验签）
     alipay_notify_url: str = ""         # 支付宝回调地址
 
+    # ── OpenAI（播客翻译+TTS）────────────────────────────────────
+    openai_api_key: str = ""            # platform.openai.com → API Keys
+    # 翻译模型（gpt-4o-mini 性价比最高；需要更高质量可换 gpt-4o）
+    openai_translate_model: str = "gpt-4o-mini"
+    # TTS 语音：nova / shimmer / alloy / echo / fable / onyx
+    openai_tts_voice: str = "nova"
+    # 每集最大摘要字数（中文），约 1500 字 ≈ 5-7 分钟音频
+    podcast_summary_chars: int = 1800
+
     @property
     def admin_ids(self) -> list[int]:
         return [int(i) for i in self.admin_telegram_ids.split(",") if i.strip()]

@@ -1,5 +1,6 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
 from telegram import Update, MenuButtonWebApp, WebAppInfo
 from telegram.ext import (
     Application, CommandHandler, PreCheckoutQueryHandler,
@@ -12,6 +13,8 @@ from app.bot.handlers.payments import pre_checkout_handler, successful_payment_h
 from app.bot.handlers.join_requests import handle_join_request
 from app.api.routes import plans, subscriptions, payments
 from app.api.routes import third_party_pay
+from app.api.routes import influencer
+from app.api.routes import podcast_audio
 
 _bot_app: Application | None = None
 
@@ -56,10 +59,21 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="TG Subscription Service", lifespan=lifespan)
+
+# CORS：允许前端 HTML 静态页面跨域调用 influencer-updates 接口
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],        # 生产环境可改为具体域名
+    allow_methods=["GET"],
+    allow_headers=["*"],
+)
+
 app.include_router(plans.router,            prefix="/api/v1")
 app.include_router(subscriptions.router,    prefix="/api/v1")
 app.include_router(payments.router,         prefix="/api/v1")
 app.include_router(third_party_pay.router,  prefix="/api/v1")
+app.include_router(influencer.router,       prefix="/api/v1")
+app.include_router(podcast_audio.router,    prefix="/api/v1")
 
 
 @app.post("/webhooks/telegram")

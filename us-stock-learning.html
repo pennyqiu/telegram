@@ -235,6 +235,8 @@ const curriculum=[
   {id:'tech-moat-framework',phase:6,tag:'第28课',title:'科技股投资框架：护城河识别与估值实战',duration:'100 min'},
   {id:'passive-academic',phase:6,tag:'第29课',title:'被动投资的学术证据：Vanguard研究30年',duration:'80 min'},
   {id:'schd-research',phase:6,tag:'第30课',title:'SCHD深度研究：红利投资的科学与实战',duration:'110 min'},
+  {id:'ben-felix',phase:6,tag:'第31课',title:'Ben Felix循证投资：因子模型与学术实证',duration:'90 min'},
+  {id:'audio-commute',phase:6,tag:'🎧 通勤彩蛋',title:'通勤学习指南：投资播客音频路线图',duration:'上下班时间'},
 ];
 
 let currentIndex=0;
@@ -329,6 +331,24 @@ function renderContent(){
     </div>
   </div>`;
   initChecklists();
+  // 投资大师专栏：异步加载最新动态
+  const LIVE_SOURCES = {
+    'damodaran-analysis': 'damodaran',
+    'howard-marks-memos': 'howard_marks',
+    'ben-felix': 'ben_felix',
+  };
+  if (LIVE_SOURCES[item.id]) {
+    loadInfluencerUpdates(LIVE_SOURCES[item.id]);
+  }
+  // 普通话播客播放器
+  const PODCAST_PAGES = {
+    'ben-felix': ['podcast-player-ben', 'ben_felix'],
+    'audio-commute': ['podcast-player-all', ''],
+  };
+  if (PODCAST_PAGES[item.id]) {
+    const [pid, src] = PODCAST_PAGES[item.id];
+    loadPodcastPlayer(pid, src);
+  }
 }
 function initChecklists(){
   document.querySelectorAll('.checklist li').forEach(li=>{
@@ -336,6 +356,129 @@ function initChecklists(){
     if(localStorage.getItem(key)==='1')li.classList.add('checked');
     li.addEventListener('click',()=>{li.classList.toggle('checked');localStorage.setItem(key,li.classList.contains('checked')?'1':'0');});
   });
+}
+
+// ===== 普通话播客播放器 =====
+const PODCAST_API = (()=>{
+  const saved = localStorage.getItem('podcast_api_url');
+  return saved || INFLUENCER_API.replace('/influencer-updates', '/podcast-audio');
+})();
+const AUDIO_BASE = (()=>{
+  const saved = localStorage.getItem('audio_base_url');
+  return saved || INFLUENCER_API.replace('/api/v1/influencer-updates', '/api/v1/audio');
+})();
+
+function loadPodcastPlayer(containerId, sourceFilter) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  el.innerHTML = '<div style="color:#64748b;font-size:13px;padding:12px 0">⏳ 加载普通话音频…</div>';
+  const url = sourceFilter ? `${PODCAST_API}?source=${sourceFilter}` : PODCAST_API;
+  fetch(url, { signal: AbortSignal.timeout(10000) })
+    .then(r => r.json())
+    .then(data => {
+      const eps = (data.episodes || []).filter(e => e.available);
+      if (eps.length === 0) {
+        el.innerHTML = `<div style="background:#fef9c3;border:1px solid #fde047;border-radius:10px;padding:14px;font-size:13px;color:#713f12">
+          <strong>🎙️ 普通话音频摘要</strong><br>
+          暂无已生成的音频。服务器每天 08:00 自动生成新集。<br>
+          <a href="${PODCAST_API}/refresh" style="color:#92400e;font-weight:600" onclick="triggerPodcastRefresh(event,'${containerId}','${sourceFilter}')">手动触发生成 →</a>
+        </div>`;
+        return;
+      }
+      const cards = eps.map(ep => `
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:14px;margin-bottom:10px">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
+            <div style="flex:1">
+              <div style="font-size:13px;font-weight:700;color:#1e293b;margin-bottom:4px;line-height:1.4">${ep.title}</div>
+              <div style="font-size:11px;color:#94a3b8;margin-bottom:8px">${ep.date} · ${ep.source_name} · ${ep.file_size_kb}KB MP3</div>
+              <div style="font-size:12px;color:#64748b;line-height:1.5;margin-bottom:10px">${ep.summary_preview || ''}</div>
+              <audio controls preload="none" style="width:100%;height:36px;accent-color:#6366f1">
+                <source src="${AUDIO_BASE}/${ep.mp3_file}" type="audio/mpeg">
+              </audio>
+            </div>
+            <a href="${ep.original_url}" target="_blank" style="flex-shrink:0;font-size:11px;color:#2563eb;text-decoration:none;white-space:nowrap;margin-top:2px">原文 →</a>
+          </div>
+        </div>`).join('');
+      el.innerHTML = `
+        <div style="background:#f0f9ff;border:1px solid #7dd3fc;border-radius:12px;padding:16px;margin:20px 0">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+            <strong style="color:#0369a1;font-size:14px">🎙️ 普通话音频摘要（AI 翻译 + TTS）</strong>
+            <button onclick="triggerPodcastRefresh(event,'${containerId}','${sourceFilter}')" style="font-size:11px;border:1px solid #7dd3fc;background:#fff;color:#0369a1;border-radius:6px;padding:3px 8px;cursor:pointer">刷新</button>
+          </div>
+          ${cards}
+          <div style="font-size:11px;color:#94a3b8;margin-top:6px">每天 08:00 自动更新 · GPT-4o-mini 翻译 · OpenAI TTS nova 声音 · 每集约 5-7 分钟</div>
+        </div>`;
+    })
+    .catch(() => {
+      el.innerHTML = `<div style="font-size:12px;color:#dc2626;padding:8px">
+        ⚠ 无法连接播客 API。确认服务器运行中，或设置地址：<br>
+        <code style="font-size:11px">localStorage.setItem('podcast_api_url','https://你的域名/api/v1/podcast-audio')</code>
+      </div>`;
+    });
+}
+
+function triggerPodcastRefresh(event, containerId, sourceFilter) {
+  event.preventDefault();
+  fetch(PODCAST_API.replace('/podcast-audio', '/podcast-audio/refresh'), { method: 'POST' })
+    .then(() => {
+      const el = document.getElementById(containerId);
+      if (el) el.innerHTML = '<div style="color:#64748b;font-size:13px;padding:12px 0">⏳ 正在后台生成音频（约 1-3 分钟），请稍后刷新页面…</div>';
+    })
+    .catch(() => alert('触发失败，请确认服务器在线'));
+}
+// 修改这个地址为你的 FastAPI 服务器域名/IP
+const INFLUENCER_API = (()=>{
+  const saved = localStorage.getItem('influencer_api_url');
+  return saved || 'http://localhost:8000/api/v1/influencer-updates';
+})();
+
+function loadInfluencerUpdates(sourceKey) {
+  const el = document.getElementById('live-updates-' + sourceKey);
+  if (!el) return;
+  el.innerHTML = '<div style="color:#64748b;font-size:13px;padding:12px 0">⏳ 正在加载最新动态…</div>';
+  fetch(INFLUENCER_API, { signal: AbortSignal.timeout(10000) })
+    .then(r => r.json())
+    .then(data => {
+      if (data.status === 'pending') {
+        el.innerHTML = `<div style="background:#fef9c3;border:1px solid #fde047;border-radius:8px;padding:12px;font-size:13px;color:#713f12">
+          ⏳ ${data.message}
+        </div>`;
+        return;
+      }
+      const src = data.sources && data.sources[sourceKey];
+      if (!src || !src.items || src.items.length === 0) {
+        el.innerHTML = '<div style="color:#94a3b8;font-size:13px;padding:8px 0">暂无最新数据，下次定时任务（每天 07:00）将自动更新。</div>';
+        return;
+      }
+      const updatedAt = data.updated_at || '';
+      const rows = src.items.map(item => `
+        <li style="padding:10px 0;border-bottom:1px solid #f1f5f9;display:flex;gap:10px;align-items:flex-start">
+          <span style="flex-shrink:0;min-width:80px;font-size:11px;color:#94a3b8;padding-top:2px">${item.date || '—'}</span>
+          <div>
+            <a href="${item.url}" target="_blank" style="color:#1d4ed8;font-weight:600;font-size:13px;text-decoration:none;line-height:1.4">${item.title}</a>
+            ${item.summary ? `<div style="font-size:12px;color:#64748b;margin-top:3px;line-height:1.5">${item.summary}</div>` : ''}
+          </div>
+        </li>`).join('');
+      el.innerHTML = `
+        <div style="background:#f0f9ff;border:1px solid #7dd3fc;border-radius:10px;padding:16px;margin:20px 0">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+            <strong style="color:#0369a1;font-size:14px">📡 ${src.label}（实时追踪）</strong>
+            <span style="font-size:11px;color:#94a3b8">更新于 ${updatedAt}</span>
+          </div>
+          <ul style="list-style:none;padding:0;margin:0">${rows}</ul>
+          <div style="margin-top:10px;font-size:11px;color:#94a3b8">每天 07:00 自动抓取 · <a href="${INFLUENCER_API}?refresh=true" target="_blank" style="color:#0369a1">手动刷新</a></div>
+        </div>`;
+      if (src.error) {
+        el.innerHTML += `<div style="font-size:11px;color:#ef4444;padding:4px 0">⚠ 部分内容抓取失败：${src.error}</div>`;
+      }
+    })
+    .catch(() => {
+      el.innerHTML = `<div style="background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:12px;font-size:13px;color:#dc2626">
+        ⚠ 无法连接到后端服务（${INFLUENCER_API}）。<br>
+        请确认 FastAPI 服务正在运行，或在 localStorage 中设置正确的接口地址：<br>
+        <code style="font-size:11px">localStorage.setItem('influencer_api_url','https://你的域名/api/v1/influencer-updates')</code>
+      </div>`;
+    });
 }
 function markDone(id){
   if(completed.has(id)){completed.delete(id);document.getElementById('completedBadge')?.classList.remove('show');}
@@ -366,7 +509,7 @@ function getWelcome(){return`<div class="welcome-screen">
   <div class="phase-card" onclick="goTo(9)"><div class="phase-card-num pn-3">三</div><h3>投资工具</h3><p>ETF 60年历史与被动投资革命、组合构建实战</p><div class="phase-card-tag"><span class="ptag">2课</span><span class="ptag">~2.5h</span></div></div>
   <div class="phase-card" onclick="goTo(11)"><div class="phase-card-num pn-4">四</div><h3>风险管理</h3><p>完整风险框架、压力测试、黑天鹅应对手册</p><div class="phase-card-tag"><span class="ptag">2课</span><span class="ptag">~2.5h</span></div></div>
   <div class="phase-card" onclick="goTo(13)"><div class="phase-card-num pn-5">五</div><h3>养老规划</h3><p>42-60岁分阶段详细方案、年度资产配置表、退休提取策略</p><div class="phase-card-tag"><span class="ptag">3课</span><span class="ptag">~3.5h</span></div></div>
-  <div class="phase-card" onclick="goTo(16)"><div class="phase-card-num pn-1">六</div><h3>持续成长</h3><p>全球领路人、Damodaran估值精华、Howard Marks备忘录、QQQ/SPY深度研究、科技股护城河框架、SCHD红利研究</p><div class="phase-card-tag"><span class="ptag">9课</span><span class="ptag">~12h</span></div></div>
+  <div class="phase-card" onclick="goTo(16)"><div class="phase-card-num pn-1">六</div><h3>持续成长</h3><p>全球领路人、Ben Felix循证投资、Damodaran估值精华、Howard Marks备忘录、QQQ/SPY深度研究、科技股护城河、SCHD红利研究、通勤音频路线图</p><div class="phase-card-tag"><span class="ptag">13课</span><span class="ptag">~14h</span></div></div>
 </div>
 <div class="info-box blue" style="margin-top:24px">
   <div class="info-box-title">💡 使用说明</div>
@@ -5095,6 +5238,8 @@ AI浪潮（2023-24）: EPS预期↑ → 若护城河成立，估值↑合理
   </li>
 </ol>
 
+<div id="live-updates-damodaran"></div>
+
 <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;padding:20px;margin:24px 0">
 <strong style="color:#15803d;font-size:15px">💡 如何应用到你的投资实践</strong>
 <ul style="margin-top:12px;padding-left:20px">
@@ -5103,6 +5248,29 @@ AI浪潮（2023-24）: EPS预期↑ → 若护城河成立，估值↑合理
   <li style="margin-bottom:10px">每次美联储大幅加息/降息：重算你持仓中成长股（高倍率）的估值，量化利率变化对持仓的影响</li>
   <li style="margin-bottom:10px">遇到"AI新公司"等估值难题：用他对OpenAI/NVIDIA的分析方法，将叙事转化为可检验的数字假设</li>
 </ul>
+</div>
+
+<div style="background:#fef9c3;border:1px solid #fde047;border-radius:12px;padding:18px;margin:20px 0">
+<strong style="color:#713f12;font-size:14px">📡 持续追踪 Damodaran 最新产出</strong>
+<div style="margin-top:12px;display:grid;grid-template-columns:repeat(2,1fr);gap:10px;font-size:13px">
+  <div style="background:#fff;border-radius:8px;padding:12px;border:1px solid #fde68a">
+    <div style="font-weight:700;color:#92400e;margin-bottom:4px">📰 Substack 订阅</div>
+    <div style="color:#64748b"><a href="https://aswathdamodaran.substack.com" target="_blank" style="color:#2563eb">aswathdamodaran.substack.com</a><br>每月2-4篇深度估值文章，直接发邮件</div>
+  </div>
+  <div style="background:#fff;border-radius:8px;padding:12px;border:1px solid #fde68a">
+    <div style="font-weight:700;color:#92400e;margin-bottom:4px">📺 YouTube 订阅</div>
+    <div style="color:#64748b"><a href="https://www.youtube.com/@AswathDamodaran" target="_blank" style="color:#2563eb">@AswathDamodaran</a><br>每季度财报后对主要公司做估值更新</div>
+  </div>
+  <div style="background:#fff;border-radius:8px;padding:12px;border:1px solid #fde68a">
+    <div style="font-weight:700;color:#92400e;margin-bottom:4px">📊 年度数据包</div>
+    <div style="color:#64748b"><a href="https://pages.stern.nyu.edu/~adamodar/" target="_blank" style="color:#2563eb">pages.stern.nyu.edu/~adamodar</a><br>每年1月更新：全球ERP、行业多倍数、Beta值</div>
+  </div>
+  <div style="background:#fff;border-radius:8px;padding:12px;border:1px solid #fde68a">
+    <div style="font-weight:700;color:#92400e;margin-bottom:4px">🎙️ 播客（通勤可听）</div>
+    <div style="color:#64748b">Invest Like the Best 有多集 Damodaran 专访<br>搜索 "Damodaran" 即可找到对应集</div>
+  </div>
+</div>
+<p style="font-size:12px;color:#92400e;margin-top:10px">⚡ <strong>最佳节奏</strong>：每年1月读数据更新 → 每季度听一次估值更新视频 → 遇到重大市场事件时必读他的分析</p>
 </div>
 `,
 
@@ -5877,6 +6045,31 @@ Marks列出的警告信号：
 </p>
 <p style="font-size:12px;color:#64748b;margin-top:8px">— Howard Marks，Oaktree Capital联合创始人</p>
 </div>
+
+<div style="background:#fef9c3;border:1px solid #fde047;border-radius:12px;padding:18px;margin:20px 0">
+<strong style="color:#713f12;font-size:14px">📡 持续追踪 Howard Marks 最新产出</strong>
+<div style="margin-top:12px;display:grid;grid-template-columns:repeat(2,1fr);gap:10px;font-size:13px">
+  <div style="background:#fff;border-radius:8px;padding:12px;border:1px solid #fde68a">
+    <div style="font-weight:700;color:#92400e;margin-bottom:4px">📝 Memos 订阅（免费）</div>
+    <div style="color:#64748b"><a href="https://www.oaktreecapital.com/insights/memo" target="_blank" style="color:#2563eb">oaktreecapital.com/insights/memo</a><br>页面最底部有邮件订阅入口，新Memo发布即时推送</div>
+  </div>
+  <div style="background:#fff;border-radius:8px;padding:12px;border:1px solid #fde68a">
+    <div style="font-weight:700;color:#92400e;margin-bottom:4px">🎙️ 播客采访（通勤必听）</div>
+    <div style="color:#64748b">Masters in Business (Bloomberg) 有多集 Howard Marks 专访<br>Spotify 搜索 "Howard Marks Bloomberg" 即可找到</div>
+  </div>
+  <div style="background:#fff;border-radius:8px;padding:12px;border:1px solid #fde68a">
+    <div style="font-weight:700;color:#92400e;margin-bottom:4px">📺 视频演讲</div>
+    <div style="color:#64748b">YouTube 搜索 "Howard Marks talk 2024/2025"<br>每次重大市场事件后通常有最新演讲发布</div>
+  </div>
+  <div style="background:#fff;border-radius:8px;padding:12px;border:1px solid #fde68a">
+    <div style="font-weight:700;color:#92400e;margin-bottom:4px">📚 书籍延伸阅读</div>
+    <div style="color:#64748b">《The Most Important Thing》（中文版：投资最重要的事）<br>《Mastering the Market Cycle》（中文版：周期）</div>
+  </div>
+</div>
+<p style="font-size:12px;color:#92400e;margin-top:10px">⚡ <strong>最佳节奏</strong>：每月查看一次 Oaktree 页面是否有新 Memo → 每次发布立刻阅读（通常1-2小时读完，价值极高）→ 每年底听一次他的年度演讲总结观点</p>
+</div>
+
+<div id="live-updates-howard_marks"></div>
 `,
 
 'tech-moat-framework':`
@@ -6858,6 +7051,433 @@ SCHD：-3.2%（防御性持仓，金融/能源抗跌）
   </div>
   <div style="margin-top:20px;font-size:13px;opacity:.8">
     "投资最重要的不是你在牛市里赚了多少，而是你在熊市里是否还能坚持。"
+  </div>
+</div>
+`,
+
+// =====================================================================
+'ben-felix':`
+<p>Ben Felix 是加拿大 PWL Capital 投资组合经理，也是全球最具影响力的<strong>循证投资</strong>（Evidence-Based Investing）传播者。他的 YouTube 频道和 Rational Reminder 播客以<strong>每一个观点都有学术论文支撑</strong>著称——没有情绪，没有猜测，只有数据和研究。在你学完被动投资理论后，他是帮你把"为什么"搞透彻的最佳老师。</p>
+
+<div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:12px;padding:20px;margin:20px 0">
+<strong style="color:#1e40af;font-size:15px">🎓 Ben Felix 基本信息</strong>
+<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:14px">
+  <div style="background:#fff;border-radius:8px;padding:14px;border:1px solid #dbeafe">
+    <div style="font-size:12px;color:#64748b;margin-bottom:4px">所在机构</div>
+    <div style="font-weight:700;color:#1e40af">PWL Capital（加拿大渥太华）</div>
+    <div style="font-size:12px;color:#64748b;margin-top:2px">独立注册投资顾问公司，无利益冲突</div>
+  </div>
+  <div style="background:#fff;border-radius:8px;padding:14px;border:1px solid #dbeafe">
+    <div style="font-size:12px;color:#64748b;margin-bottom:4px">YouTube频道</div>
+    <div style="font-weight:700;color:#1e40af"><a href="https://www.youtube.com/@BenFelixCSI" target="_blank" style="color:#1e40af">@BenFelixCSI</a></div>
+    <div style="font-size:12px;color:#64748b;margin-top:2px">60万+ 订阅，每期均有参考文献列表</div>
+  </div>
+  <div style="background:#fff;border-radius:8px;padding:14px;border:1px solid #dbeafe">
+    <div style="font-size:12px;color:#64748b;margin-bottom:4px">播客</div>
+    <div style="font-weight:700;color:#1e40af"><a href="https://rationalreminder.ca" target="_blank" style="color:#1e40af">Rational Reminder Podcast</a></div>
+    <div style="font-size:12px;color:#64748b;margin-top:2px">与 Cameron Passmore 共同主持，300+期</div>
+  </div>
+  <div style="background:#fff;border-radius:8px;padding:14px;border:1px solid #dbeafe">
+    <div style="font-size:12px;color:#64748b;margin-bottom:4px">核心方法论</div>
+    <div style="font-weight:700;color:#1e40af">Fama-French 5因子模型</div>
+    <div style="font-size:12px;color:#64748b;margin-top:2px">学术界最主流的资产定价框架</div>
+  </div>
+</div>
+</div>
+
+<h2>一、为什么 Ben Felix 是独一无二的？</h2>
+
+<div class="code-block"><span class="cm">// 他与其他财经 YouTuber 的本质区别</span>
+<span class="hl">普通财经YouTuber</span>：
+  • 讲"这只股票值得买入"——主观选股
+  • "我预测2025年市场会..."——情绪化预测
+  • 依赖趋势、故事、直觉
+  • 靠流量/广告营收，存在利益冲突
+
+<span class="hl">Ben Felix的做法</span>：
+  • 每个观点引用同行评审学术论文（peer-reviewed）
+  • 描述"学术研究发现什么"，不做个人预测
+  • 所有结论都是可证伪的
+  • 作为执照投资顾问，受监管，无广告推销
+
+<span class="hl">他的核心信念</span>：
+  "投资决策不应基于猜测，应基于证据。
+   如果没有学术支撑，观点就不值得信任。"</div>
+
+<h2>二、核心框架：Fama-French 五因子模型</h2>
+
+<p>这是现代金融学最重要的资产定价理论，由诺贝尔经济学奖得主 Eugene Fama 和 Kenneth French 共同发展。Ben Felix 是将这套学术框架讲给普通投资者的最佳传播者。</p>
+
+<h3>1. 市场因子（Market Beta）——风险溢价的基础</h3>
+<div class="code-block"><span class="cm">// 为什么股票长期跑赢债券？</span>
+<span class="hl">市场溢价</span>：历史约 5-7%/年（超额无风险利率）
+原因：承担市场系统性风险的补偿
+  
+核心含义：
+  • 持有市场（VOO/VTI）= 自动捕获市场溢价
+  • 分散化是消除个股风险的免费午餐
+  • 不能分散掉的系统性风险 = 回报来源
+
+<span class="hl">Ben Felix的实践建议</span>：
+  "仅持有市场因子（指数基金）对大多数投资者已足够。
+   其他因子是锦上添花，不是必须的。"</div>
+
+<h3>2. 规模因子（Size Premium）——小盘股溢价</h3>
+<div class="code-block"><span class="cm">// 1981年 Banz 发现，后被 Fama-French 纳入模型</span>
+<span class="hl">学术发现</span>：小市值公司（Small Cap）长期比大市值公司
+  多赚约 2-3%/年（全球市场历史数据）
+
+<span class="hl">直觉解释</span>：
+  • 小公司分析师覆盖少 → 信息不对称 → 定价效率低
+  • 流动性差 → 需要流动性溢价
+  • 商业风险更高 → 需要更高回报补偿
+
+<span class="hl">注意事项</span>（Ben Felix 强调）：
+  • 单独的 Size 因子近年溢价不稳定
+  • 需要与 Profitability 因子叠加才有效
+  • 持仓：Avantis US Small Cap Value (AVUV) 是优质载体</div>
+
+<h3>3. 价值因子（Value Premium）——便宜公司的超额回报</h3>
+<div class="code-block"><span class="cm">// 最有争议、也最有长期证据的因子</span>
+<span class="hl">定义</span>：低估值股票（低PB/PE）长期跑赢高估值股票
+历史溢价：约 3-5%/年（全球130年数据）
+
+<span class="hl">为什么有效？（两种解释）</span>：
+  风险解释（Fama）：
+    价值股通常是"陷入困境的公司"
+    → 持有风险更高 → 理应有更高回报
+  
+  行为解释（Thaler等）：
+    投资者对成长股过度乐观（买太贵）
+    对价值股过度悲观（卖太便宜）
+    → 均值回归产生超额回报
+
+<span class="hl">2020年代状况</span>：
+  • 2009-2021：成长股持续跑赢价值股（12年）
+  • 2022：价值股反转，大幅跑赢（+20% vs 成长 -30%）
+  • 2023-2024：成长股再次领先
+  → Ben Felix 观点："因子溢价需要耐心，但长期仍成立"</div>
+
+<h3>4. 盈利能力因子（Profitability Premium）</h3>
+<div class="code-block"><span class="cm">// 高盈利公司长期跑赢低盈利公司</span>
+<span class="hl">指标</span>：用"营业利润/账面资产"衡量
+
+<span class="hl">组合运用</span>（Ben Felix 最推崇的配置）：
+  Small Cap + Value + High Profitability
+  = "小盘价值质量股"
+  
+  实证：在美国和全球市场，这个组合：
+  • 历史年化回报比市场高 3-5%
+  • 风险调整后的夏普比率也更高
+
+<span class="hl">ETF 载体</span>：
+  • AVUV（Avantis US Small Cap Value）— 最推荐
+  • AVDV（Avantis International Small Cap Value）
+  • DFA 系列（机构级，散户可通过顾问获取）</div>
+
+<h3>5. 投资因子（Investment Premium）——保守扩张的溢价</h3>
+<div class="code-block"><span class="cm">// 资产增长慢的公司 > 资产增长快的公司</span>
+<span class="hl">学术发现</span>：激进扩张（高资本支出）的公司
+  长期回报往往低于保守型公司
+
+<span class="hl">直觉</span>：
+  • 过度投资 → 破坏价值（management overconfidence）
+  • 保守投资 → 说明公司有高质量项目才扩张
+  → 投资因子是管理质量的间接信号</div>
+
+<h2>三、代表视频精华（建议必看清单）</h2>
+
+<ul class="resource-list">
+  <li><span class="resource-badge rb-video">必看 #1</span><div><a href="https://www.youtube.com/watch?v=seaB2HQoGqA" target="_blank" style="color:#1e40af;font-weight:700">Why You Shouldn't Pick Stocks（为什么不该选股）</a><br><span style="color:var(--gray-500);font-size:12px">20分钟 · 这是最重要的一期视频。系统性呈现"为什么99%的人选股是负期望值游戏"——引用大量学术研究，彻底解构主动投资的幻觉。看完后你对指数投资的信念会更坚定</span></div></li>
+  <li><span class="resource-badge rb-video">必看 #2</span><div><a href="https://www.youtube.com/watch?v=wx3wobfj_GA" target="_blank" style="color:#1e40af;font-weight:700">The 5 Factor Model（5因子模型解说）</a><br><span style="color:var(--gray-500);font-size:12px">18分钟 · 上面第二章的视频版，Ben Felix把学术论文翻译成人话。理解因子投资的最佳起点，比读论文效率高100倍</span></div></li>
+  <li><span class="resource-badge rb-video">必看 #3</span><div><a href="https://www.youtube.com/watch?v=dhSyQKFLMiQ" target="_blank" style="color:#1e40af;font-weight:700">Expected Returns（期望回报的正确思维方式）</a><br><span style="color:var(--gray-500);font-size:12px">22分钟 · "你不应该基于过去回报买入，应该基于期望回报"——这是估值和因子投资的结合，解释为什么估值高时期望回报低</span></div></li>
+  <li><span class="resource-badge rb-video">强烈推荐 #4</span><div><a href="https://www.youtube.com/watch?v=HpxPTIFjRRg" target="_blank" style="color:#1e40af;font-weight:700">International Diversification（国际分散化）</a><br><span style="color:var(--gray-500);font-size:12px">18分钟 · 专门讲"为什么只持有美股不够"——对中国投资者格外重要，解释为什么VT（全球）比VOO（美国）从期望回报角度更合理</span></div></li>
+  <li><span class="resource-badge rb-video">强烈推荐 #5</span><div><a href="https://www.youtube.com/watch?v=2MVSsVi1_e4" target="_blank" style="color:#1e40af;font-weight:700">Is Value Investing Dead?（价值投资死了吗？）</a><br><span style="color:var(--gray-500);font-size:12px">20分钟 · 2020年代最热议的话题。Ben Felix用数据和学术证据回答：溢价仍然存在，但需要耐心。是否仍值得追求价值因子？</span></div></li>
+  <li><span class="resource-badge rb-video">强烈推荐 #6</span><div><a href="https://www.youtube.com/watch?v=GBWP00xU4Q4" target="_blank" style="color:#1e40af;font-weight:700">Home Bias（本土偏误的危害）</a><br><span style="color:var(--gray-500);font-size:12px">15分钟 · 为什么大多数投资者持有过多本国股票？本土偏误如何损害长期回报？对中国投资者投资A股vs美股的决策有直接指导意义</span></div></li>
+  <li><span class="resource-badge rb-video">进阶 #7</span><div><a href="https://www.youtube.com/watch?v=3evkPdBMtgQ" target="_blank" style="color:#1e40af;font-weight:700">Rebalancing（再平衡的时机与方法）</a><br><span style="color:var(--gray-500);font-size:12px">19分钟 · 何时再平衡？阈值法还是定期法？每次讨论实际操作时必看，附有学术研究对比不同策略的效果差异</span></div></li>
+  <li><span class="resource-badge rb-video">进阶 #8</span><div><a href="https://www.youtube.com/watch?v=KtFvE5jKqFk" target="_blank" style="color:#1e40af;font-weight:700">Sequence of Returns Risk（回报顺序风险）</a><br><span style="color:var(--gray-500);font-size:12px">22分钟 · 退休投资者最容易忽视的风险——退休初期遇到熊市的灾难性影响，以及应对策略。养老规划必看</span></div></li>
+  <li><span class="resource-badge rb-video">进阶 #9</span><div><a href="https://www.youtube.com/watch?v=1FXZfM42Rok" target="_blank" style="color:#1e40af;font-weight:700">Tax-Loss Harvesting（税损收割）</a><br><span style="color:var(--gray-500);font-size:12px">17分钟 · 合法的税务优化策略详解。在有应税账户的投资者中，税损收割每年可节省0.5-1%的税务成本</span></div></li>
+  <li><span class="resource-badge rb-video">进阶 #10</span><div><a href="https://www.youtube.com/watch?v=Qi2d09K60p4" target="_blank" style="color:#1e40af;font-weight:700">The Problem with Factor Investing（因子投资的问题）</a><br><span style="color:var(--gray-500);font-size:12px">20分钟 · Ben Felix 诚实评估自己倡导的方法论——因子投资的局限性是什么？什么情况下不该用？这种批判性诚实是他最让人信服的地方</span></div></li>
+</ul>
+
+<h2>四、Rational Reminder 播客精华集（可通勤收听）</h2>
+
+<div style="background:#f0fdf4;border:1px solid #86efac;border-radius:10px;padding:14px;margin-bottom:16px;font-size:13px">
+  <strong style="color:#15803d">🎧 通勤收听说明</strong><br>
+  Rational Reminder 大多数集在 <strong>60-90 分钟</strong>，非常适合早晚各一段通勤。建议在 <a href="https://rationalreminder.ca/podcast" target="_blank" style="color:#15803d">官网</a> 或 Apple Podcasts / Spotify 搜索 "Rational Reminder" 订阅。每期都有 show notes 和参考论文列表。
+</div>
+
+<ul class="resource-list">
+  <li><span class="resource-badge rb-podcast">Episode 100</span><div><a href="https://rationalreminder.ca/podcast/100" target="_blank" style="color:#1e40af;font-weight:700">Episode 100：Evidence-Based Investing Deep Dive</a><br><span style="color:var(--gray-500);font-size:12px">72分钟 · 100集里程碑，总结循证投资的核心原则。是整个播客的精华浓缩版，新听众起点首选</span></div></li>
+  <li><span class="resource-badge rb-podcast">经典集</span><div><a href="https://rationalreminder.ca/podcast/148" target="_blank" style="color:#1e40af;font-weight:700">Episode 148：Interview with Eugene Fama（诺贝尔奖得主访谈）</a><br><span style="color:var(--gray-500);font-size:12px">75分钟 · 直接对话 Fama-French 模型创始人！讨论因子投资的现状、市场有效性和投资实践。极其难得的访谈</span></div></li>
+  <li><span class="resource-badge rb-podcast">经典集</span><div><a href="https://rationalreminder.ca/podcast/163" target="_blank" style="color:#1e40af;font-weight:700">Episode 163：Interview with Robert Novy-Marx（盈利因子之父）</a><br><span style="color:var(--gray-500);font-size:12px">65分钟 · 盈利能力因子的学术奠基人解释为什么"高盈利公司持续跑赢"，以及如何在实践中捕获这个溢价</span></div></li>
+  <li><span class="resource-badge rb-podcast">近期推荐</span><div><a href="https://rationalreminder.ca/podcast/290" target="_blank" style="color:#1e40af;font-weight:700">Episode 290+：2024 Market Review & Factor Performance</a><br><span style="color:var(--gray-500);font-size:12px">每年年末的回顾集，分析各因子当年表现、给出下一年的期望回报展望。是检验因子是否有效的年度报告</span></div></li>
+  <li><span class="resource-badge rb-podcast">进阶推荐</span><div><a href="https://rationalreminder.ca/podcast/179" target="_blank" style="color:#1e40af;font-weight:700">Episode 179：The Five Factor Model Deep Dive</a><br><span style="color:var(--gray-500);font-size:12px">90分钟 · 完整讲解本节课第二章的内容——五个因子的学术证据、实践建议和常见误解澄清</span></div></li>
+</ul>
+
+<h2>五、2024-2025 最新内容追踪</h2>
+
+<div style="background:#fef9c3;border:1px solid #fde047;border-radius:10px;padding:16px;margin:16px 0">
+<strong style="color:#713f12;font-size:14px">📡 如何持续追踪 Ben Felix 的最新产出</strong>
+<div style="margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:13px">
+  <div style="background:#fff;border-radius:8px;padding:12px;border:1px solid #fde68a">
+    <div style="font-weight:700;color:#92400e;margin-bottom:6px">YouTube 订阅</div>
+    <div style="color:#64748b"><a href="https://www.youtube.com/@BenFelixCSI" target="_blank" style="color:#2563eb">@BenFelixCSI</a><br>通常每月 1-2 期视频，开启通知</div>
+  </div>
+  <div style="background:#fff;border-radius:8px;padding:12px;border:1px solid #fde68a">
+    <div style="font-weight:700;color:#92400e;margin-bottom:6px">播客订阅</div>
+    <div style="color:#64748b">Apple Podcasts/Spotify 搜索<br>"Rational Reminder"，每周更新</div>
+  </div>
+  <div style="background:#fff;border-radius:8px;padding:12px;border:1px solid #fde68a">
+    <div style="font-weight:700;color:#92400e;margin-bottom:6px">PWL Capital 博客</div>
+    <div style="color:#64748b"><a href="https://www.pwlcapital.com/insights/" target="_blank" style="color:#2563eb">pwlcapital.com/insights</a><br>深度白皮书和研究报告</div>
+  </div>
+  <div style="background:#fff;border-radius:8px;padding:12px;border:1px solid #fde68a">
+    <div style="font-weight:700;color:#92400e;margin-bottom:6px">Twitter/X</div>
+    <div style="color:#64748b"><a href="https://twitter.com/benjaminwfelix" target="_blank" style="color:#2563eb">@benjaminwfelix</a><br>实时分享最新研究发现</div>
+  </div>
+</div>
+</div>
+
+<h3>2024年重点内容</h3>
+<ul class="resource-list">
+  <li><span class="resource-badge rb-video">2024</span><div><a href="https://www.youtube.com/watch?v=qkPzNWXtLhI" target="_blank" style="color:#1e40af;font-weight:700">Magnificent 7 和集中度风险（2024版）</a><br><span style="color:var(--gray-500);font-size:12px">2024年最受关注的视频之一：当7只科技股占 S&P 500 的35%+时，指数投资还安全吗？他用历史数据分析高集中度市场的后续表现</span></div></li>
+  <li><span class="resource-badge rb-video">2024</span><div><a href="https://www.youtube.com/watch?v=T7_XjNRFMHg" target="_blank" style="color:#1e40af;font-weight:700">AI 泡沫还是生产力革命？（投资视角）</a><br><span style="color:var(--gray-500);font-size:12px">Ben Felix 如何看待 NVDA 的估值？他的框架：即使AI会改变世界，也不代表AI股票是好投资（历史上互联网改变世界，但大多数互联网公司投资者亏损）</span></div></li>
+  <li><span class="resource-badge rb-podcast">2025</span><div><a href="https://rationalreminder.ca" target="_blank" style="color:#1e40af;font-weight:700">Rational Reminder 2025年：关税冲击与因子投资应对</a><br><span style="color:var(--gray-500);font-size:12px">2025年贸易战背景下，因子投资者如何看待全球分散化？他的观点：正是这种不确定性，让国际分散化的价值更突出</span></div></li>
+</ul>
+
+<h2>六、与本课程其他知识的结合</h2>
+
+<div class="table-wrap"><table>
+<thead><tr><th>已学知识</th><th>Ben Felix的补充维度</th><th>建议视频</th></tr></thead>
+<tbody>
+<tr><td>被动投资（第29课）</td><td>为什么学术证据支持被动投资</td><td>Why You Shouldn't Pick Stocks</td></tr>
+<tr><td>ETF配置（第10课）</td><td>如何在被动基础上叠加因子</td><td>The 5 Factor Model</td></tr>
+<tr><td>养老规划（第17-19课）</td><td>回报顺序风险与退休提取</td><td>Sequence of Returns Risk</td></tr>
+<tr><td>风险管理（第15课）</td><td>因子投资的行为纪律</td><td>The Problem with Factor Investing</td></tr>
+<tr><td>国际分散（全文）</td><td>学术角度为什么要持有非美国股</td><td>International Diversification</td></tr>
+</tbody></table></div>
+
+<h2>七、实战清单</h2>
+<ul class="checklist-default">
+  <li data-key="bf1"><div class="check-box">✓</div><span class="check-text"><strong>订阅 YouTube 频道并开启通知</strong>——搜索 "Ben Felix" 或直接访问 youtube.com/@BenFelixCSI，点击铃铛。他每期视频都是精华，不设通知会错过</span></li>
+  <li data-key="bf2"><div class="check-box">✓</div><span class="check-text"><strong>添加 Rational Reminder 到播客APP</strong>——用 Apple Podcasts / Spotify / Pocket Casts 搜索订阅。从 Episode 100 开始听，利用通勤时间。每周1集，坚持3个月你对学术金融的理解会质变</span></li>
+  <li data-key="bf3"><div class="check-box">✓</div><span class="check-text"><strong>看完"Why You Shouldn't Pick Stocks"</strong>——哪怕只看一期 Ben Felix 视频，就看这一期。20分钟，彻底重塑你对选股的认知</span></li>
+  <li data-key="bf4"><div class="check-box">✓</div><span class="check-text"><strong>理解5因子模型的直觉逻辑</strong>——不需要记住数学公式，但要理解"市场、规模、价值、盈利能力、投资"五个因子代表什么经济风险，以及为什么有补偿</span></li>
+  <li data-key="bf5"><div class="check-box">✓</div><span class="check-text"><strong>评估是否值得倾斜因子</strong>——读完本节后，你的问题应该变成："除了VOO/VTI，是否值得加5-20% AVUV（小盘价值质量）来倾斜因子？" 这是进阶投资者的合理问题，没有标准答案</span></li>
+  <li data-key="bf6"><div class="check-box">✓</div><span class="check-text"><strong>关注 PWL Capital 年度投资组合建议</strong>——PWL每年发布他们的模型组合更新，Ben Felix会在视频解说。这是把学术理论转化为实践操作的最好参考</span></li>
+</ul>
+
+<div style="background:#f0f9ff;border:1px solid #7dd3fc;border-radius:12px;padding:20px;margin:24px 0">
+<strong style="color:#0369a1;font-size:15px">🧠 关键认知升级</strong>
+<p style="margin-top:10px;font-size:13px;line-height:1.8;color:#374151">
+  学完本节后，你对投资的理解应该有一个本质升级：<strong>回报不是来自运气或聪明，而是来自承担特定的、可识别的风险因子。</strong>市场（Beta）、规模、价值、盈利能力——每一个因子都是对一种经济风险的补偿。这意味着：① 你可以有目的地构建组合来"购买"这些风险溢价；② 如果某因子消失，你知道原因，不会恐慌；③ 你的投资决策从"猜测"变成了"有学术依据的配置"。这就是 Ben Felix 带给你的最核心礼物。
+</p>
+</div>
+
+<div id="live-updates-ben_felix"></div>
+<div id="podcast-player-ben"></div>
+`,
+
+// =====================================================================
+'audio-commute':`
+<p>你每天上下班路上的时间，可能是你一天中最宝贵的"学习窗口"——因为没有会议打断，没有消息弹出，只有你和耳机里的声音。这节课专门设计一套<strong>全普通话通勤投资学习路线图</strong>，从播客到音频课再到有声书，全部中文，直接听就能懂。</p>
+
+<div style="background:linear-gradient(135deg,#fef3c7,#fff7ed);border:1.5px solid #fbbf24;border-radius:14px;padding:20px;margin:16px 0">
+<strong style="color:#92400e;font-size:15px">🎧 你的通勤时间价值有多大？</strong>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px">
+  <div style="background:#fff;border-radius:8px;padding:14px;text-align:center;border:1px solid #fde68a">
+    <div style="font-size:24px;font-weight:900;color:#92400e">500+</div>
+    <div style="font-size:12px;color:#64748b">年通勤小时数（1小时/天）</div>
+  </div>
+  <div style="background:#fff;border-radius:8px;padding:14px;text-align:center;border:1px solid #fde68a">
+    <div style="font-size:24px;font-weight:900;color:#92400e">250+</div>
+    <div style="font-size:12px;color:#64748b">可听播客/课程集数</div>
+  </div>
+  <div style="background:#fff;border-radius:8px;padding:14px;text-align:center;border:1px solid #fde68a">
+    <div style="font-size:24px;font-weight:900;color:#92400e">3年</div>
+    <div style="font-size:12px;color:#64748b">从入门到顶级投资者认知</div>
+  </div>
+</div>
+<p style="font-size:13px;color:#92400e;margin-top:10px">1年通勤 ≈ 读完20本书 = 完成100节大学课程。不用的时候它叫"浪费"，用起来叫"复利"。</p>
+</div>
+
+<div style="background:linear-gradient(135deg,#eff6ff,#f5f3ff);border:1.5px solid #c7d2fe;border-radius:14px;padding:18px;margin:16px 0">
+<strong style="color:#4f46e5;font-size:15px">🎙️ 外国播客 × 普通话音频 — 自动生成</strong>
+<p style="font-size:13px;color:#4c1d95;margin-top:8px;line-height:1.6">
+  服务器每天 08:00 自动抓取 <strong>Rational Reminder</strong> 和 <strong>Ben Felix</strong> 最新集的英文文字稿，
+  用 GPT-4o-mini 压缩翻译成 1800 字中文摘要，再用 OpenAI TTS（nova 声音）生成 <strong>5-7 分钟普通话 MP3</strong>，
+  直接在下方播放。通勤路上无需打开任何 APP，点击即听。
+</p>
+</div>
+
+<div id="podcast-player-all"></div>
+
+<h2>一、先装好这三个APP（5分钟搞定）</h2>
+
+<div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:16px;margin:16px 0">
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;font-size:13px">
+  <div style="background:#fff;border-radius:8px;padding:14px;border:2px solid #6366f1">
+    <div style="font-weight:700;color:#4f46e5;font-size:14px;margin-bottom:6px">⭐ 小宇宙</div>
+    <div style="color:#64748b">• 中文播客首选<br>• 内容最全、更新最快<br>• 离线下载、倍速播放<br>• 完全免费<br><strong style="color:#4f46e5">→ 主力APP</strong></div>
+  </div>
+  <div style="background:#fff;border-radius:8px;padding:14px;border:1px solid #e2e8f0">
+    <div style="font-weight:700;color:#1d4ed8;font-size:14px;margin-bottom:6px">得到APP</div>
+    <div style="color:#64748b">• 系统化音频课程<br>• 顶级老师授课<br>• 每天10-30分钟小课<br>• 部分付费（值得）<br><strong style="color:#1d4ed8">→ 系统学习</strong></div>
+  </div>
+  <div style="background:#fff;border-radius:8px;padding:14px;border:1px solid #e2e8f0">
+    <div style="font-weight:700;color:#059669;font-size:14px;margin-bottom:6px">喜马拉雅</div>
+    <div style="color:#64748b">• 有声书最丰富<br>• 投资经典书全有<br>• 开车/地铁均适合<br>• 会员￥25/月<br><strong style="color:#059669">→ 有声书库</strong></div>
+  </div>
+</div>
+<p style="font-size:12px;color:#64748b;margin-top:10px">⚡ <strong>关键设置</strong>：三个APP都打开 1.5x 倍速播放，耳朵2-3天后完全适应。同样通勤时间可多吸收50%内容。</p>
+</div>
+
+<h2>二、普通话播客路线图（按投资学习阶段）</h2>
+
+<h3>🟢 第一阶段：投资认知重建（前1-2个月）</h3>
+<p style="font-size:13px;color:#64748b">目标：把过去的散乱认知推倒重来，建立正确的底层框架</p>
+
+<ul class="resource-list">
+  <li><span class="resource-badge rb-podcast">强烈推荐</span><div><strong>知行小酒馆</strong>（小宇宙）<br><span style="color:var(--gray-500);font-size:12px">睿远基金旗下播客，陈光明/傅鹏博团队出品 · 30-60分钟/集 · 不定期更新<br>⭐⭐ <strong>中文投资播客天花板</strong>。不讲个股推荐，专注长期投资框架、价值投资理念、行为金融学。每集都是精华。搜索"知行小酒馆"即可在小宇宙找到</span></div></li>
+  <li><span class="resource-badge rb-podcast">强烈推荐</span><div><strong>超额收益</strong>（小宇宙）<br><span style="color:var(--gray-500);font-size:12px">专注A股和美股ETF的理性投资播客 · 20-40分钟/集<br>讨论指数投资、资产配置、定投策略，有大量关于VOO/QQQ/SCHD的中文解析。与本课程内容高度契合，相当于本课程的音频版补充</span></div></li>
+  <li><span class="resource-badge rb-podcast">入门必听</span><div><strong>钱与自由</strong>（小宇宙）<br><span style="color:var(--gray-500);font-size:12px">个人财务规划 + 投资启蒙 · 20-40分钟/集<br>从"为什么要投资"讲起，聊储蓄率、复利、被动收入。对刚开始建立投资习惯的阶段极有价值，能解答"我这种情况适合怎么开始"的实际问题</span></div></li>
+</ul>
+
+<div class="code-block"><span class="cm">// 第一阶段每周通勤计划（以每天上下班各30分钟为例）</span>
+<span class="hl">周一早</span>：知行小酒馆 新集/存档集（30min）
+<span class="hl">周一晚</span>：钱与自由（30min，建立财务规划意识）
+<span class="hl">周二早</span>：超额收益（关于ETF定投的集数）
+<span class="hl">周二晚</span>：继续超额收益 或 复听知行小酒馆
+<span class="hl">周三</span>  ：得到APP 张潇雨·个人投资课（每天1-2讲，各10-15min）
+<span class="hl">周四</span>  ：喜马拉雅《金钱心理学》有声书（对应本课程第1课内容）
+<span class="hl">周五</span>  ：自由补听本周感兴趣的任意一集
+
+月均学习量：20小时高密度中文投资内容</div>
+
+<h3>🔵 第二阶段：公司认知深化（2-4个月）</h3>
+<p style="font-size:13px;color:#64748b">目标：深度理解科技公司，建立真实的行业+投资复合判断力</p>
+
+<ul class="resource-list">
+  <li><span class="resource-badge rb-podcast">深度必听</span><div><strong>商业就是这样</strong>（小宇宙）<br><span style="color:var(--gray-500);font-size:12px">中文版 Acquired · 每集深度研究一家伟大公司的全部历史 · 1-4小时/集<br><br>⭐⭐ <strong>通勤最佳伴侣</strong>——一集可以跨越多天通勤，长度完美匹配。作为互联网从业者，你对这些公司的理解会比普通投资者深2倍，听完能直接转化为投资判断。<br><br>推荐收听顺序：<br>• 英伟达（NVIDIA）——AI时代最重要的公司<br>• 苹果（Apple）——科技护城河完整教科书<br>• 微软（Microsoft）——云转型与企业护城河<br>• 亚马逊（Amazon）——飞轮效应与AWS估值逻辑<br>• 谷歌（Google）——广告垄断与AI竞争<br>每集听完，你对该公司的理解会碾压大多数分析师报告</span></div></li>
+  <li><span class="resource-badge rb-podcast">科技视角</span><div><strong>硅谷101</strong>（小宇宙）<br><span style="color:var(--gray-500);font-size:12px">硅谷华人深度报道科技公司 · 30-60分钟/集 · 定期更新<br>专注硅谷最新动态：AI竞争格局、新兴公司分析、科技政策。作为互联网从业者，你的行业认知 × 他们的深度报道 = 对科技股的独特判断力。比看新闻深度高10倍</span></div></li>
+  <li><span class="resource-badge rb-podcast">宏观框架</span><div><strong>何帆大局观</strong>（得到APP）<br><span style="color:var(--gray-500);font-size:12px">北京大学汇丰商学院教授何帆 · 10-15分钟/集<br>用结构性框架解读全球宏观趋势：中美关系、产业链重构、科技周期。帮你把宏观动态转化为投资判断，而不是被每天的市场噪音牵着走</span></div></li>
+</ul>
+
+<h3>🟣 第三阶段：系统课程强化（4-12个月）</h3>
+<p style="font-size:13px;color:#64748b">目标：用系统课程打通知识盲区，形成完整的个人投资体系</p>
+
+<ul class="resource-list">
+  <li><span class="resource-badge rb-paid">得到·强推</span><div><strong>张潇雨·个人投资课</strong>（得到APP）· 约￥199<br><span style="color:var(--gray-500);font-size:12px">⭐⭐ <strong>中文个人投资课程第一名</strong>，没有之一。前腾讯、得到投资人，用10分钟/集的短音频系统讲透：为什么不能选股、资产配置原理、投资心理学、指数基金实操。<br>100+讲，全部10-15分钟，通勤碎片化学习的完美格式。听完后你对本课程所有内容的理解会再上一个台阶</span></div></li>
+  <li><span class="resource-badge rb-paid">得到·推荐</span><div><strong>香帅的北大金融学课</strong>（得到APP）· 约￥199<br><span style="color:var(--gray-500);font-size:12px">北京大学汇丰商学院教授唐涯（香帅）· 10分钟/集 · 365讲<br>系统金融学基础——资产定价、市场效率、金融工具原理。是本课程阅读内容的"声音版本"，帮你把抽象金融概念真正内化。特别推荐：关于"资产定价"和"市场有效性"的章节</span></div></li>
+  <li><span class="resource-badge rb-free">小宇宙·免费</span><div><strong>曾博·价值投资的逻辑</strong>（小宇宙）<br><span style="color:var(--gray-500);font-size:12px">专注价值投资的深度访谈播客 · 60-90分钟/集<br>邀请真实的基金经理、价值投资实践者做深度对话。不讲大道理，讲真实决策过程。适合在建立基础认知后，想了解"顶级投资者实际怎么想"的进阶阶段</span></div></li>
+  <li><span class="resource-badge rb-free">小宇宙·免费</span><div><strong>ETF拯救世界</strong>（小宇宙）<br><span style="color:var(--gray-500);font-size:12px">专注ETF指数投资的播客 · 20-40分钟/集<br>中文ETF投资播客中最专业的一个，讨论各类ETF的构成、策略、费率对比，以及定投执行中的实际问题。本课程ETF章节的完美音频伴侣</span></div></li>
+</ul>
+
+<h2>三、有声书：投资经典全部可以听</h2>
+
+<div style="background:#f0f9ff;border:1px solid #7dd3fc;border-radius:10px;padding:16px;margin:16px 0">
+<strong style="color:#0369a1;font-size:14px">📚 喜马拉雅 / 微信读书 有声书清单（与课程一一对应）</strong>
+<p style="font-size:12px;color:#64748b;margin-top:6px">微信读书的"听书"功能免费，喜马拉雅会员￥25/月包含大量投资书。两者都可离线下载，通勤收听。</p>
+</div>
+
+<div class="table-wrap"><table>
+<thead><tr><th>书名</th><th>对应课程章节</th><th>时长</th><th>平台</th></tr></thead>
+<tbody>
+<tr><td><strong>《金钱心理学》</strong><br>Morgan Housel</td><td>贯穿全课程（投资行为基础）</td><td>约6小时</td><td>喜马拉雅/微信读书</td></tr>
+<tr><td><strong>《聪明的投资者》</strong><br>Benjamin Graham</td><td>第5-8课（估值体系）</td><td>约18小时</td><td>喜马拉雅</td></tr>
+<tr><td><strong>《穷查理宝典》</strong><br>Charlie Munger</td><td>第25课（Farnam心智模型）</td><td>约15小时</td><td>喜马拉雅/微信读书</td></tr>
+<tr><td><strong>《周期》</strong><br>Howard Marks</td><td>第27课（Howard Marks专栏）</td><td>约8小时</td><td>喜马拉雅/微信读书</td></tr>
+<tr><td><strong>《投资最重要的事》</strong><br>Howard Marks</td><td>第27课（Howard Marks专栏）</td><td>约6小时</td><td>喜马拉雅/微信读书</td></tr>
+<tr><td><strong>《漫步华尔街》</strong><br>Burton Malkiel</td><td>第29课（被动投资学术证据）</td><td>约10小时</td><td>喜马拉雅</td></tr>
+<tr><td><strong>《彼得·林奇的成功投资》</strong><br>Peter Lynch</td><td>第22课（价值投资精华）</td><td>约7小时</td><td>喜马拉雅/微信读书</td></tr>
+<tr><td><strong>《巴菲特致股东的信》</strong><br>Warren Buffett</td><td>第20课（全球顶级领路人）</td><td>约12小时</td><td>喜马拉雅</td></tr>
+</tbody></table></div>
+
+<div style="background:#fef9c3;border:1px solid #fde047;border-radius:10px;padding:12px;margin:12px 0;font-size:13px">
+<strong style="color:#713f12">💡 微信读书听书技巧</strong>：打开微信读书 → 搜索书名 → 点"听书" → 选AI朗读或真人朗读（真人版更好）→ 后台播放。完全免费，还能随时暂停切换到文字版核实细节。
+</div>
+
+<h2>四、一周通勤学习黄金计划（全普通话版）</h2>
+
+<div class="code-block"><span class="cm">// 以每天上下班各30分钟（共1小时）为基准，全中文内容</span>
+
+<span class="hl">周一</span>：上班——知行小酒馆 1集（45min，到公司后停）
+         下班——得到：张潇雨投资课 2-3讲（各12min）
+         ✓ 投资框架 + 实操细节
+
+<span class="hl">周二</span>：上班——商业就是这样（听目标公司，如 NVIDIA）
+         下班——商业就是这样（续集）
+         ✓ 深度理解科技公司护城河
+
+<span class="hl">周三</span>：上班——硅谷101（最新科技动态）
+         下班——超额收益（ETF/指数投资专题）
+         ✓ 行业认知 + ETF投资方法
+
+<span class="hl">周四</span>：上班——喜马拉雅有声书（本周对应课程书籍）
+         下班——喜马拉雅续集
+         ✓ 投资经典内化
+
+<span class="hl">周五</span>：上班——钱与自由 / 曾博价值投资（进阶思维）
+         下班——自由听：复听本周最喜欢的任意1集
+         ✓ 巩固+保持学习乐趣
+
+<span class="hl">月均产出</span>：
+  • ~20小时 全普通话高质量投资内容
+  • 相当于每月读完4本投资书籍
+  • 6个月后认知将超越大多数散户投资者</div>
+
+<h2>五、按课程章节的音频资源对照表</h2>
+
+<div class="table-wrap"><table>
+<thead><tr><th>本课程章节</th><th>配套普通话音频</th><th>在哪里听</th></tr></thead>
+<tbody>
+<tr><td>市场基础（第1-4课）</td><td>香帅北大金融学课·市场章节</td><td>得到APP</td></tr>
+<tr><td>估值体系（第5-8课）</td><td>《聪明的投资者》有声书</td><td>喜马拉雅</td></tr>
+<tr><td>ETF投资（第9-10课）</td><td>ETF拯救世界 / 超额收益</td><td>小宇宙</td></tr>
+<tr><td>风险管理（第15-16课）</td><td>张潇雨投资课·风险心理学章节</td><td>得到APP</td></tr>
+<tr><td>养老规划（第17-19课）</td><td>钱与自由·退休规划系列</td><td>小宇宙</td></tr>
+<tr><td>Damodaran 专栏</td><td>商业就是这样·公司历史集</td><td>小宇宙</td></tr>
+<tr><td>Howard Marks 专栏</td><td>《周期》+《投资最重要的事》有声书</td><td>喜马拉雅</td></tr>
+<tr><td>Ben Felix 专栏</td><td>超额收益·因子投资专题集</td><td>小宇宙</td></tr>
+<tr><td>科技股分析（第28课）</td><td>商业就是这样 + 硅谷101</td><td>小宇宙</td></tr>
+<tr><td>SCHD研究（第30课）</td><td>ETF拯救世界·红利ETF专题</td><td>小宇宙</td></tr>
+</tbody></table></div>
+
+<h2>六、3个月后你会有什么变化</h2>
+
+<div style="background:#f0fdf4;border:1px solid #86efac;border-radius:12px;padding:20px;margin:24px 0">
+<strong style="color:#15803d;font-size:15px">🎯 通勤学习3个月里程碑</strong>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px;font-size:13px">
+  <div style="background:#fff;border-radius:8px;padding:12px;border:1px solid #86efac">
+    <div style="font-weight:700;color:#15803d;margin-bottom:6px">第1个月</div>
+    <div style="color:#374151">• 建立长期投资的正确心理框架<br>• 不再被市场短期涨跌影响情绪<br>• 理解为什么指数基金是基础<br>• 开始质疑"荐股"类内容的可信度</div>
+  </div>
+  <div style="background:#fff;border-radius:8px;padding:12px;border:1px solid #86efac">
+    <div style="font-weight:700;color:#15803d;margin-bottom:6px">第2个月</div>
+    <div style="color:#374151">• 对2-3家科技公司有深度认知<br>• 能用有声书内容验证课程内容<br>• 形成"通勤=学习"的固定习惯<br>• 能向身边朋友清晰解释ETF定投</div>
+  </div>
+  <div style="background:#fff;border-radius:8px;padding:12px;border:1px solid #86efac">
+    <div style="font-weight:700;color:#15803d;margin-bottom:6px">第3个月</div>
+    <div style="color:#374151">• 形成自己的投资框架<br>• 音频+阅读双线并行，信息密度翻倍<br>• 投资决策有清晰逻辑，不依赖直觉<br>• 认知碾压大多数"老股民"</div>
+  </div>
+  <div style="background:#fff;border-radius:8px;padding:12px;border:1px solid #86efac">
+    <div style="font-weight:700;color:#15803d;margin-bottom:6px">1年后</div>
+    <div style="color:#374151">• 约240小时中文投资内容输入<br>• 相当于完整的个人投资研究生课程<br>• 通勤时间完全不再"浪费"<br>• 认知差距已经开始转化为财富差距</div>
+  </div>
+</div>
+</div>
+
+<div style="text-align:center;margin-top:36px;padding:32px;background:linear-gradient(135deg,#7c3aed,#1d4ed8);border-radius:16px;color:#fff">
+  <div style="font-size:22px;font-weight:900;margin-bottom:8px">🎧 明天上班就开始</div>
+  <div style="font-size:14px;opacity:.9;line-height:1.8">
+    今晚：下载小宇宙APP → 搜索"知行小酒馆" → 订阅 → 下载最近3集备用<br>
+    同时：下载得到APP → 搜索"张潇雨个人投资课" → 购买（￥199，值得）<br>
+    同时：打开微信读书 → 搜索《金钱心理学》→ 点"听书" → 免费<br><br>
+    <strong>明天上班路上，你的通勤时间就已经开始产生复利了。</strong>
+  </div>
+  <div style="margin-top:16px;font-size:12px;opacity:.8">
+    "你的认知边界，就是你财富的边界。通勤路上的1小时，是最低成本的认知升级。"
   </div>
 </div>
 `,
