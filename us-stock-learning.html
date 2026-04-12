@@ -5653,291 +5653,563 @@ SCHD股息自动覆盖（目标）：
 
 // =====================================================================
 'retirement-cases':`
-<p style="color:#64748b;font-size:14px;margin-bottom:16px">以下为四种常见退休情景的完整推演，供参考对照。点击顶部标签切换案例。</p>
+<style>
+.rc-tag{display:inline-block;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;letter-spacing:.04em;margin-bottom:6px}
+.rc-section-title{font-weight:700;color:#1e293b;font-size:14px;margin-bottom:10px}
+.rc-stock-card{border:1px solid #e2e8f0;border-radius:10px;padding:14px 16px;margin-bottom:10px;background:#fafafa}
+.rc-stock-name{background:#1e293b;color:#fff;font-size:12px;font-weight:800;padding:4px 10px;border-radius:6px;display:inline-block;margin-bottom:8px}
+.rc-stock-what{font-size:13px;color:#374151;line-height:1.85;margin-bottom:6px}
+.rc-stock-role{font-size:13px;color:#374151;line-height:1.85;background:#f0f9ff;border-left:3px solid #3b82f6;padding:8px 12px;border-radius:0 8px 8px 0}
+.rc-stats{font-size:11px;color:#94a3b8;margin-top:5px}
+</style>
+
+<p style="color:#64748b;font-size:14px;margin-bottom:16px">以下四个案例展示在40岁或45岁开始系统投资美股、60岁退休的完整路径。包含积累期组合配置、每只标的选择逻辑、20/15年成长推演以及退休启动预测。</p>
 
 <div style="display:flex;gap:0;border-radius:12px 12px 0 0;overflow:hidden;border:1.5px solid #e2e8f0;border-bottom:none">
-  <button id="rp-tab-0" onclick="rpSwitchCase(0)" style="flex:1;padding:13px 8px;background:#1e293b;color:#fff;border:none;font-size:13px;font-weight:700;cursor:pointer;transition:all 0.2s">保守型 · 40岁</button>
-  <button id="rp-tab-1" onclick="rpSwitchCase(1)" style="flex:1;padding:13px 8px;background:#f1f5f9;color:#374151;border:none;border-left:1px solid #e2e8f0;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s">保守型 · 45岁</button>
-  <button id="rp-tab-2" onclick="rpSwitchCase(2)" style="flex:1;padding:13px 8px;background:#f1f5f9;color:#374151;border:none;border-left:1px solid #e2e8f0;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s">激进型 · 40岁</button>
-  <button id="rp-tab-3" onclick="rpSwitchCase(3)" style="flex:1;padding:13px 8px;background:#f1f5f9;color:#374151;border:none;border-left:1px solid #e2e8f0;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s">激进型 · 45岁</button>
+  <button id="rp-tab-0" onclick="rpSwitchCase(0)" style="flex:1;padding:13px 8px;background:#1e293b;color:#fff;border:none;font-size:12px;font-weight:700;cursor:pointer;transition:all 0.2s;line-height:1.4">保守型<br>40岁起·60岁退</button>
+  <button id="rp-tab-1" onclick="rpSwitchCase(1)" style="flex:1;padding:13px 8px;background:#f1f5f9;color:#374151;border:none;border-left:1px solid #e2e8f0;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s;line-height:1.4">保守型<br>45岁起·60岁退</button>
+  <button id="rp-tab-2" onclick="rpSwitchCase(2)" style="flex:1;padding:13px 8px;background:#f1f5f9;color:#374151;border:none;border-left:1px solid #e2e8f0;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s;line-height:1.4">激进型<br>40岁起·60岁退</button>
+  <button id="rp-tab-3" onclick="rpSwitchCase(3)" style="flex:1;padding:13px 8px;background:#f1f5f9;color:#374151;border:none;border-left:1px solid #e2e8f0;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s;line-height:1.4">激进型<br>45岁起·60岁退</button>
 </div>
 
 <div style="border:1.5px solid #e2e8f0;border-radius:0 0 14px 14px;overflow:hidden;margin-bottom:28px">
 
-  <div id="rp-case-0" style="padding:24px">
-    <div style="background:linear-gradient(135deg,#1e40af,#1d4ed8);border-radius:12px;padding:20px 24px;color:#fff;margin-bottom:20px">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
-        <span style="background:rgba(255,255,255,0.25);font-size:12px;font-weight:700;padding:3px 10px;border-radius:20px">保守型</span>
-        <span style="font-size:13px;opacity:0.8">退休期 50年 · 二线城市 · 夫妻两人</span>
-      </div>
-      <div style="font-size:20px;font-weight:800;margin-bottom:8px">40岁提前退休方案</div>
-      <div style="display:flex;gap:20px;font-size:13px;opacity:0.9">
-        <span>总资产 ¥1200万</span><span>美股55% ≈ $90万</span><span>月支出 ¥2.5万</span><span>有社保（60岁起）</span>
-      </div>
+<!-- =============================== CASE 0 =============================== -->
+<div id="rp-case-0" style="padding:24px">
+  <div style="background:linear-gradient(135deg,#1e40af,#1d4ed8);border-radius:12px;padding:20px 24px;color:#fff;margin-bottom:20px">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+      <span class="rc-tag" style="background:rgba(255,255,255,0.25);color:#fff">保守型</span>
+      <span style="font-size:13px;opacity:0.8">积累期20年 · 一线/二线城市 · 在职中产</span>
     </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px">
-      <div style="background:#f8fafc;border-radius:10px;padding:16px">
-        <div style="font-size:12px;font-weight:700;color:#64748b;margin-bottom:8px">核心挑战</div>
-        <ul style="font-size:13px;color:#374151;line-height:2;margin:0;padding-left:16px">
-          <li>50年超长退休期，通胀是头号威胁</li>
-          <li>40岁社保未启动，需自给自足20年</li>
-          <li>债券配置需适度，不能过于保守</li>
-        </ul>
-      </div>
-      <div style="background:#f0fdf4;border-radius:10px;padding:16px">
-        <div style="font-size:12px;font-weight:700;color:#64748b;margin-bottom:8px">核心优势</div>
-        <ul style="font-size:13px;color:#374151;line-height:2;margin:0;padding-left:16px">
-          <li>资产充裕，4%法则完全可行</li>
-          <li>60岁社保启动，现金流大幅改善</li>
-          <li>有自住房，无房贷压力</li>
-        </ul>
-      </div>
-    </div>
-    <div style="margin-bottom:20px">
-      <div style="font-weight:700;color:#1e293b;font-size:14px;margin-bottom:10px">💼 推荐美股组合（美股总资产 ¥660万 ≈ $90万）</div>
-      <div class="table-wrap"><table>
-        <thead><tr><th>持仓</th><th>比例</th><th>金额</th><th>股息率</th><th>年股息</th><th>配置逻辑</th></tr></thead>
-        <tbody>
-          <tr><td><strong>VOO</strong></td><td>25%</td><td>$22.5万</td><td>1.3%</td><td>$0.29万</td><td>核心成长，跑赢通胀</td></tr>
-          <tr><td><strong>SCHD</strong></td><td>22%</td><td>$19.8万</td><td>3.5%</td><td>$0.69万</td><td>股息增长核心仓</td></tr>
-          <tr><td><strong>VYM</strong></td><td>8%</td><td>$7.2万</td><td>2.8%</td><td>$0.20万</td><td>分散SCHD集中风险</td></tr>
-          <tr><td><strong>BND</strong></td><td>28%</td><td>$25.2万</td><td>4.0%</td><td>$1.01万</td><td>保守核心，降低波动</td></tr>
-          <tr><td><strong>TIPS</strong></td><td>10%</td><td>$9.0万</td><td>2.5%</td><td>$0.23万</td><td>直接对冲通胀风险</td></tr>
-          <tr><td><strong>GLD</strong></td><td>7%</td><td>$6.3万</td><td>—</td><td>—</td><td>危机对冲，稳定器</td></tr>
-          <tr style="background:#dcfce7;font-weight:700"><td colspan="4">合计年股息</td><td><strong>$2.42万 ≈ ¥17.7万/年</strong></td><td>月均¥1.5万</td></tr>
-        </tbody>
-      </table></div>
-    </div>
-    <div style="margin-bottom:20px">
-      <div style="font-weight:700;color:#1e293b;font-size:14px;margin-bottom:10px">📈 20年收入增长推演</div>
-      <div class="table-wrap"><table>
-        <thead><tr><th>年份</th><th>年龄</th><th>美股年股息</th><th>社保</th><th>4%补充</th><th>合计年收入</th><th>年支出需求</th></tr></thead>
-        <tbody>
-          <tr><td>退休首年</td><td>40岁</td><td>¥17.7万</td><td>—</td><td>¥12.3万</td><td><strong>¥30万</strong></td><td>¥30万 ✅</td></tr>
-          <tr><td>第10年</td><td>50岁</td><td>¥26万</td><td>—</td><td>¥4万</td><td><strong>¥30万</strong></td><td>¥34万 ✅</td></tr>
-          <tr style="background:#dbeafe"><td>第20年</td><td>60岁</td><td>¥38万</td><td>¥5万</td><td>—</td><td><strong>¥43万</strong></td><td>¥40万 ✅✅</td></tr>
-          <tr style="background:#dcfce7"><td>第30年</td><td>70岁</td><td>¥55万</td><td>¥5万</td><td>—</td><td><strong>¥60万</strong></td><td>¥45万（大幅盈余）</td></tr>
-        </tbody>
-      </table></div>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
-      <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:10px;padding:14px">
-        <div style="font-weight:700;color:#9a3412;font-size:13px;margin-bottom:6px">🛡️ 缓冲垫</div>
-        <div style="font-size:13px;color:#374151;line-height:1.8">保留 <strong>2年生活费 ≈ ¥60万</strong>于货币基金。退休前3年（37-40岁）每年存¥20万专项备用。</div>
-      </div>
-      <div style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:10px;padding:14px">
-        <div style="font-weight:700;color:#0c4a6e;font-size:13px;margin-bottom:6px">📋 提取策略</div>
-        <div style="font-size:13px;color:#374151;line-height:1.8"><strong>3.5%法则</strong>：年提取¥42万，股息¥17.7万自然流入，差额动态补足。60岁后转纯股息法。</div>
-      </div>
-    </div>
-    <div style="background:#fef3c7;border:1px solid #fde047;border-radius:10px;padding:14px;font-size:13px;line-height:1.8">⚠️ <strong>超长退休期提醒：</strong>50年通胀累积效应巨大，必须保留55%+股票（VOO+SCHD+VYM）的增长性。每5年重新评估资产配置。</div>
-  </div>
-
-  <div id="rp-case-1" style="display:none;padding:24px">
-    <div style="background:linear-gradient(135deg,#0f766e,#0d9488);border-radius:12px;padding:20px 24px;color:#fff;margin-bottom:20px">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
-        <span style="background:rgba(255,255,255,0.25);font-size:12px;font-weight:700;padding:3px 10px;border-radius:20px">保守型</span>
-        <span style="font-size:13px;opacity:0.8">退休期 45年 · 一线城市 · 夫妻两人</span>
-      </div>
-      <div style="font-size:20px;font-weight:800;margin-bottom:8px">45岁提前退休方案</div>
-      <div style="display:flex;gap:20px;font-size:13px;opacity:0.9">
-        <span>总资产 ¥1800万</span><span>美股60% ≈ $148万</span><span>月支出 ¥3.5万</span><span>夫妻社保60岁起¥9万/年</span>
-      </div>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px">
-      <div style="background:#f8fafc;border-radius:10px;padding:16px">
-        <div style="font-size:12px;font-weight:700;color:#64748b;margin-bottom:8px">核心挑战</div>
-        <ul style="font-size:13px;color:#374151;line-height:2;margin:0;padding-left:16px">
-          <li>一线城市生活成本高，月支出¥3.5万</li>
-          <li>15年社保空窗期（45-60岁）</li>
-          <li>汇率波动影响股息折算</li>
-        </ul>
-      </div>
-      <div style="background:#f0fdf4;border-radius:10px;padding:16px">
-        <div style="font-size:12px;font-weight:700;color:#64748b;margin-bottom:8px">核心优势</div>
-        <ul style="font-size:13px;color:#374151;line-height:2;margin:0;padding-left:16px">
-          <li>3.5%法则年收入¥63万，远超¥42万需求</li>
-          <li>夫妻双社保60岁起¥9万/年额外保障</li>
-          <li>首年盈余¥21万可继续再投入</li>
-        </ul>
-      </div>
-    </div>
-    <div style="margin-bottom:20px">
-      <div style="font-weight:700;color:#1e293b;font-size:14px;margin-bottom:10px">💼 推荐美股组合（美股总资产 ¥1080万 ≈ $148万）</div>
-      <div class="table-wrap"><table>
-        <thead><tr><th>持仓</th><th>比例</th><th>金额</th><th>股息率</th><th>年股息</th><th>配置逻辑</th></tr></thead>
-        <tbody>
-          <tr><td><strong>VOO</strong></td><td>25%</td><td>$37万</td><td>1.3%</td><td>$0.48万</td><td>核心成长</td></tr>
-          <tr><td><strong>SCHD</strong></td><td>22%</td><td>$32.6万</td><td>3.5%</td><td>$1.14万</td><td>股息增长核心仓</td></tr>
-          <tr><td><strong>VYM</strong></td><td>8%</td><td>$11.8万</td><td>2.8%</td><td>$0.33万</td><td>分散股息来源</td></tr>
-          <tr><td><strong>BND</strong></td><td>28%</td><td>$41.4万</td><td>4.0%</td><td>$1.66万</td><td>稳定收益锚</td></tr>
-          <tr><td><strong>TIPS</strong></td><td>10%</td><td>$14.8万</td><td>2.5%</td><td>$0.37万</td><td>对冲通胀</td></tr>
-          <tr><td><strong>GLD</strong></td><td>7%</td><td>$10.4万</td><td>—</td><td>—</td><td>危机稳定器</td></tr>
-          <tr style="background:#dcfce7;font-weight:700"><td colspan="4">合计年股息</td><td><strong>$3.98万 ≈ ¥29万/年</strong></td><td>月均¥2.4万</td></tr>
-        </tbody>
-      </table></div>
-    </div>
-    <div style="margin-bottom:20px">
-      <div style="font-weight:700;color:#1e293b;font-size:14px;margin-bottom:10px">📈 20年收入增长推演</div>
-      <div class="table-wrap"><table>
-        <thead><tr><th>年份</th><th>年龄</th><th>美股年股息</th><th>社保</th><th>补充提取</th><th>合计年收入</th><th>年支出</th></tr></thead>
-        <tbody>
-          <tr><td>退休首年</td><td>45岁</td><td>¥29万</td><td>—</td><td>¥13万</td><td><strong>¥42万</strong></td><td>¥42万 ✅</td></tr>
-          <tr><td>第10年</td><td>55岁</td><td>¥41万</td><td>—</td><td>—</td><td><strong>¥41万</strong></td><td>¥48万（接近）</td></tr>
-          <tr style="background:#dbeafe"><td>第15年</td><td>60岁</td><td>¥50万</td><td>¥9万</td><td>—</td><td><strong>¥59万</strong></td><td>¥50万 ✅✅</td></tr>
-          <tr style="background:#dcfce7"><td>第25年</td><td>70岁</td><td>¥75万</td><td>¥9万</td><td>—</td><td><strong>¥84万</strong></td><td>¥55万（大幅盈余）</td></tr>
-        </tbody>
-      </table></div>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
-      <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:10px;padding:14px">
-        <div style="font-weight:700;color:#9a3412;font-size:13px;margin-bottom:6px">🛡️ 缓冲垫</div>
-        <div style="font-size:13px;line-height:1.8">保留 <strong>2年生活费 ≈ ¥84万</strong>。港元账户保留HK$50万对冲汇率风险。</div>
-      </div>
-      <div style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:10px;padding:14px">
-        <div style="font-weight:700;color:#0c4a6e;font-size:13px;margin-bottom:6px">📋 提取策略</div>
-        <div style="font-size:13px;line-height:1.8"><strong>3.5%法则</strong>：年提取¥63万，首年盈余¥21万可再投入。60岁后转纯股息法。</div>
-      </div>
-    </div>
-    <div style="background:#ecfdf5;border:1px solid #6ee7b7;border-radius:10px;padding:14px;font-size:13px;line-height:1.8">✅ <strong>45岁保守型核心优势：</strong>资产¥1800万是最强保障，退休首年就有¥21万盈余，60岁社保启动后生活水平进一步提升。</div>
-  </div>
-
-  <div id="rp-case-2" style="display:none;padding:24px">
-    <div style="background:linear-gradient(135deg,#7f1d1d,#dc2626);border-radius:12px;padding:20px 24px;color:#fff;margin-bottom:20px">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
-        <span style="background:rgba(255,255,255,0.25);font-size:12px;font-weight:700;padding:3px 10px;border-radius:20px">激进型</span>
-        <span style="font-size:13px;opacity:0.8">退休期 50年 · 一线城市/考虑海外 · 无固定社保</span>
-      </div>
-      <div style="font-size:20px;font-weight:800;margin-bottom:8px">40岁超早退休方案</div>
-      <div style="display:flex;gap:20px;font-size:13px;opacity:0.9">
-        <span>总资产 ¥3000万</span><span>美股75% ≈ $308万</span><span>月支出 ¥6万</span><span>无社保，纯靠投资</span>
-      </div>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px">
-      <div style="background:#f8fafc;border-radius:10px;padding:16px">
-        <div style="font-size:12px;font-weight:700;color:#64748b;margin-bottom:8px">核心挑战</div>
-        <ul style="font-size:13px;color:#374151;line-height:2;margin:0;padding-left:16px">
-          <li>无社保兜底，全靠投资支撑50年</li>
-          <li>月支出¥6万，初期股息覆盖不足</li>
-          <li>QQQ高波动，心理承受要求高</li>
-        </ul>
-      </div>
-      <div style="background:#fff5f5;border-radius:10px;padding:16px">
-        <div style="font-size:12px;font-weight:700;color:#64748b;margin-bottom:8px">核心优势</div>
-        <ul style="font-size:13px;color:#374151;line-height:2;margin:0;padding-left:16px">
-          <li>4%法则年收入¥120万，远超¥72万需求</li>
-          <li>50年复利期，QQQ+个股增值潜力惊人</li>
-          <li>15年后SCHD股息可完全覆盖支出</li>
-        </ul>
-      </div>
-    </div>
-    <div style="margin-bottom:20px">
-      <div style="font-weight:700;color:#1e293b;font-size:14px;margin-bottom:10px">💼 推荐美股组合（美股总资产 ¥2250万 ≈ $308万）</div>
-      <div class="table-wrap"><table>
-        <thead><tr><th>持仓</th><th>比例</th><th>金额</th><th>股息率</th><th>年股息</th><th>配置逻辑</th></tr></thead>
-        <tbody>
-          <tr><td><strong>VOO</strong></td><td>28%</td><td>$86万</td><td>1.3%</td><td>$1.12万</td><td>核心基石</td></tr>
-          <tr><td><strong>SCHD</strong></td><td>18%</td><td>$55万</td><td>3.5%</td><td>$1.93万</td><td>股息增长引擎（8-11%/年）</td></tr>
-          <tr><td><strong>QQQ</strong></td><td>26%</td><td>$80万</td><td>0.6%</td><td>$0.48万</td><td>AI时代科技超额回报</td></tr>
-          <tr><td><strong>美股个股</strong>（MSFT/AAPL/GOOGL）</td><td>22%</td><td>$68万</td><td>1.2%</td><td>$0.82万</td><td>精选科技护城河</td></tr>
-          <tr><td><strong>GLD</strong></td><td>4%</td><td>$12万</td><td>—</td><td>—</td><td>危机对冲</td></tr>
-          <tr><td><strong>现金/货基</strong></td><td>2%</td><td>$6万</td><td>2.0%</td><td>$0.12万</td><td>机动资金</td></tr>
-          <tr style="background:#dcfce7;font-weight:700"><td colspan="4">合计年股息</td><td><strong>$4.47万 ≈ ¥32.6万/年</strong></td><td>月均¥2.7万（初期）</td></tr>
-        </tbody>
-      </table></div>
-    </div>
-    <div style="margin-bottom:20px">
-      <div style="font-weight:700;color:#1e293b;font-size:14px;margin-bottom:10px">📈 50年长期增长推演</div>
-      <div class="table-wrap"><table>
-        <thead><tr><th>年份</th><th>年龄</th><th>SCHD年股息</th><th>组合年股息（¥）</th><th>组合市值估算</th><th>备注</th></tr></thead>
-        <tbody>
-          <tr><td>退休首年</td><td>40岁</td><td>$1.93万</td><td>¥32.6万</td><td>¥3000万</td><td>4%法则补足缺口</td></tr>
-          <tr><td>第10年</td><td>50岁</td><td>$4.16万</td><td>¥58万</td><td>¥4500万（估）</td><td>基本平衡</td></tr>
-          <tr style="background:#fff5f5"><td>第15年</td><td>55岁</td><td>$6.12万</td><td>¥80万</td><td>¥5500万（估）</td><td>股息完全覆盖 ✅</td></tr>
-          <tr style="background:#dcfce7"><td>第30年</td><td>70岁</td><td>$19.4万</td><td>¥210万+</td><td>¥10000万+（估）</td><td>越老越富裕</td></tr>
-        </tbody>
-      </table></div>
-      <div style="font-size:12px;color:#64748b;margin-top:6px">注：SCHD股息增长8%/年，QQQ+VOO按历史年化10-12%估算，仅供参考。</div>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
-      <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:10px;padding:14px">
-        <div style="font-weight:700;color:#9a3412;font-size:13px;margin-bottom:6px">🛡️ 缓冲垫</div>
-        <div style="font-size:13px;line-height:1.8">保留 <strong>1年生活费 ≈ ¥72万</strong>。大跌时不止损是铁律，缓冲垫让你在危机期不被迫卖股。</div>
-      </div>
-      <div style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:10px;padding:14px">
-        <div style="font-weight:700;color:#0c4a6e;font-size:13px;margin-bottom:6px">📋 提取策略</div>
-        <div style="font-size:13px;line-height:1.8"><strong>初期（40-55岁）</strong>：4%动态提取（¥120万/年，盈余再投入）。<strong>55岁后</strong>：转纯股息法，永不卖股。</div>
-      </div>
-    </div>
-    <div style="background:#fef2f2;border:1px solid #fca5a5;border-radius:10px;padding:14px;font-size:13px;line-height:1.8">⚠️ <strong>最大风险：</strong>严格执行缓冲垫纪律，市场大跌年份优先动用缓冲垫，绝不在低位减持核心仓位。即使¥3000万缩水50%，4%法则仍可提取¥60万/年，依然可行。</div>
-  </div>
-
-  <div id="rp-case-3" style="display:none;padding:24px">
-    <div style="background:linear-gradient(135deg,#4c1d95,#7c3aed);border-radius:12px;padding:20px 24px;color:#fff;margin-bottom:20px">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
-        <span style="background:rgba(255,255,255,0.25);font-size:12px;font-weight:700;padding:3px 10px;border-radius:20px">激进型</span>
-        <span style="font-size:13px;opacity:0.8">退休期 45年 · 一线城市 · 有顾问收入（前5年）</span>
-      </div>
-      <div style="font-size:20px;font-weight:800;margin-bottom:8px">45岁激进型退休方案</div>
-      <div style="display:flex;gap:20px;font-size:13px;opacity:0.9">
-        <span>总资产 ¥2000万</span><span>美股70% ≈ $192万</span><span>月支出 ¥5万</span><span>顾问收入¥15万/年（前5年）</span>
-      </div>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px">
-      <div style="background:#f8fafc;border-radius:10px;padding:16px">
-        <div style="font-size:12px;font-weight:700;color:#64748b;margin-bottom:8px">核心挑战</div>
-        <ul style="font-size:13px;color:#374151;line-height:2;margin:0;padding-left:16px">
-          <li>初期股息¥20万，年支出¥60万，缺口大</li>
-          <li>顾问收入5年后消失，压力上升</li>
-          <li>QQQ+个股大幅震荡，考验持仓定力</li>
-        </ul>
-      </div>
-      <div style="background:#faf5ff;border-radius:10px;padding:16px">
-        <div style="font-size:12px;font-weight:700;color:#64748b;margin-bottom:8px">核心优势</div>
-        <ul style="font-size:13px;color:#374151;line-height:2;margin:0;padding-left:16px">
-          <li>4%法则年收入¥80万远超¥60万需求</li>
-          <li>顾问收入前5年大幅缓解提取压力</li>
-          <li>激进配置20年后股息完全覆盖生活</li>
-        </ul>
-      </div>
-    </div>
-    <div style="margin-bottom:20px">
-      <div style="font-weight:700;color:#1e293b;font-size:14px;margin-bottom:10px">💼 推荐美股组合（美股总资产 ¥1400万 ≈ $192万）</div>
-      <div class="table-wrap"><table>
-        <thead><tr><th>持仓</th><th>比例</th><th>金额</th><th>股息率</th><th>年股息</th><th>配置逻辑</th></tr></thead>
-        <tbody>
-          <tr><td><strong>VOO</strong></td><td>25%</td><td>$48万</td><td>1.3%</td><td>$0.62万</td><td>基石仓位</td></tr>
-          <tr><td><strong>SCHD</strong></td><td>20%</td><td>$38.4万</td><td>3.5%</td><td>$1.34万</td><td>股息增长核心</td></tr>
-          <tr><td><strong>QQQ</strong></td><td>28%</td><td>$53.8万</td><td>0.6%</td><td>$0.32万</td><td>AI+科技主引擎</td></tr>
-          <tr><td><strong>美股个股</strong>（MSFT/AAPL/NVDA）</td><td>22%</td><td>$42.2万</td><td>1.2%</td><td>$0.51万</td><td>精选护城河</td></tr>
-          <tr><td><strong>GLD</strong></td><td>5%</td><td>$9.6万</td><td>—</td><td>—</td><td>系统性对冲</td></tr>
-          <tr style="background:#dcfce7;font-weight:700"><td colspan="4">合计年股息</td><td><strong>$2.79万 ≈ ¥20.4万/年</strong></td><td>月均¥1.7万（初期）</td></tr>
-        </tbody>
-      </table></div>
-    </div>
-    <div style="margin-bottom:20px">
-      <div style="font-weight:700;color:#1e293b;font-size:14px;margin-bottom:10px">📈 三阶段提取路径</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
-        <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:10px;padding:14px">
-          <div style="font-weight:700;color:#9a3412;font-size:13px;margin-bottom:8px">第一阶段（45-50岁）</div>
-          <div style="font-size:13px;line-height:1.9">股息¥20万 + 顾问¥15万 = ¥35万<br>4%补足¥25万<br>合计¥60万 = 需求 ✅</div>
-        </div>
-        <div style="background:#faf5ff;border:1px solid #e9d5ff;border-radius:10px;padding:14px">
-          <div style="font-weight:700;color:#7c3aed;font-size:13px;margin-bottom:8px">第二阶段（50-60岁）</div>
-          <div style="font-size:13px;line-height:1.9">股息¥28万（8%增长）<br>4%提取补足¥32万<br>合计¥60万 ✅</div>
-        </div>
-        <div style="background:#f0fdf4;border:1px solid #86efac;border-radius:10px;padding:14px">
-          <div style="font-weight:700;color:#15803d;font-size:13px;margin-bottom:8px">第三阶段（60岁+）</div>
-          <div style="font-size:13px;line-height:1.9">股息¥45-60万（15年增长）<br>无需卖出 ✅✅<br>越老越富裕</div>
-        </div>
-      </div>
-    </div>
-    <div style="background:#f5f3ff;border:1px solid #c4b5fd;border-radius:10px;padding:14px;font-size:13px;line-height:1.8">
-      <strong style="color:#7c3aed">💡 关键洞察：</strong>4%法则退休首年即可提取¥80万，远超¥60万年支出，有¥20万/年再投入美股的「复利加速器」。随着QQQ和个股长期增值，10-15年后资产可能翻倍，届时完全进入股息法的「自由状态」——永远不需要再卖股票。
+    <div style="font-size:20px;font-weight:800;margin-bottom:8px">40岁开始 → 60岁退休</div>
+    <div style="display:flex;flex-wrap:wrap;gap:16px;font-size:13px;opacity:0.9">
+      <span>现有美股 $15万（¥110万）</span>
+      <span>年新增投入 $5万（≈月投¥3万）</span>
+      <span>积累期 20年</span>
+      <span>目标收益率 ~7.5%/年</span>
     </div>
   </div>
 
-</div>`,
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px">
+    <div style="background:#f8fafc;border-radius:10px;padding:14px">
+      <div style="font-size:12px;font-weight:700;color:#64748b;margin-bottom:8px">为什么选这个节奏</div>
+      <ul style="font-size:13px;color:#374151;line-height:2;margin:0;padding-left:16px">
+        <li>40岁正是收入高峰期，月投¥3万不影响生活</li>
+        <li>距退休20年，时间复利效应非常显著</li>
+        <li>保守配置目标：到60岁资产稳健，波动可控</li>
+      </ul>
+    </div>
+    <div style="background:#f0fdf4;border-radius:10px;padding:14px">
+      <div style="font-size:12px;font-weight:700;color:#64748b;margin-bottom:8px">保守策略的核心逻辑</div>
+      <ul style="font-size:13px;color:#374151;line-height:2;margin:0;padding-left:16px">
+        <li>宁可少赚，也要睡得着觉</li>
+        <li>BND+TIPS压低波动，市场暴跌时不慌</li>
+        <li>SCHD股息持续增长，退休时自动升级</li>
+      </ul>
+    </div>
+  </div>
+
+  <div style="margin-bottom:20px">
+    <div class="rc-section-title">💼 积累期推荐组合（按美股总仓）</div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>标的</th><th>比例</th><th>股息/收益率</th><th>在积累期的配置逻辑</th></tr></thead>
+      <tbody>
+        <tr><td><strong>VOO</strong></td><td>25%</td><td>1.3%+增值</td><td>核心成长底仓，买下整个美国经济，费率仅0.03%</td></tr>
+        <tr><td><strong>SCHD</strong></td><td>30%</td><td>3.5%，年增8-11%</td><td>股息再投入，每季度股息自动买入更多SCHD，复利发动机</td></tr>
+        <tr><td><strong>VYM</strong></td><td>10%</td><td>2.8%</td><td>高即时股息，分散SCHD集中度，覆盖400+蓝筹</td></tr>
+        <tr><td><strong>BND</strong></td><td>25%</td><td>4.0%</td><td>减震器，市场大跌时涨，让你坚持持有不恐慌卖出</td></tr>
+        <tr><td><strong>TIPS</strong></td><td>5%</td><td>2.5%（通胀联动）</td><td>抵御通胀对本金的长期侵蚀，20年后购买力守护者</td></tr>
+        <tr><td><strong>GLD</strong></td><td>5%</td><td>—</td><td>极端危机保险（战争/货币危机），5%是最低配比</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div style="margin-bottom:20px">
+    <div class="rc-section-title">🔍 每只标的，为什么选它？</div>
+
+    <div class="rc-stock-card">
+      <span class="rc-stock-name">VOO</span>
+      <div class="rc-stock-what"><strong>是什么：</strong>Vanguard S&P 500 ETF，追踪美国最大500家公司，包含苹果、微软、英伟达、亚马逊、谷歌等科技巨头，按市值加权，历史年化约10%（含股息），费率仅0.03%。</div>
+      <div class="rc-stock-role"><strong>为何选它：</strong>保守策略不代表放弃成长。VOO是「用最低成本买下整个美国经济」的底层资产。它的500只股票分散了个股风险，即使某家公司崩塌（如2001年安然、2008年雷曼），对VOO的影响微乎其微。20年积累期里，VOO承担「跑赢通胀+追求长期增值」的核心任务。</div>
+      <div class="rc-stats">费率0.03% · 500只股票 · 历史年化~10% · 季度分红</div>
+    </div>
+
+    <div class="rc-stock-card">
+      <span class="rc-stock-name">SCHD</span>
+      <div class="rc-stock-what"><strong>是什么：</strong>Schwab US Dividend Equity ETF，精选100只兼具高股息率和高股息增长率的蓝筹（可口可乐、强生、宝洁、洛克希德马丁等）。每季度按财务质量重新筛选，确保持有的都是真正赚钱且愿意分钱的公司。</div>
+      <div class="rc-stock-role"><strong>为何选它：</strong>SCHD最大的魅力是<strong>股息复利机器</strong>。积累期内股息自动再投入，等于每季度市场帮你免费买入更多SCHD。历史股息增长率8-11%/年意味着每7-8年股息翻一倍。今天3.5%的股息率，持有15年后相对于初始成本可能已达8-9%。到60岁退休时，这笔年金就已远超你想象。</div>
+      <div class="rc-stats">费率0.06% · 股息率~3.5% · 股息增长~8-11%/年 · 100只精选蓝筹</div>
+    </div>
+
+    <div class="rc-stock-card">
+      <span class="rc-stock-name">VYM</span>
+      <div class="rc-stock-what"><strong>是什么：</strong>Vanguard High Dividend Yield ETF，追踪400多只高股息美国公司，覆盖金融、能源、消费品、工业等多个板块，侧重「即时股息率高」而非股息增长速度。</div>
+      <div class="rc-stock-role"><strong>为何选它：</strong>VYM和SCHD是「互补搭档」而非竞争关系。SCHD偏重股息增长（今天3.5%，未来越来越多），VYM偏重即时高收益（今天就拿到更多现金）。两者叠加，既保证当下现金流，又保证未来成长性。另外VYM持有400+只股票，比SCHD的100只更分散，降低了单一持仓的集中风险。</div>
+      <div class="rc-stats">费率0.06% · 股息率~2.8% · 持有400+只股票 · 侧重当下高收益</div>
+    </div>
+
+    <div class="rc-stock-card">
+      <span class="rc-stock-name">BND</span>
+      <div class="rc-stock-what"><strong>是什么：</strong>Vanguard Total Bond Market ETF，持有约10,000只美国投资级债券（国债+企业债+抵押贷款证券），覆盖整个美国债券市场，费率0.03%。</div>
+      <div class="rc-stock-role"><strong>为何选它：</strong>BND的核心价值不是收益，而是<strong>让你敢于坚守</strong>。研究显示，大多数散户的致命错误是「在市场最低点恐慌卖出」。BND与股市相关性低，大跌时通常不跌甚至上涨，组合整体跌幅因此大幅收窄——账面亏损从-40%变成-20%，心理冲击减半，坚持持有的概率大幅提升。每年4%左右的利息也是稳定的现金流贡献。</div>
+      <div class="rc-stats">费率0.03% · 利息~4% · 约10,000只债券 · 与股市负相关</div>
+    </div>
+
+    <div class="rc-stock-card">
+      <span class="rc-stock-name">TIPS</span>
+      <div class="rc-stock-what"><strong>是什么：</strong>iShares TIPS Bond ETF，追踪美国通胀保值债券。与普通债券的根本区别：本金随CPI（消费者价格指数）自动调整，通胀3%本金也增长3%，利息随之增加。</div>
+      <div class="rc-stock-role"><strong>为何选它：</strong>20年是通胀侵蚀财富的足够长时间——如果年均通胀3%，20年后¥100万的购买力只剩¥55万。TIPS是政府发行的「通胀保险单」，本金随物价指数自动调整，确保20年积累下来的真实购买力不被侵蚀。保守型投资者尤其需要这种确定性保障。</div>
+      <div class="rc-stats">费率0.19% · 实际收益率~2.5%（+通胀调整） · 政府信用 · 通胀完全联动</div>
+    </div>
+
+    <div class="rc-stock-card">
+      <span class="rc-stock-name">GLD</span>
+      <div class="rc-stock-what"><strong>是什么：</strong>SPDR Gold Trust，追踪实物黄金价格，每份约代表1/10盎司黄金。不产生利息，纯粹跟随金价涨跌。</div>
+      <div class="rc-stock-role"><strong>为何选它：</strong>黄金是组合的「最终保险」。它在正常年份表现平平，但在每次真正的系统性危机（2008年金融海啸、2020年疫情、地缘冲突）中都展现出独立于股市和债市的价值。5%的配置是「保险费」逻辑：正常情况下代价微小，极端情况下是组合的最后防线。与其他资产的相关性极低，是真正意义上的多元化工具。</div>
+      <div class="rc-stats">无股息 · 费率0.40% · 与股市/债市相关性极低 · 极端风险对冲</div>
+    </div>
+  </div>
+
+  <div style="margin-bottom:20px">
+    <div class="rc-section-title">📈 20年积累期成长推演（起始$15万，每年新增$5万，综合收益率7.5%）</div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>时间节点</th><th>年龄</th><th>累计投入</th><th>预计组合市值</th><th>年股息收入</th><th>里程碑</th></tr></thead>
+      <tbody>
+        <tr><td>起点</td><td>40岁</td><td>$15万（存量）</td><td>$15万（¥110万）</td><td>¥3万/年</td><td>开始系统定投</td></tr>
+        <tr><td>第5年</td><td>45岁</td><td>投入$25万</td><td><strong>$51万（¥372万）</strong></td><td>¥10万/年</td><td>翻3倍+，复利开始显现</td></tr>
+        <tr><td>第10年</td><td>50岁</td><td>投入$50万</td><td><strong>$102万（¥745万）</strong></td><td>¥20万/年</td><td>迈入百万美元俱乐部</td></tr>
+        <tr><td>第15年</td><td>55岁</td><td>投入$75万</td><td><strong>$172万（¥1255万）</strong></td><td>¥34万/年</td><td>仅靠股息年入34万</td></tr>
+        <tr style="background:#dbeafe"><td>第20年</td><td>60岁退休</td><td>投入$100万</td><td><strong>$280万（¥2044万）</strong></td><td>¥55万/年</td><td>🎯 退休启动</td></tr>
+      </tbody>
+    </table></div>
+    <div style="font-size:12px;color:#94a3b8;margin-top:6px">注：7.5%为保守估算（S&P500历史~10%，加债券拖累后约7.5%）。数据仅供参考，实际收益因市场波动而异。</div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
+    <div style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:10px;padding:14px">
+      <div style="font-weight:700;color:#0c4a6e;font-size:13px;margin-bottom:8px">🎯 60岁退休时的收入潜力</div>
+      <div style="font-size:13px;color:#374151;line-height:2">
+        美股组合：$280万（¥2044万）<br>
+        4%法则年收入：<strong>¥82万/年</strong>（月均¥6.8万）<br>
+        股息收入（不卖股）：<strong>¥55万/年</strong>（月均¥4.6万）<br>
+        + 社保/年金（60岁起）：¥6-10万/年<br>
+        <strong style="color:#16a34a">合计：¥61-92万/年</strong>
+      </div>
+    </div>
+    <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:10px;padding:14px">
+      <div style="font-weight:700;color:#9a3412;font-size:13px;margin-bottom:8px">📋 退休后推荐策略</div>
+      <div style="font-size:13px;color:#374151;line-height:2">
+        <strong>前5年（60-65岁）：</strong>4%法则，年提取¥82万<br>
+        <strong>5年后：</strong>SCHD股息持续增长，逐步减少卖出<br>
+        <strong>70岁后：</strong>转入纯股息法（永不卖股）<br>
+        同时保留2年生活费（约¥80万）作为缓冲垫
+      </div>
+    </div>
+  </div>
+
+  <div style="background:#dbeafe;border:1px solid #93c5fd;border-radius:10px;padding:14px;font-size:13px;line-height:1.9">
+    <strong style="color:#1d4ed8">💡 保守型·40岁的核心洞察：</strong>20年+每年$5万的复利威力惊人——累计投入仅$100万，60岁时资产达$280万，增值180%，主要来自复利而非本金。保守配置的真正价值是：即使遇到2008年或2020年级别的崩盘，你也不会因为恐慌而打乱投资节奏。坚持比聪明更重要。
+  </div>
+</div>
+
+<!-- =============================== CASE 1 =============================== -->
+<div id="rp-case-1" style="display:none;padding:24px">
+  <div style="background:linear-gradient(135deg,#0f766e,#0d9488);border-radius:12px;padding:20px 24px;color:#fff;margin-bottom:20px">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+      <span class="rc-tag" style="background:rgba(255,255,255,0.25);color:#fff">保守型</span>
+      <span style="font-size:13px;opacity:0.8">积累期15年 · 一线城市 · 事业稳定期</span>
+    </div>
+    <div style="font-size:20px;font-weight:800;margin-bottom:8px">45岁开始 → 60岁退休</div>
+    <div style="display:flex;flex-wrap:wrap;gap:16px;font-size:13px;opacity:0.9">
+      <span>现有美股 $20万（¥146万）</span>
+      <span>年新增投入 $6万（≈月投¥3.6万）</span>
+      <span>积累期 15年</span>
+      <span>目标收益率 ~7.5%/年</span>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px">
+    <div style="background:#f8fafc;border-radius:10px;padding:14px">
+      <div style="font-size:12px;font-weight:700;color:#64748b;margin-bottom:8px">45岁起步的挑战</div>
+      <ul style="font-size:13px;color:#374151;line-height:2;margin:0;padding-left:16px">
+        <li>只有15年积累期，时间窗口更窄</li>
+        <li>需要更高的年度投入（$6万/年）</li>
+        <li>保守配置下复利放大效果较激进型弱</li>
+      </ul>
+    </div>
+    <div style="background:#f0fdf4;border-radius:10px;padding:14px">
+      <div style="font-size:12px;font-weight:700;color:#64748b;margin-bottom:8px">45岁起步的优势</div>
+      <ul style="font-size:13px;color:#374151;line-height:2;margin:0;padding-left:16px">
+        <li>45岁通常已有更多积蓄，起点更高</li>
+        <li>收入更稳定，$6万/年投入相对轻松</li>
+        <li>距退休近，心理压力更小，更能坚持</li>
+      </ul>
+    </div>
+  </div>
+
+  <div style="margin-bottom:20px">
+    <div class="rc-section-title">💼 积累期推荐组合（与保守40岁同款，更强调股息稳定性）</div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>标的</th><th>比例</th><th>股息/收益率</th><th>15年积累期的配置逻辑</th></tr></thead>
+      <tbody>
+        <tr><td><strong>VOO</strong></td><td>25%</td><td>1.3%+增值</td><td>15年依然足够长，VOO的复利效应显著，核心底仓不动摇</td></tr>
+        <tr><td><strong>SCHD</strong></td><td>32%</td><td>3.5%，年增8-11%</td><td>比40岁方案略提高SCHD比例，退休时股息更充裕，提高即战力</td></tr>
+        <tr><td><strong>VYM</strong></td><td>10%</td><td>2.8%</td><td>与SCHD互补，提升整体股息率，减少退休初期对卖股的依赖</td></tr>
+        <tr><td><strong>BND</strong></td><td>23%</td><td>4.0%</td><td>15年内市场大跌可能经历1-2次，BND保证每次都能坚守不抛</td></tr>
+        <tr><td><strong>TIPS</strong></td><td>5%</td><td>2.5%（通胀联动）</td><td>15年通胀累积效应同样显著，保住购买力</td></tr>
+        <tr><td><strong>GLD</strong></td><td>5%</td><td>—</td><td>极端风险最后一道防线，5%保险费值得</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div style="margin-bottom:20px">
+    <div class="rc-section-title">🔍 每只标的，为什么选它？</div>
+
+    <div class="rc-stock-card">
+      <span class="rc-stock-name">VOO</span>
+      <div class="rc-stock-what"><strong>是什么：</strong>Vanguard S&P 500 ETF，持有美国500家最大上市公司，包含科技、金融、医疗、消费等所有主要行业，是美国股市最具代表性的投资工具。</div>
+      <div class="rc-stock-role"><strong>为何选它：</strong>45岁距退休仅15年，有人会担心「时间不够」。但VOO历史数据显示，任何一个15年的滚动周期，正收益概率接近100%。与其纠结「市场现在高不高」，不如持续买入VOO，用时间换取确定性回报。</div>
+      <div class="rc-stats">费率0.03% · 500只股票 · 任意15年滚动周期正收益概率~99%</div>
+    </div>
+
+    <div class="rc-stock-card">
+      <span class="rc-stock-name">SCHD（加重配置至32%）</span>
+      <div class="rc-stock-what"><strong>是什么：</strong>Schwab US Dividend Equity ETF，专注筛选100只财务健康、持续增发股息的蓝筹公司，是退休收入规划者的首选ETF。</div>
+      <div class="rc-stock-role"><strong>为何选它：</strong>45岁起步，时间比40岁少5年，所以我们把SCHD提高到32%。这样15年后的股息基础更雄厚：以8%年增长率估算，今天投入¥100万的SCHD，15年后每年产生的股息约等于今天的¥3倍。退休初期就能拿到更多现金，减少对卖出股票的依赖。</div>
+      <div class="rc-stats">费率0.06% · 股息率~3.5% · 15年后预期股息是初始的~3倍（8%增长）</div>
+    </div>
+
+    <div class="rc-stock-card">
+      <span class="rc-stock-name">VYM</span>
+      <div class="rc-stock-what"><strong>是什么：</strong>Vanguard High Dividend Yield ETF，覆盖400+只高股息企业，行业分布比SCHD更广泛，包含更多传统行业巨头。</div>
+      <div class="rc-stock-role"><strong>为何选它：</strong>与SCHD形成「增长型股息+高即时股息」的双保险。VYM覆盖面更广（400+ vs 100只），当SCHD某个季度因筛选调仓出现波动时，VYM提供稳定补充。对于临近退休的45岁投资者，稳定的现金流预期比追求最高收益更重要。</div>
+      <div class="rc-stats">费率0.06% · 股息率~2.8% · 400+只股票 · 行业分布更广</div>
+    </div>
+
+    <div class="rc-stock-card">
+      <span class="rc-stock-name">BND</span>
+      <div class="rc-stock-what"><strong>是什么：</strong>Vanguard Total Bond Market ETF，约10,000只美国投资级债券的综合投资，包括国债、企业债、机构债。</div>
+      <div class="rc-stock-role"><strong>为何选它：</strong>45岁到60岁这15年可能经历1-2次大级别市场回调。保守型投资者最大的风险不是「市场跌了」，而是「市场跌了我扛不住割肉了」。BND在2020年3月股市崩盘时不仅没跌，反而上涨了4%——正是这种逆向表现，给了你在最恐慌时继续持股的信心和底气。</div>
+      <div class="rc-stats">费率0.03% · 利息~4% · 2020年3月股灾期间BND上涨4%</div>
+    </div>
+
+    <div class="rc-stock-card">
+      <span class="rc-stock-name">TIPS</span>
+      <div class="rc-stock-what"><strong>是什么：</strong>iShares TIPS Bond ETF，持有美国通胀保值国债，本金随CPI自动调整，是唯一能直接对冲通胀风险的政府债券工具。</div>
+      <div class="rc-stock-role"><strong>为何选它：</strong>15年里若通胀平均2.5%，累计购买力损失约32%。TIPS的本金会跟随CPI调整，相当于购买了一张「购买力保险单」。对于45岁、计划精确储备到60岁退休的人来说，这种确定性保障比追求超额收益更有价值。</div>
+      <div class="rc-stats">费率0.19% · 本金完全通胀联动 · 15年通胀累积保障 · 政府信用背书</div>
+    </div>
+
+    <div class="rc-stock-card">
+      <span class="rc-stock-name">GLD</span>
+      <div class="rc-stock-what"><strong>是什么：</strong>SPDR Gold Trust，跟踪实物黄金价格，流动性极高，与股票和债券几乎无相关性。</div>
+      <div class="rc-stock-role"><strong>为何选它：</strong>当股市和债市同时下跌时（这在历史上时有发生），黄金往往独树一帜。5%的配置成本极低，但在系统性危机时能承担「避险舱」的角色。对于距退休还有15年的中年投资者，极端事件的概率不可忽视，黄金是这5%最值钱的「保险费」。</div>
+      <div class="rc-stats">无股息 · 费率0.40% · 2008年全年涨5.8% · 与股市相关性接近零</div>
+    </div>
+  </div>
+
+  <div style="margin-bottom:20px">
+    <div class="rc-section-title">📈 15年积累期成长推演（起始$20万，每年新增$6万，综合收益率7.5%）</div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>时间节点</th><th>年龄</th><th>累计投入</th><th>预计组合市值</th><th>年股息收入</th><th>里程碑</th></tr></thead>
+      <tbody>
+        <tr><td>起点</td><td>45岁</td><td>$20万（存量）</td><td>$20万（¥146万）</td><td>¥4万/年</td><td>开始系统定投</td></tr>
+        <tr><td>第5年</td><td>50岁</td><td>投入$30万</td><td><strong>$63万（¥460万）</strong></td><td>¥12万/年</td><td>翻3倍，复利加速</td></tr>
+        <tr><td>第10年</td><td>55岁</td><td>投入$60万</td><td><strong>$126万（¥920万）</strong></td><td>¥25万/年</td><td>百万美元，月均¥2万股息</td></tr>
+        <tr style="background:#dbeafe"><td>第15年</td><td>60岁退休</td><td>投入$90万</td><td><strong>$212万（¥1548万）</strong></td><td>¥42万/年</td><td>🎯 退休启动</td></tr>
+      </tbody>
+    </table></div>
+    <div style="font-size:12px;color:#94a3b8;margin-top:6px">注：7.5%为加权保守估算，含债券类资产拖累。实际结果受市场波动影响，仅供规划参考。</div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
+    <div style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:10px;padding:14px">
+      <div style="font-weight:700;color:#0c4a6e;font-size:13px;margin-bottom:8px">🎯 60岁退休时的收入潜力</div>
+      <div style="font-size:13px;color:#374151;line-height:2">
+        美股组合：$212万（¥1548万）<br>
+        4%法则年收入：<strong>¥62万/年</strong>（月均¥5.2万）<br>
+        股息收入（不卖股）：<strong>¥42万/年</strong>（月均¥3.5万）<br>
+        + 社保/年金（60岁起）：¥6-10万/年<br>
+        <strong style="color:#16a34a">合计：¥48-72万/年</strong>
+      </div>
+    </div>
+    <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:10px;padding:14px">
+      <div style="font-weight:700;color:#9a3412;font-size:13px;margin-bottom:8px">⚡ 如何强化这个方案</div>
+      <div style="font-size:13px;color:#374151;line-height:2">
+        <strong>每年多投$1万：</strong>60岁时多¥97万资产<br>
+        <strong>推迟至62岁退休：</strong>额外2年复利约多¥200万<br>
+        <strong>把股息再投入2年：</strong>退休时额外多¥30万<br>
+        每推迟1年退休，收益约增加8-10%
+      </div>
+    </div>
+  </div>
+
+  <div style="background:#ccfbf1;border:1px solid #5eead4;border-radius:10px;padding:14px;font-size:13px;line-height:1.9">
+    <strong style="color:#0f766e">💡 保守型·45岁的核心洞察：</strong>累计投入$90万，60岁时资产$212万，资产是投入的2.4倍。15年时间虽比20年少，但起点更高（$20万 vs $15万）且年投更多（$6万 vs $5万），弥补了部分时间差距。关键是：60岁时¥42万/年的股息收入（月均¥3.5万），加上社保，已经足够支撑舒适退休生活。
+  </div>
+</div>
+
+<!-- =============================== CASE 2 =============================== -->
+<div id="rp-case-2" style="display:none;padding:24px">
+  <div style="background:linear-gradient(135deg,#7f1d1d,#dc2626);border-radius:12px;padding:20px 24px;color:#fff;margin-bottom:20px">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+      <span class="rc-tag" style="background:rgba(255,255,255,0.25);color:#fff">激进型</span>
+      <span style="font-size:13px;opacity:0.8">积累期20年 · 一线城市 · 高收入职业</span>
+    </div>
+    <div style="font-size:20px;font-weight:800;margin-bottom:8px">40岁开始 → 60岁退休</div>
+    <div style="display:flex;flex-wrap:wrap;gap:16px;font-size:13px;opacity:0.9">
+      <span>现有美股 $15万（¥110万）</span>
+      <span>年新增投入 $5万（≈月投¥3万）</span>
+      <span>积累期 20年</span>
+      <span>目标收益率 ~11%/年（纯股票）</span>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px">
+    <div style="background:#f8fafc;border-radius:10px;padding:14px">
+      <div style="font-size:12px;font-weight:700;color:#64748b;margin-bottom:8px">激进型的真实代价</div>
+      <ul style="font-size:13px;color:#374151;line-height:2;margin:0;padding-left:16px">
+        <li>QQQ单次最大回撤曾达-83%（2000年科网泡沫）</li>
+        <li>账面大幅缩水时心理压力极大</li>
+        <li>需要绝对纪律：不在低点卖出</li>
+      </ul>
+    </div>
+    <div style="background:#fff5f5;border-radius:10px;padding:14px">
+      <div style="font-size:12px;font-weight:700;color:#64748b;margin-bottom:8px">激进型的长期优势</div>
+      <ul style="font-size:13px;color:#374151;line-height:2;margin:0;padding-left:16px">
+        <li>同样投入，60岁资产是保守型的1.6倍</li>
+        <li>AI时代科技增长可能远超历史均值</li>
+        <li>20年足够经历多个完整牛熊周期</li>
+      </ul>
+    </div>
+  </div>
+
+  <div style="margin-bottom:20px">
+    <div class="rc-section-title">💼 积累期推荐组合（高增长导向，零债券）</div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>标的</th><th>比例</th><th>股息/收益率</th><th>20年积累期的配置逻辑</th></tr></thead>
+      <tbody>
+        <tr><td><strong>VOO</strong></td><td>25%</td><td>1.3%+增值</td><td>分散化底仓，即使QQQ大跌VOO波动较小，心理锚点</td></tr>
+        <tr><td><strong>QQQ</strong></td><td>35%</td><td>0.6%+增值</td><td>AI+科技超额收益主引擎，NASDAQ 100历史年化~15%</td></tr>
+        <tr><td><strong>SCHD</strong></td><td>20%</td><td>3.5%，年增8-11%</td><td>股息再投入+增长，20年后变成庞大现金流机器</td></tr>
+        <tr><td><strong>美股个股</strong></td><td>15%</td><td>1-2%+增值</td><td>MSFT/AAPL/NVDA，护城河个股的超额回报</td></tr>
+        <tr><td><strong>GLD</strong></td><td>5%</td><td>—</td><td>唯一非股票资产，极端事件时的最后防线</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div style="margin-bottom:20px">
+    <div class="rc-section-title">🔍 每只标的，为什么选它？</div>
+
+    <div class="rc-stock-card">
+      <span class="rc-stock-name">VOO（压舱石）</span>
+      <div class="rc-stock-what"><strong>是什么：</strong>S&P 500指数ETF，追踪美国500家最大公司，分散化最好的宽基指数，是所有美股组合的基础底仓。</div>
+      <div class="rc-stock-role"><strong>为何选它：</strong>在激进组合里，VOO的作用是「心理缓冲器」。当QQQ从高点回撤30%时，VOO可能只跌15%，组合整体跌幅因此收窄。这种稳定性让你在最需要的时候坚持持有QQQ，而不是恐慌出逃。25%的VOO是激进策略的「安全带」——不影响高速行驶，但关键时刻能救命。</div>
+      <div class="rc-stats">费率0.03% · 500只股票 · 历史年化~10% · 回撤通常比QQQ小一半</div>
+    </div>
+
+    <div class="rc-stock-card">
+      <span class="rc-stock-name">QQQ（超额收益引擎）</span>
+      <div class="rc-stock-what"><strong>是什么：</strong>Invesco NASDAQ-100 ETF，追踪纳斯达克100家非金融企业，苹果、微软、英伟达、谷歌、Meta合计占比约40%，是全球最集中的科技成长ETF。</div>
+      <div class="rc-stock-role"><strong>为何选它：</strong>QQQ是激进型组合的核心逻辑所在。AI革命、云计算、半导体这三条赛道在未来10-20年的爆发是高度确定的，而这三条赛道最顶级的公司几乎都在QQQ里。历史数据：2003-2023年QQQ年化约17%，远超VOO的10%。代价是剧烈波动——但对于有20年时间窗口、有固定收入、不依赖这笔钱生活的40岁投资者，这种波动是可以承受的。</div>
+      <div class="rc-stats">费率0.20% · 100只科技股 · 2003-2023年化~17% · 最大回撤-83%（含科网泡沫）</div>
+    </div>
+
+    <div class="rc-stock-card">
+      <span class="rc-stock-name">SCHD（现金流种子）</span>
+      <div class="rc-stock-what"><strong>是什么：</strong>Schwab US Dividend Equity ETF，100只精选高质量股息成长股，兼具成长性和稳定性。</div>
+      <div class="rc-stock-role"><strong>为何选它：</strong>在激进组合里，SCHD承担了「20年后的现金流种子」角色。今天投入¥100万SCHD，按8%股息增长，20年后每年产生的股息约等于今天的¥4.7倍。届时即使QQQ剧烈波动，SCHD的稳定股息流让你在退休初期不必在最坏时机卖出QQQ。两者搭配：QQQ负责资产增值，SCHD负责现金流稳定。</div>
+      <div class="rc-stats">费率0.06% · 股息~3.5% · 20年后股息是初始的~4.7倍（8%增长率）</div>
+    </div>
+
+    <div class="rc-stock-card">
+      <span class="rc-stock-name">美股个股（MSFT/AAPL/NVDA）</span>
+      <div class="rc-stock-what"><strong>是什么：</strong>微软（AI+Azure云计算）、苹果（硬件生态+服务飞轮）、英伟达（AI算力芯片垄断）——三家护城河最深的科技巨头。</div>
+      <div class="rc-stock-role"><strong>为何选它：</strong>这三家公司的共同特征：<strong>垄断性平台+AI时代受益者+现金流充沛</strong>。微软凭借Azure和Copilot正在重塑企业IT；苹果靠生态锁定10亿+ iPhone用户；英伟达在AI算力芯片上有5-7年的技术领先优势。建议单只不超过5%，合计15%，提供超越ETF的潜在超额收益，同时保持合理分散。</div>
+      <div class="rc-stats">每只≤5%仓位 · 需年度重新评估护城河 · 建议选3只以上分散</div>
+    </div>
+
+    <div class="rc-stock-card">
+      <span class="rc-stock-name">GLD（唯一非股票仓位）</span>
+      <div class="rc-stock-what"><strong>是什么：</strong>SPDR Gold Trust，实物黄金价格追踪，是激进型组合里唯一不依赖公司盈利的资产。</div>
+      <div class="rc-stock-role"><strong>为何选它：</strong>激进型组合100%股票（除GLD），最怕的是「系统性崩盘同时影响所有股票」。2008年金融危机时，VOO和QQQ都跌40-50%，而G�d全年涨约5.8%。5%的GLD是整个高风险组合里唯一的「非相关资产」，在极端危机时提供非常宝贵的心理支撑和实际对冲价值。</div>
+      <div class="rc-stats">无股息 · 费率0.40% · 与股市相关性~0 · 危机年份独立表现</div>
+    </div>
+  </div>
+
+  <div style="margin-bottom:20px">
+    <div class="rc-section-title">📈 20年积累期成长推演（起始$15万，每年新增$5万，综合收益率11%）</div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>时间节点</th><th>年龄</th><th>累计投入</th><th>预计组合市值</th><th>年股息收入</th><th>里程碑</th></tr></thead>
+      <tbody>
+        <tr><td>起点</td><td>40岁</td><td>$15万（存量）</td><td>$15万（¥110万）</td><td>¥1.6万/年</td><td>激进型开始定投</td></tr>
+        <tr><td>第5年</td><td>45岁</td><td>投入$25万</td><td><strong>$66万（¥482万）</strong></td><td>¥7万/年</td><td>比保守型多$15万</td></tr>
+        <tr><td>第10年</td><td>50岁</td><td>投入$50万</td><td><strong>$130万（¥949万）</strong></td><td>¥14万/年</td><td>百万美元，比保守型多28万</td></tr>
+        <tr><td>第15年</td><td>55岁</td><td>投入$75万</td><td><strong>$244万（¥1781万）</strong></td><td>¥26万/年</td><td>比保守型多72万，差距扩大</td></tr>
+        <tr style="background:#fee2e2"><td>第20年</td><td>60岁退休</td><td>投入$100万</td><td><strong>$442万（¥3227万）</strong></td><td>¥48万/年</td><td>🎯 是保守型的1.58倍！</td></tr>
+      </tbody>
+    </table></div>
+    <div style="font-size:12px;color:#94a3b8;margin-top:6px">注：11%为纯股票组合历史估算（S&P500约10%，NASDAQ 100约15%，加权约11%）。实际结果受市场影响，中间可能出现-30%至-40%的账面回撤，请务必做好心理准备。</div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
+    <div style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:10px;padding:14px">
+      <div style="font-weight:700;color:#0c4a6e;font-size:13px;margin-bottom:8px">🎯 60岁退休时的收入潜力</div>
+      <div style="font-size:13px;color:#374151;line-height:2">
+        美股组合：$442万（¥3227万）<br>
+        4%法则年收入：<strong>¥129万/年</strong>（月均¥10.8万）<br>
+        股息收入（不卖股）：<strong>¥48万/年</strong>（月均¥4万）<br>
+        + 社保（60岁起）：¥5-8万/年<br>
+        <strong style="color:#16a34a">合计：¥53-137万/年</strong>
+      </div>
+    </div>
+    <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:10px;padding:14px">
+      <div style="font-weight:700;color:#9a3412;font-size:13px;margin-bottom:8px">⚠️ 最重要的纪律要求</div>
+      <div style="font-size:13px;color:#374151;line-height:2">
+        <strong>保留1.5年生活费缓冲垫</strong>（约¥70万）<br>
+        大跌年份<strong>坚决不卖出</strong>，动用缓冲垫<br>
+        每2-3年检视个股护城河是否仍然成立<br>
+        临近退休（55岁后）逐步增加SCHD比例
+      </div>
+    </div>
+  </div>
+
+  <div style="background:#fef2f2;border:1px solid #fca5a5;border-radius:10px;padding:14px;font-size:13px;line-height:1.9">
+    <strong style="color:#dc2626">💡 激进型·40岁的核心洞察：</strong>同样投入$100万，激进型60岁时有$442万，保守型只有$280万——差距$162万（¥1183万）。这就是11%与7.5%年化收益率的20年复利差距。但要获得这个差距，你必须在2008年(-48%)、2020年(-34%)、2022年(-35%)这样的大跌年份忍住不卖。<strong>能否坚守纪律，决定了你最终站在哪个数字旁边。</strong>
+  </div>
+</div>
+
+<!-- =============================== CASE 3 =============================== -->
+<div id="rp-case-3" style="display:none;padding:24px">
+  <div style="background:linear-gradient(135deg,#4c1d95,#7c3aed);border-radius:12px;padding:20px 24px;color:#fff;margin-bottom:20px">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+      <span class="rc-tag" style="background:rgba(255,255,255,0.25);color:#fff">激进型</span>
+      <span style="font-size:13px;opacity:0.8">积累期15年 · 一线城市 · 高收入稳定期</span>
+    </div>
+    <div style="font-size:20px;font-weight:800;margin-bottom:8px">45岁开始 → 60岁退休</div>
+    <div style="display:flex;flex-wrap:wrap;gap:16px;font-size:13px;opacity:0.9">
+      <span>现有美股 $20万（¥146万）</span>
+      <span>年新增投入 $6万（≈月投¥3.6万）</span>
+      <span>积累期 15年</span>
+      <span>目标收益率 ~11%/年（纯股票）</span>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px">
+    <div style="background:#f8fafc;border-radius:10px;padding:14px">
+      <div style="font-size:12px;font-weight:700;color:#64748b;margin-bottom:8px">45岁激进型的特殊考量</div>
+      <ul style="font-size:13px;color:#374151;line-height:2;margin:0;padding-left:16px">
+        <li>15年内可能经历1-2次大熊市</li>
+        <li>临近退休时账面亏损更难接受</li>
+        <li>55岁后建议逐步把QQQ换成SCHD</li>
+      </ul>
+    </div>
+    <div style="background:#faf5ff;border-radius:10px;padding:14px">
+      <div style="font-size:12px;font-weight:700;color:#64748b;margin-bottom:8px">45岁起步的额外优势</div>
+      <ul style="font-size:13px;color:#374151;line-height:2;margin:0;padding-left:16px">
+        <li>起步资产更多（$20万），复利基数更大</li>
+        <li>月投$6万，年化贡献超过40岁方案</li>
+        <li>职业经验丰富，收入更稳定，投入更有保障</li>
+      </ul>
+    </div>
+  </div>
+
+  <div style="margin-bottom:20px">
+    <div class="rc-section-title">💼 积累期推荐组合（激进全股票，加重SCHD防守）</div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>标的</th><th>比例</th><th>股息/收益率</th><th>15年积累期的配置逻辑</th></tr></thead>
+      <tbody>
+        <tr><td><strong>VOO</strong></td><td>25%</td><td>1.3%+增值</td><td>分散底仓，15年内市场震荡时VOO比QQQ抗跌，心理锚点</td></tr>
+        <tr><td><strong>QQQ</strong></td><td>30%</td><td>0.6%+增值</td><td>比40岁激进型略降，因为15年窗口更短，适度控制科技集中度</td></tr>
+        <tr><td><strong>SCHD</strong></td><td>25%</td><td>3.5%，年增8-11%</td><td>比40岁激进型提高，15年后退休直接拥有更大的股息基础</td></tr>
+        <tr><td><strong>美股个股</strong></td><td>15%</td><td>1-2%+增值</td><td>精选护城河个股，提供超额回报，控制单只≤5%</td></tr>
+        <tr><td><strong>GLD</strong></td><td>5%</td><td>—</td><td>15年内极端风险对冲，距退休越近保险价值越高</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div style="margin-bottom:20px">
+    <div class="rc-section-title">🔍 每只标的，为什么选它？</div>
+
+    <div class="rc-stock-card">
+      <span class="rc-stock-name">VOO</span>
+      <div class="rc-stock-what"><strong>是什么：</strong>美国500家最大公司的综合ETF，费率0.03%，是最高效的美国股市暴露工具。</div>
+      <div class="rc-stock-role"><strong>为何选它：</strong>在激进型15年策略里，VOO的价值被放大了。当你45岁开始投资，有几年的QQQ可能是熊市，此时VOO稳定的表现能维持组合整体不太难看，防止「还没看到复利就先被套住割肉离场」的情形。VOO是激进组合里的「情绪管理工具」。</div>
+      <div class="rc-stats">费率0.03% · 历史任意15年滚动正收益概率~99% · 最大回撤约-50%（2008）</div>
+    </div>
+
+    <div class="rc-stock-card">
+      <span class="rc-stock-name">QQQ（30%，比40岁方案略降）</span>
+      <div class="rc-stock-what"><strong>是什么：</strong>NASDAQ 100 ETF，科技成长股集合，苹果+微软+英伟达+谷歌+Meta五巨头占约40%权重。</div>
+      <div class="rc-stock-role"><strong>为何选它：</strong>45岁起步15年，我们把QQQ从35%降至30%，把SCHD从20%提高到25%。原因：距退休只有15年，QQQ在最后5年（55-60岁）若发生大熊市，退休时资产会受重创。通过提高SCHD比例，我们在不放弃科技成长的同时，提前布局退休后的稳定现金流。QQQ仍是超额收益的核心来源，只是比重稍降以换取更高稳定性。</div>
+      <div class="rc-stats">费率0.20% · 15年年化估算~13% · 与VOO同持提供互补缓冲</div>
+    </div>
+
+    <div class="rc-stock-card">
+      <span class="rc-stock-name">SCHD（加重至25%，为退休铺路）</span>
+      <div class="rc-stock-what"><strong>是什么：</strong>专注股息增长的蓝筹ETF，历史股息增长率8-11%/年，是退休现金流规划的核心工具。</div>
+      <div class="rc-stock-role"><strong>为何选它：</strong>45岁激进型比40岁激进型更需要提前建立股息基础。15年后，SCHD持仓按8%增长，今天投入¥100万的SCHD，60岁时每年产生约¥3.2倍的股息。这意味着：即使QQQ在退休前两年大跌，靠SCHD的稳定股息你也不必在最坏时机卖出高波动仓位。SCHD是整个激进组合的「退休保障层」。</div>
+      <div class="rc-stats">费率0.06% · 股息~3.5% · 15年后股息是初始的~3.2倍 · 退休现金流基础</div>
+    </div>
+
+    <div class="rc-stock-card">
+      <span class="rc-stock-name">美股个股（护城河精选）</span>
+      <div class="rc-stock-what"><strong>是什么：</strong>MSFT（AI+云计算）、AAPL（生态+服务）、NVDA（AI算力）等，每只各不超过5%仓位。</div>
+      <div class="rc-stock-role"><strong>为何选它：</strong>在45岁激进型策略里，个股是「高确定性超额收益」的来源。微软、苹果、英伟达这三家公司的护城河是历经时间检验的，而非押注于未经证明的新兴公司。每只5%上限确保单一公司爆雷不影响全局。建议每年做一次护城河评估：AI地位是否仍然稳固？竞争者是否出现了实质性威胁？</div>
+      <div class="rc-stats">每只≤5% · 建议3-5只分散 · 每年评估一次 · 总比例≤20%</div>
+    </div>
+
+    <div class="rc-stock-card">
+      <span class="rc-stock-name">GLD（临近退休价值更高）</span>
+      <div class="rc-stock-what"><strong>是什么：</strong>实物黄金ETF，与股市、债市相关性几乎为零，危机时独立表现。</div>
+      <div class="rc-stock-role"><strong>为何选它：</strong>对于激进型45岁投资者，黄金的价值随着退休日期临近而上升。原因：距退休越近，系统性风险对你的影响越大（没时间等待复苏）。5%的GLD在正常年份的拖累极小（约每年-0.5%影响），但在金融危机时能提供独立上涨或减少下行——这在临近退休的关键5年里价值极高。</div>
+      <div class="rc-stats">无股息 · 费率0.40% · 临近退休保险价值上升 · 与股市相关性~0</div>
+    </div>
+  </div>
+
+  <div style="margin-bottom:20px">
+    <div class="rc-section-title">📈 15年积累期成长推演（起始$20万，每年新增$6万，综合收益率11%）</div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>时间节点</th><th>年龄</th><th>累计投入</th><th>预计组合市值</th><th>年股息收入</th><th>里程碑</th></tr></thead>
+      <tbody>
+        <tr><td>起点</td><td>45岁</td><td>$20万（存量）</td><td>$20万（¥146万）</td><td>¥2万/年</td><td>激进型开始定投</td></tr>
+        <tr><td>第5年</td><td>50岁</td><td>投入$30万</td><td><strong>$82万（¥599万）</strong></td><td>¥9万/年</td><td>比保守型45岁多$19万</td></tr>
+        <tr><td>第10年</td><td>55岁</td><td>投入$60万</td><td><strong>$162万（¥1183万）</strong></td><td>¥17万/年</td><td>比保守型多36万，差距扩大</td></tr>
+        <tr style="background:#f5f3ff"><td>第15年</td><td>60岁退休</td><td>投入$90万</td><td><strong>$302万（¥2205万）</strong></td><td>¥32万/年</td><td>🎯 是保守型的1.43倍</td></tr>
+      </tbody>
+    </table></div>
+    <div style="font-size:12px;color:#94a3b8;margin-top:6px">注：11%为历史纯股票组合估算。注意：同样15年期，若遭遇2000-2003年或2008-2009年级别熊市，中间过程可能出现账面-35%至-50%的大幅回撤。</div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
+    <div style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:10px;padding:14px">
+      <div style="font-weight:700;color:#0c4a6e;font-size:13px;margin-bottom:8px">🎯 60岁退休时的收入潜力</div>
+      <div style="font-size:13px;color:#374151;line-height:2">
+        美股组合：$302万（¥2205万）<br>
+        4%法则年收入：<strong>¥88万/年</strong>（月均¥7.3万）<br>
+        股息收入（不卖股）：<strong>¥32万/年</strong>（月均¥2.7万）<br>
+        + 社保（60岁起）：¥5-8万/年<br>
+        <strong style="color:#16a34a">合计：¥37-96万/年</strong>
+      </div>
+    </div>
+    <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:10px;padding:14px">
+      <div style="font-weight:700;color:#9a3412;font-size:13px;margin-bottom:8px">🔄 建议的退休过渡策略</div>
+      <div style="font-size:13px;color:#374151;line-height:2">
+        <strong>55岁起（还有5年）：</strong>每年把10%的QQQ换成SCHD<br>
+        <strong>60岁时：</strong>QQQ降至~15%，SCHD升至~40%<br>
+        <strong>提前降低</strong>纯科技集中风险，软着陆<br>
+        避免「退休前一年大跌」摧毁20年积累
+      </div>
+    </div>
+  </div>
+
+  <div style="background:#f5f3ff;border:1px solid #c4b5fd;border-radius:10px;padding:14px;font-size:13px;line-height:1.9">
+    <strong style="color:#7c3aed">💡 激进型·45岁的核心洞察：</strong>累计投入$90万，60岁时$302万——是投入的3.4倍。与激进型40岁相比少$140万，但与保守型45岁相比多$90万。关键建议：<strong>55岁后开始「软着陆」——每年从QQQ换入SCHD，到60岁时科技集中度已降至安全水平</strong>，既享受了15年的激进增长，又避免了退休前被科技股大跌摧毁的风险。
+  </div>
+</div>
+
+</div>
+`,
 
 // =====================================================================
 'cpa-tax-easter-egg':`
