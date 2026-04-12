@@ -53,13 +53,14 @@ PODCAST_SOURCES = [
         "type": "rr_website",          # 从 rationalreminder.ca 抓取文字稿
         "max_episodes": 3,             # 每次最多处理最新 3 集
     },
-    {
-        "key": "ben_felix",
-        "name": "Ben Felix",
-        "rss": "https://www.youtube.com/feeds/videos.xml?channel_id=UCDXTQ8nWmx_EhZ2v-kp7QxA",
-        "type": "youtube_caption",     # 抓取 YouTube 自动字幕
-        "max_episodes": 2,
-    },
+    # Ben Felix YouTube 字幕太短（自动字幕通常只有几百字），暂时停用
+    # {
+    #     "key": "ben_felix",
+    #     "name": "Ben Felix",
+    #     "rss": "https://www.youtube.com/feeds/videos.xml?channel_id=UCDXTQ8nWmx_EhZ2v-kp7QxA",
+    #     "type": "youtube_caption",
+    #     "max_episodes": 2,
+    # },
 ]
 
 
@@ -479,3 +480,107 @@ def translate_podcasts(self):
     save_index(r, episodes)
     log.info("translate_podcasts done: %d new episodes", new_count)
     return {"new_episodes": new_count, "total": len(episodes)}
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# 回溯翻译：按指定集数批量处理历史集
+# ══════════════════════════════════════════════════════════════════════════════
+
+@celery_app.task(name="backfill_episodes", bind=True, max_retries=0, time_limit=7200)
+def backfill_episodes(self, episode_numbers: list[int], source_key: str = "rational_reminder"):
+    """
+    回溯翻译指定集数列表。
+
+    手动触发示例：
+        docker compose exec worker celery -A app.tasks.celery_app call backfill_episodes \
+          --args='[[100,101,102,103,104,105,106,107,108,109,110]]'
+
+    参数：
+        episode_numbers: 要翻译的集数列表，如 [100, 101, 102]
+        source_key: 来源键，目前支持 "rational_reminder"
+    """
+    import redis as redis_lib
+    from app.core.config import settings
+    from concurrent.futures import ThreadPoolExecutor, as_completed
+
+    if not settings.openai_api_key:
+        log.warning("OPENAI_API_KEY 未设置，跳过回溯翻译")
+        return {"skipped": "no openai key"}
+
+    r = redis_lib.from_url(settings.redis_url, decode_responses=True)
+    episodes = load_index(r)
+    new_count = 0
+    failed = []
+
+    # 构造虚拟 item 列表
+    items = []
+    for num in episode_numbers:
+        ep_id = f"{source_key}_ep{num}"
+        if episode_exists(episodes, ep_id):
+            log.info("skip (already processed): episode %d", num)
+            continue
+        items.append({
+            "title": f"Episode {num}",
+            "url": f"https://rationalreminder.ca/podcast/{num}",
+            "date": f"ep{num}",
+            "slug": str(num),
+            "_ep_id_override": ep_id,
+        })
+
+    if not items:
+        log.info("backfill: all episodes already processed")
+        return {"new_episodes": 0, "total": len(episodes), "message": "已全部处理过"}
+
+    log.info("backfill: %d episodes to process: %s", len(items), [i["title"] for i in items])
+
+    source = next((s for s in PODCAST_SOURCES if s["key"] == source_key), None)
+    if not source:
+        return {"error": f"unknown source_key: {source_key}"}
+
+    # 并发处理，最多2个同时跑
+    def _process(item):
+        ep_id = item.pop("_ep_id_override")
+        transcript = fetch_rr_transcript(item["url"], title=item["title"])
+        if len(transcript) < 200:
+            log.warning("transcript too short for %s, skip", item["title"])
+            return None
+        summary = gpt_summarize(transcript, title=item["title"])
+        safe_name = re.sub(r"[^\w-]", "_", ep_id)[:60]
+        mp3_path = AUDIO_DIR / f"{safe_name}.mp3"
+        generate_tts_mp3(summary, mp3_path)
+        meta = {
+            "id": ep_id,
+            "source": source_key,
+            "source_name": source["name"],
+            "title": item["title"],
+            "date": item["date"],
+            "original_url": item["url"],
+            "mp3_file": mp3_path.name,
+            "summary_preview": summary[:120] + "…",
+            "created_at": __import__("datetime").datetime.now(__import__("datetime").timezone.utc).strftime("%Y-%m-%d"),
+            "backfill": True,
+        }
+        log.info("backfill episode ready: %s", meta["title"])
+        return meta
+
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        futures = {pool.submit(_process, item): item for item in items}
+        for future in as_completed(futures):
+            item = futures[future]
+            try:
+                meta = future.result()
+                if meta:
+                    episodes.append(meta)
+                    new_count += 1
+                    save_index(r, episodes)  # 每完成一集就保存，防止中途失败丢数据
+            except RuntimeError as e:
+                log.error("⚠️ 停止回溯：%s", e)
+                return {"new_episodes": new_count, "error": str(e), "failed": failed}
+            except Exception as e:
+                log.error("backfill failed %s: %s", item.get("title"), e)
+                failed.append(item.get("title"))
+
+    save_index(r, episodes)
+    log.info("backfill done: %d new episodes, %d failed", new_count, len(failed))
+    return {"new_episodes": new_count, "total": len(episodes), "failed": failed}
+
