@@ -28,13 +28,15 @@ async def create_invoice(
 
     sub = await subscription_service.create_pending(db, user, plan)
 
+    is_onetime = plan.billing_cycle == "one_time"
     bot = get_bot()
     link = await bot.create_invoice_link(
         title=plan.name,
-        description=plan.description or f"{plan.name}，每月自动续费",
+        description=plan.description or ("一次付款，永久访问" if is_onetime else f"{plan.name}，每月自动续费"),
         payload=f"sub_{plan.id}_{sub.id}",
         currency="XTR",
         prices=[{"label": plan.name, "amount": plan.stars_price}],
+        # 买断不传 subscription_period，Telegram 不会设为自动续费
         subscription_period=2592000 if plan.billing_cycle == "monthly" else None,
     )
     return {"data": {"invoice_link": link, "subscription_id": sub.id}}

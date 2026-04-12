@@ -131,17 +131,19 @@ function ChannelModal({
           选择支付方式
         </div>
         <div style={{ fontSize: 13, color: "#888", marginBottom: 20 }}>
-          {plan.name}
+          {plan.name} · {plan.billing_cycle === "one_time" ? "买断 · 永久有效" : "月付"}
         </div>
 
         {CHANNELS.map((ch) => {
           const disabled =
             (ch.id === "wechat" || ch.id === "alipay") && !plan.cny_price_fen;
+          const isOnetime = plan.billing_cycle === "one_time";
+          const suffix = isOnetime ? "" : "/月";
           const amount =
             ch.id === "stars"
-              ? `${plan.stars_price} Stars/月`
+              ? `${plan.stars_price} Stars${suffix}`
               : plan.cny_price_fen
-              ? `¥${(plan.cny_price_fen / 100).toFixed(2)}/月`
+              ? `¥${(plan.cny_price_fen / 100).toFixed(2)}${suffix}`
               : "未开通";
 
           return (
@@ -256,12 +258,15 @@ export default function Plans() {
         padding: 16,
       }}
     >
-      <h2 style={{ marginBottom: 16 }}>选择订阅套餐</h2>
+      <h2 style={{ marginBottom: 16 }}>课程 & 服务</h2>
 
       {subscription && (
         <div style={{ background: subBg, borderRadius: 12, padding: 12, marginBottom: 16 }}>
-          <strong>当前订阅：</strong>{subscription.plan_name}<br />
-          <small>有效期至：{new Date(subscription.expires_at).toLocaleDateString()}</small>
+          <strong>✅ 已购买：</strong>{subscription.plan_name}<br />
+          {subscription.plan_id.includes("one_time") || subscription.plan_id.includes("lifetime")
+            ? <small style={{ color: "#057a55" }}>永久有效，无需续费</small>
+            : <small>有效期至：{new Date(subscription.expires_at).toLocaleDateString()}</small>
+          }
         </div>
       )}
 
@@ -282,11 +287,11 @@ export default function Plans() {
               <strong style={{ fontSize: 16 }}>{plan.name}</strong>
               <div style={{ textAlign: "right", lineHeight: 1.4 }}>
                 <div style={{ fontWeight: "bold", color: "#f5a623", fontSize: 13 }}>
-                  ⭐ {plan.stars_price} Stars/月
+                  ⭐ {plan.stars_price} Stars{plan.billing_cycle === "one_time" ? "" : "/月"}
                 </div>
                 {plan.cny_price_fen > 0 && (
                   <div style={{ fontSize: 12, color: "#888" }}>
-                    ¥{(plan.cny_price_fen / 100).toFixed(2)}/月
+                    ¥{(plan.cny_price_fen / 100).toFixed(2)}{plan.billing_cycle === "one_time" ? "" : "/月"}
                   </div>
                 )}
               </div>
@@ -313,7 +318,7 @@ export default function Plans() {
                 fontSize: 14,
               }}
             >
-              {isLoading ? "处理中..." : isActive ? "当前套餐" : "立即订阅"}
+              {isLoading ? "处理中..." : isActive ? "已购买 ✓" : plan.billing_cycle === "one_time" ? "立即购买" : "立即订阅"}
             </button>
           </div>
         );

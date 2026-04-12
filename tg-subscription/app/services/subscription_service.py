@@ -124,7 +124,12 @@ class SubscriptionService:
 
     @staticmethod
     def _cycle_delta(cycle: str) -> timedelta:
-        return {"monthly": timedelta(days=30), "quarterly": timedelta(days=90), "yearly": timedelta(days=365)}.get(cycle, timedelta(days=30))
+        return {
+            "monthly":   timedelta(days=30),
+            "quarterly": timedelta(days=90),
+            "yearly":    timedelta(days=365),
+            "one_time":  timedelta(days=36500),   # 100年，视为永久
+        }.get(cycle, timedelta(days=30))
 
 
 subscription_service = SubscriptionService()

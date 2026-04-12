@@ -34,6 +34,16 @@ class Settings(BaseSettings):
     alipay_public_key: str = ""         # 支付宝公钥（用于验签）
     alipay_notify_url: str = ""         # 支付宝回调地址
 
+    # ── 虎皮椒聚合支付（无营业执照首选，xunhupay.com）──────────────
+    # 填入后自动启用，微信/支付宝均走虎皮椒通道；留空则走官方直连 SDK
+    xunhupay_appid: str = ""            # 虎皮椒 AppID
+    xunhupay_appsecret: str = ""        # 虎皮椒 AppSecret
+    xunhupay_notify_url: str = ""       # 回调地址，如 https://你的域名/webhooks/xunhupay
+
+    # ── 课程内容交付 ────────────────────────────────────────────────
+    # 付费后 Bot 私信用户的课程访问地址（GitHub Pages / Vercel 静态托管即可）
+    course_url: str = ""                # 如 https://yourname.github.io/us-stock-learning
+
     # ── OpenAI（播客翻译+TTS）────────────────────────────────────
     openai_api_key: str = ""            # platform.openai.com → API Keys
     # 翻译模型（gpt-4o-mini 性价比最高；需要更高质量可换 gpt-4o）
@@ -54,6 +64,11 @@ class Settings(BaseSettings):
     @property
     def alipay_enabled(self) -> bool:
         return bool(self.alipay_app_id and self.alipay_private_key and self.alipay_public_key)
+
+    @property
+    def xunhupay_enabled(self) -> bool:
+        """虎皮椒配置存在时优先使用，覆盖官方微信/支付宝直连"""
+        return bool(self.xunhupay_appid and self.xunhupay_appsecret and self.xunhupay_notify_url)
 
 
 settings = Settings()

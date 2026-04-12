@@ -50,11 +50,43 @@ async def successful_payment_handler(update: Update, context: ContextTypes.DEFAU
                 paid_at=datetime.now(UTC),
             )
             db.add(pmt)
-            text = (
-                f"订阅成功！\n"
-                f"套餐：{sub.plan.name}\n"
-                f"有效期至：{sub.expires_at.strftime('%Y-%m-%d')}\n\n"
-                f"前往付费频道申请加入，Bot 将自动审核通过。"
-            )
+            is_onetime = sub.plan.billing_cycle == "one_time"
+            if is_onetime:
+                text = (
+                    f"🎉 购买成功！\n\n"
+                    f"课程：{sub.plan.name}\n"
+                    f"有效期：永久\n\n"
+                    f"稍后将发送课程访问链接，请留意私信。"
+                )
+            else:
+                text = (
+                    f"✅ 订阅成功！\n"
+                    f"套餐：{sub.plan.name}\n"
+                    f"有效期至：{sub.expires_at.strftime('%Y-%m-%d')}\n\n"
+                    f"前往付费频道申请加入，Bot 将自动审核通过。"
+                )
 
     await context.bot.send_message(update.effective_user.id, text)
+    # 付费成功后发送课程访问链接
+    if not payment.is_recurring:
+        await _send_course_access(context.bot, update.effective_user.id, sub.plan)
+
+
+async def _send_course_access(bot, telegram_id: int, plan):
+    """付款成功后私信课程访问地址"""
+    from app.core.config import settings
+    if not settings.course_url:
+        return
+    is_onetime = plan.billing_cycle == "one_time"
+    validity_note = "永久有效，无需续费。" if is_onetime else "订阅有效期内可访问。"
+    await bot.send_message(
+        chat_id=telegram_id,
+        text=(
+            f"🎓 *课程访问地址*\n\n"
+            f"点击下方链接即可开始学习《美股系统学习》完整课程：\n\n"
+            f"👉 {settings.course_url}\n\n"
+            f"_{validity_note}_\n\n"
+            f"💡 建议在浏览器中打开并收藏，课程进度自动保存到本地。"
+        ),
+        parse_mode="Markdown",
+    )

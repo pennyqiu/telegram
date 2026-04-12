@@ -22,6 +22,11 @@ def check_expiring_subscriptions():
             )
             subs = result.scalars().all()
             for sub in subs:
+                # 买断套餐永久有效，不发到期提醒
+                from app.models.plan import Plan
+                plan = await db.get(Plan, sub.plan_id)
+                if plan and plan.billing_cycle == "one_time":
+                    continue
                 send_expiry_reminder.delay(sub.id)
                 sub.status = SubscriptionStatus.expiring
             await db.commit()
@@ -103,6 +108,9 @@ def remove_channel_access(user_id: int, plan_id: str):
             user = await db.get(User, user_id)
             plan = await db.get(Plan, plan_id)
             if not user or not plan:
+                return
+            # 买断套餐永久有效，不执行移出
+            if plan.billing_cycle == "one_time":
                 return
             bot = get_bot()
             for channel_id in plan.channels:

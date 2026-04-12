@@ -1,6 +1,7 @@
 from contextlib import asynccontextmanager
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, Depends
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.config import settings
 from app.core.database import engine, Base, AsyncSessionLocal, get_db
 from app.api.routes import influencer
@@ -112,6 +113,25 @@ async def telegram_webhook(request: Request):
     update = Update.de_json(data, _bot_app.bot)
     await _bot_app.process_update(update)
     return {"ok": True}
+
+
+@app.post("/webhooks/wechat")
+async def wechat_notify_endpoint(request: Request, db: AsyncSession = Depends(get_db)):
+    from app.api.routes.third_party_pay import wechat_notify
+    return await wechat_notify(request, db)
+
+
+@app.post("/webhooks/alipay")
+async def alipay_notify_endpoint(request: Request, db: AsyncSession = Depends(get_db)):
+    from app.api.routes.third_party_pay import alipay_notify
+    return await alipay_notify(request, db)
+
+
+@app.post("/webhooks/xunhupay")
+async def xunhupay_notify_endpoint(request: Request, db: AsyncSession = Depends(get_db)):
+    """虎皮椒聚合支付回调（微信+支付宝统一入口）"""
+    from app.api.routes.third_party_pay import xunhupay_notify
+    return await xunhupay_notify(request, db)
 
 
 @app.get("/health")

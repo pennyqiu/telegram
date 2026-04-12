@@ -27,7 +27,7 @@ from app.core.database import get_db
 from app.models.payment_order import PaymentOrder, PaymentOrderStatus, PaymentChannel
 from app.models.plan import Plan
 from app.models.user import User
-from app.services import wechat_pay, alipay_service
+from app.services import wechat_pay, alipay_service, xunhupay_service
 from app.services.subscription_service import subscription_service
 
 logger = logging.getLogger(__name__)
@@ -65,6 +65,19 @@ async def _activate_subscription(db: AsyncSession, order: PaymentOrder):
                 f"感谢订阅，尽情享用吧！"
             ),
         )
+        # 发送课程访问地址
+        if settings.course_url:
+            await bot.send_message(
+                chat_id=user.telegram_id,
+                text=(
+                    f"🎓 *课程访问地址*\n\n"
+                    f"点击下方链接即可开始学习《美股系统学习》完整课程：\n\n"
+                    f"👉 {settings.course_url}\n\n"
+                    f"_请勿将链接分享他人，订阅到期后将失效。_\n\n"
+                    f"💡 建议在浏览器中打开并收藏，课程进度会自动保存。"
+                ),
+                parse_mode="Markdown",
+            )
     except Exception as e:
         logger.warning("通知用户失败: %s", e)
 
@@ -104,7 +117,40 @@ async def create_payment(
     )
 
     description = f"{plan.name}订阅"
+    return_url = f"{settings.mini_app_url}/pay/result?no={out_trade_no}"
 
+    # ── 虎皮椒聚合支付（优先）────────────────────────────────────
+    if settings.xunhupay_enabled:
+        result = xunhupay_service.create_order(
+            out_trade_no=out_trade_no,
+            amount_fen=plan.cny_price_fen,
+            subject=description,
+            channel=body.channel,
+            notify_url=settings.xunhupay_notify_url,
+            return_url=return_url,
+        )
+        order.code_url = result.get("code_url") or result.get("pay_url")
+        db.add(order)
+        if body.channel == PaymentChannel.wechat:
+            return {"data": {
+                "channel": "wechat",
+                "out_trade_no": out_trade_no,
+                "amount_fen": plan.cny_price_fen,
+                "amount_cny": f"¥{plan.cny_price_fen / 100:.2f}",
+                "expires_at": expires_at.isoformat(),
+                # 前端通过 /pay/qrcode/{out_trade_no} 获取二维码
+            }}
+        else:
+            return {"data": {
+                "channel": "alipay",
+                "out_trade_no": out_trade_no,
+                "amount_fen": plan.cny_price_fen,
+                "amount_cny": f"¥{plan.cny_price_fen / 100:.2f}",
+                "pay_url": result.get("pay_url"),
+                "expires_at": expires_at.isoformat(),
+            }}
+
+    # ── 官方直连支付（需商户账号）────────────────────────────────
     if body.channel == PaymentChannel.wechat:
         code_url = wechat_pay.create_native_order(
             out_trade_no=out_trade_no,
@@ -167,7 +213,15 @@ async def get_payment_status(
 
     # 主动向第三方查询（减少轮询对第三方的压力，可配合前端 5s 一次）
     try:
-        if order.channel == PaymentChannel.wechat:
+        if settings.xunhupay_enabled:
+            # 虎皮椒统一查询（微信/支付宝均走这里）
+            resp = xunhupay_service.query_order(out_trade_no)
+            if resp.get("trade_status") == "TRADE_SUCCESS":
+                order.status = PaymentOrderStatus.paid
+                order.trade_no = resp.get("trade_no")
+                order.paid_at = datetime.now(timezone.utc)
+                await _activate_subscription(db, order)
+        elif order.channel == PaymentChannel.wechat:
             resp = wechat_pay.query_order(out_trade_no)
             if resp.get("trade_state") == "SUCCESS":
                 order.status = PaymentOrderStatus.paid
@@ -265,5 +319,35 @@ async def alipay_notify(request: Request, db: AsyncSession):
                 order.paid_at = datetime.now(timezone.utc)
                 await _activate_subscription(db, order)
                 await db.commit()
+
+    return Response(content="success")
+
+
+# ── 虎皮椒异步通知（Webhook，微信+支付宝统一） ────────────────────
+
+async def xunhupay_notify(request: Request, db: AsyncSession):
+    """
+    虎皮椒异步通知（POST form）
+    配置回调地址：https://你的域名/webhooks/xunhupay
+    """
+    form = await request.form()
+    data = dict(form)
+
+    parsed = xunhupay_service.extract_notification(data)
+    if not parsed:
+        return Response(content="fail")
+
+    out_trade_no = parsed.get("out_trade_no")
+    if parsed.get("trade_status") == "TRADE_SUCCESS" and out_trade_no:
+        result = await db.execute(
+            select(PaymentOrder).where(PaymentOrder.out_trade_no == out_trade_no)
+        )
+        order = result.scalar_one_or_none()
+        if order and order.status == PaymentOrderStatus.pending:
+            order.status = PaymentOrderStatus.paid
+            order.trade_no = parsed.get("trade_no")
+            order.paid_at = datetime.now(timezone.utc)
+            await _activate_subscription(db, order)
+            await db.commit()
 
     return Response(content="success")
