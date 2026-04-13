@@ -1,4 +1,5 @@
 """重建 Redis 中的播客索引（从 /audio/ 目录扫描 MP3，并从 RSS/网页补全标题）"""
+import html
 import json
 import re
 import sys
@@ -12,6 +13,13 @@ AUDIO_DIR = Path("/audio")
 RSS_URL   = "https://rationalreminder.libsyn.com/rss"
 
 r = redis.from_url("redis://redis:6379/0", decode_responses=True)
+
+
+def _clean(text: str) -> str:
+    """反转义 HTML 实体并去掉多余后缀"""
+    text = html.unescape(text)
+    text = re.sub(r"\s*[—\-|]\s*Rational Reminder.*$", "", text).strip()
+    return text
 
 
 def fetch_rss_titles() -> dict:
@@ -52,13 +60,13 @@ def fetch_episode_title(num: int) -> tuple[str, str]:
             # 去掉 " — Rational Reminder" 等后缀
             title = re.sub(r"\s*[—\-|]\s*Rational Reminder.*$", "", raw).strip()
             if title:
-                return title, url
+                return _clean(title), url
         # 备选：<h1>
         m2 = re.search(r"<h1[^>]*>(.*?)</h1>", resp.text, re.IGNORECASE | re.DOTALL)
         if m2:
             title = re.sub(r"<[^>]+>", "", m2.group(1)).strip()
             if title:
-                return title, url
+                return _clean(title), url
     except Exception as e:
         print(f"  title fetch failed for ep{num}: {e}", file=sys.stderr)
     return f"Episode {num}", url
