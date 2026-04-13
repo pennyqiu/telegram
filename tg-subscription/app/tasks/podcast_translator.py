@@ -366,9 +366,9 @@ def load_index(r) -> list[dict]:
 
 
 def save_index(r, episodes: list[dict]) -> None:
-    # 按日期降序，保留最新 50 集
+    # 按日期降序，保留最新 200 集（不设过期时间，由 Redis AOF 持久化保证不丢失）
     episodes.sort(key=lambda x: x.get("date", ""), reverse=True)
-    r.setex(REDIS_PODCAST_KEY, CACHE_TTL, json.dumps(episodes[:50], ensure_ascii=False))
+    r.set(REDIS_PODCAST_KEY, json.dumps(episodes[:200], ensure_ascii=False))
 
 
 def episode_exists(episodes: list[dict], ep_id: str) -> bool:

@@ -41,7 +41,11 @@ services:
   redis:
     image: redis:7-alpine
     ports: ["6379:6379"]
+    command: redis-server --appendonly yes --appendfsync everysec
+    volumes:
+      - redis_data:/data
 
 volumes:
   sub_pgdata:
   audio_output:   # 持久化音频文件，重启容器不丢失
+  redis_data:     # Redis AOF 持久化，重启后自动恢复索引数据
