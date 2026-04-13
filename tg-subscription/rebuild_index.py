@@ -33,7 +33,7 @@ for mp3 in sorted(audio_dir.glob("*.mp3")):
         "created_at": "2026-04-12",
     })
 
-r.set("podcast_episodes_index", json.dumps(episodes, ensure_ascii=False))
+r.set("podcast_episodes", json.dumps(episodes, ensure_ascii=False))
 print(f"rebuilt: {len(episodes)} episodes")
 for e in episodes:
     print(f"  {e['mp3_file']}")
