@@ -431,6 +431,10 @@ function renderContent(){
     const [pid, src] = PODCAST_PAGES[item.id];
     loadPodcastPlayer(pid, src);
   }
+  // audio-commute：章节音频懒加载
+  if (item.id === 'audio-commute') {
+    loadChapterAudio('chapter-audio-section');
+  }
 }
 function initChecklists(){
   document.querySelectorAll('.checklist li').forEach(li=>{
@@ -10376,20 +10380,6 @@ BND让跌幅变成-15%，<span class="hl">大多数人能撑住-15%</span>。
 <p style="color:#64748b;font-size:13px;margin-bottom:16px">按课程章节组织的完整翻译音频，每集包含普通话完整翻译版和原版英文入口。内容会随翻译进度持续增加。</p>
 
 <div id="chapter-audio-section"><div style="color:#64748b;font-size:13px;padding:12px 0">⏳ 加载中…</div></div>
-
-<script>
-// 章节音频懒加载：仅在此节课被渲染时触发
-(function() {
-  function tryLoad() {
-    if (typeof loadChapterAudio === 'function' && document.getElementById('chapter-audio-section')) {
-      loadChapterAudio('chapter-audio-section');
-    } else {
-      setTimeout(tryLoad, 200);
-    }
-  }
-  tryLoad();
-})();
-</script>
 
 <h2>五、3个月后你会有什么变化</h2>
 
