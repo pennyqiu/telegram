@@ -46,17 +46,6 @@ def fetch_rss_titles() -> dict:
     except Exception as e:
         print(f"  RSS fetch failed: {e}", file=sys.stderr)
     return mapping
-                parts = pub.split()
-                if len(parts) >= 4:
-                    key = f"{parts[0].rstrip(',')}  {parts[1]} {parts[2]} {parts[3]}"
-                    mapping[key] = (
-                        title_m.group(1).strip(),
-                        link_m.group(1).strip() if link_m else "https://rationalreminder.ca/podcast",
-                        enclosure_m.group(1) if enclosure_m else "",
-                    )
-    except Exception as e:
-        print(f"  RSS fetch failed: {e}", file=sys.stderr)
-    return mapping
 
 
 def fetch_episode_title(num: int) -> tuple[str, str]:
