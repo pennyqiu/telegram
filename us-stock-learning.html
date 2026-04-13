@@ -512,6 +512,89 @@ function triggerPodcastRefresh(event, containerId, sourceFilter) {
     })
     .catch(() => alert('触发失败，请确认服务器在线'));
 }
+
+// ===== 课程章节配套音频（按章节展示，底部专区）=====
+const CHAPTER_AUDIO_MAP = [
+  { label:'市场基础（第1-4课）',    epNums: Array.from({length:21},(_,i)=>100+i) },
+  { label:'ETF投资（第9-10课）',    epNums: [131,150] },
+  { label:'养老规划（第17-19课）',  epNums: [179,180,181,182,183,184] },
+  { label:'Howard Marks 专栏',      epNums: [148] },
+];
+const BEN_FELIX_LINKS = [
+  { label:'风险管理（第15-16课）', title:'How to Think About Risk', url:'https://www.youtube.com/watch?v=l9TwMNgBmvw' },
+  { label:'Ben Felix 专栏（第31课）', title:'The 5 Factor Model', url:'https://www.youtube.com/watch?v=jKWbW7Wgm0w' },
+  { label:'被动投资学术证据', title:'Why You Shouldn\'t Pick Stocks', url:'https://www.youtube.com/watch?v=mUN_-8K7RXE' },
+];
+
+function loadChapterAudio(containerId) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  const PODCAST_API = getPodcastAPI();
+  const AUDIO_BASE  = getAudioBase();
+  el.innerHTML = '<div style="color:#64748b;font-size:13px;padding:12px 0">⏳ 加载章节音频…</div>';
+  fetch(PODCAST_API, { signal: AbortSignal.timeout(10000) })
+    .then(r => r.json())
+    .then(data => {
+      const allEps = data.episodes || [];
+      // 按集数编号建立索引
+      const byEpNum = {};
+      allEps.forEach(ep => {
+        const m = ep.id && ep.id.match(/ep(\d+)$/);
+        if (m) byEpNum[parseInt(m[1])] = ep;
+      });
+
+      const sectionStyle = 'margin-bottom:28px';
+      const headerStyle  = 'font-size:14px;font-weight:700;color:#1e293b;padding:10px 14px;background:#f1f5f9;border-radius:8px 8px 0 0;border:1px solid #e2e8f0;border-bottom:none;display:flex;align-items:center;gap:8px';
+      const bodyStyle    = 'border:1px solid #e2e8f0;border-radius:0 0 8px 8px;overflow:hidden';
+
+      let html = '';
+
+      CHAPTER_AUDIO_MAP.forEach(chapter => {
+        const eps = chapter.epNums.map(n => byEpNum[n]).filter(Boolean);
+        const items = chapter.epNums.map(n => {
+          const ep = byEpNum[n];
+          if (ep && ep.available) {
+            const origAudio = ep.original_mp3
+              ? `<div style="margin-top:6px"><div style="font-size:11px;color:#94a3b8;margin-bottom:3px">🌐 原版英文</div><audio controls preload="none" style="width:100%;height:32px;accent-color:#64748b"><source src="${ep.original_mp3}" type="audio/mpeg"></audio></div>`
+              : `<div style="margin-top:6px"><a href="${ep.original_url}" target="_blank" style="font-size:11px;color:#2563eb;text-decoration:none">🌐 原版英文页面 →</a></div>`;
+            return `<div style="padding:12px 14px;border-bottom:1px solid #f1f5f9">
+              <div style="font-size:12px;font-weight:600;color:#1e293b;margin-bottom:4px">${ep.title}</div>
+              <div style="font-size:11px;color:#94a3b8;margin-bottom:6px">${ep.file_size_kb}KB · 普通话完整翻译</div>
+              <div style="font-size:12px;color:#64748b;margin-bottom:8px"><audio controls preload="none" style="width:100%;height:32px;accent-color:#6366f1"><source src="${AUDIO_BASE}/${ep.mp3_file}" type="audio/mpeg"></audio></div>
+              ${origAudio}
+            </div>`;
+          } else {
+            return `<div style="padding:10px 14px;border-bottom:1px solid #f1f5f9;color:#94a3b8;font-size:12px">
+              Episode ${n} — <span style="color:#f59e0b">⏳ 翻译中，稍后可用</span>
+            </div>`;
+          }
+        }).join('');
+        const done = chapter.epNums.filter(n => byEpNum[n] && byEpNum[n].available).length;
+        html += `<div style="${sectionStyle}">
+          <div style="${headerStyle}">📚 ${chapter.label} <span style="margin-left:auto;font-size:11px;color:#64748b;font-weight:400">${done}/${chapter.epNums.length} 集已就绪</span></div>
+          <div style="${bodyStyle}">${items}</div>
+        </div>`;
+      });
+
+      // Ben Felix YouTube 条目（无翻译版，仅原版链接）
+      const bfItems = BEN_FELIX_LINKS.map(bf => `
+        <div style="padding:12px 14px;border-bottom:1px solid #f1f5f9">
+          <div style="font-size:12px;font-weight:600;color:#1e293b;margin-bottom:4px">${bf.label}</div>
+          <div style="font-size:11px;color:#94a3b8;margin-bottom:6px">${bf.title}</div>
+          <a href="${bf.url}" target="_blank" style="display:inline-flex;align-items:center;gap:5px;font-size:12px;color:#fff;background:#dc2626;border-radius:6px;padding:5px 12px;text-decoration:none">▶ 观看英文原版 YouTube</a>
+          <div style="margin-top:6px;font-size:11px;color:#94a3b8">（YouTube 字幕太短，暂无普通话翻译版）</div>
+        </div>`).join('');
+      html += `<div style="${sectionStyle}">
+        <div style="${headerStyle}">🎬 Ben Felix 视频专栏（原版）</div>
+        <div style="${bodyStyle}">${bfItems}</div>
+      </div>`;
+
+      el.innerHTML = html || '<div style="color:#94a3b8;font-size:13px;padding:12px">暂无章节音频数据</div>';
+    })
+    .catch(() => {
+      el.innerHTML = '<div style="font-size:12px;color:#dc2626;padding:8px">⚠ 无法加载章节音频</div>';
+    });
+}
 // 修改这个地址为你的 FastAPI 服务器域名/IP
 const INFLUENCER_API = (()=>{
   const saved = localStorage.getItem('influencer_api_url');
@@ -10288,19 +10371,25 @@ BND让跌幅变成-15%，<span class="hl">大多数人能撑住-15%</span>。
   • 4-8集 Ben Felix 核心视点（每个都有学术论文支撑）
   • 约20小时学习内容（全程普通话，无需理解英文）</div>
 
-<h2>四、按课程章节的音频对应</h2>
+<h2>四、课程配套音频专区</h2>
 
-<div class="table-wrap"><table>
-<thead><tr><th>本课程章节</th><th>对应AI普通话摘要</th><th>原版英文来源</th></tr></thead>
-<tbody>
-<tr><td>市场基础（第1-4课）</td><td>Rational Reminder：市场效率专题</td><td>Episode 100-120</td></tr>
-<tr><td>ETF投资（第9-10课）</td><td>Rational Reminder：被动投资证据</td><td>Episode 131, 150</td></tr>
-<tr><td>风险管理（第15-16课）</td><td>Ben Felix：如何理解风险</td><td>"How to Think About Risk"</td></tr>
-<tr><td>养老规划（第17-19课）</td><td>Rational Reminder：回报顺序风险</td><td>Episode 179+</td></tr>
-<tr><td>Ben Felix 专栏（第31课）</td><td>Ben Felix：5因子模型 / 选股无效</td><td>"The 5 Factor Model"</td></tr>
-<tr><td>Howard Marks 专栏</td><td>Rational Reminder：Eugene Fama专访</td><td>Episode 148</td></tr>
-<tr><td>被动投资学术证据</td><td>Ben Felix：为什么不该选股</td><td>"Why You Shouldn't Pick Stocks"</td></tr>
-</tbody></table></div>
+<p style="color:#64748b;font-size:13px;margin-bottom:16px">按课程章节组织的完整翻译音频，每集包含普通话完整翻译版和原版英文入口。内容会随翻译进度持续增加。</p>
+
+<div id="chapter-audio-section"><div style="color:#64748b;font-size:13px;padding:12px 0">⏳ 加载中…</div></div>
+
+<script>
+// 章节音频懒加载：仅在此节课被渲染时触发
+(function() {
+  function tryLoad() {
+    if (typeof loadChapterAudio === 'function' && document.getElementById('chapter-audio-section')) {
+      loadChapterAudio('chapter-audio-section');
+    } else {
+      setTimeout(tryLoad, 200);
+    }
+  }
+  tryLoad();
+})();
+</script>
 
 <h2>五、3个月后你会有什么变化</h2>
 

@@ -104,6 +104,9 @@ def fetch_rss_items(rss_url: str, limit: int = 5) -> list[dict]:
         for item in channel.findall("item")[:limit]:
             def t(tag): return (item.findtext(tag) or "").strip()
             link = t("link") or t("enclosure")
+            # 提取原版 MP3（enclosure url="..."）
+            enclosure = item.find("enclosure")
+            original_mp3 = enclosure.get("url", "") if enclosure is not None else ""
             # 从链接提取 episode slug（如 rationalreminder.ca/podcast/310）
             m = re.search(r"rationalreminder\.ca/podcast/([^/?]+)", link)
             slug = m.group(1) if m else ""
@@ -112,6 +115,7 @@ def fetch_rss_items(rss_url: str, limit: int = 5) -> list[dict]:
                 "url": f"https://rationalreminder.ca/podcast/{slug}" if slug else link,
                 "date": t("pubDate")[:16],
                 "slug": slug,
+                "original_mp3": original_mp3,
             })
     return items
 
@@ -418,6 +422,7 @@ def process_episode(source: dict, item: dict, episodes: list[dict]) -> dict | No
         "title": item["title"],
         "date": item["date"][:10] if item["date"] else "",
         "original_url": item["url"],
+        "original_mp3": item.get("original_mp3", ""),
         "mp3_file": mp3_path.name,
         "summary_preview": summary[:120] + "…",  # 前 120 字预览
         "created_at": datetime.now(timezone.utc).strftime("%Y-%m-%d"),

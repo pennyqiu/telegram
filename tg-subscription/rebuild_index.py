@@ -23,25 +23,36 @@ def _clean(text: str) -> str:
 
 
 def fetch_rss_titles() -> dict:
-    """从 RSS feed 返回 {发布日期字符串: (标题, 链接)} 映射"""
+    """从 RSS feed 返回 {发布日期字符串: (标题, 链接, 原版MP3)} 映射"""
     mapping = {}
     try:
         resp = httpx.get(RSS_URL, timeout=20, follow_redirects=True)
         for item in re.findall(r"<item>(.*?)</item>", resp.text, re.DOTALL):
             title_m = re.search(r"<title><!\[CDATA\[(.*?)]]></title>", item) or \
                       re.search(r"<title>(.*?)</title>", item)
-            link_m  = re.search(r"<link>(.*?)</link>", item)
-            pub_m   = re.search(r"<pubDate>(.*?)</pubDate>", item)
+            link_m     = re.search(r"<link>(.*?)</link>", item)
+            pub_m      = re.search(r"<pubDate>(.*?)</pubDate>", item)
+            enclosure_m = re.search(r'<enclosure[^>]+url="([^"]+)"', item)
             if title_m and pub_m:
                 pub = pub_m.group(1).strip()
-                # e.g. "Thu, 02 Apr 2026 ..." → key "Thu  02 Apr 2026"
-                # 格式化成与文件名一致
                 parts = pub.split()
                 if len(parts) >= 4:
                     key = f"{parts[0].rstrip(',')}  {parts[1]} {parts[2]} {parts[3]}"
                     mapping[key] = (
                         title_m.group(1).strip(),
                         link_m.group(1).strip() if link_m else "https://rationalreminder.ca/podcast",
+                        enclosure_m.group(1) if enclosure_m else "",
+                    )
+    except Exception as e:
+        print(f"  RSS fetch failed: {e}", file=sys.stderr)
+    return mapping
+                parts = pub.split()
+                if len(parts) >= 4:
+                    key = f"{parts[0].rstrip(',')}  {parts[1]} {parts[2]} {parts[3]}"
+                    mapping[key] = (
+                        title_m.group(1).strip(),
+                        link_m.group(1).strip() if link_m else "https://rationalreminder.ca/podcast",
+                        enclosure_m.group(1) if enclosure_m else "",
                     )
     except Exception as e:
         print(f"  RSS fetch failed: {e}", file=sys.stderr)
@@ -90,14 +101,16 @@ for mp3 in mp3_files:
         print(f"  Fetching title for Episode {num}...")
         title, url = fetch_episode_title(num)
         date = f"ep{num}"
+        original_mp3 = ""   # 历史集无法从 RSS 获取（太旧），留空
     else:
         date_part = re.sub(r'^rational_reminder_', '', name).replace('_', ' ').strip()
         rss_entry = rss.get(date_part)
         if rss_entry:
-            title, url = rss_entry
+            title, url, original_mp3 = rss_entry
         else:
             title = f"Rational Reminder — {date_part}"
             url   = "https://rationalreminder.ca/podcast"
+            original_mp3 = ""
         date = date_part
 
     print(f"  {mp3.name} → {title}")
@@ -108,6 +121,7 @@ for mp3 in mp3_files:
         "title": title,
         "date": date,
         "original_url": url,
+        "original_mp3": original_mp3,
         "mp3_file": mp3.name,
         "summary_preview": "",
         "created_at": "2026-04-12",
