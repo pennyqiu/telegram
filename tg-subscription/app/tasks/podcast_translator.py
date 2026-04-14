@@ -372,7 +372,10 @@ def save_index(r, episodes: list[dict]) -> None:
 
 
 def episode_exists(episodes: list[dict], ep_id: str) -> bool:
-    return any(e["id"] == ep_id for e in episodes)
+    # 同时检查 mp3 文件名，兼容 rebuild_index.py 生成的不同 id 格式
+    safe_name = re.sub(r"[^\w-]", "_", ep_id)[:60]
+    mp3_name = f"{safe_name}.mp3"
+    return any(e["id"] == ep_id or e.get("mp3_file", "") == mp3_name for e in episodes)
 
 
 # ══════════════════════════════════════════════════════════════════════════════

@@ -28,6 +28,96 @@ async def lifespan(app: FastAPI):
             import logging
             logging.getLogger(__name__).warning("DB init skipped: %s", e)
 
+    # 播客索引自动恢复：若 Redis 索引为空但磁盘有 MP3，自动重建索引
+    try:
+        import logging, json
+        from pathlib import Path
+        import redis as redis_lib
+        from app.core.config import settings
+        from app.tasks.podcast_translator import REDIS_PODCAST_KEY, AUDIO_DIR
+
+        _log = logging.getLogger(__name__)
+        _r = redis_lib.from_url(settings.redis_url, decode_responses=True)
+        _raw = _r.get(REDIS_PODCAST_KEY)
+        _episodes = json.loads(_raw) if _raw else []
+
+        if not _episodes and AUDIO_DIR.exists():
+            _mp3s = sorted(AUDIO_DIR.glob("*.mp3"))
+            if _mp3s:
+                _log.warning("启动时检测到 Redis 播客索引为空，磁盘有 %d 个 MP3，自动重建索引…", len(_mp3s))
+                import re, html as _html, httpx as _httpx
+
+                def _fetch_rss_titles():
+                    mapping = {}
+                    try:
+                        resp = _httpx.get("https://rationalreminder.libsyn.com/rss", timeout=20, follow_redirects=True)
+                        for item in re.findall(r"<item>(.*?)</item>", resp.text, re.DOTALL):
+                            title_m = re.search(r"<title><!\[CDATA\[(.*?)]]></title>", item) or re.search(r"<title>(.*?)</title>", item)
+                            link_m = re.search(r"<link>(.*?)</link>", item)
+                            pub_m = re.search(r"<pubDate>(.*?)</pubDate>", item)
+                            enc_m = re.search(r'<enclosure[^>]+url="([^"]+)"', item)
+                            if title_m and pub_m:
+                                pub = pub_m.group(1).strip()
+                                parts = pub.split()
+                                if len(parts) >= 4:
+                                    key = f"{parts[0].rstrip(',')}  {parts[1]} {parts[2]} {parts[3]}"
+                                    mapping[key] = (
+                                        _html.unescape(title_m.group(1).strip()),
+                                        link_m.group(1).strip() if link_m else "https://rationalreminder.ca/podcast",
+                                        enc_m.group(1) if enc_m else "",
+                                    )
+                    except Exception as exc:
+                        _log.warning("RSS fetch failed during startup rebuild: %s", exc)
+                    return mapping
+
+                def _fetch_ep_title(num):
+                    url = f"https://rationalreminder.ca/podcast/{num}"
+                    try:
+                        resp = _httpx.get(url, timeout=15, follow_redirects=True)
+                        m = re.search(r"<title>(.*?)</title>", resp.text, re.IGNORECASE)
+                        if m:
+                            t = re.sub(r"\s*[—\-|]\s*Rational Reminder.*$", "", _html.unescape(m.group(1))).strip()
+                            if t:
+                                return t, url
+                    except Exception:
+                        pass
+                    return f"Episode {num}", url
+
+                _rss = _fetch_rss_titles()
+                _rebuilt = []
+                for _mp3 in _mp3s:
+                    _n = _mp3.stem
+                    _ep_m = re.search(r'ep(\d+)$', _n)
+                    if _ep_m:
+                        _num = int(_ep_m.group(1))
+                        _title, _url = _fetch_ep_title(_num)
+                        _date = f"ep{_num}"
+                        _orig = ""
+                    else:
+                        _dp = re.sub(r'^rational_reminder_', '', _n).replace('_', ' ').strip()
+                        _entry = _rss.get(_dp)
+                        if _entry:
+                            _title, _url, _orig = _entry
+                        else:
+                            _title = f"Rational Reminder — {_dp}"
+                            _url = "https://rationalreminder.ca/podcast"
+                            _orig = ""
+                        _date = _dp
+                    _rebuilt.append({
+                        "id": _n, "source": "rational_reminder",
+                        "source_name": "Rational Reminder",
+                        "title": _title, "date": _date,
+                        "original_url": _url, "original_mp3": _orig,
+                        "mp3_file": _mp3.name, "summary_preview": "",
+                        "created_at": "2026-04-12",
+                    })
+
+                _r.set(REDIS_PODCAST_KEY, json.dumps(_rebuilt, ensure_ascii=False))
+                _log.info("启动自动重建完成：%d 集写入 Redis", len(_rebuilt))
+    except Exception as _startup_err:
+        import logging
+        logging.getLogger(__name__).warning("播客索引自动重建失败（不影响启动）: %s", _startup_err)
+
     # Telegram Bot 初始化（仅当 token 配置时）
     if settings.telegram_bot_token:
         try:
