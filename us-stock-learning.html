@@ -317,6 +317,7 @@ const curriculum=[
   {id:'aapl-research',phase:6,tag:'第40课',title:'AAPL深度研究：消费品帝国的护城河与增长引擎',duration:'90 min'},
   {id:'ben-felix',phase:6,tag:'第41课',title:'Ben Felix循证投资：因子模型与学术实证',duration:'90 min'},
   {id:'audio-commute',phase:6,tag:'🎧 通勤彩蛋',title:'通勤学习指南：投资播客音频路线图',duration:'上下班时间'},
+  {id:'hk-fund-career',phase:7,phaseLabel:'第七阶段：香港金融职涯',tag:'🏦 职涯专题',title:'科技工程师入场香港私募基金：从入场券到职涯规划',duration:'90 min'},
 ];
 
 let currentIndex=0;
@@ -393,8 +394,8 @@ function renderContent(){
   document.getElementById('breadcrumb').innerHTML=`美股学习路径 › <span>${item.title}</span>`;
   if(item.type==='welcome'){area.innerHTML=getWelcome();initChecklists();return;}
   const isDone=completed.has(item.id);
-  const badgeMap={1:'badge-blue',2:'badge-green',3:'badge-purple',4:'badge-red',5:'badge-yellow',6:'badge-blue'};
-  const phaseNames={1:'📚 第一阶段：市场基础',2:'📊 第二阶段：估值体系',3:'📈 第三阶段：投资工具',4:'🛡️ 第四阶段：风险管理',5:'🎯 第五阶段：养老规划',6:'🌐 第六阶段：持续成长'};
+  const badgeMap={1:'badge-blue',2:'badge-green',3:'badge-purple',4:'badge-red',5:'badge-yellow',6:'badge-blue',7:'badge-green'};
+  const phaseNames={1:'📚 第一阶段：市场基础',2:'📊 第二阶段：估值体系',3:'📈 第三阶段：投资工具',4:'🛡️ 第四阶段：风险管理',5:'🎯 第五阶段：养老规划',6:'🌐 第六阶段：持续成长',7:'🏦 第七阶段：香港金融职涯'};
   area.innerHTML=`<div class="content-area">
     <div class="lesson-header">
       <div class="lesson-phase-badge ${badgeMap[item.phase]||'badge-blue'}">${phaseNames[item.phase]||''}</div>
@@ -676,11 +677,11 @@ function getWelcome(){return`<div class="welcome-screen">
   <div class="welcome-stats">
     <div class="welcome-stat"><div class="welcome-stat-num">20</div><div class="welcome-stat-label">课程节数</div></div>
     <div class="welcome-stat"><div class="welcome-stat-num">~24h</div><div class="welcome-stat-label">总学习时长</div></div>
-    <div class="welcome-stat"><div class="welcome-stat-num">6</div><div class="welcome-stat-label">学习阶段</div></div>
+    <div class="welcome-stat"><div class="welcome-stat-num">7</div><div class="welcome-stat-label">学习阶段</div></div>
     <div class="welcome-stat"><div class="welcome-stat-num">2</div><div class="welcome-stat-label">完整估值案例</div></div>
   </div>
 </div>
-<h2 style="font-size:19px;font-weight:800;color:#111;margin-bottom:14px;">六大学习阶段</h2>
+<h2 style="font-size:19px;font-weight:800;color:#111;margin-bottom:14px;">七大学习阶段</h2>
 <div class="welcome-phases">
   <div class="phase-card" onclick="goTo(1)"><div class="phase-card-num pn-1">一</div><h3>市场基础</h3><p>市场结构、宏观经济、美联储深度解析、财务报表</p><div class="phase-card-tag"><span class="ptag">4课</span><span class="ptag">~5h</span></div></div>
   <div class="phase-card" onclick="goTo(5)"><div class="phase-card-num pn-2">二</div><h3>估值体系</h3><p>估值指标、可口可乐DCF、谷歌分部估值、公司分析框架</p><div class="phase-card-tag"><span class="ptag">4课</span><span class="ptag">~5.5h</span></div></div>
@@ -688,6 +689,7 @@ function getWelcome(){return`<div class="welcome-screen">
   <div class="phase-card" onclick="goTo(11)"><div class="phase-card-num pn-4">四</div><h3>风险管理</h3><p>完整风险框架、压力测试、黑天鹅应对手册</p><div class="phase-card-tag"><span class="ptag">2课</span><span class="ptag">~2.5h</span></div></div>
   <div class="phase-card" onclick="goTo(13)"><div class="phase-card-num pn-5">五</div><h3>养老规划</h3><p>42-60岁分阶段详细方案、年度资产配置表、退休提取策略</p><div class="phase-card-tag"><span class="ptag">3课</span><span class="ptag">~3.5h</span></div></div>
   <div class="phase-card" onclick="goTo(16)"><div class="phase-card-num pn-1">六</div><h3>持续成长</h3><p>全球领路人、Ben Felix循证投资、Damodaran估值精华、Howard Marks备忘录、QQQ/SPY深度研究、科技股护城河、SCHD红利研究、通勤音频路线图</p><div class="phase-card-tag"><span class="ptag">13课</span><span class="ptag">~14h</span></div></div>
+  <div class="phase-card" onclick="goTo(curriculum.length-1)" style="border-color:#6366f1;background:linear-gradient(135deg,#faf5ff,#ede9fe)"><div class="phase-card-num" style="background:#6d28d9;color:#fff">七</div><h3 style="color:#4c1d95">香港金融职涯</h3><p style="color:#6d28d9">科技工程师入场私募基金的完整路线图：SFC牌照、CFA路径、量化项目、求职策略、薪资与发展前景</p><div class="phase-card-tag"><span class="ptag" style="background:#ede9fe;color:#6d28d9">职涯专题</span><span class="ptag" style="background:#ede9fe;color:#6d28d9">~90min</span></div></div>
 </div>
 <div class="info-box blue" style="margin-top:24px">
   <div class="info-box-title">💡 使用说明</div>
@@ -10405,7 +10407,7 @@ BND让跌幅变成-15%，<span class="hl">大多数人能撑住-15%</span>。
 </div>
 </div>
 
-<div style="text-align:center;margin-top:36px;padding:32px;background:linear-gradient(135deg,#7c3aed,#1d4ed8);border-radius:16px;color:#fff">
+  <div style="text-align:center;margin-top:36px;padding:32px;background:linear-gradient(135deg,#7c3aed,#1d4ed8);border-radius:16px;color:#fff">
   <div style="font-size:22px;font-weight:900;margin-bottom:8px">🎧 明天上班就开始</div>
   <div style="font-size:14px;opacity:.9;line-height:1.8">
     上方的播放器里已经有最新生成的普通话音频。<br>
@@ -10414,6 +10416,342 @@ BND让跌幅变成-15%，<span class="hl">大多数人能撑住-15%</span>。
   </div>
   <div style="margin-top:16px;font-size:12px;opacity:.8">
     "你的认知边界，就是你财富的边界。通勤路上的1小时，是最低成本的认知升级。"
+  </div>
+</div>
+`,
+
+// =====================================================================
+'hk-fund-career':`
+<div style="background:linear-gradient(135deg,#0f172a,#1e3a5f);border-radius:16px;padding:28px 32px;margin-bottom:28px;color:#fff">
+  <div style="font-size:12px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:8px">专项职涯规划</div>
+  <div style="font-size:24px;font-weight:900;line-height:1.3;margin-bottom:10px">从大厂 Top 3% 工程师<br>到香港私募基金从业者</div>
+  <div style="font-size:14px;color:rgba(255,255,255,.75);line-height:1.7">这不是遥不可及的跨越。你已经具备 80% 的底层能力——<strong style="color:#fbbf24">技术思维、数据处理、逻辑分析</strong>。本文给你一张精确的作战地图：需要补什么、用多久、怎么进门、进去后能走多远。</div>
+</div>
+
+<h2>一、为什么你有天然优势</h2>
+<p>香港基金业正在经历一场深刻变革：<strong>从靠关系拿项目，到靠数据做决策</strong>。量化基金、AI 驱动的系统性策略正在取代传统主观选股，而这恰好是技术人的主场。</p>
+
+<div class="cards-grid">
+  <div class="card"><div class="card-icon">🐍</div><div class="card-title">编程能力</div><div class="card-desc">Python/C++ 是量化研究员的日常语言。你写了多年生产代码，而大多数 CFA 持证人连 pandas 都不会用——这是结构性优势</div></div>
+  <div class="card"><div class="card-icon">📊</div><div class="card-title">数据处理</div><div class="card-desc">处理海量数据、构建模型、A/B 测试——这些在互联网公司的日常工作，在基金里叫做「Alpha 信号研发」和「因子挖掘」</div></div>
+  <div class="card"><div class="card-icon">💻</div><div class="card-title">科技行业认知</div><div class="card-desc">你从内部视角理解互联网公司的商业模式、技术护城河、增长逻辑。这让你天然适合做 TMT（科技媒体电信）行业研究员</div></div>
+  <div class="card"><div class="card-icon">🧠</div><div class="card-title">Top 3% 的分析力</div><div class="card-desc">能晋升到大厂专家工程师，意味着你具备极强的系统性思维和解决复杂问题的能力——这是做投资研究的核心素质</div></div>
+</div>
+
+<div style="background:#fef9c3;border:1.5px solid #fbbf24;border-radius:12px;padding:18px 20px;margin:20px 0">
+<strong style="color:#92400e">⚡ 你的竞争对手是谁？</strong>
+<p style="color:#78350f;font-size:13px;line-height:1.7;margin-top:8px">大多数基金分析师毕业于港大/港中文金融系，熟悉金融理论但<strong>不会编程、不懂产品、没有大规模系统经验</strong>。香港量化基金非常稀缺真正的「既懂代码又懂金融」的人才。你的路径不是和他们正面竞争，而是从他们不擅长的方向进入，再补上金融知识。</p>
+</div>
+
+<h2>二、香港基金业版图：你能进哪里</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>机构类型</th><th>代表公司</th><th>工程师适合度</th><th>核心需求</th></tr></thead>
+<tbody>
+<tr><td><strong>量化对冲基金</strong></td><td>Citadel HK、Man AHL、Point72、Two Sigma HK、Jane Street、Millennium</td><td><span style="color:#16a34a;font-weight:700">★★★★★ 最优选</span></td><td>数学+编程+统计，金融可后补</td></tr>
+<tr><td><strong>系统性策略基金</strong></td><td>Renaissance（极难）、AQR HK、Winton</td><td><span style="color:#16a34a;font-weight:700">★★★★</span></td><td>统计学、机器学习、因子研究</td></tr>
+<tr><td><strong>大型资管 TMT 研究</strong></td><td>贝莱德 HK、富达 HK、摩根资管</td><td><span style="color:#ca8a04;font-weight:700">★★★</span></td><td>CFA+财务建模+科技行业洞察</td></tr>
+<tr><td><strong>私募股权（PE）</strong></td><td>KKR HK、黑石 HK、TPG、春华资本</td><td><span style="color:#ca8a04;font-weight:700">★★</span></td><td>强调金融建模与人际网络，门槛最高</td></tr>
+<tr><td><strong>家族办公室</strong></td><td>各类超高净值家族</td><td><span style="color:#ca8a04;font-weight:700">★★★</span></td><td>全栈能力，灵活，薪资差异大</td></tr>
+<tr><td><strong>银行量化风险</strong></td><td>高盛 HK、摩根大通 HK、汇丰 HK</td><td><span style="color:#16a34a;font-weight:700">★★★★</span></td><td>最稳健的过渡路径，技术要求高</td></tr>
+</tbody></table></div>
+
+<div style="background:#f0fdf4;border:1px solid #86efac;border-radius:12px;padding:16px 20px;margin:16px 0">
+<strong style="color:#15803d">🎯 推荐切入方向：量化研究员（Quantitative Researcher）</strong>
+<p style="font-size:13px;color:#374151;line-height:1.7;margin-top:8px">这是工程师背景转行的<strong>最短路径、最高回报、最少壁垒</strong>的角色。你不需要20年交易经验，也不需要名校金融 PhD——你需要的是：能用代码实现一个有效的交易策略，并能讲清楚背后的逻辑。</p>
+</div>
+
+<h2>三、硬性前置条件（按优先级排序）</h2>
+
+<h3>① SFC 证券及期货事务监察委员会牌照（必须）</h3>
+<p>在香港任何受规管的金融活动中工作，都需要 SFC 牌照。以下是核心牌照：</p>
+<div class="table-wrap"><table>
+<thead><tr><th>牌照类型</th><th>适用业务</th><th>优先级</th></tr></thead>
+<tbody>
+<tr><td><strong>Type 1：证券交易</strong></td><td>买卖股票、ETF</td><td>基础</td></tr>
+<tr><td><strong>Type 4：就证券提供意见</strong></td><td>研究员、分析师</td><td>研究员必备</td></tr>
+<tr><td><strong>Type 9：资产管理</strong></td><td>管理投资组合、私募基金</td><td><span style="color:#dc2626;font-weight:700">核心目标</span></td></tr>
+</tbody></table></div>
+
+<div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:12px;padding:16px 20px;margin:16px 0">
+<strong style="color:#1d4ed8">📋 SFC 牌照申请流程</strong>
+<ol style="font-size:13px;color:#374151;line-height:2;margin-top:8px">
+  <li>通过 <strong>HKSI（香港证券及投资学会）</strong>认可的备考课程</li>
+  <li>通过 <strong>LE Paper 1（基础法规）+ LE Paper 2（资产管理专项）</strong>两张考试</li>
+  <li>入职基金公司后，由雇主以「持牌代表」身份向 SFC 申请</li>
+  <li>SFC 批核后正式持牌，全程约 3-6 个月</li>
+</ol>
+<p style="font-size:12px;color:#64748b;margin-top:4px">⚠️ 牌照必须绑定雇主，在职才能激活。可以先考好试，等入职后由公司申请。考试费约 HKD 900/科。</p>
+</div>
+
+<h3>② CFA 特许金融分析师（强烈推荐）</h3>
+<div class="cards-grid">
+  <div class="card"><div class="card-icon">🏅</div><div class="card-title">Level 1</div><div class="card-desc">涵盖权益、固收、衍生品、投资组合管理。建议6个月备考，300小时。通过率约42%。考试费 $900-1200 USD。<strong>Year 1 目标</strong></div></div>
+  <div class="card"><div class="card-icon">🏅🏅</div><div class="card-title">Level 2</div><div class="card-desc">深度财务报表分析+估值建模。200小时以上。通过率约45%。Level 2 对简历加成最大，让你在面试中能讲清楚 DCF。<strong>Year 2 目标</strong></div></div>
+  <div class="card"><div class="card-icon">🏅🏅🏅</div><div class="card-title">Level 3（可选）</div><div class="card-desc">组合管理+行为金融+财富规划。若已拿到 offer，可以入职后再考。全球 CFA charterholder 约 19 万人，含金量高</div></div>
+</div>
+<p style="font-size:13px;color:#64748b">💡 即便只通过 L1，也比没有好很多。L1+L2 对量化研究员岗位已经非常有说服力。</p>
+
+<h3>③ 英语能力（工作语言）</h3>
+<ul style="font-size:14px;line-height:2;color:#374151">
+  <li>香港基金业的工作语言是<strong>英文</strong>（研报、PPT、模型全部英文）</li>
+  <li>能流利阅读英文研究报告、写作研究摘要是基本门槛</li>
+  <li>准备方式：CFA 备考本身就是英文浸泡，额外每天阅读 1 篇 Bloomberg / FT 文章</li>
+  <li>口语达到「用英文进行专业讨论」的水平即可，不需要母语级别</li>
+</ul>
+
+<h3>④ 量化项目（工程师的杀手锏）</h3>
+<div style="background:linear-gradient(135deg,#f5f3ff,#ede9fe);border:1.5px solid #c4b5fd;border-radius:14px;padding:20px 24px;margin:16px 0">
+<strong style="color:#6d28d9;font-size:15px">🔥 你最强的差异化武器</strong>
+<p style="font-size:13px;color:#374151;line-height:1.8;margin-top:8px">一个放在 GitHub 上的实际量化策略项目，价值远超一张 CFA 证书。内容包括：数据获取 → 信号构建 → 回测 → 风险调整收益 → Sharpe Ratio 计算。即便策略不赚钱，<strong>展示出你会这套流程就是入场券</strong>。</p>
+<div class="table-wrap" style="margin-top:14px"><table>
+<thead><tr><th>项目方向</th><th>技术栈</th><th>难度</th><th>面试加成</th></tr></thead>
+<tbody>
+<tr><td>动量/均值回归策略</td><td>Python + pandas + yfinance</td><td>⭐⭐</td><td>高</td></tr>
+<tr><td>Fama-French 因子模型复现</td><td>Python + statsmodels</td><td>⭐⭐⭐</td><td>很高</td></tr>
+<tr><td>机器学习选股模型</td><td>sklearn + XGBoost</td><td>⭐⭐⭐</td><td>很高</td></tr>
+<tr><td>科技股板块轮动策略</td><td>Python + Alpaca API</td><td>⭐⭐⭐</td><td>极高（结合你的行业认知）</td></tr>
+</tbody></table></div>
+</div>
+
+<h2>四、2年系统学习与行动计划</h2>
+<p>以下计划假设你<strong>在职备考</strong>（不需要离职），每天投入 1.5-2 小时。这是最稳健也最现实的路径。</p>
+
+<div style="background:#fff;border:1.5px solid #e2e8f0;border-radius:14px;overflow:hidden;margin:16px 0">
+<div style="background:linear-gradient(135deg,#1e3a5f,#2563eb);padding:14px 20px;color:#fff;font-weight:700;font-size:14px">📅 Year 1：建立基础 + 考取证书</div>
+<div style="padding:20px">
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;font-size:13px">
+  <div style="background:#f8fafc;border-radius:10px;padding:14px;border:1px solid #e2e8f0">
+    <div style="font-weight:700;color:#1e3a5f;margin-bottom:8px">月 1-3：金融基础速成</div>
+    <ul style="margin:0;padding-left:16px;line-height:2;color:#374151">
+      <li>CFA L1 备考（本课程前4个阶段已打好基础）</li>
+      <li>HKSI LE Paper 1 备考（香港法规）</li>
+      <li>每日阅读 Bloomberg / FT 1篇</li>
+      <li>开始学习 Python 金融数据分析（yfinance、pandas）</li>
+    </ul>
+  </div>
+  <div style="background:#f8fafc;border-radius:10px;padding:14px;border:1px solid #e2e8f0">
+    <div style="font-weight:700;color:#1e3a5f;margin-bottom:8px">月 4-6：考试冲刺</div>
+    <ul style="margin:0;padding-left:16px;line-height:2;color:#374151">
+      <li>参加 CFA L1 考试（每年2/5/8/11月）</li>
+      <li>通过 HKSI LE Paper 1</li>
+      <li>开始做第一个量化策略项目（动量策略）</li>
+      <li>建立 GitHub 账号，整理代码</li>
+    </ul>
+  </div>
+  <div style="background:#f8fafc;border-radius:10px;padding:14px;border:1px solid #e2e8f0">
+    <div style="font-weight:700;color:#1e3a5f;margin-bottom:8px">月 7-9：深化量化能力</div>
+    <ul style="margin:0;padding-left:16px;line-height:2;color:#374151">
+      <li>CFA L2 备考启动（重点：估值建模）</li>
+      <li>HKSI LE Paper 2（资产管理专项）</li>
+      <li>学习回测框架（backtrader 或 zipline）</li>
+      <li>开始写科技行业研究 memo（1-2篇/月）</li>
+    </ul>
+  </div>
+  <div style="background:#f8fafc;border-radius:10px;padding:14px;border:1px solid #e2e8f0">
+    <div style="font-weight:700;color:#1e3a5f;margin-bottom:8px">月 10-12：积累可见成果</div>
+    <ul style="margin:0;padding-left:16px;line-height:2;color:#374151">
+      <li>完成 Fama-French 因子复现项目</li>
+      <li>建立 LinkedIn HK 金融圈人脉（每周加5人）</li>
+      <li>开始关注香港量化基金招聘需求</li>
+      <li>初稿简历（突出数据/模型/科技行业经验）</li>
+    </ul>
+  </div>
+</div>
+</div>
+</div>
+
+<div style="background:#fff;border:1.5px solid #e2e8f0;border-radius:14px;overflow:hidden;margin:16px 0">
+<div style="background:linear-gradient(135deg,#14532d,#16a34a);padding:14px 20px;color:#fff;font-weight:700;font-size:14px">📅 Year 2：冲刺入场</div>
+<div style="padding:20px">
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;font-size:13px">
+  <div style="background:#f8fafc;border-radius:10px;padding:14px;border:1px solid #e2e8f0">
+    <div style="font-weight:700;color:#14532d;margin-bottom:8px">月 1-3：CFA L2 冲刺</div>
+    <ul style="margin:0;padding-left:16px;line-height:2;color:#374151">
+      <li>CFA L2 考试（通过率45%，需认真备考）</li>
+      <li>完善科技股量化项目（加入ML选股模型）</li>
+      <li>研究目标公司：读其官网、招聘需求、公开研报</li>
+      <li>准备「60秒自我介绍」（英文+普通话双版）</li>
+    </ul>
+  </div>
+  <div style="background:#f8fafc;border-radius:10px;padding:14px;border:1px solid #e2e8f0">
+    <div style="font-weight:700;color:#14532d;margin-bottom:8px">月 4-6：启动求职</div>
+    <ul style="margin:0;padding-left:16px;line-height:2;color:#374151">
+      <li>联系 3-5 家香港猎头（见下文名单）</li>
+      <li>更新 LinkedIn：突出「Quant + Tech + Finance」</li>
+      <li>申请香港工作签证信息收集（内地公民）</li>
+      <li>开始参加香港 CFA Society 活动（有线上场次）</li>
+    </ul>
+  </div>
+  <div style="background:#f8fafc;border-radius:10px;padding:14px;border:1px solid #e2e8f0">
+    <div style="font-weight:700;color:#14532d;margin-bottom:8px">月 7-9：面试冲刺</div>
+    <ul style="margin:0;padding-left:16px;line-height:2;color:#374151">
+      <li>准备量化面试题（LeetCode 金融类 + Brainteaser）</li>
+      <li>准备 Case Study（读一家公司，讲清楚投资逻辑）</li>
+      <li>刷《Heard on the Street》（量化面试经典书）</li>
+      <li>保持每日刷新对目标公司的理解</li>
+    </ul>
+  </div>
+  <div style="background:#f0fdf4;border-radius:10px;padding:14px;border:1px solid #86efac">
+    <div style="font-weight:700;color:#14532d;margin-bottom:8px">月 10-12：目标落地</div>
+    <ul style="margin:0;padding-left:16px;line-height:2;color:#374151">
+      <li><strong style="color:#15803d">目标：拿到 offer + 办理香港工作签证</strong></li>
+      <li>谈判薪资（了解市场行情，不要轻易接第一个数字）</li>
+      <li>规划家庭安排（租房/学校/配偶工作）</li>
+      <li>入职后立即启动 SFC 牌照申请</li>
+    </ul>
+  </div>
+</div>
+</div>
+</div>
+
+<h2>五、求职策略：进门的具体方法</h2>
+
+<h3>目标公司清单（按难度从低到高）</h3>
+<div class="table-wrap"><table>
+<thead><tr><th>公司</th><th>类型</th><th>工程师友好度</th><th>入场难度</th><th>备注</th></tr></thead>
+<tbody>
+<tr><td><strong>汇丰/渣打量化风险团队</strong></td><td>银行量化</td><td>★★★★★</td><td>中等</td><td>最适合第一份香港金融工作，稳定</td></tr>
+<tr><td><strong>晨星 HK / FactSet HK</strong></td><td>金融数据</td><td>★★★★★</td><td>较低</td><td>过渡型工作，积累香港本地资历</td></tr>
+<tr><td><strong>贝莱德 HK（量化团队）</strong></td><td>大型资管</td><td>★★★★</td><td>中高</td><td>世界最大资管，品牌背书极强</td></tr>
+<tr><td><strong>Man AHL HK</strong></td><td>系统性对冲基金</td><td>★★★★★</td><td>高</td><td>纯量化，非常看重编程能力</td></tr>
+<tr><td><strong>Citadel Securities HK</strong></td><td>量化做市/对冲</td><td>★★★★★</td><td>很高</td><td>薪资天花板，面试极难</td></tr>
+<tr><td><strong>Point72 HK</strong></td><td>对冲基金</td><td>★★★★</td><td>高</td><td>有量化和主观两条线</td></tr>
+<tr><td><strong>春华资本 / 高瓴 HK</strong></td><td>PE/成长股</td><td>★★★</td><td>极高</td><td>更看重金融+行业经验，工程师直接转难度大</td></tr>
+</tbody></table></div>
+
+<h3>猎头名单（直接联系这些机构）</h3>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:13px;margin:14px 0">
+  <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:14px">
+    <div style="font-weight:700;color:#1e293b;margin-bottom:6px">🌐 国际猎头公司</div>
+    <ul style="margin:0;padding-left:16px;line-height:2;color:#374151">
+      <li><strong>Michael Page Hong Kong</strong>（金融科技、量化）</li>
+      <li><strong>Robert Walters HK</strong>（资产管理）</li>
+      <li><strong>Selby Jennings HK</strong>（量化/对冲基金专精）</li>
+      <li><strong>Heidrick & Struggles</strong>（高管层）</li>
+    </ul>
+  </div>
+  <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:14px">
+    <div style="font-weight:700;color:#1e293b;margin-bottom:6px">🔍 有效操作方法</div>
+    <ul style="margin:0;padding-left:16px;line-height:2;color:#374151">
+      <li>LinkedIn 搜索「Quant Researcher Hong Kong」直接联系在职人员</li>
+      <li>加入 CFA Society Hong Kong，参加活动</li>
+      <li>参加 QuantConnect / Kaggle 量化比赛，建立名气</li>
+      <li>关注微信群「香港金融校友群」等渠道</li>
+    </ul>
+  </div>
+</div>
+
+<h3>简历关键词策略</h3>
+<div style="background:#1e293b;border-radius:12px;padding:20px;margin:14px 0;font-family:monospace;font-size:13px;line-height:1.8;color:#e2e8f0">
+<span style="color:#94a3b8">// 工程师背景转量化研究员简历 - 关键词映射</span><br><br>
+<span style="color:#86efac">互联网工作经历 → 金融语言翻译：</span><br>
+大数据处理           →  <span style="color:#fbbf24">High-frequency data pipeline / Tick data analysis</span><br>
+A/B 测试             →  <span style="color:#fbbf24">Quantitative hypothesis testing / Signal validation</span><br>
+机器学习模型          →  <span style="color:#fbbf24">Alpha signal generation / Predictive factor modeling</span><br>
+推荐系统             →  <span style="color:#fbbf24">Multi-factor model construction</span><br>
+风控系统             →  <span style="color:#fbbf24">Risk management system / VaR implementation</span><br>
+Top 3% 绩效          →  <span style="color:#fbbf24">Consistently top-ranked engineer (top 3% of 5000+)</span><br><br>
+<span style="color:#94a3b8">// 必须在简历中出现的金融关键词</span><br>
+<span style="color:#c4b5fd">CFA Candidate (Level X) · SFC LE Exam Passed · Sharpe Ratio · Backtesting<br>
+Factor Model · Alpha Generation · Python/NumPy/Pandas · Statistical Arbitrage</span>
+</div>
+
+<h2>六、薪资与职业发展路径</h2>
+
+<div class="table-wrap"><table>
+<thead><tr><th>阶段</th><th>职位</th><th>年薪（港币）</th><th>含年终奖估计</th><th>约合人民币</th></tr></thead>
+<tbody>
+<tr><td>入场（0-2年）</td><td>初级量化研究员 / 分析师</td><td>60-100万</td><td>100-180万</td><td>约95-170万</td></tr>
+<tr><td>成长（3-5年）</td><td>高级研究员 / 策略经理</td><td>120-200万</td><td>200-400万</td><td>约190-380万</td></tr>
+<tr><td>成熟（5-8年）</td><td>基金经理 / Portfolio Manager</td><td>200-500万</td><td>500万-数千万</td><td>视业绩而定</td></tr>
+<tr><td>顶端（8年+）</td><td>合伙人 / 自立门户</td><td>无上限</td><td>无上限</td><td>分红+管理费</td></tr>
+</tbody></table></div>
+
+<div style="background:#fef2f2;border:1px solid #fecaca;border-radius:12px;padding:16px 20px;margin:16px 0">
+<strong style="color:#dc2626">⚠️ 香港生活成本现实评估</strong>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:13px;margin-top:12px">
+  <div>
+    <div style="font-weight:600;color:#374151;margin-bottom:6px">主要支出</div>
+    <ul style="margin:0;padding-left:16px;line-height:2;color:#64748b">
+      <li>房租（一居室）：HKD 2-3.5万/月</li>
+      <li>子女学费（国际学校）：HKD 10-20万/年</li>
+      <li>日常生活：HKD 1-1.5万/月</li>
+    </ul>
+  </div>
+  <div>
+    <div style="font-weight:600;color:#374151;margin-bottom:6px">利好因素</div>
+    <ul style="margin:0;padding-left:16px;line-height:2;color:#64748b">
+      <li>个人所得税封顶 <strong>15%</strong>（内地最高45%）</li>
+      <li>港币与美元挂钩，资产国际化</li>
+      <li>医疗、交通基础设施完善</li>
+    </ul>
+  </div>
+</div>
+<p style="font-size:13px;color:#dc2626;margin-top:10px">结论：入场年薪 HKD 100 万以上才能维持与内地目前生活水平相近的质量。量化研究员岗位通常能满足这一条件。</p>
+</div>
+
+<h3>职业发展天花板对比</h3>
+<div class="cards-grid">
+  <div class="card"><div class="card-icon">🏗️</div><div class="card-title">大厂专家工程师路径</div><div class="card-desc">P8/P9 → 高级总监 → VP，年薪上限约 300-500 万人民币，受公司业绩和晋升名额限制，职业生涯后期增长放缓</div></div>
+  <div class="card" style="border-color:#6366f1"><div class="card-icon">🚀</div><div class="card-title">香港基金从业路径</div><div class="card-desc">量化研究员 → 策略经理 → PM，5年后收入可超越大厂天花板，<strong>核心是业绩驱动而非职级驱动</strong>，成功者无收入上限</div></div>
+</div>
+
+<h2>七、可行性评估与关键风险</h2>
+<div style="background:#f0f9ff;border:1.5px solid #7dd3fc;border-radius:14px;padding:20px 24px;margin:16px 0">
+<strong style="color:#0369a1;font-size:15px">🎯 对你的专项可行性评估</strong>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px;font-size:13px">
+  <div>
+    <div style="font-weight:700;color:#0c4a6e;margin-bottom:8px">✅ 有利因素</div>
+    <ul style="margin:0;padding-left:16px;line-height:2;color:#374151">
+      <li>Top 3% 工程师，技术能力已达职业顶端</li>
+      <li>本课程已建立系统金融知识框架</li>
+      <li>有大厂资历，猎头会主动联系</li>
+      <li>现在金融圈对「懂 AI/ML 的人才」需求极旺</li>
+      <li>香港抢人才计划覆盖金融、科技复合背景</li>
+    </ul>
+  </div>
+  <div>
+    <div style="font-weight:700;color:#0c4a6e;margin-bottom:8px">⚠️ 需要克服的挑战</div>
+    <ul style="margin:0;padding-left:16px;line-height:2;color:#374151">
+      <li>金融证书需要 1-2 年时间（CFA L1/L2）</li>
+      <li>英语工作能力需要刻意训练</li>
+      <li>思维方式转变：从确定性工程思维到概率性投资思维</li>
+      <li>香港生活成本高，家庭安排需提前规划</li>
+      <li>第一份工作薪资可能低于当前大厂水平</li>
+    </ul>
+  </div>
+</div>
+<div style="background:#e0f2fe;border-radius:10px;padding:14px;margin-top:14px">
+<strong style="color:#0369a1">综合评估：可行性 ★★★★（4/5），推荐指数 ★★★★★</strong>
+<p style="font-size:13px;color:#374151;line-height:1.7;margin-top:6px">基于你的背景，2年认真准备后进入香港量化基金领域的概率极高。建议走「量化研究员」切入路径，这是工程师背景转行的最优解。5年后你的总收入有望超过在大厂做到 P10 级别的收入上限，且资产更加国际化。</p>
+</div>
+</div>
+
+<h2>八、实战行动清单</h2>
+<ul class="checklist">
+  <li data-key="hk1"><div class="check-box">✓</div><span class="check-text"><strong>本月完成：</strong>注册 CFA Institute 账号（cfainstitute.org），了解最近一次 L1 考试报名截止日期，制定备考时间表</span></li>
+  <li data-key="hk2"><div class="check-box">✓</div><span class="check-text"><strong>本月完成：</strong>注册 HKSI 网站（hksi.org.hk），下载 LE Paper 1 &amp; 2 备考材料，评估考试时间</span></li>
+  <li data-key="hk3"><div class="check-box">✓</div><span class="check-text"><strong>本月完成：</strong>在 GitHub 建一个「quant-research」仓库，写第一个动量策略回测（哪怕只有50行代码）</span></li>
+  <li data-key="hk4"><div class="check-box">✓</div><span class="check-text"><strong>本月完成：</strong>更新 LinkedIn profile，添加「CFA Candidate」、「Quantitative Research」等关键词，开始 follow 香港金融圈账号</span></li>
+  <li data-key="hk5"><div class="check-box">✓</div><span class="check-text"><strong>3个月内：</strong>找到并联系 1-2 位香港量化基金从业者（校友网络 / LinkedIn），做一次 30 分钟信息访谈，了解第一手内部信息</span></li>
+  <li data-key="hk6"><div class="check-box">✓</div><span class="check-text"><strong>3个月内：</strong>读完《量化交易》（Ernest Chan著）和《主动投资组合管理》（Grinold & Kahn著）——量化面试必考来源</span></li>
+  <li data-key="hk7"><div class="check-box">✓</div><span class="check-text"><strong>6个月内：</strong>通过 CFA L1 考试。这是整个计划中最重要的一步，它证明你对金融知识的严肃承诺</span></li>
+  <li data-key="hk8"><div class="check-box">✓</div><span class="check-text"><strong>6个月内：</strong>完成一个完整的量化项目（含信号构建、回测、风险分析），推上 GitHub，能在面试中讲清楚 Sharpe Ratio 和 max drawdown</span></li>
+  <li data-key="hk9"><div class="check-box">✓</div><span class="check-text"><strong>12个月内：</strong>联系 Selby Jennings / Robert Walters HK 猎头，了解当前量化研究员市场行情，发送简历进行初步评估</span></li>
+  <li data-key="hk10"><div class="check-box">✓</div><span class="check-text"><strong>持续进行：</strong>每天通勤时收听 Odd Lots（Bloomberg）、My First Million、Invest Like the Best 等英文播客，积累金融英语语感和行业认知</span></li>
+</ul>
+
+<div style="text-align:center;margin-top:36px;padding:32px;background:linear-gradient(135deg,#0f172a,#1e3a5f,#1d4ed8);border-radius:16px;color:#fff">
+  <div style="font-size:22px;font-weight:900;margin-bottom:8px">🏦 你已经在终点线的 80%</div>
+  <div style="font-size:14px;opacity:.88;line-height:1.9;max-width:600px;margin:0 auto">
+    大多数人转行香港金融是从零开始——你不是。<br>
+    你的技术能力、分析思维、高绩效记录，已经是最难习得的那部分。<br><br>
+    <strong>你现在需要的，只是用 2 年时间补上那 20% 的「金融语言」。</strong><br><br>
+    CFA L1 → 量化项目 → SFC 考试 → 联系猎头。<br>
+    每一步都是确定性的，每一步都在向那扇门靠近。
+  </div>
+  <div style="margin-top:20px;font-size:12px;opacity:.65">
+    "The best investment you can make is in yourself." — Warren Buffett
   </div>
 </div>
 `,
