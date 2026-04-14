@@ -347,7 +347,7 @@ function restorePosition() {
 function renderNav(){
   const menu=document.getElementById('navMenu');
   let html='';let lastPhase=-1;
-  const phaseIcons=['','📚','📊','📈','🛡️','🎯','🌐'];
+  const phaseIcons=['','📚','📊','📈','🛡️','🎯','🌐','🏦'];
   curriculum.forEach((item,idx)=>{
     if(item.phase!==lastPhase){
       if(lastPhase>=0)html+='</div>';
