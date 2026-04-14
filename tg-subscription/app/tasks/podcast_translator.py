@@ -454,6 +454,13 @@ def translate_podcasts(self):
     episodes = load_index(r)
     new_count = 0
 
+    # 防护：如果 Redis 索引为空但磁盘上有 MP3，先自动重建索引
+    if not episodes and AUDIO_DIR.exists():
+        mp3_count = len(list(AUDIO_DIR.glob("*.mp3")))
+        if mp3_count > 0:
+            log.warning("Redis 索引为空但磁盘有 %d 个 MP3，跳过本次覆盖，请手动运行 rebuild_index.py", mp3_count)
+            return {"skipped": "index empty but mp3 files exist, run rebuild_index.py first"}
+
     for source in PODCAST_SOURCES:
         items = fetch_rss_items(source["rss"], limit=source["max_episodes"])
         source_episodes_to_process = [
