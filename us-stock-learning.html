@@ -317,7 +317,9 @@ const curriculum=[
   {id:'aapl-research',phase:6,tag:'第40课',title:'AAPL深度研究：消费品帝国的护城河与增长引擎',duration:'90 min'},
   {id:'ben-felix',phase:6,tag:'第41课',title:'Ben Felix循证投资：因子模型与学术实证',duration:'90 min'},
   {id:'audio-commute',phase:6,tag:'🎧 通勤彩蛋',title:'通勤学习指南：投资播客音频路线图',duration:'上下班时间'},
-  {id:'hk-fund-career',phase:7,phaseLabel:'第七阶段：香港金融职涯',tag:'🏦 职涯专题',title:'科技工程师入场香港私募基金：从入场券到职涯规划',duration:'90 min'},
+  {id:'hk-fund-career',phase:7,phaseLabel:'第七阶段：香港金融职涯',tag:'🏦 专题一',title:'科技工程师入场香港私募基金：从入场券到职涯规划',duration:'90 min'},
+  {id:'hk-quant-roadmap',phase:7,tag:'📐 专题二',title:'量化研究员完整技能图谱：数学·编程·策略三线攻克',duration:'120 min'},
+  {id:'hk-english-strategy',phase:7,tag:'🗣️ 专题三',title:'金融英语快速达标：英语差的人专属180天方案',duration:'60 min'},
 ];
 
 let currentIndex=0;
@@ -689,7 +691,7 @@ function getWelcome(){return`<div class="welcome-screen">
   <div class="phase-card" onclick="goTo(11)"><div class="phase-card-num pn-4">四</div><h3>风险管理</h3><p>完整风险框架、压力测试、黑天鹅应对手册</p><div class="phase-card-tag"><span class="ptag">2课</span><span class="ptag">~2.5h</span></div></div>
   <div class="phase-card" onclick="goTo(13)"><div class="phase-card-num pn-5">五</div><h3>养老规划</h3><p>42-60岁分阶段详细方案、年度资产配置表、退休提取策略</p><div class="phase-card-tag"><span class="ptag">3课</span><span class="ptag">~3.5h</span></div></div>
   <div class="phase-card" onclick="goTo(16)"><div class="phase-card-num pn-1">六</div><h3>持续成长</h3><p>全球领路人、Ben Felix循证投资、Damodaran估值精华、Howard Marks备忘录、QQQ/SPY深度研究、科技股护城河、SCHD红利研究、通勤音频路线图</p><div class="phase-card-tag"><span class="ptag">13课</span><span class="ptag">~14h</span></div></div>
-  <div class="phase-card" onclick="goTo(curriculum.length-1)" style="border-color:#6366f1;background:linear-gradient(135deg,#faf5ff,#ede9fe)"><div class="phase-card-num" style="background:#6d28d9;color:#fff">七</div><h3 style="color:#4c1d95">香港金融职涯</h3><p style="color:#6d28d9">科技工程师入场私募基金的完整路线图：SFC牌照、CFA路径、量化项目、求职策略、薪资与发展前景</p><div class="phase-card-tag"><span class="ptag" style="background:#ede9fe;color:#6d28d9">职涯专题</span><span class="ptag" style="background:#ede9fe;color:#6d28d9">~90min</span></div></div>
+  <div class="phase-card" onclick="goTo(curriculum.findIndex(function(c){return c.phase===7;}))" style="border-color:#6366f1;background:linear-gradient(135deg,#faf5ff,#ede9fe)"><div class="phase-card-num" style="background:#6d28d9;color:#fff">七</div><h3 style="color:#4c1d95">香港金融职涯</h3><p style="color:#6d28d9">入场私募/量化基金完整路线图 · 量化研究员数学编程策略三线攻克 · 英语差专属180天快速达标方案</p><div class="phase-card-tag"><span class="ptag" style="background:#ede9fe;color:#6d28d9">3个专题</span><span class="ptag" style="background:#ede9fe;color:#6d28d9">~4h</span></div></div>
 </div>
 <div class="info-box blue" style="margin-top:24px">
   <div class="info-box-title">💡 使用说明</div>
@@ -10752,6 +10754,701 @@ Factor Model · Alpha Generation · Python/NumPy/Pandas · Statistical Arbitrage
   </div>
   <div style="margin-top:20px;font-size:12px;opacity:.65">
     "The best investment you can make is in yourself." — Warren Buffett
+  </div>
+</div>
+`,
+
+// =====================================================================
+'hk-quant-roadmap':`
+<div style="background:linear-gradient(135deg,#1e1b4b,#312e81,#4338ca);border-radius:16px;padding:28px 32px;margin-bottom:28px;color:#fff">
+  <div style="font-size:12px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:8px">量化研究员深度攻略</div>
+  <div style="font-size:24px;font-weight:900;line-height:1.3;margin-bottom:10px">数学 · 编程 · 策略<br>三条线并行，系统攻克</div>
+  <div style="font-size:14px;color:rgba(255,255,255,.75);line-height:1.7">量化研究员的知识体系看起来吓人，但本质上就是三件事：<strong style="color:#a5b4fc">用数学描述市场规律，用代码实现这些规律，用策略把规律变成钱</strong>。这三件事你都有基础——只是以前叫算法、叫工程、叫系统，现在换了个名字。</div>
+</div>
+
+<h2>一、你真正需要的数学（比你想象的少）</h2>
+<p>很多人被「量化」两个字吓退，以为需要博士级数学。实际上，<strong>初级量化研究员需要的数学在大学水平就够了</strong>。以下是精准清单：</p>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0">
+  <div style="background:#fff;border:2px solid #6366f1;border-radius:14px;padding:18px">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+      <span style="font-size:20px">🎯</span>
+      <strong style="color:#4338ca;font-size:15px">必须掌握（高优先级）</strong>
+    </div>
+    <div style="font-size:13px;color:#374151;line-height:2">
+      <div style="display:flex;justify-content:space-between;border-bottom:1px solid #e2e8f0;padding-bottom:6px;margin-bottom:6px"><span><strong>概率论基础</strong></span><span style="color:#6366f1">权重40%</span></div>
+      <ul style="margin:0 0 10px 0;padding-left:16px;color:#64748b">
+        <li>期望、方差、协方差——组合收益的核心语言</li>
+        <li>正态分布——金融模型的默认假设</li>
+        <li>贝叶斯更新——信号强弱的动态调整</li>
+        <li>大数定律——为什么回测需要足够长的历史</li>
+      </ul>
+      <div style="display:flex;justify-content:space-between;border-bottom:1px solid #e2e8f0;padding-bottom:6px;margin-bottom:6px"><span><strong>统计推断</strong></span><span style="color:#6366f1">权重30%</span></div>
+      <ul style="margin:0;padding-left:16px;color:#64748b">
+        <li>假设检验 t-test——判断策略是否显著赚钱</li>
+        <li>回归分析——因子模型的数学基础</li>
+        <li>相关性 vs 因果性——避免过拟合陷阱</li>
+        <li>p-hacking 概念——为什么好看的回测不算数</li>
+      </ul>
+    </div>
+  </div>
+  <div style="background:#fff;border:1.5px solid #e2e8f0;border-radius:14px;padding:18px">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+      <span style="font-size:20px">📌</span>
+      <strong style="color:#374151;font-size:15px">需要了解（中优先级）</strong>
+    </div>
+    <div style="font-size:13px;color:#374151;line-height:2">
+      <div style="display:flex;justify-content:space-between;border-bottom:1px solid #e2e8f0;padding-bottom:6px;margin-bottom:6px"><span><strong>线性代数</strong></span><span style="color:#64748b">权重20%</span></div>
+      <ul style="margin:0 0 10px 0;padding-left:16px;color:#64748b">
+        <li>矩阵乘法——多资产组合协方差计算</li>
+        <li>特征值分解——PCA降维、风险因子分解</li>
+        <li>理解即可，不需要手算</li>
+      </ul>
+      <div style="display:flex;justify-content:space-between;border-bottom:1px solid #e2e8f0;padding-bottom:6px;margin-bottom:6px"><span><strong>时间序列</strong></span><span style="color:#64748b">权重10%</span></div>
+      <ul style="margin:0;padding-left:16px;color:#64748b">
+        <li>自相关 ACF/PACF——动量/均值回归的统计依据</li>
+        <li>ARIMA 基础——价格预测入门</li>
+        <li>协整检验——配对交易的理论基础</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div style="background:#fef9c3;border:1.5px solid #fbbf24;border-radius:12px;padding:16px 20px;margin:16px 0">
+<strong style="color:#92400e">💡 工程师的学习捷径</strong>
+<p style="font-size:13px;color:#78350f;line-height:1.7;margin-top:8px">你已经有了算法复杂度分析（概率论的直觉）、A/B 测试设计（假设检验的工程实践）、推荐系统（矩阵分解=特征值分解）。<strong>你不是在学新知识，你是在给已有的直觉配上数学符号。</strong> 用 3 个月，不用从零开始。</p>
+</div>
+
+<h3>数学学习资源（按效率排序）</h3>
+<div class="table-wrap"><table>
+<thead><tr><th>资源</th><th>形式</th><th>时间投入</th><th>适合场景</th></tr></thead>
+<tbody>
+<tr><td><strong>Khan Academy 统计学</strong>（中文字幕可选）</td><td>视频+练习</td><td>40小时</td><td>概率统计从头系统补</td></tr>
+<tr><td><strong>《统计学习方法》李航</strong>（中文）</td><td>教材</td><td>60小时</td><td>ML理论基础，中文无障碍</td></tr>
+<tr><td><strong>Quantitative Finance with Python</strong>（Chris Kelliher）</td><td>英文书</td><td>80小时</td><td>数学+代码结合，量化圣经之一</td></tr>
+<tr><td><strong>3Blue1Brown 线性代数</strong>（YouTube，中文字幕）</td><td>动画视频</td><td>10小时</td><td>建立线代几何直觉，不需要计算</td></tr>
+<tr><td><strong>MIT 18.650 Statistics for Applications</strong>（OCW免费）</td><td>英文讲义+视频</td><td>100小时</td><td>有余力时进阶，非必须</td></tr>
+</tbody></table></div>
+
+<h2>二、量化 Python 技术栈完整地图</h2>
+<p>你已经会写代码，这一关最轻松。核心是<strong>换一套「金融语境」的库和思维方式</strong>，而不是重新学编程。</p>
+
+<div style="background:#0f172a;border-radius:14px;padding:24px;margin:16px 0;font-family:monospace;font-size:13px;line-height:2;color:#e2e8f0">
+<span style="color:#94a3b8"># ══ 量化 Python 技术栈 ══ 按学习顺序排列</span><br><br>
+<span style="color:#86efac"># ① 数据获取层（Week 1-2）</span><br>
+<span style="color:#fbbf24">yfinance</span>         <span style="color:#64748b"># 免费获取股票日线/分钟数据（Yahoo Finance）</span><br>
+<span style="color:#fbbf24">pandas_datareader</span> <span style="color:#64748b"># 宏观数据（FRED美联储数据库）</span><br>
+<span style="color:#fbbf24">polygon.io API</span>   <span style="color:#64748b"># 专业实时数据，免费层够用（$0/月起）</span><br>
+<span style="color:#fbbf24">Quandl/Nasdaq</span>    <span style="color:#64748b"># 另类数据入口（商品、宏观）</span><br><br>
+<span style="color:#86efac"># ② 数据处理层（Week 3-4，你最熟悉的领域）</span><br>
+<span style="color:#fbbf24">pandas</span>           <span style="color:#64748b"># 时间序列处理：resample/rolling/shift——价格→收益率</span><br>
+<span style="color:#fbbf24">numpy</span>            <span style="color:#64748b"># 矩阵运算：协方差矩阵、向量化回测</span><br>
+<span style="color:#fbbf24">scipy.stats</span>      <span style="color:#64748b"># t检验、正态性检验、相关性分析</span><br>
+<span style="color:#fbbf24">statsmodels</span>      <span style="color:#64748b"># OLS回归、时间序列ARIMA、协整检验</span><br><br>
+<span style="color:#86efac"># ③ 信号研究层（Month 2-3）</span><br>
+<span style="color:#fbbf24">sklearn</span>          <span style="color:#64748b"># 机器学习选股：随机森林、XGBoost因子</span><br>
+<span style="color:#fbbf24">ta-lib / pandas-ta</span><span style="color:#64748b"># 技术指标库（RSI/MACD/布林带，一行代码）</span><br>
+<span style="color:#fbbf24">alphalens</span>        <span style="color:#64748b"># Quantopian出品，因子分析专用（IC/IR/分组回测）</span><br><br>
+<span style="color:#86efac"># ④ 回测层（Month 3-4）</span><br>
+<span style="color:#fbbf24">vectorbt</span>         <span style="color:#64748b"># 最快的向量化回测框架，比backtrader快100x</span><br>
+<span style="color:#fbbf24">backtrader</span>       <span style="color:#64748b"># 事件驱动回测，更接近实盘逻辑</span><br>
+<span style="color:#fbbf24">zipline-reloaded</span> <span style="color:#64748b"># Quantopian开源版，机构级回测</span><br><br>
+<span style="color:#86efac"># ⑤ 风险分析层（Month 4-5）</span><br>
+<span style="color:#fbbf24">pyportfolioopt</span>   <span style="color:#64748b"># 投资组合优化（均值方差/Black-Litterman）</span><br>
+<span style="color:#fbbf24">empyrical</span>        <span style="color:#64748b"># Sharpe/Sortino/Max Drawdown 一键计算</span><br>
+<span style="color:#fbbf24">pyfolio</span>          <span style="color:#64748b"># 可视化完整策略绩效报告</span><br>
+</div>
+
+<h3>学习路径：从第一行量化代码到完整项目（16周）</h3>
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;font-size:12px;margin:16px 0">
+  <div style="background:#eff6ff;border:1.5px solid #93c5fd;border-radius:10px;padding:14px">
+    <div style="font-weight:800;color:#1d4ed8;font-size:13px;margin-bottom:8px">Week 1-2<br>数据基础</div>
+    <ul style="margin:0;padding-left:14px;line-height:2;color:#374151">
+      <li>yfinance下载SPY 10年数据</li>
+      <li>计算日收益率 pct_change()</li>
+      <li>画收益率分布直方图</li>
+      <li>验证：是否正态分布？</li>
+      <li>计算年化收益率和波动率</li>
+    </ul>
+    <div style="margin-top:8px;font-size:11px;color:#3b82f6;font-weight:600">里程碑：第一张收益分析图</div>
+  </div>
+  <div style="background:#f0fdf4;border:1.5px solid #86efac;border-radius:10px;padding:14px">
+    <div style="font-weight:800;color:#15803d;font-size:13px;margin-bottom:8px">Week 3-6<br>第一个策略</div>
+    <ul style="margin:0;padding-left:14px;line-height:2;color:#374151">
+      <li>动量策略：过去12月涨幅最好的买入</li>
+      <li>信号生成 rolling().mean()</li>
+      <li>回测框架搭建（vectorbt）</li>
+      <li>计算 Sharpe Ratio</li>
+      <li>对比买入持有基准</li>
+    </ul>
+    <div style="margin-top:8px;font-size:11px;color:#16a34a;font-weight:600">里程碑：第一个有完整回测的策略</div>
+  </div>
+  <div style="background:#fdf4ff;border:1.5px solid #d8b4fe;border-radius:10px;padding:14px">
+    <div style="font-weight:800;color:#7e22ce;font-size:13px;margin-bottom:8px">Week 7-12<br>因子研究</div>
+    <ul style="margin:0;padding-left:14px;line-height:2;color:#374151">
+      <li>复现 Fama-French 三因子</li>
+      <li>用 alphalens 评估因子 IC</li>
+      <li>科技行业专项因子（研发/毛利/NRR）</li>
+      <li>多因子组合打分</li>
+      <li>用 ML 优化因子权重</li>
+    </ul>
+    <div style="margin-top:8px;font-size:11px;color:#7e22ce;font-weight:600">里程碑：GitHub 上有因子研究报告</div>
+  </div>
+  <div style="background:#fff7ed;border:1.5px solid #fed7aa;border-radius:10px;padding:14px">
+    <div style="font-weight:800;color:#c2410c;font-size:13px;margin-bottom:8px">Week 13-16<br>完整项目</div>
+    <ul style="margin:0;padding-left:14px;line-height:2;color:#374151">
+      <li>投资组合优化（pyportfolioopt）</li>
+      <li>风险控制：仓位限制+止损</li>
+      <li>用 pyfolio 生成完整报告</li>
+      <li>写英文 README（见专题三）</li>
+      <li>部署到 GitHub Pages 展示</li>
+    </ul>
+    <div style="margin-top:8px;font-size:11px;color:#c2410c;font-weight:600">里程碑：面试可展示的完整项目</div>
+  </div>
+</div>
+
+<h2>三、策略体系：从零到能讲清楚五大类策略</h2>
+<p>量化面试必考：「你研究过哪些策略？讲一个。」你需要至少深入了解 2-3 种，能讲清楚信号、回测、风险这三个环节。</p>
+
+<div style="background:#fff;border:1.5px solid #e2e8f0;border-radius:14px;overflow:hidden;margin:16px 0">
+<div style="background:#f8fafc;padding:12px 20px;font-weight:700;font-size:13px;color:#374151;border-bottom:1px solid #e2e8f0">五大主流量化策略详解</div>
+<div style="padding:20px">
+
+<div style="border-left:4px solid #6366f1;padding:12px 16px;margin-bottom:14px;background:#fafafa;border-radius:0 8px 8px 0">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+  <strong style="color:#4338ca;font-size:14px">① 动量策略（Momentum）</strong>
+  <span style="background:#ede9fe;color:#6d28d9;font-size:11px;font-weight:700;padding:3px 8px;border-radius:6px">推荐首选</span>
+</div>
+<div style="font-size:13px;color:#374151;line-height:1.8">
+  <strong>信号逻辑：</strong>过去表现好的资产短期内继续表现好（动量效应）。<br>
+  <strong>实现方法：</strong>计算过去 1/3/6/12 个月收益率排名，买入前 20%，卖出后 20%。<br>
+  <strong>数学工具：</strong>截面排序、时间序列滚动计算。<br>
+  <strong>风险点：</strong>动量崩溃（Momentum Crash）——市场急速反转时大幅亏损。<br>
+  <strong>工程师类比：</strong>类似点击率预测——「最近高点击的内容继续推」。
+</div>
+</div>
+
+<div style="border-left:4px solid #16a34a;padding:12px 16px;margin-bottom:14px;background:#fafafa;border-radius:0 8px 8px 0">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+  <strong style="color:#14532d;font-size:14px">② 均值回归（Mean Reversion）</strong>
+  <span style="background:#dcfce7;color:#15803d;font-size:11px;font-weight:700;padding:3px 8px;border-radius:6px">数学要求低</span>
+</div>
+<div style="font-size:13px;color:#374151;line-height:1.8">
+  <strong>信号逻辑：</strong>价格偏离历史均值太多时会回归——「橡皮筋」效应。<br>
+  <strong>实现方法：</strong>布林带（均值±2倍标准差），价格触下轨买入，触上轨卖出。<br>
+  <strong>配对变体：</strong>找两只高相关股票（如 MSFT/GOOGL），价差偏离时做对冲交易。<br>
+  <strong>风险点：</strong>趋势行情中均值回归策略大亏，需要过滤趋势市。<br>
+  <strong>工程师类比：</strong>类似异常检测——「偏差太大就会被系统纠正」。
+</div>
+</div>
+
+<div style="border-left:4px solid #ca8a04;padding:12px 16px;margin-bottom:14px;background:#fafafa;border-radius:0 8px 8px 0">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+  <strong style="color:#92400e;font-size:14px">③ 因子投资（Factor Investing）</strong>
+  <span style="background:#fef3c7;color:#92400e;font-size:11px;font-weight:700;padding:3px 8px;border-radius:6px">与CFA高度重合</span>
+</div>
+<div style="font-size:13px;color:#374151;line-height:1.8">
+  <strong>信号逻辑：</strong>某些系统性特征（价值/质量/低波动）长期有超额收益。<br>
+  <strong>核心因子：</strong>PE估值（价值因子）、ROE（质量因子）、市值（规模因子）、过去收益率（动量因子）。<br>
+  <strong>实现方法：</strong>对所有股票按因子打分排名，构建多空组合。<br>
+  <strong>与本课程关联：</strong>第31课 Ben Felix 因子模型已有理论基础，可直接复现。<br>
+  <strong>工程师类比：</strong>类似特征工程——「找到预测目标的有效特征」。
+</div>
+</div>
+
+<div style="border-left:4px solid #0ea5e9;padding:12px 16px;margin-bottom:14px;background:#fafafa;border-radius:0 8px 8px 0">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+  <strong style="color:#0369a1;font-size:14px">④ 机器学习选股（ML Alpha）</strong>
+  <span style="background:#e0f2fe;color:#0369a1;font-size:11px;font-weight:700;padding:3px 8px;border-radius:6px">工程师最强项</span>
+</div>
+<div style="font-size:13px;color:#374151;line-height:1.8">
+  <strong>信号逻辑：</strong>用 ML 模型预测未来 N 天收益率方向，按预测概率排名选股。<br>
+  <strong>特征工程：</strong>价量技术指标 + 财务比率 + 宏观特征 + NLP情感分数。<br>
+  <strong>常用模型：</strong>XGBoost（最稳健）、LightGBM（最快）、LSTM（时间序列）。<br>
+  <strong>关键陷阱：</strong>过拟合（p-hacking）——必须用walk-forward validation而非传统交叉验证。<br>
+  <strong>工程师天然优势：</strong>你会的所有 ML 技能在这里直接复用。
+</div>
+</div>
+
+<div style="border-left:4px solid #dc2626;padding:12px 16px;background:#fafafa;border-radius:0 8px 8px 0">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+  <strong style="color:#991b1b;font-size:14px">⑤ 另类数据策略（Alternative Data）</strong>
+  <span style="background:#fee2e2;color:#dc2626;font-size:11px;font-weight:700;padding:3px 8px;border-radius:6px">2026年热门方向</span>
+</div>
+<div style="font-size:13px;color:#374151;line-height:1.8">
+  <strong>信号逻辑：</strong>利用非传统数据源（招聘数据/卫星图/APP下载量/新闻NLP）预测公司基本面。<br>
+  <strong>你能做的：</strong>抓取 LinkedIn 招聘数量（工程师扩张=收入增长信号）、App Annie 下载量、Google Trends。<br>
+  <strong>门槛：</strong>需要爬虫 + NLP（你都会）+ 金融逻辑（补）。<br>
+  <strong>稀缺性：</strong>这个方向门槛最高、竞争最少、薪资溢价最大。
+</div>
+</div>
+
+</div>
+</div>
+
+<h2>四、量化面试完整题库与通关策略</h2>
+<p>量化基金面试通常分 3-4 轮，每一轮都有固定套路，<strong>完全可以系统备考</strong>。</p>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;font-size:13px;margin:16px 0">
+  <div style="background:#fff;border:1.5px solid #6366f1;border-radius:12px;overflow:hidden">
+    <div style="background:#6366f1;padding:10px 16px;color:#fff;font-weight:700">第1轮：数学/概率 Brainteaser</div>
+    <div style="padding:14px;line-height:1.9;color:#374151">
+      <div style="font-weight:600;color:#4338ca;margin-bottom:6px">典型题型：</div>
+      <ul style="margin:0;padding-left:16px">
+        <li>「扔一枚不公平硬币，正面概率0.6，连续扔3次，至少1次正面的概率是？」</li>
+        <li>「一个股票连续涨了3天，第4天涨的概率是多少？」（考你是否知道独立性）</li>
+        <li>「有1000个候选人，你能看到每个人的排名但不能回头，最优停止策略是什么？」（Secretary Problem）</li>
+      </ul>
+      <div style="font-weight:600;color:#4338ca;margin-top:10px;margin-bottom:6px">备考资源：</div>
+      <ul style="margin:0;padding-left:16px">
+        <li>《A Practical Guide to Quantitative Finance Interviews》（Xinfeng Zhou，橙色书）</li>
+        <li>《Heard on the Street》（Timothy Crack，经典集）</li>
+        <li>LeetCode 概率题 Tag + 知乎「量化面试」专题</li>
+      </ul>
+    </div>
+  </div>
+  <div style="background:#fff;border:1.5px solid #16a34a;border-radius:12px;overflow:hidden">
+    <div style="background:#16a34a;padding:10px 16px;color:#fff;font-weight:700">第2轮：编程/算法题</div>
+    <div style="padding:14px;line-height:1.9;color:#374151">
+      <div style="font-weight:600;color:#14532d;margin-bottom:6px">典型题型：</div>
+      <ul style="margin:0;padding-left:16px">
+        <li>「给你一个价格序列，计算最大回撤（Max Drawdown）」——O(n)解法</li>
+        <li>「实现一个滚动窗口的 Sharpe Ratio 计算」</li>
+        <li>「给定持仓和价格，计算 Portfolio Beta」</li>
+        <li>「实现简单的动量策略回测，输出年化收益」</li>
+      </ul>
+      <div style="font-weight:600;color:#14532d;margin-top:10px;margin-bottom:6px">备考策略：</div>
+      <ul style="margin:0;padding-left:16px">
+        <li>LeetCode Medium 每天1题（保持手感）</li>
+        <li>额外刷：金融算法题（搜索「quantitative finance python interview」）</li>
+        <li>自己实现一遍所有 empyrical 里的指标</li>
+      </ul>
+    </div>
+  </div>
+  <div style="background:#fff;border:1.5px solid #ca8a04;border-radius:12px;overflow:hidden">
+    <div style="background:#ca8a04;padding:10px 16px;color:#fff;font-weight:700">第3轮：策略 Case Study</div>
+    <div style="padding:14px;line-height:1.9;color:#374151">
+      <div style="font-weight:600;color:#92400e;margin-bottom:6px">典型题型：</div>
+      <ul style="margin:0;padding-left:16px">
+        <li>「你有1个月时间，用给定数据集找一个可交易的Alpha信号，怎么做？」</li>
+        <li>「你的动量策略在2020年3月大崩盘，解释原因并提出改进方案」</li>
+        <li>「比较动量和价值因子的相关性，什么时候组合使用更有效？」</li>
+      </ul>
+      <div style="font-weight:600;color:#92400e;margin-top:10px;margin-bottom:6px">答题框架：</div>
+      <div style="background:#fef3c7;padding:10px;border-radius:8px;font-size:12px">
+        数据获取 → 信号构建逻辑 → 回测设计（防过拟合）→ 绩效分析 → 风险控制 → 改进方向
+      </div>
+    </div>
+  </div>
+  <div style="background:#fff;border:1.5px solid #0ea5e9;border-radius:12px;overflow:hidden">
+    <div style="background:#0ea5e9;padding:10px 16px;color:#fff;font-weight:700">第4轮：市场认知 + 行为面试</div>
+    <div style="padding:14px;line-height:1.9;color:#374151">
+      <div style="font-weight:600;color:#0369a1;margin-bottom:6px">典型问题：</div>
+      <ul style="margin:0;padding-left:16px">
+        <li>「最近市场上你最关注什么机会/风险？」</li>
+        <li>「如果你管理10亿美元，你会如何配置？」</li>
+        <li>「讲一个你职业生涯中失败的项目，你学到了什么？」</li>
+        <li>「你如何在团队中展示你的研究成果？」（英语口头表达，见专题三）</li>
+      </ul>
+      <div style="font-weight:600;color:#0369a1;margin-top:10px;margin-bottom:6px">备考策略：</div>
+      <ul style="margin:0;padding-left:16px">
+        <li>每天读 1 篇 Bloomberg 宏观新闻（建立市场感知）</li>
+        <li>准备 3 个结构化故事（STAR 框架：情境/任务/行动/结果）</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<h2>五、项目实战：面试可展示的完整作品集</h2>
+
+<div style="background:#fff;border:1.5px solid #e2e8f0;border-radius:14px;overflow:hidden;margin:16px 0">
+<div style="background:linear-gradient(135deg,#1e293b,#334155);padding:14px 20px;color:#fff;font-weight:700;font-size:14px">
+  🗂️ 推荐项目组合（按影响力排序）
+</div>
+<div style="padding:20px">
+<div style="margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid #e2e8f0">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+    <strong style="color:#1e293b;font-size:14px">Project 1：科技股因子选股系统（主打项目）</strong>
+    <span style="background:#dcfce7;color:#15803d;font-size:11px;font-weight:700;padding:3px 8px;border-radius:6px;white-space:nowrap">最高优先级</span>
+  </div>
+  <div style="font-size:13px;color:#374151;line-height:1.8">
+    <strong>核心亮点：</strong>结合你的科技行业认知，构建专属 TMT 因子（NRR净收入留存率、研发密度、员工增速）<br>
+    <strong>技术栈：</strong>yfinance数据 + alphalens因子评估 + pyfolio绩效报告<br>
+    <strong>差异化：</strong>加入 NLP 情感因子（分析科技公司财报会议纪要的语气变化）<br>
+    <strong>面试说法：</strong>"I built a systematic factor model specifically for US tech stocks, leveraging my background as a senior engineer to identify proprietary signals like R&D intensity and NRR..."
+  </div>
+</div>
+<div style="margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid #e2e8f0">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+    <strong style="color:#1e293b;font-size:14px">Project 2：配对交易策略（Pairs Trading）</strong>
+    <span style="background:#ede9fe;color:#6d28d9;font-size:11px;font-weight:700;padding:3px 8px;border-radius:6px;white-space:nowrap">展示统计知识</span>
+  </div>
+  <div style="font-size:13px;color:#374151;line-height:1.8">
+    <strong>核心亮点：</strong>MSFT vs GOOGL，用协整检验（Engle-Granger）验证价差均值回归，构建自动化交易信号<br>
+    <strong>技术栈：</strong>statsmodels协整检验 + vectorbt回测 + 仓位动态调整<br>
+    <strong>面试价值：</strong>展示你懂统计推断、均值回归、风险对冲
+  </div>
+</div>
+<div>
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+    <strong style="color:#1e293b;font-size:14px">Project 3：另类数据 Alpha（进阶项目）</strong>
+    <span style="background:#fef3c7;color:#92400e;font-size:11px;font-weight:700;padding:3px 8px;border-radius:6px;white-space:nowrap">差异化神器</span>
+  </div>
+  <div style="font-size:13px;color:#374151;line-height:1.8">
+    <strong>核心亮点：</strong>抓取美国科技公司 LinkedIn 招聘岗位数量变化（工程师招聘加速 → 营收增长领先指标），测试其预测力<br>
+    <strong>技术栈：</strong>Python爬虫 + NLP处理 + 事件研究（Event Study）<br>
+    <strong>面试价值：</strong>「另类数据+技术能力+行业洞察」三合一，99%的面试候选人做不出来
+  </div>
+</div>
+</div>
+</div>
+
+<h2>六、12个月量化修炼全日程（每天1.5小时）</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>时间段</th><th>任务</th><th>每日投入</th><th>里程碑</th></tr></thead>
+<tbody>
+<tr><td><strong>月1-2</strong><br>数学基础</td><td>Khan Academy概率统计（全部）+ 3Blue1Brown线代（全部）+ 第一个yfinance数据分析脚本</td><td>1.5h</td><td>能独立计算任意股票的年化夏普比率</td></tr>
+<tr><td><strong>月3-4</strong><br>第一个策略</td><td>动量策略完整实现（含回测+pyfolio报告）+ CFA L1备考同步启动</td><td>2h（考证期）</td><td>GitHub 上第一个完整量化策略项目</td></tr>
+<tr><td><strong>月5-6</strong><br>因子研究</td><td>Fama-French因子复现 + 科技行业专属因子开发 + alphalens因子分析报告</td><td>1.5h</td><td>能讲清楚「什么是IC，你的因子IC是多少」</td></tr>
+<tr><td><strong>月7-8</strong><br>ML选股</td><td>XGBoost选股模型（含walk-forward validation）+ 配对交易策略实现 + CFA L1考试</td><td>2h（考证期）</td><td>通过CFA L1 + ML项目上GitHub</td></tr>
+<tr><td><strong>月9-10</strong><br>进阶项目</td><td>另类数据项目（LinkedIn招聘信号）+ 组合优化（pyportfolioopt）+ 准备简历</td><td>1.5h</td><td>三个完整项目在GitHub，简历初稿完成</td></tr>
+<tr><td><strong>月11-12</strong><br>面试冲刺</td><td>每天1道概率题（橙色书）+ 每天1道LeetCode + 英语模拟面试（见专题三）</td><td>2h</td><td>联系猎头，开始面试，目标拿到第一个面试机会</td></tr>
+</tbody></table></div>
+
+<div style="text-align:center;margin-top:36px;padding:32px;background:linear-gradient(135deg,#1e1b4b,#4338ca);border-radius:16px;color:#fff">
+  <div style="font-size:22px;font-weight:900;margin-bottom:8px">📐 量化这条路，就是用你最熟悉的武器打一场新的仗</div>
+  <div style="font-size:14px;opacity:.88;line-height:1.9;max-width:600px;margin:0 auto">
+    代码还是那些代码，数据还是那些数据。<br>
+    唯一变了的，是你处理的数据从「用户行为」变成了「市场价格」，<br>
+    你优化的目标从「点击率」变成了「Sharpe Ratio」。<br><br>
+    <strong>本质上，你做的是同一件事。</strong>
+  </div>
+  <div style="margin-top:16px;font-size:12px;opacity:.65">
+    最快的路不是捷径，而是用你已有的优势走一条别人走不了的路。
+  </div>
+</div>
+`,
+
+// =====================================================================
+'hk-english-strategy':`
+<div style="background:linear-gradient(135deg,#064e3b,#065f46,#047857);border-radius:16px;padding:28px 32px;margin-bottom:28px;color:#fff">
+  <div style="font-size:12px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:8px">金融英语快速达标</div>
+  <div style="font-size:24px;font-weight:900;line-height:1.3;margin-bottom:10px">英语很差？<br>这是专门为你写的方案</div>
+  <div style="font-size:14px;color:rgba(255,255,255,.75);line-height:1.7">先说一个好消息：<strong style="color:#6ee7b7">量化研究员的英语门槛，比你想象的低得多。</strong>你需要的不是 BBC 播音腔，不是 GRE 词汇，而是能用英语说清楚「这个策略为什么有效」的能力。这是可以在 180 天内做到的事。</div>
+</div>
+
+<h2>一、先做一个诚实的现实评估</h2>
+
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;font-size:13px;margin:16px 0">
+  <div style="background:#fef2f2;border:1.5px solid #fecaca;border-radius:12px;padding:16px;text-align:center">
+    <div style="font-size:28px;margin-bottom:8px">❌</div>
+    <div style="font-weight:700;color:#dc2626;margin-bottom:6px">你不需要的英语</div>
+    <ul style="text-align:left;margin:0;padding-left:16px;color:#64748b;line-height:2">
+      <li>雅思 7.0+</li>
+      <li>完美口音</li>
+      <li>GRE词汇</li>
+      <li>文学写作能力</li>
+      <li>即兴聊天流畅</li>
+    </ul>
+  </div>
+  <div style="background:#f0fdf4;border:1.5px solid #86efac;border-radius:12px;padding:16px;text-align:center">
+    <div style="font-size:28px;margin-bottom:8px">✅</div>
+    <div style="font-weight:700;color:#15803d;margin-bottom:6px">你真正需要的英语</div>
+    <ul style="text-align:left;margin:0;padding-left:16px;color:#64748b;line-height:2">
+      <li>读懂英文研报</li>
+      <li>写清楚英文邮件</li>
+      <li>用英语讲策略逻辑</li>
+      <li>回答技术面试问题</li>
+      <li>写 GitHub README</li>
+    </ul>
+  </div>
+  <div style="background:#eff6ff;border:1.5px solid #bfdbfe;border-radius:12px;padding:16px;text-align:center">
+    <div style="font-size:28px;margin-bottom:8px">🎯</div>
+    <div style="font-weight:700;color:#1d4ed8;margin-bottom:6px">量化面试英语特点</div>
+    <ul style="text-align:left;margin:0;padding-left:16px;color:#64748b;line-height:2">
+      <li>词汇高度专业化</li>
+      <li>句型简洁重复</li>
+      <li>重逻辑轻文采</li>
+      <li>面试官关注内容≫口音</li>
+      <li>数字/公式可替代语言</li>
+    </ul>
+  </div>
+</div>
+
+<div style="background:#fefce8;border:1.5px solid #fde047;border-radius:12px;padding:16px 20px;margin:16px 0">
+<strong style="color:#713f12">🔑 核心认知：专业英语是「小词汇表+固定句型」的组合</strong>
+<p style="font-size:13px;color:#78350f;line-height:1.8;margin-top:8px">日常英语词汇量需要几万个，但金融量化专业英语你只需要掌握 <strong>800 个高频专业词汇</strong> + <strong>50 个面试固定句型</strong>，就能覆盖 90% 的工作场景。这是一个月内可以完成的任务。</p>
+</div>
+
+<h2>二、180天英语突破计划（按阶段拆解）</h2>
+
+<div style="background:#fff;border:1.5px solid #e2e8f0;border-radius:14px;overflow:hidden;margin:16px 0">
+<div style="display:grid;grid-template-columns:repeat(3,1fr)">
+
+<div style="border-right:1px solid #e2e8f0">
+<div style="background:linear-gradient(135deg,#dc2626,#ef4444);padding:12px 16px;color:#fff;font-weight:700;font-size:13px">
+  阶段一（Day 1-60）<br>建立词汇地基
+</div>
+<div style="padding:16px;font-size:13px;line-height:1.9;color:#374151">
+  <div style="font-weight:600;color:#dc2626;margin-bottom:8px">核心任务：</div>
+  <p>每天 <strong>20个金融词汇</strong>，用 Anki 词卡记忆，60天记完1200个核心词汇。</p>
+  <div style="font-weight:600;color:#dc2626;margin-bottom:6px;margin-top:10px">每日计划（45分钟）：</div>
+  <ul style="margin:0;padding-left:16px;line-height:2">
+    <li><strong>早晨10分钟</strong>：Anki 复习昨日词汇（通勤）</li>
+    <li><strong>午休15分钟</strong>：读 1 篇 Bloomberg 标题+摘要（不要全文）</li>
+    <li><strong>晚上20分钟</strong>：新增20个词汇+例句，Anki 加入</li>
+  </ul>
+  <div style="background:#fef2f2;border-radius:8px;padding:10px;margin-top:10px;font-size:12px;color:#dc2626">
+    <strong>词汇学习优先顺序：</strong><br>
+    策略类 → 风险类 → 市场结构类 → 宏观经济类<br>（下方提供完整词汇表）
+  </div>
+</div>
+</div>
+
+<div style="border-right:1px solid #e2e8f0">
+<div style="background:linear-gradient(135deg,#ca8a04,#d97706);padding:12px 16px;color:#fff;font-weight:700;font-size:13px">
+  阶段二（Day 61-120）<br>输入爆破
+</div>
+<div style="padding:16px;font-size:13px;line-height:1.9;color:#374151">
+  <div style="font-weight:600;color:#ca8a04;margin-bottom:8px">核心任务：</div>
+  <p>大量可理解输入（i+1原则）——看/听能懂80%的材料，强迫大脑自动填充剩余20%。</p>
+  <div style="font-weight:600;color:#ca8a04;margin-bottom:6px;margin-top:10px">每日计划（60分钟）：</div>
+  <ul style="margin:0;padding-left:16px;line-height:2">
+    <li><strong>通勤30分钟</strong>：听 Odd Lots / Planet Money（慢速，开英文字幕）</li>
+    <li><strong>午休15分钟</strong>：读 1 篇 FT 完整文章（先读标题猜内容再读全文）</li>
+    <li><strong>晚上15分钟</strong>：用 ChatGPT 写 1 封英文邮件，让 GPT 改，对比差异</li>
+  </ul>
+  <div style="background:#fef3c7;border-radius:8px;padding:10px;margin-top:10px;font-size:12px;color:#92400e">
+    <strong>关键材料清单：</strong><br>
+    YouTube: Investopedia 视频（慢速清晰）<br>
+    播客: Odd Lots（每集1个金融话题）<br>
+    官方研报: BlackRock / Vanguard 季报（图表多，文字少）
+  </div>
+</div>
+</div>
+
+<div>
+<div style="background:linear-gradient(135deg,#16a34a,#15803d);padding:12px 16px;color:#fff;font-weight:700;font-size:13px">
+  阶段三（Day 121-180）<br>输出攻坚
+</div>
+<div style="padding:16px;font-size:13px;line-height:1.9;color:#374151">
+  <div style="font-weight:600;color:#16a34a;margin-bottom:8px">核心任务：</div>
+  <p>从被动理解到主动输出——开口说、动手写，针对面试场景做专项训练。</p>
+  <div style="font-weight:600;color:#16a34a;margin-bottom:6px;margin-top:10px">每日计划（60分钟）：</div>
+  <ul style="margin:0;padding-left:16px;line-height:2">
+    <li><strong>早晨10分钟</strong>：录音朗读1段策略说明（听回放找问题）</li>
+    <li><strong>晚上20分钟</strong>：用英文写 GitHub commit message + 项目 README</li>
+    <li><strong>每周1次</strong>：找 italki 上的金融英语教师做1小时 mock interview</li>
+    <li><strong>每周1次</strong>：和 ChatGPT 做英文量化面试模拟（见下方 prompt）</li>
+  </ul>
+  <div style="background:#f0fdf4;border-radius:8px;padding:10px;margin-top:10px;font-size:12px;color:#15803d">
+    <strong>目标：180天后能做到</strong><br>
+    用英语流畅解释你的策略逻辑，回答「Why does momentum work?」这类问题
+  </div>
+</div>
+</div>
+
+</div>
+</div>
+
+<h2>三、800个核心金融英语词汇——分类速记</h2>
+
+<div style="background:#fff;border:1.5px solid #e2e8f0;border-radius:14px;overflow:hidden;margin:16px 0">
+<div style="background:#1e293b;padding:12px 20px;color:#fff;font-weight:700;font-size:13px">第一批（月1，最高频，先背这100个）</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0;font-size:12px">
+
+<div style="padding:14px;border-right:1px solid #e2e8f0;border-bottom:1px solid #e2e8f0">
+<div style="font-weight:700;color:#4338ca;margin-bottom:8px">📊 策略核心词（30个）</div>
+<div style="line-height:2;color:#374151">
+alpha <span style="color:#94a3b8">超额收益</span><br>
+beta <span style="color:#94a3b8">市场敏感度</span><br>
+momentum <span style="color:#94a3b8">动量</span><br>
+mean reversion <span style="color:#94a3b8">均值回归</span><br>
+factor model <span style="color:#94a3b8">因子模型</span><br>
+signal <span style="color:#94a3b8">信号</span><br>
+backtest <span style="color:#94a3b8">回测</span><br>
+overfitting <span style="color:#94a3b8">过拟合</span><br>
+long / short <span style="color:#94a3b8">做多/做空</span><br>
+position sizing <span style="color:#94a3b8">仓位管理</span><br>
+rebalancing <span style="color:#94a3b8">再平衡</span><br>
+universe <span style="color:#94a3b8">股票池</span><br>
+cross-sectional <span style="color:#94a3b8">截面的</span><br>
+time-series <span style="color:#94a3b8">时间序列的</span><br>
+transaction cost <span style="color:#94a3b8">交易成本</span>
+</div>
+</div>
+
+<div style="padding:14px;border-right:1px solid #e2e8f0;border-bottom:1px solid #e2e8f0">
+<div style="font-weight:700;color:#dc2626;margin-bottom:8px">🛡️ 风险指标词（30个）</div>
+<div style="line-height:2;color:#374151">
+Sharpe ratio <span style="color:#94a3b8">夏普比率</span><br>
+Sortino ratio <span style="color:#94a3b8">索提诺比率</span><br>
+max drawdown <span style="color:#94a3b8">最大回撤</span><br>
+volatility <span style="color:#94a3b8">波动率</span><br>
+VaR <span style="color:#94a3b8">风险价值</span><br>
+correlation <span style="color:#94a3b8">相关性</span><br>
+covariance <span style="color:#94a3b8">协方差</span><br>
+diversification <span style="color:#94a3b8">分散化</span><br>
+tail risk <span style="color:#94a3b8">尾部风险</span><br>
+leverage <span style="color:#94a3b8">杠杆</span><br>
+liquidity <span style="color:#94a3b8">流动性</span><br>
+bid-ask spread <span style="color:#94a3b8">买卖价差</span><br>
+slippage <span style="color:#94a3b8">滑点</span><br>
+stress test <span style="color:#94a3b8">压力测试</span><br>
+hedge <span style="color:#94a3b8">对冲</span>
+</div>
+</div>
+
+<div style="padding:14px;border-bottom:1px solid #e2e8f0">
+<div style="font-weight:700;color:#16a34a;margin-bottom:8px">📈 市场结构词（40个）</div>
+<div style="line-height:2;color:#374151">
+equity <span style="color:#94a3b8">股权/股票</span><br>
+fixed income <span style="color:#94a3b8">固定收益</span><br>
+derivatives <span style="color:#94a3b8">衍生品</span><br>
+options <span style="color:#94a3b8">期权</span><br>
+futures <span style="color:#94a3b8">期货</span><br>
+ETF <span style="color:#94a3b8">交易所交易基金</span><br>
+benchmark <span style="color:#94a3b8">基准</span><br>
+portfolio <span style="color:#94a3b8">投资组合</span><br>
+allocation <span style="color:#94a3b8">配置</span><br>
+P&L <span style="color:#94a3b8">盈亏（Profit & Loss）</span><br>
+AUM <span style="color:#94a3b8">管理规模</span><br>
+market cap <span style="color:#94a3b8">市值</span><br>
+earnings <span style="color:#94a3b8">盈利/财报</span><br>
+valuation <span style="color:#94a3b8">估值</span><br>
+yield <span style="color:#94a3b8">收益率</span>
+</div>
+</div>
+
+</div>
+</div>
+
+<h2>四、50个面试必备固定句型（背这些就够用）</h2>
+<p>量化面试的英语套路高度重复。以下句型覆盖 90% 的面试场景，背熟后可以即插即用：</p>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;font-size:13px;margin:16px 0">
+
+<div style="background:#fff;border:1.5px solid #6366f1;border-radius:12px;overflow:hidden">
+<div style="background:#6366f1;padding:10px 16px;color:#fff;font-weight:700">🧮 描述策略逻辑</div>
+<div style="padding:14px;line-height:2.2;color:#374151;font-family:inherit">
+  「The signal is based on <em>[factor]</em>, which captures <em>[economic intuition]</em>.」<br>
+  <span style="color:#94a3b8;font-size:12px">→ 信号基于某因子，捕捉某经济直觉</span><br>
+  「We construct a long-short portfolio by ranking stocks on <em>[metric]</em> and going long the top quintile.」<br>
+  <span style="color:#94a3b8;font-size:12px">→ 对股票按某指标排名，买入前五分之一</span><br>
+  「The strategy has a Sharpe ratio of <em>[X]</em> with a max drawdown of <em>[Y%]</em> over the backtest period.」<br>
+  <span style="color:#94a3b8;font-size:12px">→ 报告策略的风险调整绩效</span><br>
+  「To avoid overfitting, I used walk-forward validation rather than in-sample optimization.」<br>
+  <span style="color:#94a3b8;font-size:12px">→ 说明防过拟合措施</span>
+</div>
+</div>
+
+<div style="background:#fff;border:1.5px solid #16a34a;border-radius:12px;overflow:hidden">
+<div style="background:#16a34a;padding:10px 16px;color:#fff;font-weight:700">🎤 面试开场与自我介绍</div>
+<div style="padding:14px;line-height:2.2;color:#374151">
+  「I'm currently a senior engineer at <em>[Company]</em>, ranked in the top 3% of a team of <em>[N]</em> engineers.」<br>
+  「My work involves large-scale data pipelines, which is directly transferable to quantitative research.」<br>
+  「I've been systematically learning quantitative finance for the past <em>[X]</em> months, focusing on factor models and systematic strategies.」<br>
+  「My GitHub has <em>[N]</em> quantitative projects including a tech-sector factor model and a pairs trading strategy.」
+</div>
+</div>
+
+<div style="background:#fff;border:1.5px solid #ca8a04;border-radius:12px;overflow:hidden">
+<div style="background:#ca8a04;padding:10px 16px;color:#fff;font-weight:700">📉 解释风险与局限性（加分题）</div>
+<div style="padding:14px;line-height:2.2;color:#374151">
+  「The main risk of this strategy is <em>[risk]</em>, which we mitigate by <em>[approach]</em>.」<br>
+  「The strategy performs well in trending markets but struggles during sharp reversals — we address this by adding a regime filter.」<br>
+  「The backtest doesn't fully account for transaction costs and market impact, which would reduce the Sharpe ratio in live trading.」<br>
+  「This is a limitation of using historical data — we cannot rule out data snooping bias.」
+</div>
+</div>
+
+<div style="background:#fff;border:1.5px solid #0ea5e9;border-radius:12px;overflow:hidden">
+<div style="background:#0ea5e9;padding:10px 16px;color:#fff;font-weight:700">❓ 听不懂/没想清楚时的万能句</div>
+<div style="padding:14px;line-height:2.2;color:#374151">
+  「Could you rephrase that? I want to make sure I understand the question correctly.」<br>
+  <span style="color:#94a3b8;font-size:12px">→ 礼貌要求重复，争取思考时间</span><br>
+  「That's an interesting question. Let me think about it for a moment.」<br>
+  <span style="color:#94a3b8;font-size:12px">→ 沉默3秒的礼貌过渡</span><br>
+  「I'm not entirely sure about the exact mechanism, but my intuition is that...」<br>
+  <span style="color:#94a3b8;font-size:12px">→ 不确定时诚实过渡，然后给出你的思路</span><br>
+  「I haven't worked with that specific data set, but I would approach it by...」<br>
+  <span style="color:#94a3b8;font-size:12px">→ 没经验时展示解决问题的方法论</span>
+</div>
+</div>
+
+</div>
+
+<h2>五、ChatGPT 英语训练方法（每天20分钟，替代昂贵课外班）</h2>
+
+<div style="background:#1e293b;border-radius:14px;padding:20px 24px;margin:16px 0;font-size:13px;line-height:1.9;color:#e2e8f0">
+<div style="color:#fbbf24;font-weight:700;margin-bottom:10px">📋 每周5种训练场景（复制以下 Prompt 直接使用）</div>
+
+<div style="margin-bottom:14px;padding:12px;background:#0f172a;border-radius:8px">
+<div style="color:#86efac;font-weight:600;margin-bottom:6px">场景1：写作改错</div>
+<div style="color:#cbd5e1;font-size:12px">You are a native-English quant researcher at a top hedge fund. I will write an email or strategy description in English. Please correct my grammar and word choice, then explain why each change was made. Here is my text: [你写的内容]</div>
+</div>
+
+<div style="margin-bottom:14px;padding:12px;background:#0f172a;border-radius:8px">
+<div style="color:#86efac;font-weight:600;margin-bottom:6px">场景2：面试模拟</div>
+<div style="color:#cbd5e1;font-size:12px">You are a senior quant interviewer at Citadel Hong Kong. Interview me for a Quantitative Researcher position. Ask me one question at a time about my strategies, math background, and Python skills. After each of my answers, give me a score from 1-10 and explain how to improve.</div>
+</div>
+
+<div style="margin-bottom:14px;padding:12px;background:#0f172a;border-radius:8px">
+<div style="color:#86efac;font-weight-600;margin-bottom:6px">场景3：概念解释练习</div>
+<div style="color:#cbd5e1;font-size:12px">Ask me to explain [Sharpe Ratio / momentum factor / cointegration / Fama-French model] in English as if I were explaining to a quant analyst. After I explain, tell me what I said correctly and what was missing or unclear. Give me a model answer.</div>
+</div>
+
+<div style="padding:12px;background:#0f172a;border-radius:8px">
+<div style="color:#86efac;font-weight:600;margin-bottom:6px">场景4：将中文策略翻译成英文</div>
+<div style="color:#cbd5e1;font-size:12px">I will describe a trading strategy in Chinese. Please translate it into professional English that I could use in a job interview or research paper. Then ask me to say it back to you in my own words. Here is my strategy description: [你用中文写的策略说明]</div>
+</div>
+</div>
+
+<h2>六、关键工具清单（全部免费或低成本）</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>工具</th><th>用途</th><th>费用</th><th>使用方法</th></tr></thead>
+<tbody>
+<tr><td><strong>Anki</strong>（桌面+手机）</td><td>词汇记忆，间隔重复算法</td><td>免费</td><td>下载现成「CFA英语词汇」词卡包，通勤时刷</td></tr>
+<tr><td><strong>ChatGPT / Claude</strong></td><td>写作改错+面试模拟</td><td>$20/月</td><td>每天20分钟，用上方prompt做专项训练</td></tr>
+<tr><td><strong>Readwise Reader</strong></td><td>高亮+记忆英文文章</td><td>$8/月</td><td>订阅Bloomberg/FT RSS，通勤阅读，自动生成复习卡</td></tr>
+<tr><td><strong>italki</strong></td><td>一对一金融英语口语</td><td>$15-25/小时</td><td>每周1次，找专攻金融英语的导师做mock interview</td></tr>
+<tr><td><strong>YouTube慢速字幕</strong></td><td>听力训练</td><td>免费</td><td>设置0.75倍速+英文字幕，看Two Sigma/Citadel Tech Talk</td></tr>
+<tr><td><strong>DeepL</strong></td><td>精准金融翻译</td><td>免费</td><td>看不懂的研报段落直接翻，理解后用英文复述</td></tr>
+</tbody></table></div>
+
+<h2>七、180天后你的英语能力预期</h2>
+<div class="cards-grid">
+  <div class="card"><div class="card-icon">📖</div><div class="card-title">阅读能力</div><div class="card-desc">能独立阅读贝莱德/高盛/摩根的量化研究报告，理解率 80%+，不需要翻译工具</div></div>
+  <div class="card"><div class="card-icon">✉️</div><div class="card-title">写作能力</div><div class="card-desc">能独立写出专业英文邮件和项目 README，语法错误少，逻辑清晰，能被面试官读懂</div></div>
+  <div class="card"><div class="card-icon">🎤</div><div class="card-title">口语能力</div><div class="card-desc">能用英文解释你的策略（准备好的内容），回答技术问题时思路清晰，虽然有口音但能被理解</div></div>
+  <div class="card" style="border-color:#6366f1"><div class="card-icon">🏆</div><div class="card-title">面试能力</div><div class="card-desc">通过量化基金英文面试的概率极大提升。记住：面试官判断你的是你的量化思维，不是你的口音</div></div>
+</div>
+
+<div style="background:#f0fdf4;border:1.5px solid #86efac;border-radius:14px;padding:20px 24px;margin:20px 0">
+<strong style="color:#15803d;font-size:15px">🌱 一个真实的心理预期管理</strong>
+<p style="font-size:13px;color:#374151;line-height:1.8;margin-top:10px">英语在成年后从基础到流利需要时间，但你的目标不是流利，而是<strong>专业可用</strong>。在量化基金面试中，一个能用简单英语讲清楚 Fama-French 因子、能展示 100 行漂亮 Python 代码的非母语者，比一个英语流利但不懂量化的候选人更受欢迎。</p>
+<p style="font-size:13px;color:#374151;line-height:1.8;margin-top:6px"><strong>英语是门槛，不是墙。</strong> 你要做的不是越过高山，而是跨过一道门槛。180天，足够了。</p>
+</div>
+
+<ul class="checklist">
+  <li data-key="en1"><div class="check-box">✓</div><span class="check-text"><strong>本周完成：</strong>安装 Anki，下载「CFA Level 1 Vocabulary」词卡包，开始每天 20 词的记忆计划</span></li>
+  <li data-key="en2"><div class="check-box">✓</div><span class="check-text"><strong>本周完成：</strong>订阅 Bloomberg Markets Daily 和 Odd Lots 播客，加入通勤收听列表</span></li>
+  <li data-key="en3"><div class="check-box">✓</div><span class="check-text"><strong>本月完成：</strong>用 ChatGPT 完成第一次量化面试模拟（用上方 Prompt），录音保存，1个月后对比进步</span></li>
+  <li data-key="en4"><div class="check-box">✓</div><span class="check-text"><strong>本月完成：</strong>用英文写第一个 GitHub README，描述你的第一个量化项目（哪怕只有5句话）</span></li>
+  <li data-key="en5"><div class="check-box">✓</div><span class="check-text"><strong>60天内：</strong>在 italki 预约第一次金融英语 mock interview，用真实对话感受自己的口语水平</span></li>
+  <li data-key="en6"><div class="check-box">✓</div><span class="check-text"><strong>持续进行：</strong>每次在本课程看到英文资料，不要跳过——先用 DeepL 理解，然后尝试用自己的英文复述一遍给自己听</span></li>
+</ul>
+
+<div style="text-align:center;margin-top:36px;padding:32px;background:linear-gradient(135deg,#064e3b,#059669);border-radius:16px;color:#fff">
+  <div style="font-size:22px;font-weight:900;margin-bottom:8px">🗣️ 英语差不是你的问题，是你的起点</div>
+  <div style="font-size:14px;opacity:.88;line-height:1.9;max-width:600px;margin:0 auto">
+    Top 3% 的工程师，学什么都比别人快。<br>
+    英语不过是另一个需要系统攻克的技术问题。<br><br>
+    <strong>用你调试 Bug 的同一份耐心和方法，攻克它。</strong><br><br>
+    Day 1 开始背词汇。<br>Day 60 你已经认识大多数研报里的词。<br>Day 180 你能用英语讲清楚你的策略。
+  </div>
+  <div style="margin-top:16px;font-size:12px;opacity:.65">
+    "Language is the most powerful tool you'll ever use — even in a world of code." 
   </div>
 </div>
 `,
