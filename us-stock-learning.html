@@ -333,6 +333,7 @@ const curriculum=[
   {id:'hk-fund-career',phase:7,phaseLabel:'第七阶段：香港金融职涯',tag:'🏦 专题一',title:'科技工程师入场香港私募基金：从入场券到职涯规划',duration:'90 min'},
   {id:'hk-quant-roadmap',phase:7,tag:'📐 专题二',title:'量化研究员完整技能图谱：数学·编程·策略三线攻克',duration:'120 min'},
   {id:'hk-english-strategy',phase:7,tag:'🗣️ 专题三',title:'金融英语快速达标：英语差的人专属180天方案',duration:'60 min'},
+  {id:'hk-sfc-license',phase:7,tag:'📋 专题四',title:'SFC 牌照完全备考手册：LE Paper 1 & 2 实战指南',shortTitle:'SFC 牌照备考实战手册',duration:'60 min'},
 ];
 
 let currentIndex=0;
@@ -780,8 +781,8 @@ function getWelcome(){return`<div class="welcome-screen">
   <h1>📈 美股系统学习路径<br>完整版 · 约30小时课程</h1>
   <p>专为互联网从业者设计的深度美股学习体系。42岁，年入150万，持有800万股票——<br>本课程将帮助你系统掌握美股投资，构建能穿越30年的养老组合。</p>
   <div class="welcome-stats">
-    <div class="welcome-stat"><div class="welcome-stat-num">41</div><div class="welcome-stat-label">课程节数</div></div>
-    <div class="welcome-stat"><div class="welcome-stat-num">~57h</div><div class="welcome-stat-label">总学习时长</div></div>
+    <div class="welcome-stat"><div class="welcome-stat-num">42</div><div class="welcome-stat-label">课程节数</div></div>
+    <div class="welcome-stat"><div class="welcome-stat-num">~58h</div><div class="welcome-stat-label">总学习时长</div></div>
     <div class="welcome-stat"><div class="welcome-stat-num">7</div><div class="welcome-stat-label">学习阶段</div></div>
     <div class="welcome-stat"><div class="welcome-stat-num">6</div><div class="welcome-stat-label">完整估值案例</div></div>
   </div>
@@ -11552,6 +11553,379 @@ yield <span style="color:#94a3b8">收益率</span>
   </div>
   <div style="margin-top:16px;font-size:12px;opacity:.65">
     "Language is the most powerful tool you'll ever use — even in a world of code." 
+  </div>
+</div>
+`,
+
+// =====================================================================
+'hk-sfc-license':`
+<div style="background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460);border-radius:16px;padding:28px 32px;margin-bottom:28px;color:#fff">
+  <div style="font-size:12px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:8px">SFC 牌照备考实战</div>
+  <div style="font-size:24px;font-weight:900;line-height:1.3;margin-bottom:10px">LE Paper 1 & 2<br>从报名到拿牌全流程手册</div>
+  <div style="font-size:14px;color:rgba(255,255,255,.75);line-height:1.7">在香港做任何受规管的金融工作，SFC 牌照是硬性门槛。好消息是：<strong style="color:#93c5fd">LE 考试完全可以在职备考，Paper 1 只需 40 小时，通过率稳定在 70% 以上</strong>。这份指南给你一张精确的作战地图，从报名网站到答题技巧，全部可以直接执行。</div>
+</div>
+
+<h2>一、考试体系总览</h2>
+<p>SFC 牌照申请的前提是通过 <strong>HKSI（香港证券及投资学会）</strong>的牌照考试（LE，Licensing Examination）。考试共设多张 Paper，做量化研究员 / 资产管理方向，只需通过以下两张：</p>
+
+<div class="table-wrap"><table>
+<thead><tr><th>考试</th><th>全称</th><th>对应 SFC 牌照</th><th>难度</th><th>备考时长</th><th>考试费</th></tr></thead>
+<tbody>
+<tr><td><strong>LE Paper 1</strong></td><td>Fundamentals of Securities and Futures Regulation（证券及期货法规基础）</td><td>所有类型（必考基础）</td><td>⭐⭐</td><td>40–60 小时</td><td>HKD 870</td></tr>
+<tr><td><strong>LE Paper 2</strong></td><td>Regulation of Asset Management（资产管理监管）</td><td><strong>Type 9 资产管理</strong>（核心目标）</td><td>⭐⭐⭐</td><td>30–50 小时</td><td>HKD 870</td></tr>
+</tbody></table></div>
+
+<div style="background:#fffbeb;border:1.5px solid #fcd34d;border-radius:12px;padding:16px 20px;margin:16px 0">
+<strong style="color:#92400e">📌 选哪几张 Paper？</strong>
+<ul style="font-size:13px;color:#78350f;line-height:2;margin-top:8px">
+  <li>量化研究员（Quantitative Researcher）→ <strong>Paper 1 + Paper 2</strong>（Type 9）</li>
+  <li>研究分析师（Research Analyst）→ <strong>Paper 1 + Paper 5</strong>（Type 4 就证券提供意见）</li>
+  <li>同时持有 Type 4 + Type 9 → <strong>Paper 1 + Paper 2 + Paper 5</strong>（三张）</li>
+  <li>如有 CFA charterholder 资格 → 可豁免 Paper 1（但须向 HKSI 申请豁免，需提交证书）</li>
+</ul>
+</div>
+
+<h2>二、LE Paper 1 精解：基础法规</h2>
+
+<div style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:12px;padding:18px 22px;margin:16px 0">
+<strong style="color:#0369a1;font-size:14px">📋 考试格式</strong>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px;font-size:13px">
+  <div style="background:#fff;border-radius:8px;padding:12px;text-align:center;border:1px solid #e0f2fe"><div style="font-size:20px;margin-bottom:4px">📝</div><div style="font-weight:700;color:#0c4a6e">70 道题</div><div style="color:#64748b">单选 / 多选混合</div></div>
+  <div style="background:#fff;border-radius:8px;padding:12px;text-align:center;border:1px solid #e0f2fe"><div style="font-size:20px;margin-bottom:4px">⏱️</div><div style="font-weight:700;color:#0c4a6e">105 分钟</div><div style="color:#64748b">答题时间</div></div>
+  <div style="background:#fff;border-radius:8px;padding:12px;text-align:center;border:1px solid #e0f2fe"><div style="font-size:20px;margin-bottom:4px">🎯</div><div style="font-weight:700;color:#0c4a6e">70% 及格</div><div style="color:#64748b">即 49/70 题正确</div></div>
+</div>
+</div>
+
+<h3>Paper 1 六大考点模块（分值比例）</h3>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:13px;margin:14px 0">
+  <div style="background:#fff;border:1.5px solid #6366f1;border-radius:12px;padding:16px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <strong style="color:#4338ca">A. 证券及期货条例（SFO）</strong>
+      <span style="background:#ede9fe;color:#6d28d9;padding:2px 8px;border-radius:99px;font-size:11px;font-weight:700">约 25%</span>
+    </div>
+    <ul style="margin:0;padding-left:16px;line-height:2;color:#374151">
+      <li>SFO 的架构和主要条款</li>
+      <li>受规管活动 Type 1–10 的定义</li>
+      <li>持牌资格与注册资格的区别</li>
+      <li>SFC 的权力与执法措施</li>
+      <li>市场失当行为（内幕交易、操纵市场）定义</li>
+    </ul>
+  </div>
+  <div style="background:#fff;border:1.5px solid #10b981;border-radius:12px;padding:16px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <strong style="color:#065f46">B. 操守准则（Code of Conduct）</strong>
+      <span style="background:#d1fae5;color:#065f46;padding:2px 8px;border-radius:99px;font-size:11px;font-weight:700">约 20%</span>
+    </div>
+    <ul style="margin:0;padding-left:16px;line-height:2;color:#374151">
+      <li>诚信、能力、勤勉三大核心要求</li>
+      <li>利益冲突的识别与披露义务</li>
+      <li>客户资产的保管规则</li>
+      <li>传阅研究报告的限制</li>
+      <li>Fit and Proper（适当人选）标准</li>
+    </ul>
+  </div>
+  <div style="background:#fff;border:1.5px solid #f59e0b;border-radius:12px;padding:16px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <strong style="color:#92400e">C. 反洗钱（AML）& KYC</strong>
+      <span style="background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:99px;font-size:11px;font-weight:700">约 20%</span>
+    </div>
+    <ul style="margin:0;padding-left:16px;line-height:2;color:#374151">
+      <li>《打击洗钱及恐怖分子资金筹集条例》</li>
+      <li>可疑交易报告（STR）的触发条件</li>
+      <li>客户尽职审查（CDD）四种级别</li>
+      <li>政治人物（PEP）强化审查要求</li>
+      <li>禁止「豁免」或「提示」嫌疑人</li>
+    </ul>
+  </div>
+  <div style="background:#fff;border:1.5px solid #ec4899;border-radius:12px;padding:16px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <strong style="color:#9d174d">D. 市场失当行为 & 内幕交易</strong>
+      <span style="background:#fce7f3;color:#9d174d;padding:2px 8px;border-radius:99px;font-size:11px;font-weight:700">约 15%</span>
+    </div>
+    <ul style="margin:0;padding-left:16px;line-height:2;color:#374151">
+      <li>内幕消息的三要素：非公开、价格敏感、来自内部</li>
+      <li>市场操纵六大类（虚假交易、洗盘等）</li>
+      <li>市场失当行为审裁处 vs. 刑事检控区别</li>
+      <li>民事 vs. 刑事处罚上限</li>
+    </ul>
+  </div>
+  <div style="background:#fff;border:1.5px solid #64748b;border-radius:12px;padding:16px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <strong style="color:#334155">E. 公司收购 & 合并守则</strong>
+      <span style="background:#f1f5f9;color:#334155;padding:2px 8px;border-radius:99px;font-size:11px;font-weight:700">约 10%</span>
+    </div>
+    <ul style="margin:0;padding-left:16px;line-height:2;color:#374151">
+      <li>强制性全面收购（触发 30% 门槛）</li>
+      <li>收购守则中的「公平价格」原则</li>
+      <li>收购要约的时间表要求</li>
+    </ul>
+  </div>
+  <div style="background:#fff;border:1.5px solid #14b8a6;border-radius:12px;padding:16px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <strong style="color:#0f766e">F. 其他监管框架</strong>
+      <span style="background:#ccfbf1;color:#0f766e;padding:2px 8px;border-radius:99px;font-size:11px;font-weight:700">约 10%</span>
+    </div>
+    <ul style="margin:0;padding-left:16px;line-height:2;color:#374151">
+      <li>香港交易所上市规则（主板 vs. GEM）</li>
+      <li>证券借贷与回购规则</li>
+      <li>集体投资计划（CIS）的定义与豁免</li>
+    </ul>
+  </div>
+</div>
+
+<h2>三、LE Paper 2 精解：资产管理监管</h2>
+
+<div style="background:#f5f3ff;border:1px solid #c4b5fd;border-radius:12px;padding:18px 22px;margin:16px 0">
+<strong style="color:#5b21b6;font-size:14px">📋 考试格式</strong>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px;font-size:13px">
+  <div style="background:#fff;border-radius:8px;padding:12px;text-align:center;border:1px solid #ede9fe"><div style="font-size:20px;margin-bottom:4px">📝</div><div style="font-weight:700;color:#4c1d95">60 道题</div><div style="color:#64748b">单选为主</div></div>
+  <div style="background:#fff;border-radius:8px;padding:12px;text-align:center;border:1px solid #ede9fe"><div style="font-size:20px;margin-bottom:4px">⏱️</div><div style="font-weight:700;color:#4c1d95">90 分钟</div><div style="color:#64748b">答题时间</div></div>
+  <div style="background:#fff;border-radius:8px;padding:12px;text-align:center;border:1px solid #ede9fe"><div style="font-size:20px;margin-bottom:4px">🎯</div><div style="font-weight:700;color:#4c1d95">70% 及格</div><div style="color:#64748b">即 42/60 题正确</div></div>
+</div>
+</div>
+
+<h3>Paper 2 四大核心模块</h3>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:13px;margin:14px 0">
+  <div style="background:#fff;border:1.5px solid #8b5cf6;border-radius:12px;padding:16px">
+    <div style="font-weight:700;color:#6d28d9;margin-bottom:10px">① 资产管理操守准则（最重点）约 35%</div>
+    <ul style="margin:0;padding-left:16px;line-height:2;color:#374151">
+      <li><strong>最佳执行（Best Execution）</strong>：执行客户指令的价格、速度、成本要求</li>
+      <li><strong>全权委托协议（Discretionary Mandate）</strong>：授权范围与书面确认要求</li>
+      <li><strong>软佣金（Soft Dollar）</strong>：接受与披露的合规边界</li>
+      <li><strong>公平分配（Fair Allocation）</strong>：同类客户同等对待原则</li>
+      <li><strong>代理投票</strong>：如何代表客户行使股东权</li>
+      <li><strong>侧袋账户（Side Pocket）</strong>：非流动资产的隔离处理</li>
+    </ul>
+  </div>
+  <div style="background:#fff;border:1.5px solid #0284c7;border-radius:12px;padding:16px">
+    <div style="font-weight:700;color:#0c4a6e;margin-bottom:10px">② 客户资产保管规则 约 25%</div>
+    <ul style="margin:0;padding-left:16px;line-height:2;color:#374151">
+      <li><strong>客户资金隔离</strong>：必须与公司自有资产分开托管</li>
+      <li><strong>客户证券托管</strong>：不得将客户股份用于自营</li>
+      <li><strong>记录保存要求</strong>：交易记录保存 7 年</li>
+      <li><strong>第三方托管人</strong>：使用要求与监督义务</li>
+      <li><strong>抵押品管理</strong>：超额抵押的归还规则</li>
+    </ul>
+  </div>
+  <div style="background:#fff;border:1.5px solid #059669;border-radius:12px;padding:16px">
+    <div style="font-weight:700;color:#065f46;margin-bottom:10px">③ 基金与集体投资计划 约 25%</div>
+    <ul style="margin:0;padding-left:16px;line-height:2;color:#374151">
+      <li><strong>认可基金 vs. 非认可基金</strong>：销售限制与投资者门槛</li>
+      <li><strong>SFC 认可零售基金</strong>：招募说明书要求（KFS 关键事实报告）</li>
+      <li><strong>专业投资者（PI）</strong>：HKD 800 万资产门槛及豁免</li>
+      <li><strong>对冲基金报告要求</strong>：尽职审查文件标准</li>
+      <li><strong>房地产投资信托（REITs）</strong>：REIT 守则核心条款</li>
+      <li><strong>强积金（MPF）</strong>：受托人职责基础知识</li>
+    </ul>
+  </div>
+  <div style="background:#fff;border:1.5px solid #dc2626;border-radius:12px;padding:16px">
+    <div style="font-weight:700;color:#991b1b;margin-bottom:10px">④ 国际监管框架 约 15%</div>
+    <ul style="margin:0;padding-left:16px;line-height:2;color:#374151">
+      <li><strong>IOSCO 原则</strong>：证监会国际组织的投资者保护三大目标</li>
+      <li><strong>FATF 建议</strong>：反洗钱国际标准的 40 条建议要点</li>
+      <li><strong>巴塞尔协议</strong>：银行资本充足率对资管的影响</li>
+      <li><strong>AIFMD（欧盟）</strong>：对香港基金跨境销售欧洲的影响</li>
+    </ul>
+  </div>
+</div>
+
+<h2>四、官方报名全流程（可直接执行）</h2>
+
+<div style="background:#fff;border:1.5px solid #e2e8f0;border-radius:14px;overflow:hidden;margin:16px 0">
+<div style="background:linear-gradient(135deg,#0f3460,#1e40af);padding:14px 20px;color:#fff;font-weight:700;font-size:14px">📅 从报名到拿成绩：全流程时间线</div>
+<div style="padding:20px">
+<div style="position:relative;padding-left:28px">
+  <div style="position:absolute;left:8px;top:0;bottom:0;width:2px;background:#e2e8f0"></div>
+
+  <div style="position:relative;margin-bottom:20px">
+    <div style="position:absolute;left:-24px;top:2px;width:14px;height:14px;border-radius:50%;background:#2563eb;border:2px solid #fff;box-shadow:0 0 0 2px #2563eb"></div>
+    <div style="font-weight:700;color:#1e3a5f;font-size:14px">Step 1｜注册 HKSI 账号</div>
+    <div style="font-size:13px;color:#374151;margin-top:6px;line-height:1.8">
+      网址：<strong>hksi.org.hk → Examinations → LE Examinations</strong><br>
+      点击 "Candidate Login" → "New Registration"<br>
+      需要：有效护照（内地居民用护照，非身份证）、邮箱、手机号<br>
+      <span style="background:#dbeafe;color:#1d4ed8;padding:1px 6px;border-radius:4px;font-size:11px">操作时间：约 10 分钟</span>
+    </div>
+  </div>
+
+  <div style="position:relative;margin-bottom:20px">
+    <div style="position:absolute;left:-24px;top:2px;width:14px;height:14px;border-radius:50%;background:#2563eb;border:2px solid #fff;box-shadow:0 0 0 2px #2563eb"></div>
+    <div style="font-weight:700;color:#1e3a5f;font-size:14px">Step 2｜购买官方备考材料</div>
+    <div style="font-size:13px;color:#374151;margin-top:6px;line-height:1.8">
+      登录后前往 "Study Materials" → 购买对应 Paper 的官方教材（Study Notes）<br>
+      Paper 1：约 HKD 380；Paper 2：约 HKD 280<br>
+      也提供 Practice Questions（模拟题库）：约 HKD 200/Paper<br>
+      <span style="background:#fef9c3;color:#92400e;padding:1px 6px;border-radius:4px;font-size:11px">⚠️ 强烈建议同时购买模拟题库，考题风格与真题高度一致</span>
+    </div>
+  </div>
+
+  <div style="position:relative;margin-bottom:20px">
+    <div style="position:absolute;left:-24px;top:2px;width:14px;height:14px;border-radius:50%;background:#2563eb;border:2px solid #fff;box-shadow:0 0 0 2px #2563eb"></div>
+    <div style="font-weight:700;color:#1e3a5f;font-size:14px">Step 3｜预约考试日期</div>
+    <div style="font-size:13px;color:#374151;margin-top:6px;line-height:1.8">
+      HKSI 网站 → "Book Examination" → 选择科目 → 选时间槽<br>
+      考试在香港考试中心进行（Wan Chai、Tsim Sha Tsui 等多个地点）<br>
+      考试费：<strong>HKD 870/科</strong>，信用卡或网上转账付款<br>
+      建议预约备考结束前 2 周内的日期，避免遗忘<br>
+      <span style="background:#d1fae5;color:#065f46;padding:1px 6px;border-radius:4px;font-size:11px">✅ 可提前最多 6 个月预约，建议提前 1-2 个月锁定日期</span>
+    </div>
+  </div>
+
+  <div style="position:relative;margin-bottom:20px">
+    <div style="position:absolute;left:-24px;top:2px;width:14px;height:14px;border-radius:50%;background:#16a34a;border:2px solid #fff;box-shadow:0 0 0 2px #16a34a"></div>
+    <div style="font-weight:700;color:#14532d;font-size:14px">Step 4｜考试当天</div>
+    <div style="font-size:13px;color:#374151;margin-top:6px;line-height:1.8">
+      携带：有效护照（原件）+ 预约确认邮件<br>
+      考试为机考（电脑作答），中英文版本可选，建议选中文<br>
+      提前 15 分钟到达，需存放所有电子设备<br>
+      考试结束后，<strong>屏幕即显示通过/未通过</strong>（正式成绩单另行邮寄）<br>
+      <span style="background:#fce7f3;color:#9d174d;padding:1px 6px;border-radius:4px;font-size:11px">如不通过：可于 3 个月后重考，无次数限制</span>
+    </div>
+  </div>
+
+  <div style="position:relative">
+    <div style="position:absolute;left:-24px;top:2px;width:14px;height:14px;border-radius:50%;background:#d97706;border:2px solid #fff;box-shadow:0 0 0 2px #d97706"></div>
+    <div style="font-weight:700;color:#92400e;font-size:14px">Step 5｜考后：等入职，由公司申请 SFC 牌照</div>
+    <div style="font-size:13px;color:#374151;margin-top:6px;line-height:1.8">
+      成绩单有效期：<strong>无固定有效期</strong>（HKSI 成绩永久有效，但 SFC 会考量是否需要继续教育）<br>
+      入职后，HR 或 Compliance 部门负责向 SFC 递交申请（Form 3/Form W）<br>
+      SFC 审核：3-6 个月，期间可正常工作但不能以「持牌代表」名义签署文件<br>
+      批核后，牌照在 SFC 公共登记冊可查（sfcregister.sfc.hk）
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+<h2>五、备考策略：最短时间过关</h2>
+
+<div style="background:#fff;border:1.5px solid #e2e8f0;border-radius:14px;overflow:hidden;margin:16px 0">
+<div style="background:linear-gradient(135deg,#1e3a5f,#0369a1);padding:14px 20px;color:#fff;font-weight:700;font-size:14px">📚 Paper 1 备考计划（6 周，40–50 小时）</div>
+<div style="padding:18px">
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;font-size:13px">
+  <div style="background:#f0f9ff;border-radius:10px;padding:14px;border:1px solid #bae6fd">
+    <div style="font-weight:700;color:#0369a1;margin-bottom:8px">第 1-2 周｜框架速读</div>
+    <ul style="margin:0;padding-left:16px;line-height:2;color:#374151">
+      <li>通读官方 Study Notes，不求记忆，建立轮廓</li>
+      <li>标注「SFO 受规管活动分类」+ 「操守准则五大原则」</li>
+      <li>每天 1 小时，周末 3 小时</li>
+    </ul>
+  </div>
+  <div style="background:#f0f9ff;border-radius:10px;padding:14px;border:1px solid #bae6fd">
+    <div style="font-weight:700;color:#0369a1;margin-bottom:8px">第 3-4 周｜重点精读</div>
+    <ul style="margin:0;padding-left:16px;line-height:2;color:#374151">
+      <li>精读 AML + 内幕交易两大高分模块</li>
+      <li>背熟「市场失当行为六类」和「CDD 四级别」</li>
+      <li>开始做官方模拟题，每天 20 题</li>
+    </ul>
+  </div>
+  <div style="background:#f0f9ff;border-radius:10px;padding:14px;border:1px solid #bae6fd">
+    <div style="font-weight:700;color:#0369a1;margin-bottom:8px">第 5-6 周｜题海冲刺</div>
+    <ul style="margin:0;padding-left:16px;line-height:2;color:#374151">
+      <li>刷完所有模拟题，错题重做两遍</li>
+      <li>针对错误集中模块，回书复习</li>
+      <li>最后 3 天：仅做模拟全卷（70 题限时 105 分钟）</li>
+    </ul>
+  </div>
+</div>
+</div>
+</div>
+
+<div style="background:#fff;border:1.5px solid #e2e8f0;border-radius:14px;overflow:hidden;margin:16px 0">
+<div style="background:linear-gradient(135deg,#4c1d95,#6d28d9);padding:14px 20px;color:#fff;font-weight:700;font-size:14px">📚 Paper 2 备考计划（4 周，30–40 小时）</div>
+<div style="padding:18px">
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:13px">
+  <div style="background:#f5f3ff;border-radius:10px;padding:14px;border:1px solid #c4b5fd">
+    <div style="font-weight:700;color:#5b21b6;margin-bottom:8px">第 1-2 周｜操守准则深读（最重要）</div>
+    <ul style="margin:0;padding-left:16px;line-height:2;color:#374151">
+      <li>重点：最佳执行、软佣金、公平分配 三大场景题</li>
+      <li>记住「全权委托 vs 非全权委托」各自的披露要求差异</li>
+      <li>做 Paper 2 模拟题第一遍，建立错题本</li>
+    </ul>
+  </div>
+  <div style="background:#f5f3ff;border-radius:10px;padding:14px;border:1px solid #c4b5fd">
+    <div style="font-weight:700;color:#5b21b6;margin-bottom:8px">第 3-4 周｜基金法规 + 冲刺</div>
+    <ul style="margin:0;padding-left:16px;line-height:2;color:#374151">
+      <li>认可基金 vs 非认可基金的销售规则</li>
+      <li>专业投资者（HKD 800 万门槛）豁免场景练习</li>
+      <li>模拟题第二遍，目标正确率 80%+ 再去考</li>
+    </ul>
+  </div>
+</div>
+</div>
+</div>
+
+<h2>六、高频易错知识点速记</h2>
+
+<div style="background:#1e293b;border-radius:12px;padding:20px;margin:14px 0;font-family:monospace;font-size:13px;line-height:2;color:#e2e8f0">
+<span style="color:#94a3b8">// Paper 1 高频易错点</span><br><br>
+<span style="color:#fbbf24">Q: SFC 持牌 vs HKMA 注册，什么区别？</span><br>
+<span style="color:#86efac">A: 持牌人（Licensed）受 SFC 监管，注册机构（Registered）受 HKMA 监管，银行从事证券业务是注册而非持牌</span><br><br>
+<span style="color:#fbbf24">Q: 内幕交易，「市场上已有传言」是否豁免？</span><br>
+<span style="color:#86efac">A: 不豁免。传言不等于公开披露，内幕消息仍然成立</span><br><br>
+<span style="color:#fbbf24">Q: 客户要求「all-or-nothing」指令，是否必须执行？</span><br>
+<span style="color:#86efac">A: 须尽力执行，但可告知客户可能无法成交，不能主动拒绝接受</span><br><br>
+<span style="color:#94a3b8">// Paper 2 高频易错点</span><br><br>
+<span style="color:#fbbf24">Q: 软佣金（Soft Dollar）是否合法？</span><br>
+<span style="color:#86efac">A: 合法，但须符合「诚实为客户利益」原则，且必须向客户披露，不能用于非研究相关费用</span><br><br>
+<span style="color:#fbbf24">Q: 专业投资者（PI）门槛是 HKD 100 万还是 800 万？</span><br>
+<span style="color:#86efac">A: 个人专业投资者：HKD 800 万（净资产，可含主要住所）。法人机构：HKD 800 万净资产 或 资产管理规模 HKD 4000 万</span><br><br>
+<span style="color:#fbbf24">Q: 全权委托账户，需要每次交易前通知客户吗？</span><br>
+<span style="color:#86efac">A: 不需要。全权委托意味着已获授权，无需每笔事先通知，但须定期汇报账户状况</span>
+</div>
+
+<h2>七、推荐备考资源清单</h2>
+
+<div class="table-wrap"><table>
+<thead><tr><th>资源类型</th><th>名称 / 来源</th><th>费用</th><th>推荐指数</th><th>备注</th></tr></thead>
+<tbody>
+<tr><td>官方教材</td><td>HKSI Study Notes（P1 + P2）</td><td>HKD 380 + 280</td><td>⭐⭐⭐⭐⭐</td><td>必买，考题直接从这里出</td></tr>
+<tr><td>官方题库</td><td>HKSI Practice Questions</td><td>HKD 200/科</td><td>⭐⭐⭐⭐⭐</td><td>题目风格与真题高度相同，强烈推荐</td></tr>
+<tr><td>网课（中文）</td><td>Kaplan Hong Kong LE 课程</td><td>HKD 1,500-3,000</td><td>⭐⭐⭐⭐</td><td>有视频讲解，适合自学能力稍弱者</td></tr>
+<tr><td>网课（中文）</td><td>BPP Hong Kong LE 课程</td><td>HKD 1,200-2,500</td><td>⭐⭐⭐⭐</td><td>同等水平，可货比三家</td></tr>
+<tr><td>免费资源</td><td>SFC 官网「监管框架」文件</td><td>免费</td><td>⭐⭐⭐</td><td>直接读原文条款，适合确认细节</td></tr>
+<tr><td>社群</td><td>小红书搜「HKSI LE备考」</td><td>免费</td><td>⭐⭐⭐⭐</td><td>有大量内地人分享真实考试经验和题型</td></tr>
+<tr><td>法规原文</td><td>hklii.hk（香港法律信息学会）</td><td>免费</td><td>⭐⭐⭐</td><td>可搜索 SFO 原文条款，用于验证答案逻辑</td></tr>
+</tbody></table></div>
+
+<h2>八、实战行动清单</h2>
+<ul class="checklist">
+  <li data-key="sfc1"><div class="check-box">✓</div><span class="check-text"><strong>今天完成：</strong>打开 hksi.org.hk，注册账号（10分钟），浏览 Paper 1 & 2 的考试大纲页面，了解当前考期安排</span></li>
+  <li data-key="sfc2"><div class="check-box">✓</div><span class="check-text"><strong>本周完成：</strong>购买 HKSI 官方 Paper 1 Study Notes + Practice Questions，下载 PDF，建立备考文件夹</span></li>
+  <li data-key="sfc3"><div class="check-box">✓</div><span class="check-text"><strong>第 1 周：</strong>通读 Paper 1 官方教材一遍（不做笔记，仅建立知识框架），用荧光笔标注不懂的概念</span></li>
+  <li data-key="sfc4"><div class="check-box">✓</div><span class="check-text"><strong>第 3 周：</strong>重点精读 AML（第三章）和市场失当行为（第六章），这两章占分约 35%，是通过关键</span></li>
+  <li data-key="sfc5"><div class="check-box">✓</div><span class="check-text"><strong>第 4 周起：</strong>开始做 Practice Questions，每天 20-30 题，记录错误率，弱点章节重新精读</span></li>
+  <li data-key="sfc6"><div class="check-box">✓</div><span class="check-text"><strong>第 6 周：</strong>预约考试（提前 2 周在 HKSI 网站 Book Examination），选择你所在城市或计划前往香港的日期</span></li>
+  <li data-key="sfc7"><div class="check-box">✓</div><span class="check-text"><strong>Paper 1 通过后：</strong>立即启动 Paper 2 备考（操守准则模块与 Paper 1 有重叠，温习成本低），争取 4 周内通过</span></li>
+  <li data-key="sfc8"><div class="check-box">✓</div><span class="check-text"><strong>两张 Paper 均通过后：</strong>将成绩截图放入求职档案，更新 LinkedIn 为「SFC LE Paper 1 & 2 Passed」，这是猎头眼中的信号</span></li>
+  <li data-key="sfc9"><div class="check-box">✓</div><span class="check-text"><strong>入职后第一周：</strong>主动找 Compliance / HR 确认 SFC 申请流程，提供 HKSI 成绩单原件，启动正式牌照申请</span></li>
+  <li data-key="sfc10"><div class="check-box">✓</div><span class="check-text"><strong>持续：</strong>持牌后每年完成 SFC 要求的持续专业培训（CPT）：Type 9 需 5 小时合规类 + 5 小时一般类，由公司 Compliance 安排</span></li>
+</ul>
+
+<div style="background:#f0fdf4;border:1.5px solid #86efac;border-radius:14px;padding:20px 24px;margin:20px 0">
+<strong style="color:#14532d;font-size:15px">💡 一个重要的时间策略</strong>
+<p style="font-size:13px;color:#374151;line-height:1.8;margin-top:10px">
+不少人等到找到工作 <em>后</em> 才去考 LE 试，但这会让入职后的牌照申请时间更长（需先考完试，再由公司申请，合计 5-9 个月）。<br><br>
+<strong>更好的节奏是：先把两张 Paper 都考完，再开始求职。</strong>这样：
+</p>
+<ol style="font-size:13px;color:#374151;line-height:2;margin-top:0;padding-left:20px">
+  <li>简历上可以写「SFC LE Paper 1 & 2 Passed」，对猎头和 HR 是强烈信号</li>
+  <li>入职后 SFC 申请周期缩短（仅剩公司申请 + SFC 批核，约 2-3 个月）</li>
+  <li>让面试官看到你的主动性和严肃态度——这在金融圈非常加分</li>
+</ol>
+</div>
+
+<div style="text-align:center;margin-top:36px;padding:32px;background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460);border-radius:16px;color:#fff">
+  <div style="font-size:22px;font-weight:900;margin-bottom:8px">📋 两张 Paper，80 小时，一张进门票</div>
+  <div style="font-size:14px;opacity:.88;line-height:1.9;max-width:600px;margin:0 auto">
+    LE Paper 1 & 2 不是障碍，是筛选器。<br>
+    大多数对手没有耐心在找工作之前就把它考完。<br><br>
+    <strong>你考完了，你就已经领先了。</strong><br><br>
+    打开 hksi.org.hk，注册账号。<br>
+    今天就是 Day 1。
+  </div>
+  <div style="margin-top:20px;font-size:12px;opacity:.65">
+    HKSI 官网：hksi.org.hk &nbsp;·&nbsp; SFC 公众登记册：sfcregister.sfc.hk
   </div>
 </div>
 `,
