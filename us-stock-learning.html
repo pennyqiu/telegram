@@ -335,6 +335,7 @@ const curriculum=[
   {id:'hk-english-strategy',phase:7,tag:'🗣️ 专题三',title:'金融英语快速达标：英语差的人专属180天方案',duration:'60 min'},
   {id:'hk-sfc-license',phase:7,tag:'📋 专题四',title:'SFC 牌照完全备考手册：LE Paper 1 & 2 实战指南',shortTitle:'SFC 牌照备考实战手册',duration:'60 min'},
   {id:'hk-cfa-guide',phase:7,tag:'🎓 专题五',title:'CFA 完全备考手册：42岁在职转型专项指南',shortTitle:'CFA 备考与转型指南',duration:'90 min'},
+  {id:'hk-sfc-cfa-roadmap',phase:7,tag:'🗺️ 专题六',title:'SFC + CFA 联合备考路线图：一条路走到底不走回头路',shortTitle:'SFC+CFA 联合备考路线',duration:'30 min'},
 ];
 
 let currentIndex=0;
@@ -782,7 +783,7 @@ function getWelcome(){return`<div class="welcome-screen">
   <h1>📈 美股系统学习路径<br>完整版 · 约30小时课程</h1>
   <p>专为互联网从业者设计的深度美股学习体系。42岁，年入150万，持有800万股票——<br>本课程将帮助你系统掌握美股投资，构建能穿越30年的养老组合。</p>
   <div class="welcome-stats">
-    <div class="welcome-stat"><div class="welcome-stat-num">43</div><div class="welcome-stat-label">课程节数</div></div>
+    <div class="welcome-stat"><div class="welcome-stat-num">44</div><div class="welcome-stat-label">课程节数</div></div>
     <div class="welcome-stat"><div class="welcome-stat-num">~60h</div><div class="welcome-stat-label">总学习时长</div></div>
     <div class="welcome-stat"><div class="welcome-stat-num">7</div><div class="welcome-stat-label">学习阶段</div></div>
     <div class="welcome-stat"><div class="welcome-stat-num">6</div><div class="welcome-stat-label">完整估值案例</div></div>
@@ -12544,6 +12545,356 @@ HKSI 考试中心在工作日（周一至周五）和<strong>周六上午</stron
   </div>
   <div style="margin-top:20px;font-size:12px;opacity:.65">
     CFA Institute 官网：cfainstitute.org &nbsp;·&nbsp; Schweser 备考材料：schweser.com
+  </div>
+</div>
+`,
+
+// =====================================================================
+'hk-sfc-cfa-roadmap':`
+<div style="background:linear-gradient(135deg,#0f172a,#1e1b4b,#1e3a5f);border-radius:16px;padding:28px 32px;margin-bottom:28px;color:#fff">
+  <div style="font-size:12px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:8px">SFC + CFA 联合备考策略</div>
+  <div style="font-size:24px;font-weight:900;line-height:1.3;margin-bottom:10px">一条路走到底<br>不走回头路的备考思路</div>
+  <div style="font-size:14px;color:rgba(255,255,255,.75);line-height:1.8">SFC LE 和 CFA 不是两件独立的事，它们共享一套底层逻辑。<strong style="color:#93c5fd">用对顺序，可以省掉 35-45 小时重复学习</strong>；用错顺序，会反复从头建立相同的概念。这份指南的目标只有一个：让你每一小时的学习都累积到下一步，永远向前不回头。</div>
+</div>
+
+<h2>一、先看清两者的关系</h2>
+
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin:16px 0;font-size:13px">
+  <div style="background:#fff;border:2px solid #2563eb;border-radius:14px;padding:18px">
+    <div style="font-weight:700;color:#1d4ed8;font-size:14px;margin-bottom:10px">📋 SFC LE Paper 1</div>
+    <div style="color:#374151;line-height:1.9">
+      考的是 <strong>香港监管法规</strong><br>
+      SFO 条例、操守准则、反洗钱<br>
+      市场失当行为、收购守则<br><br>
+      <span style="background:#dbeafe;color:#1d4ed8;padding:1px 6px;border-radius:4px;font-size:11px">备考：40-50 小时</span><br>
+      <span style="background:#dbeafe;color:#1d4ed8;padding:1px 6px;border-radius:4px;font-size:11px">难度：⭐⭐</span>
+    </div>
+  </div>
+  <div style="background:#fff;border:2px solid #7c3aed;border-radius:14px;padding:18px">
+    <div style="font-weight:700;color:#5b21b6;font-size:14px;margin-bottom:10px">📋 SFC LE Paper 2</div>
+    <div style="color:#374151;line-height:1.9">
+      考的是 <strong>资产管理监管</strong><br>
+      最佳执行、软佣金、客户资产<br>
+      认可基金、专业投资者规则<br><br>
+      <span style="background:#ede9fe;color:#5b21b6;padding:1px 6px;border-radius:4px;font-size:11px">备考：30-40 小时</span><br>
+      <span style="background:#ede9fe;color:#5b21b6;padding:1px 6px;border-radius:4px;font-size:11px">难度：⭐⭐⭐</span>
+    </div>
+  </div>
+  <div style="background:#fff;border:2px solid #059669;border-radius:14px;padding:18px">
+    <div style="font-weight:700;color:#065f46;font-size:14px;margin-bottom:10px">🎓 CFA L1 → L2 → L3</div>
+    <div style="color:#374151;line-height:1.9">
+      考的是 <strong>投资专业知识全体系</strong><br>
+      估值、财报、组合管理<br>
+      固收、衍生品、Ethics<br><br>
+      <span style="background:#d1fae5;color:#065f46;padding:1px 6px;border-radius:4px;font-size:11px">备考：900+ 小时（三级合计）</span><br>
+      <span style="background:#d1fae5;color:#065f46;padding:1px 6px;border-radius:4px;font-size:11px">难度：⭐⭐⭐⭐⭐</span>
+    </div>
+  </div>
+</div>
+
+<h2>二、重叠区域图谱（这是省时间的关键）</h2>
+
+<div style="background:#fff;border:1.5px solid #e2e8f0;border-radius:14px;overflow:hidden;margin:16px 0">
+<div style="background:#f8fafc;padding:14px 20px;font-weight:700;color:#1e293b;font-size:14px;border-bottom:1px solid #e2e8f0">知识重叠热度图</div>
+<div style="padding:16px">
+<div class="table-wrap"><table>
+<thead><tr><th>知识模块</th><th>LE Paper 1</th><th>LE Paper 2</th><th>CFA L1</th><th>CFA L2</th><th>CFA L3</th><th>结论</th></tr></thead>
+<tbody>
+<tr>
+  <td><strong>道德 / 操守准则</strong></td>
+  <td><span style="color:#16a34a;font-weight:700">●●● 核心</span></td>
+  <td><span style="color:#16a34a;font-weight:700">●●● 核心</span></td>
+  <td><span style="color:#16a34a;font-weight:700">●●● 核心（15-20%）</span></td>
+  <td><span style="color:#16a34a;font-weight:700">●●● 核心</span></td>
+  <td><span style="color:#16a34a;font-weight:700">●●● 核心</span></td>
+  <td>🔥 <strong>学一遍，五处得分</strong></td>
+</tr>
+<tr>
+  <td><strong>资产管理行为准则</strong><br><small>（最佳执行/软佣金/公平分配）</small></td>
+  <td>○ 无</td>
+  <td><span style="color:#16a34a;font-weight:700">●●● 核心（35%）</span></td>
+  <td><span style="color:#ca8a04">●● 提及</span></td>
+  <td><span style="color:#16a34a;font-weight:700">●●● 深度覆盖</span></td>
+  <td><span style="color:#16a34a;font-weight:700">●●● 实操覆盖</span></td>
+  <td>🔥 <strong>先CFA L2再Paper 2事半功倍</strong></td>
+</tr>
+<tr>
+  <td><strong>投资组合 / 组合管理</strong></td>
+  <td>○ 无</td>
+  <td><span style="color:#ca8a04">●● 框架</span></td>
+  <td><span style="color:#ca8a04">●● 基础</span></td>
+  <td><span style="color:#16a34a;font-weight:700">●●● 深度</span></td>
+  <td><span style="color:#16a34a;font-weight:700">●●● 全面（35-40%）</span></td>
+  <td>✅ CFA L3 后 Paper 2 无压力</td>
+</tr>
+<tr>
+  <td><strong>内幕交易 / 市场失当行为</strong></td>
+  <td><span style="color:#16a34a;font-weight:700">●●● 核心（15%）</span></td>
+  <td>○ 无</td>
+  <td><span style="color:#16a34a;font-weight:700">●●● CFA Ethics 核心</span></td>
+  <td><span style="color:#ca8a04">●● 提及</span></td>
+  <td>○ 无</td>
+  <td>🔥 <strong>CFA L1 Ethics后Paper 1直接上</strong></td>
+</tr>
+<tr>
+  <td><strong>AML / KYC</strong></td>
+  <td><span style="color:#16a34a;font-weight:700">●●● 核心（20%）</span></td>
+  <td><span style="color:#ca8a04">●● 提及</span></td>
+  <td><span style="color:#dc2626">● 极少提及</span></td>
+  <td><span style="color:#dc2626">● 极少提及</span></td>
+  <td><span style="color:#dc2626">● 极少提及</span></td>
+  <td>⚠️ <strong>CFA无法帮你，需单独学</strong></td>
+</tr>
+<tr>
+  <td><strong>SFO 香港证券法规框架</strong></td>
+  <td><span style="color:#16a34a;font-weight:700">●●● 核心（25%）</span></td>
+  <td><span style="color:#ca8a04">●● 部分</span></td>
+  <td><span style="color:#dc2626">● 无（HK 本地法）</span></td>
+  <td><span style="color:#dc2626">● 无</span></td>
+  <td><span style="color:#dc2626">● 无</span></td>
+  <td>⚠️ <strong>CFA无法帮你，需单独学</strong></td>
+</tr>
+<tr>
+  <td><strong>股权估值 / DCF / 财报分析</strong></td>
+  <td>○ 无</td>
+  <td>○ 无</td>
+  <td><span style="color:#ca8a04">●● 基础</span></td>
+  <td><span style="color:#16a34a;font-weight:700">●●● 核心（深度）</span></td>
+  <td><span style="color:#ca8a04">●● 应用</span></td>
+  <td>✅ 纯CFA内容，LE无压力</td>
+</tr>
+</tbody></table></div>
+
+<div style="background:#fef9c3;border-radius:10px;padding:14px;margin-top:14px;font-size:13px">
+<strong style="color:#92400e">📌 两条核心结论：</strong>
+<ul style="margin:6px 0 0 0;padding-left:20px;line-height:2;color:#78350f">
+  <li><strong>道德/操守准则</strong>是 CFA（全三级）和 LE Paper 1 & 2 的共同灵魂。这一块学透了，等于在五个科目里都打了基础。</li>
+  <li><strong>AML + SFO法规框架</strong>是 LE Paper 1 的独特内容，CFA 帮不了你，需要专门为它分配 20-25 小时。</li>
+</ul>
+</div>
+</div>
+</div>
+
+<h2>三、CFA 持证后可以免考 LE Paper 1</h2>
+
+<div style="background:#f0fdf4;border:2px solid #16a34a;border-radius:12px;padding:16px 20px;margin:16px 0">
+<strong style="color:#14532d;font-size:14px">🎁 隐藏福利：拿到 CFA Charter 可申请豁免 LE Paper 1</strong>
+<p style="font-size:13px;color:#374151;line-height:1.8;margin-top:8px">HKSI 认可 CFA Institute 的 CFA Charterholder 资格，持证者可申请豁免 LE Paper 1（基础法规考试），只需参加 LE Paper 2（资产管理专项）即可申请 SFC Type 9 牌照。</p>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;font-size:12px">
+  <div style="background:#fff;border-radius:8px;padding:10px;border:1px solid #86efac">
+    <div style="font-weight:700;color:#065f46;margin-bottom:4px">✅ 适合：长线规划者</div>
+    <div style="color:#374151;line-height:1.8">如果你打算把 CFA 三级全部考完再入行香港，可以拿到 charter 后只考 Paper 2，少考一门。</div>
+  </div>
+  <div style="background:#fff;border-radius:8px;padding:10px;border:1px solid #86efac">
+    <div style="font-weight:700;color:#065f46;margin-bottom:4px">⚠️ 但：不适合想早入行者</div>
+    <div style="color:#374151;line-height:1.8">CFA 三级最快 2-3 年。如果你想在 12-18 个月内就开始求职，应先考完 Paper 1 & 2，不要等 charter。</div>
+  </div>
+</div>
+<p style="font-size:12px;color:#64748b;margin-top:8px">豁免申请：登录 HKSI 网站 → Exemption Application → 提交 CFA Charterholder 证书，审核约 4-6 周。</p>
+</div>
+
+<h2>四、最优备考顺序：一条路走到底</h2>
+
+<div style="background:#fff;border:2px solid #6366f1;border-radius:16px;overflow:hidden;margin:16px 0">
+<div style="background:linear-gradient(135deg,#4338ca,#6d28d9);padding:16px 24px;color:#fff">
+  <div style="font-weight:900;font-size:16px">推荐方案：「以 CFA 为主线，LE 见缝插针」</div>
+  <div style="font-size:13px;opacity:.85;margin-top:4px">CFA 提供深度知识基础，LE 利用重叠窗口短平快完成，全程无重复、无浪费</div>
+</div>
+<div style="padding:20px">
+
+<div style="position:relative;padding-left:32px">
+<div style="position:absolute;left:10px;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,#4338ca,#6d28d9,#059669,#d97706)"></div>
+
+<div style="position:relative;margin-bottom:28px">
+  <div style="position:absolute;left:-26px;top:4px;width:16px;height:16px;border-radius:50%;background:#4338ca;border:3px solid #fff;box-shadow:0 0 0 2px #4338ca"></div>
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+    <span style="background:#4338ca;color:#fff;padding:3px 10px;border-radius:99px;font-size:12px;font-weight:700">阶段一｜月 1-5</span>
+    <span style="font-weight:700;font-size:14px;color:#1e1b4b">CFA L1 主力备考</span>
+  </div>
+  <div style="background:#f5f3ff;border-radius:10px;padding:14px;font-size:13px">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div>
+        <div style="font-weight:600;color:#4338ca;margin-bottom:6px">主要任务</div>
+        <ul style="margin:0;padding-left:16px;line-height:2;color:#374151">
+          <li>按顺序学：Quant → FSA（最难先啃）→ Equity → Fixed Income</li>
+          <li>Economics → Corporate Finance → Derivatives → Alternatives</li>
+          <li>月 4-5 集中学 <strong>Ethics 模块</strong>（这是后续所有考试的根基）</li>
+          <li>Kaplan Qbank 每天 30-40 题，持续刷题</li>
+        </ul>
+      </div>
+      <div>
+        <div style="font-weight:600;color:#4338ca;margin-bottom:6px">同步准备（利用碎片时间）</div>
+        <ul style="margin:0;padding-left:16px;line-height:2;color:#374151">
+          <li>下载 HKSI LE Paper 1 官方教材，通读一遍（约 5 小时）</li>
+          <li>不需要记忆，只是建立「香港监管」的感性认识</li>
+          <li>标注与 CFA Ethics 重叠的章节，感受两者的语言差异</li>
+        </ul>
+      </div>
+    </div>
+    <div style="background:#ede9fe;border-radius:8px;padding:10px;margin-top:10px;font-size:12px;color:#4c1d95">
+      <strong>⏱️ 时间分配：</strong> CFA L1 备考 250-280 小时 + LE Paper 1 通读 5 小时 · 每天约 1.5 小时
+    </div>
+  </div>
+</div>
+
+<div style="position:relative;margin-bottom:28px">
+  <div style="position:absolute;left:-26px;top:4px;width:16px;height:16px;border-radius:50%;background:#2563eb;border:3px solid #fff;box-shadow:0 0 0 2px #2563eb"></div>
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+    <span style="background:#2563eb;color:#fff;padding:3px 10px;border-radius:99px;font-size:12px;font-weight:700">阶段二｜月 5-6</span>
+    <span style="font-weight:700;font-size:14px;color:#1e3a5f">趁热：Ethics 刚学完，立即冲刺 LE Paper 1</span>
+  </div>
+  <div style="background:#eff6ff;border-radius:10px;padding:14px;font-size:13px">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div>
+        <div style="font-weight:600;color:#1d4ed8;margin-bottom:6px">3-4 周集中攻 LE Paper 1</div>
+        <ul style="margin:0;padding-left:16px;line-height:2;color:#374151">
+          <li>用 CFA Ethics 已建立的框架，快速映射到香港法规语言</li>
+          <li>专门学习 <strong>AML（20小时）+ SFO 法规（10小时）</strong>——这是 CFA 帮不了你的部分</li>
+          <li>买 HKSI 官方 Practice Questions，刷完一遍</li>
+          <li>模拟全卷限时练习 2 遍</li>
+        </ul>
+      </div>
+      <div>
+        <div style="font-weight:600;color:#1d4ed8;margin-bottom:6px">为什么这时候考？</div>
+        <ul style="margin:0;padding-left:16px;line-height:2;color:#374151">
+          <li>CFA Ethics 知识最热，与 Paper 1 重叠内容无需重学</li>
+          <li>估算：Paper 1 独立学需 50 小时，此时只需 <strong>25-30 小时</strong></li>
+          <li>节省 ~20 小时</li>
+          <li>完成后简历可写「SFC LE Paper 1 Passed」</li>
+        </ul>
+      </div>
+    </div>
+    <div style="background:#dbeafe;border-radius:8px;padding:10px;margin-top:10px">
+      <strong style="color:#1d4ed8;font-size:12px">🎯 阶段末：参加 LE Paper 1 考试（周六赴港，半天搞定）→ 同月或下月参加 CFA L1 考试</strong>
+    </div>
+  </div>
+</div>
+
+<div style="position:relative;margin-bottom:28px">
+  <div style="position:absolute;left:-26px;top:4px;width:16px;height:16px;border-radius:50%;background:#059669;border:3px solid #fff;box-shadow:0 0 0 2px #059669"></div>
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+    <span style="background:#059669;color:#fff;padding:3px 10px;border-radius:99px;font-size:12px;font-weight:700">阶段三｜月 7-8</span>
+    <span style="font-weight:700;font-size:14px;color:#14532d">CFA L1 考完 → 趁余热速通 LE Paper 2</span>
+  </div>
+  <div style="background:#f0fdf4;border-radius:10px;padding:14px;font-size:13px">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div>
+        <div style="font-weight:600;color:#15803d;margin-bottom:6px">4 周专攻 LE Paper 2</div>
+        <ul style="margin:0;padding-left:16px;line-height:2;color:#374151">
+          <li>CFA L1 Portfolio Management 和 Ethics 知识刚扎实</li>
+          <li>Paper 2 的操守准则（35%）和 Ethics 高度重叠，读起来非常熟悉</li>
+          <li>重点新学：客户资产保管规则 + 认可基金分类（这些 CFA L1 未深讲）</li>
+          <li>买 HKSI Paper 2 Practice Questions，刷完</li>
+        </ul>
+      </div>
+      <div>
+        <div style="font-weight:600;color:#15803d;margin-bottom:6px">效率对比</div>
+        <ul style="margin:0;padding-left:16px;line-height:2;color:#374151">
+          <li>Paper 2 独立学需 40-50 小时</li>
+          <li>有 CFA L1 基础后：<strong>仅需 20-25 小时</strong></li>
+          <li>节省 ~20 小时</li>
+          <li>完成后：LE Paper 1 ✅ + Paper 2 ✅</li>
+          <li>简历立即可写「SFC LE Paper 1 & 2 Passed」</li>
+        </ul>
+      </div>
+    </div>
+    <div style="background:#dcfce7;border-radius:8px;padding:10px;margin-top:10px">
+      <strong style="color:#15803d;font-size:12px">🎯 阶段末成果：CFA L1 ✅ + LE Paper 1 ✅ + LE Paper 2 ✅<br>→ 可以开始认真投简历，LinkedIn 写「CFA L1 Passed · SFC LE Paper 1 & 2 Passed」，这是香港金融圈的强力信号</strong>
+    </div>
+  </div>
+</div>
+
+<div style="position:relative;margin-bottom:28px">
+  <div style="position:absolute;left:-26px;top:4px;width:16px;height:16px;border-radius:50%;background:#7c3aed;border:3px solid #fff;box-shadow:0 0 0 2px #7c3aed"></div>
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+    <span style="background:#7c3aed;color:#fff;padding:3px 10px;border-radius:99px;font-size:12px;font-weight:700">阶段四｜月 9-14</span>
+    <span style="font-weight:700;font-size:14px;color:#4c1d95">CFA L2：这是让你脱颖而出的一级</span>
+  </div>
+  <div style="background:#f5f3ff;border-radius:10px;padding:14px;font-size:13px">
+    <ul style="margin:0;padding-left:16px;line-height:2;color:#374151">
+      <li>重点：Equity Valuation（DDM/DCF/Residual Income）、Financial Reporting 深化</li>
+      <li>这一级学完，你选股的底层逻辑会发生质变——你会知道为什么某个估值是高还是低</li>
+      <li>L2 的资产管理内容会让你<strong>回头看 LE Paper 2 感到轻松</strong>（知识深化了）</li>
+      <li>求职并行：L2 备考期间可同时准备量化项目 + 联系猎头信息访谈</li>
+    </ul>
+    <div style="background:#ede9fe;border-radius:8px;padding:10px;margin-top:10px;font-size:12px;color:#4c1d95">
+      <strong>⏱️ 时间分配：</strong> 300 小时，约 6 个月，每天 1.5 小时
+    </div>
+  </div>
+</div>
+
+<div style="position:relative">
+  <div style="position:absolute;left:-26px;top:4px;width:16px;height:16px;border-radius:50%;background:#d97706;border:3px solid #fff;box-shadow:0 0 0 2px #d97706"></div>
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+    <span style="background:#d97706;color:#fff;padding:3px 10px;border-radius:99px;font-size:12px;font-weight:700">阶段五｜月 15-24</span>
+    <span style="font-weight:700;font-size:14px;color:#92400e">CFA L3 + 正式入场</span>
+  </div>
+  <div style="background:#fffbeb;border-radius:10px;padding:14px;font-size:13px">
+    <ul style="margin:0;padding-left:16px;line-height:2;color:#374151">
+      <li>L3 重点：Portfolio Management（35%）+ 行为金融 + 财富规划</li>
+      <li>Essay 题型：提前 3 个月开始英文写作训练，用官方历年真题练习</li>
+      <li>并行：L3 备考期间应该已经在面试或已经入职香港金融机构了</li>
+      <li>通过 L3 后：提交 CFA Charter 申请（4000小时工作经验），正式持证</li>
+    </ul>
+    <div style="background:#fde68a;border-radius:8px;padding:10px;margin-top:10px;font-size:12px;color:#92400e">
+      <strong>🎯 最终状态（约 2 年）：CFA Charterholder + SFC Type 9 持牌代表<br>这是香港金融行业 PM / 高级研究员岗位的完整入场券</strong>
+    </div>
+  </div>
+</div>
+
+</div>
+</div>
+</div>
+
+<h2>五、时间总表与关键里程碑</h2>
+
+<div class="table-wrap"><table>
+<thead><tr><th>时间</th><th>主线任务</th><th>插入任务</th><th>完成后简历状态</th><th>是否可开始求职</th></tr></thead>
+<tbody>
+<tr><td>月 1-4</td><td>CFA L1（FSA/Equity/Fixed Income/Quant）</td><td>通读 LE Paper 1 教材（5小时）</td><td>CFA L1 Candidate</td><td>可以开始看行情，了解岗位要求</td></tr>
+<tr><td>月 5</td><td>CFA L1 Ethics 深度学习</td><td>LE Paper 1 AML + SFO（25小时）</td><td>—</td><td>—</td></tr>
+<tr><td>月 6</td><td>CFA L1 全卷冲刺 → 考试</td><td><strong>LE Paper 1 考试 ✅</strong></td><td>CFA L1 Passed + LE Paper 1 Passed</td><td>✅ 开始投简历</td></tr>
+<tr><td>月 7-8</td><td>CFA L2 浅预习</td><td><strong>LE Paper 2 集中学习 + 考试 ✅</strong>（20小时）</td><td>CFA L1 + LE Paper 1 & 2 全部通过</td><td>✅ 强力求职期</td></tr>
+<tr><td>月 9-14</td><td>CFA L2 主力备考 → 考试</td><td>量化项目 + 猎头沟通</td><td>CFA L2 Passed</td><td>✅ 面试节奏提速</td></tr>
+<tr><td>月 15-24</td><td>CFA L3 备考 → 考试</td><td>入职后 SFC 正式持牌申请</td><td>CFA L3 Passed（候选 Charter）</td><td>✅ 应该已入职</td></tr>
+<tr><td>24 个月后</td><td>提交 CFA Charter 申请</td><td>—</td><td><strong>CFA Charterholder + SFC 持牌</strong></td><td>✅ 完整资质</td></tr>
+</tbody></table></div>
+
+<h2>六、三个不走回头路的关键原则</h2>
+
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin:16px 0;font-size:13px">
+  <div style="background:linear-gradient(135deg,#eff6ff,#dbeafe);border:1.5px solid #93c5fd;border-radius:14px;padding:18px">
+    <div style="font-size:20px;margin-bottom:8px">🎯</div>
+    <div style="font-weight:700;color:#1d4ed8;margin-bottom:8px">原则一：Ethics 只深学一次</div>
+    <div style="color:#374151;line-height:1.8">CFA Ethics 和 LE Paper 1 & 2 的操守准则共享 70% 以上的底层逻辑。<strong>在 CFA L1 月 4-5 把 Ethics 学到精熟</strong>，后续所有相关内容都只是"换了个香港法规的外壳"，读起来非常快。不要反过来，先学 LE 再学 CFA Ethics，会感觉在重复。</div>
+  </div>
+  <div style="background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:1.5px solid #86efac;border-radius:14px;padding:18px">
+    <div style="font-size:20px;margin-bottom:8px">⚡</div>
+    <div style="font-weight:700;color:#15803d;margin-bottom:8px">原则二：LE 考试见缝插针</div>
+    <div style="color:#374151;line-height:1.8">LE Paper 1 & 2 考试本身不难（相比 CFA），花 4-5 周集中冲刺即可。关键是<strong>选在 CFA 相关知识最热的时间点之后立即考</strong>。Paper 1 选 CFA L1 Ethics 学完后，Paper 2 选 CFA L1 考完后。此时知识最新鲜，最省力。</div>
+  </div>
+  <div style="background:linear-gradient(135deg,#fefce8,#fef9c3);border:1.5px solid #fcd34d;border-radius:14px;padding:18px">
+    <div style="font-size:20px;margin-bottom:8px">🚫</div>
+    <div style="font-weight:700;color:#92400e;margin-bottom:8px">原则三：AML 和 SFO 不要拖</div>
+    <div style="color:#374151;line-height:1.8">这两块是 LE Paper 1 独有的、CFA 帮不了你的内容，<strong>不存在"复习 CFA 顺便就会了"的情况</strong>。分配明确的 20-25 小时专项学习，不要抱希望靠 CFA 知识"猜"过去——这是失分的主要来源。</div>
+  </div>
+</div>
+
+<div style="background:linear-gradient(135deg,#0f172a,#1e1b4b,#1e3a5f);border-radius:16px;padding:28px 32px;margin-top:28px;color:#fff;text-align:center">
+  <div style="font-size:20px;font-weight:900;margin-bottom:10px">🗺️ 两年路线图总结</div>
+  <div style="font-size:13px;opacity:.9;line-height:2.2;font-family:monospace;background:rgba(255,255,255,.06);border-radius:10px;padding:16px;text-align:left;max-width:600px;margin:0 auto">
+    <span style="color:#93c5fd">月 1-5</span>　CFA L1 主力备考（含 Ethics 深学）<br>
+    <span style="color:#93c5fd">月 5-6</span>　LE Paper 1 冲刺（25h）→ 考试 ✅<br>
+    <span style="color:#86efac">月 6　</span>　CFA L1 考试 ✅<br>
+    <span style="color:#86efac">月 7-8</span>　LE Paper 2 冲刺（20h）→ 考试 ✅<br>
+    <span style="color:#fbbf24">月 8　</span>　<strong style="color:#fbbf24">开始认真求职（LE + CFA L1 全部完成）</strong><br>
+    <span style="color:#c4b5fd">月 9-14</span>　CFA L2 备考 → 考试 ✅<br>
+    <span style="color:#f9a8d4">月 15-24</span>　CFA L3 备考 → 考试 ✅<br>
+    <span style="color:#fcd34d">24月+</span>　CFA Charter 申请 + SFC 正式持牌 🎓
+  </div>
+  <div style="font-size:13px;opacity:.75;margin-top:14px;line-height:1.8">
+    总节省时间：约 <strong style="color:#fbbf24">35-45 小时</strong>（与分开独立备考相比）<br>
+    最重要的是：<strong style="color:#86efac">每一步都建立在上一步之上，没有任何重复和回头路</strong>
   </div>
 </div>
 `,
