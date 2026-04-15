@@ -1,0 +1,54 @@
+# Telegram 项目上下文切换别名
+# 使用方法：source .context_aliases 或添加到 ~/.zshrc
+
+# 获取脚本所在目录
+if [[ -n "${BASH_SOURCE[0]}" ]]; then
+    TELEGRAM_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+elif [[ -n "${(%):-%N}" ]]; then
+    # zsh
+    TELEGRAM_ROOT="$(cd "$(dirname "${(%):-%N}")" && pwd)" 
+else
+    # fallback
+    TELEGRAM_ROOT="/Users/hustqiu/telegram"
+fi
+
+# 快捷切换命令
+alias ctx="python3 '$TELEGRAM_ROOT/context_switch.py'"
+alias ctx-status="python3 '$TELEGRAM_ROOT/context_switch.py' status"
+alias ctx-help="python3 '$TELEGRAM_ROOT/context_switch.py' help"
+
+# 各模式快捷切换
+alias ctx-sub="python3 '$TELEGRAM_ROOT/context_switch.py' subscription"
+alias ctx-club="python3 '$TELEGRAM_ROOT/context_switch.py' club" 
+alias ctx-ins="python3 '$TELEGRAM_ROOT/context_switch.py' insurance"
+alias ctx-inv="python3 '$TELEGRAM_ROOT/context_switch.py' investment"
+alias ctx-all="python3 '$TELEGRAM_ROOT/context_switch.py' all"
+
+# 状态显示（可用于 prompt）
+alias ctx-emoji="python3 '$TELEGRAM_ROOT/status_bar.py' emoji"
+alias ctx-short="python3 '$TELEGRAM_ROOT/status_bar.py' short"
+
+# 便捷函数：切换 + 显示状态
+function ctx-switch() {
+    if [ -z "$1" ]; then
+        echo "用法: ctx-switch <模式>"
+        echo "可用模式: subscription, club, insurance, investment, all"
+        return 1
+    fi
+    
+    python3 "$TELEGRAM_ROOT/context_switch.py" "$1"
+    
+    if [ $? -eq 0 ]; then
+        echo ""
+        echo "🎯 当前上下文: $(python3 '$TELEGRAM_ROOT/status_bar.py' full)"
+    fi
+}
+
+# 提示当前状态
+echo "🗺️  Telegram 项目上下文工具已加载"
+echo "💡 使用 'ctx-help' 查看所有命令"
+if command -v python3 >/dev/null 2>&1; then
+    echo "🎯 当前模式: $(python3 '$TELEGRAM_ROOT/status_bar.py' full)"
+else
+    echo "⚠️  需要 Python3 才能使用上下文切换功能"
+fi

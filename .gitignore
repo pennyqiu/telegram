@@ -29,10 +29,15 @@ tg-club/mini-app/dist/
 # ── 编辑器 & 系统 ───────────────────────────────────────────────
 .DS_Store
 .idea/
-.vscode/
+# .vscode/ 注释掉，允许提交上下文工具的 tasks.json
 *.swp
 *.swo
 Thumbs.db
+
+# ── 上下文工具本地生成文件（不提交）─────────────────────────────
+.context_aliases_local
+context_aliases.bat
+.cursorignore.backup
 
 # ── 日志 ────────────────────────────────────────────────────────
 *.log

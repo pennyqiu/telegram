@@ -1,39 +1,31 @@
-# 香港保险从业者入门全指南
+# 保险指南系统
 
-> 专为初入香港保险行业的从业者撰写，尤其适合具有会计财务背景、性格内向的新人
+## 用途
+保险知识科普与决策辅助工具，包含大陆/香港/台湾保险产品分析。
 
----
+## 模块构成
+- **静态内容站**：`public/index.html` + `articles/` + `wechat-copy/`
+- **FastAPI 服务**：`fastapi_app/` - 简单后端API
+- **简报生成器**：`insurance_briefing/` - 自动化内容爬取与整理
 
-## 目录结构
+## 本地开发
+```bash
+cd insurance-guide/
 
-| 文件 | 内容 |
-|------|------|
-| [01-hk-insurance-basics.md](./01-hk-insurance-basics.md) | 香港保险行业基础知识全解 |
-| [02-market-analysis.md](./02-market-analysis.md) | 市场现状、数据与未来展望 |
-| [03-hk-unique-position.md](./03-hk-unique-position.md) | 香港作为保险中心的独特优劣势 |
-| [04-learning-roadmap.md](./04-learning-roadmap.md) | 从入门到专业的学习路线图（分阶段） |
-| [05-accounting-advantage.md](./05-accounting-advantage.md) | 会计背景从业者的差异化竞争力分析 |
-| [06-introvert-strategy.md](./06-introvert-strategy.md) | 内向型性格的从业策略与突破方法 |
+# 静态站 - 直接打开
+open public/index.html
 
----
+# FastAPI 服务
+cd fastapi_app/
+pip install -r requirements.txt
+python main.py
 
-## 快速导读建议
+# 简报系统
+cd insurance_briefing/  
+pip install -r requirements.txt
+python briefing_generator.py
+```
 
-**如果你是第一天入职：**  
-→ 先读 `01`（了解行业）→ `03`（了解香港特色）→ `04`（制定学习计划）
-
-**如果你有会计/财务背景：**  
-→ 重点读 `05`，这是你的核心差异化优势指南
-
-**如果你比较内向，不擅长主动拓客：**  
-→ 重点读 `06`，有专门针对内向性格的系统性建议
-
----
-
-## 关于安盛（AXA）
-
-安盛（AXA）是全球最大的保险集团之一，总部位于法国巴黎，在香港深耕多年，产品线覆盖人寿、医疗、储蓄、投资连结保险等，在高净值客户和跨境服务方面具有显著品牌优势。加入安盛是进入香港保险市场的优质起点。
-
----
-
-*本指南基于 2025-2026 年香港市场公开信息整理，建议定期结合最新监管动态更新。*
+## 部署
+- 静态站：任意静态托管（Vercel/Netlify）
+- 简报系统：见 `insurance_briefing/DEPLOY.md`

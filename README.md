@@ -1,8 +1,19 @@
+# Telegram 多系统仓库
+
+> **🗺️ 项目导航**：本仓库包含 4 个独立系统，请查看 **[PROJECTS.md](PROJECTS.md)** 了解全貌和使用指南。
+
+| 系统 | 描述 | 快速链接 |
+|------|------|----------|
+| **Telegram 订阅系统** | Stars 原生订阅 + Mini App | [详情](#telegram-订阅与周期付费系统) / [目录](tg-subscription/) |
+| **Telegram 俱乐部系统** | 足球队管理系统 | [目录](tg-club/) |
+| **保险指南系统** | 保险知识与决策工具 | [详情](insurance-guide/) |
+| **投资工具集** | 股票估值、追踪等工具 | [详情](INVESTMENT_TOOLS.md) |
+
+---
+
 # Telegram 订阅与周期付费系统
 
 > 基于 Telegram Mini App + Stars 原生订阅的全闭环付费解决方案，用户全程不离开 Telegram App。
-
----
 
 ## 项目概览
 

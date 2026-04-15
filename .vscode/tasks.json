@@ -1,0 +1,89 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "🎯 Context: 查看当前模式",
+            "type": "shell",
+            "command": "python3",
+            "args": ["context_switch.py", "status"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "📱 Context: 订阅系统模式",
+            "type": "shell", 
+            "command": "python3",
+            "args": ["context_switch.py", "subscription"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always", 
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "⚽ Context: 俱乐部系统模式",
+            "type": "shell",
+            "command": "python3", 
+            "args": ["context_switch.py", "club"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false, 
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "🏥 Context: 保险指南模式",
+            "type": "shell",
+            "command": "python3",
+            "args": ["context_switch.py", "insurance"], 
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "💰 Context: 投资工具模式", 
+            "type": "shell",
+            "command": "python3",
+            "args": ["context_switch.py", "investment"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "🌍 Context: 全部模块模式",
+            "type": "shell",
+            "command": "python3", 
+            "args": ["context_switch.py", "all"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        }
+    ]
+}

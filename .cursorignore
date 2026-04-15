@@ -1,0 +1,78 @@
+# Cursor AI 上下文隔离配置
+# 根据当前工作模块，取消注释相应行来隔离无关内容
+
+# ================================
+# 🎯 改 Telegram 订阅系统时启用
+# ================================
+# tg-club/
+# insurance-guide/
+# investment_tracker/
+# *analysis.html
+# *tracker.html
+# *calculator.html
+# *learning.html
+# value_investing_*.html
+# scraped_articles.json
+
+# ================================  
+# 🎯 改 Telegram 俱乐部系统时启用
+# ================================
+# insurance-guide/
+# investment_tracker/
+# *analysis.html
+# *tracker.html
+# *calculator.html
+# *learning.html
+# value_investing_*.html
+# scraped_articles.json
+# # 注意：不要忽略 tg-subscription/，因为需要 API 对接
+
+# ================================
+# 🎯 改保险内容系统时启用  
+# ================================
+# tg-club/
+# tg-subscription/
+# investment_tracker/
+# *analysis.html
+# *tracker.html  
+# *calculator.html
+# *learning.html
+# value_investing_*.html
+# docs/
+# scraped_articles.json
+
+# ================================
+# 🎯 改投资工具时启用
+# ================================
+# tg-club/
+# tg-subscription/  
+# insurance-guide/
+# docs/
+
+# ================================
+# 🎯 通用忽略（始终生效）
+# ================================
+# 日志和临时文件
+*.log
+*.tmp
+.DS_Store
+__pycache__/
+node_modules/
+.env
+.venv/
+venv/
+
+# 编译产物
+dist/
+build/
+*.pyc
+*.pyo
+
+# IDE 配置
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Git 
+.git/
