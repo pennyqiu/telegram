@@ -334,6 +334,7 @@ const curriculum=[
   {id:'hk-quant-roadmap',phase:7,tag:'📐 专题二',title:'量化研究员完整技能图谱：数学·编程·策略三线攻克',duration:'120 min'},
   {id:'hk-english-strategy',phase:7,tag:'🗣️ 专题三',title:'金融英语快速达标：英语差的人专属180天方案',duration:'60 min'},
   {id:'hk-sfc-license',phase:7,tag:'📋 专题四',title:'SFC 牌照完全备考手册：LE Paper 1 & 2 实战指南',shortTitle:'SFC 牌照备考实战手册',duration:'60 min'},
+  {id:'hk-cfa-guide',phase:7,tag:'🎓 专题五',title:'CFA 完全备考手册：42岁在职转型专项指南',shortTitle:'CFA 备考与转型指南',duration:'90 min'},
 ];
 
 let currentIndex=0;
@@ -781,8 +782,8 @@ function getWelcome(){return`<div class="welcome-screen">
   <h1>📈 美股系统学习路径<br>完整版 · 约30小时课程</h1>
   <p>专为互联网从业者设计的深度美股学习体系。42岁，年入150万，持有800万股票——<br>本课程将帮助你系统掌握美股投资，构建能穿越30年的养老组合。</p>
   <div class="welcome-stats">
-    <div class="welcome-stat"><div class="welcome-stat-num">42</div><div class="welcome-stat-label">课程节数</div></div>
-    <div class="welcome-stat"><div class="welcome-stat-num">~58h</div><div class="welcome-stat-label">总学习时长</div></div>
+    <div class="welcome-stat"><div class="welcome-stat-num">43</div><div class="welcome-stat-label">课程节数</div></div>
+    <div class="welcome-stat"><div class="welcome-stat-num">~60h</div><div class="welcome-stat-label">总学习时长</div></div>
     <div class="welcome-stat"><div class="welcome-stat-num">7</div><div class="welcome-stat-label">学习阶段</div></div>
     <div class="welcome-stat"><div class="welcome-stat-num">6</div><div class="welcome-stat-label">完整估值案例</div></div>
   </div>
@@ -12044,6 +12045,415 @@ HKSI 考试中心在工作日（周一至周五）和<strong>周六上午</stron
   </div>
   <div style="margin-top:20px;font-size:12px;opacity:.65">
     HKSI 官网：hksi.org.hk &nbsp;·&nbsp; SFC 公众登记册：sfcregister.sfc.hk
+  </div>
+</div>
+`,
+
+// =====================================================================
+'hk-cfa-guide':`
+<div style="background:linear-gradient(135deg,#1c1917,#292524,#44403c);border-radius:16px;padding:28px 32px;margin-bottom:28px;color:#fff">
+  <div style="font-size:12px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:8px">CFA 转型专项指南 · 42岁</div>
+  <div style="font-size:24px;font-weight:900;line-height:1.3;margin-bottom:10px">你已经有 80% 了<br>CFA 帮你把剩下 20% 变成敲门砖</div>
+  <div style="font-size:14px;color:rgba(255,255,255,.75);line-height:1.8">8 年炒股、600 万仓位、大厂开发负责人——这套组合在金融圈里罕见且有价值。<strong style="color:#fbbf24">你缺的不是判断力，是一张让别人相信你判断力的证书</strong>。CFA 就是这张证书：它不会再成为另一道坎，因为它是专门为有经验的从业者设计的。这份指南告诉你从哪里开始、怎么最短时间拿到、以及 42 岁的你最适合去哪里。</div>
+</div>
+
+<h2>一、入场资格前提（先确认你符合）</h2>
+
+<div class="table-wrap"><table>
+<thead><tr><th>条件</th><th>要求</th><th>你的情况</th></tr></thead>
+<tbody>
+<tr><td><strong>学历</strong></td><td>本科学历（含大专+相关工作经验），或在读大四最后一年</td><td><span style="color:#16a34a;font-weight:700">✅ 大厂开发负责人，本科及以上</span></td></tr>
+<tr><td><strong>工作经验</strong></td><td>无最低要求（可先考完三级，再补工作经验申请 charter）</td><td><span style="color:#16a34a;font-weight:700">✅ 8年投资经验 + 管理经验可记录</span></td></tr>
+<tr><td><strong>证件</strong></td><td>有效国际护照（用于报名注册）</td><td><span style="color:#16a34a;font-weight:700">✅ 常规护照即可</span></td></tr>
+<tr><td><strong>语言</strong></td><td>英文（考试为全英文，无中文版）</td><td><span style="color:#ca8a04;font-weight:700">⚠️ 需要专项提升，但有工具加速</span></td></tr>
+<tr><td><strong>道德声明</strong></td><td>签署《职业操守声明》，无重大违规记录</td><td><span style="color:#16a34a;font-weight:700">✅ 无障碍</span></td></tr>
+</tbody></table></div>
+
+<div style="background:#f0fdf4;border:1.5px solid #86efac;border-radius:12px;padding:16px 20px;margin:16px 0">
+<strong style="color:#14532d">✅ 关于工作经验的关键细节</strong>
+<p style="font-size:13px;color:#374151;line-height:1.8;margin-top:8px">CFA charterholder 要求 <strong>4,000 小时相关工作经验</strong>（投资决策制定或直接督导），可在通过三级考试<strong>之前、之中、之后</strong>累积，无严格时间限制。你的 8 年炒股经历（持续主动管理 600 万仓位）可以作为「个人投资组合管理」经验记录，加上未来金融相关工作，基本可以达标。<strong>先考试，经验后补，不用等。</strong></p>
+</div>
+
+<h2>二、CFA 三级考试体系全解</h2>
+
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin:16px 0;font-size:13px">
+  <div style="background:#fff;border:2px solid #2563eb;border-radius:14px;overflow:hidden">
+    <div style="background:#2563eb;color:#fff;padding:12px 16px;font-weight:700;font-size:14px">Level 1 · 基础关</div>
+    <div style="padding:16px">
+      <div style="margin-bottom:10px"><span style="background:#dbeafe;color:#1d4ed8;padding:2px 8px;border-radius:99px;font-size:11px;font-weight:700">通过率约 37-42%</span></div>
+      <div style="font-weight:600;color:#374151;margin-bottom:6px">考试格式</div>
+      <ul style="margin:0;padding-left:16px;line-height:2;color:#374151">
+        <li>180 道单选题</li>
+        <li>分上下午两场，各 135 分钟</li>
+        <li>全年 4 次：2/5/8/11 月</li>
+        <li>机考（电脑作答）</li>
+      </ul>
+      <div style="font-weight:600;color:#374151;margin-top:10px;margin-bottom:6px">备考时长</div>
+      <div style="color:#374151">建议 <strong>300 小时</strong>，约 6 个月在职备考</div>
+      <div style="font-weight:600;color:#374151;margin-top:10px;margin-bottom:6px">核心难点</div>
+      <div style="color:#374151">知识点多、覆盖广，需要大量记忆。财务报表分析（FSA）是最难模块。</div>
+    </div>
+  </div>
+  <div style="background:#fff;border:2px solid #7c3aed;border-radius:14px;overflow:hidden">
+    <div style="background:#7c3aed;color:#fff;padding:12px 16px;font-weight:700;font-size:14px">Level 2 · 深度关</div>
+    <div style="padding:16px">
+      <div style="margin-bottom:10px"><span style="background:#ede9fe;color:#5b21b6;padding:2px 8px;border-radius:99px;font-size:11px;font-weight:700">通过率约 43-47%</span></div>
+      <div style="font-weight:600;color:#374151;margin-bottom:6px">考试格式</div>
+      <ul style="margin:0;padding-left:16px;line-height:2;color:#374151">
+        <li>88 道题目集（Vignette 情景题）</li>
+        <li>每组情景 4-6 道选择题</li>
+        <li>全年 3 次：2/5/8 月</li>
+        <li>机考</li>
+      </ul>
+      <div style="font-weight:600;color:#374151;margin-top:10px;margin-bottom:6px">备考时长</div>
+      <div style="color:#374151">建议 <strong>300 小时</strong>，约 6-8 个月在职备考</div>
+      <div style="font-weight:600;color:#374151;margin-top:10px;margin-bottom:6px">核心难点</div>
+      <div style="color:#374151">需要阅读长段情景再作答，考查综合应用能力，不能靠死记硬背。</div>
+    </div>
+  </div>
+  <div style="background:#fff;border:2px solid #059669;border-radius:14px;overflow:hidden">
+    <div style="background:#059669;color:#fff;padding:12px 16px;font-weight:700;font-size:14px">Level 3 · 综合关</div>
+    <div style="padding:16px">
+      <div style="margin-bottom:10px"><span style="background:#d1fae5;color:#065f46;padding:2px 8px;border-radius:99px;font-size:11px;font-weight:700">通过率约 49-52%</span></div>
+      <div style="font-weight:600;color:#374151;margin-bottom:6px">考试格式</div>
+      <ul style="margin:0;padding-left:16px;line-height:2;color:#374151">
+        <li>上午：开放性简答（Essay，约 8-12 题）</li>
+        <li>下午：情景选择题（同 L2 格式）</li>
+        <li>全年 2 次：2 月 / 5 月</li>
+        <li>机考 + 部分考点仍有纸考</li>
+      </ul>
+      <div style="font-weight:600;color:#374151;margin-top:10px;margin-bottom:6px">备考时长</div>
+      <div style="color:#374151">建议 <strong>300 小时</strong>，约 6-8 个月在职备考</div>
+      <div style="font-weight:600;color:#374151;margin-top:10px;margin-bottom:6px">核心难点</div>
+      <div style="color:#374151">上午简答题须用英文写作，且 L3 内容最贴近实战，反而是有经验者的优势场。</div>
+    </div>
+  </div>
+</div>
+
+<h2>三、重点学习内容（按你的背景标注优先级）</h2>
+
+<div style="background:#fff;border:1.5px solid #e2e8f0;border-radius:14px;overflow:hidden;margin:16px 0">
+<div style="background:linear-gradient(135deg,#1e3a5f,#2563eb);padding:14px 20px;color:#fff;font-weight:700;font-size:14px">📚 Level 1 十大模块（对有 8 年炒股经验者的难度重标）</div>
+<div style="padding:16px">
+<div class="table-wrap"><table>
+<thead><tr><th>模块</th><th>考试权重</th><th>对你的难度</th><th>原因</th><th>重点</th></tr></thead>
+<tbody>
+<tr><td><strong>道德与职业准则（Ethics）</strong></td><td>15-20%</td><td><span style="color:#ca8a04">中</span></td><td>规则多、细节陷阱多，但逻辑清晰</td><td>⭐⭐⭐⭐⭐ 必须高分，影响borderline判定</td></tr>
+<tr><td><strong>财务报表分析（FSA）</strong></td><td>13-17%</td><td><span style="color:#dc2626">高</span></td><td>若无会计背景，需从零建立财务三表概念</td><td>⭐⭐⭐⭐⭐ 最难也最重要</td></tr>
+<tr><td><strong>股权投资（Equity）</strong></td><td>10-12%</td><td><span style="color:#16a34a">低</span></td><td>8年炒股经验，DDM/DCF 已有直觉</td><td>⭐⭐⭐⭐ 得分容易</td></tr>
+<tr><td><strong>固定收益（Fixed Income）</strong></td><td>10-12%</td><td><span style="color:#ca8a04">中</span></td><td>债券久期/凸性计算需学习，但逻辑清晰</td><td>⭐⭐⭐⭐</td></tr>
+<tr><td><strong>量化方法（Quant）</strong></td><td>8-12%</td><td><span style="color:#16a34a">低</span></td><td>统计学、回归分析——工程师的主场</td><td>⭐⭐⭐ 可快速通过</td></tr>
+<tr><td><strong>经济学（Economics）</strong></td><td>8-12%</td><td><span style="color:#ca8a04">中</span></td><td>宏观/微观经济理论，需系统学习</td><td>⭐⭐⭐</td></tr>
+<tr><td><strong>公司金融（Corporate Finance）</strong></td><td>8-12%</td><td><span style="color:#ca8a04">中</span></td><td>资本结构、资本预算，与炒股直接相关</td><td>⭐⭐⭐⭐</td></tr>
+<tr><td><strong>衍生品（Derivatives）</strong></td><td>5-8%</td><td><span style="color:#ca8a04">中</span></td><td>期权定价（BS模型）需要理解</td><td>⭐⭐⭐</td></tr>
+<tr><td><strong>另类投资（Alternatives）</strong></td><td>5-8%</td><td><span style="color:#16a34a">低</span></td><td>PE/VC/房地产概念为主，较易得分</td><td>⭐⭐</td></tr>
+<tr><td><strong>投资组合管理（Portfolio Mgmt）</strong></td><td>5-8%</td><td><span style="color:#16a34a">低</span></td><td>MPT、CAPM——炒股经验直接对应</td><td>⭐⭐⭐ 亲切感强</td></tr>
+</tbody></table></div>
+</div>
+</div>
+
+<div style="background:#fef9c3;border:1.5px solid #fbbf24;border-radius:12px;padding:16px 20px;margin:16px 0">
+<strong style="color:#92400e">💡 Level 2 & 3 对你的特殊意义</strong>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px;font-size:13px">
+  <div>
+    <div style="font-weight:700;color:#78350f;margin-bottom:6px">Level 2 — 最贴近炒股实战</div>
+    <ul style="margin:0;padding-left:16px;line-height:2;color:#374151">
+      <li>深度股权估值（DDM、DCF、EV/EBITDA、Residual Income）</li>
+      <li>财报深度分析（你会开始看懂公司真实盈利能力）</li>
+      <li>固定收益定价与久期管理</li>
+      <li>⭐ 这一级学完，你的选股逻辑会发生质变</li>
+    </ul>
+  </div>
+  <div>
+    <div style="font-weight:700;color:#78350f;margin-bottom:6px">Level 3 — 最贴近组合管理实战</div>
+    <ul style="margin:0;padding-left:16px;line-height:2;color:#374151">
+      <li>投资组合构建与风险管理（你 600 万仓位的理论体系）</li>
+      <li>行为金融（为什么你会犯那些错误）</li>
+      <li>财富规划与退休规划（42岁最应该看的内容）</li>
+      <li>⭐ 这一级学完，600万仓位的管理逻辑会脱胎换骨</li>
+    </ul>
+  </div>
+</div>
+</div>
+
+<h2>四、在哪儿考试（大陆可以考，不用去香港）</h2>
+
+<div style="background:#f0fdf4;border:1.5px solid #86efac;border-radius:12px;padding:16px 20px;margin:16px 0">
+<strong style="color:#14532d">✅ 重要好消息：CFA 考试在大陆即可完成，无需赴港</strong>
+<p style="font-size:13px;color:#374151;line-height:1.8;margin-top:8px">CFA Institute 已在全球部署 CBT（机考）体系，大陆主要城市均设有 Prometric 授权考试中心。</p>
+</div>
+
+<div class="table-wrap"><table>
+<thead><tr><th>城市</th><th>Level 1</th><th>Level 2</th><th>Level 3</th><th>备注</th></tr></thead>
+<tbody>
+<tr><td><strong>上海</strong></td><td>✅ 全年4次</td><td>✅ 全年3次</td><td>✅ 全年2次</td><td>考点最多，容量最大</td></tr>
+<tr><td><strong>北京</strong></td><td>✅ 全年4次</td><td>✅ 全年3次</td><td>✅ 全年2次</td><td>—</td></tr>
+<tr><td><strong>深圳</strong></td><td>✅ 全年4次</td><td>✅ 全年3次</td><td>✅ 全年2次</td><td>靠近香港，可连报 SFC</td></tr>
+<tr><td><strong>广州</strong></td><td>✅</td><td>✅</td><td>✅</td><td>—</td></tr>
+<tr><td><strong>成都</strong></td><td>✅</td><td>✅</td><td>✅</td><td>—</td></tr>
+<tr><td><strong>杭州 / 南京 / 武汉 / 西安</strong></td><td>✅</td><td>部分</td><td>部分</td><td>Level 2/3 建议选省会城市</td></tr>
+</tbody></table></div>
+
+<p style="font-size:13px;color:#64748b">最新考点以 CFA Institute 官网（cfainstitute.org）报名时实时显示为准，报名时可直接在系统中选择城市和考试中心。</p>
+
+<h2>五、拿到 CFA 证书的完整流程</h2>
+
+<div style="background:#fff;border:1.5px solid #e2e8f0;border-radius:14px;overflow:hidden;margin:16px 0">
+<div style="background:linear-gradient(135deg,#1c1917,#44403c);padding:14px 20px;color:#fff;font-weight:700;font-size:14px">🎓 从报名到挂上 CFA Charterholder 头衔</div>
+<div style="padding:20px;position:relative;padding-left:40px">
+  <div style="position:absolute;left:20px;top:0;bottom:0;width:2px;background:#e2e8f0"></div>
+
+  <div style="position:relative;margin-bottom:22px">
+    <div style="position:absolute;left:-26px;top:3px;width:14px;height:14px;border-radius:50%;background:#2563eb;border:2px solid #fff;box-shadow:0 0 0 2px #2563eb"></div>
+    <div style="font-weight:700;color:#1e3a5f;font-size:14px">① 注册 CFA Institute 账号（立即可做）</div>
+    <div style="font-size:13px;color:#374151;margin-top:6px;line-height:1.8">
+      网址：<strong>cfainstitute.org</strong> → Create Account<br>
+      需要：护照信息 + 学历信息 + 邮箱<br>
+      注册后可查看所有考试时间和报名截止日期<br>
+      <span style="background:#dbeafe;color:#1d4ed8;padding:1px 6px;border-radius:4px;font-size:11px">操作时间：约 15 分钟</span>
+    </div>
+  </div>
+
+  <div style="position:relative;margin-bottom:22px">
+    <div style="position:absolute;left:-26px;top:3px;width:14px;height:14px;border-radius:50%;background:#2563eb;border:2px solid #fff;box-shadow:0 0 0 2px #2563eb"></div>
+    <div style="font-weight:700;color:#1e3a5f;font-size:14px">② 报名 Level 1（费用结构）</div>
+    <div style="font-size:13px;color:#374151;margin-top:6px;line-height:1.8">
+      <strong>一次性注册费</strong>：USD 350（仅首次，终身有效）<br>
+      <strong>考试费</strong>（按报名早晚分三档）：<br>
+      &nbsp;&nbsp;· Early（约考前 6 个月前）：USD 900<br>
+      &nbsp;&nbsp;· Standard（约考前 3 个月）：USD 1,200<br>
+      &nbsp;&nbsp;· Late（约考前 6 周）：USD 1,450<br>
+      <strong>建议：至少提前 4 个月报名</strong>，锁定 Early 价格且有时间准备<br>
+      <span style="background:#fef9c3;color:#92400e;padding:1px 6px;border-radius:4px;font-size:11px">L1 总费用约人民币 9,000-10,000 元（Early），全三级约 2.5 万人民币</span>
+    </div>
+  </div>
+
+  <div style="position:relative;margin-bottom:22px">
+    <div style="position:absolute;left:-26px;top:3px;width:14px;height:14px;border-radius:50%;background:#7c3aed;border:2px solid #fff;box-shadow:0 0 0 2px #7c3aed"></div>
+    <div style="font-weight:700;color:#4c1d95;font-size:14px">③ 逐级通过 Level 1 → Level 2 → Level 3</div>
+    <div style="font-size:13px;color:#374151;margin-top:6px;line-height:1.8">
+      每级考试只能按顺序进行，必须通过上一级才能报名下一级<br>
+      考试结果约 <strong>8-10 周后</strong>发布（登录账号查询，不另行通知）<br>
+      如未通过：等下次再考，无次数限制，费用重新缴纳<br>
+      <span style="background:#ede9fe;color:#5b21b6;padding:1px 6px;border-radius:4px;font-size:11px">全三级最快 2 年（连续通过），在职者多数用 3-4 年</span>
+    </div>
+  </div>
+
+  <div style="position:relative;margin-bottom:22px">
+    <div style="position:absolute;left:-26px;top:3px;width:14px;height:14px;border-radius:50%;background:#059669;border:2px solid #fff;box-shadow:0 0 0 2px #059669"></div>
+    <div style="font-weight:700;color:#065f46;font-size:14px">④ 提交工作经验（通过 Level 3 后）</div>
+    <div style="font-size:13px;color:#374151;margin-top:6px;line-height:1.8">
+      登录账号 → Professional Experience → 填写工作经历<br>
+      要求：<strong>4,000 小时以上投资决策相关工作</strong>，在任何时间范围内累积即可<br>
+      可以填写：个人投资组合管理经历（炒股8年，约16,000小时可记录）、金融分析工作、研究工作等<br>
+      每段经历须有一位能证明的 <strong>Professional Reference</strong>（可以是前任领导或同事）<br>
+      <span style="background:#d1fae5;color:#065f46;padding:1px 6px;border-radius:4px;font-size:11px">✅ 你的情况完全满足 4,000 小时要求</span>
+    </div>
+  </div>
+
+  <div style="position:relative;margin-bottom:22px">
+    <div style="position:absolute;left:-26px;top:3px;width:14px;height:14px;border-radius:50%;background:#d97706;border:2px solid #fff;box-shadow:0 0 0 2px #d97706"></div>
+    <div style="font-weight:700;color:#92400e;font-size:14px">⑤ 申请成为 Regular Member</div>
+    <div style="font-size:13px;color:#374151;margin-top:6px;line-height:1.8">
+      加入 CFA Institute 正式会员（Regular Member）：年费约 USD 275/年<br>
+      同时加入所在地区的 CFA Society（如 CFA Society Shanghai）：另付本地会费约 USD 150/年<br>
+      提供 2 名 Professional Reference（推荐人）的联系信息，对方会收到邮件确认<br>
+    </div>
+  </div>
+
+  <div style="position:relative">
+    <div style="position:absolute;left:-26px;top:3px;width:18px;height:18px;border-radius:50%;background:#dc2626;border:2px solid #fff;box-shadow:0 0 0 2px #dc2626;display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;font-weight:700">🎓</div>
+    <div style="font-weight:700;color:#991b1b;font-size:14px">⑥ 获授 CFA Charterholder 头衔</div>
+    <div style="font-size:13px;color:#374151;margin-top:6px;line-height:1.8">
+      CFA Institute 审核通过后，正式授予 <strong>CFA® Charterholder</strong> 资格<br>
+      收到官方证书（实体+电子版）<br>
+      可在 LinkedIn / 简历上正式写 <strong>「CFA Charterholder」</strong>（注意：未通过三级不能写 CFA，只能写 CFA Level X Candidate）<br>
+      维持资格：每年完成持续教育（Continuing Education）要求，缴纳年费
+    </div>
+  </div>
+</div>
+</div>
+
+<h2>六、42岁在职人员备考策略（量身定制）</h2>
+
+<div style="background:#fff;border:1.5px solid #e2e8f0;border-radius:14px;overflow:hidden;margin:16px 0">
+<div style="background:linear-gradient(135deg,#1e3a5f,#0369a1);padding:14px 20px;color:#fff;font-weight:700;font-size:14px">📅 三年通关计划（每天 1.5 小时，在职完成）</div>
+<div style="padding:18px">
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;font-size:13px">
+  <div style="background:#f0f9ff;border-radius:12px;padding:16px;border:1px solid #bae6fd">
+    <div style="font-weight:700;color:#0369a1;font-size:14px;margin-bottom:10px">Year 1 → Level 1</div>
+    <div style="font-weight:600;color:#374151;margin-bottom:6px">月 1-3：建立基础</div>
+    <ul style="margin:0;padding-left:16px;line-height:2;color:#374151;margin-bottom:10px">
+      <li>买 CFA Institute 官方教材（CFAI Curriculum）</li>
+      <li>或选 Kaplan Schweser Notes（精简版，推荐在职者）</li>
+      <li>按顺序学：Ethics → Quant → FSA（最难先攻）</li>
+    </ul>
+    <div style="font-weight:600;color:#374151;margin-bottom:6px">月 4-5：题海阶段</div>
+    <ul style="margin:0;padding-left:16px;line-height:2;color:#374151;margin-bottom:10px">
+      <li>买 Qbank（Kaplan）做模拟题，每天 40 题</li>
+      <li>每周做一套模拟全卷（3小时限时）</li>
+    </ul>
+    <div style="font-weight:600;color:#374151;margin-bottom:6px">月 6：冲刺考试</div>
+    <ul style="margin:0;padding-left:16px;line-height:2;color:#374151">
+      <li>每周至少 2 套模拟题</li>
+      <li>Ethics 单独再读一遍（边界题必须熟练）</li>
+    </ul>
+  </div>
+  <div style="background:#f5f3ff;border-radius:12px;padding:16px;border:1px solid #c4b5fd">
+    <div style="font-weight:700;color:#5b21b6;font-size:14px;margin-bottom:10px">Year 2 → Level 2</div>
+    <div style="font-weight:600;color:#374151;margin-bottom:6px">月 1-4：估值核心</div>
+    <ul style="margin:0;padding-left:16px;line-height:2;color:#374151;margin-bottom:10px">
+      <li>重点：Equity Valuation（DDM/DCF/RI）</li>
+      <li>Financial Reporting Analysis（深化）</li>
+      <li>练习 Vignette 答题方式（先读问题再看材料）</li>
+    </ul>
+    <div style="font-weight:600;color:#374151;margin-bottom:6px">月 5-6：题海 + 弱点攻坚</div>
+    <ul style="margin:0;padding-left:16px;line-height:2;color:#374151;margin-bottom:10px">
+      <li>L2 比 L1 更依赖综合判断</li>
+      <li>错题本建立：每个错题写出「为什么错」</li>
+    </ul>
+    <div style="font-weight:600;color:#374151;margin-bottom:6px">并行开始</div>
+    <ul style="margin:0;padding-left:16px;line-height:2;color:#374151">
+      <li>学 HKSI LE Paper 1（可与 L2 备考同步）</li>
+      <li>更新 LinkedIn，写「CFA Level 2 Candidate」</li>
+    </ul>
+  </div>
+  <div style="background:#f0fdf4;border-radius:12px;padding:16px;border:1px solid #86efac">
+    <div style="font-weight:700;color:#065f46;font-size:14px;margin-bottom:10px">Year 3 → Level 3</div>
+    <div style="font-weight:600;color:#374151;margin-bottom:6px">月 1-4：组合管理</div>
+    <ul style="margin:0;padding-left:16px;line-height:2;color:#374151;margin-bottom:10px">
+      <li>重点：Portfolio Management（35-40%）</li>
+      <li>练习 Essay 题型（英文写作最需提前准备）</li>
+      <li>行为金融 + 财富规划（对你最有用）</li>
+    </ul>
+    <div style="font-weight:600;color:#374151;margin-bottom:6px">月 5-6：冲刺</div>
+    <ul style="margin:0;padding-left:16px;line-height:2;color:#374151;margin-bottom:10px">
+      <li>刷 CFA Institute 官方历年 Essay 真题</li>
+      <li>对照标准答案练习作答，不要只看题不写</li>
+    </ul>
+    <div style="background:#d1fae5;border-radius:8px;padding:10px;margin-top:4px">
+      <strong style="color:#065f46;font-size:12px">🎯 Year 3 末：提交工作经验申请 Charter</strong>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+<div style="background:#fef2f2;border:1.5px solid #fca5a5;border-radius:12px;padding:16px 20px;margin:16px 0">
+<strong style="color:#991b1b">⚠️ 备考推荐资源清单</strong>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px;font-size:13px">
+  <div>
+    <div style="font-weight:600;color:#374151;margin-bottom:6px">主力备考材料（选一套）</div>
+    <ul style="margin:0;padding-left:16px;line-height:2;color:#374151">
+      <li><strong>Kaplan Schweser</strong>（schweser.com）：最流行，精简好理解，有 Qbank 题库。每级约 USD 500-800</li>
+      <li><strong>CFA Institute 官方 Curriculum</strong>：最权威，但内容极厚，适合有时间者</li>
+      <li><strong>Mark Meldrum（YouTube/网站）</strong>：免费视频讲解，华人备考圈评价极高</li>
+    </ul>
+  </div>
+  <div>
+    <div style="font-weight:600;color:#374151;margin-bottom:6px">辅助提升材料</div>
+    <ul style="margin:0;padding-left:16px;line-height:2;color:#374151">
+      <li><strong>CFA Institute Mock Exam</strong>：官方模拟题，每次约 USD 50，最接近真题</li>
+      <li><strong>IFT（Arif Irfanullah）</strong>：YouTube 免费课，L1 尤其好</li>
+      <li><strong>小红书搜「CFA备考」</strong>：大量中国考生真实经验分享</li>
+      <li><strong>Reddit r/CFA</strong>：英文社区，全球考生讨论，关键时期很有用</li>
+    </ul>
+  </div>
+</div>
+</div>
+
+<h2>七、目标工作岗位：42岁的正确战场</h2>
+
+<div style="background:linear-gradient(135deg,#fef9c3,#fef3c7);border:2px solid #fbbf24;border-radius:14px;padding:20px 24px;margin:16px 0">
+<strong style="color:#92400e;font-size:15px">🎯 核心原则：不要和 28 岁的人竞争同一个岗位</strong>
+<p style="font-size:13px;color:#78350f;line-height:1.8;margin-top:8px">42 岁在金融圈是资历，不是劣势——<strong>前提是你去竞争正确的岗位</strong>。初级分析师岗位（analyst trainee）会是一道坎。高级研究员、投资顾问、基金经理、CIO 这类岗位，42 岁+CFA+炒股经历反而是极强组合。目标是「用你的全部经验换更高位置进场」，而不是「从头开始」。</p>
+</div>
+
+<div class="table-wrap"><table>
+<thead><tr><th>岗位</th><th>匹配度</th><th>匹配原因</th><th>预期年薪</th><th>进场策略</th></tr></thead>
+<tbody>
+<tr><td><strong>TMT 行业高级研究员<br>（科技/互联网方向）</strong></td><td><span style="color:#16a34a;font-weight:700">★★★★★ 最优选</span></td><td>你从内部理解科技公司商业模式，是任何金融科班无法复制的优势</td><td>HKD 80-150万/年（券商/资管）</td><td>CFA L2 在读即可投，科技背景即入场券</td></tr>
+<tr><td><strong>家族办公室投资顾问 / PM</strong></td><td><span style="color:#16a34a;font-weight:700">★★★★★ 最优选</span></td><td>家族办公室偏好有人生阅历、成熟判断力的人，42岁是优势</td><td>弹性大，HKD 100-300万+分成</td><td>通过 CFA L2 后联系猎头，突出「科技+投资」双背景</td></tr>
+<tr><td><strong>私人银行客户经理（HNW）</strong></td><td><span style="color:#16a34a;font-weight:700">★★★★</span></td><td>高净值客户信任与自己相近年龄段、有阅历的顾问；你本人 600 万仓位也是共鸣点</td><td>底薪 HKD 50-80 万 + 提成，上不封顶</td><td>CFA 持证后，通过银行内推或猎头，面试重点准备「客户关系管理」</td></tr>
+<tr><td><strong>量化研究员（TMT 专项）</strong></td><td><span style="color:#16a34a;font-weight:700">★★★★</span></td><td>技术能力+行业认知+金融知识三合一，量化基金极度稀缺此类组合</td><td>HKD 100-200万+奖金</td><td>CFA L1+量化项目即可开始投</td></tr>
+<tr><td><strong>风险管理高级岗（CRO/Risk Manager）</strong></td><td><span style="color:#ca8a04;font-weight:700">★★★</span></td><td>系统性思维+金融风险知识，大型银行和资管公司需求稳定</td><td>HKD 80-150万</td><td>稳健，适合作为过渡期第一份香港金融工作</td></tr>
+<tr><td><strong>内地私募 / 公募基金经理</strong></td><td><span style="color:#ca8a04;font-weight:700">★★★</span></td><td>不必一定去香港；内地私募基金对 CFA+科技行业背景的基金经理同样有需求</td><td>人民币底薪 50-100 万 + 业绩提成</td><td>CFA L2/L3 + 科技行业研究能力，联系内地公私募机构</td></tr>
+</tbody></table></div>
+
+<h2>八、42岁转型：你的独特优势分析</h2>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0;font-size:13px">
+  <div style="background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:1.5px solid #86efac;border-radius:14px;padding:18px">
+    <div style="font-weight:700;color:#14532d;font-size:14px;margin-bottom:12px">✅ 你比 28 岁金融毕业生强的地方</div>
+    <ul style="margin:0;padding-left:16px;line-height:2.2;color:#374151">
+      <li><strong>真钱实战经验</strong>：8 年 600 万真实仓位管理，28 岁分析师零实战</li>
+      <li><strong>科技行业第一视角</strong>：你亲眼见过一家互联网公司怎么运作、增长、衰退</li>
+      <li><strong>管理与领导力</strong>：开发负责人的管理经验，研究主管岗位直接用</li>
+      <li><strong>系统性思维</strong>：工程师出身的人看问题有框架、有逻辑，金融研究需要这个</li>
+      <li><strong>稳定性与成熟度</strong>：家族办公室和高净值客户明确偏好有阅历的合作方</li>
+      <li><strong>学习能力</strong>：能从零学到大厂负责人，证明你的学习迁移能力极强</li>
+    </ul>
+  </div>
+  <div style="background:linear-gradient(135deg,#fff7ed,#ffedd5);border:1.5px solid #fb923c;border-radius:14px;padding:18px">
+    <div style="font-weight:700;color:#c2410c;font-size:14px;margin-bottom:12px">⚠️ 需要提前管理的风险</div>
+    <ul style="margin:0;padding-left:16px;line-height:2.2;color:#374151">
+      <li><strong>第一份金融工作薪资可能有落差</strong>：从大厂负责人到初入金融圈，接受短期薪资调整是进场的代价，3-5年后追回</li>
+      <li><strong>英文工作能力需要快速提升</strong>：CFA 考试全英文，职场沟通也需要</li>
+      <li><strong>金融体系知识有盲区</strong>：财务报表、固定收益、宏观分析是你的补课区，但 CFA 备考直接覆盖</li>
+      <li><strong>职业年龄敏感性</strong>：不投初级岗位，专攻高级/顾问/合伙人路径，避开与小鲜肉的竞争</li>
+      <li><strong>家庭安排</strong>：若考虑香港，须提前规划配偶、子女教育等</li>
+    </ul>
+  </div>
+</div>
+
+<div style="background:linear-gradient(135deg,#f0f9ff,#e0f2fe);border:2px solid #38bdf8;border-radius:14px;padding:20px 24px;margin:16px 0">
+<strong style="color:#0369a1;font-size:15px">🧭 长线发展路径：不再有「另一道坎」的方式</strong>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:14px;font-size:13px">
+  <div style="background:#fff;border-radius:10px;padding:14px;border:1px solid #bae6fd;text-align:center">
+    <div style="font-size:22px;margin-bottom:6px">📚</div>
+    <div style="font-weight:700;color:#0369a1;margin-bottom:4px">现在 ~ 3年</div>
+    <div style="color:#374151;line-height:1.8">CFA L1→L2→L3<br>HKSI LE Paper 1&2<br>量化项目 on GitHub<br>建立金融圈人脉</div>
+  </div>
+  <div style="background:#fff;border-radius:10px;padding:14px;border:1px solid #bae6fd;text-align:center">
+    <div style="font-size:22px;margin-bottom:6px">🏦</div>
+    <div style="font-weight:700;color:#0369a1;margin-bottom:4px">3~5年</div>
+    <div style="color:#374151;line-height:1.8">CFA 持证<br>加入家族办公室或<br>TMT 研究机构<br>建立真实金融履历</div>
+  </div>
+  <div style="background:#fff;border-radius:10px;padding:14px;border:1px solid #bae6fd;text-align:center">
+    <div style="font-size:22px;margin-bottom:6px">🚀</div>
+    <div style="font-weight:700;color:#0369a1;margin-bottom:4px">5年后（47岁+）</div>
+    <div style="color:#374151;line-height:1.8">Portfolio Manager<br>/ CIO / 合伙人<br>或自立门户管理<br>家族资产</div>
+  </div>
+</div>
+<p style="font-size:13px;color:#374151;line-height:1.8;margin-top:14px">47 岁的 CFA 持证人、前大厂负责人、8 年个人投资经验、科技行业深度认知——<strong>这是别人花 20 年都凑不齐的组合</strong>。唯一不确定性是起步时的薪资过渡期（约 1-2 年），之后是向上不封顶的路径。这不是另一道坎，这是另一条跑道，而且你比跑道上的所有人都跑过更多圈了。</p>
+</div>
+
+<h2>九、实战行动清单</h2>
+<ul class="checklist">
+  <li data-key="cfa1"><div class="check-box">✓</div><span class="check-text"><strong>本周完成：</strong>打开 cfainstitute.org，注册账号，查看最近一次 Level 1 考试的报名截止日期和考试城市（选你所在城市）</span></li>
+  <li data-key="cfa2"><div class="check-box">✓</div><span class="check-text"><strong>本周完成：</strong>浏览 Kaplan Schweser 官网（schweser.com），对比 Essential / Premium 套餐，制定学习资料采购计划（不必立即购买，先了解结构）</span></li>
+  <li data-key="cfa3"><div class="check-box">✓</div><span class="check-text"><strong>月 1 完成：</strong>用 Early Registration 价格报名 Level 1（每次考试报名截止约提前 3-6 个月，Early 价格最省 USD 300-550），锁定考试日期后备考才有压力</span></li>
+  <li data-key="cfa4"><div class="check-box">✓</div><span class="check-text"><strong>每天：</strong>通勤时间收听英文播客（Bloomberg Odd Lots / CFA Institute Podcast），同时训练金融英语语感和备考知识点，一举两得</span></li>
+  <li data-key="cfa5"><div class="check-box">✓</div><span class="check-text"><strong>第 1 个月：</strong>用 Mark Meldrum YouTube 频道（免费）学习 Ethics 模块，Ethics 是 Level 1 的护城河——高分者靠 Ethics 过关，低分者因 Ethics 遭淘汰</span></li>
+  <li data-key="cfa6"><div class="check-box">✓</div><span class="check-text"><strong>第 2 个月起：</strong>攻财务报表分析（FSA）——这是你最大的盲区也是最重要的模块，建议每天 1 小时专项学习，而非和其他模块轮转</span></li>
+  <li data-key="cfa7"><div class="check-box">✓</div><span class="check-text"><strong>CFA L1 通过后：</strong>更新 LinkedIn 为「CFA Level 2 Candidate」，开始 follow 香港金融圈和内地私募圈的招聘动态，此时已经是求职信号</span></li>
+  <li data-key="cfa8"><div class="check-box">✓</div><span class="check-text"><strong>CFA L2 备考期间：</strong>同步备考 HKSI LE Paper 1 & 2（L2 知识与 LE Paper 2 有高度重叠），利用同一段学习状态一并完成</span></li>
+  <li data-key="cfa9"><div class="check-box">✓</div><span class="check-text"><strong>持续记录：</strong>建立个人投资决策日志（每次买卖记录逻辑），这既是 Level 3 Portfolio Management 的实战素材，也是日后申请 CFA Charter 4,000 小时工作经验的文档基础</span></li>
+  <li data-key="cfa10"><div class="check-box">✓</div><span class="check-text"><strong>3 年内：</strong>目标联系 2-3 家家族办公室或 TMT 研究机构（通过 LinkedIn + 猎头），以「顾问合作」形式先建立关系，而非直接投全职简历——这是 42 岁入场最无压力的方式</span></li>
+</ul>
+
+<div style="text-align:center;margin-top:36px;padding:32px;background:linear-gradient(135deg,#1c1917,#292524,#57534e);border-radius:16px;color:#fff">
+  <div style="font-size:22px;font-weight:900;margin-bottom:8px">🎓 42 岁，是开始，不是截止</div>
+  <div style="font-size:14px;opacity:.88;line-height:1.9;max-width:600px;margin:0 auto">
+    Ray Dalio 在 26 岁时还在从地铁里爬出来，找工作被拒绝。<br>
+    Charlie Munger 在 45 岁时才认真开始他的投资生涯。<br><br>
+    <strong>金融是少数几个「经验」和「判断力」比「年龄」更值钱的行业。</strong><br><br>
+    你已经有了判断力、有了实战经验、有了技术底子。<br>
+    CFA 是你向这个行业证明自己的语言。<br><br>
+    打开 cfainstitute.org，今天注册，今天开始。
+  </div>
+  <div style="margin-top:20px;font-size:12px;opacity:.65">
+    CFA Institute 官网：cfainstitute.org &nbsp;·&nbsp; Schweser 备考材料：schweser.com
   </div>
 </div>
 `,
