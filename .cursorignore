@@ -4,8 +4,8 @@
 # ================================
 # 🎯 改 Telegram 订阅系统时启用
 # ================================
-# tg-club/
-# insurance-guide/
+tg-club/
+insurance-guide/
 # investment_tracker/
 # *analysis.html
 # *tracker.html
@@ -17,7 +17,7 @@
 # ================================  
 # 🎯 改 Telegram 俱乐部系统时启用
 # ================================
-# insurance-guide/
+insurance-guide/
 # investment_tracker/
 # *analysis.html
 # *tracker.html
@@ -30,24 +30,24 @@
 # ================================
 # 🎯 改保险内容系统时启用  
 # ================================
-# tg-club/
-# tg-subscription/
+tg-club/
+tg-subscription/
 # investment_tracker/
 # *analysis.html
 # *tracker.html  
 # *calculator.html
 # *learning.html
 # value_investing_*.html
-# docs/
+docs/
 # scraped_articles.json
 
 # ================================
 # 🎯 改投资工具时启用
 # ================================
-# tg-club/
+tg-club/
 # tg-subscription/  
-# insurance-guide/
-# docs/
+insurance-guide/
+docs/
 
 # ================================
 # 🎯 通用忽略（始终生效）
