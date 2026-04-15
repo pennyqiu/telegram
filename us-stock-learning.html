@@ -28,14 +28,22 @@
   .progress-label{display:flex;justify-content:space-between;font-size:11px;color:var(--gray-500);margin-bottom:5px;}
   .progress-track{height:5px;background:var(--gray-200);border-radius:99px;overflow:hidden;}
   .progress-fill{height:100%;background:linear-gradient(90deg,#1a56db,#06b6d4);border-radius:99px;transition:width .4s ease;}
-  .phase-group{padding:6px 0;}
-  .phase-label{padding:5px 16px 3px;font-size:10px;font-weight:700;letter-spacing:.05em;color:var(--gray-400);text-transform:uppercase;}
-  .nav-item{display:flex;align-items:center;gap:9px;padding:8px 14px;cursor:pointer;border-left:3px solid transparent;transition:all .15s;font-size:13px;color:var(--gray-600);}
+  .phase-group{padding:4px 0;}
+  .phase-label{padding:6px 16px 5px;font-size:10px;font-weight:700;letter-spacing:.05em;color:var(--gray-400);text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:5px;user-select:none;transition:color .15s;}
+  .phase-label:hover{color:var(--gray-600);background:var(--gray-50);}
+  .phase-label-arrow{margin-left:auto;font-size:9px;color:var(--gray-300);transition:transform .2s;}
+  .phase-count{font-size:10px;background:var(--gray-100);color:var(--gray-500);padding:1px 5px;border-radius:99px;font-weight:600;margin-left:4px;}
+  .phase-items{overflow:hidden;transition:all .2s;}
+  .phase-group.collapsed .phase-items{display:none;}
+  .phase-group.collapsed .phase-label-arrow{transform:rotate(-90deg);}
+  .sub-group-label{padding:5px 14px 3px 26px;font-size:10px;font-weight:700;color:var(--gray-400);letter-spacing:.04em;margin-top:2px;border-left:2px solid var(--gray-100);margin-left:14px;}
+  .sub-group .nav-item{padding-left:22px;}
+  .nav-item{display:flex;align-items:center;gap:8px;padding:6px 14px;cursor:pointer;border-left:3px solid transparent;transition:all .15s;font-size:12px;color:var(--gray-600);}
   .nav-item:hover{background:var(--gray-50);color:var(--gray-900);}
   .nav-item.active{background:var(--primary-light);border-left-color:var(--primary);color:var(--primary);font-weight:600;}
   .nav-item.completed{color:var(--gray-500);}
   .nav-item.completed .nav-icon{background:var(--success);color:#fff;}
-  .nav-icon{width:22px;height:22px;border-radius:50%;background:var(--gray-200);color:var(--gray-500);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;transition:all .2s;}
+  .nav-icon{width:20px;height:20px;border-radius:50%;background:var(--gray-200);color:var(--gray-500);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex-shrink:0;transition:all .2s;}
   .nav-item.active .nav-icon{background:var(--primary);color:#fff;}
   .nav-title{flex:1;line-height:1.3;}
   .nav-tag{font-size:10px;padding:1px 5px;border-radius:99px;background:var(--gray-100);color:var(--gray-500);font-weight:600;flex-shrink:0;}
@@ -346,17 +354,80 @@ function restorePosition() {
   }
   return 0;
 }
+// 折叠状态：默认折叠所有 phase，goTo 时自动展开目标 phase
+const collapsedPhases = new Set([1,2,3,4,5,6,7]);
+
+function togglePhase(phase, e){
+  e && e.stopPropagation();
+  if(collapsedPhases.has(phase)) collapsedPhases.delete(phase);
+  else collapsedPhases.add(phase);
+  renderNav();
+}
+
+// Phase 6 子分组映射
+const subgroupMap = {
+  'influencers':'sg-leaders','value-wisdom':'sg-leaders','damodaran-analysis':'sg-leaders',
+  'farnam-mental-models':'sg-leaders','howard-marks-memos':'sg-leaders','ben-felix':'sg-leaders',
+  'tools-platforms':'sg-tools','action-plan':'sg-tools','tech-moat-framework':'sg-tools',
+  'qqq-spy-research':'sg-etf','passive-academic':'sg-etf','schd-research':'sg-etf',
+  'voo-research':'sg-etf','qqq-research':'sg-etf','vym-research':'sg-etf',
+  'dgro-research':'sg-etf','bnd-research':'sg-etf','tips-research':'sg-etf',
+  'gld-research':'sg-etf','aapl-research':'sg-etf',
+  'audio-commute':'sg-audio'
+};
+const subgroupLabels = {
+  'sg-leaders':'📖 顶级领路人精华',
+  'sg-tools':'🛠️ 工具与方法论',
+  'sg-etf':'📊 ETF & 个股研究',
+  'sg-audio':'🎧 通勤音频路线'
+};
+
 function renderNav(){
   const menu=document.getElementById('navMenu');
-  let html='';let lastPhase=-1;
+  let html='';let lastPhase=-1;let lastSubgroup=null;let inPhaseItems=false;
   const phaseIcons=['','📚','📊','📈','🛡️','🎯','🌐','🏦'];
+
+  // 统计每个 phase 的课数和完成数
+  const phaseCounts={}, phaseCompleted={};
+  curriculum.forEach(item=>{
+    if(item.phase===0) return;
+    phaseCounts[item.phase]=(phaseCounts[item.phase]||0)+1;
+    if(completed.has(item.id)) phaseCompleted[item.phase]=(phaseCompleted[item.phase]||0)+1;
+  });
+
   curriculum.forEach((item,idx)=>{
     if(item.phase!==lastPhase){
-      if(lastPhase>=0)html+='</div>';
-      html+=`<div class="phase-group">`;
-      if(item.phase>0&&item.phaseLabel){html+=`<div class="phase-label">${phaseIcons[item.phase]||''} ${item.phaseLabel||''}</div>`;}
+      // 关闭上一个子分组和 phase
+      if(lastSubgroup){html+='</div>';lastSubgroup=null;}
+      if(inPhaseItems){html+='</div>';inPhaseItems=false;}
+      if(lastPhase>=0) html+='</div>';
+
+      const isCollapsed=collapsedPhases.has(item.phase);
+      const cnt=phaseCounts[item.phase]||0;
+      const done=phaseCompleted[item.phase]||0;
+      const countBadge=cnt?`<span class="phase-count">${done}/${cnt}</span>`:'';
+      const arrow=item.phase>0?`<span class="phase-label-arrow">▾</span>`:'';
+      const clickable=item.phase>0?`onclick="togglePhase(${item.phase},event)"`:'';
+
+      html+=`<div class="phase-group ${isCollapsed?'collapsed':''}">`;
+      if(item.phase>0&&item.phaseLabel){
+        html+=`<div class="phase-label" ${clickable}>${phaseIcons[item.phase]||''} ${item.phaseLabel||''}${countBadge}${arrow}</div>`;
+      }
+      html+=`<div class="phase-items">`;
+      inPhaseItems=true;
       lastPhase=item.phase;
     }
+
+    // phase 6 子分组
+    const sg=subgroupMap[item.id];
+    if(sg&&sg!==lastSubgroup){
+      if(lastSubgroup) html+='</div>';
+      html+=`<div class="sub-group"><div class="sub-group-label">${subgroupLabels[sg]||''}</div>`;
+      lastSubgroup=sg;
+    } else if(!sg&&lastSubgroup){
+      html+='</div>';lastSubgroup=null;
+    }
+
     const isActive=idx===currentIndex;
     const isDone=completed.has(item.id);
     html+=`<div class="nav-item ${isActive?'active':''} ${isDone&&!isActive?'completed':''}" onclick="goTo(${idx})">
@@ -365,8 +436,11 @@ function renderNav(){
       <span class="nav-tag">${item.duration}</span>
     </div>`;
   });
+  if(lastSubgroup) html+='</div>';
+  if(inPhaseItems) html+='</div>';
   html+='</div>';
   menu.innerHTML=html;
+
   const total=curriculum.length-1;
   const done=completed.size;
   document.getElementById('progressText').textContent=`${done} / ${total} 课`;
@@ -374,14 +448,13 @@ function renderNav(){
 }
 function goTo(idx){
   currentIndex=idx;
+  collapsedPhases.delete(curriculum[idx].phase); // 自动展开目标 phase
   const lessonId = curriculum[idx].id;
-  // 保存到URL hash和localStorage
   window.location.hash = 'lesson-' + lessonId;
   localStorage.setItem('usstock_current_lesson', lessonId);
   renderNav();
   renderContent();
   window.scrollTo(0,0);
-  // 移动端：切换课程后自动关闭侧边栏
   if(window.innerWidth<=768) closeSidebar();
 }
 function navigate(dir){const n=currentIndex+dir;if(n>=0&&n<curriculum.length)goTo(n);}
@@ -11460,6 +11533,7 @@ return C[id]||'<p>内容准备中...</p>';
 
 // 页面初始化：恢复上次浏览位置
 currentIndex = restorePosition();
+collapsedPhases.delete(curriculum[currentIndex].phase); // 展开当前所在 phase
 renderNav();
 renderContent();
 
