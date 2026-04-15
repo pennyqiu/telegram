@@ -36,7 +36,12 @@
   .phase-items{overflow:hidden;transition:all .2s;}
   .phase-group.collapsed .phase-items{display:none;}
   .phase-group.collapsed .phase-label-arrow{transform:rotate(-90deg);}
-  .sub-group-label{padding:5px 14px 3px 26px;font-size:10px;font-weight:700;color:var(--gray-400);letter-spacing:.04em;margin-top:2px;border-left:2px solid var(--gray-100);margin-left:14px;}
+  .sub-group-label{padding:5px 10px 3px 26px;font-size:10px;font-weight:700;color:var(--gray-400);letter-spacing:.04em;margin-top:2px;border-left:2px solid var(--gray-100);margin-left:14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;user-select:none;transition:color .15s;}
+  .sub-group-label:hover{color:var(--gray-600);}
+  .sub-group-label .sg-arrow{font-size:9px;transition:transform .2s;display:inline-block;}
+  .sub-group-label .sg-count{font-size:9px;color:var(--gray-300);font-weight:500;margin-right:4px;}
+  .sub-group.sg-collapsed .sub-group-label .sg-arrow{transform:rotate(-90deg);}
+  .sub-group.sg-collapsed .nav-item{display:none;}
   .sub-group .nav-item{padding-left:22px;}
   .nav-item{display:flex;align-items:center;gap:8px;padding:6px 14px;cursor:pointer;border-left:3px solid transparent;transition:all .15s;font-size:12px;color:var(--gray-600);}
   .nav-item:hover{background:var(--gray-50);color:var(--gray-900);}
@@ -45,7 +50,7 @@
   .nav-item.completed .nav-icon{background:var(--success);color:#fff;}
   .nav-icon{width:20px;height:20px;border-radius:50%;background:var(--gray-200);color:var(--gray-500);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex-shrink:0;transition:all .2s;}
   .nav-item.active .nav-icon{background:var(--primary);color:#fff;}
-  .nav-title{flex:1;line-height:1.3;}
+  .nav-title{flex:1;line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
   .nav-tag{font-size:10px;padding:1px 5px;border-radius:99px;background:var(--gray-100);color:var(--gray-500);font-weight:600;flex-shrink:0;}
   .nav-item.active .nav-tag{background:var(--primary-light);color:var(--primary);}
   /* MAIN */
@@ -305,26 +310,26 @@ const curriculum=[
   {id:'stock-guide',phase:5,tag:'📖 标的手册',title:'核心ETF与个股深度指南',duration:'15 min'},
   {id:'cpa-tax-easter-egg',phase:5,tag:'🥚 彩蛋',title:'CPA的稀缺赛道：跨境税务深度指南',duration:'30 min'},
   {id:'influencers',phase:6,phaseLabel:'第六阶段：持续成长',tag:'第22课',title:'全球顶级领路人',duration:'40 min'},
+  {id:'value-wisdom',phase:6,tag:'第24课',title:'价值投资精华：顶级博客核心思想',shortTitle:'价值投资精华',duration:'90 min'},
+  {id:'damodaran-analysis',phase:6,tag:'第26课',title:'Damodaran估值精华：2020-2025全面解读',shortTitle:'Damodaran 估值精华',duration:'120 min'},
+  {id:'farnam-mental-models',phase:6,tag:'第27课',title:'Farnam Street心智模型：2020-2025精华',shortTitle:'Farnam 心智模型',duration:'90 min'},
+  {id:'howard-marks-memos',phase:6,tag:'第29课',title:'Howard Marks投资备忘录精选：周期与风险',shortTitle:'Howard Marks 备忘录',duration:'110 min'},
+  {id:'ben-felix',phase:6,tag:'第41课',title:'Ben Felix循证投资：因子模型与学术实证',shortTitle:'Ben Felix 循证投资',duration:'90 min'},
   {id:'tools-platforms',phase:6,tag:'第23课',title:'必备工具与数据平台',duration:'40 min'},
-  {id:'value-wisdom',phase:6,tag:'第24课',title:'价值投资精华：顶级博客核心思想',duration:'90 min'},
+  {id:'tech-moat-framework',phase:6,tag:'第30课',title:'科技股投资框架：护城河识别与估值实战',shortTitle:'科技股护城河框架',duration:'100 min'},
   {id:'action-plan',phase:6,tag:'第25课',title:'90天行动计划',duration:'30 min'},
-  {id:'damodaran-analysis',phase:6,tag:'第26课',title:'Damodaran估值精华：2020-2025全面解读',duration:'120 min'},
-  {id:'farnam-mental-models',phase:6,tag:'第27课',title:'Farnam Street心智模型：2020-2025精华',duration:'90 min'},
-  {id:'qqq-spy-research',phase:6,tag:'第28课',title:'ETF进阶研究：QQQ vs SPY 长期表现与配置策略',duration:'100 min'},
-  {id:'howard-marks-memos',phase:6,tag:'第29课',title:'Howard Marks投资备忘录精选：周期与风险',duration:'110 min'},
-  {id:'tech-moat-framework',phase:6,tag:'第30课',title:'科技股投资框架：护城河识别与估值实战',duration:'100 min'},
-  {id:'passive-academic',phase:6,tag:'第31课',title:'被动投资的学术证据：Vanguard研究30年',duration:'80 min'},
-  {id:'schd-research',phase:6,tag:'第32课',title:'SCHD深度研究：红利投资的科学与实战',duration:'110 min'},
-  {id:'voo-research',phase:6,tag:'第33课',title:'VOO深度研究：买入整个美国的科学与实战',duration:'90 min'},
-  {id:'qqq-research',phase:6,tag:'第34课',title:'QQQ深度研究：科技成长的极致表达',duration:'90 min'},
-  {id:'vym-research',phase:6,tag:'第35课',title:'VYM深度研究：即时高收益的现金流逻辑',duration:'75 min'},
-  {id:'dgro-research',phase:6,tag:'第36课',title:'DGRO深度研究：股息成长的科技融合版本',duration:'75 min'},
-  {id:'bnd-research',phase:6,tag:'第37课',title:'BND深度研究：组合减震器的科学与心理学',duration:'80 min'},
-  {id:'tips-research',phase:6,tag:'第38课',title:'TIPS深度研究：购买力守护者的运作机制',duration:'70 min'},
-  {id:'gld-research',phase:6,tag:'第39课',title:'GLD深度研究：黄金的真实价值与投资逻辑',duration:'70 min'},
-  {id:'aapl-research',phase:6,tag:'第40课',title:'AAPL深度研究：消费品帝国的护城河与增长引擎',duration:'90 min'},
-  {id:'ben-felix',phase:6,tag:'第41课',title:'Ben Felix循证投资：因子模型与学术实证',duration:'90 min'},
-  {id:'audio-commute',phase:6,tag:'🎧 通勤彩蛋',title:'通勤学习指南：投资播客音频路线图',duration:'上下班时间'},
+  {id:'passive-academic',phase:6,tag:'第31课',title:'被动投资的学术证据：Vanguard研究30年',shortTitle:'被动投资学术证据',duration:'80 min'},
+  {id:'qqq-spy-research',phase:6,tag:'第28课',title:'ETF进阶研究：QQQ vs SPY 长期表现与配置策略',shortTitle:'QQQ vs SPY 进阶对比',duration:'100 min'},
+  {id:'schd-research',phase:6,tag:'第32课',title:'SCHD深度研究：红利投资的科学与实战',shortTitle:'SCHD · 红利投资',duration:'110 min'},
+  {id:'voo-research',phase:6,tag:'第33课',title:'VOO深度研究：买入整个美国的科学与实战',shortTitle:'VOO · 买入整个美国',duration:'90 min'},
+  {id:'qqq-research',phase:6,tag:'第34课',title:'QQQ深度研究：科技成长的极致表达',shortTitle:'QQQ · 科技成长',duration:'90 min'},
+  {id:'vym-research',phase:6,tag:'第35课',title:'VYM深度研究：即时高收益的现金流逻辑',shortTitle:'VYM · 即时高收益',duration:'75 min'},
+  {id:'dgro-research',phase:6,tag:'第36课',title:'DGRO深度研究：股息成长的科技融合版本',shortTitle:'DGRO · 股息成长',duration:'75 min'},
+  {id:'bnd-research',phase:6,tag:'第37课',title:'BND深度研究：组合减震器的科学与心理学',shortTitle:'BND · 组合减震器',duration:'80 min'},
+  {id:'tips-research',phase:6,tag:'第38课',title:'TIPS深度研究：购买力守护者的运作机制',shortTitle:'TIPS · 购买力守护',duration:'70 min'},
+  {id:'gld-research',phase:6,tag:'第39课',title:'GLD深度研究：黄金的真实价值与投资逻辑',shortTitle:'GLD · 黄金价值',duration:'70 min'},
+  {id:'aapl-research',phase:6,tag:'第40课',title:'AAPL深度研究：消费品帝国的护城河与增长引擎',shortTitle:'AAPL · 消费品帝国',duration:'90 min'},
+  {id:'audio-commute',phase:6,tag:'🎧 通勤彩蛋',title:'通勤学习指南：投资播客音频路线图',shortTitle:'通勤学习路线图',duration:'上下班时间'},
   {id:'hk-fund-career',phase:7,phaseLabel:'第七阶段：香港金融职涯',tag:'🏦 专题一',title:'科技工程师入场香港私募基金：从入场券到职涯规划',duration:'90 min'},
   {id:'hk-quant-roadmap',phase:7,tag:'📐 专题二',title:'量化研究员完整技能图谱：数学·编程·策略三线攻克',duration:'120 min'},
   {id:'hk-english-strategy',phase:7,tag:'🗣️ 专题三',title:'金融英语快速达标：英语差的人专属180天方案',duration:'60 min'},
@@ -369,7 +374,8 @@ const subgroupMap = {
   'influencers':'sg-leaders','value-wisdom':'sg-leaders','damodaran-analysis':'sg-leaders',
   'farnam-mental-models':'sg-leaders','howard-marks-memos':'sg-leaders','ben-felix':'sg-leaders',
   'tools-platforms':'sg-tools','action-plan':'sg-tools','tech-moat-framework':'sg-tools',
-  'qqq-spy-research':'sg-etf','passive-academic':'sg-etf','schd-research':'sg-etf',
+  'passive-academic':'sg-tools',
+  'qqq-spy-research':'sg-etf','schd-research':'sg-etf',
   'voo-research':'sg-etf','qqq-research':'sg-etf','vym-research':'sg-etf',
   'dgro-research':'sg-etf','bnd-research':'sg-etf','tips-research':'sg-etf',
   'gld-research':'sg-etf','aapl-research':'sg-etf',
@@ -381,6 +387,19 @@ const subgroupLabels = {
   'sg-etf':'📊 ETF & 个股研究',
   'sg-audio':'🎧 通勤音频路线'
 };
+const collapsedSubgroups = new Set(['sg-etf']);
+
+function toggleSubgroup(sg, e){
+  e.stopPropagation();
+  if(collapsedSubgroups.has(sg)){
+    collapsedSubgroups.delete(sg);
+  } else {
+    // 若当前活动课在该子组内，不允许折叠
+    if(subgroupMap[curriculum[currentIndex].id]===sg) return;
+    collapsedSubgroups.add(sg);
+  }
+  renderNav();
+}
 
 function renderNav(){
   const menu=document.getElementById('navMenu');
@@ -418,11 +437,19 @@ function renderNav(){
       lastPhase=item.phase;
     }
 
-    // phase 6 子分组
     const sg=subgroupMap[item.id];
     if(sg&&sg!==lastSubgroup){
       if(lastSubgroup) html+='</div>';
-      html+=`<div class="sub-group"><div class="sub-group-label">${subgroupLabels[sg]||''}</div>`;
+      // 统计该子组的课数和完成数
+      const sgItems=curriculum.filter(c=>subgroupMap[c.id]===sg);
+      const sgTotal=sgItems.length;
+      const sgDone=sgItems.filter(c=>completed.has(c.id)).length;
+      const sgCollapsed=collapsedSubgroups.has(sg);
+      html+=`<div class="sub-group ${sgCollapsed?'sg-collapsed':''}">`;
+      html+=`<div class="sub-group-label" onclick="toggleSubgroup('${sg}',event)">`;
+      html+=`<span>${subgroupLabels[sg]||''}</span>`;
+      html+=`<span><span class="sg-count">${sgDone}/${sgTotal}</span><span class="sg-arrow">▾</span></span>`;
+      html+=`</div>`;
       lastSubgroup=sg;
     } else if(!sg&&lastSubgroup){
       html+='</div>';lastSubgroup=null;
@@ -430,9 +457,10 @@ function renderNav(){
 
     const isActive=idx===currentIndex;
     const isDone=completed.has(item.id);
+    const displayTitle=item.shortTitle||item.title;
     html+=`<div class="nav-item ${isActive?'active':''} ${isDone&&!isActive?'completed':''}" onclick="goTo(${idx})">
       <div class="nav-icon">${isDone?'✓':(item.phase===0?'🏠':item.tag.replace('第','').replace('课',''))}</div>
-      <span class="nav-title">${item.title}</span>
+      <span class="nav-title">${displayTitle}</span>
       <span class="nav-tag">${item.duration}</span>
     </div>`;
   });
@@ -449,6 +477,8 @@ function renderNav(){
 function goTo(idx){
   currentIndex=idx;
   collapsedPhases.delete(curriculum[idx].phase); // 自动展开目标 phase
+  const sg=subgroupMap[curriculum[idx].id];
+  if(sg) collapsedSubgroups.delete(sg); // 自动展开目标子分组
   const lessonId = curriculum[idx].id;
   window.location.hash = 'lesson-' + lessonId;
   localStorage.setItem('usstock_current_lesson', lessonId);
@@ -11534,6 +11564,8 @@ return C[id]||'<p>内容准备中...</p>';
 // 页面初始化：恢复上次浏览位置
 currentIndex = restorePosition();
 collapsedPhases.delete(curriculum[currentIndex].phase); // 展开当前所在 phase
+const _initSg=subgroupMap[curriculum[currentIndex].id];
+if(_initSg) collapsedSubgroups.delete(_initSg); // 展开当前所在子分组
 renderNav();
 renderContent();
 
