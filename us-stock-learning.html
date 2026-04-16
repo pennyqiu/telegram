@@ -336,6 +336,7 @@ const curriculum=[
   {id:'hk-sfc-license',phase:7,tag:'📋 专题四',title:'SFC 牌照完全备考手册：LE Paper 1 & 2 实战指南',shortTitle:'SFC 牌照备考实战手册',duration:'60 min'},
   {id:'hk-cfa-guide',phase:7,tag:'🎓 专题五',title:'CFA 完全备考手册：42岁在职转型专项指南',shortTitle:'CFA 备考与转型指南',duration:'90 min'},
   {id:'hk-sfc-cfa-roadmap',phase:7,tag:'🗺️ 专题六',title:'SFC + CFA 联合备考路线图：一条路走到底不走回头路',shortTitle:'SFC+CFA 联合备考路线',duration:'30 min'},
+  {id:'hk-quant-tools',phase:7,tag:'🛠️ 专题七',title:'量化项目技术栈实战手册：8个核心库从零到上手',shortTitle:'量化技术栈实战手册',duration:'60 min'},
 ];
 
 let currentIndex=0;
@@ -783,7 +784,7 @@ function getWelcome(){return`<div class="welcome-screen">
   <h1>📈 美股系统学习路径<br>完整版 · 约30小时课程</h1>
   <p>专为互联网从业者设计的深度美股学习体系。42岁，年入150万，持有800万股票——<br>本课程将帮助你系统掌握美股投资，构建能穿越30年的养老组合。</p>
   <div class="welcome-stats">
-    <div class="welcome-stat"><div class="welcome-stat-num">44</div><div class="welcome-stat-label">课程节数</div></div>
+    <div class="welcome-stat"><div class="welcome-stat-num">45</div><div class="welcome-stat-label">课程节数</div></div>
     <div class="welcome-stat"><div class="welcome-stat-num">~60h</div><div class="welcome-stat-label">总学习时长</div></div>
     <div class="welcome-stat"><div class="welcome-stat-num">7</div><div class="welcome-stat-label">学习阶段</div></div>
     <div class="welcome-stat"><div class="welcome-stat-num">6</div><div class="welcome-stat-label">完整估值案例</div></div>
@@ -10610,14 +10611,34 @@ BND让跌幅变成-15%，<span class="hl">大多数人能撑住-15%</span>。
 <h3>④ 量化项目（工程师的杀手锏）</h3>
 <div style="background:linear-gradient(135deg,#f5f3ff,#ede9fe);border:1.5px solid #c4b5fd;border-radius:14px;padding:20px 24px;margin:16px 0">
 <strong style="color:#6d28d9;font-size:15px">🔥 你最强的差异化武器</strong>
-<p style="font-size:13px;color:#374151;line-height:1.8;margin-top:8px">一个放在 GitHub 上的实际量化策略项目，价值远超一张 CFA 证书。内容包括：数据获取 → 信号构建 → 回测 → 风险调整收益 → Sharpe Ratio 计算。即便策略不赚钱，<strong>展示出你会这套流程就是入场券</strong>。</p>
+<p style="font-size:13px;color:#374151;line-height:1.8;margin-top:8px">一个放在 GitHub 上的实际量化策略项目，价值远超一张 CFA 证书。内容包括：数据获取 → 信号构建 → 回测 → 风险调整收益 → Sharpe Ratio 计算。即便策略不赚钱，<strong>展示出你会这套流程就是入场券</strong>。<br>→ 每个工具的学习方法见「<strong>专题七：量化项目技术栈实战手册</strong>」</p>
 <div class="table-wrap" style="margin-top:14px"><table>
-<thead><tr><th>项目方向</th><th>技术栈</th><th>难度</th><th>面试加成</th></tr></thead>
+<thead><tr><th>项目方向</th><th>核心工具（默认 Python 环境）</th><th>工具说明</th><th>难度</th><th>面试加成</th></tr></thead>
 <tbody>
-<tr><td>动量/均值回归策略</td><td>Python + pandas + yfinance</td><td>⭐⭐</td><td>高</td></tr>
-<tr><td>Fama-French 因子模型复现</td><td>Python + statsmodels</td><td>⭐⭐⭐</td><td>很高</td></tr>
-<tr><td>机器学习选股模型</td><td>sklearn + XGBoost</td><td>⭐⭐⭐</td><td>很高</td></tr>
-<tr><td>科技股板块轮动策略</td><td>Python + Alpaca API</td><td>⭐⭐⭐</td><td>极高（结合你的行业认知）</td></tr>
+<tr>
+  <td><strong>动量 / 均值回归策略</strong></td>
+  <td><code>pandas</code> + <code>yfinance</code> + <code>backtrader</code></td>
+  <td>pandas 处理价格时间序列；yfinance 免费拉取历史行情；backtrader 做事件驱动回测</td>
+  <td>⭐⭐</td><td>高</td>
+</tr>
+<tr>
+  <td><strong>Fama-French 因子模型复现</strong></td>
+  <td><code>statsmodels</code> + <code>alphalens</code></td>
+  <td>statsmodels 做多元 OLS 因子回归；alphalens 分析因子 IC / 分位数收益 / 衰减曲线（面试必问）</td>
+  <td>⭐⭐⭐</td><td>很高</td>
+</tr>
+<tr>
+  <td><strong>机器学习选股模型</strong></td>
+  <td><code>scikit-learn</code> + <code>XGBoost</code> + <code>pyfolio</code></td>
+  <td>sklearn 特征工程 + 时序交叉验证；XGBoost 非线性建模；pyfolio 生成专业的组合绩效报告（Sharpe / Drawdown / 年化）</td>
+  <td>⭐⭐⭐</td><td>很高</td>
+</tr>
+<tr>
+  <td><strong>科技股板块轮动策略</strong></td>
+  <td><code>Alpaca API</code> + <code>vectorbt</code></td>
+  <td>Alpaca 提供免费纸交易账户 + REST API 下单；vectorbt 向量化回测（比 backtrader 快 100 倍），适合科技股轮动信号快速验证</td>
+  <td>⭐⭐⭐</td><td>极高（结合你的行业认知）</td>
+</tr>
 </tbody></table></div>
 </div>
 
@@ -13143,6 +13164,477 @@ HKSI 考试中心在工作日（周一至周五）和<strong>周六上午</stron
   <div style="font-size:13px;opacity:.75;margin-top:14px;line-height:1.8">
     总节省时间：约 <strong style="color:#fbbf24">35-45 小时</strong>（与分开独立备考相比）<br>
     最重要的是：<strong style="color:#86efac">每一步都建立在上一步之上，没有任何重复和回头路</strong>
+  </div>
+</div>
+`,
+
+// =====================================================================
+'hk-quant-tools':`
+<div style="background:linear-gradient(135deg,#0f172a,#1e1b4b,#312e81);border-radius:16px;padding:28px 32px;margin-bottom:28px;color:#fff">
+  <div style="font-size:12px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:8px">量化项目技术栈实战手册</div>
+  <div style="font-size:24px;font-weight:900;line-height:1.3;margin-bottom:10px">8 个核心库<br>从装包到能写项目</div>
+  <div style="font-size:14px;color:rgba(255,255,255,.75);line-height:1.8">工程师最大的优势是学库快。这份手册的目标不是教你所有功能，而是让你用<strong style="color:#a5b4fc">最少的时间通过门槛</strong>：知道它是什么、装好、跑通第一段代码、知道去哪里深入。每个库都给出「5分钟上手」的最小可运行示例。</div>
+</div>
+
+<div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:14px 18px;margin-bottom:20px;font-size:13px">
+<strong style="color:#1e293b">🗺️ 8 个库的定位全图</strong>
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px">
+  <div style="background:#fff;border-radius:8px;padding:10px;border:1.5px solid #2563eb;text-align:center">
+    <div style="font-weight:700;color:#2563eb;font-size:12px">数据层</div>
+    <div style="font-size:11px;color:#374151;margin-top:4px;line-height:1.6"><code>pandas</code><br><code>yfinance</code></div>
+  </div>
+  <div style="background:#fff;border-radius:8px;padding:10px;border:1.5px solid #059669;text-align:center">
+    <div style="font-weight:700;color:#059669;font-size:12px">统计建模层</div>
+    <div style="font-size:11px;color:#374151;margin-top:4px;line-height:1.6"><code>statsmodels</code><br><code>alphalens</code></div>
+  </div>
+  <div style="background:#fff;border-radius:8px;padding:10px;border:1.5px solid #7c3aed;text-align:center">
+    <div style="font-weight:700;color:#7c3aed;font-size:12px">机器学习层</div>
+    <div style="font-size:11px;color:#374151;margin-top:4px;line-height:1.6"><code>scikit-learn</code><br><code>XGBoost</code></div>
+  </div>
+  <div style="background:#fff;border-radius:8px;padding:10px;border:1.5px solid #d97706;text-align:center">
+    <div style="font-weight:700;color:#d97706;font-size:12px">回测 & 执行层</div>
+    <div style="font-size:11px;color:#374151;margin-top:4px;line-height:1.6"><code>backtrader</code><br><code>vectorbt</code><br><code>Alpaca API</code><br><code>pyfolio</code></div>
+  </div>
+</div>
+</div>
+
+<!-- ===== 1. pandas ===== -->
+<div style="background:#fff;border:2px solid #2563eb;border-radius:16px;overflow:hidden;margin:18px 0">
+<div style="background:linear-gradient(135deg,#1e3a5f,#2563eb);padding:14px 20px;color:#fff;display:flex;justify-content:space-between;align-items:center">
+  <div><div style="font-size:11px;opacity:.7;letter-spacing:1px">数据层 · 第一个必学</div><div style="font-weight:900;font-size:16px">① pandas</div></div>
+  <code style="background:rgba(255,255,255,.15);padding:4px 10px;border-radius:6px;font-size:12px">pip install pandas</code>
+</div>
+<div style="padding:18px 20px;display:grid;grid-template-columns:1fr 1fr;gap:16px;font-size:13px">
+  <div>
+    <div style="font-weight:700;color:#1e3a5f;margin-bottom:8px">是什么 / 用来做什么</div>
+    <p style="color:#374151;line-height:1.8;margin:0 0 10px 0">量化研究的「数据操作台」。所有的股价数据、因子数据、收益序列，都以 DataFrame（二维表）的形式存在 pandas 里。你每天最多时间都在用它。<br><br>
+    工程师类比：相当于金融数据的 SQL + Excel，但代码化、可重现。</p>
+    <div style="font-weight:700;color:#1e3a5f;margin-bottom:6px">量化中最常用的操作</div>
+    <ul style="margin:0;padding-left:16px;line-height:2;color:#374151">
+      <li><code>pct_change()</code> — 价格序列转收益率</li>
+      <li><code>rolling(20).mean()</code> — 20日均线</li>
+      <li><code>shift(1)</code> — 昨日价格（防止未来数据）</li>
+      <li><code>corr()</code> — 股票间相关性矩阵</li>
+      <li><code>resample('M')</code> — 日线转月线</li>
+    </ul>
+  </div>
+  <div>
+    <div style="font-weight:700;color:#1e3a5f;margin-bottom:8px">⚡ 5 分钟上手示例</div>
+    <div style="background:#1e293b;border-radius:8px;padding:14px;font-family:monospace;font-size:12px;line-height:1.9;color:#e2e8f0">
+<span style="color:#94a3b8">import</span> pandas <span style="color:#94a3b8">as</span> pd<br>
+<span style="color:#94a3b8">import</span> yfinance <span style="color:#94a3b8">as</span> yf<br><br>
+<span style="color:#86efac"># 下载苹果5年日线数据</span><br>
+df = yf.download(<span style="color:#fbbf24">'AAPL'</span>, period=<span style="color:#fbbf24">'5y'</span>)<br><br>
+<span style="color:#86efac"># 计算日收益率</span><br>
+df[<span style="color:#fbbf24">'returns'</span>] = df[<span style="color:#fbbf24">'Close'</span>].pct_change()<br><br>
+<span style="color:#86efac"># 20日移动平均</span><br>
+df[<span style="color:#fbbf24">'ma20'</span>] = df[<span style="color:#fbbf24">'Close'</span>].rolling(20).mean()<br><br>
+<span style="color:#86efac"># 年化波动率</span><br>
+vol = df[<span style="color:#fbbf24">'returns'</span>].std() * (252**0.5)<br>
+print(<span style="color:#fbbf24">f'年化波动率: {vol:.2%}'</span>)
+    </div>
+    <div style="margin-top:10px">
+      <div style="font-weight:700;color:#1e3a5f;margin-bottom:6px">深入学习资源</div>
+      <ul style="margin:0;padding-left:16px;line-height:2;color:#374151">
+        <li><a href="https://www.kaggle.com/learn/pandas" target="_blank" style="color:#2563eb">Kaggle Pandas 免费课</a>（4小时，最好的入门）</li>
+        <li>官方文档 pandas.pydata.org（查函数用）</li>
+        <li>《Python for Data Analysis》Wes McKinney 著（作者就是 pandas 创始人）</li>
+      </ul>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===== 2. yfinance ===== -->
+<div style="background:#fff;border:2px solid #0891b2;border-radius:16px;overflow:hidden;margin:18px 0">
+<div style="background:linear-gradient(135deg,#164e63,#0891b2);padding:14px 20px;color:#fff;display:flex;justify-content:space-between;align-items:center">
+  <div><div style="font-size:11px;opacity:.7;letter-spacing:1px">数据层 · 免费行情数据</div><div style="font-weight:900;font-size:16px">② yfinance</div></div>
+  <code style="background:rgba(255,255,255,.15);padding:4px 10px;border-radius:6px;font-size:12px">pip install yfinance</code>
+</div>
+<div style="padding:18px 20px;display:grid;grid-template-columns:1fr 1fr;gap:16px;font-size:13px">
+  <div>
+    <div style="font-weight:700;color:#164e63;margin-bottom:8px">是什么 / 用来做什么</div>
+    <p style="color:#374151;line-height:1.8;margin:0 0 10px 0">Yahoo Finance 数据 API 的 Python 封装。<strong>免费</strong>获取美股、ETF、指数的历史日线数据（最长30年+）、财务数据、股息数据。个人项目的首选数据源，无需注册 API Key。<br><br>局限：有时会有数据缺失，不适合高频（分钟级以下）数据。</p>
+    <div style="font-weight:700;color:#164e63;margin-bottom:6px">替代 / 补充数据源</div>
+    <ul style="margin:0;padding-left:16px;line-height:2;color:#374151">
+      <li><strong>akshare</strong>：A股数据首选，免费，覆盖沪深港</li>
+      <li><strong>tushare</strong>：A股数据，需积分，数据质量高</li>
+      <li><strong>Alpaca Data API</strong>：美股分钟级数据，免费账户可用</li>
+      <li><strong>Quandl/NASDAQ Data Link</strong>：宏观/基本面数据</li>
+    </ul>
+  </div>
+  <div>
+    <div style="font-weight:700;color:#164e63;margin-bottom:8px">⚡ 5 分钟上手示例</div>
+    <div style="background:#1e293b;border-radius:8px;padding:14px;font-family:monospace;font-size:12px;line-height:1.9;color:#e2e8f0">
+<span style="color:#94a3b8">import</span> yfinance <span style="color:#94a3b8">as</span> yf<br><br>
+<span style="color:#86efac"># 下载多只股票（组合）</span><br>
+tickers = [<span style="color:#fbbf24">'AAPL','MSFT','NVDA','QQQ'</span>]<br>
+data = yf.download(tickers, period=<span style="color:#fbbf24">'3y'</span>)[<span style="color:#fbbf24">'Close'</span>]<br><br>
+<span style="color:#86efac"># 获取单股详细信息</span><br>
+aapl = yf.Ticker(<span style="color:#fbbf24">'AAPL'</span>)<br>
+info = aapl.info  <span style="color:#94a3b8"># PE ratio, market cap...</span><br>
+hist = aapl.history(period=<span style="color:#fbbf24">'1y'</span>)<br>
+divs = aapl.dividends  <span style="color:#94a3b8"># 历史分红</span><br><br>
+<span style="color:#86efac"># 计算相关性矩阵</span><br>
+returns = data.pct_change().dropna()<br>
+print(returns.corr().round(2))
+    </div>
+    <div style="margin-top:10px">
+      <div style="font-weight:700;color:#164e63;margin-bottom:6px">深入学习</div>
+      <ul style="margin:0;padding-left:16px;line-height:2;color:#374151">
+        <li>GitHub: ranaroussi/yfinance（官方文档，直接看 README）</li>
+        <li>注意事项：数据有时有缺口，生产环境建议本地缓存</li>
+      </ul>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===== 3. statsmodels ===== -->
+<div style="background:#fff;border:2px solid #059669;border-radius:16px;overflow:hidden;margin:18px 0">
+<div style="background:linear-gradient(135deg,#14532d,#059669);padding:14px 20px;color:#fff;display:flex;justify-content:space-between;align-items:center">
+  <div><div style="font-size:11px;opacity:.7;letter-spacing:1px">统计建模层 · 因子回归必备</div><div style="font-weight:900;font-size:16px">③ statsmodels</div></div>
+  <code style="background:rgba(255,255,255,.15);padding:4px 10px;border-radius:6px;font-size:12px">pip install statsmodels</code>
+</div>
+<div style="padding:18px 20px;display:grid;grid-template-columns:1fr 1fr;gap:16px;font-size:13px">
+  <div>
+    <div style="font-weight:700;color:#14532d;margin-bottom:8px">是什么 / 用来做什么</div>
+    <p style="color:#374151;line-height:1.8;margin:0 0 10px 0">学术级统计建模库。量化研究里最核心的用途是<strong>因子回归</strong>——把股票收益率对各种因子（市场、规模、价值、动量）做 OLS 回归，得到 Alpha 和 Beta 暴露。Fama-French 复现离不开它。<br><br>工程师类比：相当于金融版的 scipy.stats，但输出的是标准学术统计报告。</p>
+    <div style="font-weight:700;color:#14532d;margin-bottom:6px">量化中的核心用途</div>
+    <ul style="margin:0;padding-left:16px;line-height:2;color:#374151">
+      <li><strong>OLS 多元回归</strong>：计算股票对各因子的暴露（Beta）</li>
+      <li><strong>t 检验 / p 值</strong>：判断因子是否显著</li>
+      <li><strong>时间序列分析</strong>：ADF 单位根检验（均值回归）、协整检验</li>
+      <li><strong>ARIMA</strong>：预测时间序列（进阶）</li>
+    </ul>
+  </div>
+  <div>
+    <div style="font-weight:700;color:#14532d;margin-bottom:8px">⚡ Fama-French 三因子回归（核心示例）</div>
+    <div style="background:#1e293b;border-radius:8px;padding:14px;font-family:monospace;font-size:12px;line-height:1.9;color:#e2e8f0">
+<span style="color:#94a3b8">import</span> statsmodels.api <span style="color:#94a3b8">as</span> sm<br>
+<span style="color:#94a3b8">import</span> pandas <span style="color:#94a3b8">as</span> pd<br><br>
+<span style="color:#86efac"># ff_data 含 Mkt-RF, SMB, HML, RF 列</span><br>
+<span style="color:#86efac"># stock_ret 是目标股票月收益率</span><br><br>
+excess_ret = stock_ret - ff_data[<span style="color:#fbbf24">'RF'</span>]<br>
+X = ff_data[[<span style="color:#fbbf24">'Mkt-RF'</span>,<span style="color:#fbbf24">'SMB'</span>,<span style="color:#fbbf24">'HML'</span>]]<br>
+X = sm.add_constant(X)  <span style="color:#94a3b8"># 加截距</span><br><br>
+model = sm.OLS(excess_ret, X).fit()<br>
+print(model.summary())<br>
+<span style="color:#86efac"># 输出：Alpha(const)、各因子Beta</span><br>
+<span style="color:#86efac"># R-squared、t值、p值</span>
+    </div>
+    <div style="margin-top:10px">
+      <div style="font-weight:700;color:#14532d;margin-bottom:6px">深入学习</div>
+      <ul style="margin:0;padding-left:16px;line-height:2;color:#374151">
+        <li>Fama-French 因子数据下载：<a href="https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html" target="_blank" style="color:#059669">Ken French Data Library</a>（免费）</li>
+        <li>statsmodels 官方文档：statsmodels.org（OLS 部分即可）</li>
+      </ul>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===== 4. alphalens ===== -->
+<div style="background:#fff;border:2px solid #0369a1;border-radius:16px;overflow:hidden;margin:18px 0">
+<div style="background:linear-gradient(135deg,#0c4a6e,#0369a1);padding:14px 20px;color:#fff;display:flex;justify-content:space-between;align-items:center">
+  <div><div style="font-size:11px;opacity:.7;letter-spacing:1px">统计建模层 · 因子分析报告</div><div style="font-weight:900;font-size:16px">④ alphalens-reloaded</div></div>
+  <code style="background:rgba(255,255,255,.15);padding:4px 10px;border-radius:6px;font-size:12px">pip install alphalens-reloaded</code>
+</div>
+<div style="padding:18px 20px;display:grid;grid-template-columns:1fr 1fr;gap:16px;font-size:13px">
+  <div>
+    <div style="font-weight:700;color:#0c4a6e;margin-bottom:8px">是什么 / 用来做什么</div>
+    <p style="color:#374151;line-height:1.8;margin:0 0 10px 0">Quantopian 开源的因子分析框架（现维护版叫 alphalens-reloaded）。你写了一个因子（比如动量得分），丢进去，它自动给你出一份专业报告：<strong>IC 值、分位数收益、因子衰减曲线、换手率</strong>。这是量化基金面试中最常被问到的分析框架。</p>
+    <div style="font-weight:700;color:#0c4a6e;margin-bottom:6px">关键输出指标（面试必须会讲）</div>
+    <ul style="margin:0;padding-left:16px;line-height:2;color:#374151">
+      <li><strong>IC（Information Coefficient）</strong>：因子预测能力，|IC| > 0.05 就有价值</li>
+      <li><strong>ICIR（IC / IC 标准差）</strong>：因子稳定性，越高越好</li>
+      <li><strong>分位数收益</strong>：最高分位组 - 最低分位组的多空收益</li>
+      <li><strong>因子衰减</strong>：信号多少天后失效（指导调仓频率）</li>
+    </ul>
+  </div>
+  <div>
+    <div style="font-weight:700;color:#0c4a6e;margin-bottom:8px">⚡ 5 分钟上手示例</div>
+    <div style="background:#1e293b;border-radius:8px;padding:14px;font-family:monospace;font-size:12px;line-height:1.9;color:#e2e8f0">
+<span style="color:#94a3b8">import</span> alphalens <span style="color:#94a3b8">as</span> al<br><br>
+<span style="color:#86efac"># factor_data: index=(日期,股票), value=因子值</span><br>
+<span style="color:#86efac"># prices: 股票价格DataFrame</span><br><br>
+<span style="color:#86efac"># 准备数据</span><br>
+factor_data = al.utils.get_clean_factor_and_forward_returns(<br>
+    factor,        <span style="color:#94a3b8"># 你的因子</span><br>
+    prices,        <span style="color:#94a3b8"># 价格数据</span><br>
+    periods=(1,5,10)  <span style="color:#94a3b8"># 预测1/5/10天后收益</span><br>
+)<br><br>
+<span style="color:#86efac"># 一行出完整报告</span><br>
+al.tears.create_full_tear_sheet(factor_data)
+    </div>
+    <div style="margin-top:10px">
+      <div style="font-weight:700;color:#0c4a6e;margin-bottom:6px">深入学习</div>
+      <ul style="margin:0;padding-left:16px;line-height:2;color:#374151">
+        <li>GitHub: stefan-jansen/alphalens-reloaded（README 有完整示例）</li>
+        <li>把 IC > 0.05、ICIR > 0.3 作为因子有效的基准线</li>
+      </ul>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===== 5. scikit-learn ===== -->
+<div style="background:#fff;border:2px solid #7c3aed;border-radius:16px;overflow:hidden;margin:18px 0">
+<div style="background:linear-gradient(135deg,#4c1d95,#7c3aed);padding:14px 20px;color:#fff;display:flex;justify-content:space-between;align-items:center">
+  <div><div style="font-size:11px;opacity:.7;letter-spacing:1px">机器学习层 · 特征工程核心</div><div style="font-weight:900;font-size:16px">⑤ scikit-learn</div></div>
+  <code style="background:rgba(255,255,255,.15);padding:4px 10px;border-radius:6px;font-size:12px">pip install scikit-learn</code>
+</div>
+<div style="padding:18px 20px;display:grid;grid-template-columns:1fr 1fr;gap:16px;font-size:13px">
+  <div>
+    <div style="font-weight:700;color:#4c1d95;margin-bottom:8px">是什么 / 用来做什么</div>
+    <p style="color:#374151;line-height:1.8;margin:0 0 10px 0">Python 机器学习标准库，API 极其统一（fit → predict）。在量化里用来做<strong>股票分类预测</strong>（下周涨/跌）和<strong>特征工程</strong>（标准化、降维）。<br><br>⚠️ <strong>金融数据的关键坑：绝对不能用随机切分（train_test_split）</strong>，必须用 <code>TimeSeriesSplit</code> 按时间顺序切，否则用了未来数据，回测结果虚假。</p>
+    <div style="font-weight:700;color:#4c1d95;margin-bottom:6px">量化中常用的模型 & 工具</div>
+    <ul style="margin:0;padding-left:16px;line-height:2;color:#374151">
+      <li><strong>RandomForestClassifier</strong>：预测涨跌，内置特征重要性</li>
+      <li><strong>StandardScaler</strong>：特征标准化（因子截面中性化）</li>
+      <li><strong>PCA</strong>：降维，提取主因子</li>
+      <li><strong>TimeSeriesSplit</strong>：时间序列交叉验证（必用）</li>
+      <li><strong>Pipeline</strong>：特征工程 + 模型串联，防止数据泄露</li>
+    </ul>
+  </div>
+  <div>
+    <div style="font-weight:700;color:#4c1d95;margin-bottom:8px">⚡ 核心示例（时间序列正确切法）</div>
+    <div style="background:#1e293b;border-radius:8px;padding:14px;font-family:monospace;font-size:12px;line-height:1.9;color:#e2e8f0">
+<span style="color:#94a3b8">from</span> sklearn.ensemble <span style="color:#94a3b8">import</span> RandomForestClassifier<br>
+<span style="color:#94a3b8">from</span> sklearn.model_selection <span style="color:#94a3b8">import</span> TimeSeriesSplit<br>
+<span style="color:#94a3b8">from</span> sklearn.preprocessing <span style="color:#94a3b8">import</span> StandardScaler<br>
+<span style="color:#94a3b8">from</span> sklearn.pipeline <span style="color:#94a3b8">import</span> Pipeline<br><br>
+<span style="color:#86efac"># X: 特征（动量/估值/技术指标）</span><br>
+<span style="color:#86efac"># y: 标签（1=下月涨, 0=跌）</span><br><br>
+pipe = Pipeline([<br>
+    (<span style="color:#fbbf24">'scaler'</span>, StandardScaler()),<br>
+    (<span style="color:#fbbf24">'clf'</span>, RandomForestClassifier(n_estimators=100))<br>
+])<br><br>
+tscv = TimeSeriesSplit(n_splits=5)<br>
+<span style="color:#94a3b8">for</span> train_idx, test_idx <span style="color:#94a3b8">in</span> tscv.split(X):<br>
+    pipe.fit(X.iloc[train_idx], y.iloc[train_idx])<br>
+    score = pipe.score(X.iloc[test_idx], y.iloc[test_idx])<br>
+    print(<span style="color:#fbbf24">f'准确率: {score:.2%}'</span>)
+    </div>
+    <div style="margin-top:10px">
+      <div style="font-weight:700;color:#4c1d95;margin-bottom:6px">深入学习</div>
+      <ul style="margin:0;padding-left:16px;line-height:2;color:#374151">
+        <li><a href="https://scikit-learn.org/stable/tutorial" target="_blank" style="color:#7c3aed">sklearn 官方教程</a>（人类写过最好的 ML 入门文档）</li>
+        <li>Kaggle Intro to Machine Learning（免费，4小时）</li>
+      </ul>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===== 6. XGBoost ===== -->
+<div style="background:#fff;border:2px solid #dc2626;border-radius:16px;overflow:hidden;margin:18px 0">
+<div style="background:linear-gradient(135deg,#991b1b,#dc2626);padding:14px 20px;color:#fff;display:flex;justify-content:space-between;align-items:center">
+  <div><div style="font-size:11px;opacity:.7;letter-spacing:1px">机器学习层 · Kaggle 竞赛冠军算法</div><div style="font-weight:900;font-size:16px">⑥ XGBoost</div></div>
+  <code style="background:rgba(255,255,255,.15);padding:4px 10px;border-radius:6px;font-size:12px">pip install xgboost</code>
+</div>
+<div style="padding:18px 20px;display:grid;grid-template-columns:1fr 1fr;gap:16px;font-size:13px">
+  <div>
+    <div style="font-weight:700;color:#991b1b;margin-bottom:8px">是什么 / 用来做什么</div>
+    <p style="color:#374151;line-height:1.8;margin:0 0 10px 0">梯度提升树算法的最强实现，2015年以来在 Kaggle 结构化数据竞赛中屡次夺冠。在量化里用于<strong>非线性特征建模</strong>：给每只股票打「未来收益分」，比线性因子模型能捕捉更复杂的交互关系。<br><br>内置的 <strong>feature_importance_</strong> 属性告诉你哪些特征（因子）最有预测力——面试中直接拿这个图讲。</p>
+    <div style="font-weight:700;color:#991b1b;margin-bottom:6px">关键超参数</div>
+    <ul style="margin:0;padding-left:16px;line-height:2;color:#374151">
+      <li><code>n_estimators</code>：树的数量（100-500）</li>
+      <li><code>max_depth</code>：树深度（3-6，防过拟合）</li>
+      <li><code>learning_rate</code>：步长（0.01-0.1）</li>
+      <li><code>early_stopping_rounds</code>：自动防过拟合（必开）</li>
+      <li><code>subsample</code>：样本采样比例（0.8，防过拟合）</li>
+    </ul>
+  </div>
+  <div>
+    <div style="font-weight:700;color:#991b1b;margin-bottom:8px">⚡ 股票评分模型示例</div>
+    <div style="background:#1e293b;border-radius:8px;padding:14px;font-family:monospace;font-size:12px;line-height:1.9;color:#e2e8f0">
+<span style="color:#94a3b8">import</span> xgboost <span style="color:#94a3b8">as</span> xgb<br>
+<span style="color:#94a3b8">import</span> matplotlib.pyplot <span style="color:#94a3b8">as</span> plt<br><br>
+model = xgb.XGBRegressor(<br>
+    n_estimators=300,<br>
+    max_depth=4,<br>
+    learning_rate=0.05,<br>
+    subsample=0.8,<br>
+    early_stopping_rounds=20<br>
+)<br><br>
+model.fit(X_train, y_train,<br>
+    eval_set=[(X_val, y_val)],<br>
+    verbose=<span style="color:#fbbf24">False</span>)<br><br>
+<span style="color:#86efac"># 特征重要性图（面试必备）</span><br>
+xgb.plot_importance(model, max_num_features=10)<br>
+plt.show()
+    </div>
+    <div style="margin-top:10px">
+      <div style="font-weight:700;color:#991b1b;margin-bottom:6px">深入学习</div>
+      <ul style="margin:0;padding-left:16px;line-height:2;color:#374151">
+        <li>xgboost.readthedocs.io（官方文档）</li>
+        <li>Kaggle Intermediate ML 课（有专门的 XGBoost 章节）</li>
+      </ul>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===== 7. backtrader / vectorbt ===== -->
+<div style="background:#fff;border:2px solid #d97706;border-radius:16px;overflow:hidden;margin:18px 0">
+<div style="background:linear-gradient(135deg,#92400e,#d97706);padding:14px 20px;color:#fff;display:flex;justify-content:space-between;align-items:center">
+  <div><div style="font-size:11px;opacity:.7;letter-spacing:1px">回测层 · 二选一</div><div style="font-weight:900;font-size:16px">⑦ backtrader（深度）/ vectorbt（快速）</div></div>
+  <code style="background:rgba(255,255,255,.15);padding:4px 10px;border-radius:6px;font-size:12px">pip install backtrader vectorbt</code>
+</div>
+<div style="padding:18px 20px;display:grid;grid-template-columns:1fr 1fr;gap:16px;font-size:13px">
+  <div>
+    <div style="font-weight:700;color:#92400e;margin-bottom:8px">如何选择？</div>
+    <div class="table-wrap"><table style="font-size:12px">
+    <thead><tr><th></th><th>backtrader</th><th>vectorbt</th></tr></thead>
+    <tbody>
+    <tr><td>范式</td><td>事件驱动（模拟真实交易）</td><td>向量化（超快速）</td></tr>
+    <tr><td>学习曲线</td><td>较陡，需理解 Strategy/Broker/Data 结构</td><td>平缓，pandas 操作感</td></tr>
+    <tr><td>速度</td><td>慢（逐条处理）</td><td>极快（numpy 矩阵运算）</td></tr>
+    <tr><td>适合</td><td>复杂交易逻辑（止损/仓位管理）</td><td>快速验证信号有效性</td></tr>
+    <tr><td>推荐场景</td><td>最终版本项目</td><td>探索阶段、参数扫描</td></tr>
+    </tbody></table></div>
+    <div style="background:#fffbeb;border-radius:8px;padding:10px;margin-top:10px">
+      <strong style="color:#92400e">建议：先用 vectorbt 跑通逻辑，确认有效后用 backtrader 做精细回测</strong>
+    </div>
+  </div>
+  <div>
+    <div style="font-weight:700;color:#92400e;margin-bottom:8px">⚡ vectorbt 5 分钟示例（动量策略）</div>
+    <div style="background:#1e293b;border-radius:8px;padding:14px;font-family:monospace;font-size:12px;line-height:1.9;color:#e2e8f0">
+<span style="color:#94a3b8">import</span> vectorbt <span style="color:#94a3b8">as</span> vbt<br><br>
+<span style="color:#86efac"># 下载数据</span><br>
+price = vbt.YFData.download(<span style="color:#fbbf24">'AAPL'</span>, period=<span style="color:#fbbf24">'5y'</span>).get(<span style="color:#fbbf24">'Close'</span>)<br><br>
+<span style="color:#86efac"># 生成信号：20日高点突破买入，低点跌破卖出</span><br>
+fast_ma = vbt.MA.run(price, 20)<br>
+entries = fast_ma.ma_crossed_above(price * 0.95)<br>
+exits   = fast_ma.ma_crossed_below(price * 1.05)<br><br>
+<span style="color:#86efac"># 回测（自动计算 Sharpe / Drawdown）</span><br>
+pf = vbt.Portfolio.from_signals(price, entries, exits)<br>
+print(pf.stats()[[<span style="color:#fbbf24">'Total Return [%]'</span>,<br>
+                   <span style="color:#fbbf24">'Sharpe Ratio'</span>,<br>
+                   <span style="color:#fbbf24">'Max Drawdown [%]'</span>]])
+    </div>
+    <div style="margin-top:10px">
+      <div style="font-weight:700;color:#92400e;margin-bottom:6px">深入学习</div>
+      <ul style="margin:0;padding-left:16px;line-height:2;color:#374151">
+        <li>vectorbt.pro（官方文档，免费部分足够入门）</li>
+        <li>backtrader.com（官方文档 + quickstart，5个示例跑完即入门）</li>
+      </ul>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===== 8. Alpaca API + pyfolio ===== -->
+<div style="background:#fff;border:2px solid #0f766e;border-radius:16px;overflow:hidden;margin:18px 0">
+<div style="background:linear-gradient(135deg,#134e4a,#0f766e);padding:14px 20px;color:#fff;display:flex;justify-content:space-between;align-items:center">
+  <div><div style="font-size:11px;opacity:.7;letter-spacing:1px">执行层 · 模拟交易 + 绩效报告</div><div style="font-weight:900;font-size:16px">⑧ Alpaca API + pyfolio</div></div>
+  <code style="background:rgba(255,255,255,.15);padding:4px 10px;border-radius:6px;font-size:12px">pip install alpaca-trade-api pyfolio-reloaded</code>
+</div>
+<div style="padding:18px 20px;display:grid;grid-template-columns:1fr 1fr;gap:16px;font-size:13px">
+  <div>
+    <div style="font-weight:700;color:#134e4a;margin-bottom:8px">Alpaca API — 让策略活起来</div>
+    <p style="color:#374151;line-height:1.8;margin:0 0 10px 0">美股免佣经纪商，提供完整的 REST + WebSocket API。<strong>Paper Trading 账户免费</strong>，用真实市场价格模拟下单，不会损失真钱——这是让你的策略从「回测」变成「实盘验证」的关键工具，也是面试时说「我在 paper trading 跑了 3 个月」的底气。</p>
+    <div style="font-weight:700;color:#134e4a;margin-bottom:6px">注册流程（5 分钟）</div>
+    <ol style="margin:0;padding-left:16px;line-height:2;color:#374151">
+      <li>alpaca.markets 注册账号（支持大陆邮箱）</li>
+      <li>选择 Paper Trading 模式</li>
+      <li>生成 API Key + Secret Key</li>
+      <li>pip install alpaca-trade-api，开始调用</li>
+    </ol>
+    <div style="font-weight:700;color:#134e4a;margin-top:10px;margin-bottom:6px">pyfolio — 一键出专业报告</div>
+    <p style="color:#374151;line-height:1.8;margin:0">把你的收益序列丢进去，自动生成：年化收益 / Sharpe / Sortino / 最大回撤 / 月度热力图 / 持仓分析。面试时把这张图打印出来，比任何语言表达都有力。</p>
+  </div>
+  <div>
+    <div style="font-weight:700;color:#134e4a;margin-bottom:8px">⚡ Alpaca 下单示例 + pyfolio 报告</div>
+    <div style="background:#1e293b;border-radius:8px;padding:14px;font-family:monospace;font-size:12px;line-height:1.9;color:#e2e8f0">
+<span style="color:#94a3b8">import</span> alpaca_trade_api <span style="color:#94a3b8">as</span> tradeapi<br>
+<span style="color:#94a3b8">import</span> pyfolio <span style="color:#94a3b8">as</span> pf<br><br>
+<span style="color:#86efac"># 连接 Paper Trading 账户</span><br>
+api = tradeapi.REST(<br>
+    <span style="color:#fbbf24">'YOUR_API_KEY'</span>,<br>
+    <span style="color:#fbbf24">'YOUR_SECRET'</span>,<br>
+    base_url=<span style="color:#fbbf24">'https://paper-api.alpaca.markets'</span><br>
+)<br><br>
+<span style="color:#86efac"># 买入 100 股苹果（Paper 模拟）</span><br>
+api.submit_order(<br>
+    symbol=<span style="color:#fbbf24">'AAPL'</span>, qty=100,<br>
+    side=<span style="color:#fbbf24">'buy'</span>, type=<span style="color:#fbbf24">'market'</span><br>
+)<br><br>
+<span style="color:#86efac"># pyfolio 生成完整绩效报告</span><br>
+<span style="color:#86efac"># returns: 策略日收益率 Series</span><br>
+pf.create_full_tear_sheet(returns)
+    </div>
+    <div style="margin-top:10px">
+      <div style="font-weight:700;color:#134e4a;margin-bottom:6px">深入学习</div>
+      <ul style="margin:0;padding-left:16px;line-height:2;color:#374151">
+        <li>alpaca.markets/docs（完整 API 文档）</li>
+        <li>GitHub: stefan-jansen/pyfolio-reloaded（维护活跃版本）</li>
+      </ul>
+    </div>
+  </div>
+</div>
+</div>
+
+<h2>二、环境配置：10 分钟装好一切</h2>
+
+<div style="background:#1e293b;border-radius:12px;padding:20px;margin:14px 0;font-family:monospace;font-size:13px;line-height:2;color:#e2e8f0">
+<span style="color:#94a3b8"># 1. 安装 Anaconda（推荐，管理虚拟环境）</span><br>
+<span style="color:#94a3b8">#    下载：anaconda.com/download → 选 macOS/Linux/Windows</span><br><br>
+<span style="color:#94a3b8"># 2. 创建量化专用虚拟环境</span><br>
+conda create -n quant python=3.11<br>
+conda activate quant<br><br>
+<span style="color:#94a3b8"># 3. 一次性安装所有工具</span><br>
+pip install pandas numpy yfinance statsmodels \<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alphalens-reloaded scikit-learn xgboost \<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;backtrader vectorbt pyfolio-reloaded \<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alpaca-trade-api matplotlib seaborn jupyter<br><br>
+<span style="color:#94a3b8"># 4. 启动 Jupyter Notebook（交互式开发环境）</span><br>
+jupyter notebook<br><br>
+<span style="color:#86efac"># ✅ 环境就绪，开始写第一个策略</span>
+</div>
+
+<h2>三、第一个完整项目：20 天动量策略（从零到 GitHub）</h2>
+
+<div style="background:#fff;border:1.5px solid #e2e8f0;border-radius:14px;overflow:hidden;margin:16px 0">
+<div style="background:linear-gradient(135deg,#1e3a5f,#4338ca);padding:14px 20px;color:#fff;font-weight:700;font-size:14px">🚀 推荐第一个项目的完整执行路径</div>
+<div style="padding:18px">
+<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;font-size:12px;text-align:center">
+  <div style="background:#f0f9ff;border-radius:10px;padding:12px;border:1px solid #bae6fd">
+    <div style="font-weight:700;color:#0369a1;margin-bottom:6px">Day 1-2<br>数据准备</div>
+    <div style="color:#374151;line-height:1.7">用 yfinance 下载 QQQ 成分股 3 年日线数据<br>用 pandas 计算日收益率</div>
+  </div>
+  <div style="background:#f0fdf4;border-radius:10px;padding:12px;border:1px solid #86efac">
+    <div style="font-weight:700;color:#15803d;margin-bottom:6px">Day 3-5<br>信号构建</div>
+    <div style="color:#374151;line-height:1.7">计算每只股票过去 20 日累计收益作为动量得分<br>每月末按分数排名</div>
+  </div>
+  <div style="background:#f5f3ff;border-radius:10px;padding:12px;border:1px solid #c4b5fd">
+    <div style="font-weight:700;color:#5b21b6;margin-bottom:6px">Day 6-10<br>因子分析</div>
+    <div style="color:#374151;line-height:1.7">用 alphalens 计算动量因子 IC<br>看分位数收益图</div>
+  </div>
+  <div style="background:#fffbeb;border-radius:10px;padding:12px;border:1px solid #fcd34d">
+    <div style="font-weight:700;color:#92400e;margin-bottom:6px">Day 11-15<br>回测验证</div>
+    <div style="color:#374151;line-height:1.7">用 vectorbt 做完整回测<br>输出 Sharpe / Drawdown</div>
+  </div>
+  <div style="background:#fef2f2;border-radius:10px;padding:12px;border:1px solid #fca5a5">
+    <div style="font-weight:700;color:#991b1b;margin-bottom:6px">Day 16-20<br>包装上线</div>
+    <div style="color:#374151;line-height:1.7">pyfolio 生成报告<br>写 README<br>推送 GitHub</div>
+  </div>
+</div>
+<div style="background:#1e293b;color:#86efac;border-radius:8px;padding:12px;margin-top:14px;font-family:monospace;font-size:12px;text-align:center">
+  20 天后你有：一个有 IC 分析、完整回测、pyfolio 绩效报告的 GitHub 项目<br>
+  面试官问「你有什么量化项目经验」，你打开 GitHub 给他看 → 录取概率 × 3
+</div>
+</div>
+</div>
+
+<div style="text-align:center;margin-top:36px;padding:28px;background:linear-gradient(135deg,#0f172a,#1e1b4b,#312e81);border-radius:16px;color:#fff">
+  <div style="font-size:20px;font-weight:900;margin-bottom:8px">🛠️ 工具不是障碍，你是工程师</div>
+  <div style="font-size:14px;opacity:.88;line-height:1.9;max-width:600px;margin:0 auto">
+    每个库都是一个 pip install 和一段 README 的距离。<br>
+    你以前学 Kubernetes、学 React、学分布式系统——都比这复杂。<br><br>
+    <strong>现在的目标很具体：20 天，一个完整项目，推上 GitHub。</strong><br><br>
+    然后你就有资格在面试里说：<br>「我的动量因子 IC 是 0.07，Sharpe 1.3，最大回撤 12%。」
   </div>
 </div>
 `,
