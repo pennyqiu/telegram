@@ -337,6 +337,7 @@ const curriculum=[
   {id:'hk-cfa-guide',phase:7,tag:'🎓 专题五',title:'CFA 完全备考手册：42岁在职转型专项指南',shortTitle:'CFA 备考与转型指南',duration:'90 min'},
   {id:'hk-sfc-cfa-roadmap',phase:7,tag:'🗺️ 专题六',title:'SFC + CFA 联合备考路线图：一条路走到底不走回头路',shortTitle:'SFC+CFA 联合备考路线',duration:'30 min'},
   {id:'hk-quant-tools',phase:7,tag:'🛠️ 专题七',title:'量化项目技术栈实战手册：8个核心库从零到上手',shortTitle:'量化技术栈实战手册',duration:'60 min'},
+  {id:'quant-strategy-projects',phase:7,tag:'🧪 专题八',title:'量化策略项目库：初/中/高/专家 16个可交付项目',shortTitle:'量化策略项目库',duration:'持续实践'},
 ];
 
 let currentIndex=0;
@@ -784,7 +785,7 @@ function getWelcome(){return`<div class="welcome-screen">
   <h1>📈 美股系统学习路径<br>完整版 · 约30小时课程</h1>
   <p>专为互联网从业者设计的深度美股学习体系。42岁，年入150万，持有800万股票——<br>本课程将帮助你系统掌握美股投资，构建能穿越30年的养老组合。</p>
   <div class="welcome-stats">
-    <div class="welcome-stat"><div class="welcome-stat-num">45</div><div class="welcome-stat-label">课程节数</div></div>
+    <div class="welcome-stat"><div class="welcome-stat-num">46</div><div class="welcome-stat-label">课程节数</div></div>
     <div class="welcome-stat"><div class="welcome-stat-num">~60h</div><div class="welcome-stat-label">总学习时长</div></div>
     <div class="welcome-stat"><div class="welcome-stat-num">7</div><div class="welcome-stat-label">学习阶段</div></div>
     <div class="welcome-stat"><div class="welcome-stat-num">6</div><div class="welcome-stat-label">完整估值案例</div></div>
@@ -13635,6 +13636,752 @@ jupyter notebook<br><br>
     你以前学 Kubernetes、学 React、学分布式系统——都比这复杂。<br><br>
     <strong>现在的目标很具体：20 天，一个完整项目，推上 GitHub。</strong><br><br>
     然后你就有资格在面试里说：<br>「我的动量因子 IC 是 0.07，Sharpe 1.3，最大回撤 12%。」
+  </div>
+</div>
+`,
+
+// =====================================================================
+'quant-strategy-projects':`
+<div style="background:linear-gradient(135deg,#0f172a,#1e3a5f,#0369a1);border-radius:16px;padding:28px 32px;margin-bottom:28px;color:#fff">
+  <div style="font-size:12px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:8px">量化策略项目库</div>
+  <div style="font-size:24px;font-weight:900;line-height:1.3;margin-bottom:10px">16 个可交付项目<br>初级 → 中级 → 高级 → 专家</div>
+  <div style="font-size:14px;color:rgba(255,255,255,.75);line-height:1.8">每个项目都有明确的「X天交付」目标、核心工具、GitHub 可展示成果，以及面试中能说的那句话。按顺序推进，不跳级——每一级的工程技能都是下一级的地基。</div>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:18px">
+    <div style="background:rgba(255,255,255,.1);border-radius:8px;padding:10px;text-align:center"><div style="font-size:18px">🟢</div><div style="font-weight:700;font-size:13px;margin-top:4px">初级</div><div style="font-size:11px;opacity:.7">4 个项目<br>共约 65 天</div></div>
+    <div style="background:rgba(255,255,255,.1);border-radius:8px;padding:10px;text-align:center"><div style="font-size:18px">🔵</div><div style="font-weight:700;font-size:13px;margin-top:4px">中级</div><div style="font-size:11px;opacity:.7">4 个项目<br>共约 105 天</div></div>
+    <div style="background:rgba(255,255,255,.1);border-radius:8px;padding:10px;text-align:center"><div style="font-size:18px">🟠</div><div style="font-weight:700;font-size:13px;margin-top:4px">高级</div><div style="font-size:11px;opacity:.7">4 个项目<br>共约 150 天</div></div>
+    <div style="background:rgba(255,255,255,.1);border-radius:8px;padding:10px;text-align:center"><div style="font-size:18px">🔴</div><div style="font-weight:700;font-size:13px;margin-top:4px">专家</div><div style="font-size:11px;opacity:.7">4 个项目<br>共约 240 天</div></div>
+  </div>
+</div>
+
+<!-- ================================================================ -->
+<!-- 初级 -->
+<!-- ================================================================ -->
+<div style="display:flex;align-items:center;gap:10px;margin:28px 0 16px 0">
+  <div style="background:#16a34a;color:#fff;font-weight:900;font-size:13px;padding:4px 14px;border-radius:20px">🟢 初级</div>
+  <div style="flex:1;height:2px;background:linear-gradient(90deg,#16a34a,transparent)"></div>
+  <div style="font-size:12px;color:#6b7280">掌握基本数据处理 + 单一信号策略 + 完整回测流程</div>
+</div>
+
+<!-- 初级 P1 -->
+<div style="background:#fff;border:2px solid #16a34a;border-radius:16px;overflow:hidden;margin:14px 0">
+<div style="background:linear-gradient(135deg,#14532d,#16a34a);padding:12px 20px;color:#fff;display:flex;justify-content:space-between;align-items:center">
+  <div>
+    <div style="font-size:10px;opacity:.7;letter-spacing:1px">初级 P1 · 已完成模板见专题七</div>
+    <div style="font-weight:900;font-size:15px">双均线交叉策略（Golden Cross）</div>
+  </div>
+  <div style="text-align:right">
+    <div style="background:rgba(255,255,255,.2);padding:3px 10px;border-radius:6px;font-size:12px;font-weight:700">⏱ 15 天</div>
+    <div style="font-size:10px;opacity:.7;margin-top:3px">pandas · vectorbt</div>
+  </div>
+</div>
+<div style="padding:16px 20px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;font-size:13px">
+  <div>
+    <div style="font-weight:700;color:#14532d;margin-bottom:6px">策略逻辑</div>
+    <p style="color:#374151;line-height:1.8;margin:0">短期均线（SMA 50）上穿长期均线（SMA 200）买入，下穿卖出。这是华尔街最广为人知的趋势跟踪信号，简单但有效，适合初次建立完整工作流。</p>
+  </div>
+  <div>
+    <div style="font-weight:700;color:#14532d;margin-bottom:6px">📅 执行路径</div>
+    <ul style="margin:0;padding-left:14px;line-height:2;color:#374151;font-size:12px">
+      <li>Day 1-3：yfinance 下载 SPY/QQQ 日线，pandas 计算双均线</li>
+      <li>Day 4-6：生成买卖信号，可视化金叉/死叉位置</li>
+      <li>Day 7-10：vectorbt 回测，输出 Sharpe / Drawdown</li>
+      <li>Day 11-13：参数扫描（SMA 20/50/100/200 组合）</li>
+      <li>Day 14-15：写 README，推 GitHub</li>
+    </ul>
+  </div>
+  <div>
+    <div style="font-weight:700;color:#14532d;margin-bottom:6px">✅ 交付成果</div>
+    <ul style="margin:0;padding-left:14px;line-height:2;color:#374151;font-size:12px">
+      <li>GitHub 项目含信号图 + 回测 equity curve</li>
+      <li>参数热力图（Sharpe vs SMA组合）</li>
+      <li>与 Buy & Hold 的对比分析</li>
+    </ul>
+    <div style="background:#f0fdf4;border-radius:6px;padding:8px;margin-top:8px;font-size:11px;color:#14532d;border:1px solid #86efac">
+      <strong>面试时说：</strong>「我测试了 16 种均线参数组合，(50,200) 在 2010-2023 年 Sharpe 0.9，但交易成本敏感——这说明 Golden Cross 更适合低频长持。」
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- 初级 P2 -->
+<div style="background:#fff;border:2px solid #16a34a;border-radius:16px;overflow:hidden;margin:14px 0">
+<div style="background:linear-gradient(135deg,#14532d,#16a34a);padding:12px 20px;color:#fff;display:flex;justify-content:space-between;align-items:center">
+  <div>
+    <div style="font-size:10px;opacity:.7;letter-spacing:1px">初级 P2</div>
+    <div style="font-weight:900;font-size:15px">布林带均值回归策略（Bollinger Bands）</div>
+  </div>
+  <div style="text-align:right">
+    <div style="background:rgba(255,255,255,.2);padding:3px 10px;border-radius:6px;font-size:12px;font-weight:700">⏱ 20 天</div>
+    <div style="font-size:10px;opacity:.7;margin-top:3px">pandas · vectorbt · matplotlib</div>
+  </div>
+</div>
+<div style="padding:16px 20px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;font-size:13px">
+  <div>
+    <div style="font-weight:700;color:#14532d;margin-bottom:6px">策略逻辑</div>
+    <p style="color:#374151;line-height:1.8;margin:0">价格触及下轨（均值 − 2σ）买入，上轨（均值 + 2σ）卖出。与趋势策略相反，赌的是"价格终将回归均值"。适合震荡市（SPY 横盘期、单一股票区间震荡时表现好）。</p>
+  </div>
+  <div>
+    <div style="font-weight:700;color:#14532d;margin-bottom:6px">📅 执行路径</div>
+    <ul style="margin:0;padding-left:14px;line-height:2;color:#374151;font-size:12px">
+      <li>Day 1-4：计算 BB（20日均线 ± 2标准差）</li>
+      <li>Day 5-8：生成进场/出场信号，判断%B 指标</li>
+      <li>Day 9-13：vectorbt 回测，分趋势市 vs 震荡市表现</li>
+      <li>Day 14-17：加入 RSI 过滤条件（RSI&lt;30 才买）</li>
+      <li>Day 18-20：写 README + 可视化结果推 GitHub</li>
+    </ul>
+  </div>
+  <div>
+    <div style="font-weight:700;color:#14532d;margin-bottom:6px">✅ 交付成果</div>
+    <ul style="margin:0;padding-left:14px;line-height:2;color:#374151;font-size:12px">
+      <li>BB 信号可视化图（标出所有买卖点）</li>
+      <li>趋势 vs 震荡市分段表现对比报告</li>
+      <li>RSI 过滤前后 Sharpe 对比</li>
+    </ul>
+    <div style="background:#f0fdf4;border-radius:6px;padding:8px;margin-top:8px;font-size:11px;color:#14532d;border:1px solid #86efac">
+      <strong>面试时说：</strong>「单独用 BB 在趋势市会频繁被打止损，加入 RSI&lt;35 过滤后胜率从 43% 升到 61%——这让我理解了信号叠加的本质是降低假阳性。」
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- 初级 P3（动量 P1 已有，这是第3个） -->
+<div style="background:#fff;border:2px solid #16a34a;border-radius:16px;overflow:hidden;margin:14px 0">
+<div style="background:linear-gradient(135deg,#14532d,#16a34a);padding:12px 20px;color:#fff;display:flex;justify-content:space-between;align-items:center">
+  <div>
+    <div style="font-size:10px;opacity:.7;letter-spacing:1px">初级 P3</div>
+    <div style="font-weight:900;font-size:15px">买入持有 vs 主动策略基准对比框架</div>
+  </div>
+  <div style="text-align:right">
+    <div style="background:rgba(255,255,255,.2);padding:3px 10px;border-radius:6px;font-size:12px;font-weight:700">⏱ 10 天</div>
+    <div style="font-size:10px;opacity:.7;margin-top:3px">pyfolio · pandas · matplotlib</div>
+  </div>
+</div>
+<div style="padding:16px 20px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;font-size:13px">
+  <div>
+    <div style="font-weight:700;color:#14532d;margin-bottom:6px">为什么要做这个</div>
+    <p style="color:#374151;line-height:1.8;margin:0">大多数主动策略<strong>跑不赢 SPY Buy &amp; Hold</strong>。建立一套标准化的策略评估框架（含基准比较、费后收益、多周期滚动 Sharpe），是所有后续项目的共用脚手架，也是任何量化研究报告的必要起点。</p>
+  </div>
+  <div>
+    <div style="font-weight:700;color:#14532d;margin-bottom:6px">📅 执行路径</div>
+    <ul style="margin:0;padding-left:14px;line-height:2;color:#374151;font-size:12px">
+      <li>Day 1-3：pyfolio 跑完整 tear sheet（SPY 基准）</li>
+      <li>Day 4-5：加入交易成本（0.05% 单边），还原真实收益</li>
+      <li>Day 6-8：滚动 1年/3年 Sharpe 图，看策略稳定性</li>
+      <li>Day 9-10：封装成可复用函数，任何策略一行调用</li>
+    </ul>
+  </div>
+  <div>
+    <div style="font-weight:700;color:#14532d;margin-bottom:6px">✅ 交付成果</div>
+    <ul style="margin:0;padding-left:14px;line-height:2;color:#374151;font-size:12px">
+      <li>标准化策略评估模板（Python 函数库）</li>
+      <li>费前/费后/基准三线对比图</li>
+      <li>可在所有未来项目中直接 import 复用</li>
+    </ul>
+    <div style="background:#f0fdf4;border-radius:6px;padding:8px;margin-top:8px;font-size:11px;color:#14532d;border:1px solid #86efac">
+      <strong>面试时说：</strong>「我所有策略都经过费后收益和基准对比——多数主动策略在考虑 0.1% 双边成本后 Alpha 消失，所以我更关注换手率低的低频因子。」
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- 初级 P4 -->
+<div style="background:#fff;border:2px solid #16a34a;border-radius:16px;overflow:hidden;margin:14px 0">
+<div style="background:linear-gradient(135deg,#14532d,#16a34a);padding:12px 20px;color:#fff;display:flex;justify-content:space-between;align-items:center">
+  <div>
+    <div style="font-size:10px;opacity:.7;letter-spacing:1px">初级 P4</div>
+    <div style="font-weight:900;font-size:15px">等权重 vs 市值加权投资组合</div>
+  </div>
+  <div style="text-align:right">
+    <div style="background:rgba(255,255,255,.2);padding:3px 10px;border-radius:6px;font-size:12px;font-weight:700">⏱ 20 天</div>
+    <div style="font-size:10px;opacity:.7;margin-top:3px">pandas · numpy · pyfolio</div>
+  </div>
+</div>
+<div style="padding:16px 20px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;font-size:13px">
+  <div>
+    <div style="font-weight:700;color:#14532d;margin-bottom:6px">策略逻辑</div>
+    <p style="color:#374151;line-height:1.8;margin:0">对同一组股票（如纳斯达克 Top 20），分别用等权重和市值加权构建组合，每月再平衡，对比长期表现。这是理解指数基金设计逻辑和 Smart Beta 产品的基础实验。</p>
+  </div>
+  <div>
+    <div style="font-weight:700;color:#14532d;margin-bottom:6px">📅 执行路径</div>
+    <ul style="margin:0;padding-left:14px;line-height:2;color:#374151;font-size:12px">
+      <li>Day 1-4：下载 20 只科技股，计算月度收益矩阵</li>
+      <li>Day 5-8：等权重 vs 市值加权 + 月度再平衡</li>
+      <li>Day 9-13：相关性热力图、组合波动率分解</li>
+      <li>Day 14-17：加入最小化组合波动率优化（scipy）</li>
+      <li>Day 18-20：pyfolio 出报告，GitHub 提交</li>
+    </ul>
+  </div>
+  <div>
+    <div style="font-weight:700;color:#14532d;margin-bottom:6px">✅ 交付成果</div>
+    <ul style="margin:0;padding-left:14px;line-height:2;color:#374151;font-size:12px">
+      <li>3 种组合权重策略的长期绩效对比</li>
+      <li>相关性热力图（了解股票间联动）</li>
+      <li>初步掌握 scipy.optimize（中级进阶铺垫）</li>
+    </ul>
+    <div style="background:#f0fdf4;border-radius:6px;padding:8px;margin-top:8px;font-size:11px;color:#14532d;border:1px solid #86efac">
+      <strong>面试时说：</strong>「等权重组合在科技股中 Sharpe 高于市值加权，因为避开了 AAPL/MSFT 的过度集中——这和因子投资里的反向操作逻辑一致。」
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ================================================================ -->
+<!-- 中级 -->
+<!-- ================================================================ -->
+<div style="display:flex;align-items:center;gap:10px;margin:36px 0 16px 0">
+  <div style="background:#2563eb;color:#fff;font-weight:900;font-size:13px;padding:4px 14px;border-radius:20px">🔵 中级</div>
+  <div style="flex:1;height:2px;background:linear-gradient(90deg,#2563eb,transparent)"></div>
+  <div style="font-size:12px;color:#6b7280">掌握因子分析 / 协整 / 组合构建 / 多资产策略</div>
+</div>
+
+<!-- 中级 M1 -->
+<div style="background:#fff;border:2px solid #2563eb;border-radius:16px;overflow:hidden;margin:14px 0">
+<div style="background:linear-gradient(135deg,#1e3a5f,#2563eb);padding:12px 20px;color:#fff;display:flex;justify-content:space-between;align-items:center">
+  <div>
+    <div style="font-size:10px;opacity:.7;letter-spacing:1px">中级 M1</div>
+    <div style="font-weight:900;font-size:15px">配对交易 / 统计套利（Pairs Trading）</div>
+  </div>
+  <div style="text-align:right">
+    <div style="background:rgba(255,255,255,.2);padding:3px 10px;border-radius:6px;font-size:12px;font-weight:700">⏱ 30 天</div>
+    <div style="font-size:10px;opacity:.7;margin-top:3px">statsmodels · vectorbt · scipy</div>
+  </div>
+</div>
+<div style="padding:16px 20px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;font-size:13px">
+  <div>
+    <div style="font-weight:700;color:#1e3a5f;margin-bottom:6px">策略逻辑</div>
+    <p style="color:#374151;line-height:1.8;margin:0">找两只价格长期协整的股票（如 AAPL &amp; MSFT），当价差偏离均值 2σ 时做空强势股、做多弱势股，等价差收敛后平仓。这是对冲基金最经典的市场中性策略，不依赖市场方向。</p>
+    <div style="background:#eff6ff;border-radius:6px;padding:8px;margin-top:8px;font-size:12px;color:#1e3a5f">
+      <strong>核心技术：</strong>ADF 单位根检验 + Engle-Granger 协整检验 + Kalman Filter 动态 hedge ratio
+    </div>
+  </div>
+  <div>
+    <div style="font-weight:700;color:#1e3a5f;margin-bottom:6px">📅 执行路径</div>
+    <ul style="margin:0;padding-left:14px;line-height:2;color:#374151;font-size:12px">
+      <li>Day 1-5：学 statsmodels ADF + 协整检验（coint），找配对</li>
+      <li>Day 6-10：计算 spread（Z-score），设阈值 ±2σ</li>
+      <li>Day 11-18：vectorbt 实现多空信号 + 回测</li>
+      <li>Day 19-24：Kalman Filter 动态对冲比（pykalman）</li>
+      <li>Day 25-28：跨板块配对扫描（找 50 对同行业股票）</li>
+      <li>Day 29-30：完整报告 + 推 GitHub</li>
+    </ul>
+  </div>
+  <div>
+    <div style="font-weight:700;color:#1e3a5f;margin-bottom:6px">✅ 交付成果</div>
+    <ul style="margin:0;padding-left:14px;line-height:2;color:#374151;font-size:12px">
+      <li>协整对筛选系统（支持批量扫描）</li>
+      <li>Spread Z-score 信号图 + 回测 equity curve</li>
+      <li>静态 vs Kalman 动态对冲比效果对比</li>
+    </ul>
+    <div style="background:#eff6ff;border-radius:6px;padding:8px;margin-top:8px;font-size:11px;color:#1e3a5f;border:1px solid #bfdbfe">
+      <strong>面试时说：</strong>「我的配对交易策略 Sharpe 1.7，但 2020 年 3 月协整关系崩溃，价差一直不收敛——这让我理解了'协整在制度性冲击下不成立'，之后加入了协整稳定性检测。」
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- 中级 M2 -->
+<div style="background:#fff;border:2px solid #2563eb;border-radius:16px;overflow:hidden;margin:14px 0">
+<div style="background:linear-gradient(135deg,#1e3a5f,#2563eb);padding:12px 20px;color:#fff;display:flex;justify-content:space-between;align-items:center">
+  <div>
+    <div style="font-size:10px;opacity:.7;letter-spacing:1px">中级 M2</div>
+    <div style="font-weight:900;font-size:15px">ETF 板块轮动策略（Sector Rotation）</div>
+  </div>
+  <div style="text-align:right">
+    <div style="background:rgba(255,255,255,.2);padding:3px 10px;border-radius:6px;font-size:12px;font-weight:700">⏱ 30 天</div>
+    <div style="font-size:10px;opacity:.7;margin-top:3px">pandas · Alpaca API · vectorbt</div>
+  </div>
+</div>
+<div style="padding:16px 20px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;font-size:13px">
+  <div>
+    <div style="font-weight:700;color:#1e3a5f;margin-bottom:6px">策略逻辑</div>
+    <p style="color:#374151;line-height:1.8;margin:0">每月末计算 11 个 SPDR 板块 ETF（XLK/XLF/XLE/XLV…）的过去3个月动量得分，买入得分最高的前 3 个，同等权重持有。结合经济周期理论（复苏→消费→科技→能源）有更强的基本面解释。</p>
+    <div style="background:#eff6ff;border-radius:6px;padding:8px;margin-top:8px;font-size:12px;color:#1e3a5f">
+      11 个标准板块 ETF：XLK XLF XLE XLV XLI XLY XLP XLRE XLB XLC XLU
+    </div>
+  </div>
+  <div>
+    <div style="font-weight:700;color:#1e3a5f;margin-bottom:6px">📅 执行路径</div>
+    <ul style="margin:0;padding-left:14px;line-height:2;color:#374151;font-size:12px">
+      <li>Day 1-5：下载 11 个 ETF 数据，计算多周期动量</li>
+      <li>Day 6-10：月末排名 + top3 信号生成</li>
+      <li>Day 11-18：vectorbt 多资产组合回测</li>
+      <li>Day 19-23：与 SPY 对比，分析超额收益来源</li>
+      <li>Day 24-27：Alpaca Paper Trading 接入实盘跟踪</li>
+      <li>Day 28-30：GitHub + 月度再平衡定时任务</li>
+    </ul>
+  </div>
+  <div>
+    <div style="font-weight:700;color:#1e3a5f;margin-bottom:6px">✅ 交付成果</div>
+    <ul style="margin:0;padding-left:14px;line-height:2;color:#374151;font-size:12px">
+      <li>11 ETF 动量轮动回测（2003-2024）</li>
+      <li>月度持仓变化历史图（看出经济周期轮转）</li>
+      <li>接入 Alpaca 的 Paper Trading 实盘跟踪脚本</li>
+    </ul>
+    <div style="background:#eff6ff;border-radius:6px;padding:8px;margin-top:8px;font-size:11px;color:#1e3a5f;border:1px solid #bfdbfe">
+      <strong>面试时说：</strong>「板块轮动策略历史年化 12.3%，Sharpe 0.85，但 2022 年能源板块异常强势时因没及时切换跑输基准——这是我引入宏观过滤层（美联储加息周期判断）的原因。」
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- 中级 M3 -->
+<div style="background:#fff;border:2px solid #2563eb;border-radius:16px;overflow:hidden;margin:14px 0">
+<div style="background:linear-gradient(135deg,#1e3a5f,#2563eb);padding:12px 20px;color:#fff;display:flex;justify-content:space-between;align-items:center">
+  <div>
+    <div style="font-size:10px;opacity:.7;letter-spacing:1px">中级 M3 · 与专题七技术栈深度结合</div>
+    <div style="font-weight:900;font-size:15px">Fama-French 五因子模型完整复现</div>
+  </div>
+  <div style="text-align:right">
+    <div style="background:rgba(255,255,255,.2);padding:3px 10px;border-radius:6px;font-size:12px;font-weight:700">⏱ 25 天</div>
+    <div style="font-size:10px;opacity:.7;margin-top:3px">statsmodels · alphalens · pandas</div>
+  </div>
+</div>
+<div style="padding:16px 20px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;font-size:13px">
+  <div>
+    <div style="font-weight:700;color:#1e3a5f;margin-bottom:6px">策略逻辑</div>
+    <p style="color:#374151;line-height:1.8;margin:0">从 Ken French 数据库下载原始数据，在 A 股或港股自行复现五因子（Market/SMB/HML/RMW/CMA），验证在中国市场的有效性。学术意义极强，任何研究员岗位都会聊到这个模型。</p>
+    <div style="background:#eff6ff;border-radius:6px;padding:8px;margin-top:8px;font-size:12px;color:#1e3a5f">
+      五因子：市场超额收益 / 规模（SMB）/ 价值（HML）/ 盈利能力（RMW）/ 投资激进度（CMA）
+    </div>
+  </div>
+  <div>
+    <div style="font-weight:700;color:#1e3a5f;margin-bottom:6px">📅 执行路径</div>
+    <ul style="margin:0;padding-left:14px;line-height:2;color:#374151;font-size:12px">
+      <li>Day 1-5：从 Ken French 库下载 FF5 月度因子数据</li>
+      <li>Day 6-10：对 AAPL/AMZN/MSFT 做三因子回归，解读 Alpha</li>
+      <li>Day 11-16：alphalens 分析每个因子的 IC / 分位数收益</li>
+      <li>Day 17-21：用 akshare 获取 A 股数据，验证因子在 A 股有效性</li>
+      <li>Day 22-25：写研究报告（含图表），GitHub 发布</li>
+    </ul>
+  </div>
+  <div>
+    <div style="font-weight:700;color:#1e3a5f;margin-bottom:6px">✅ 交付成果</div>
+    <ul style="margin:0;padding-left:14px;line-height:2;color:#374151;font-size:12px">
+      <li>多只股票 Alpha / Beta 分解报告</li>
+      <li>A 股 vs 美股因子有效性对比（核心差异化内容）</li>
+      <li>一份真正意义上的「研究报告」格式文档</li>
+    </ul>
+    <div style="background:#eff6ff;border-radius:6px;padding:8px;margin-top:8px;font-size:11px;color:#1e3a5f;border:1px solid #bfdbfe">
+      <strong>面试时说：</strong>「我复现了 FF5，发现 A 股 HML 因子 IC 仅 0.02（几乎无效），而 SMB 因子 IC 达到 0.08——这和美股相反，说明 A 股散户主导导致小盘溢价更突出。」
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- 中级 M4 -->
+<div style="background:#fff;border:2px solid #2563eb;border-radius:16px;overflow:hidden;margin:14px 0">
+<div style="background:linear-gradient(135deg,#1e3a5f,#2563eb);padding:12px 20px;color:#fff;display:flex;justify-content:space-between;align-items:center">
+  <div>
+    <div style="font-size:10px;opacity:.7;letter-spacing:1px">中级 M4</div>
+    <div style="font-weight:900;font-size:15px">风险平价组合（Risk Parity）</div>
+  </div>
+  <div style="text-align:right">
+    <div style="background:rgba(255,255,255,.2);padding:3px 10px;border-radius:6px;font-size:12px;font-weight:700">⏱ 20 天</div>
+    <div style="font-size:10px;opacity:.7;margin-top:3px">numpy · scipy · pyfolio</div>
+  </div>
+</div>
+<div style="padding:16px 20px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;font-size:13px">
+  <div>
+    <div style="font-weight:700;color:#1e3a5f;margin-bottom:6px">策略逻辑</div>
+    <p style="color:#374151;line-height:1.8;margin:0">传统 60/40 组合按资金比例分配，高波动资产（股票）承担了 90% 的风险。风险平价按各资产的波动率倒数分配权重，让每类资产对总风险的贡献相等——这是桥水「全天候基金」的核心思想。</p>
+  </div>
+  <div>
+    <div style="font-weight:700;color:#1e3a5f;margin-bottom:6px">📅 执行路径</div>
+    <ul style="margin:0;padding-left:14px;line-height:2;color:#374151;font-size:12px">
+      <li>Day 1-4：下载股票(SPY)/债券(TLT)/大宗商品(GLD)/REIT(VNQ)</li>
+      <li>Day 5-9：计算各资产波动率，按 1/σ 分配权重</li>
+      <li>Day 10-14：scipy.optimize 实现真正等风险贡献优化</li>
+      <li>Day 15-17：2008/2020 年熊市对比（风险平价 vs 60/40）</li>
+      <li>Day 18-20：pyfolio 报告 + GitHub</li>
+    </ul>
+  </div>
+  <div>
+    <div style="font-weight:700;color:#1e3a5f;margin-bottom:6px">✅ 交付成果</div>
+    <ul style="margin:0;padding-left:14px;line-height:2;color:#374151;font-size:12px">
+      <li>4 资产风险平价组合 vs 60/40 历史绩效对比</li>
+      <li>每月动态权重调整记录图</li>
+      <li>2008/2020 年回撤对比（风险平价优越性的核心证明）</li>
+    </ul>
+    <div style="background:#eff6ff;border-radius:6px;padding:8px;margin-top:8px;font-size:11px;color:#1e3a5f;border:1px solid #bfdbfe">
+      <strong>面试时说：</strong>「我实现了风险平价组合，2008 年最大回撤 19%（60/40 是 35%）——但低波动意味着低杠杆，实际用加杠杆才能达到目标收益，这引出了我的 Black-Litterman 项目。」
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ================================================================ -->
+<!-- 高级 -->
+<!-- ================================================================ -->
+<div style="display:flex;align-items:center;gap:10px;margin:36px 0 16px 0">
+  <div style="background:#ea580c;color:#fff;font-weight:900;font-size:13px;padding:4px 14px;border-radius:20px">🟠 高级</div>
+  <div style="flex:1;height:2px;background:linear-gradient(90deg,#ea580c,transparent)"></div>
+  <div style="font-size:12px;color:#6b7280">机器学习选股 / 多因子 Alpha / 事件驱动 / 期权策略</div>
+</div>
+
+<!-- 高级 A1 -->
+<div style="background:#fff;border:2px solid #ea580c;border-radius:16px;overflow:hidden;margin:14px 0">
+<div style="background:linear-gradient(135deg,#7c2d12,#ea580c);padding:12px 20px;color:#fff;display:flex;justify-content:space-between;align-items:center">
+  <div>
+    <div style="font-size:10px;opacity:.7;letter-spacing:1px">高级 A1 · 你的行业背景最适合这个</div>
+    <div style="font-weight:900;font-size:15px">XGBoost 机器学习选股模型（科技股专项）</div>
+  </div>
+  <div style="text-align:right">
+    <div style="background:rgba(255,255,255,.2);padding:3px 10px;border-radius:6px;font-size:12px;font-weight:700">⏱ 45 天</div>
+    <div style="font-size:10px;opacity:.7;margin-top:3px">XGBoost · sklearn · alphalens · pyfolio</div>
+  </div>
+</div>
+<div style="padding:16px 20px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;font-size:13px">
+  <div>
+    <div style="font-weight:700;color:#7c2d12;margin-bottom:6px">策略逻辑</div>
+    <p style="color:#374151;line-height:1.8;margin:0">构建约 30 个特征（技术面+基本面+行业）对标普 500 科技股做次月涨跌预测，用 XGBoost 训练，按预测得分分五组，做多高分组、做空低分组。核心难点：时序切分防泄露 + 特征重要性解读。</p>
+    <div style="background:#fff7ed;border-radius:6px;padding:8px;margin-top:8px;font-size:12px;color:#7c2d12">
+      <strong>你的优势：</strong>互联网行业认知可直接转化为特征工程（云收入增速、订阅用户数、毛利率变化等）
+    </div>
+  </div>
+  <div>
+    <div style="font-weight:700;color:#7c2d12;margin-bottom:6px">📅 执行路径</div>
+    <ul style="margin:0;padding-left:14px;line-height:2;color:#374151;font-size:12px">
+      <li>Day 1-8：特征工程（30个特征：动量/估值/技术/行业）</li>
+      <li>Day 9-15：TimeSeriesSplit + XGBoost 基础模型</li>
+      <li>Day 16-22：超参数调优（Optuna 自动调参）</li>
+      <li>Day 23-30：特征重要性分析 + SHAP 值解释</li>
+      <li>Day 31-38：alphalens 因子有效性分析</li>
+      <li>Day 39-43：pyfolio 多空组合绩效报告</li>
+      <li>Day 44-45：GitHub 发布研究报告</li>
+    </ul>
+  </div>
+  <div>
+    <div style="font-weight:700;color:#7c2d12;margin-bottom:6px">✅ 交付成果</div>
+    <ul style="margin:0;padding-left:14px;line-height:2;color:#374151;font-size:12px">
+      <li>30+ 特征的科技股选股模型（IC 报告）</li>
+      <li>SHAP 特征重要性可视化（解释为什么买这只）</li>
+      <li>分五组多空组合收益图（最强的是L/S spread图）</li>
+    </ul>
+    <div style="background:#fff7ed;border-radius:6px;padding:8px;margin-top:8px;font-size:11px;color:#7c2d12;border:1px solid #fed7aa">
+      <strong>面试时说：</strong>「我的 XGBoost 模型在科技股上 ICIR 0.42，最重要的三个特征是：毛利率变化（YoY）、云收入占比增速、研发投入/收入比——这三个我在互联网从业8年里都有亲身判断经验。」
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- 高级 A2 -->
+<div style="background:#fff;border:2px solid #ea580c;border-radius:16px;overflow:hidden;margin:14px 0">
+<div style="background:linear-gradient(135deg,#7c2d12,#ea580c);padding:12px 20px;color:#fff;display:flex;justify-content:space-between;align-items:center">
+  <div>
+    <div style="font-size:10px;opacity:.7;letter-spacing:1px">高级 A2</div>
+    <div style="font-weight:900;font-size:15px">多因子 Alpha 合成模型</div>
+  </div>
+  <div style="text-align:right">
+    <div style="background:rgba(255,255,255,.2);padding:3px 10px;border-radius:6px;font-size:12px;font-weight:700">⏱ 40 天</div>
+    <div style="font-size:10px;opacity:.7;margin-top:3px">alphalens · sklearn · statsmodels</div>
+  </div>
+</div>
+<div style="padding:16px 20px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;font-size:13px">
+  <div>
+    <div style="font-weight:700;color:#7c2d12;margin-bottom:6px">策略逻辑</div>
+    <p style="color:#374151;line-height:1.8;margin:0">分别计算 5-8 个单因子（动量、价值、质量、低波动、规模、盈利能力），用 IC 加权或机器学习合成为综合评分，实现「哪些因子现在有效就加大权重」的动态 Alpha 合成。这是主流量化基金实际使用的架构。</p>
+  </div>
+  <div>
+    <div style="font-weight:700;color:#7c2d12;margin-bottom:6px">📅 执行路径</div>
+    <ul style="margin:0;padding-left:14px;line-height:2;color:#374151;font-size:12px">
+      <li>Day 1-10：逐一构建 6 个单因子，alphalens 分析 IC</li>
+      <li>Day 11-18：IC 加权合成法（按历史 IC 给因子打权重）</li>
+      <li>Day 19-26：岭回归合成法（避免因子多重共线性）</li>
+      <li>Day 27-33：因子相关性矩阵，去掉冗余因子</li>
+      <li>Day 34-38：最终组合 alphalens 综合报告</li>
+      <li>Day 39-40：GitHub 发布</li>
+    </ul>
+  </div>
+  <div>
+    <div style="font-weight:700;color:#7c2d12;margin-bottom:6px">✅ 交付成果</div>
+    <ul style="margin:0;padding-left:14px;line-height:2;color:#374151;font-size:12px">
+      <li>6 因子 IC 时序图（看出哪些因子在哪个阶段有效）</li>
+      <li>IC 加权 vs 等权 vs 岭回归 三种合成方法对比</li>
+      <li>真正意义上的「多因子模型」研究报告</li>
+    </ul>
+    <div style="background:#fff7ed;border-radius:6px;padding:8px;margin-top:8px;font-size:11px;color:#7c2d12;border:1px solid #fed7aa">
+      <strong>面试时说：</strong>「我的多因子合成模型 ICIR 从单因子最高 0.38 提升到 0.51——因子多样化降低了噪声。但 2022 年加息周期里价值因子突然复活，纯 IC 加权没能及时上调权重，这引出了宏观状态切换的需求。」
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- 高级 A3 -->
+<div style="background:#fff;border:2px solid #ea580c;border-radius:16px;overflow:hidden;margin:14px 0">
+<div style="background:linear-gradient(135deg,#7c2d12,#ea580c);padding:12px 20px;color:#fff;display:flex;justify-content:space-between;align-items:center">
+  <div>
+    <div style="font-size:10px;opacity:.7;letter-spacing:1px">高级 A3</div>
+    <div style="font-weight:900;font-size:15px">事件驱动策略：财报异动效应（PEAD）</div>
+  </div>
+  <div style="text-align:right">
+    <div style="background:rgba(255,255,255,.2);padding:3px 10px;border-radius:6px;font-size:12px;font-weight:700">⏱ 35 天</div>
+    <div style="font-size:10px;opacity:.7;margin-top:3px">pandas · yfinance · statsmodels · vectorbt</div>
+  </div>
+</div>
+<div style="padding:16px 20px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;font-size:13px">
+  <div>
+    <div style="font-weight:700;color:#7c2d12;margin-bottom:6px">策略逻辑</div>
+    <p style="color:#374151;line-height:1.8;margin:0">Post-Earnings Announcement Drift（PEAD）：财报超预期（EPS 实际 &gt; 预期）后，股价在未来 1-60 天内继续漂移。在财报发布后第一天买入，持有 20 个交易日。结合你的科技行业认知，判断哪些公司的预期差最容易出现。</p>
+  </div>
+  <div>
+    <div style="font-weight:700;color:#7c2d12;margin-bottom:6px">📅 执行路径</div>
+    <ul style="margin:0;padding-left:14px;line-height:2;color:#374151;font-size:12px">
+      <li>Day 1-6：获取历史 EPS 预期 vs 实际数据（yfinance / scrapin）</li>
+      <li>Day 7-12：计算 Earnings Surprise（SUE 标准化预期差）</li>
+      <li>Day 13-20：事件研究法（Event Study）：财报后 [-5, +60] 天 CAR</li>
+      <li>Day 21-27：高/中/低 Surprise 三组收益对比</li>
+      <li>Day 28-32：vectorbt 实现完整交易策略回测</li>
+      <li>Day 33-35：发布 GitHub</li>
+    </ul>
+  </div>
+  <div>
+    <div style="font-weight:700;color:#7c2d12;margin-bottom:6px">✅ 交付成果</div>
+    <ul style="margin:0;padding-left:14px;line-height:2;color:#374151;font-size:12px">
+      <li>科技股财报后 60 天累计超额收益（CAR）图</li>
+      <li>三组 Surprise 分组收益对比（经典学术结论可视化）</li>
+      <li>PEAD 策略回测 vs SPY 对比</li>
+    </ul>
+    <div style="background:#fff7ed;border-radius:6px;padding:8px;margin-top:8px;font-size:11px;color:#7c2d12;border:1px solid #fed7aa">
+      <strong>面试时说：</strong>「我验证了 PEAD 效应在纳斯达克科技股依然存在，高 SUE 组财报后 20 日平均超额收益 3.2%——但 2023 年 AI 主题下市场反应越来越快，持有窗口正在缩短至 5 天。」
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- 高级 A4 -->
+<div style="background:#fff;border:2px solid #ea580c;border-radius:16px;overflow:hidden;margin:14px 0">
+<div style="background:linear-gradient(135deg,#7c2d12,#ea580c);padding:12px 20px;color:#fff;display:flex;justify-content:space-between;align-items:center">
+  <div>
+    <div style="font-size:10px;opacity:.7;letter-spacing:1px">高级 A4</div>
+    <div style="font-weight:900;font-size:15px">期权策略回测：Covered Call + Protective Put</div>
+  </div>
+  <div style="text-align:right">
+    <div style="background:rgba(255,255,255,.2);padding:3px 10px;border-radius:6px;font-size:12px;font-weight:700">⏱ 30 天</div>
+    <div style="font-size:10px;opacity:.7;margin-top:3px">pandas · numpy · scipy · matplotlib</div>
+  </div>
+</div>
+<div style="padding:16px 20px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;font-size:13px">
+  <div>
+    <div style="font-weight:700;color:#7c2d12;margin-bottom:6px">策略逻辑</div>
+    <p style="color:#374151;line-height:1.8;margin:0">从 Black-Scholes 定价开始，实现两个最基础的期权策略：① 备兑看涨（持股 + 卖 Call，每月收权利金）② 保护性看跌（持股 + 买 Put，对冲下跌）。对比每种策略的收益 / 风险特征，为你的 600 万仓位提供对冲思路。</p>
+  </div>
+  <div>
+    <div style="font-weight:700;color:#7c2d12;margin-bottom:6px">📅 执行路径</div>
+    <ul style="margin:0;padding-left:14px;line-height:2;color:#374151;font-size:12px">
+      <li>Day 1-6：Black-Scholes 定价公式实现（scipy.stats.norm）</li>
+      <li>Day 7-12：历史波动率 vs 隐含波动率计算</li>
+      <li>Day 13-18：Covered Call 月度滚动回测（收权利金）</li>
+      <li>Day 19-24：Protective Put 对冲效果回测</li>
+      <li>Day 25-28：两种策略在 2020 年崩盘 / 反弹中的表现</li>
+      <li>Day 29-30：发布 GitHub</li>
+    </ul>
+  </div>
+  <div>
+    <div style="font-weight:700;color:#7c2d12;margin-bottom:6px">✅ 交付成果</div>
+    <ul style="margin:0;padding-left:14px;line-height:2;color:#374151;font-size:12px">
+      <li>Black-Scholes 期权定价器（可复用工具）</li>
+      <li>Covered Call 5年回测：月均收权利金 0.8% vs 放弃上涨</li>
+      <li>Protective Put 2020 对冲效果分析报告</li>
+    </ul>
+    <div style="background:#fff7ed;border-radius:6px;padding:8px;margin-top:8px;font-size:11px;color:#7c2d12;border:1px solid #fed7aa">
+      <strong>面试时说：</strong>「我的 Covered Call 回测显示月均权利金收入 0.8%，但在 NVDA 2023 年大涨中损失了 40% 的上涨收益——这让我理解了为什么机构只对已锁定利润的仓位使用 CC。」
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ================================================================ -->
+<!-- 专家级 -->
+<!-- ================================================================ -->
+<div style="display:flex;align-items:center;gap:10px;margin:36px 0 16px 0">
+  <div style="background:#dc2626;color:#fff;font-weight:900;font-size:13px;padding:4px 14px;border-radius:20px">🔴 专家</div>
+  <div style="flex:1;height:2px;background:linear-gradient(90deg,#dc2626,transparent)"></div>
+  <div style="font-size:12px;color:#6b7280">强化学习 / 高频套利框架 / Black-Litterman / 全天候策略</div>
+</div>
+
+<!-- 专家 E1 -->
+<div style="background:#fff;border:2px solid #dc2626;border-radius:16px;overflow:hidden;margin:14px 0">
+<div style="background:linear-gradient(135deg,#7f1d1d,#dc2626);padding:12px 20px;color:#fff;display:flex;justify-content:space-between;align-items:center">
+  <div>
+    <div style="font-size:10px;opacity:.7;letter-spacing:1px">专家 E1 · 需有高级项目基础</div>
+    <div style="font-weight:900;font-size:15px">Black-Litterman 组合优化模型</div>
+  </div>
+  <div style="text-align:right">
+    <div style="background:rgba(255,255,255,.2);padding:3px 10px;border-radius:6px;font-size:12px;font-weight:700">⏱ 45 天</div>
+    <div style="font-size:10px;opacity:.7;margin-top:3px">numpy · scipy · pandas · cvxpy</div>
+  </div>
+</div>
+<div style="padding:16px 20px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;font-size:13px">
+  <div>
+    <div style="font-weight:700;color:#7f1d1d;margin-bottom:6px">是什么 / 为什么重要</div>
+    <p style="color:#374151;line-height:1.8;margin:0">Markowitz 均值-方差优化的最大问题是对预期收益极度敏感（估计误差被放大）。Black-Litterman 模型结合「市场隐含均衡收益」和「投资者主观观点」，生成更稳健的权重。高盛投资管理部 1990 年开发，至今仍是主流。</p>
+  </div>
+  <div>
+    <div style="font-weight:700;color:#7f1d1d;margin-bottom:6px">📅 执行路径</div>
+    <ul style="margin:0;padding-left:14px;line-height:2;color:#374151;font-size:12px">
+      <li>Day 1-8：Markowitz 均值-方差优化（有效前沿）</li>
+      <li>Day 9-16：理解 BL 模型数学原理（逆向优化 + 贝叶斯更新）</li>
+      <li>Day 17-25：实现 BL 模型，输入自己的主观观点（「科技超配」）</li>
+      <li>Day 26-33：cvxpy 添加实际约束（不做空、最大单股 20%）</li>
+      <li>Day 34-40：BL vs 等权 vs 风险平价 三模型历史对比</li>
+      <li>Day 41-45：研究报告 + GitHub</li>
+    </ul>
+  </div>
+  <div>
+    <div style="font-weight:700;color:#7f1d1d;margin-bottom:6px">✅ 交付成果</div>
+    <ul style="margin:0;padding-left:14px;line-height:2;color:#374151;font-size:12px">
+      <li>有效前沿可视化（经典图，任何 CFA 面试都会问）</li>
+      <li>BL 模型完整实现（可输入任意主观观点）</li>
+      <li>三种组合优化方法综合对比报告</li>
+    </ul>
+    <div style="background:#fef2f2;border-radius:6px;padding:8px;margin-top:8px;font-size:11px;color:#7f1d1d;border:1px solid #fca5a5">
+      <strong>面试时说：</strong>「我实现了 BL 模型，输入'科技超配 5%'的主观观点后，模型自动在维持组合整体收益率的同时分配了更稳健的权重——比纯 Markowitz 的权重波动小了 60%。」
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- 专家 E2 -->
+<div style="background:#fff;border:2px solid #dc2626;border-radius:16px;overflow:hidden;margin:14px 0">
+<div style="background:linear-gradient(135deg,#7f1d1d,#dc2626);padding:12px 20px;color:#fff;display:flex;justify-content:space-between;align-items:center">
+  <div>
+    <div style="font-size:10px;opacity:.7;letter-spacing:1px">专家 E2</div>
+    <div style="font-weight:900;font-size:15px">全天候策略（All Weather Portfolio）</div>
+  </div>
+  <div style="text-align:right">
+    <div style="background:rgba(255,255,255,.2);padding:3px 10px;border-radius:6px;font-size:12px;font-weight:700">⏱ 45 天</div>
+    <div style="font-size:10px;opacity:.7;margin-top:3px">pandas · numpy · scipy · pyfolio</div>
+  </div>
+</div>
+<div style="padding:16px 20px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;font-size:13px">
+  <div>
+    <div style="font-weight:700;color:#7f1d1d;margin-bottom:6px">策略逻辑</div>
+    <p style="color:#374151;line-height:1.8;margin:0">Ray Dalio 桥水基金的核心框架：任何时期经济处于「增长/衰退 × 通胀/通缩」四种状态之一，为每种状态配备相应的资产类型。目标是在任何宏观环境下都能生存，而非最大化收益。</p>
+    <div style="background:#fef2f2;border-radius:6px;padding:8px;margin-top:8px;font-size:12px;color:#7f1d1d">
+      四象限：增长+低通胀（股票）/ 增长+高通胀（大宗）/ 衰退+低通胀（债券）/ 衰退+高通胀（黄金）
+    </div>
+  </div>
+  <div>
+    <div style="font-weight:700;color:#7f1d1d;margin-bottom:6px">📅 执行路径</div>
+    <ul style="margin:0;padding-left:14px;line-height:2;color:#374151;font-size:12px">
+      <li>Day 1-8：理解四象限框架，选定资产代理 ETF</li>
+      <li>Day 9-16：宏观状态识别（GDP增速 + CPI 分位数判断）</li>
+      <li>Day 17-24：各象限资产配置权重确定（风险平价内嵌）</li>
+      <li>Day 25-32：动态切换回测（季度再平衡）</li>
+      <li>Day 33-40：与 SPY / 60-40 / 风险平价 全面对比</li>
+      <li>Day 41-45：宏观数据接入（FRED API）+ GitHub</li>
+    </ul>
+  </div>
+  <div>
+    <div style="font-weight:700;color:#7f1d1d;margin-bottom:6px">✅ 交付成果</div>
+    <ul style="margin:0;padding-left:14px;line-height:2;color:#374151;font-size:12px">
+      <li>四象限宏观状态历史划分图（2000-2024）</li>
+      <li>全天候组合 vs 四种对比策略的完整绩效报告</li>
+      <li>FRED API 接入的宏观数据监控系统</li>
+    </ul>
+    <div style="background:#fef2f2;border-radius:6px;padding:8px;margin-top:8px;font-size:11px;color:#7f1d1d;border:1px solid #fca5a5">
+      <strong>面试时说：</strong>「我复现了全天候策略，过去 20 年最大回撤 12%，年化 7.8%——收益不高，但2008/2020 年两次大跌都表现平稳，这让我真正理解了桥水为什么不追求高收益而追求稳定性。」
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- 专家 E3 -->
+<div style="background:#fff;border:2px solid #dc2626;border-radius:16px;overflow:hidden;margin:14px 0">
+<div style="background:linear-gradient(135deg,#7f1d1d,#dc2626);padding:12px 20px;color:#fff;display:flex;justify-content:space-between;align-items:center">
+  <div>
+    <div style="font-size:10px;opacity:.7;letter-spacing:1px">专家 E3 · 工程师最有优势的方向</div>
+    <div style="font-weight:900;font-size:15px">强化学习交易 Agent（RL Trading）</div>
+  </div>
+  <div style="text-align:right">
+    <div style="background:rgba(255,255,255,.2);padding:3px 10px;border-radius:6px;font-size:12px;font-weight:700">⏱ 90 天</div>
+    <div style="font-size:10px;opacity:.7;margin-top:3px">stable-baselines3 · gymnasium · pandas</div>
+  </div>
+</div>
+<div style="padding:16px 20px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;font-size:13px">
+  <div>
+    <div style="font-weight:700;color:#7f1d1d;margin-bottom:6px">是什么 / 工程师的终极项目</div>
+    <p style="color:#374151;line-height:1.8;margin:0">把交易定义为强化学习问题：状态（市场特征）→ 动作（买/卖/持有）→ 奖励（Sharpe / 超额收益）。Agent 通过不断试错学习交易策略，不需要显式编写规则。这是纯工程师思维应用到量化的最前沿方向，传统金融人做不了。</p>
+  </div>
+  <div>
+    <div style="font-weight:700;color:#7f1d1d;margin-bottom:6px">📅 执行路径（分三阶段）</div>
+    <ul style="margin:0;padding-left:14px;line-height:2;color:#374151;font-size:12px">
+      <li><strong>第一阶段（30天）：</strong>用 gymnasium 构建交易环境（TradingEnv），定义状态/动作/奖励</li>
+      <li><strong>第二阶段（30天）：</strong>PPO / SAC 算法训练，对比随机策略 / Buy &amp; Hold</li>
+      <li><strong>第三阶段（30天）：</strong>加入 Transformer 特征提取器，提升状态表示能力；过拟合防止方案</li>
+    </ul>
+  </div>
+  <div>
+    <div style="font-weight:700;color:#7f1d1d;margin-bottom:6px">✅ 交付成果</div>
+    <ul style="margin:0;padding-left:14px;line-height:2;color:#374151;font-size:12px">
+      <li>完整 TradingEnv 自定义环境（可开源）</li>
+      <li>PPO Agent 训练曲线 + 测试集回测绩效</li>
+      <li>技术报告：RL vs 传统量化方法的本质差异</li>
+    </ul>
+    <div style="background:#fef2f2;border-radius:6px;padding:8px;margin-top:8px;font-size:11px;color:#7f1d1d;border:1px solid #fca5a5">
+      <strong>面试时说：</strong>「我训练的 RL Agent 在 out-of-sample 测试集上 Sharpe 1.1——比 Buy &amp; Hold 高但低于我的 XGBoost 模型。RL 的真正价值不是收益高，而是它能自适应市场状态变化，无需手动调整规则。」
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- 专家 E4 -->
+<div style="background:#fff;border:2px solid #dc2626;border-radius:16px;overflow:hidden;margin:14px 0">
+<div style="background:linear-gradient(135deg,#7f1d1d,#dc2626);padding:12px 20px;color:#fff;display:flex;justify-content:space-between;align-items:center">
+  <div>
+    <div style="font-size:10px;opacity:.7;letter-spacing:1px">专家 E4</div>
+    <div style="font-weight:900;font-size:15px">高频统计套利框架（微观结构视角）</div>
+  </div>
+  <div style="text-align:right">
+    <div style="background:rgba(255,255,255,.2);padding:3px 10px;border-radius:6px;font-size:12px;font-weight:700">⏱ 60 天</div>
+    <div style="font-size:10px;opacity:.7;margin-top:3px">pandas · Alpaca WebSocket · asyncio</div>
+  </div>
+</div>
+<div style="padding:16px 20px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;font-size:13px">
+  <div>
+    <div style="font-weight:700;color:#7f1d1d;margin-bottom:6px">策略逻辑</div>
+    <p style="color:#374151;line-height:1.8;margin:0">基于分钟级行情数据，识别两只相关股票的短期价差偏离（如 AAPL vs QQQ 成分偏离），在价差收敛前交易。与日线配对交易的区别：时间维度更短（1-30分钟），需要异步编程 + WebSocket 实时数据接入。</p>
+  </div>
+  <div>
+    <div style="font-weight:700;color:#7f1d1d;margin-bottom:6px">📅 执行路径</div>
+    <ul style="margin:0;padding-left:14px;line-height:2;color:#374151;font-size:12px">
+      <li>Day 1-10：Alpaca WebSocket 分钟级数据接入（asyncio）</li>
+      <li>Day 11-20：分钟级协整检验，滚动窗口更新</li>
+      <li>Day 21-35：Paper Trading 实盘接入（实时信号 → 自动下单）</li>
+      <li>Day 36-48：延迟分析 + 滑点模型建立</li>
+      <li>Day 49-55：完整风控系统（日亏损上限 / 最大持仓）</li>
+      <li>Day 56-60：技术文档 + GitHub</li>
+    </ul>
+  </div>
+  <div>
+    <div style="font-weight:700;color:#7f1d1d;margin-bottom:6px">✅ 交付成果</div>
+    <ul style="margin:0;padding-left:14px;line-height:2;color:#374151;font-size:12px">
+      <li>完整实时交易系统框架（工程含金量极高）</li>
+      <li>延迟分析报告（信号 → 下单的毫秒级时延）</li>
+      <li>带风控模块的 Paper Trading 运行记录（3个月+）</li>
+    </ul>
+    <div style="background:#fef2f2;border-radius:6px;padding:8px;margin-top:8px;font-size:11px;color:#7f1d1d;border:1px solid #fca5a5">
+      <strong>面试时说：</strong>「我的高频套利框架在 Paper Trading 中运行了 3 个月，平均每天交易 12 次，单次 P&amp;L 约 $8——但发现 Alpaca 的纸交易不模拟真实市场冲击，实盘时摩擦成本让策略濒临收支平衡，这让我理解了为什么高频是基础设施的游戏。」
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- 总览路线图 -->
+<div style="background:linear-gradient(135deg,#0f172a,#1e293b);border-radius:16px;padding:24px 28px;margin-top:28px;color:#fff">
+  <div style="font-weight:900;font-size:16px;margin-bottom:16px;text-align:center">📊 16 项目总览 · 推荐推进节奏</div>
+  <div class="table-wrap"><table style="font-size:12px;color:#e2e8f0">
+  <thead><tr style="border-bottom:1px solid rgba(255,255,255,.2)"><th style="color:#94a3b8">阶段</th><th style="color:#94a3b8">项目</th><th style="color:#94a3b8">累计天数</th><th style="color:#94a3b8">GitHub 产出</th><th style="color:#94a3b8">求职状态</th></tr></thead>
+  <tbody>
+  <tr><td><span style="background:#16a34a;padding:2px 8px;border-radius:10px;font-size:11px">初级</span></td><td>P1 双均线 + P2 布林带 + P3 基准框架 + P4 组合权重</td><td>65 天</td><td>4 个项目</td><td>可投初级研究员实习</td></tr>
+  <tr><td><span style="background:#2563eb;padding:2px 8px;border-radius:10px;font-size:11px">中级</span></td><td>M1 配对交易 + M2 板块轮动 + M3 FF5 + M4 风险平价</td><td>170 天</td><td>8 个项目</td><td>可投量化研究员 / 策略分析师</td></tr>
+  <tr><td><span style="background:#ea580c;padding:2px 8px;border-radius:10px;font-size:11px">高级</span></td><td>A1 XGBoost + A2 多因子 + A3 事件驱动 + A4 期权</td><td>320 天</td><td>12 个项目</td><td>可投中型私募量化研究员</td></tr>
+  <tr><td><span style="background:#dc2626;padding:2px 8px;border-radius:10px;font-size:11px">专家</span></td><td>E1 BL + E2 全天候 + E3 RL Agent + E4 高频框架</td><td>560 天</td><td>16 个项目</td><td>百亿私募 / 量化基金核心岗位</td></tr>
+  </tbody></table></div>
+  <div style="text-align:center;margin-top:16px;font-size:13px;color:rgba(255,255,255,.75);line-height:1.9">
+    不需要做完 16 个项目才能求职。<strong style="color:#86efac">完成初级 + 中级 M1-M2 共 6 个项目（约 110 天）</strong>，你的 GitHub 就已经比 95% 的 CFA 持证人更有说服力。<br>
+    每个项目按<strong style="color:#fbbf24">「能在面试里说清楚一件事」</strong>的标准来做，不追求完美，追求可交付。
   </div>
 </div>
 `,
