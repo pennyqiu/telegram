@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>香港金融职涯 · 18个月转型 Checklist</title>
+<style>
+  /* ── Reset ── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* ── Screen preview ── */
+  body {
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: #e5e7eb;
+    color: #0f172a;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  .page {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 12mm auto;
+    background: #fff;
+    padding: 14mm 14mm 12mm 14mm;
+    position: relative;
+  }
+
+  /* ── Header ── */
+  .doc-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    border-bottom: 2.5px solid #0f172a;
+    padding-bottom: 8px;
+    margin-bottom: 10px;
+  }
+  .doc-title { font-size: 18px; font-weight: 900; color: #0f172a; line-height: 1.2; }
+  .doc-subtitle { font-size: 10px; color: #475569; margin-top: 3px; }
+  .doc-meta { text-align: right; font-size: 10px; color: #475569; line-height: 1.8; }
+  .doc-meta strong { color: #0f172a; }
+
+  /* ── Phase timeline strip ── */
+  .timeline {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 3px;
+    margin-bottom: 12px;
+  }
+  .tl-cell {
+    padding: 6px 8px;
+    border-radius: 4px;
+    border-top: 3px solid;
+  }
+  .tl-m1 { border-color: #6366f1; background: #eef2ff; }
+  .tl-m2 { border-color: #f59e0b; background: #fffbeb; }
+  .tl-m3 { border-color: #0369a1; background: #eff6ff; }
+  .tl-m4 { border-color: #15803d; background: #f0fdf4; }
+  .tl-m5 { border-color: #7c3aed; background: #faf5ff; }
+  .tl-num { font-weight: 900; font-size: 11px; }
+  .tl-m1 .tl-num { color: #4338ca; }
+  .tl-m2 .tl-num { color: #b45309; }
+  .tl-m3 .tl-num { color: #075985; }
+  .tl-m4 .tl-num { color: #166534; }
+  .tl-m5 .tl-num { color: #5b21b6; }
+  .tl-label { font-weight: 700; font-size: 10px; color: #0f172a; }
+  .tl-period { font-size: 9px; color: #64748b; margin-top: 1px; }
+
+  /* ── Phase section ── */
+  .phase-section { margin-bottom: 11px; }
+  .phase-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 8px;
+    border-radius: 4px 4px 0 0;
+    border-left: 4px solid;
+  }
+  .phase-m1 { border-color: #6366f1; background: #eef2ff; }
+  .phase-m2 { border-color: #f59e0b; background: #fffbeb; }
+  .phase-m3 { border-color: #0369a1; background: #eff6ff; }
+  .phase-m4 { border-color: #15803d; background: #f0fdf4; }
+  .phase-m5 { border-color: #7c3aed; background: #faf5ff; }
+
+  .phase-num {
+    font-weight: 900;
+    font-size: 13px;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: #fff;
+  }
+  .bg-m1 { background: #6366f1; }
+  .bg-m2 { background: #f59e0b; }
+  .bg-m3 { background: #0369a1; }
+  .bg-m4 { background: #15803d; }
+  .bg-m5 { background: #7c3aed; }
+
+  .phase-title-block { flex: 1; }
+  .phase-name { font-weight: 800; font-size: 13px; color: #0f172a; }
+  .phase-sub { font-size: 9px; color: #64748b; }
+
+  .phase-date-box {
+    display: flex;
+    gap: 8px;
+    font-size: 9px;
+    color: #475569;
+  }
+  .date-field {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    white-space: nowrap;
+  }
+  .date-line { display: inline-block; width: 36px; border-bottom: 1px solid #94a3b8; }
+
+  /* ── Task rows ── */
+  .task-body {
+    border: 1px solid #e2e8f0;
+    border-top: none;
+    border-radius: 0 0 4px 4px;
+    overflow: hidden;
+  }
+  .task-row {
+    display: grid;
+    grid-template-columns: 18px 1fr 52px;
+    gap: 6px;
+    align-items: start;
+    padding: 4px 8px;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 10.5px;
+  }
+  .task-row:last-child { border-bottom: none; }
+  .task-row.week-label {
+    background: #f8fafc;
+    font-size: 9.5px;
+    color: #475569;
+    padding: 3px 8px;
+    grid-template-columns: 1fr;
+    font-weight: 600;
+  }
+  .task-row.milestone-row {
+    background: #fafafa;
+    border-top: 1.5px dashed #cbd5e1;
+    padding: 6px 8px;
+    grid-template-columns: 22px 1fr;
+    gap: 6px;
+    align-items: start;
+  }
+  .task-check {
+    width: 13px;
+    height: 13px;
+    border: 1.5px solid #94a3b8;
+    border-radius: 2px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .milestone-check {
+    width: 18px;
+    height: 18px;
+    border: 2px solid #0f172a;
+    border-radius: 3px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .task-text { line-height: 1.5; }
+  .task-topic {
+    font-size: 9px;
+    color: #94a3b8;
+    white-space: nowrap;
+    padding-top: 1px;
+    text-align: right;
+  }
+  .milestone-text { line-height: 1.5; }
+  .milestone-label { font-size: 9px; font-weight: 700; color: #64748b; display: block; }
+  .milestone-content { font-size: 10.5px; font-weight: 600; color: #0f172a; display: block; }
+  .milestone-next { font-size: 9px; color: #64748b; display: block; margin-top: 2px; }
+
+  /* ── Iron rules ── */
+  .rules-section { margin-top: 10px; }
+  .rules-title {
+    font-size: 11px;
+    font-weight: 800;
+    color: #0f172a;
+    border-bottom: 1.5px solid #0f172a;
+    padding-bottom: 4px;
+    margin-bottom: 6px;
+  }
+  .rules-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 6px;
+  }
+  .rule-card {
+    border: 1px solid #e2e8f0;
+    border-radius: 4px;
+    padding: 6px 8px;
+  }
+  .rule-card-title { font-weight: 700; font-size: 10px; color: #0f172a; margin-bottom: 2px; }
+  .rule-card-body { font-size: 9px; color: #475569; line-height: 1.5; }
+
+  /* ── Progress tracker ── */
+  .tracker {
+    margin-top: 10px;
+    border: 1px solid #e2e8f0;
+    border-radius: 4px;
+    padding: 8px 10px;
+  }
+  .tracker-title { font-size: 10px; font-weight: 700; margin-bottom: 6px; color: #0f172a; }
+  .tracker-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 6px;
+  }
+  .tracker-cell {
+    border: 1px solid #e2e8f0;
+    border-radius: 3px;
+    padding: 5px 6px;
+    font-size: 9px;
+  }
+  .tracker-cell-label { font-weight: 700; color: #475569; margin-bottom: 4px; }
+  .tracker-line { border-bottom: 1px solid #cbd5e1; height: 14px; margin-bottom: 4px; }
+
+  /* ── Page break ── */
+  .page-break { page-break-after: always; break-after: page; }
+
+  /* ── Footer ── */
+  .page-footer {
+    position: absolute;
+    bottom: 8mm;
+    left: 14mm;
+    right: 14mm;
+    display: flex;
+    justify-content: space-between;
+    font-size: 8px;
+    color: #94a3b8;
+    border-top: 1px solid #e2e8f0;
+    padding-top: 4px;
+  }
+
+  /* ── Print ── */
+  @media print {
+    body { background: #fff; }
+    .page {
+      margin: 0;
+      padding: 12mm 14mm 10mm 14mm;
+      width: 210mm;
+      min-height: 297mm;
+      page-break-after: always;
+      break-after: page;
+    }
+    .page:last-child { page-break-after: avoid; break-after: avoid; }
+    .no-print { display: none; }
+    input[type="checkbox"] { display: none; }
+  }
+
+  /* ── Print button (screen only) ── */
+  .print-btn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #0f172a;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 600;
+    z-index: 999;
+  }
+  .print-btn:hover { background: #1e293b; }
+  @media print { .print-btn { display: none; } }
+</style>
+</head>
+<body>
+
+<button class="print-btn no-print" onclick="window.print()">打印 / 导出 PDF</button>
+
+<!-- ══════════════════════════════════════════════════
+     PAGE 1 — 定向期 + 基础建设
+══════════════════════════════════════════════════ -->
+<div class="page">
+
+  <!-- Header -->
+  <div class="doc-header">
+    <div>
+      <div class="doc-title">香港金融职涯 · 18 个月在职转型 Checklist</div>
+      <div class="doc-subtitle">科技工程师 → 量化研究员 · 每周 15h · 5 个里程碑</div>
+    </div>
+    <div class="doc-meta">
+      <strong>开始日期</strong>：________________<br>
+      <strong>目标完成</strong>：________________<br>
+      <strong>目标公司</strong>：________________
+    </div>
+  </div>
+
+  <!-- Timeline strip -->
+  <div class="timeline">
+    <div class="tl-cell tl-m1">
+      <div class="tl-num">M1 · 定向期</div>
+      <div class="tl-label">确认方向 · 制定计划</div>
+      <div class="tl-period">第 1–2 月 · 每周 10h</div>
+    </div>
+    <div class="tl-cell tl-m2">
+      <div class="tl-num">M2 · 基础建设</div>
+      <div class="tl-label">量化技能 · SFC 考试</div>
+      <div class="tl-period">第 2–7 月 · 每周 15h</div>
+    </div>
+    <div class="tl-cell tl-m3">
+      <div class="tl-num">M3 · CFA L1</div>
+      <div class="tl-label">备考 300h · 国际认证</div>
+      <div class="tl-period">第 5–12 月 · 每周 15h</div>
+    </div>
+    <div class="tl-cell tl-m4">
+      <div class="tl-num">M4 · 项目实战</div>
+      <div class="tl-label">GitHub 作品集 4+</div>
+      <div class="tl-period">第 9–16 月 · 每周 15h</div>
+    </div>
+    <div class="tl-cell tl-m5">
+      <div class="tl-num">M5 · 冲刺转型</div>
+      <div class="tl-label">投递 · 面试 · Offer</div>
+      <div class="tl-period">第 14–18 月 · 每周 15h</div>
+    </div>
+  </div>
+
+  <!-- M1 -->
+  <div class="phase-section">
+    <div class="phase-header phase-m1">
+      <div class="phase-num bg-m1">M1</div>
+      <div class="phase-title-block">
+        <div class="phase-name">定向期 · 第 1–2 个月</div>
+        <div class="phase-sub">每周 10h · 主攻：搞清楚方向，制定计划</div>
+      </div>
+      <div class="phase-date-box">
+        <div class="date-field">开始 <span class="date-line"></span></div>
+        <div class="date-field">完成 <span class="date-line"></span></div>
+      </div>
+    </div>
+    <div class="task-body">
+      <div class="task-row week-label">第 1–2 周</div>
+      <div class="task-row">
+        <div class="task-check"></div>
+        <div class="task-text">精读专题一，梳理香港基金业版图，锁定目标岗位（量化研究员）</div>
+        <div class="task-topic">专题一</div>
+      </div>
+      <div class="task-row week-label">第 3–4 周</div>
+      <div class="task-row">
+        <div class="task-check"></div>
+        <div class="task-text">研究 3–5 个目标公司 JD，列出技能差距清单（编程 / 数学 / 金融知识）</div>
+        <div class="task-topic">自研</div>
+      </div>
+      <div class="task-row week-label">第 5–6 周</div>
+      <div class="task-row">
+        <div class="task-check"></div>
+        <div class="task-text">读专题四（SFC+CFA 联合备考路线图），制定 18 个月计划表——写出来</div>
+        <div class="task-topic">专题四</div>
+      </div>
+      <div class="task-row week-label">第 7–8 周</div>
+      <div class="task-row">
+        <div class="task-check"></div>
+        <div class="task-text">搭建学习系统（Anki / Notion），开始每日 20 min 英语热身（每天坚持，不算在 10h 内）</div>
+        <div class="task-topic">专题三</div>
+      </div>
+      <div class="task-row milestone-row">
+        <div class="milestone-check"></div>
+        <div class="milestone-text">
+          <span class="milestone-label">🏁 里程碑 M1 达标条件</span>
+          <span class="milestone-content">写出 1 页个人转型路线图：目标岗位 + 所需资质 + 时间节点</span>
+          <span class="milestone-next">→ 下一步：同时启动英语每日计划，不要等到 M2 才开始</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- M2 -->
+  <div class="phase-section">
+    <div class="phase-header phase-m2">
+      <div class="phase-num bg-m2">M2</div>
+      <div class="phase-title-block">
+        <div class="phase-name">基础建设 · 第 2–7 个月</div>
+        <div class="phase-sub">每周 15h · 主攻：量化技能底座 + SFC 考试（两件事错开推进）</div>
+      </div>
+      <div class="phase-date-box">
+        <div class="date-field">开始 <span class="date-line"></span></div>
+        <div class="date-field">完成 <span class="date-line"></span></div>
+      </div>
+    </div>
+    <div class="task-body">
+      <div class="task-row week-label">第 9–12 周 · 数学线</div>
+      <div class="task-row">
+        <div class="task-check"></div>
+        <div class="task-text">专题二数学线：线性代数、概率统计、时间序列入门</div>
+        <div class="task-topic">专题二</div>
+      </div>
+      <div class="task-row week-label">第 13–16 周 · 编程线</div>
+      <div class="task-row">
+        <div class="task-check"></div>
+        <div class="task-text">专题二编程线：pandas / numpy / yfinance 上手（配合专题七一起看）</div>
+        <div class="task-topic">专题二+七</div>
+      </div>
+      <div class="task-row week-label">第 17–20 周 · SFC Paper 1</div>
+      <div class="task-row">
+        <div class="task-check"></div>
+        <div class="task-text">专题五：SFC Paper 1 冲刺备考（基础法规），目标 4 周通过</div>
+        <div class="task-topic">专题五</div>
+      </div>
+      <div class="task-row">
+        <div class="task-check"></div>
+        <div class="task-text"><strong>通过 SFC LE Paper 1</strong> &nbsp; 考试日期：__________ &nbsp; 成绩：__________</div>
+        <div class="task-topic">SFC 考试</div>
+      </div>
+      <div class="task-row week-label">第 21–24 周 · SFC Paper 2</div>
+      <div class="task-row">
+        <div class="task-check"></div>
+        <div class="task-text">专题五：SFC Paper 2 冲刺（资产管理专项），同步继续量化编程练习</div>
+        <div class="task-topic">专题五</div>
+      </div>
+      <div class="task-row">
+        <div class="task-check"></div>
+        <div class="task-text"><strong>通过 SFC LE Paper 2</strong> &nbsp; 考试日期：__________ &nbsp; 成绩：__________</div>
+        <div class="task-topic">SFC 考试</div>
+      </div>
+      <div class="task-row week-label">第 25–28 周 · 策略线</div>
+      <div class="task-row">
+        <div class="task-check"></div>
+        <div class="task-text">专题二策略线：动量 / 均值回归策略原理，完成首个本地可运行回测 Demo（有 Sharpe 输出）</div>
+        <div class="task-topic">专题二</div>
+      </div>
+      <div class="task-row milestone-row">
+        <div class="milestone-check"></div>
+        <div class="milestone-text">
+          <span class="milestone-label">🏁 里程碑 M2 达标条件（两项都要完成）</span>
+          <span class="milestone-content">① SFC LE Paper 1 & 2 均已通过 &nbsp; ② 首个量化策略 Demo 可运行</span>
+          <span class="milestone-next">→ 下一步：SFC 考完即启动 CFA L1 正式备考，两条线并行</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>香港金融职涯 · 18 个月在职转型 Checklist</span>
+    <span>第 1 页 / 共 2 页</span>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════
+     PAGE 2 — CFA L1 · 项目实战 · 冲刺转型 · 铁律
+══════════════════════════════════════════════════ -->
+<div class="page">
+
+  <!-- M3 -->
+  <div class="phase-section">
+    <div class="phase-header phase-m3">
+      <div class="phase-num bg-m3">M3</div>
+      <div class="phase-title-block">
+        <div class="phase-name">CFA Level 1 备考 · 第 5–12 个月</div>
+        <div class="phase-sub">每周 15h · 主攻：CFA L1（约 300h）· 每周 10–12h CFA + 5h 量化延续</div>
+      </div>
+      <div class="phase-date-box">
+        <div class="date-field">报名 <span class="date-line"></span></div>
+        <div class="date-field">考试 <span class="date-line"></span></div>
+      </div>
+    </div>
+    <div class="task-body">
+      <div class="task-row week-label">第 21–28 周 · 权益 + 固收</div>
+      <div class="task-row">
+        <div class="task-check"></div>
+        <div class="task-text">权益 + 固收核心模块：每周 10h CFA + 5h 量化编程延续</div>
+        <div class="task-topic">专题六</div>
+      </div>
+      <div class="task-row week-label">第 29–36 周 · 衍生品 + 另类 + 组合</div>
+      <div class="task-row">
+        <div class="task-check"></div>
+        <div class="task-text">衍生品 + 另类投资 + 组合管理：每周 10h CFA + 5h 英语强化</div>
+        <div class="task-topic">专题六</div>
+      </div>
+      <div class="task-row week-label">第 37–44 周 · 财报 + 道德 · 冲刺</div>
+      <div class="task-row">
+        <div class="task-check"></div>
+        <div class="task-text">财务报表分析 + 道德模块：进入刷题冲刺阶段，每周 12h+ CFA</div>
+        <div class="task-topic">专题六</div>
+      </div>
+      <div class="task-row week-label">第 45–48 周 · 模拟卷</div>
+      <div class="task-row">
+        <div class="task-check"></div>
+        <div class="task-text">全真模拟卷 ×3 套，错题强化，考前 4 周停止新知识输入</div>
+        <div class="task-topic">专题六</div>
+      </div>
+      <div class="task-row milestone-row">
+        <div class="milestone-check"></div>
+        <div class="milestone-text">
+          <span class="milestone-label">🏁 里程碑 M3 达标条件</span>
+          <span class="milestone-content">CFA Level 1 通过（目标 12 月或次年 6 月考期）</span>
+          <span class="milestone-next">→ 下一步：量化项目全力加速，CFA L2 可同步报名</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- M4 -->
+  <div class="phase-section">
+    <div class="phase-header phase-m4">
+      <div class="phase-num bg-m4">M4</div>
+      <div class="phase-title-block">
+        <div class="phase-name">量化项目实战 · 第 9–16 个月</div>
+        <div class="phase-sub">每周 15h · 主攻：把技能变成 GitHub 上看得见的作品集（4 个可交付项目）</div>
+      </div>
+      <div class="phase-date-box">
+        <div class="date-field">开始 <span class="date-line"></span></div>
+        <div class="date-field">完成 <span class="date-line"></span></div>
+      </div>
+    </div>
+    <div class="task-body">
+      <div class="task-row week-label">第 37–44 周 · 技术栈上手</div>
+      <div class="task-row">
+        <div class="task-check"></div>
+        <div class="task-text">专题七：backtrader + statsmodels + alphalens 上手，完成初级项目 ×2，推送 GitHub</div>
+        <div class="task-topic">专题七+八</div>
+      </div>
+      <div class="task-row week-label">第 45–52 周 · 因子模型</div>
+      <div class="task-row">
+        <div class="task-check"></div>
+        <div class="task-text">专题八：动量策略 + Fama-French 因子复现，整理成 GitHub Repo，写中文 README</div>
+        <div class="task-topic">专题八</div>
+      </div>
+      <div class="task-row week-label">第 53–58 周 · ML 选股</div>
+      <div class="task-row">
+        <div class="task-check"></div>
+        <div class="task-text">专题八：ML 选股模型（XGBoost），pyfolio 生成完整绩效报告（Sharpe / MaxDD）</div>
+        <div class="task-topic">专题八</div>
+      </div>
+      <div class="task-row week-label">第 59–64 周 · 整合作品集</div>
+      <div class="task-row">
+        <div class="task-check"></div>
+        <div class="task-text">整合作品集：补齐英文文档，写 1–2 篇技术博客，项目展示视频（可选）</div>
+        <div class="task-topic">专题八+九</div>
+      </div>
+      <div class="task-row milestone-row">
+        <div class="milestone-check"></div>
+        <div class="milestone-text">
+          <span class="milestone-label">🏁 里程碑 M4 达标条件</span>
+          <span class="milestone-content">GitHub 公开 4+ 量化项目（含完整回测 + Sharpe / MaxDD 报告），可直接在面试中演示</span>
+          <span class="milestone-next">→ 下一步：项目完成后即可开始投递，不要等到「完美」</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- M5 -->
+  <div class="phase-section">
+    <div class="phase-header phase-m5">
+      <div class="phase-num bg-m5">M5</div>
+      <div class="phase-title-block">
+        <div class="phase-name">冲刺转型 · 第 14–18 个月</div>
+        <div class="phase-sub">每周 15h · 主攻：求职投递 + 面试准备（量化项目是敲门砖，SFC 牌照是准入证）</div>
+      </div>
+      <div class="phase-date-box">
+        <div class="date-field">开始 <span class="date-line"></span></div>
+        <div class="date-field">Offer <span class="date-line"></span></div>
+      </div>
+    </div>
+    <div class="task-body">
+      <div class="task-row week-label">第 57–60 周 · 简历重写</div>
+      <div class="task-row">
+        <div class="task-check"></div>
+        <div class="task-text">重写简历：突出量化项目 + SFC 牌照 + 技术栈，量化所有成果数字化</div>
+        <div class="task-topic">自研</div>
+      </div>
+      <div class="task-row week-label">第 61–64 周 · 定向投递</div>
+      <div class="task-row">
+        <div class="task-check"></div>
+        <div class="task-text">定向投递：每周 3–5 封，锁定量化基金 / 银行量化风险部门，激活 LinkedIn</div>
+        <div class="task-topic">专题九</div>
+      </div>
+      <div class="task-row week-label">第 65–68 周 · 面试准备</div>
+      <div class="task-row">
+        <div class="task-check"></div>
+        <div class="task-text">面试准备：Python 算法题 + 因子回测展示 + 行为面试（STAR 结构）</div>
+        <div class="task-topic">专题一+二</div>
+      </div>
+      <div class="task-row week-label">第 69–72 周 · Offer 收割</div>
+      <div class="task-row">
+        <div class="task-check"></div>
+        <div class="task-text">Offer 谈判 + SFC 由雇主申请激活 + CFA L2 正式报名</div>
+        <div class="task-topic">专题五</div>
+      </div>
+      <div class="task-row milestone-row">
+        <div class="milestone-check"></div>
+        <div class="milestone-text">
+          <span class="milestone-label">🏁 里程碑 M5（终点）达标条件</span>
+          <span class="milestone-content">收到量化基金或银行量化风险部门 Offer，完成跨行转型</span>
+          <span class="milestone-next">→ 入职后继续 CFA L2，积累 4000h 工作经验后申请 CFA Charterholder</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Iron Rules -->
+  <div class="rules-section">
+    <div class="rules-title">在职学习 6 条铁律（每周日对照检查）</div>
+    <div class="rules-grid">
+      <div class="rule-card">
+        <div class="rule-card-title">① 单线推进</div>
+        <div class="rule-card-body">每个时间段只推进一件主事。CFA / SFC / 量化项目不同时全速跑。次要任务每天 ≤20 min 维持。</div>
+      </div>
+      <div class="rule-card">
+        <div class="rule-card-title">② 周计划优先</div>
+        <div class="rule-card-body">每周日规划本周 15h 投入到哪里，写下来。不做计划就把时间交给杂事。</div>
+      </div>
+      <div class="rule-card">
+        <div class="rule-card-title">③ 里程碑驱动</div>
+        <div class="rule-card-body">5 个里程碑是硬指标，不是「学得差不多」。里程碑没完成，不往下一阶段走。</div>
+      </div>
+      <div class="rule-card">
+        <div class="rule-card-title">④ 碎片时间利用</div>
+        <div class="rule-card-body">通勤 + 午休 ≈ 每日 40–60 min。配合音频资料（专题十）+ Anki，不浪费。</div>
+      </div>
+      <div class="rule-card">
+        <div class="rule-card-title">⑤ 不追求完美</div>
+        <div class="rule-card-body">项目「能跑通、能讲清楚」就达标。追求完美是在职学习的最大陷阱。</div>
+      </div>
+      <div class="rule-card">
+        <div class="rule-card-title">⑥ 英语每天不断</div>
+        <div class="rule-card-body">唯一需要每天做的事，绝对不能中断。CFA 备考本身是最强的英语浸泡。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Progress tracker -->
+  <div class="tracker">
+    <div class="tracker-title">进度快照（每月月底填写一次）</div>
+    <div class="tracker-grid">
+      <div class="tracker-cell">
+        <div class="tracker-cell-label">M1 完成日期</div>
+        <div class="tracker-line"></div>
+        <div class="tracker-cell-label">备注</div>
+        <div class="tracker-line"></div>
+      </div>
+      <div class="tracker-cell">
+        <div class="tracker-cell-label">M2 完成日期</div>
+        <div class="tracker-line"></div>
+        <div class="tracker-cell-label">SFC 成绩</div>
+        <div class="tracker-line"></div>
+      </div>
+      <div class="tracker-cell">
+        <div class="tracker-cell-label">M3 完成日期</div>
+        <div class="tracker-line"></div>
+        <div class="tracker-cell-label">CFA 成绩</div>
+        <div class="tracker-line"></div>
+      </div>
+      <div class="tracker-cell">
+        <div class="tracker-cell-label">M4 完成日期</div>
+        <div class="tracker-line"></div>
+        <div class="tracker-cell-label">GitHub 项目数</div>
+        <div class="tracker-line"></div>
+      </div>
+      <div class="tracker-cell">
+        <div class="tracker-cell-label">M5 完成日期</div>
+        <div class="tracker-line"></div>
+        <div class="tracker-cell-label">Offer 公司</div>
+        <div class="tracker-line"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>香港金融职涯 · 18 个月在职转型 Checklist</span>
+    <span>第 2 页 / 共 2 页</span>
+  </div>
+</div>
+
+</body>
+</html>
