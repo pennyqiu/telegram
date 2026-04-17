@@ -334,9 +334,9 @@ const curriculum=[
   {id:'hk-fund-career',phase:7,phaseLabel:'第七阶段：香港金融职涯',tag:'🏦 专题一',title:'科技工程师入场香港私募基金：从入场券到职涯规划',duration:'90 min'},
   {id:'hk-quant-roadmap',phase:7,tag:'📐 专题二',title:'量化研究员完整技能图谱：数学·编程·策略三线攻克',duration:'120 min'},
   {id:'hk-english-strategy',phase:7,tag:'🗣️ 专题三',title:'金融英语快速达标：英语差的人专属180天方案',duration:'60 min'},
-  {id:'hk-sfc-license',phase:7,tag:'📋 专题四',title:'SFC 牌照完全备考手册：LE Paper 1 & 2 实战指南',shortTitle:'SFC 牌照备考实战手册',duration:'60 min'},
-  {id:'hk-cfa-guide',phase:7,tag:'🎓 专题五',title:'CFA 完全备考手册：42岁在职转型专项指南',shortTitle:'CFA 备考与转型指南',duration:'90 min'},
-  {id:'hk-sfc-cfa-roadmap',phase:7,tag:'🗺️ 专题六',title:'SFC + CFA 联合备考路线图：一条路走到底不走回头路',shortTitle:'SFC+CFA 联合备考路线',duration:'30 min'},
+  {id:'hk-sfc-cfa-roadmap',phase:7,tag:'🗺️ 专题四',title:'SFC + CFA 联合备考路线图：一条路走到底不走回头路',shortTitle:'SFC+CFA 联合备考路线',duration:'30 min'},
+  {id:'hk-sfc-license',phase:7,tag:'📋 专题五',title:'SFC 牌照完全备考手册：LE Paper 1 & 2 实战指南',shortTitle:'SFC 牌照备考实战手册',duration:'60 min'},
+  {id:'hk-cfa-guide',phase:7,tag:'🎓 专题六',title:'CFA 完全备考手册：42岁在职转型专项指南',shortTitle:'CFA 备考与转型指南',duration:'90 min'},
   {id:'hk-quant-tools',phase:7,tag:'🛠️ 专题七',title:'量化项目技术栈实战手册：8个核心库从零到上手',shortTitle:'量化技术栈实战手册',duration:'60 min'},
   {id:'quant-strategy-projects',phase:7,tag:'🧪 专题八',title:'量化策略项目库：初/中/高/专家 16个可交付项目',shortTitle:'量化策略项目库',duration:'持续实践'},
 ];
@@ -385,13 +385,22 @@ const subgroupMap = {
   'voo-research':'sg-etf','qqq-research':'sg-etf','vym-research':'sg-etf',
   'dgro-research':'sg-etf','bnd-research':'sg-etf','tips-research':'sg-etf',
   'gld-research':'sg-etf','aapl-research':'sg-etf',
-  'audio-commute':'sg-audio'
+  'audio-commute':'sg-audio',
+  // Phase 7 子分组映射
+  'hk-fund-career':'sg7-entry',
+  'hk-quant-roadmap':'sg7-skills','hk-english-strategy':'sg7-skills',
+  'hk-sfc-cfa-roadmap':'sg7-cert','hk-sfc-license':'sg7-cert','hk-cfa-guide':'sg7-cert',
+  'hk-quant-tools':'sg7-projects','quant-strategy-projects':'sg7-projects'
 };
 const subgroupLabels = {
   'sg-leaders':'📖 顶级领路人精华',
   'sg-tools':'🛠️ 工具与方法论',
   'sg-etf':'📊 ETF & 个股研究',
-  'sg-audio':'🎧 通勤音频路线'
+  'sg-audio':'🎧 通勤音频路线',
+  'sg7-entry':'🎯 职业定向',
+  'sg7-skills':'💪 技能建设',
+  'sg7-cert':'📋 资质认证',
+  'sg7-projects':'⚒️ 项目实战'
 };
 const collapsedSubgroups = new Set(['sg-etf']);
 
@@ -10797,6 +10806,52 @@ BND让跌幅变成-15%，<span class="hl">大多数人能撑住-15%</span>。
   <div style="font-size:14px;color:rgba(255,255,255,.75);line-height:1.7">这不是遥不可及的跨越。你已经具备 80% 的底层能力——<strong style="color:#fbbf24">技术思维、数据处理、逻辑分析</strong>。本文给你一张精确的作战地图：需要补什么、用多久、怎么进门、进去后能走多远。</div>
 </div>
 
+<div style="background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:14px;padding:20px 24px;margin-bottom:28px">
+  <div style="font-weight:800;font-size:15px;color:#0f172a;margin-bottom:16px">🗺️ 第七阶段：学习路线总览（共8个专题）</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:13px">
+
+    <div style="background:#fff;border:1.5px solid #0f172a;border-radius:12px;padding:14px 16px">
+      <div style="font-weight:700;color:#0f172a;margin-bottom:8px;display:flex;align-items:center;gap:6px"><span style="background:#0f172a;color:#fff;font-size:11px;padding:2px 8px;border-radius:99px">专题一</span>🎯 职业定向</div>
+      <div style="color:#374151;line-height:1.8">
+        <strong>入场路径全图</strong>：你的优势在哪里、哪类基金最适合、如何在不离职的情况下准备转行<br>
+        <span style="color:#6b7280;font-size:12px">👉 从这里开始，确认方向再行动</span>
+      </div>
+    </div>
+
+    <div style="background:#fff;border:1.5px solid #4338ca;border-radius:12px;padding:14px 16px">
+      <div style="font-weight:700;color:#4338ca;margin-bottom:8px;display:flex;align-items:center;gap:6px"><span style="background:#4338ca;color:#fff;font-size:11px;padding:2px 8px;border-radius:99px">专题二三</span>💪 技能建设</div>
+      <div style="color:#374151;line-height:1.8">
+        <strong>专题二</strong>：量化技能图谱（数学·编程·策略三线）<br>
+        <strong>专题三</strong>：金融英语180天方案<br>
+        <span style="color:#6b7280;font-size:12px">👉 建立进场所需的技能底座</span>
+      </div>
+    </div>
+
+    <div style="background:#fff;border:1.5px solid #0369a1;border-radius:12px;padding:14px 16px">
+      <div style="font-weight:700;color:#0369a1;margin-bottom:8px;display:flex;align-items:center;gap:6px"><span style="background:#0369a1;color:#fff;font-size:11px;padding:2px 8px;border-radius:99px">专题四五六</span>📋 资质认证</div>
+      <div style="color:#374151;line-height:1.8">
+        <strong>专题四</strong>：SFC+CFA 联合备考路线图（先读这个！）<br>
+        <strong>专题五</strong>：SFC LE Paper 1 &amp; 2 实战手册<br>
+        <strong>专题六</strong>：CFA 42岁在职备考专项指南<br>
+        <span style="color:#6b7280;font-size:12px">👉 先看路线图，再看详细备考手册</span>
+      </div>
+    </div>
+
+    <div style="background:#fff;border:1.5px solid #b45309;border-radius:12px;padding:14px 16px">
+      <div style="font-weight:700;color:#b45309;margin-bottom:8px;display:flex;align-items:center;gap:6px"><span style="background:#b45309;color:#fff;font-size:11px;padding:2px 8px;border-radius:99px">专题七八</span>⚒️ 项目实战</div>
+      <div style="color:#374151;line-height:1.8">
+        <strong>专题七</strong>：量化技术栈（8个核心库）<br>
+        <strong>专题八</strong>：16个可交付量化策略项目<br>
+        <span style="color:#6b7280;font-size:12px">👉 把技能变成 GitHub 上看得见的作品集</span>
+      </div>
+    </div>
+
+  </div>
+  <div style="margin-top:14px;background:#fffbeb;border:1px solid #fcd34d;border-radius:8px;padding:10px 14px;font-size:12px;color:#92400e">
+    ⏱️ <strong>总时间估算：</strong>按每周 15 小时在职学习，从零到可以投递量化研究员简历约需 <strong>12-18 个月</strong>。资质认证（SFC+CFA L1）可与技能建设并行推进，互不耽误。
+  </div>
+</div>
+
 <h2>一、为什么你有天然优势</h2>
 <p>香港基金业正在经历一场深刻变革：<strong>从靠关系拿项目，到靠数据做决策</strong>。量化基金、AI 驱动的系统性策略正在取代传统主观选股，而这恰好是技术人的主场。</p>
 
@@ -13084,6 +13139,10 @@ HKSI 考试中心在工作日（周一至周五）和<strong>周六上午</stron
   <div style="font-size:12px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:8px">SFC + CFA 联合备考策略</div>
   <div style="font-size:24px;font-weight:900;line-height:1.3;margin-bottom:10px">一条路走到底<br>不走回头路的备考思路</div>
   <div style="font-size:14px;color:rgba(255,255,255,.75);line-height:1.8">SFC LE 和 CFA 不是两件独立的事，它们共享一套底层逻辑。<strong style="color:#93c5fd">用对顺序，可以省掉 35-45 小时重复学习</strong>；用错顺序，会反复从头建立相同的概念。这份指南的目标只有一个：让你每一小时的学习都累积到下一步，永远向前不回头。</div>
+</div>
+
+<div style="background:#eff6ff;border:1.5px solid #bfdbfe;border-radius:10px;padding:12px 18px;margin-bottom:20px;font-size:13px;color:#1e40af">
+  📌 <strong>资质认证模块读法建议</strong>：先读本页（专题四）了解整体战略顺序，再分别精读 <strong>专题五（SFC LE 详细备考手册）</strong>和 <strong>专题六（CFA 在职备考指南）</strong>。顺序颠倒会让两份手册读起来缺乏上下文，浪费时间。
 </div>
 
 <h2>一、先看清两者的关系</h2>
