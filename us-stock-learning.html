@@ -50,7 +50,7 @@
   .nav-item.completed .nav-icon{background:var(--success);color:#fff;}
   .nav-icon{width:20px;height:20px;border-radius:50%;background:var(--gray-200);color:var(--gray-500);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex-shrink:0;transition:all .2s;}
   .nav-item.active .nav-icon{background:var(--primary);color:#fff;}
-  .nav-title{flex:1;line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
+  .nav-title{flex:1;line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;line-clamp:2;-webkit-box-orient:vertical;}
   .nav-tag{font-size:10px;padding:1px 5px;border-radius:99px;background:var(--gray-100);color:var(--gray-500);font-weight:600;flex-shrink:0;}
   .nav-item.active .nav-tag{background:var(--primary-light);color:var(--primary);}
   /* MAIN */
@@ -339,6 +339,7 @@ const curriculum=[
   {id:'hk-cfa-guide',phase:7,tag:'🎓 专题六',title:'CFA 完全备考手册：42岁在职转型专项指南',shortTitle:'CFA 备考与转型指南',duration:'90 min'},
   {id:'hk-quant-tools',phase:7,tag:'🛠️ 专题七',title:'量化项目技术栈实战手册：8个核心库从零到上手',shortTitle:'量化技术栈实战手册',duration:'60 min'},
   {id:'quant-strategy-projects',phase:7,tag:'🧪 专题八',title:'量化策略项目库：初/中/高/专家 16个可交付项目',shortTitle:'量化策略项目库',duration:'持续实践'},
+  {id:'quant-resources',phase:7,tag:'📚 专题九',title:'量化学习资料库：书单/论文/课程/社区全收录',shortTitle:'量化学习资料库',duration:'持续参考'},
 ];
 
 let currentIndex=0;
@@ -795,7 +796,7 @@ function getWelcome(){return`<div class="welcome-screen">
   <h1>📈 美股系统学习路径<br>完整版 · 约30小时课程</h1>
   <p>专为互联网从业者设计的深度美股学习体系。42岁，年入150万，持有800万股票——<br>本课程将帮助你系统掌握美股投资，构建能穿越30年的养老组合。</p>
   <div class="welcome-stats">
-    <div class="welcome-stat"><div class="welcome-stat-num">46</div><div class="welcome-stat-label">课程节数</div></div>
+    <div class="welcome-stat"><div class="welcome-stat-num">47</div><div class="welcome-stat-label">课程节数</div></div>
     <div class="welcome-stat"><div class="welcome-stat-num">~60h</div><div class="welcome-stat-label">总学习时长</div></div>
     <div class="welcome-stat"><div class="welcome-stat-num">7</div><div class="welcome-stat-label">学习阶段</div></div>
     <div class="welcome-stat"><div class="welcome-stat-num">6</div><div class="welcome-stat-label">完整估值案例</div></div>
