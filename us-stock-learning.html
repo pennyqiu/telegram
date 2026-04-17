@@ -329,7 +329,8 @@ const curriculum=[
   {id:'farnam-mental-models',phase:6,tag:'第27课',title:'Farnam Street心智模型：2020-2025精华',shortTitle:'Farnam 心智模型',duration:'90 min'},
   {id:'howard-marks-memos',phase:6,tag:'第29课',title:'Howard Marks投资备忘录精选：周期与风险',shortTitle:'Howard Marks 备忘录',duration:'110 min'},
   {id:'ben-felix',phase:6,tag:'第41课',title:'Ben Felix循证投资：因子模型与学术实证',shortTitle:'Ben Felix 循证投资',duration:'90 min'},
-  {id:'hk-fund-career',phase:7,phaseLabel:'第七阶段：香港金融职涯',tag:'🏦 专题一',title:'科技工程师入场香港私募基金：从入场券到职涯规划',duration:'90 min'},
+  {id:'hk-learning-roadmap',phase:7,phaseLabel:'第七阶段：香港金融职涯',tag:'📍 路线图',title:'18个月在职转型路线图：5个里程碑完整攻略',shortTitle:'18个月转型路线图',duration:'15 min'},
+  {id:'hk-fund-career',phase:7,tag:'🏦 专题一',title:'科技工程师入场香港私募基金：从入场券到职涯规划',duration:'90 min'},
   {id:'hk-quant-roadmap',phase:7,tag:'📐 专题二',title:'量化研究员完整技能图谱：数学·编程·策略三线攻克',duration:'120 min'},
   {id:'hk-english-strategy',phase:7,tag:'🗣️ 专题三',title:'金融英语快速达标：英语差的人专属180天方案',duration:'60 min'},
   {id:'hk-sfc-cfa-roadmap',phase:7,tag:'🗺️ 专题四',title:'SFC + CFA 联合备考路线图：一条路走到底不走回头路',shortTitle:'SFC+CFA 联合备考路线',duration:'30 min'},
@@ -386,7 +387,7 @@ const subgroupMap = {
   'dgro-research':'sg-etf','bnd-research':'sg-etf','tips-research':'sg-etf',
   'gld-research':'sg-etf','aapl-research':'sg-etf',
   // Phase 7 子分组映射
-  'hk-fund-career':'sg7-entry',
+  'hk-learning-roadmap':'sg7-entry','hk-fund-career':'sg7-entry',
   'hk-quant-roadmap':'sg7-skills','hk-english-strategy':'sg7-skills',
   'hk-sfc-cfa-roadmap':'sg7-cert','hk-sfc-license':'sg7-cert','hk-cfa-guide':'sg7-cert',
   'hk-quant-tools':'sg7-projects','quant-strategy-projects':'sg7-projects',
@@ -10794,6 +10795,199 @@ BND让跌幅变成-15%，<span class="hl">大多数人能撑住-15%</span>。
   </div>
   <div style="margin-top:16px;font-size:12px;opacity:.8">
     "你的认知边界，就是你财富的边界。通勤路上的1小时，是最低成本的认知升级。"
+  </div>
+</div>
+`,
+
+// =====================================================================
+'hk-learning-roadmap':`
+<div style="background:#0f172a;border-radius:16px;padding:28px 32px;margin-bottom:28px;color:#fff">
+  <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:8px">第七阶段 · 在职转型专属</div>
+  <div style="font-size:22px;font-weight:900;line-height:1.3;margin-bottom:10px">18 个月路线图：5 个里程碑<br>从工程师到量化研究员</div>
+  <div style="font-size:13px;color:rgba(255,255,255,.7);line-height:1.8">本阶段内容丰富，但<strong style="color:#fbbf24">内容多不等于要同时学</strong>。这张路线图告诉你：先做什么、后做什么、什么时候算「过关」了可以往下走。每周 15 小时，18 个月，5 个硬性里程碑。</div>
+</div>
+
+<div style="background:#fef9c3;border:1.5px solid #f59e0b;border-radius:12px;padding:16px 20px;margin-bottom:24px">
+  <div style="font-weight:700;color:#92400e;margin-bottom:6px">⚠️ 在职学习最大的陷阱</div>
+  <div style="font-size:13px;color:#78350f;line-height:1.8">「什么都想学 → 什么都没学完 → 什么都没用上」。本路线图的核心原则：<strong>每个时间段只推进一件主事</strong>，次要任务每天 ≤20 min 维持。里程碑没完成，不往下走。</div>
+</div>
+
+<h2>总览：18 个月 × 5 个里程碑</h2>
+
+<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:0;margin-bottom:28px;border:1.5px solid #e2e8f0;border-radius:12px;overflow:hidden;font-size:12px">
+  <div style="padding:14px 12px;border-right:1px solid #e2e8f0;background:#f8fafc">
+    <div style="font-weight:800;color:#6366f1;margin-bottom:4px">M1</div>
+    <div style="font-weight:700;color:#0f172a;margin-bottom:4px">定向期</div>
+    <div style="color:#64748b;line-height:1.6">第 1–2 月<br>每周 10h</div>
+  </div>
+  <div style="padding:14px 12px;border-right:1px solid #e2e8f0;background:#fffbeb">
+    <div style="font-weight:800;color:#d97706;margin-bottom:4px">M2</div>
+    <div style="font-weight:700;color:#0f172a;margin-bottom:4px">基础建设</div>
+    <div style="color:#64748b;line-height:1.6">第 2–7 月<br>每周 15h</div>
+  </div>
+  <div style="padding:14px 12px;border-right:1px solid #e2e8f0;background:#f8fafc">
+    <div style="font-weight:800;color:#0369a1;margin-bottom:4px">M3</div>
+    <div style="font-weight:700;color:#0f172a;margin-bottom:4px">CFA L1</div>
+    <div style="color:#64748b;line-height:1.6">第 5–12 月<br>每周 15h</div>
+  </div>
+  <div style="padding:14px 12px;border-right:1px solid #e2e8f0;background:#f0fdf4">
+    <div style="font-weight:800;color:#15803d;margin-bottom:4px">M4</div>
+    <div style="font-weight:700;color:#0f172a;margin-bottom:4px">项目实战</div>
+    <div style="color:#64748b;line-height:1.6">第 9–16 月<br>每周 15h</div>
+  </div>
+  <div style="padding:14px 12px;background:#faf5ff">
+    <div style="font-weight:800;color:#7c3aed;margin-bottom:4px">M5</div>
+    <div style="font-weight:700;color:#0f172a;margin-bottom:4px">冲刺转型</div>
+    <div style="color:#64748b;line-height:1.6">第 14–18 月<br>每周 15h</div>
+  </div>
+</div>
+
+<div style="display:flex;gap:0;margin-bottom:28px;height:8px;border-radius:99px;overflow:hidden">
+  <div style="flex:2;background:#6366f1"></div>
+  <div style="flex:5;background:#f59e0b"></div>
+  <div style="flex:7;background:#0369a1"></div>
+  <div style="flex:7;background:#16a34a"></div>
+  <div style="flex:4;background:#7c3aed"></div>
+</div>
+
+<h2>M1 · 定向期（第 1–2 个月，每周 10h）</h2>
+<div style="background:#eef2ff;border-left:4px solid #6366f1;border-radius:0 10px 10px 0;padding:14px 18px;margin-bottom:16px;font-size:13px;color:#3730a3;line-height:1.8">
+  <strong>主攻：</strong>搞清楚方向，制定计划。这两个月不要求学新技能，只要求「想清楚」。
+</div>
+
+<div class="table-wrap"><table>
+<thead><tr><th>时间段</th><th>学习内容</th><th>对应专题</th><th>周投入</th></tr></thead>
+<tbody>
+<tr><td>第 1–2 周</td><td>精读专题一，梳理香港基金业版图，锁定目标岗位（量化研究员）</td><td>专题一</td><td>10h</td></tr>
+<tr><td>第 3–4 周</td><td>研究 3–5 个目标公司 JD，列出技能差距清单（编程/数学/金融知识）</td><td>自研</td><td>10h</td></tr>
+<tr><td>第 5–6 周</td><td>读专题四（SFC+CFA 路线图），制定整体 18 个月备考计划表——写出来</td><td>专题四</td><td>10h</td></tr>
+<tr><td>第 7–8 周</td><td>搭建学习系统（Anki / Notion），开始每日 20 min 英语热身（不算在 10h 内）</td><td>专题三</td><td>10h</td></tr>
+</tbody></table></div>
+
+<div style="background:#e0e7ff;border:1.5px solid #6366f1;border-radius:10px;padding:14px 18px;margin:16px 0 28px 0">
+  <div style="font-weight:700;color:#3730a3;margin-bottom:4px">🏁 里程碑 M1</div>
+  <div style="font-size:13px;color:#312e81;line-height:1.7">写出 1 页个人转型路线图：目标岗位 + 所需资质 + 时间节点。<br><span style="color:#4f46e5">下一步：同时启动英语每日计划，不要等到 M2 才开始。</span></div>
+</div>
+
+<h2>M2 · 基础建设（第 2–7 个月，每周 15h）</h2>
+<div style="background:#fffbeb;border-left:4px solid #f59e0b;border-radius:0 10px 10px 0;padding:14px 18px;margin-bottom:16px;font-size:13px;color:#92400e;line-height:1.8">
+  <strong>主攻：</strong>量化技能底座 + SFC 考试。两件事错开推进，不同时全速跑。
+</div>
+
+<div class="table-wrap"><table>
+<thead><tr><th>时间段</th><th>学习内容</th><th>对应专题</th><th>周投入</th></tr></thead>
+<tbody>
+<tr><td>第 9–12 周</td><td>专题二数学线：线性代数、概率统计、时间序列入门</td><td>专题二</td><td>15h</td></tr>
+<tr><td>第 13–16 周</td><td>专题二编程线：pandas / numpy / yfinance 上手（配合专题七一起看）</td><td>专题二 + 专题七</td><td>15h</td></tr>
+<tr><td>第 17–20 周</td><td>专题五：SFC Paper 1 冲刺备考（基础法规），目标 4 周通过</td><td>专题五</td><td>15h</td></tr>
+<tr><td>第 21–24 周</td><td>专题五：SFC Paper 2 冲刺（资产管理专项），同步继续量化编程练习</td><td>专题五</td><td>15h</td></tr>
+<tr><td>第 25–28 周</td><td>专题二策略线：动量 / 均值回归策略原理，完成第一个本地可运行的回测 Demo</td><td>专题二</td><td>15h</td></tr>
+</tbody></table></div>
+
+<div style="background:#fef3c7;border:1.5px solid #f59e0b;border-radius:10px;padding:14px 18px;margin:16px 0 28px 0">
+  <div style="font-weight:700;color:#92400e;margin-bottom:4px">🏁 里程碑 M2</div>
+  <div style="font-size:13px;color:#78350f;line-height:1.7">通过 SFC LE Paper 1 & 2 考试 + 完成首个量化策略 Demo（可回测、有 Sharpe 输出）。<br><span style="color:#b45309">下一步：SFC 考完即启动 CFA L1 正式备考，两条线并行。</span></div>
+</div>
+
+<h2>M3 · CFA Level 1 备考（第 5–12 个月，每周 15h）</h2>
+<div style="background:#eff6ff;border-left:4px solid #0369a1;border-radius:0 10px 10px 0;padding:14px 18px;margin-bottom:16px;font-size:13px;color:#1e3a5f;line-height:1.8">
+  <strong>主攻：</strong>CFA L1，约需 300 小时。在职每周 10–12h CFA，剩余时间维持量化项目不断线。
+</div>
+
+<div class="table-wrap"><table>
+<thead><tr><th>时间段</th><th>学习内容</th><th>对应专题</th><th>周投入</th></tr></thead>
+<tbody>
+<tr><td>第 21–28 周</td><td>权益 + 固收核心模块：每周 10h CFA + 5h 量化编程延续</td><td>专题六</td><td>15h</td></tr>
+<tr><td>第 29–36 周</td><td>衍生品 + 另类投资 + 组合管理：每周 10h CFA + 5h 英语强化</td><td>专题六</td><td>15h</td></tr>
+<tr><td>第 37–44 周</td><td>财务报表分析 + 道德模块：进入刷题冲刺阶段，每周 12h+ CFA</td><td>专题六</td><td>15h</td></tr>
+<tr><td>第 45–48 周</td><td>全真模拟卷 ×3 套，错题强化，考前 4 周停止新知识输入</td><td>专题六</td><td>15h</td></tr>
+</tbody></table></div>
+
+<div style="background:#dbeafe;border:1.5px solid #0369a1;border-radius:10px;padding:14px 18px;margin:16px 0 28px 0">
+  <div style="font-weight:700;color:#1e3a5f;margin-bottom:4px">🏁 里程碑 M3</div>
+  <div style="font-size:13px;color:#1e40af;line-height:1.7">CFA Level 1 通过（目标 12 月或次年 6 月考期）。<br><span style="color:#1d4ed8">下一步：量化项目全力加速，CFA L2 可在 M4 期间同步启动报名。</span></div>
+</div>
+
+<h2>M4 · 量化项目实战（第 9–16 个月，每周 15h）</h2>
+<div style="background:#f0fdf4;border-left:4px solid #15803d;border-radius:0 10px 10px 0;padding:14px 18px;margin-bottom:16px;font-size:13px;color:#14532d;line-height:1.8">
+  <strong>主攻：</strong>把技能变成 GitHub 上看得见的作品集。这是工程师最大的差异化武器。
+</div>
+
+<div class="table-wrap"><table>
+<thead><tr><th>时间段</th><th>学习内容</th><th>对应专题</th><th>周投入</th></tr></thead>
+<tbody>
+<tr><td>第 37–44 周</td><td>专题七：backtrader + statsmodels + alphalens 上手，完成初级项目 ×2，推送 GitHub</td><td>专题七 + 专题八</td><td>15h</td></tr>
+<tr><td>第 45–52 周</td><td>专题八：动量策略 + Fama-French 因子复现，整理成 GitHub Repo，写中文 README</td><td>专题八</td><td>15h</td></tr>
+<tr><td>第 53–58 周</td><td>专题八：ML 选股模型（XGBoost），pyfolio 生成完整绩效报告（Sharpe / MaxDD）</td><td>专题八</td><td>15h</td></tr>
+<tr><td>第 59–64 周</td><td>整合作品集：补齐英文文档，写 1–2 篇技术博客，项目讲解录制（可选）</td><td>专题八 + 专题九</td><td>15h</td></tr>
+</tbody></table></div>
+
+<div style="background:#dcfce7;border:1.5px solid #15803d;border-radius:10px;padding:14px 18px;margin:16px 0 28px 0">
+  <div style="font-weight:700;color:#14532d;margin-bottom:4px">🏁 里程碑 M4</div>
+  <div style="font-size:13px;color:#166534;line-height:1.7">GitHub 公开 4+ 量化项目（含完整回测 + Sharpe / MaxDD 报告），可直接在面试中演示。<br><span style="color:#15803d">下一步：项目完成后即可开始投递，不要等到「完美」。</span></div>
+</div>
+
+<h2>M5 · 冲刺转型（第 14–18 个月，每周 15h）</h2>
+<div style="background:#faf5ff;border-left:4px solid #7c3aed;border-radius:0 10px 10px 0;padding:14px 18px;margin-bottom:16px;font-size:13px;color:#4c1d95;line-height:1.8">
+  <strong>主攻：</strong>求职投递 + 面试准备。量化项目是敲门砖，SFC 牌照是准入证。
+</div>
+
+<div class="table-wrap"><table>
+<thead><tr><th>时间段</th><th>学习内容</th><th>对应专题</th><th>周投入</th></tr></thead>
+<tbody>
+<tr><td>第 57–60 周</td><td>重写简历：突出量化项目 + SFC 牌照 + 技术栈，量化所有成果数字化</td><td>自研</td><td>15h</td></tr>
+<tr><td>第 61–64 周</td><td>定向投递：每周 3–5 封，锁定量化基金 / 银行量化风险部门，激活 LinkedIn</td><td>专题九</td><td>15h</td></tr>
+<tr><td>第 65–68 周</td><td>面试准备：Python 算法题 + 因子回测展示 + 行为面试（STAR 结构）</td><td>专题一 + 专题二</td><td>15h</td></tr>
+<tr><td>第 69–72 周</td><td>Offer 谈判 + SFC 由雇主申请激活 + CFA L2 正式报名</td><td>专题五</td><td>15h</td></tr>
+</tbody></table></div>
+
+<div style="background:#ede9fe;border:1.5px solid #7c3aed;border-radius:10px;padding:14px 18px;margin:16px 0 28px 0">
+  <div style="font-weight:700;color:#4c1d95;margin-bottom:4px">🏁 里程碑 M5（终点）</div>
+  <div style="font-size:13px;color:#5b21b6;line-height:1.7">收到量化基金或银行量化风险部门 Offer，完成跨行转型。<br><span style="color:#7c3aed">入职后继续 CFA L2，积累 4000h 工作经验后申请 CFA Charterholder。</span></div>
+</div>
+
+<h2>在职学习 6 条铁律</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:28px">
+
+<div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:14px 16px">
+  <div style="font-weight:700;color:#0f172a;margin-bottom:6px">① 单线推进</div>
+  <div style="font-size:13px;color:#475569;line-height:1.7">每个时间段只有一个「主攻项目」。CFA / SFC / 量化项目不要同时全速推。次要任务每天 ≤20 min 维持。</div>
+</div>
+
+<div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:14px 16px">
+  <div style="font-weight:700;color:#0f172a;margin-bottom:6px">② 周计划优先</div>
+  <div style="font-size:13px;color:#475569;line-height:1.7">每周日规划本周 15h 投入到哪里，写下来。不做计划就等于把时间交给杂事。</div>
+</div>
+
+<div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:14px 16px">
+  <div style="font-weight:700;color:#0f172a;margin-bottom:6px">③ 里程碑驱动</div>
+  <div style="font-size:13px;color:#475569;line-height:1.7">5 个里程碑是硬指标，不是「学得差不多」。里程碑没完成，不往下一阶段走。</div>
+</div>
+
+<div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:14px 16px">
+  <div style="font-weight:700;color:#0f172a;margin-bottom:6px">④ 碎片时间利用</div>
+  <div style="font-size:13px;color:#475569;line-height:1.7">通勤 + 午休 ≈ 每日 40–60 min。配合音频资料（专题十）+ Anki 复习，不浪费。</div>
+</div>
+
+<div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:14px 16px">
+  <div style="font-weight:700;color:#0f172a;margin-bottom:6px">⑤ 不追求完美</div>
+  <div style="font-size:13px;color:#475569;line-height:1.7">项目「能跑通、能讲清楚」就达标。追求完美是在职学习的最大陷阱。</div>
+</div>
+
+<div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:14px 16px">
+  <div style="font-weight:700;color:#0f172a;margin-bottom:6px">⑥ 英语每天不断</div>
+  <div style="font-size:13px;color:#475569;line-height:1.7">英语是唯一需要每天做的事，绝对不能中断。CFA 备考本身就是最强的英语浸泡。</div>
+</div>
+
+</div>
+
+<div style="background:#f0fdf4;border:1.5px solid #86efac;border-radius:12px;padding:16px 20px;margin-bottom:8px">
+  <div style="font-weight:700;color:#15803d;margin-bottom:8px">立刻行动：从这里开始</div>
+  <div style="font-size:13px;color:#374151;line-height:2">
+    1. 先读 <strong>专题一</strong>（科技工程师入场香港私募基金），建立整体认知<br>
+    2. 然后读 <strong>专题四</strong>（SFC+CFA 联合备考路线图），确认考试时间节点<br>
+    3. 再回到本路线图，对照你的实际情况微调时间线<br>
+    4. <strong>第一个动作</strong>：今天搭好 Anki，加入第一张 CFA 词汇卡片
   </div>
 </div>
 `,
