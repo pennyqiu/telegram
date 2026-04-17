@@ -14705,6 +14705,541 @@ jupyter notebook<br><br>
 </div>
 `,
 
+// =====================================================================
+'quant-resources':`
+<div style="background:linear-gradient(135deg,#1e1b4b,#312e81,#4338ca);border-radius:16px;padding:28px 32px;margin-bottom:28px;color:#fff">
+  <div style="font-size:12px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:8px">量化学习资料库</div>
+  <div style="font-size:24px;font-weight:900;line-height:1.3;margin-bottom:10px">书单 / 论文 / 课程 / 社区<br>全部可直接使用</div>
+  <div style="font-size:14px;color:rgba(255,255,255,.75);line-height:1.8">每本书、每篇论文都标注了<strong style="color:#a5b4fc">对应哪个项目</strong>、<strong style="color:#86efac">优先读哪个章节</strong>，以及是否有免费版本。目标不是读完所有书，而是做项目遇到问题时知道去哪里找答案。</div>
+</div>
+
+<!-- ================================================================ -->
+<!-- 核心书单 -->
+<!-- ================================================================ -->
+<h2>一、核心书单（按难度排序，共 12 本）</h2>
+
+<!-- 入门三件套 -->
+<div style="display:flex;align-items:center;gap:8px;margin:20px 0 12px 0">
+  <div style="background:#16a34a;color:#fff;font-size:12px;font-weight:700;padding:3px 12px;border-radius:12px">🟢 入门三件套</div>
+  <div style="font-size:12px;color:#6b7280">对应初级 P1-P4，从这里开始</div>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:20px">
+
+<div style="background:#fff;border:1.5px solid #16a34a;border-radius:14px;overflow:hidden">
+  <div style="background:#f0fdf4;padding:14px 16px;border-bottom:1px solid #dcfce7">
+    <div style="font-size:10px;color:#16a34a;font-weight:700;letter-spacing:1px;margin-bottom:4px">B1 · 入门首选</div>
+    <div style="font-weight:900;font-size:14px;color:#14532d;line-height:1.4">Quantitative Trading</div>
+    <div style="font-size:12px;color:#374151;margin-top:3px">Ernest P. Chan · 2009</div>
+  </div>
+  <div style="padding:12px 16px;font-size:12px;color:#374151;line-height:1.8">
+    <div style="margin-bottom:8px">量化入门最友好的书。用真实案例讲均值回归、动量策略、统计套利的完整流程，代码可直接用（Matlab/Python 版皆有）。没有过多数学，工程师读起来非常顺畅。</div>
+    <div><strong>优先读：</strong>第2章（回测系统）、第3章（绩效评估）、第5章（均值回归）</div>
+    <div style="margin-top:8px"><strong>对应项目：</strong>P1/P2/M1</div>
+    <div style="background:#f0fdf4;border-radius:6px;padding:6px 10px;margin-top:8px;font-size:11px">
+      <span style="color:#16a34a;font-weight:700">💰 获取：</span>Amazon 实体书约 $40，豆瓣读书可找中文版扫描，O'Reilly 订阅可在线读
+    </div>
+  </div>
+</div>
+
+<div style="background:#fff;border:1.5px solid #16a34a;border-radius:14px;overflow:hidden">
+  <div style="background:#f0fdf4;padding:14px 16px;border-bottom:1px solid #dcfce7">
+    <div style="font-size:10px;color:#16a34a;font-weight:700;letter-spacing:1px;margin-bottom:4px">B2 · Python 操作手册</div>
+    <div style="font-weight:900;font-size:14px;color:#14532d;line-height:1.4">Python for Finance<br>（2nd Edition）</div>
+    <div style="font-size:12px;color:#374151;margin-top:3px">Yves Hilpisch · O'Reilly · 2018</div>
+  </div>
+  <div style="padding:12px 16px;font-size:12px;color:#374151;line-height:1.8">
+    <div style="margin-bottom:8px">专注 Python 在金融中的实际操作：pandas 数据处理、期权定价（B-S）、蒙特卡洛模拟、机器学习应用。可以当字典用，遇到具体问题查对应章节。</div>
+    <div><strong>优先读：</strong>第5章（pandas 时序）、第15章（B-S 期权）、第18章（ML 基础）</div>
+    <div style="margin-top:8px"><strong>对应项目：</strong>P1-P4 / A4 期权回测</div>
+    <div style="background:#f0fdf4;border-radius:6px;padding:6px 10px;margin-top:8px;font-size:11px">
+      <span style="color:#16a34a;font-weight:700">💰 获取：</span><a href="https://www.oreilly.com" target="_blank" style="color:#16a34a">O'Reilly 在线读</a>（订阅制，$50/月，所有书免费）；GitHub 有作者代码仓库
+    </div>
+  </div>
+</div>
+
+<div style="background:#fff;border:1.5px solid #16a34a;border-radius:14px;overflow:hidden">
+  <div style="background:#f0fdf4;padding:14px 16px;border-bottom:1px solid #dcfce7">
+    <div style="font-size:10px;color:#16a34a;font-weight:700;letter-spacing:1px;margin-bottom:4px">B3 · 中文首选</div>
+    <div style="font-weight:900;font-size:14px;color:#14532d;line-height:1.4">量化投资：以 Python 为工具</div>
+    <div style="font-size:12px;color:#374151;margin-top:3px">蔡立耑 · 电子工业出版社 · 2017</div>
+  </div>
+  <div style="padding:12px 16px;font-size:12px;color:#374151;line-height:1.8">
+    <div style="margin-bottom:8px">国内量化入门最实用的中文书，聚焦 A 股和港股场景，用 Python 实现均线、RSI、MACD 等经典策略，示例数据基于 tushare/akshare。工程师背景读半天就能上手。</div>
+    <div><strong>优先读：</strong>第3章（技术指标）、第6章（回测框架）、第8章（多因子）</div>
+    <div style="margin-top:8px"><strong>对应项目：</strong>P1/P2/M2/M3（A 股版本）</div>
+    <div style="background:#f0fdf4;border-radius:6px;padding:6px 10px;margin-top:8px;font-size:11px">
+      <span style="color:#16a34a;font-weight:700">💰 获取：</span>京东 / 当当实体书约 ¥79，微信读书有电子版
+    </div>
+  </div>
+</div>
+
+</div>
+
+<!-- 中级四本 -->
+<div style="display:flex;align-items:center;gap:8px;margin:20px 0 12px 0">
+  <div style="background:#2563eb;color:#fff;font-size:12px;font-weight:700;padding:3px 12px;border-radius:12px">🔵 中级进阶（4 本）</div>
+  <div style="font-size:12px;color:#6b7280">对应中级 M1-M4，完成初级后读</div>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px">
+
+<div style="background:#fff;border:1.5px solid #2563eb;border-radius:14px;overflow:hidden">
+  <div style="background:#eff6ff;padding:14px 16px;border-bottom:1px solid #dbeafe">
+    <div style="font-size:10px;color:#2563eb;font-weight:700;letter-spacing:1px;margin-bottom:4px">B4 · 因子投资圣经</div>
+    <div style="font-weight:900;font-size:14px;color:#1e3a5f;line-height:1.4">Expected Returns：<br>An Investor's Guide to Harvesting Market Rewards</div>
+    <div style="font-size:12px;color:#374151;margin-top:3px">Antti Ilmanen · Wiley · 2011</div>
+  </div>
+  <div style="padding:12px 16px;font-size:12px;color:#374151;line-height:1.8">
+    <div style="margin-bottom:8px">因子投资领域最权威的参考书。系统梳理了所有主流因子（价值/动量/质量/低波动/套利）的学术证据和实践历史，是 AQR 基金的研究基础。读完后对「为什么这个因子有效」有深层理解。</div>
+    <div><strong>优先读：</strong>第6章（动量）、第8章（价值）、第10章（低波动）</div>
+    <div style="margin-top:6px"><strong>对应项目：</strong>M3 FF5 复现 / A2 多因子合成</div>
+    <div style="background:#eff6ff;border-radius:6px;padding:6px 10px;margin-top:8px;font-size:11px">
+      <span style="color:#2563eb;font-weight:700">💰 获取：</span>Amazon 约 $80；<a href="https://www.aqr.com/Insights/Research" target="_blank" style="color:#2563eb">AQR 官网</a> 有大量免费配套论文
+    </div>
+  </div>
+</div>
+
+<div style="background:#fff;border:1.5px solid #2563eb;border-radius:14px;overflow:hidden">
+  <div style="background:#eff6ff;padding:14px 16px;border-bottom:1px solid #dbeafe">
+    <div style="font-size:10px;color:#2563eb;font-weight:700;letter-spacing:1px;margin-bottom:4px">B5 · 主动管理理论基础</div>
+    <div style="font-weight:900;font-size:14px;color:#1e3a5f;line-height:1.4">Active Portfolio Management<br>（2nd Edition）</div>
+    <div style="font-size:12px;color:#374151;margin-top:3px">Grinold & Kahn · McGraw-Hill · 2000</div>
+  </div>
+  <div style="padding:12px 16px;font-size:12px;color:#374151;line-height:1.8">
+    <div style="margin-bottom:8px">量化基金从业者人手一本的「白宝书」。提出了 IC-IR-BR（信息系数-信息比-广度）框架，是理解「一个因子为什么有 Alpha」的基础语言。面试里被问到「你怎么评估因子」——这本书给你答案。</div>
+    <div><strong>优先读：</strong>第6章（IC / IR）、第7章（因子模型）</div>
+    <div style="margin-top:6px"><strong>对应项目：</strong>A2 多因子合成 / M3 FF5</div>
+    <div style="background:#eff6ff;border-radius:6px;padding:6px 10px;margin-top:8px;font-size:11px">
+      <span style="color:#2563eb;font-weight:700">💰 获取：</span>Amazon 约 $60，中文版《积极投资组合管理》有中文翻译版
+    </div>
+  </div>
+</div>
+
+<div style="background:#fff;border:1.5px solid #2563eb;border-radius:14px;overflow:hidden">
+  <div style="background:#eff6ff;padding:14px 16px;border-bottom:1px solid #dbeafe">
+    <div style="font-size:10px;color:#2563eb;font-weight:700;letter-spacing:1px;margin-bottom:4px">B6 · 配对交易专著</div>
+    <div style="font-weight:900;font-size:14px;color:#1e3a5f;line-height:1.4">Algorithmic Trading:<br>Winning Strategies and Their Rationale</div>
+    <div style="font-size:12px;color:#374151;margin-top:3px">Ernest P. Chan · Wiley · 2013</div>
+  </div>
+  <div style="padding:12px 16px;font-size:12px;color:#374151;line-height:1.8">
+    <div style="margin-bottom:8px">E.P.Chan 的第二本书，专注均值回归和统计套利。对 Kalman Filter、协整检验、配对交易的解释是我见过最清晰的，配有完整 MATLAB/Python 代码。做 M1 项目时配合这本书效率翻倍。</div>
+    <div><strong>优先读：</strong>第3章（协整 / ADF）、第4章（Kalman Filter）</div>
+    <div style="margin-top:6px"><strong>对应项目：</strong>M1 配对交易（必读）</div>
+    <div style="background:#eff6ff;border-radius:6px;padding:6px 10px;margin-top:8px;font-size:11px">
+      <span style="color:#2563eb;font-weight:700">💰 获取：</span>Amazon 约 $50；作者博客 epchan.blogspot.com 有免费章节
+    </div>
+  </div>
+</div>
+
+<div style="background:#fff;border:1.5px solid #2563eb;border-radius:14px;overflow:hidden">
+  <div style="background:#eff6ff;padding:14px 16px;border-bottom:1px solid #dbeafe">
+    <div style="font-size:10px;color:#2563eb;font-weight:700;letter-spacing:1px;margin-bottom:4px">B7 · 组合优化必读</div>
+    <div style="font-weight:900;font-size:14px;color:#1e3a5f;line-height:1.4">Quantitative Equity Portfolio Management<br>（2nd Edition）</div>
+    <div style="font-size:12px;color:#374151;margin-top:3px">Qian / Hua / Sorensen · CRC Press · 2007</div>
+  </div>
+  <div style="padding:12px 16px;font-size:12px;color:#374151;line-height:1.8">
+    <div style="margin-bottom:8px">从因子信号到组合构建的完整工程手册。覆盖因子中性化、风险模型、换手率控制、交易成本模型，是从「研究员」变成「组合经理」必须掌握的工程内容。</div>
+    <div><strong>优先读：</strong>第4章（因子构建）、第7章（组合优化约束）</div>
+    <div style="margin-top:6px"><strong>对应项目：</strong>A2 多因子 / E1 Black-Litterman</div>
+    <div style="background:#eff6ff;border-radius:6px;padding:6px 10px;margin-top:8px;font-size:11px">
+      <span style="color:#2563eb;font-weight:700">💰 获取：</span>Amazon 约 $80，Springer 订阅可下载 PDF
+    </div>
+  </div>
+</div>
+
+</div>
+
+<!-- 高级/专家 5 本 -->
+<div style="display:flex;align-items:center;gap:8px;margin:20px 0 12px 0">
+  <div style="background:#dc2626;color:#fff;font-size:12px;font-weight:700;padding:3px 12px;border-radius:12px">🔴 高级/专家（5 本）</div>
+  <div style="font-size:12px;color:#6b7280">对应高级 A1-A4 和专家 E1-E4</div>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:12px">
+
+<div style="background:#fff;border:2px solid #dc2626;border-radius:14px;overflow:hidden">
+  <div style="background:#fef2f2;padding:14px 16px;border-bottom:1px solid #fecaca">
+    <div style="font-size:10px;color:#dc2626;font-weight:700;letter-spacing:1px;margin-bottom:4px">B8 · ML 量化必读 · 工程师最爱</div>
+    <div style="font-weight:900;font-size:14px;color:#7f1d1d;line-height:1.4">Advances in Financial<br>Machine Learning</div>
+    <div style="font-size:12px;color:#374151;margin-top:3px">Marcos Lopez de Prado · Wiley · 2018</div>
+  </div>
+  <div style="padding:12px 16px;font-size:12px;color:#374151;line-height:1.8">
+    <div style="margin-bottom:8px">目前量化 + 机器学习领域最重要的书。de Prado 是 AQR 前量化研究主管，揭示了把 ML 用于金融时所有常见错误（数据泄露、回测过拟合、多重假设检验）和正确做法（Triple Barrier 标签法、特征重要性 + MDI/MDA）。工程师读这本书有天然优势。</div>
+    <div><strong>优先读：</strong>第3章（数据标注）、第8章（特征重要性）、第11章（回测）</div>
+    <div style="margin-top:6px"><strong>对应项目：</strong>A1 XGBoost 选股（必读）/ A2 多因子</div>
+    <div style="background:#fef2f2;border-radius:6px;padding:6px 10px;margin-top:8px;font-size:11px">
+      <span style="color:#dc2626;font-weight:700">💰 获取：</span>Amazon 约 $60；<a href="https://github.com/boyboi86/AFML" target="_blank" style="color:#dc2626">GitHub 有配套代码</a>；作者 SSRN 页面有免费配套论文
+    </div>
+  </div>
+</div>
+
+<div style="background:#fff;border:2px solid #dc2626;border-radius:14px;overflow:hidden">
+  <div style="background:#fef2f2;padding:14px 16px;border-bottom:1px solid #fecaca">
+    <div style="font-size:10px;color:#dc2626;font-weight:700;letter-spacing:1px;margin-bottom:4px">B9 · de Prado 精华浓缩版</div>
+    <div style="font-weight:900;font-size:14px;color:#7f1d1d;line-height:1.4">Machine Learning<br>for Asset Managers</div>
+    <div style="font-size:12px;color:#374151;margin-top:3px">Marcos Lopez de Prado · Cambridge · 2020</div>
+  </div>
+  <div style="padding:12px 16px;font-size:12px;color:#374151;line-height:1.8">
+    <div style="margin-bottom:8px">B8 的精华浓缩版（约160页），专注因子构建中的 ML 方法：最优投资组合理论的局限、层次风险平价（HRP）、CV 防过拟合。比 B8 薄但更聚焦，配合 B8 使用。</div>
+    <div><strong>优先读：</strong>第4章（HRP 层次风险平价）、第6章（特征重要性）</div>
+    <div style="margin-top:6px"><strong>对应项目：</strong>E1 Black-Litterman / A2 多因子</div>
+    <div style="background:#fef2f2;border-radius:6px;padding:6px 10px;margin-top:8px;font-size:11px">
+      <span style="color:#dc2626;font-weight:700">💰 获取：</span>Cambridge University Press 约 $30，是 12 本里最便宜的高级书
+    </div>
+  </div>
+</div>
+
+<div style="background:#fff;border:2px solid #dc2626;border-radius:14px;overflow:hidden">
+  <div style="background:#fef2f2;padding:14px 16px;border-bottom:1px solid #fecaca">
+    <div style="font-size:10px;color:#dc2626;font-weight:700;letter-spacing:1px;margin-bottom:4px">B10 · 期权交易者案头书</div>
+    <div style="font-weight:900;font-size:14px;color:#7f1d1d;line-height:1.4">Options, Futures, and<br>Other Derivatives（11th Ed.）</div>
+    <div style="font-size:12px;color:#374151;margin-top:3px">John C. Hull · Pearson · 2021</div>
+  </div>
+  <div style="padding:12px 16px;font-size:12px;color:#374151;line-height:1.8">
+    <div style="margin-bottom:8px">衍生品领域最权威的教材（俗称「Hull 书」），CFA/FRM 指定参考书之一。做 A4 期权项目前至少要读懂 Black-Scholes 推导和 Greeks（Delta/Gamma/Vega/Theta）的含义。</div>
+    <div><strong>优先读：</strong>第11章（B-S 定价）、第13章（Greeks）、第15章（期权策略）</div>
+    <div style="margin-top:6px"><strong>对应项目：</strong>A4 期权策略回测（必读前3章）</div>
+    <div style="background:#fef2f2;border-radius:6px;padding:6px 10px;margin-top:8px;font-size:11px">
+      <span style="color:#dc2626;font-weight:700">💰 获取：</span>Amazon 约 $100（教材价高），旧版（9th/10th Ed.）内容一致约 $30，Z-Library 可找 PDF
+    </div>
+  </div>
+</div>
+
+<div style="background:#fff;border:2px solid #dc2626;border-radius:14px;overflow:hidden">
+  <div style="background:#fef2f2;padding:14px 16px;border-bottom:1px solid #fecaca">
+    <div style="font-size:10px;color:#dc2626;font-weight:700;letter-spacing:1px;margin-bottom:4px">B11 · 高频交易圣经</div>
+    <div style="font-weight:900;font-size:14px;color:#7f1d1d;line-height:1.4">Algorithmic and High-Frequency<br>Trading</div>
+    <div style="font-size:12px;color:#374151;margin-top:3px">Cartea / Jaimungal / Penalva · Cambridge · 2015</div>
+  </div>
+  <div style="padding:12px 16px;font-size:12px;color:#374151;line-height:1.8">
+    <div style="margin-bottom:8px">高频策略的学术标准教材。从市场微观结构（做市商模型、订单流分析、逆向选择）到最优执行（Almgren-Chriss 模型）。做 E4 高频项目时，第1-3章是必读基础。数学较重，但工程师能啃下来。</div>
+    <div><strong>优先读：</strong>第1章（市场微观结构）、第2章（做市商策略）</div>
+    <div style="margin-top:6px"><strong>对应项目：</strong>E4 高频套利框架（必读）</div>
+    <div style="background:#fef2f2;border-radius:6px;padding:6px 10px;margin-top:8px;font-size:11px">
+      <span style="color:#dc2626;font-weight:700">💰 获取：</span>作者页面提供<a href="https://www.math.ucdavis.edu/~sjoh/algohf.html" target="_blank" style="color:#dc2626">免费 PDF</a>（Cambridge 授权）
+    </div>
+  </div>
+</div>
+
+</div>
+
+<div style="background:#fff;border:2px solid #dc2626;border-radius:14px;overflow:hidden;margin-bottom:20px">
+  <div style="background:#fef2f2;padding:14px 16px;border-bottom:1px solid #fecaca">
+    <div style="font-size:10px;color:#dc2626;font-weight:700;letter-spacing:1px;margin-bottom:4px">B12 · 强化学习交易入门</div>
+    <div style="font-weight:900;font-size:14px;color:#7f1d1d;line-height:1.4">Deep Reinforcement Learning<br>Hands-On（2nd Ed.）</div>
+    <div style="font-size:12px;color:#374151;margin-top:3px">Maxim Lapan · Packt · 2020</div>
+  </div>
+  <div style="padding:12px 16px;display:grid;grid-template-columns:1fr 1fr;gap:14px;font-size:12px;color:#374151;line-height:1.8">
+    <div>
+      <div style="margin-bottom:8px">最实用的 RL 入门书，专注 stable-baselines3 和 PyTorch 实现。第3章的交易环境示例和 E3 项目高度重合，直接照着写自己的 TradingEnv 即可。工程师背景读起来非常舒服。</div>
+      <div><strong>优先读：</strong>第3章（RL 基础）、第8章（PPO 算法）、第12章（自定义交易环境）</div>
+      <div style="margin-top:6px"><strong>对应项目：</strong>E3 强化学习 Agent（必读）</div>
+    </div>
+    <div style="background:#fef2f2;border-radius:6px;padding:10px;font-size:11px">
+      <span style="color:#dc2626;font-weight:700">💰 获取：</span> Packt 出版社约 $40；<a href="https://github.com/PacktPublishing/Deep-Reinforcement-Learning-Hands-On" target="_blank" style="color:#dc2626">GitHub 配套代码</a>完整可运行<br><br>
+      <strong>配套看：</strong><a href="https://spinningup.openai.com" target="_blank" style="color:#dc2626">OpenAI Spinning Up</a>——免费在线文档，PPO/SAC 算法最清晰的讲解
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================ -->
+<!-- 必读论文 -->
+<!-- ================================================================ -->
+<h2>二、必读论文（9 篇，全部免费下载）</h2>
+<p style="font-size:13px;color:#374151">每篇论文都是你将要复现的策略的「原始证据」。读论文不需要懂所有数学，重点看：<strong>研究结论 → 数据来源 → 核心图表</strong>，读完后你就能在面试里引用原始数据。</p>
+
+<div class="table-wrap"><table style="font-size:12px">
+<thead>
+  <tr>
+    <th>论文</th>
+    <th>作者 / 年份</th>
+    <th>核心结论（一句话）</th>
+    <th>对应项目</th>
+    <th>免费下载</th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td><strong>Returns to Buying Winners and Selling Losers</strong></td>
+    <td>Jegadeesh &amp; Titman · 1993</td>
+    <td>过去 3-12 个月表现好的股票，未来 3-12 个月继续跑赢——动量效应的奠基论文</td>
+    <td>P1 动量策略 / M3 FF</td>
+    <td><a href="https://www.jstor.org/stable/2328882" target="_blank" style="color:#2563eb">JSTOR</a></td>
+  </tr>
+  <tr>
+    <td><strong>Common Risk Factors in the Returns on Stocks and Bonds</strong></td>
+    <td>Fama &amp; French · 1993</td>
+    <td>市场/规模/价值三因子可以解释大部分股票横截面收益差异——三因子模型原始论文</td>
+    <td>M3 FF5 复现</td>
+    <td><a href="https://www.sciencedirect.com/science/article/pii/0304405X93900235" target="_blank" style="color:#2563eb">ScienceDirect</a></td>
+  </tr>
+  <tr>
+    <td><strong>A Five-Factor Asset Pricing Model</strong></td>
+    <td>Fama &amp; French · 2015</td>
+    <td>在三因子基础上加入盈利能力（RMW）和投资激进度（CMA），五因子模型</td>
+    <td>M3 FF5 复现</td>
+    <td><a href="https://www.sciencedirect.com/science/article/pii/S0304405X14002323" target="_blank" style="color:#2563eb">ScienceDirect</a></td>
+  </tr>
+  <tr>
+    <td><strong>Portfolio Selection</strong></td>
+    <td>Markowitz · 1952</td>
+    <td>通过资产相关性构建有效前沿，是现代投资组合理论的起点——仅14页，必读</td>
+    <td>P4 组合 / E1 BL</td>
+    <td><a href="https://www.jstor.org/stable/2975974" target="_blank" style="color:#2563eb">JSTOR</a></td>
+  </tr>
+  <tr>
+    <td><strong>Global Portfolio Optimization</strong></td>
+    <td>Black &amp; Litterman · 1992</td>
+    <td>结合市场均衡和投资者主观观点，解决 Markowitz 对预期收益过敏感的问题</td>
+    <td>E1 Black-Litterman</td>
+    <td><a href="https://www.aqr.com/Insights/Research/Journal-Article/Global-Portfolio-Optimization" target="_blank" style="color:#2563eb">AQR</a></td>
+  </tr>
+  <tr>
+    <td><strong>The Pricing of Options and Corporate Liabilities</strong></td>
+    <td>Black &amp; Scholes · 1973</td>
+    <td>期权定价的数学公式——诺贝尔经济学奖，6页，把 B-S 公式推导一遍是必经之路</td>
+    <td>A4 期权策略</td>
+    <td><a href="https://www.cs.princeton.edu/courses/archive/fall09/cos323/papers/black_scholes73.pdf" target="_blank" style="color:#2563eb">Princeton</a></td>
+  </tr>
+  <tr>
+    <td><strong>An Empirical Evaluation of Accounting Income Numbers</strong></td>
+    <td>Ball &amp; Brown · 1968</td>
+    <td>财报发布后股价继续单向漂移（PEAD），是 A3 事件驱动项目的理论来源</td>
+    <td>A3 财报 PEAD</td>
+    <td><a href="https://www.jstor.org/stable/2490232" target="_blank" style="color:#2563eb">JSTOR</a></td>
+  </tr>
+  <tr>
+    <td><strong>The Statistics of Sharpe Ratios</strong></td>
+    <td>Lo · 2002</td>
+    <td>Sharpe Ratio 的置信区间和统计显著性——告诉你 Sharpe 多高才算「真的好」</td>
+    <td>所有项目通用</td>
+    <td><a href="https://www.ifa.com/media/images/pdf%20files/stats-of-sharpe-ratios.pdf" target="_blank" style="color:#2563eb">IFA</a></td>
+  </tr>
+  <tr>
+    <td><strong>The Relationship Between Return and Market Value of Common Stocks</strong></td>
+    <td>Banz · 1981</td>
+    <td>小市值股票长期跑赢大市值股票（规模效应）——FF 模型 SMB 因子的实证来源</td>
+    <td>M3 FF5 / A2 多因子</td>
+    <td><a href="https://www.sciencedirect.com/science/article/pii/0304405X81900180" target="_blank" style="color:#2563eb">ScienceDirect</a></td>
+  </tr>
+</tbody>
+</table></div>
+
+<!-- ================================================================ -->
+<!-- 在线课程 -->
+<!-- ================================================================ -->
+<h2>三、在线课程（6 门，优先免费）</h2>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0">
+
+<div style="background:#fff;border:1.5px solid #7c3aed;border-radius:12px;overflow:hidden">
+  <div style="background:#f5f3ff;padding:12px 16px;border-bottom:1px solid #ede9fe">
+    <div style="display:flex;justify-content:space-between;align-items:start">
+      <div>
+        <div style="font-size:10px;color:#7c3aed;font-weight:700;margin-bottom:3px">C1 · 系统性最强 · 免费</div>
+        <div style="font-weight:700;color:#4c1d95;font-size:13px">Investment Management with Python and Machine Learning Specialization</div>
+        <div style="font-size:11px;color:#374151;margin-top:3px">EDHEC Business School · Coursera · 4门课</div>
+      </div>
+      <span style="background:#16a34a;color:#fff;font-size:10px;padding:2px 8px;border-radius:8px;white-space:nowrap;margin-left:8px">旁听免费</span>
+    </div>
+  </div>
+  <div style="padding:12px 16px;font-size:12px;color:#374151;line-height:1.8">
+    <div style="margin-bottom:6px">全球顶级量化金融 Coursera 课程。4 门课覆盖：① 组合构建 ② 资产定价 ③ 机器学习选股 ④ 量化回测。有配套 Jupyter Notebook，代码质量极高。建议把本课程第1门和你的 P4 项目同步推进。</div>
+    <div><strong>时长：</strong>约 4 个月（每周 3-5 小时）</div>
+    <div><strong>对应项目：</strong>P4 / M4 / A1 / E1</div>
+    <a href="https://www.coursera.org/specializations/investment-management-python-machine-learning" target="_blank" style="display:block;background:#7c3aed;color:#fff;text-align:center;padding:6px;border-radius:6px;margin-top:8px;font-size:11px;font-weight:700;text-decoration:none">前往 Coursera →</a>
+  </div>
+</div>
+
+<div style="background:#fff;border:1.5px solid #7c3aed;border-radius:12px;overflow:hidden">
+  <div style="background:#f5f3ff;padding:12px 16px;border-bottom:1px solid #ede9fe">
+    <div style="display:flex;justify-content:space-between;align-items:start">
+      <div>
+        <div style="font-size:10px;color:#7c3aed;font-weight:700;margin-bottom:3px">C2 · 量化实战最直接</div>
+        <div style="font-weight:700;color:#4c1d95;font-size:13px">QuantConnect Bootcamp<br>（Learning Center）</div>
+        <div style="font-size:11px;color:#374151;margin-top:3px">QuantConnect · 免费在线平台</div>
+      </div>
+      <span style="background:#16a34a;color:#fff;font-size:10px;padding:2px 8px;border-radius:8px;white-space:nowrap;margin-left:8px">完全免费</span>
+    </div>
+  </div>
+  <div style="padding:12px 16px;font-size:12px;color:#374151;line-height:1.8">
+    <div style="margin-bottom:6px">QuantConnect 是专业级回测平台（对冲基金实际使用），内置 Lean 引擎。他们的 Bootcamp 是免费的，直接在浏览器里写策略、运行回测。课程从数据获取到多资产组合，完全用实际代码讲解。</div>
+    <div><strong>时长：</strong>按自己节奏，每模块约 1-2 小时</div>
+    <div><strong>对应项目：</strong>P1-P4 / M1-M2（实际运行感）</div>
+    <a href="https://www.quantconnect.com/learning/articles/introduction-to-options" target="_blank" style="display:block;background:#7c3aed;color:#fff;text-align:center;padding:6px;border-radius:6px;margin-top:8px;font-size:11px;font-weight:700;text-decoration:none">前往 QuantConnect →</a>
+  </div>
+</div>
+
+<div style="background:#fff;border:1.5px solid #7c3aed;border-radius:12px;overflow:hidden">
+  <div style="background:#f5f3ff;padding:12px 16px;border-bottom:1px solid #ede9fe">
+    <div style="display:flex;justify-content:space-between;align-items:start">
+      <div>
+        <div style="font-size:10px;color:#7c3aed;font-weight:700;margin-bottom:3px">C3 · Kaggle · ML 基础</div>
+        <div style="font-weight:700;color:#4c1d95;font-size:13px">Intro to ML + Intermediate ML<br>+ Time Series</div>
+        <div style="font-size:11px;color:#374151;margin-top:3px">Kaggle Learn · 免费微课</div>
+      </div>
+      <span style="background:#16a34a;color:#fff;font-size:10px;padding:2px 8px;border-radius:8px;white-space:nowrap;margin-left:8px">完全免费</span>
+    </div>
+  </div>
+  <div style="padding:12px 16px;font-size:12px;color:#374151;line-height:1.8">
+    <div style="margin-bottom:6px">Kaggle 的微课是人类写过最好的 ML 入门材料。推荐按顺序完成：pandas → Intro to ML → Intermediate ML → Time Series。每门课约 3-4 小时，全部带可运行 Notebook，完成后直接用于 A1 项目。</div>
+    <div><strong>时长：</strong>4 门共约 15 小时</div>
+    <div><strong>对应项目：</strong>A1 XGBoost 选股（前置）</div>
+    <a href="https://www.kaggle.com/learn" target="_blank" style="display:block;background:#7c3aed;color:#fff;text-align:center;padding:6px;border-radius:6px;margin-top:8px;font-size:11px;font-weight:700;text-decoration:none">前往 Kaggle Learn →</a>
+  </div>
+</div>
+
+<div style="background:#fff;border:1.5px solid #7c3aed;border-radius:12px;overflow:hidden">
+  <div style="background:#f5f3ff;padding:12px 16px;border-bottom:1px solid #ede9fe">
+    <div style="display:flex;justify-content:space-between;align-items:start">
+      <div>
+        <div style="font-size:10px;color:#7c3aed;font-weight:700;margin-bottom:3px">C4 · RL 入门最清晰</div>
+        <div style="font-weight:700;color:#4c1d95;font-size:13px">OpenAI Spinning Up<br>in Deep RL</div>
+        <div style="font-size:11px;color:#374151;margin-top:3px">OpenAI · 免费在线文档</div>
+      </div>
+      <span style="background:#16a34a;color:#fff;font-size:10px;padding:2px 8px;border-radius:8px;white-space:nowrap;margin-left:8px">完全免费</span>
+    </div>
+  </div>
+  <div style="padding:12px 16px;font-size:12px;color:#374151;line-height:1.8">
+    <div style="margin-bottom:6px">OpenAI 官方出品的 RL 入门教程，代码质量极高。对 PPO / SAC / TD3 算法的解释是网上最清晰的。做 E3 强化学习项目前先把 Spinning Up 里的 VPG → PPO 路径走一遍，会少走很多弯路。</div>
+    <div><strong>时长：</strong>约 2 周（边读边跑代码）</div>
+    <div><strong>对应项目：</strong>E3 RL Trading Agent（必读前置）</div>
+    <a href="https://spinningup.openai.com" target="_blank" style="display:block;background:#7c3aed;color:#fff;text-align:center;padding:6px;border-radius:6px;margin-top:8px;font-size:11px;font-weight:700;text-decoration:none">前往 Spinning Up →</a>
+  </div>
+</div>
+
+<div style="background:#fff;border:1.5px solid #7c3aed;border-radius:12px;overflow:hidden">
+  <div style="background:#f5f3ff;padding:12px 16px;border-bottom:1px solid #ede9fe">
+    <div style="display:flex;justify-content:space-between;align-items:start">
+      <div>
+        <div style="font-size:10px;color:#7c3aed;font-weight:700;margin-bottom:3px">C5 · 因子投资系统课</div>
+        <div style="font-weight:900;font-size:13px;color:#4c1d95">Quantopian Lecture Series<br>（已归档）</div>
+        <div style="font-size:11px;color:#374151;margin-top:3px">Quantopian · GitHub 可下载</div>
+      </div>
+      <span style="background:#16a34a;color:#fff;font-size:10px;padding:2px 8px;border-radius:8px;white-space:nowrap;margin-left:8px">完全免费</span>
+    </div>
+  </div>
+  <div style="padding:12px 16px;font-size:12px;color:#374151;line-height:1.8">
+    <div style="margin-bottom:6px">Quantopian 虽已关闭，但他们留下了 80+ 讲 Jupyter Notebook 讲义，覆盖 alphalens 使用、因子分析、多因子模型、风险控制。这是学 alphalens 最好的一手资料，配合 M3 和 A2 项目食用效果极佳。</div>
+    <div><strong>时长：</strong>按需查阅，每讲约 30-60 分钟</div>
+    <div><strong>对应项目：</strong>M3 FF5 / A2 多因子（核心参考）</div>
+    <a href="https://github.com/quantopian/research_public" target="_blank" style="display:block;background:#7c3aed;color:#fff;text-align:center;padding:6px;border-radius:6px;margin-top:8px;font-size:11px;font-weight:700;text-decoration:none">GitHub 下载全部讲义 →</a>
+  </div>
+</div>
+
+<div style="background:#fff;border:1.5px solid #7c3aed;border-radius:12px;overflow:hidden">
+  <div style="background:#f5f3ff;padding:12px 16px;border-bottom:1px solid #ede9fe">
+    <div style="display:flex;justify-content:space-between;align-items:start">
+      <div>
+        <div style="font-size:10px;color:#7c3aed;font-weight:700;margin-bottom:3px">C6 · 中文系统课</div>
+        <div style="font-weight:700;color:#4c1d95;font-size:13px">米筐量化 RQAlpha 教程<br>+ 优矿量化研究平台</div>
+        <div style="font-size:11px;color:#374151;margin-top:3px">米筐科技 / 优矿 · 中文</div>
+      </div>
+      <span style="background:#f59e0b;color:#fff;font-size:10px;padding:2px 8px;border-radius:8px;white-space:nowrap;margin-left:8px">部分免费</span>
+    </div>
+  </div>
+  <div style="padding:12px 16px;font-size:12px;color:#374151;line-height:1.8">
+    <div style="margin-bottom:6px">国内量化平台，提供 A 股历史数据 + 在线回测环境。米筐的 RQAlpha 是开源框架，优矿有完整的因子研究社区。如果你的项目方向有 A 股因子验证部分（M3 中提到），这两个平台是获取高质量 A 股数据的首选。</div>
+    <div><strong>对应项目：</strong>M3 A 股因子验证 / P1-P2 A 股版本</div>
+    <a href="https://www.ricequant.com/doc/rqalpha/zh/intro/overview.html" target="_blank" style="display:block;background:#7c3aed;color:#fff;text-align:center;padding:6px;border-radius:6px;margin-top:8px;font-size:11px;font-weight:700;text-decoration:none">前往米筐文档 →</a>
+  </div>
+</div>
+
+</div>
+
+<!-- ================================================================ -->
+<!-- 数据工具社区 -->
+<!-- ================================================================ -->
+<h2>四、数据源 / 工具 / 社区（每天要用的）</h2>
+
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:14px 0;font-size:12px">
+
+<div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:14px">
+  <div style="font-weight:700;color:#1e3a5f;margin-bottom:8px">📊 数据源</div>
+  <ul style="margin:0;padding-left:14px;line-height:2.2;color:#374151">
+    <li><a href="https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html" target="_blank" style="color:#2563eb"><strong>Ken French Data Library</strong></a>：FF 因子月度数据，免费下载，做 M3 必用</li>
+    <li><a href="https://fred.stlouisfed.org" target="_blank" style="color:#2563eb"><strong>FRED（圣路易斯联储）</strong></a>：宏观数据（GDP/CPI/利率），E2 全天候必用，有 Python API</li>
+    <li><a href="https://akshare.akfamily.xyz" target="_blank" style="color:#2563eb"><strong>akshare</strong></a>：A 股免费数据，覆盖最全，pip install akshare 即用</li>
+    <li><a href="https://tushare.pro" target="_blank" style="color:#2563eb"><strong>tushare Pro</strong></a>：A 股高质量数据，需积分（免费注册可获基础权限）</li>
+    <li><a href="https://finance.yahoo.com" target="_blank" style="color:#2563eb"><strong>yfinance</strong></a>：美股 / ETF 免费日线，入门首选</li>
+  </ul>
+</div>
+
+<div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:14px">
+  <div style="font-weight:700;color:#1e3a5f;margin-bottom:8px">🛠️ 回测平台</div>
+  <ul style="margin:0;padding-left:14px;line-height:2.2;color:#374151">
+    <li><a href="https://www.quantconnect.com" target="_blank" style="color:#2563eb"><strong>QuantConnect</strong></a>：专业级，免费账户可用，支持多资产</li>
+    <li><a href="https://github.com/mementum/backtrader" target="_blank" style="color:#2563eb"><strong>backtrader</strong></a>：本地事件驱动回测，P1/M1 首选</li>
+    <li><a href="https://github.com/polakowo/vectorbt" target="_blank" style="color:#2563eb"><strong>vectorbt</strong></a>：向量化快速回测，参数扫描神器</li>
+    <li><a href="https://www.ricequant.com" target="_blank" style="color:#2563eb"><strong>RQAlpha（米筐）</strong></a>：A 股回测框架，国内最成熟</li>
+    <li><a href="https://zipline-reloaded.readthedocs.io" target="_blank" style="color:#2563eb"><strong>zipline-reloaded</strong></a>：Quantopian 引擎维护版，与 alphalens 无缝集成</li>
+  </ul>
+</div>
+
+<div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:14px">
+  <div style="font-weight:700;color:#1e3a5f;margin-bottom:8px">💬 社区 / 资讯</div>
+  <ul style="margin:0;padding-left:14px;line-height:2.2;color:#374151">
+    <li><a href="https://www.reddit.com/r/algotrading" target="_blank" style="color:#2563eb"><strong>r/algotrading</strong></a>：最活跃的量化交流社区，90万+成员</li>
+    <li><a href="https://www.reddit.com/r/quant" target="_blank" style="color:#2563eb"><strong>r/quant</strong></a>：量化基金从业者讨论，面试经验最多</li>
+    <li><a href="https://www.aqr.com/Insights" target="_blank" style="color:#2563eb"><strong>AQR Insights</strong></a>：因子投资顶级研究，免费论文+白皮书</li>
+    <li><a href="https://papers.ssrn.com/sol3/topten/topTenResults.cfm?groupingId=3027&amp;netorjrnl=net" target="_blank" style="color:#2563eb"><strong>SSRN 量化金融</strong></a>：所有量化论文预印本，免费下载</li>
+    <li><a href="https://www.alphaarchitect.com/blog" target="_blank" style="color:#2563eb"><strong>Alpha Architect Blog</strong></a>：因子投资实践，每篇文章配数据，质量极高</li>
+  </ul>
+</div>
+
+</div>
+
+<!-- ================================================================ -->
+<!-- 阅读顺序 -->
+<!-- ================================================================ -->
+<h2>五、按项目阶段的推荐阅读顺序</h2>
+
+<div style="background:#fff;border:1.5px solid #e2e8f0;border-radius:14px;overflow:hidden;margin:14px 0">
+<div style="background:linear-gradient(135deg,#0f172a,#1e3a5f);padding:14px 20px;color:#fff;font-weight:700">🗺️ 不同阶段「读什么书 + 做什么项目 + 看什么课」对照表</div>
+<div style="overflow-x:auto"><table style="font-size:12px;width:100%">
+<thead><tr><th>你在哪个阶段</th><th>先读（书）</th><th>同步做（项目）</th><th>查阅（课程/数据）</th></tr></thead>
+<tbody>
+<tr style="background:#f0fdf4">
+  <td><span style="background:#16a34a;color:#fff;padding:2px 8px;border-radius:8px">初级</span></td>
+  <td>B1 Quantitative Trading<br>B3 量化投资以Python为工具</td>
+  <td>P1 双均线 → P2 布林带<br>→ P3 基准框架 → P4 组合</td>
+  <td>Kaggle pandas 课（C3 前2门）<br>QuantConnect Bootcamp（C2）</td>
+</tr>
+<tr style="background:#eff6ff">
+  <td><span style="background:#2563eb;color:#fff;padding:2px 8px;border-radius:8px">中级</span></td>
+  <td>B6 Algorithmic Trading（M1前）<br>B4 Expected Returns（M3前）<br>B5 Active Portfolio Management</td>
+  <td>M1 配对交易 → M2 板块轮动<br>→ M3 FF5 → M4 风险平价</td>
+  <td>Quantopian Lecture Series（C5）<br>Ken French 数据 + FRED API</td>
+</tr>
+<tr style="background:#fff7ed">
+  <td><span style="background:#ea580c;color:#fff;padding:2px 8px;border-radius:8px">高级</span></td>
+  <td>B8 Advances in FM（A1前必读）<br>B7 QE Portfolio Management<br>B10 Hull（A4前）</td>
+  <td>A1 XGBoost → A2 多因子<br>→ A3 PEAD → A4 期权</td>
+  <td>EDHEC Coursera 专项（C1）<br>SSRN 下载对应原始论文</td>
+</tr>
+<tr style="background:#fef2f2">
+  <td><span style="background:#dc2626;color:#fff;padding:2px 8px;border-radius:8px">专家</span></td>
+  <td>B9 ML for Asset Managers（E1前）<br>B12 Deep RL Hands-On（E3前）<br>B11 HFT（E4前）</td>
+  <td>E1 BL → E2 全天候<br>→ E3 RL Agent → E4 高频</td>
+  <td>OpenAI Spinning Up（C4）<br>r/quant 社区面试经验</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+
+<div style="text-align:center;margin-top:32px;padding:24px;background:linear-gradient(135deg,#0f172a,#1e1b4b);border-radius:16px;color:#fff">
+  <div style="font-size:18px;font-weight:900;margin-bottom:10px">📖 关于读书的一个建议</div>
+  <div style="font-size:13px;line-height:2;max-width:620px;margin:0 auto;color:rgba(255,255,255,.85)">
+    不要一开始就买齐所有书。<br>
+    <strong style="color:#86efac">先做项目，遇到问题再去书里找答案</strong>——这是工程师学东西最有效的方式。<br><br>
+    你以前没有先读完「分布式系统」所有书才写代码。<br>
+    量化也一样：<strong style="color:#fbbf24">先跑通第一个项目，再回头补理论</strong>。<br><br>
+    理论读懂是为了让你在面试里能讲清楚，不是为了通过考试。
+  </div>
+</div>
+`,
+
 }; // end C
 
 return C[id]||'<p>内容准备中...</p>';
