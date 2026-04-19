@@ -641,15 +641,46 @@ function triggerPodcastRefresh(event, containerId, sourceFilter) {
 
 // ===== 课程章节配套音频（按章节展示，底部专区）=====
 const CHAPTER_AUDIO_MAP = [
-  { label:'市场基础（第1-4课）',    epNums: Array.from({length:21},(_,i)=>100+i) },
-  { label:'ETF投资（第9-10课）',    epNums: [131,150] },
-  { label:'养老规划（第17-19课）',  epNums: [179,180,181,182,183,184] },
-  { label:'Howard Marks 专栏',      epNums: [148] },
+  {
+    label: '市场基础（第1-4课）',
+    epNums: Array.from({length:21},(_,i)=>100+i),
+    desc: '覆盖 Ep 100–120，核心主题：循证投资为何长期优于主动选股；市场如何定价风险；行为偏差如何侵蚀真实收益；如何用指数基金构建低成本核心组合。每集约 60–90 分钟，配有完整 show notes 与学术引用。<strong>推荐从 Ep 100 开始</strong>——百集里程碑，循证投资原则精华浓缩，是整个播客最佳新听众入门集。',
+  },
+  {
+    label: 'ETF 投资（第9-10课）',
+    epNums: [131, 150],
+    desc: '<strong>Ep 131</strong>：ETF 选择策略与费用差异对长期收益的影响，如何在相似产品中甄别真正低成本方案。<strong>Ep 150</strong>：全球分散化与本土偏差（Home Bias）——为什么大多数投资者持有过多本国资产，以及如何用国际 ETF 纠正。',
+  },
+  {
+    label: '养老规划（第17-19课）',
+    epNums: [179,180,181,182,183,184],
+    desc: 'Ep 179–184 养老规划专题：安全提款率（SWR）的学术证据与实际可行比例；退休后资产配置如何从积累转向分配；通胀与长寿风险的对冲策略；以及养老金（CPP/Social Security）最优领取时机。框架同样适用于中国用户规划个人退休收入。',
+  },
+  {
+    label: 'Howard Marks 专栏',
+    epNums: [148],
+    desc: '<strong>Ep 148</strong>：专访橡树资本联创 Howard Marks——备忘录写作哲学、周期识别方法论、「二阶思维（Second-Level Thinking）」如何建立认知优势，以及如何在不确定市场中保持纪律。理解 Marks 投资思想最高效的 ~60 分钟。',
+  },
 ];
 const BEN_FELIX_LINKS = [
-  { label:'风险管理（第15-16课）', title:'How to Think About Risk', url:'https://www.youtube.com/watch?v=l9TwMNgBmvw' },
-  { label:'Ben Felix 专栏（第31课）', title:'The 5 Factor Model', url:'https://www.youtube.com/watch?v=jKWbW7Wgm0w' },
-  { label:'被动投资学术证据', title:'Why You Shouldn\'t Pick Stocks', url:'https://www.youtube.com/watch?v=mUN_-8K7RXE' },
+  {
+    label: '风险管理（第15-16课）',
+    title: 'How to Think About Risk',
+    url: 'https://www.youtube.com/watch?v=l9TwMNgBmvw',
+    desc: '用学术框架重新定义「风险」。波动率 ≠ 风险；真正的风险是在错误时机被迫卖出本金。20 分钟，彻底改变你对「安全资产」与「持仓比例」的判断方式。',
+  },
+  {
+    label: 'Ben Felix 专栏（第31课）',
+    title: 'The 5 Factor Model',
+    url: 'https://www.youtube.com/watch?v=jKWbW7Wgm0w',
+    desc: 'Fama-French 五因子模型白话版——市场 Beta、规模、价值、盈利能力、投资风格五个因子各自代表什么经济风险，为什么承担这些风险会有长期溢价，以及 AVUV 等因子 ETF 背后的学术逻辑。',
+  },
+  {
+    label: '被动投资学术证据',
+    title: "Why You Shouldn't Pick Stocks",
+    url: 'https://www.youtube.com/watch?v=mUN_-8K7RXE',
+    desc: '用真实数据回答「为什么个人投资者不该选股」：主动管理基金的长期失败率、幸存者偏差的陷阱，以及为什么「我能选出赢家」是认知偏差而非技能。看完后你对选股的冲动会减少 90%。',
+  },
 ];
 
 function rrEpisodeUrl(epNum) {
@@ -683,29 +714,34 @@ function loadChapterAudio(containerId) {
           const ep = byEpNum[n];
           const fallbackUrl = ep && ep.original_url ? ep.original_url : rrEpisodeUrl(n);
           const title = (ep && ep.title) ? ep.title : `Rational Reminder · Episode ${n}`;
+          const preview = ep && ep.summary_preview ? `<div style="font-size:12px;color:#475569;line-height:1.6;margin-bottom:8px;padding:8px 10px;background:#f8fafc;border-radius:6px;border-left:3px solid #6366f1">${ep.summary_preview}</div>` : '';
           if (ep && ep.original_mp3) {
             return `<div style="padding:12px 14px;border-bottom:1px solid #f1f5f9">
               <div style="font-size:12px;font-weight:600;color:#1e293b;margin-bottom:4px">${title}</div>
               <div style="font-size:11px;color:#94a3b8;margin-bottom:6px">原版英文音频（官网抓取）</div>
+              ${preview}
               <audio controls playsinline preload="metadata" style="width:100%;height:44px;accent-color:#64748b"><source src="${ep.original_mp3}" type="audio/mpeg"></audio>
               <div style="margin-top:8px"><a href="${fallbackUrl}" target="_blank" style="font-size:11px;color:#2563eb">Show notes / 官网页面 →</a></div>
             </div>`;
           }
           return `<div style="padding:12px 14px;border-bottom:1px solid #f1f5f9">
             <div style="font-size:12px;font-weight:600;color:#1e293b;margin-bottom:4px">${title}</div>
+            ${preview}
             <a href="${fallbackUrl}" target="_blank" style="display:inline-block;font-size:12px;color:#2563eb;text-decoration:none;padding:6px 12px;background:#eff6ff;border-radius:6px;cursor:pointer;margin-top:4px">🌐 收听 / 阅读原版（官网）→</a>
           </div>`;
         }).join('');
+        const chapterDesc = chapter.desc ? `<div style="font-size:12px;color:#374151;line-height:1.7;padding:10px 14px 12px;background:#fffbeb;border-bottom:1px solid #fde68a">${chapter.desc}</div>` : '';
         html += `<div style="${sectionStyle}">
           <div style="${headerStyle}">📚 ${chapter.label} <span style="margin-left:auto;font-size:11px;color:#64748b;font-weight:400">英文原版</span></div>
+          ${chapterDesc}
           <div style="${bodyStyle}">${items}</div>
         </div>`;
       });
 
       const bfItems = BEN_FELIX_LINKS.map(bf => `
         <div style="padding:12px 14px;border-bottom:1px solid #f1f5f9">
-          <div style="font-size:12px;font-weight:600;color:#1e293b;margin-bottom:4px">${bf.label}</div>
-          <div style="font-size:11px;color:#94a3b8;margin-bottom:6px">${bf.title}</div>
+          <div style="font-size:12px;font-weight:600;color:#1e293b;margin-bottom:2px">${bf.label} · <span style="font-weight:400;color:#64748b">${bf.title}</span></div>
+          ${bf.desc ? `<div style="font-size:12px;color:#374151;line-height:1.6;margin:6px 0 10px;padding:8px 10px;background:#fff7ed;border-radius:6px;border-left:3px solid #f59e0b">${bf.desc}</div>` : ''}
           <a href="${bf.url}" target="_blank" style="display:inline-flex;align-items:center;gap:5px;font-size:12px;color:#fff;background:#dc2626;border-radius:6px;padding:5px 12px;text-decoration:none">▶ 观看英文原版 YouTube</a>
         </div>`).join('');
       html += `<div style="${sectionStyle}">
