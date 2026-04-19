@@ -545,16 +545,15 @@ function renderContent(){
   if (LIVE_SOURCES[item.id]) {
     loadInfluencerUpdates(LIVE_SOURCES[item.id]);
   }
-  // 普通话播客播放器
+  // 普通话播客播放器（Ben Felix 专栏；通勤专题仅使用下方原版章节音频）
   const PODCAST_PAGES = {
     'ben-felix': ['podcast-player-ben', 'ben_felix'],
-    'audio-commute': ['podcast-player-all', ''],
   };
   if (PODCAST_PAGES[item.id]) {
     const [pid, src] = PODCAST_PAGES[item.id];
     loadPodcastPlayer(pid, src);
   }
-  // audio-commute：章节音频懒加载
+  // audio-commute：章节配套 — 仅原版英文音频 / 官网链接
   if (item.id === 'audio-commute') {
     loadChapterAudio('chapter-audio-section');
   }
@@ -653,12 +652,15 @@ const BEN_FELIX_LINKS = [
   { label:'被动投资学术证据', title:'Why You Shouldn\'t Pick Stocks', url:'https://www.youtube.com/watch?v=mUN_-8K7RXE' },
 ];
 
+function rrEpisodeUrl(epNum) {
+  return `https://rationalreminder.ca/podcast/${epNum}`;
+}
+
 function loadChapterAudio(containerId) {
   const el = document.getElementById(containerId);
   if (!el) return;
   const PODCAST_API = getPodcastAPI();
-  const AUDIO_BASE  = getAudioBase();
-  el.innerHTML = '<div style="color:#64748b;font-size:13px;padding:12px 0">⏳ 加载章节音频…</div>';
+  el.innerHTML = '<div style="color:#64748b;font-size:13px;padding:12px 0">⏳ 加载章节原版链接…</div>';
   fetch(PODCAST_API, { signal: AbortSignal.timeout(10000) })
     .then(r => r.json())
     .then(data => {
@@ -677,49 +679,44 @@ function loadChapterAudio(containerId) {
       let html = '';
 
       CHAPTER_AUDIO_MAP.forEach(chapter => {
-        const eps = chapter.epNums.map(n => byEpNum[n]).filter(Boolean);
         const items = chapter.epNums.map(n => {
           const ep = byEpNum[n];
-          if (ep && ep.available) {
-            const origAudio = ep.original_mp3
-              ? `<div style="margin-top:6px"><div style="font-size:11px;color:#94a3b8;margin-bottom:3px">🌐 原版英文</div><audio controls playsinline preload="metadata" style="width:100%;height:44px;accent-color:#64748b"><source src="${ep.original_mp3}" type="audio/mpeg"></audio></div>`
-              : `<div style="margin-top:8px"><a href="${ep.original_url}" target="_blank" style="display:inline-block;font-size:12px;color:#2563eb;text-decoration:none;padding:6px 12px;background:#eff6ff;border-radius:6px;cursor:pointer">🌐 原版英文页面 →</a></div>`;
+          const fallbackUrl = ep && ep.original_url ? ep.original_url : rrEpisodeUrl(n);
+          const title = (ep && ep.title) ? ep.title : `Rational Reminder · Episode ${n}`;
+          if (ep && ep.original_mp3) {
             return `<div style="padding:12px 14px;border-bottom:1px solid #f1f5f9">
-              <div style="font-size:12px;font-weight:600;color:#1e293b;margin-bottom:4px">${ep.title}</div>
-              <div style="font-size:11px;color:#94a3b8;margin-bottom:6px">${ep.file_size_kb}KB · 普通话完整翻译</div>
-              <div style="font-size:12px;color:#64748b;margin-bottom:8px"><audio controls playsinline preload="metadata" style="width:100%;height:44px;accent-color:#6366f1"><source src="${AUDIO_BASE}/${ep.mp3_file}" type="audio/mpeg"></audio></div>
-              ${origAudio}
-            </div>`;
-          } else {
-            return `<div style="padding:10px 14px;border-bottom:1px solid #f1f5f9;color:#94a3b8;font-size:12px">
-              Episode ${n} — <span style="color:#f59e0b">⏳ 翻译中，稍后可用</span>
+              <div style="font-size:12px;font-weight:600;color:#1e293b;margin-bottom:4px">${title}</div>
+              <div style="font-size:11px;color:#94a3b8;margin-bottom:6px">原版英文音频（官网抓取）</div>
+              <audio controls playsinline preload="metadata" style="width:100%;height:44px;accent-color:#64748b"><source src="${ep.original_mp3}" type="audio/mpeg"></audio>
+              <div style="margin-top:8px"><a href="${fallbackUrl}" target="_blank" style="font-size:11px;color:#2563eb">Show notes / 官网页面 →</a></div>
             </div>`;
           }
+          return `<div style="padding:12px 14px;border-bottom:1px solid #f1f5f9">
+            <div style="font-size:12px;font-weight:600;color:#1e293b;margin-bottom:4px">${title}</div>
+            <a href="${fallbackUrl}" target="_blank" style="display:inline-block;font-size:12px;color:#2563eb;text-decoration:none;padding:6px 12px;background:#eff6ff;border-radius:6px;cursor:pointer;margin-top:4px">🌐 收听 / 阅读原版（官网）→</a>
+          </div>`;
         }).join('');
-        const done = chapter.epNums.filter(n => byEpNum[n] && byEpNum[n].available).length;
         html += `<div style="${sectionStyle}">
-          <div style="${headerStyle}">📚 ${chapter.label} <span style="margin-left:auto;font-size:11px;color:#64748b;font-weight:400">${done}/${chapter.epNums.length} 集已就绪</span></div>
+          <div style="${headerStyle}">📚 ${chapter.label} <span style="margin-left:auto;font-size:11px;color:#64748b;font-weight:400">英文原版</span></div>
           <div style="${bodyStyle}">${items}</div>
         </div>`;
       });
 
-      // Ben Felix YouTube 条目（无翻译版，仅原版链接）
       const bfItems = BEN_FELIX_LINKS.map(bf => `
         <div style="padding:12px 14px;border-bottom:1px solid #f1f5f9">
           <div style="font-size:12px;font-weight:600;color:#1e293b;margin-bottom:4px">${bf.label}</div>
           <div style="font-size:11px;color:#94a3b8;margin-bottom:6px">${bf.title}</div>
           <a href="${bf.url}" target="_blank" style="display:inline-flex;align-items:center;gap:5px;font-size:12px;color:#fff;background:#dc2626;border-radius:6px;padding:5px 12px;text-decoration:none">▶ 观看英文原版 YouTube</a>
-          <div style="margin-top:6px;font-size:11px;color:#94a3b8">（YouTube 字幕太短，暂无普通话翻译版）</div>
         </div>`).join('');
       html += `<div style="${sectionStyle}">
         <div style="${headerStyle}">🎬 Ben Felix 视频专栏（原版）</div>
         <div style="${bodyStyle}">${bfItems}</div>
       </div>`;
 
-      el.innerHTML = html || '<div style="color:#94a3b8;font-size:13px;padding:12px">暂无章节音频数据</div>';
+      el.innerHTML = html || '<div style="color:#94a3b8;font-size:13px;padding:12px">暂无章节数据</div>';
     })
     .catch(() => {
-      el.innerHTML = '<div style="font-size:12px;color:#dc2626;padding:8px">⚠ 无法加载章节音频</div>';
+      el.innerHTML = '<div style="font-size:12px;color:#dc2626;padding:8px">⚠ 无法加载元数据，请直接访问 <a href="https://rationalreminder.ca/podcast" target="_blank" style="color:#2563eb">rationalreminder.ca/podcast</a> 收听原版。</div>';
     });
 }
 // 修改这个地址为你的 FastAPI 服务器域名/IP
@@ -10676,90 +10673,88 @@ BND让跌幅变成-15%，<span class="hl">大多数人能撑住-15%</span>。
 
 // =====================================================================
 'audio-commute':`
-<p>你每天上下班路上的时间，可能是你一天中最宝贵的"学习窗口"。这节课的核心是一套<strong>全自动的普通话音频系统</strong>——服务器自动抓取全球顶级英文投资播客，翻译成中文，生成普通话语音，直接在这里播放，通勤路上点击即听，无需任何 APP。</p>
+<p>你每天上下班路上的时间，可能是你一天中最宝贵的「学习窗口」。这节课的路线是<strong>直接收听英文原版</strong>——Rational Reminder 播客、Ben Felix 的 YouTube 与官网音频，用 Apple Podcasts / Spotify / 浏览器即可，信息完整、无翻译折损。</p>
 
 <div style="background:linear-gradient(135deg,#fef3c7,#fff7ed);border:1.5px solid #fbbf24;border-radius:14px;padding:20px;margin:16px 0">
 <strong style="color:#92400e;font-size:15px">🎧 你的通勤时间价值有多大？</strong>
 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px">
   <div style="background:#fff;border-radius:8px;padding:14px;text-align:center;border:1px solid #fde68a">
     <div style="font-size:24px;font-weight:900;color:#92400e">500+</div>
-    <div style="font-size:12px;color:#64748b">年通勤小时数（1小时/天）</div>
+    <div style="font-size:12px;color:#64748b">年通勤小时数（约 1 小时/天）</div>
   </div>
   <div style="background:#fff;border-radius:8px;padding:14px;text-align:center;border:1px solid #fde68a">
-    <div style="font-size:24px;font-weight:900;color:#92400e">¥0.37</div>
-    <div style="font-size:12px;color:#64748b">每集 AI 生成成本</div>
+    <div style="font-size:24px;font-weight:900;color:#92400e">60–90 分钟</div>
+    <div style="font-size:12px;color:#64748b">Rational Reminder 典型单集时长</div>
   </div>
   <div style="background:#fff;border-radius:8px;padding:14px;text-align:center;border:1px solid #fde68a">
-    <div style="font-size:24px;font-weight:900;color:#92400e">5-7分钟</div>
-    <div style="font-size:12px;color:#64748b">每集普通话摘要时长</div>
+    <div style="font-size:24px;font-weight:900;color:#92400e">原版</div>
+    <div style="font-size:12px;color:#64748b">官网 show notes + 英文稿</div>
   </div>
 </div>
-<p style="font-size:13px;color:#92400e;margin-top:10px">1年通勤 ≈ 读完20本书。不用的时候它叫"浪费"，用起来叫"复利"。</p>
+<p style="font-size:13px;color:#92400e;margin-top:10px">1 年通勤 ≈ 读完很多本书的输入量。不用的时候叫「浪费」，用起来叫「复利」。</p>
 </div>
 
-<h2>一、AI 普通话播客——直接播放</h2>
+<h2>一、如何收听原版</h2>
 
 <div style="background:linear-gradient(135deg,#eff6ff,#f5f3ff);border:1.5px solid #c7d2fe;border-radius:14px;padding:18px;margin:16px 0">
-<strong style="color:#4f46e5;font-size:15px">🎙️ 工作原理</strong>
+<strong style="color:#4f46e5;font-size:15px">🎙️ 推荐做法</strong>
 <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px;font-size:12px;text-align:center">
   <div style="background:#fff;border-radius:8px;padding:10px;border:1px solid #c7d2fe">
-    <div style="font-size:20px;margin-bottom:4px">📡</div>
-    <div style="font-weight:700;color:#4f46e5;margin-bottom:3px">每天 08:00</div>
-    <div style="color:#64748b">自动抓取<br>Rational Reminder<br>Ben Felix 最新集</div>
+    <div style="font-size:20px;margin-bottom:4px">📱</div>
+    <div style="font-weight:700;color:#4f46e5;margin-bottom:3px">订阅播客</div>
+    <div style="color:#64748b">Apple / Spotify<br>搜 Rational<br>Reminder</div>
   </div>
   <div style="background:#fff;border-radius:8px;padding:10px;border:1px solid #c7d2fe">
-    <div style="font-size:20px;margin-bottom:4px">🤖</div>
-    <div style="font-weight:700;color:#4f46e5;margin-bottom:3px">GPT-4o-mini</div>
-    <div style="color:#64748b">英文文字稿<br>→ <strong>完整翻译</strong><br>成中文</div>
+    <div style="font-size:20px;margin-bottom:4px">🌐</div>
+    <div style="font-weight:700;color:#4f46e5;margin-bottom:3px">官网</div>
+    <div style="color:#64748b">每集页面可<br>在线播放<br>英文音频</div>
   </div>
   <div style="background:#fff;border-radius:8px;padding:10px;border:1px solid #c7d2fe">
-    <div style="font-size:20px;margin-bottom:4px">🔊</div>
-    <div style="font-weight:700;color:#4f46e5;margin-bottom:3px">OpenAI TTS</div>
-    <div style="color:#64748b">nova 声音<br>→ 普通话<br>MP3 音频</div>
+    <div style="font-size:20px;margin-bottom:4px">📄</div>
+    <div style="font-weight:700;color:#4f46e5;margin-bottom:3px">Show notes</div>
+    <div style="color:#64748b">英文摘要<br>与论文链接<br>对照学习</div>
   </div>
   <div style="background:#fff;border-radius:8px;padding:10px;border:1px solid #c7d2fe">
-    <div style="font-size:20px;margin-bottom:4px">▶️</div>
-    <div style="font-weight:700;color:#4f46e5;margin-bottom:3px">直接播放</div>
-    <div style="color:#64748b">无需 APP<br>浏览器内<br>点击即听</div>
+    <div style="font-size:20px;margin-bottom:4px">🎬</div>
+    <div style="font-weight:700;color:#4f46e5;margin-bottom:3px">Ben Felix</div>
+    <div style="color:#64748b">YouTube<br>开英文字幕<br>通勤可看可听</div>
   </div>
 </div>
 </div>
-
-<div id="podcast-player-all"></div>
 
 <h2>二、内容来源说明</h2>
 
 <ul class="resource-list">
-  <li><span class="resource-badge rb-podcast">来源 1</span><div><strong>Rational Reminder Podcast</strong>（Ben Felix & Cameron Passmore）<br><span style="color:var(--gray-500);font-size:12px">全球最理性的个人投资播客。每集官网提供完整英文文字稿，AI 抓取后<strong>完整翻译</strong>成中文，保留所有细节、数据和学术引用。核心内容：学术研究支撑的因子投资、资产配置、行为金融学。<br>原版（英文）：<a href="https://rationalreminder.ca/podcast" target="_blank" style="color:#2563eb">rationalreminder.ca/podcast</a></span></div></li>
-  <li><span class="resource-badge rb-video">来源 2</span><div><strong>Ben Felix YouTube（@BenFelixCSI）</strong><br><span style="color:var(--gray-500);font-size:12px">YouTube 自动字幕抓取后<strong>完整翻译</strong>成中文。每集英文视频字幕全量翻译，不压缩、不省略。内容聚焦：5因子模型、为什么不该选股、国际分散化。<br>原版（英文）：<a href="https://www.youtube.com/@BenFelixCSI" target="_blank" style="color:#2563eb">youtube.com/@BenFelixCSI</a></span></div></li>
+  <li><span class="resource-badge rb-podcast">来源 1</span><div><strong>Rational Reminder Podcast</strong>（Ben Felix & Cameron Passmore）<br><span style="color:var(--gray-500);font-size:12px">全球最理性的个人投资播客之一，每期有学术依据与参考文献。建议从官网订阅或在线播放<strong>英文原版</strong>音频，并阅读 show notes。<br>官网：<a href="https://rationalreminder.ca/podcast" target="_blank" style="color:#2563eb">rationalreminder.ca/podcast</a></span></div></li>
+  <li><span class="resource-badge rb-video">来源 2</span><div><strong>Ben Felix YouTube（@BenFelixCSI）</strong><br><span style="color:var(--gray-500);font-size:12px">循证投资视频，适合配合<strong>英文字幕</strong>观看。主题包括因子模型、被动投资、国际分散等。<br>频道：<a href="https://www.youtube.com/@BenFelixCSI" target="_blank" style="color:#2563eb">youtube.com/@BenFelixCSI</a></span></div></li>
 </ul>
 
-<h2>三、一周通勤收听计划</h2>
+<h2>三、一周通勤收听计划（原版）</h2>
 
-<div class="code-block"><span class="cm">// 以每天上下班各30分钟（共1小时）为基准</span>
+<div class="code-block"><span class="cm">// 以每天上下班各 30 分钟（共 1 小时）为基准</span>
 
-<span class="hl">周一～周二</span>：本周 Rational Reminder 普通话摘要
+<span class="hl">周一～周二</span>：Rational Reminder 最新 1 集（可拆成两天听完）
   上班 → 前半段，下班 → 后半段
-  ✓ 当周最新学术投资观点
+  ✓ 当周英文原版 + show notes
 
-<span class="hl">周三</span>：本周 Ben Felix 普通话摘要（完整，约5-7分钟）
-  剩余时间重听一遍，加深印象
-  ✓ 视频核心观点内化
+<span class="hl">周三</span>：Ben Felix 视频 1 期（15–25 分钟常见），开英文字幕
+  剩余时间可复习 show notes 里的论文标题
+  ✓ 把「结论」和「证据出处」对上号
 
-<span class="hl">周四</span>：回到本课程对应章节阅读版，对照音频加深理解
-  ✓ 音频 + 阅读双重巩固
+<span class="hl">周四</span>：回到本课程对应章节文字版，对照播客里提到的概念
+  ✓ 听 + 读双重巩固
 
-<span class="hl">周五</span>：自由时间——重听本周印象最深的片段
-  ✓ 保持学习节奏，不强迫自己
+<span class="hl">周五</span>：重听本周某一段最有启发的 10–15 分钟
+  ✓ 保持节奏即可
 
-<span class="hl">月均效果</span>：
-  • 4集 Rational Reminder 中文摘要（来自全球最严谨的投资播客）
-  • 4-8集 Ben Felix 核心视点（每个都有学术论文支撑）
-  • 约20小时学习内容（全程普通话，无需理解英文）</div>
+<span class="hl">月均效果（示意）</span>：
+  • 约 4 集 Rational Reminder 完整英文输入
+  • 若干期 Ben Felix 原版视频
+  • 英语与金融语感同步积累</div>
 
-<h2>四、课程配套音频专区</h2>
+<h2>四、课程章节 ↔ 原版入口</h2>
 
-<p style="color:#64748b;font-size:13px;margin-bottom:16px">按课程章节组织的完整翻译音频，每集包含普通话完整翻译版和原版英文入口。内容会随翻译进度持续增加。</p>
+<p style="color:#64748b;font-size:13px;margin-bottom:16px">下列列表按课程模块对应到 Rational Reminder 集数与 Ben Felix 视频：<strong>仅英文原版</strong>（若服务端有缓存的原版 MP3，会在本页直接显示播放器；否则提供官网链接）。</p>
 
 <div id="chapter-audio-section"><div style="color:#64748b;font-size:13px;padding:12px 0">⏳ 加载中…</div></div>
 
@@ -10790,8 +10785,8 @@ BND让跌幅变成-15%，<span class="hl">大多数人能撑住-15%</span>。
   <div style="text-align:center;margin-top:36px;padding:32px;background:linear-gradient(135deg,#7c3aed,#1d4ed8);border-radius:16px;color:#fff">
   <div style="font-size:22px;font-weight:900;margin-bottom:8px">🎧 明天上班就开始</div>
   <div style="font-size:14px;opacity:.9;line-height:1.8">
-    上方的播放器里已经有最新生成的普通话音频。<br>
-    打开这个页面 → 找到今天的集数 → 点播放 → 戴上耳机出门。<br><br>
+    在播客 App 里订阅 Rational Reminder，或打开下方章节里的<strong>官网链接</strong>。<br>
+    选一期 → 播放英文原版 → 戴耳机出门。<br><br>
     <strong>就这么简单。通勤路上的时间，已经开始为你工作了。</strong>
   </div>
   <div style="margin-top:16px;font-size:12px;opacity:.8">
