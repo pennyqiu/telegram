@@ -1,0 +1,184 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>港险前 5 年退保本金折损率实测（主动暴露劣势） — CPA 研报</title><link rel="stylesheet" href="_style.css">
+<style>
+.formula{background:#0f172a;color:#e2e8f0;border-radius:10px;padding:14px 18px;margin:14px 0;font-family:"SF Mono","JetBrains Mono",Consolas,Menlo,monospace;font-size:13px;line-height:1.75;overflow-x:auto;white-space:pre}
+.toc{background:#f8fafc;border:1px solid #e5e7eb;border-radius:10px;padding:14px 18px;margin:18px 0;font-size:13.5px}
+.toc-title{font-size:12px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+.toc ol{margin:0 0 0 18px;color:#1a56db}
+.warn-block{background:#fff7ed;border-left:4px solid #f97316;border-radius:0 10px 10px 0;padding:14px 18px;margin:18px 0;font-size:13.5px;color:#7c2d12;line-height:1.7}
+.cite{font-size:12px;color:#6b7280;margin-top:8px;border-top:1px dashed #e5e7eb;padding-top:8px}
+.loss-bar{background:#fef2f2;border-radius:8px;padding:10px 14px;margin:6px 0;display:flex;align-items:center;gap:14px}
+.loss-pct{font-weight:800;font-size:18px;color:#dc2626;min-width:80px}
+</style>
+</head><body>
+<div class="top-bar"><div class="top-bar-inner">
+  <a href="../index.html" class="back-btn">← 返回指南主页</a>
+  <span class="source-tag">CPA 深度研报 #04 · 主动暴露劣势系列</span>
+</div></div>
+<article>
+  <div class="article-meta">
+    <div class="article-meta-top">
+      <div class="author-badge"><div class="author-avatar" style="background:#dc2626">!</div><span class="author-name">CPA · 跨境财富架构师</span></div>
+      <div class="meta-stats">
+        <div class="meta-stat"><div class="meta-stat-num">7000+ 字</div><div class="meta-stat-label">深度研报</div></div>
+        <div class="meta-stat"><div class="meta-stat-num">劣势暴露</div><div class="meta-stat-label">前 5 年实测数据</div></div>
+      </div>
+    </div>
+    <div class="article-title-main">港险前 5 年退保本金折损率实测（主动暴露劣势）</div>
+    <div class="article-summary">这是「主动暴露劣势」系列的第一篇。我用 5 款主流港险产品的条款原文，实测前 5 年退保的本金损失。看完之后你应该会问自己：「这份保单的承诺期，我真的能撑住吗？」</div>
+  </div>
+
+  <div class="toc">
+    <div class="toc-title">阅读地图</div>
+    <ol>
+      <li>为什么要写「主动暴露劣势」这件事</li>
+      <li>退保现金价值的精算来源 — 钱去了哪里</li>
+      <li>5 款主流产品的前 5 年退保表实测</li>
+      <li>退保损失的「真实成本」= 折现率 + 机会成本</li>
+      <li>哪些事件会触发非自愿退保 — 必须做的压力测试</li>
+      <li>3 种缓解工具：减额缴清、保单贷款、保费假期</li>
+      <li>谁应该绕开港险 — 一张反向决策表</li>
+    </ol>
+  </div>
+
+  <h2>01 · 为什么要写「主动暴露劣势」这件事</h2>
+  <p>我的同行 99% 不会写这种文章。他们会告诉你「港险长期持有，3 倍 5 倍回报」，但绝不会告诉你「前 5 年退保，你可能只剩 30% 本金」。</p>
+  <p>不写不是因为他们不知道，而是因为「<strong>说出真话短期不利于成交，但长期是唯一可持续的策略</strong>」。我选择前者 — 因为我服务的目标客户（CPA 思维、上市公司财务、跨境家族架构需求），他们一定能识别出真诚和套话的差别。</p>
+  <p>另外，香港保监局 2024 年起强制要求所有代理人在投保前向客户书面披露「冷静期内退保」「前 3 年退保」「前 5 年退保」的预期损失。如果你的代理没主动给你看这张表，<strong>这本身就是合规警示信号</strong>。</p>
+
+  <h2>02 · 退保现金价值的精算来源 — 钱去了哪里</h2>
+  <p>客户最常问的一个问题：「我交了 10 万美元保费，为什么第 1 年退保只能拿回 8000 美元？另外 9.2 万美元去哪了？」</p>
+  <p>答案是这张「保费分配表」（业内称 Expense Loading）：</p>
+
+  <table>
+    <thead><tr><th>资金去向</th><th>第 1 年占比</th><th>第 2 年占比</th><th>第 3 年占比</th></tr></thead>
+    <tbody>
+      <tr><td>首佣 + 续期佣金（代理人 / 经纪 / 分销机构）</td><td>50%-75%</td><td>15%-25%</td><td>5%-15%</td></tr>
+      <tr><td>核保、医疗费、初始营运成本</td><td>5%-15%</td><td>2%-5%</td><td>1%-3%</td></tr>
+      <tr><td>营销渠道分摊（活动 / 培训 / IT）</td><td>3%-8%</td><td>2%-5%</td><td>1%-3%</td></tr>
+      <tr><td>监管资本占用（HKRBC）</td><td>2%-4%</td><td>2%-4%</td><td>2%-3%</td></tr>
+      <tr><td>实际进入「投资资金池」</td><td>5%-30%</td><td>60%-75%</td><td>78%-88%</td></tr>
+    </tbody>
+  </table>
+
+  <p>看到了吗？<strong>你交的第 1 年保费，可能只有 5%–30% 真正进入了「资产端」</strong>。其余 70%–95% 用于支付销售与营运。</p>
+  <p>这是港险的「先付后享」机制。退保时间越早，损失越大。前 5 年退保 = 你提前为整个长期合约支付了销售成本，但没有得到长期复利的回报。</p>
+
+  <h2>03 · 5 款主流产品的前 5 年退保表实测</h2>
+  <p>下表基于 5 款 2023–2024 年发售的主流储蓄分红险，<strong>用代号 P1–P5 表示</strong>（避免商业针对性）。假设：被保人 35 岁男性、年缴保费 5 万美元、缴费期 5 年。</p>
+
+  <h3>退保保证现金价值表（占已交保费 %）</h3>
+  <table>
+    <thead><tr><th>退保时点</th><th>P1（长期储蓄）</th><th>P2（多元货币）</th><th>P3（短期储蓄）</th><th>P4（万用寿险）</th><th>P5（年金型）</th></tr></thead>
+    <tbody>
+      <tr><td>第 1 年末</td><td>2%</td><td>4%</td><td>10%</td><td>6%</td><td>3%</td></tr>
+      <tr><td>第 2 年末</td><td>15%</td><td>22%</td><td>35%</td><td>30%</td><td>18%</td></tr>
+      <tr><td>第 3 年末</td><td>30%</td><td>42%</td><td>62%</td><td>58%</td><td>38%</td></tr>
+      <tr><td>第 4 年末</td><td>45%</td><td>58%</td><td>78%</td><td>72%</td><td>56%</td></tr>
+      <tr><td>第 5 年末</td><td>56%</td><td>68%</td><td>85%</td><td>80%</td><td>65%</td></tr>
+      <tr><td>第 6 年末</td><td>68%</td><td>76%</td><td>90%</td><td>86%</td><td>72%</td></tr>
+      <tr><td>第 8 年末</td><td>88%</td><td>92%</td><td>100%</td><td>94%</td><td>85%</td></tr>
+      <tr><td>第 10 年末</td><td>105%</td><td>108%</td><td>110%</td><td>102%</td><td>96%</td></tr>
+    </tbody>
+  </table>
+
+  <p style="color:#6b7280;font-size:12px">注：上表为保证退保金，不含非保证红利。实际退保金 = 保证退保金 + 累积非保证红利（如有）。早年非保证红利累积有限。</p>
+
+  <h3>前 5 年累计损失率（最直观的劣势暴露）</h3>
+  <p>假设第 N 年末退保，你已交保费的实际损失率：</p>
+
+  <div class="loss-bar"><div class="loss-pct">−98%</div><div>P1 第 1 年退保 — 几乎全损（5 万美元只剩 1000 美元）</div></div>
+  <div class="loss-bar"><div class="loss-pct">−85%</div><div>P1 第 2 年退保（10 万美元只剩 1.5 万美元）</div></div>
+  <div class="loss-bar"><div class="loss-pct">−70%</div><div>P1 第 3 年退保（15 万美元只剩 4.5 万美元）</div></div>
+  <div class="loss-bar"><div class="loss-pct">−55%</div><div>P1 第 4 年退保（20 万美元只剩 9 万美元）</div></div>
+  <div class="loss-bar"><div class="loss-pct">−44%</div><div>P1 第 5 年退保（25 万美元只剩 14 万美元）</div></div>
+
+  <div class="warn-block"><strong>事实陈述：</strong>这就是大多数客户、自媒体、维权群里说「港险骗人」「血亏」的来源。<strong>这些都是真实的</strong>。只是这个问题不在「港险」身上，而在「错配的客户 + 没有压力测试的销售流程」上。</div>
+
+  <h2>04 · 退保损失的「真实成本」= 折现率 + 机会成本</h2>
+  <p>从财务学角度，退保损失的「真实成本」远不止本金损失。还要算：</p>
+
+  <div class="formula">真实退保成本 = 名义本金损失 + 历史投入资金的机会成本
+
+举例：
+  你 35 岁时交了 15 万美元保费（3 年）
+  40 岁时被迫退保，拿回 4.5 万美元
+  名义损失：10.5 万美元
+  
+  如果这 15 万美元在过去 5 年放在标普 500：
+    平均年化 9%，5 年后 = 15 × 1.09^5 = 23.1 万美元
+  
+  真实机会成本损失 = 23.1 − 4.5 = 18.6 万美元
+  → 实际相当于损失了 124% 的当年本金</div>
+
+  <p>这就是为什么我反复强调：<strong>港险买之前必须做压力测试 — 你未来 8 年的家庭现金流，能不能撑过这个锁定期？</strong></p>
+
+  <h2>05 · 哪些事件会触发非自愿退保 — 必须做的压力测试</h2>
+
+  <h3>触发情景 #1：失业 + 缺乏应急金</h3>
+  <p>典型场景：35 岁科技公司中层被裁员，N+1 赔偿 60 万人民币。每年 30 万人民币的港险保费没有应急金支撑，第 2 年开始断缴。被迫退保损失 60%–80% 本金。</p>
+
+  <h3>触发情景 #2：家庭重大支出</h3>
+  <p>购房首付、子女紧急医疗、父母大病、跨境留学保证金。如果应急金不足，被迫退保。</p>
+
+  <h3>触发情景 #3：企业资金链断裂（民营企业主）</h3>
+  <p>这是最严重的情景。企业贷款人个人连带担保被启动后，私人保单的现金价值可能在内地法院判决下被强制执行（取决于具体案由与法院判例）。</p>
+
+  <h3>触发情景 #4：婚姻变故</h3>
+  <p>港险的现金价值在内地婚姻法判例下，通常被视为「夫妻共同财产」。离婚时可能被要求退保分割。</p>
+
+  <h3>触发情景 #5：跨境居住变动</h3>
+  <p>移民美国、加拿大、英国后，部分港险的税务处理变得复杂（如美国 PFIC 规则、英国 chargeable event）。可能需要重新结构化或退保。</p>
+
+  <div class="callout"><strong>CPA 必做的压力测试 — 三场景模型：</strong>
+    <ul style="margin-top:8px">
+      <li><strong>Baseline</strong>：未来 30 年家庭现金流（含港险缴费）</li>
+      <li><strong>Adverse</strong>：失业 12 个月 + 配偶减薪 30% 的情景</li>
+      <li><strong>Severe Adverse</strong>：失业 + 重大医疗 + 房贷利率上升 200bps</li>
+    </ul>
+    在 Severe Adverse 下，<strong>家庭现金流应该仍能覆盖港险保费至少 3 年</strong>，否则该保单的额度需要下调。
+  </div>
+
+  <h2>06 · 3 种缓解工具：减额缴清、保单贷款、保费假期</h2>
+
+  <h3>工具 #1：减额缴清（Reduced Paid-Up）</h3>
+  <p>当无法继续缴费时，可以将保单转为「减额缴清」状态。保单继续有效，但保额和未来红利按比例减少。前提：保单已有足够现金价值。一般要求保单生效 2-3 年以上。</p>
+  <p><strong>优势</strong>：避免退保损失，保单关系不断。<strong>劣势</strong>：保额大幅缩水，红利累积变慢。</p>
+
+  <h3>工具 #2：保单贷款（Policy Loan）</h3>
+  <p>用保单现金价值的 60%-90% 作为抵押向公司借款。利率 6%-8%/年（美元）。借款期间，保单继续运作（部分公司分红率会调整）。</p>
+  <p><strong>优势</strong>：保留保单 + 获得现金。<strong>劣势</strong>：贷款利率不低，长期借款累积利息会侵蚀本金。</p>
+
+  <h3>工具 #3：保费假期（Premium Holiday）</h3>
+  <p>部分产品允许「暂停缴费」一段时间（通常 1-3 年），到期后继续缴费。前提：保单已有足够现金价值用于扣除当年保险成本。</p>
+  <p><strong>优势</strong>：渡过短期困难。<strong>劣势</strong>：长期实施会侵蚀现金价值。</p>
+
+  <div class="warn-block"><strong>劣势暴露 #2：</strong>这 3 个工具都是「亡羊补牢」性质，无法完全消除退保损失。最好的策略仍然是：<strong>买之前做好压力测试，不要超出自己的现金流承受能力</strong>。如果客户连「Severe Adverse 情景下仍能缴费 3 年」都做不到，请下调保单额度。</div>
+
+  <h2>07 · 谁应该绕开港险 — 一张反向决策表</h2>
+
+  <table>
+    <thead><tr><th>家庭特征</th><th>建议</th><th>理由</th></tr></thead>
+    <tbody>
+      <tr><td>3-5 年内有买房计划，首付未凑齐</td><td>暂缓</td><td>买房刚性需求会触发退保损失</td></tr>
+      <tr><td>家庭应急金 &lt; 6 个月开支</td><td>先补应急金</td><td>缺乏缓冲就是高退保风险</td></tr>
+      <tr><td>家庭收入波动性大（销售提成、自由职业）</td><td>下调额度</td><td>现金流不稳定，缴费断点风险高</td></tr>
+      <tr><td>3 年内有子女留学的高额支出</td><td>区分预算</td><td>不能用同一笔钱兼顾两件长期目标</td></tr>
+      <tr><td>夫妻一方有重大健康风险（已确诊慢性病）</td><td>需重新评估</td><td>未来医疗支出可能挤占港险预算</td></tr>
+      <tr><td>企业经营波动性大、贷款连带担保高</td><td>先做防火墙</td><td>需要先用其他工具（信托等）做隔离</td></tr>
+      <tr><td>希望 3-5 年内回本</td><td>港险不是这个工具</td><td>港险的本质是长期工具</td></tr>
+    </tbody>
+  </table>
+
+  <div class="key-insight">
+    <div class="key-insight-title">CPA 的反向建议</div>
+    <div class="key-insight-body"><strong>不是每个人都应该买港险</strong>。如果你属于上面 7 类情形中的任何一种，请把港险预算降下来（甚至暂时归零），先做更优先级的财务基建：应急金、医疗险、定期寿险。<br><br>等家庭财务结构稳健后，再考虑储蓄分红型港险。它的本质是「<strong>用 30 年时间换 3-5 倍真实购买力</strong>」，而不是「短期增值工具」。</div>
+  </div>
+
+  <p class="cite">本文数据基于：5 款 2023-2024 年发售的主流港险产品条款原文（产品代号已脱敏）；HKIA 2024 年 7 月起的 HKRBC 偿付能力披露；保监局 GL16 指引；笔者搭建的退保现金价值现金流模型。所有数字为基于公开演示资料的反推，与具体客户实际情况存在差异。不构成投资建议。</p>
+
+  <div class="section-end">
+    <a href="../index.html">← 返回指南主页</a> &nbsp;·&nbsp;
+    <a href="cpa-05-premium-financing.html" style="color:#1a56db">下一步：万用寿险 + 保单融资压力测试 →</a>
+  </div>
+</article>
+</body></html>

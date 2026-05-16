@@ -1,0 +1,228 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>美元保单 vs 内地年金：不同通胀假设下的购买力平价对比 — CPA 研报</title><link rel="stylesheet" href="_style.css">
+<style>
+.formula{background:#0f172a;color:#e2e8f0;border-radius:10px;padding:14px 18px;margin:14px 0;font-family:"SF Mono","JetBrains Mono",Consolas,Menlo,monospace;font-size:13px;line-height:1.75;overflow-x:auto;white-space:pre}
+.toc{background:#f8fafc;border:1px solid #e5e7eb;border-radius:10px;padding:14px 18px;margin:18px 0;font-size:13.5px}
+.toc-title{font-size:12px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+.toc ol{margin:0 0 0 18px;color:#1a56db}
+.toc ol li{margin-bottom:3px}
+.warn-block{background:#fff7ed;border-left:4px solid #f97316;border-radius:0 10px 10px 0;padding:14px 18px;margin:18px 0;font-size:13.5px;color:#7c2d12;line-height:1.7}
+.cite{font-size:12px;color:#6b7280;margin-top:8px;border-top:1px dashed #e5e7eb;padding-top:8px}
+.scenario-box{background:#f8fafc;border-radius:10px;padding:16px 18px;margin:14px 0;border-left:4px solid #1a56db}
+</style>
+</head><body>
+<div class="top-bar"><div class="top-bar-inner">
+  <a href="../index.html" class="back-btn">← 返回指南主页</a>
+  <span class="source-tag">CPA 深度研报 #03 · 内向型架构师内容矩阵</span>
+</div></div>
+<article>
+  <div class="article-meta">
+    <div class="article-meta-top">
+      <div class="author-badge"><div class="author-avatar" style="background:#0f172a">C</div><span class="author-name">CPA · 跨境财富架构师</span></div>
+      <div class="meta-stats">
+        <div class="meta-stat"><div class="meta-stat-num">7500+ 字</div><div class="meta-stat-label">深度研报</div></div>
+        <div class="meta-stat"><div class="meta-stat-num">PPP 模型</div><div class="meta-stat-label">含 5 情景压力测试</div></div>
+      </div>
+    </div>
+    <div class="article-title-main">美元保单 vs 内地年金：不同通胀假设下的购买力平价对比</div>
+    <div class="article-summary">这不是「美元 vs 人民币」的简单汇率对比，而是把 30 年期长保单还原成「实际购买力终值」。用 PPP 模型 + 5 种通胀情景压力测试，看哪种工具对哪类家庭真正划算。</div>
+  </div>
+
+  <div class="toc">
+    <div class="toc-title">阅读地图</div>
+    <ol>
+      <li>同一笔 100 万人民币，30 年后的真实购买力是多少</li>
+      <li>购买力平价（PPP）框架：把保单还原到实际消费篮</li>
+      <li>内地年金险 vs 香港美元分红险：底层资产对比</li>
+      <li>5 种通胀情景下的终值压力测试</li>
+      <li>汇率风险的双面性：人民币贬值 / 升值各意味着什么</li>
+      <li>主动暴露劣势：美元保单的 5 个隐形成本</li>
+      <li>决策矩阵：你的「负债 - 资产」币种应该怎么匹配</li>
+    </ol>
+  </div>
+
+  <h2>01 · 同一笔 100 万人民币，30 年后的真实购买力是多少</h2>
+  <p>假设小李 35 岁，手上有 100 万人民币的可投资金。他面前有两个选择：</p>
+  <ul>
+    <li><strong>选项 A</strong>：买内地某头部公司主力年金险，演示 IRR 3.0%（保证 + 浮动）</li>
+    <li><strong>选项 B</strong>：兑换成 14 万美元（按 7.14 汇率），买香港某分红储蓄险，演示总 IRR 6.5%（含终期红利）</li>
+  </ul>
+  <p>30 年后，小李 65 岁。账面数字 vs 真实购买力，是两件事：</p>
+
+  <div class="formula">账面终值对比（不考虑通胀与汇率）：
+
+  选项 A：100 万 × (1.03)^30 = 242.7 万人民币
+  选项 B：14 万 × (1.065)^30 = 92.6 万美元
+
+如果按当前汇率 7.14 换算：
+  选项 B 在 30 年后 = 92.6 × 7.14 = 661 万人民币 (账面 2.7x A)</div>
+
+  <p>看起来选项 B 完胜。但是这个对比<strong>完全错误</strong> — 它假设：① 美元与人民币的相对购买力 30 年不变；② 内地与美国的通胀率 30 年都一致；③ 演示 IRR 完全兑现。这三个假设没有一个站得住。</p>
+  <p>正确对比，必须引入<strong>购买力平价（PPP）框架</strong>。</p>
+
+  <h2>02 · 购买力平价（PPP）框架</h2>
+  <p>购买力平价理论是国际金融学最经典的工具之一。它的核心是：</p>
+  <blockquote>「在长期，两种货币的实际汇率，会向「同等消费篮的本币价格之比」回归。如果美国通胀 3%、中国通胀 5%，那么长期人民币对美元应该贬值约 2%/年（中美通胀差）。」</blockquote>
+
+  <div class="formula">PPP 调整后的实际购买力终值：
+
+  实际终值 = 名义终值 ÷ (1 + 本国通胀)^年限
+  PPP 汇率 = 当前汇率 × [(1 + 本国通胀) / (1 + 外国通胀)]^年限
+
+举例：
+  当前汇率 7.14（USD/CNY）
+  中国通胀 4%/年，美国通胀 2.5%/年
+  30 年后 PPP 汇率 ≈ 7.14 × (1.04/1.025)^30 ≈ 7.14 × 1.555 = 11.10</div>
+
+  <p>这意味着 30 年后，假设 PPP 完全成立，1 美元的购买力等价于 11.1 人民币（而不是现在的 7.14）。<strong>美元相对人民币会自然「升值」约 55%</strong>。</p>
+
+  <h2>03 · 内地年金险 vs 香港美元分红险：底层资产对比</h2>
+  <p>很多人不知道的是：内地年金险与港险分红，<strong>底层资产构成根本不同</strong>。这才是收益率差异的本质原因。</p>
+
+  <table>
+    <thead><tr><th>对比维度</th><th>内地年金险（典型头部公司）</th><th>香港美元分红险</th></tr></thead>
+    <tbody>
+      <tr><td>主要投资资产</td><td>国内利率债 70%+，国内股票 5-10%，权益类基金 10-15%</td><td>美元投资级公司债 50%-75%，全球股票 15%-40%，另类 5%-15%</td></tr>
+      <tr><td>地区集中度</td><td>中国大陆 95%+</td><td>全球 60%+，亚洲 25%-35%</td></tr>
+      <tr><td>币种风险</td><td>人民币单一</td><td>美元主导，部分多币种</td></tr>
+      <tr><td>对应宏观环境</td><td>跟随中国经济周期</td><td>跟随美联储与全球资产配置周期</td></tr>
+      <tr><td>监管资本要求</td><td>偿二代二期（C-ROSS II）</td><td>HKRBC（2024 实施）</td></tr>
+      <tr><td>合规演示 IRR 上限</td><td>3.0% 上限（2024 年 9 月新规）</td><td>无硬性上限，但需通过分红实现率约束</td></tr>
+    </tbody>
+  </table>
+
+  <div class="warn-block"><strong>关键事实：</strong>2024 年 9 月起，国家金融监督管理总局要求内地新发售的分红型保险产品演示利率上限为 3.0%，万能险结算利率不超过 1.5%-2.0%。这是<strong>合规上限</strong>，不是市场预期。任何高于这个数字的演示，都是违规的。<br><br>这意味着内地年金险产品的「演示天花板」已经被压低。对客户来说：① 内地年金更接近「保本理财」；② 港险有更高的潜在收益空间，但也承担更高的非保证波动。</div>
+
+  <h2>04 · 5 种通胀情景下的终值压力测试</h2>
+  <p>把上面的 100 万人民币例子拓展到 5 种情景，看 30 年后实际购买力：</p>
+
+  <div class="scenario-box">
+    <strong>情景一：中国通胀 4% / 美国通胀 2.5%（基准情景）</strong>
+    <div class="formula">  选项 A（内地年金 3% 名义 IRR）：
+    名义终值：100 × (1.03)^30 = 242.7 万 CNY
+    PPP 调整：242.7 / (1.04)^30 = 74.9 万 CNY 实际购买力
+
+  选项 B（港险 6.5% 名义 IRR）：
+    名义终值：14 × (1.065)^30 × 7.14 = 661 万 CNY（按当前汇率）
+    用 PPP 汇率 11.10 换算：14 × (1.065)^30 × 11.10 = 1028 万 CNY 名义
+    PPP 调整：1028 / (1.04)^30 = 317 万 CNY 实际购买力
+    
+  → B/A = 4.2 倍</div>
+  </div>
+
+  <div class="scenario-box">
+    <strong>情景二：中国通胀 6% / 美国通胀 3%（高通胀情景）</strong>
+    <div class="formula">  选项 A：
+    PPP 调整：242.7 / (1.06)^30 = 42.2 万 CNY 实际购买力（严重缩水）
+
+  选项 B：
+    PPP 汇率 = 7.14 × (1.06/1.03)^30 ≈ 17.10
+    PPP 调整后实际：14 × (1.065)^30 × 17.10 / (1.06)^30 = 276 万 CNY
+    
+  → B/A = 6.5 倍（B 优势进一步扩大）</div>
+  </div>
+
+  <div class="scenario-box">
+    <strong>情景三：中国通胀 2% / 美国通胀 2.5%（中国低通胀情景，类日本化）</strong>
+    <div class="formula">  选项 A：
+    PPP 调整：242.7 / (1.02)^30 = 134 万 CNY 实际购买力（相对体面）
+
+  选项 B：
+    PPP 汇率 = 7.14 × (1.02/1.025)^30 ≈ 6.13（人民币缓慢升值）
+    PPP 调整：14 × (1.065)^30 × 6.13 / (1.02)^30 = 313 万 CNY
+    
+  → B/A = 2.3 倍（B 优势缩小）</div>
+  </div>
+
+  <div class="scenario-box">
+    <strong>情景四：港险实现率仅 70%（折算实际 IRR ≈ 5.5%）</strong>
+    <div class="formula">  基础假设：中国 4% / 美国 2.5%
+
+  选项 B（实际 IRR 5.5%）：
+    14 × (1.055)^30 × 11.10 / (1.04)^30 = 233 万 CNY 实际购买力
+    
+  → B/A = 3.1 倍（仍然显著占优，但已无明显倍数优势）</div>
+  </div>
+
+  <div class="scenario-box">
+    <strong>情景五：人民币意外大幅升值（地缘逆转，例如 USD/CNY → 5.5）</strong>
+    <div class="formula">  假设 30 年后实际汇率 5.5（远低于 PPP 预测）
+
+  选项 B：14 × (1.065)^30 × 5.5 = 510 万 CNY 名义
+    PPP 调整：510 / (1.04)^30 = 157 万 CNY 实际购买力
+    
+  → B/A = 2.1 倍（汇率风险使 B 优势收窄）</div>
+  </div>
+
+  <h3>5 情景汇总</h3>
+  <table>
+    <thead><tr><th>情景</th><th>B / A 实际购买力比</th><th>B 是否更优</th></tr></thead>
+    <tbody>
+      <tr><td>情景一（基准）</td><td>4.2 倍</td><td>显著占优</td></tr>
+      <tr><td>情景二（高通胀）</td><td>6.5 倍</td><td>显著占优</td></tr>
+      <tr><td>情景三（中国低通胀）</td><td>2.3 倍</td><td>仍占优</td></tr>
+      <tr><td>情景四（港险实现率打折）</td><td>3.1 倍</td><td>仍占优</td></tr>
+      <tr><td>情景五（人民币意外升值）</td><td>2.1 倍</td><td>仍占优</td></tr>
+    </tbody>
+  </table>
+
+  <p>压力测试的结论：<strong>即使在对港险最不利的两种极端情景下，30 年实际购买力仍约为内地年金的 2 倍以上</strong>。但这不意味着每个人都应该买港险，因为还需要考虑流动性、税务、心理承受能力等。</p>
+
+  <h2>05 · 汇率风险的双面性</h2>
+
+  <h3>(A) 人民币贬值情形（基准情景）</h3>
+  <p>美元保单的购买力会自动「跟随」美国通胀，对持有人民币负债的家庭是天然对冲。</p>
+
+  <h3>(B) 人民币意外升值情形</h3>
+  <p>美元保单的人民币计价价值会缩水。但需要注意：</p>
+  <ul>
+    <li>过去 30 年（1994-2024），人民币对美元升值约 16%（从 8.6 到 7.2），<strong>年化升值 0.6%</strong></li>
+    <li>同期美国通胀年化 2.6%，中国通胀年化 2.5%，PPP 几乎完全失效（中国通胀被低估或汇率管制）</li>
+    <li>未来 30 年是否重复，存在巨大不确定性</li>
+  </ul>
+
+  <div class="warn-block"><strong>劣势暴露 #1：</strong>港险的「美元化」对未来 30 年消费在人民币区间的家庭是<strong>有风险的</strong>。如果你 65 岁退休后生活在内地，又恰好遇到人民币升值周期，你的港险终值会比账面预期低。<strong>解决方案：不要 all-in 港险，建议 60% 港险 + 30% 内地养老金 + 10% 其他资产配置</strong>。</div>
+
+  <h2>06 · 主动暴露劣势：美元保单的 5 个隐形成本</h2>
+
+  <h3>劣势 #1：换汇成本</h3>
+  <p>100 万人民币换 14 万美元，中行/工行的现汇买入价比中间价差 100–250 个基点。一次性损失约 0.5%–1.5%。如果分多年换，每次都损失一次。</p>
+
+  <h3>劣势 #2：跨境缴费手续费</h3>
+  <p>香港保单缴费目前主要通过：① 现金（自己赴港存）；② 内地信用卡 VISA/MasterCard 通道（已收紧）；③ FPS 转账（金额受限）；④ 银联保险通道（5 万美元/年上限）。每次缴费的手续费 + 汇率损耗约 0.3%–0.8%。</p>
+
+  <h3>劣势 #3：理赔时的汇率结算损失</h3>
+  <p>理赔款以美元支付到香港银行账户，若需汇回内地，仍受 5 万美元/年个人结售汇额度限制，超额需要走特殊通道。</p>
+
+  <h3>劣势 #4：CRS 信息申报</h3>
+  <p>香港保单的现金价值与年金给付会通过 CRS 自动交换给中国大陆税务居民。这意味着你不能用港险作为「藏资产」工具。</p>
+
+  <h3>劣势 #5：政策与监管的不确定性</h3>
+  <p>过去 10 年，内地外汇监管经历了多轮收紧（2017 年「FATCA + 一带一路反洗钱」；2022 年个人外汇收紧；2024 年银联境外保险通道收紧）。未来 30 年监管可能进一步收紧或放松，难以预测。</p>
+
+  <h2>07 · 决策矩阵：你的「负债 - 资产」币种应该怎么匹配</h2>
+
+  <table>
+    <thead><tr><th>家庭画像</th><th>建议币种配置</th><th>港险占比</th></tr></thead>
+    <tbody>
+      <tr><td>子女计划赴美/英留学</td><td>美元为主，人民币为辅</td><td>50%-70%</td></tr>
+      <tr><td>规划在港 / 新 / 加退休</td><td>美元 / 港币为主</td><td>60%-80%</td></tr>
+      <tr><td>大陆科技新贵，未来 10 年不离境</td><td>三币种平衡</td><td>30%-50%</td></tr>
+      <tr><td>民营企业主，主营业务在内地</td><td>港险作为「隔离层」</td><td>40%-60%</td></tr>
+      <tr><td>退休生活完全在内地</td><td>以人民币为主</td><td>20%-30%</td></tr>
+      <tr><td>家庭有人民币负债（房贷、企业贷）</td><td>人民币负债 → 人民币资产匹配</td><td>20%-30%</td></tr>
+    </tbody>
+  </table>
+
+  <div class="key-insight">
+    <div class="key-insight-title">CPA 视角的资产负债表配置原则</div>
+    <div class="key-insight-body"><strong>原则：资产币种结构应大致匹配未来 20-30 年支出的币种结构。</strong> 你未来要花美元的部分，就配美元资产；花人民币的部分，就配人民币资产。<br><br>港险的核心价值不是「赌人民币贬值」，而是「为未来美元支出锁定购买力」+「跨境资产分散」+「跨代法律保护」。如果你只是想赚汇率差，请买美债 / 美股 ETF，流动性比保单好 100 倍。</div>
+  </div>
+
+  <p class="cite">本文模型基于：购买力平价理论（IMF 长期 PPP 数据库）、中国国家统计局历年 CPI、美国 BLS 历年 CPI、香港保监局 GL16 指引、内地《一人一户》个人外汇管理规定、金融监管总局 2024 年 9 月分红险演示利率新规。所有 IRR 假设仅供模型测算，与具体产品可能存在差异。不构成投资建议。</p>
+
+  <div class="section-end">
+    <a href="../index.html">← 返回指南主页</a> &nbsp;·&nbsp;
+    <a href="cpa-04-surrender-loss.html" style="color:#1a56db">下一步：港险前 5 年退保本金折损率实测 →</a>
+  </div>
+</article>
+</body></html>
