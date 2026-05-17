@@ -31,6 +31,31 @@ ROOT = Path('insurance-guide/articles')
 OUT_DIR = ROOT / 'xhs-publish'
 OUT_DIR.mkdir(exist_ok=True)
 
+SHORT_BODIES_FILE = Path('xhs_short_bodies.md')
+
+# ==========================================================
+# 精简版正文加载（覆盖原 ARTICLES.body）
+# ==========================================================
+def load_short_bodies():
+    """
+    解析 xhs_short_bodies.md，按 ## #NN 标题切分。
+    返回 {num:int -> body:str}
+    """
+    if not SHORT_BODIES_FILE.exists():
+        return {}
+    text = SHORT_BODIES_FILE.read_text(encoding='utf-8')
+    # 按 ## #NN 切分
+    parts = re.split(r'^##\s+#(\d{2})\s*$', text, flags=re.MULTILINE)
+    # parts[0] = 文件头部说明（丢弃）
+    # 之后是 [num, body, num, body, ...]
+    result = {}
+    for i in range(1, len(parts), 2):
+        num = int(parts[i])
+        body = parts[i+1].strip() if i+1 < len(parts) else ''
+        if body:
+            result[num] = body
+    return result
+
 # ==========================================================
 # 月度分组（与 hub 页一致）
 # ==========================================================
@@ -120,7 +145,8 @@ def build_publish_text(a):
         parts.append(normalize(a['cta']))
     if a.get('tags'):
         parts.append('')
-        parts.append(' '.join(f'#{t}' for t in a['tags']))
+        # 小红书有效标签上限 10 个，多了不识别 → 截到前 10
+        parts.append(' '.join(f'#{t}' for t in a['tags'][:10]))
     return '\n'.join(parts) + '\n'
 
 # ==========================================================
@@ -382,6 +408,16 @@ def main():
     art1 = parse_xhs01()
     all_articles = [art1] + ARTICLES
 
+    short_bodies = load_short_bodies()
+    overridden = []
+    if short_bodies:
+        for a in all_articles:
+            if a['num'] in short_bodies:
+                a['body'] = short_bodies[a['num']]
+                # 精简版自带内嵌 CTA 钩子，不再附加原长版 CTA
+                a['cta'] = ''
+                overridden.append(a['num'])
+
     publish_map = {}
     for a in all_articles:
         text = build_publish_text(a)
@@ -394,18 +430,22 @@ def main():
 
     txt_count = len([1 for a in all_articles])
     avg_len = sum(len(t) for t in publish_map.values()) / len(publish_map)
+    over = [(n, len(t)) for n, t in publish_map.items() if len(t) > 1000]
     print(f'[OK] 已生成 {txt_count} 个 .txt 文件 + 1 个 hub 页')
     print(f'     输出目录: {OUT_DIR}')
     print(f'     平均长度: {avg_len:.0f} 字 / 篇')
     print(f'     hub 页 : {OUT_DIR / "index.html"}')
     print()
-    print('     最长 / 最短 3 篇:')
-    sorted_arts = sorted(publish_map.items(), key=lambda x: len(x[1]))
-    for n, t in sorted_arts[:3]:
-        print(f'       #{n:02d} · {len(t)} 字')
-    print('       ...')
-    for n, t in sorted_arts[-3:]:
-        print(f'       #{n:02d} · {len(t)} 字')
+    if overridden:
+        print(f'[精简版已应用] {len(overridden)} 篇：{overridden}')
+    if over:
+        print(f'[字数超 1000] 还有 {len(over)} 篇待精简：')
+        for n, length in sorted(over, key=lambda x: -x[1])[:10]:
+            print(f'       #{n:02d} · {length} 字（超 {length-1000}）')
+        if len(over) > 10:
+            print(f'       ... 还有 {len(over)-10} 篇')
+    else:
+        print('[字数全部达标] ✓ 全部 39 篇都在 1000 字内')
 
 
 if __name__ == '__main__':
