@@ -1,44 +1,12 @@
-# ── 环境变量（包含密钥，严禁提交）──────────────────────────────
-.env
-.env.*
-*.env
+# 金渐成文章存档 - 私人存档不推送到公开仓库
+jinjiancheng_archive/private/
+jinjiancheng_archive/metadata.json
 
-# ── Python ──────────────────────────────────────────────────────
+# 调试文件
+page_debug.html
+jinjiancheng_scraper.py
+
+# 其他临时文件
+*.pyc
 __pycache__/
-*.py[cod]
-*.pyo
-*.pyd
-.Python
-*.egg-info/
-dist/
-build/
-.venv/
-venv/
-env/
-
-# ── Node.js ─────────────────────────────────────────────────────
-node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# ── 构建产物（由 CI/CD 生成，不纳入版本控制）────────────────────
-tg-club/admin-web/dist/
-tg-club/mini-app/dist/
-
-# ── 编辑器 & 系统 ───────────────────────────────────────────────
 .DS_Store
-.idea/
-# .vscode/ 注释掉，允许提交上下文工具的 tasks.json
-*.swp
-*.swo
-Thumbs.db
-
-# ── 上下文工具本地生成文件（不提交）─────────────────────────────
-.context_aliases_local
-context_aliases.bat
-.cursorignore.backup
-
-# ── 日志 ────────────────────────────────────────────────────────
-*.log
-logs/
