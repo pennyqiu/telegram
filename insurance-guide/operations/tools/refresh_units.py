@@ -700,6 +700,7 @@ def update_latest_publish_section():
     _recent_units = [u for u in UNITS if u['slug'].startswith('cpa')][-RECENT_BATCH:]
     _recent_n = len(_recent_units)
     _recent_nums = ' / '.join(f"#{u['number']}" for u in _recent_units) or '—'
+    _cpa_n = len([u for u in UNITS if u['slug'].startswith('cpa')])
 
     cpa_units = [u for u in UNITS if u['slug'].startswith('cpa')]
     recent = list(reversed(cpa_units))[:6]
@@ -759,6 +760,7 @@ def update_latest_publish_section():
         f'          <div style="text-align:center;flex:1;"><div style="font-size:22px;font-weight:900;color:#92400e;line-height:1;">{_total_wan}万</div><div style="font-size:10px;color:#78350f;letter-spacing:1px;margin-top:4px;">总字数</div></div>\n'
         '        </div>\n'
         f'        <div style="font-size:11.5px;color:#78350f;background:#fef3c7;padding:6px 10px;border-radius:6px;margin-bottom:10px;line-height:1.5;">\U0001F195 本批新增 <b>{_recent_n}</b> 篇·{_recent_nums}</div>\n'
+        f'        <div style="font-size:11px;color:#a16207;line-height:1.5;margin-bottom:10px;">· {len(UNITS)} 个单元 = {_cpa_n} CPA 旗舰 + {len(UNITS)-_cpa_n} 早期长文</div>\n'
         '        <div style="margin-top:auto;font-size:12px;color:#b45309;font-weight:700;">进入总览 →</div>\n'
         '      </a>\n'
         + rest_cards +

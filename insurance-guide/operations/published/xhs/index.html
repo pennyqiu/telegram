@@ -6,69 +6,55 @@
 <title>小红书素材仓库 · 运营中心</title>
 <style>
   *{margin:0;padding:0;box-sizing:border-box;}
-  body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
-       color:#1e293b;background:#f8fafc;line-height:1.6;-webkit-font-smoothing:antialiased;}
+  body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;color:#1e293b;background:#f8fafc;line-height:1.6;-webkit-font-smoothing:antialiased;}
   a{color:inherit;text-decoration:none;}
-
-  .topbar{background:#fff;padding:14px 24px;border-bottom:1px solid #e2e8f0;
-          position:sticky;top:0;z-index:10;}
-  .topbar-inner{max-width:980px;margin:0 auto;display:flex;align-items:center;gap:12px;
-                font-size:14px;}
+  .topbar{background:#fff;padding:14px 24px;border-bottom:1px solid #e2e8f0;position:sticky;top:0;z-index:10;}
+  .topbar-inner{max-width:980px;margin:0 auto;display:flex;align-items:center;gap:12px;font-size:14px;}
   .topbar a{color:#475569;font-weight:500;}
   .topbar a:hover{color:#ec4899;}
   .topbar .here{color:#ec4899;font-weight:700;}
   .topbar .sep{color:#cbd5e1;}
-
-  .hero{background:linear-gradient(135deg,#9d174d 0%,#ec4899 100%);
-        color:#fff;padding:36px 24px 44px;}
+  .hero{background:linear-gradient(135deg,#9d174d 0%,#ec4899 100%);color:#fff;padding:36px 24px 44px;}
   .hero-inner{max-width:980px;margin:0 auto;}
-  .hero-tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:1.5px;
-            background:rgba(255,255,255,0.18);padding:5px 12px;border-radius:12px;
-            margin-bottom:14px;backdrop-filter:blur(10px);}
+  .hero-tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:1.5px;background:rgba(255,255,255,0.18);padding:5px 12px;border-radius:12px;margin-bottom:14px;}
   .hero h1{font-size:28px;font-weight:800;margin-bottom:8px;line-height:1.2;}
   .hero p{font-size:14px;opacity:0.92;line-height:1.7;}
-  .hero-meta{font-size:12px;font-family:Consolas,Monaco,monospace;opacity:0.85;
-             margin-top:14px;background:rgba(0,0,0,0.18);padding:6px 12px;
-             border-radius:6px;display:inline-block;}
-
+  .hero-stats{display:flex;gap:24px;margin-top:18px;flex-wrap:wrap;}
+  .hero-stat{font-size:12px;opacity:0.9;}
+  .hero-stat b{font-size:20px;display:block;font-weight:800;margin-bottom:2px;}
   .container{max-width:980px;margin:-22px auto 0;padding:0 24px 60px;position:relative;z-index:2;}
-
-  .file-list{background:#fff;border-radius:12px;border:1px solid #e2e8f0;
-             overflow:hidden;}
-  .file-row{display:flex;align-items:center;padding:16px 20px;border-bottom:1px solid #f1f5f9;
-            transition:background 0.15s;}
+  .section-title{font-size:13px;font-weight:700;color:#64748b;letter-spacing:1px;margin:24px 0 12px;text-transform:uppercase;}
+  .hub-card{display:block;background:linear-gradient(135deg,#fdf2f8 0%,#fce7f3 100%);border:2px solid #f9a8d4;border-radius:14px;padding:22px 24px;margin-bottom:18px;transition:transform 0.15s, box-shadow 0.15s;}
+  .hub-card:hover{transform:translateY(-2px);box-shadow:0 10px 25px rgba(236,72,153,0.15);}
+  .hub-card-head{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+  .hub-card-icon{font-size:32px;}
+  .hub-card-title{font-size:18px;font-weight:800;color:#831843;}
+  .hub-card-tag{font-size:10px;font-weight:700;background:#ec4899;color:#fff;padding:3px 8px;border-radius:6px;letter-spacing:1px;margin-left:auto;}
+  .hub-card-desc{font-size:13.5px;color:#6b1742;line-height:1.7;margin-bottom:14px;}
+  .hub-card-stats{display:flex;gap:20px;padding-top:12px;border-top:1px dashed #f9a8d4;}
+  .hub-stat{flex:1;text-align:center;}
+  .hub-stat-num{font-size:22px;font-weight:900;color:#9d174d;line-height:1;}
+  .hub-stat-label{font-size:11px;color:#831843;letter-spacing:0.5px;margin-top:4px;}
+  .hub-cta{margin-top:14px;text-align:right;font-size:13px;color:#9d174d;font-weight:700;}
+  .secondary-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px;}
+  .secondary-card{display:block;background:#fff;border:1px solid #fce7f3;border-radius:10px;padding:16px 18px;transition:border 0.15s;}
+  .secondary-card:hover{border-color:#f9a8d4;}
+  .secondary-card-title{font-size:14px;font-weight:700;color:#831843;margin-bottom:6px;}
+  .secondary-card-desc{font-size:12px;color:#6b1742;line-height:1.6;}
+  .file-list{background:#fff;border-radius:12px;border:1px solid #e2e8f0;overflow:hidden;}
+  .file-row{display:flex;align-items:center;padding:16px 20px;border-bottom:1px solid #f1f5f9;transition:background 0.15s;}
   .file-row:last-child{border-bottom:none;}
   .file-row:hover{background:#f8fafc;}
-  .file-icon{width:36px;height:36px;border-radius:8px;display:flex;
-             align-items:center;justify-content:center;font-size:16px;
-             margin-right:14px;flex-shrink:0;}
-  .file-icon.html{background:#dbeafe;color:#1e40af;}
+  .file-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-right:14px;flex-shrink:0;}
   .file-icon.md{background:#d1fae5;color:#047857;}
-  .file-icon.pdf{background:#fee2e2;color:#b91c1c;}
-  .file-icon.xlsx{background:#dcfce7;color:#166534;}
-  .file-icon.py{background:#ede9fe;color:#6d28d9;}
-  .file-icon.txt{background:#fef3c7;color:#92400e;}
-  .file-icon.dir{background:#fed7aa;color:#9a3412;}
+  .file-icon.html{background:#dbeafe;color:#1e40af;}
   .file-icon.default{background:#e2e8f0;color:#475569;}
   .file-info{flex:1;min-width:0;}
-  .file-name{font-size:15px;font-weight:600;color:#0f172a;line-height:1.4;
-             overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .file-name{font-size:15px;font-weight:600;color:#0f172a;line-height:1.4;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .file-name a{color:#ec4899;}
   .file-name a:hover{text-decoration:underline;}
-  .file-meta{font-size:12px;color:#94a3b8;margin-top:3px;font-family:Consolas,Monaco,monospace;}
-  .file-size{font-size:12px;color:#64748b;margin-left:14px;font-variant-numeric:tabular-nums;
-             flex-shrink:0;}
-
-  .empty{text-align:center;padding:48px 24px;color:#94a3b8;}
-
-  .desc-box{background:#fff;border-radius:12px;padding:18px 22px;margin-bottom:18px;
-            border:1px solid #e2e8f0;border-left:3px solid #ec4899;}
-  .desc-title{font-size:14px;font-weight:700;color:#0f172a;margin-bottom:6px;}
-  .desc-text{font-size:13px;color:#475569;line-height:1.7;}
-  .desc-text code{background:#f1f5f9;padding:2px 6px;border-radius:4px;font-size:12px;color:#ec4899;}
-
-  footer{text-align:center;padding:24px;color:#94a3b8;font-size:12px;
-         border-top:1px solid #e2e8f0;background:#fff;margin-top:40px;}
+  .file-size{font-size:12px;color:#64748b;margin-left:14px;font-variant-numeric:tabular-nums;flex-shrink:0;}
+  footer{text-align:center;padding:24px;color:#94a3b8;font-size:12px;border-top:1px solid #e2e8f0;background:#fff;margin-top:40px;}
   footer a{color:#ec4899;}
 </style>
 </head>
@@ -88,18 +74,55 @@
   <div class="hero-inner">
     <span class="hero-tag">OPERATIONS · 小红书</span>
     <h1>小红书素材仓库</h1>
-    <p>短文 bodies + 单篇成稿 · 覆盖港险合法性、IRR 等热门话题。</p>
-    <div class="hero-meta">📁 operations/published/xhs/ · 共 2 个文件</div>
+    <p>v2.2 精品 39 篇 + 仓库 2 个素材 · 覆盖港险合法性、IRR、性价比、跨境医疗、税务等核心话题。</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><b>39</b>v2.2 精品（1000 字内）</div>
+      <div class="hero-stat"><b>2</b>仓库素材</div>
+      <div class="hero-stat"><b>41</b>素材合计</div>
+    </div>
   </div>
 </header>
 
 <main class="container">
 
-  <div class="desc-box">
-    <div class="desc-title">💡 相关入口</div>
-    <div class="desc-text">👉 还有 <b>v2.2 小红书 39 篇一键发布版</b>（每篇 1000 字内 · 已精简到字数限制）：<br>· 日历视图：<code><a href="../../../articles/v22-xhs-hub.html">articles/v22-xhs-hub.html</a></code><br>· 纯文本版：<code><a href="../../../articles/xhs-publish/index.html">articles/xhs-publish/</a></code></div>
+  <div class="section-title">🎯 推荐入口 · v2.2 精品 39 篇</div>
+
+  <a href="../../../articles/v22-xhs-hub.html" class="hub-card">
+    <div class="hub-card-head">
+      <span class="hub-card-icon">📚</span>
+      <span class="hub-card-title">v2.2 小红书 39 篇 · 已分类</span>
+      <span class="hub-card-tag">主推</span>
+    </div>
+    <div class="hub-card-desc">每篇 1000 字内 · 已精简到平台字数限制 · 按热门话题分组 · 可直接复制发布。点开为日历视图，按周/按主题筛选。</div>
+    <div class="hub-card-stats">
+      <div class="hub-stat">
+        <div class="hub-stat-num">39</div>
+        <div class="hub-stat-label">精品短文</div>
+      </div>
+      <div class="hub-stat">
+        <div class="hub-stat-num">6</div>
+        <div class="hub-stat-label">话题分组</div>
+      </div>
+      <div class="hub-stat">
+        <div class="hub-stat-num">≤1k</div>
+        <div class="hub-stat-label">单篇字数</div>
+      </div>
+    </div>
+    <div class="hub-cta">进入日历视图 →</div>
+  </a>
+
+  <div class="secondary-grid">
+    <a class="secondary-card" href="../../../articles/xhs-publish/index.html">
+      <div class="secondary-card-title">📄 39 篇 · 纯文本发布版</div>
+      <div class="secondary-card-desc">所有 39 篇的可直接粘贴文本版，按编号排列。</div>
+    </a>
+    <a class="secondary-card" href="../../strategy/index.html">
+      <div class="secondary-card-title">📋 小红书运营节奏</div>
+      <div class="secondary-card-desc">参考 strategy/ 下战略文档：发布频率、互动 SOP、话题排期。</div>
+    </a>
   </div>
 
+  <div class="section-title">📦 仓库散稿 · 2 个</div>
   <div class="file-list">
     <div class="file-row">
       <div class="file-icon md">📝</div>
