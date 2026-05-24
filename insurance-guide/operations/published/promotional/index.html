@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>朋友圈/小红书推广素材 · 运营中心</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+       color:#1e293b;background:#f8fafc;line-height:1.6;-webkit-font-smoothing:antialiased;}
+  a{color:inherit;text-decoration:none;}
+
+  .topbar{background:#fff;padding:14px 24px;border-bottom:1px solid #e2e8f0;
+          position:sticky;top:0;z-index:10;}
+  .topbar-inner{max-width:980px;margin:0 auto;display:flex;align-items:center;gap:12px;font-size:14px;}
+  .topbar a{color:#475569;font-weight:500;}
+  .topbar a:hover{color:#f59e0b;}
+  .topbar .here{color:#f59e0b;font-weight:700;}
+  .topbar .sep{color:#cbd5e1;}
+
+  .hero{background:linear-gradient(135deg,#92400e 0%,#f59e0b 100%);
+        color:#fff;padding:36px 24px 44px;}
+  .hero-inner{max-width:980px;margin:0 auto;}
+  .hero-tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:1.5px;
+            background:rgba(255,255,255,0.18);padding:5px 12px;border-radius:12px;margin-bottom:14px;}
+  .hero h1{font-size:28px;font-weight:800;margin-bottom:8px;line-height:1.2;}
+  .hero p{font-size:14px;opacity:0.92;line-height:1.7;}
+
+  .container{max-width:980px;margin:-22px auto 0;padding:0 24px 60px;position:relative;z-index:2;}
+
+  .desc-box{background:#fff;border-radius:12px;padding:18px 22px;margin-bottom:18px;
+            border:1px solid #e2e8f0;border-left:3px solid #f59e0b;}
+  .desc-title{font-size:14px;font-weight:700;color:#0f172a;margin-bottom:6px;}
+  .desc-text{font-size:13px;color:#475569;line-height:1.7;}
+  .desc-text a{color:#1a56db;font-weight:600;}
+
+  .cover-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;}
+  .cover-card{background:#fff;border-radius:10px;overflow:hidden;border:1px solid #e2e8f0;
+              transition:all 0.2s;cursor:pointer;}
+  .cover-card:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(15,23,42,0.1);border-color:#f59e0b;}
+  .cover-card img{width:100%;display:block;background:#0f172a;aspect-ratio:1/1;object-fit:cover;}
+  .cover-meta{padding:10px 14px;font-size:12px;}
+  .cover-name{font-weight:600;color:#0f172a;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .cover-dim{color:#94a3b8;font-family:Consolas,Monaco,monospace;margin-top:3px;}
+
+  .empty{text-align:center;padding:48px 24px;background:#fff;border-radius:12px;color:#94a3b8;}
+
+  footer{text-align:center;padding:24px;color:#94a3b8;font-size:12px;
+         border-top:1px solid #e2e8f0;background:#fff;margin-top:40px;}
+  footer a{color:#f59e0b;}
+</style>
+</head>
+<body>
+
+<nav class="topbar">
+  <div class="topbar-inner">
+    <a href="../../../index.html">🏠 综合站首页</a>
+    <span class="sep">›</span>
+    <a href="../../index.html">运营中心</a>
+    <span class="sep">›</span>
+    <span style="color:#94a3b8;">published/</span>
+    <span class="sep">›</span>
+    <span class="here">promotional/</span>
+    <span style="margin-left:auto;font-size:12px;color:#94a3b8;">v3.1</span>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-inner">
+    <span class="hero-tag">OPERATIONS · PROMOTIONAL</span>
+    <h1>朋友圈 / 小红书推广素材</h1>
+    <p>方形 1:1 封面图（800×800） · 朋友圈九宫格、小红书首图通用尺寸。文案见 <a href="../xhs/index.html" style="color:#fde68a;">xhs/</a>。</p>
+  </div>
+</header>
+
+<main class="container">
+
+  <div class="desc-box">
+    <div class="desc-title">💡 使用方法</div>
+    <div class="desc-text">
+      右键图片 → 另存为 → 上传到朋友圈 / 小红书 / 微博等。<br>
+      想要生成新的方形封面？运行 <a href="../../tools/gen_cover.py">operations/tools/gen_cover.py</a>（PIL 实现，无外部依赖）。
+    </div>
+  </div>
+
+  <div class="cover-grid">      <a class="cover-card" href="covers/cpa02-fulfillment-ratio_800x800.png" target="_blank">
+        <img src="covers/cpa02-fulfillment-ratio_800x800.png" alt="cpa02-fulfillment-ratio_800x800.png">
+        <div class="cover-meta">
+          <div class="cover-name">cpa02-fulfillment-ratio_800x800.png</div>
+          <div class="cover-dim">146.4 KB</div>
+        </div>
+      </a></div>
+
+</main>
+
+<footer>
+  <div>朋友圈/小红书推广素材 · 运营中心 v3.1 · 共 1 张</div>
+  <div style="margin-top:8px;">
+    <a href="../../../index.html">综合站首页</a> · 
+    <a href="../../index.html">运营中心</a> · 
+    <a href="../units/index.html">发布单元总览</a>
+  </div>
+</footer>
+
+</body>
+</html>

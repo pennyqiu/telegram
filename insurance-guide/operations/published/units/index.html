@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>发布单元总览 · 运营中心</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+       color:#1e293b;background:#f8fafc;line-height:1.65;-webkit-font-smoothing:antialiased;}
+  a{color:inherit;text-decoration:none;}
+
+  .topbar{background:#fff;padding:14px 24px;border-bottom:1px solid #e2e8f0;
+          position:sticky;top:0;z-index:10;}
+  .topbar-inner{max-width:1180px;margin:0 auto;display:flex;align-items:center;gap:12px;font-size:14px;}
+  .topbar a{color:#475569;font-weight:500;}
+  .topbar a:hover{color:#f59e0b;}
+  .topbar .here{color:#f59e0b;font-weight:700;}
+  .topbar .sep{color:#cbd5e1;}
+
+  .hero{background:linear-gradient(135deg,#92400e 0%,#f59e0b 100%);
+        color:#fff;padding:50px 24px 60px;}
+  .hero-inner{max-width:1180px;margin:0 auto;}
+  .hero-tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:1.5px;
+            background:rgba(255,255,255,0.18);padding:5px 12px;border-radius:12px;margin-bottom:14px;}
+  .hero h1{font-size:32px;font-weight:800;margin-bottom:8px;line-height:1.25;}
+  .hero p{font-size:15px;opacity:0.92;line-height:1.7;max-width:760px;}
+
+  .container{max-width:1180px;margin:-30px auto 0;padding:0 24px 80px;position:relative;z-index:2;}
+
+  .unit-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:18px;}
+  .unit-card{background:#fff;border-radius:14px;overflow:hidden;border:1px solid #e2e8f0;
+             transition:all 0.2s;cursor:pointer;display:flex;flex-direction:column;}
+  .unit-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(15,23,42,0.1);border-color:#f59e0b;}
+  .unit-card-cover{width:100%;aspect-ratio:9/5;display:block;object-fit:cover;background:#0f172a;}
+  .unit-card-placeholder{width:100%;aspect-ratio:9/5;display:flex;align-items:center;justify-content:center;
+                         background:linear-gradient(135deg,#1e3a8a,#3b82f6);color:rgba(255,255,255,0.6);
+                         font-size:14px;letter-spacing:1px;flex-direction:column;gap:6px;}
+  .unit-card-placeholder .ph-num{font-size:60px;font-weight:900;color:rgba(255,255,255,0.85);line-height:1;}
+  .unit-card-placeholder .ph-text{font-size:12px;opacity:0.8;}
+  .unit-card-body{padding:18px 20px;flex:1;display:flex;flex-direction:column;}
+  .unit-card-tag{display:inline-block;font-size:11px;font-weight:700;background:#fef3c7;color:#92400e;
+                 padding:3px 10px;border-radius:10px;margin-bottom:8px;align-self:flex-start;}
+  .unit-card-title{font-size:16px;font-weight:700;color:#0f172a;margin-bottom:6px;line-height:1.4;}
+  .unit-card-desc{font-size:13px;color:#64748b;line-height:1.6;flex:1;}
+  .unit-card-stats{display:flex;gap:14px;margin-top:12px;padding-top:12px;
+                   border-top:1px solid #f1f5f9;font-size:12px;color:#94a3b8;}
+  .unit-card-stats span strong{color:#0f172a;font-weight:700;}
+
+  footer{text-align:center;padding:24px;color:#94a3b8;font-size:12px;
+         border-top:1px solid #e2e8f0;background:#fff;margin-top:40px;}
+  footer a{color:#f59e0b;}
+</style>
+</head>
+<body>
+
+<nav class="topbar">
+  <div class="topbar-inner">
+    <a href="../../../index.html">🏠 综合站首页</a>
+    <span class="sep">›</span>
+    <a href="../../index.html">运营中心</a>
+    <span class="sep">›</span>
+    <span style="color:#94a3b8;">published/</span>
+    <span class="sep">›</span>
+    <span class="here">units/</span>
+    <span style="margin-left:auto;font-size:12px;color:#94a3b8;">v3.1</span>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-inner">
+    <span class="hero-tag">📦 PUBLISH UNITS</span>
+    <h1>发布单元总览</h1>
+    <p>每个「发布单元」= 一篇文章的全部物料：公众号稿 + 知乎稿 + 多尺寸封面 + 使用流程。一处汇总，一键发布。</p>
+  </div>
+</header>
+
+<main class="container">
+  <div class="unit-grid">
+    <a class="unit-card" href="cpa02-fulfillment-ratio.html">
+      <img class="unit-card-cover" src="../wechat/covers/cpa02-fulfillment-ratio_900x500.png" alt="5000 字读懂分红实现率">
+      <div class="unit-card-body">
+        <span class="unit-card-tag">CPA 旗舰研报 · 🆕</span>
+        <div class="unit-card-title">5000 字读懂分红实现率</div>
+        <div class="unit-card-desc">8 家公司横评 · 历史数据 · CPA 视角拆解</div>
+        <div class="unit-card-stats">
+          <span>📝 <strong>5000+</strong> 字</span>
+          <span>📢 公众号 + 知乎</span>
+          <span>🎨 3 张封面</span>
+        </div>
+      </div>
+    </a>
+    <a class="unit-card" href="cpa01-dividend-trap.html">
+      <div class="unit-card-placeholder">
+        <div class="ph-num">01</div>
+        <div class="ph-text">尚未生成封面</div>
+      </div>
+      <div class="unit-card-body">
+        <span class="unit-card-tag">CPA 旗舰研报</span>
+        <div class="unit-card-title">港险分红险到底是不是智商税</div>
+        <div class="unit-card-desc">CPA 视角的精算假设全拆解</div>
+        <div class="unit-card-stats">
+          <span>📝 <strong>6000+</strong> 字</span>
+          <span>📢 公众号 + 知乎</span>
+          <span>🎨 待补封面</span>
+        </div>
+      </div>
+    </a>
+    <a class="unit-card" href="v22-persona.html">
+      <div class="unit-card-placeholder">
+        <div class="ph-num">★</div>
+        <div class="ph-text">尚未生成封面</div>
+      </div>
+      <div class="unit-card-body">
+        <span class="unit-card-tag">人设奠基长文</span>
+        <div class="unit-card-title">在迅雷做了 8 年总账，我为什么把简历交给了安盛</div>
+        <div class="unit-card-desc">人设奠基长文 · 公众号 + 知乎双版本</div>
+        <div class="unit-card-stats">
+          <span>📝 <strong>8000+</strong> 字</span>
+          <span>📢 公众号 + 知乎</span>
+          <span>🎨 待补封面</span>
+        </div>
+      </div>
+    </a>
+  </div>
+</main>
+
+<footer>
+  <div>发布单元总览 · 运营中心 v3.1</div>
+  <div style="margin-top:8px;"><a href="../../../index.html">综合站首页</a> · <a href="../../index.html">运营中心</a></div>
+</footer>
+
+</body>
+</html>
