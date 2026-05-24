@@ -677,6 +677,30 @@ def update_dashboard_counts():
 def update_latest_publish_section():
     """重写主仪表盘 <!-- 最新发布 --> ~ <!-- end:latest --> 区段。
     取 UNITS 中 cpa- 开头的最后 6 个（按添加顺序倒序）作为「最新发布」。"""
+    # ---- 辅助统计：成稿总数 / 总字数（万）/ 本周新增 ----
+    _chan_count = 0
+    try:
+        _chan_count = (
+            len([f for f in os.listdir('insurance-guide/operations/published/wechat')
+                 if f.endswith(('.html', '.md')) and f != 'index.html']) +
+            len([f for f in os.listdir('insurance-guide/operations/published/zhihu')
+                 if f.endswith('.md') and f != 'index.html'])
+        )
+    except Exception:
+        _chan_count = len(UNITS) * 2
+
+    def _w(s):
+        import re as _re
+        m = _re.search(r'\d+', str(s or ''))
+        return int(m.group()) if m else 0
+    _total_words = sum(_w(u.get('words', '')) for u in UNITS)
+    _total_wan = round(_total_words / 10000, 1)
+
+    RECENT_BATCH = 4  # 本周新增数量；下次发布新批次时改这里
+    _recent_units = [u for u in UNITS if u['slug'].startswith('cpa')][-RECENT_BATCH:]
+    _recent_n = len(_recent_units)
+    _recent_nums = ' / '.join(f"#{u['number']}" for u in _recent_units) or '—'
+
     cpa_units = [u for u in UNITS if u['slug'].startswith('cpa')]
     recent = list(reversed(cpa_units))[:6]
     if not recent:
@@ -721,12 +745,21 @@ def update_latest_publish_section():
         '          </div>\n'
         '        </div>\n'
         '      </a>\n'
+        # ---- mini-stat 汇总卡 ----
         '      <a class="card" href="operations/published/units/index.html"\n'
-        '         style="display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;border:2px dashed #fbbf24;background:#fffbeb;">\n'
-        '        <div style="font-size:42px;margin-bottom:8px;">\U0001F4E6</div>\n'
-        '        <div class="card-title" style="color:#92400e;">发布单元总览</div>\n'
-        '        <div class="card-desc" style="font-size:12.5px;">每篇文章一个聚合页：稿件 + 流程，按文章打包查看</div>\n'
-        f'        <span class="card-badge orange">{len(UNITS)} 个单元</span>\n'
+        '         style="display:flex;flex-direction:column;text-align:left;border:2px dashed #fbbf24;background:#fffbeb;padding:18px;">\n'
+        '        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">\n'
+        '          <span style="font-size:24px;">\U0001F4E6</span>\n'
+        '          <span class="card-title" style="color:#92400e;font-size:15px;margin:0;">发布单元总览</span>\n'
+        '        </div>\n'
+        '        <div style="font-size:11.5px;color:#78350f;margin-bottom:12px;">每篇文章 = 全套物料聚合页</div>\n'
+        '        <div style="display:flex;justify-content:space-between;padding:10px 0;border-top:1px dashed #fbbf24;border-bottom:1px dashed #fbbf24;margin-bottom:10px;">\n'
+        f'          <div style="text-align:center;flex:1;"><div style="font-size:22px;font-weight:900;color:#92400e;line-height:1;">{len(UNITS)}</div><div style="font-size:10px;color:#78350f;letter-spacing:1px;margin-top:4px;">发布单元</div></div>\n'
+        f'          <div style="text-align:center;flex:1;border-left:1px solid #fde68a;border-right:1px solid #fde68a;"><div style="font-size:22px;font-weight:900;color:#92400e;line-height:1;">{_chan_count}</div><div style="font-size:10px;color:#78350f;letter-spacing:1px;margin-top:4px;">公众号+知乎</div></div>\n'
+        f'          <div style="text-align:center;flex:1;"><div style="font-size:22px;font-weight:900;color:#92400e;line-height:1;">{_total_wan}万</div><div style="font-size:10px;color:#78350f;letter-spacing:1px;margin-top:4px;">总字数</div></div>\n'
+        '        </div>\n'
+        f'        <div style="font-size:11.5px;color:#78350f;background:#fef3c7;padding:6px 10px;border-radius:6px;margin-bottom:10px;line-height:1.5;">\U0001F195 本批新增 <b>{_recent_n}</b> 篇·{_recent_nums}</div>\n'
+        '        <div style="margin-top:auto;font-size:12px;color:#b45309;font-weight:700;">进入总览 →</div>\n'
         '      </a>\n'
         + rest_cards +
         '    </div>\n'
