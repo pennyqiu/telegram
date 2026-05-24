@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>运营中心 · 香港保险综合站</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+       color:#1e293b;background:#f8fafc;line-height:1.6;-webkit-font-smoothing:antialiased;}
+  a{color:inherit;text-decoration:none;}
+
+  .topbar{background:#fff;border-bottom:1px solid #e2e8f0;padding:14px 24px;
+          position:sticky;top:0;z-index:50;}
+  .topbar-inner{max-width:1180px;margin:0 auto;display:flex;align-items:center;
+                justify-content:space-between;}
+  .back-link{font-size:14px;color:#64748b;font-weight:500;display:flex;align-items:center;gap:6px;}
+  .back-link:hover{color:#1a56db;}
+  .brand{font-size:14px;font-weight:700;color:#1a56db;}
+
+  .hero{background:linear-gradient(135deg,#7c3aed 0%,#a855f7 50%,#ec4899 100%);
+        color:#fff;padding:52px 24px 64px;position:relative;overflow:hidden;}
+  .hero::before{content:'';position:absolute;top:-30%;right:-5%;width:500px;height:500px;
+                background:radial-gradient(circle,rgba(255,255,255,0.1) 0%,transparent 70%);
+                border-radius:50%;}
+  .hero-inner{max-width:1180px;margin:0 auto;position:relative;z-index:1;}
+  .hero-brand{display:inline-block;font-size:12px;font-weight:600;letter-spacing:2px;
+              background:rgba(255,255,255,0.18);padding:6px 14px;border-radius:20px;margin-bottom:18px;}
+  .hero h1{font-size:36px;font-weight:800;margin-bottom:12px;letter-spacing:-0.5px;}
+  .hero p{font-size:16px;opacity:0.92;max-width:660px;line-height:1.7;}
+
+  .container{max-width:1180px;margin:-24px auto 0;padding:0 24px 80px;position:relative;z-index:2;}
+
+  .section{margin-bottom:44px;}
+  .section-title{font-size:20px;font-weight:800;color:#0f172a;margin-bottom:6px;}
+  .section-sub{color:#64748b;font-size:14px;margin-bottom:16px;}
+
+  .grid{display:grid;gap:14px;}
+  .grid-3{grid-template-columns:repeat(3,1fr);}
+  .grid-4{grid-template-columns:repeat(4,1fr);}
+  @media(max-width:960px){.grid-3,.grid-4{grid-template-columns:repeat(2,1fr);}.hero h1{font-size:26px;}}
+  @media(max-width:560px){.grid-3,.grid-4{grid-template-columns:1fr;}}
+
+  .card{background:#fff;border-radius:12px;padding:18px 18px;border:1px solid #e2e8f0;
+        transition:all 0.2s;display:flex;flex-direction:column;cursor:pointer;}
+  .card:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(15,23,42,0.08);border-color:#c4b5fd;}
+  .card-head{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+  .card-icon{font-size:22px;}
+  .card-title{font-size:15px;font-weight:700;color:#0f172a;}
+  .card-desc{font-size:13px;color:#64748b;line-height:1.6;}
+  .card-meta{font-size:11px;color:#94a3b8;margin-top:10px;}
+
+  .file-list{background:#fff;border-radius:12px;padding:20px;border:1px solid #e2e8f0;}
+  .file-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;
+            border-bottom:1px solid #f1f5f9;}
+  .file-row:last-child{border-bottom:none;}
+  .file-name{font-size:14px;color:#1e293b;font-weight:500;}
+  .file-name:hover{color:#1a56db;}
+  .file-tag{font-size:11px;background:#f1f5f9;color:#64748b;padding:2px 8px;border-radius:10px;}
+  .file-tag.green{background:#d1fae5;color:#047857;}
+  .file-tag.blue{background:#dbeafe;color:#1e40af;}
+  .file-tag.pink{background:#fce7f3;color:#9d174d;}
+  .file-tag.orange{background:#fed7aa;color:#9a3412;}
+  .file-tag.purple{background:#ede9fe;color:#6d28d9;}
+
+  .workflow{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:24px;}
+  .workflow-step{display:flex;gap:14px;margin-bottom:14px;align-items:flex-start;}
+  .workflow-step:last-child{margin-bottom:0;}
+  .workflow-num{flex-shrink:0;width:28px;height:28px;border-radius:50%;background:#7c3aed;
+                color:#fff;display:flex;align-items:center;justify-content:center;
+                font-size:13px;font-weight:700;}
+  .workflow-text{font-size:14px;color:#475569;line-height:1.7;}
+  .workflow-text code{background:#f1f5f9;padding:2px 6px;border-radius:4px;
+                      font-size:12px;color:#1e40af;font-family:Consolas,monospace;}
+  .workflow-text strong{color:#0f172a;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <a class="back-link" href="../index.html">← 返回保险综合站</a>
+    <span class="brand">📋 运营中心</span>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <span class="hero-brand">OPERATIONS HUB</span>
+    <h1>运营中心</h1>
+    <p>从战略规划到成稿仓库到发布工具，把保险业务的内容运营做成可复制的流水线。</p>
+  </div>
+</header>
+
+<main class="container">
+
+  <!-- 战略层 -->
+  <section class="section">
+    <h2 class="section-title">🗺️ 战略地图</h2>
+    <p class="section-sub">6 个月节奏 · 发布 SOP · 完整战略手册</p>
+    <div class="grid grid-3">
+      <a class="card" href="strategy/战略手册.md">
+        <div class="card-head"><span class="card-icon">📕</span><div class="card-title">战略手册（完整版）</div></div>
+        <div class="card-desc">人设 / 渠道 / 内容 / 转化全链路战略文档</div>
+        <div class="card-meta">57 KB · 核心文档</div>
+      </a>
+      <a class="card" href="strategy/公众号6个月内容矩阵.md">
+        <div class="card-head"><span class="card-icon">🗓️</span><div class="card-title">公众号 6 个月矩阵</div></div>
+        <div class="card-desc">月度选题 + 发布节奏 + 主题轮换</div>
+        <div class="card-meta">19 KB · 公众号</div>
+      </a>
+      <a class="card" href="strategy/知乎6个月日历.md">
+        <div class="card-head"><span class="card-icon">📅</span><div class="card-title">知乎 6 个月日历</div></div>
+        <div class="card-desc">回答路径 + 长文规划 + 问题适配</div>
+        <div class="card-meta">22 KB · 知乎</div>
+      </a>
+      <a class="card" href="strategy/知乎发布SOP.md">
+        <div class="card-head"><span class="card-icon">📋</span><div class="card-title">知乎发布 SOP</div></div>
+        <div class="card-desc">从选问题到回答到互动全流程</div>
+        <div class="card-meta">11 KB · SOP</div>
+      </a>
+      <a class="card" href="strategy/朋友圈长线运营矩阵.md">
+        <div class="card-head"><span class="card-icon">👥</span><div class="card-title">朋友圈长线矩阵</div></div>
+        <div class="card-desc">主题分布 + 发布密度 + 避坑指南</div>
+        <div class="card-meta">18 KB · 朋友圈</div>
+      </a>
+      <a class="card" href="reference/人设奠基长文.md">
+        <div class="card-head"><span class="card-icon">👤</span><div class="card-title">人设奠基长文</div></div>
+        <div class="card-desc">v2.2 早期素材稿（含双版本草稿）</div>
+        <div class="card-meta">26 KB · 素材</div>
+      </a>
+    </div>
+  </section>
+
+  <!-- 成稿仓库 -->
+  <section class="section">
+    <h2 class="section-title">📦 成稿仓库</h2>
+    <p class="section-sub">已生成、可直接发布的稿件，按渠道分类</p>
+
+    <div class="grid grid-3" style="margin-bottom:20px;">
+      <a class="card" href="published/wechat/" style="border-top:3px solid #10b981;">
+        <div class="card-head"><span class="card-icon">📢</span><div class="card-title">公众号</div></div>
+        <div class="card-desc">HTML（带样式）+ Markdown 双格式</div>
+        <div class="card-meta">3 篇 · 直接粘贴公众号编辑器</div>
+      </a>
+      <a class="card" href="published/zhihu/" style="border-top:3px solid #1a56db;">
+        <div class="card-head"><span class="card-icon">💡</span><div class="card-title">知乎</div></div>
+        <div class="card-desc">Markdown 原生格式</div>
+        <div class="card-meta">2 篇 · 直接粘贴知乎编辑器</div>
+      </a>
+      <a class="card" href="published/xhs/" style="border-top:3px solid #ec4899;">
+        <div class="card-head"><span class="card-icon">📕</span><div class="card-title">小红书</div></div>
+        <div class="card-desc">短文 bodies + 单篇成稿</div>
+        <div class="card-meta">2 包 · 多条素材</div>
+      </a>
+    </div>
+
+    <div class="file-list">
+      <div class="file-row">
+        <a class="file-name" href="published/wechat/公众号_在迅雷做了8年总账.html">📢 在迅雷做了 8 年总账，我为什么把简历交给了安盛</a>
+        <span class="file-tag green">公众号 HTML</span>
+      </div>
+      <div class="file-row">
+        <a class="file-name" href="published/wechat/公众号_港险分红险智商税CPA拆解.html">📢 香港分红险到底是不是智商税？CPA 视角拆解</a>
+        <span class="file-tag green">公众号 HTML</span>
+      </div>
+      <div class="file-row">
+        <a class="file-name" href="published/zhihu/知乎_8年迅雷CPA转做香港保险.md">💡 一个 8 年迅雷 CPA，为什么转身去做香港保险？</a>
+        <span class="file-tag blue">知乎 MD</span>
+      </div>
+      <div class="file-row">
+        <a class="file-name" href="published/zhihu/知乎_港险分红险智商税CPA拆解.md">💡 香港分红险智商税 · CPA 视角精算假设全拆解</a>
+        <span class="file-tag blue">知乎 MD</span>
+      </div>
+      <div class="file-row">
+        <a class="file-name" href="published/xhs/小红书01_港险合法性.md">📕 小红书 #01 · 港险合法性</a>
+        <span class="file-tag pink">小红书 MD</span>
+      </div>
+      <div class="file-row">
+        <a class="file-name" href="published/xhs/xhs_short_bodies.md">📕 小红书短文集（多条素材）</a>
+        <span class="file-tag pink">小红书包</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 工具 -->
+  <section class="section">
+    <h2 class="section-title">⚙️ 工具与流水线</h2>
+    <p class="section-sub">把 articles/ 下的 HTML 一键转换成公众号 + 知乎双格式</p>
+    <div class="workflow">
+      <div class="workflow-step">
+        <div class="workflow-num">1</div>
+        <div class="workflow-text">在 <code>insurance-guide/articles/</code> 里挑一篇要发布的文章，例如 <code>cpa-02-fulfillment-ratio.html</code></div>
+      </div>
+      <div class="workflow-step">
+        <div class="workflow-num">2</div>
+        <div class="workflow-text">在 <strong>项目根目录</strong>运行：<br>
+          <code style="display:inline-block;margin-top:6px;padding:6px 10px;">python insurance-guide/operations/tools/convert_single.py "insurance-guide/articles/cpa-02-fulfillment-ratio.html" "港险分红实现率拆解"</code>
+        </div>
+      </div>
+      <div class="workflow-step">
+        <div class="workflow-num">3</div>
+        <div class="workflow-text">在项目根目录得到两个文件：<code>公众号_港险分红实现率拆解.html</code> + <code>知乎_港险分红实现率拆解.md</code>，把它们移入 <code>operations/published/wechat</code> 和 <code>operations/published/zhihu</code></div>
+      </div>
+      <div class="workflow-step">
+        <div class="workflow-num">4</div>
+        <div class="workflow-text"><strong>公众号</strong>：浏览器双击 HTML → Ctrl+A → Ctrl+C → 粘贴到公众号编辑器（样式全保留）<br><strong>知乎</strong>：直接打开 MD 复制内容粘贴到知乎"写文章"（知乎原生支持 Markdown）</div>
+      </div>
+    </div>
+    <div style="margin-top:20px;">
+      <a class="card" href="tools/README.md">
+        <div class="card-head"><span class="card-icon">📖</span><div class="card-title">工具使用说明（详细）</div></div>
+        <div class="card-desc">convert_single.py / convert_v2.py 完整参数说明 + 常见问题</div>
+      </a>
+    </div>
+  </section>
+
+  <!-- 资源 -->
+  <section class="section">
+    <h2 class="section-title">📦 资源下载</h2>
+    <p class="section-sub">PDF / Excel 等客户分发材料</p>
+    <div class="file-list">
+      <div class="file-row">
+        <a class="file-name" href="assets/港险投保30问_网页版.pdf">📄 港险投保 30 问 · 网页版 PDF</a>
+        <span class="file-tag orange">676 KB</span>
+      </div>
+      <div class="file-row">
+        <a class="file-name" href="assets/港险投保30问.pdf">📄 港险投保 30 问 · 打印版 PDF</a>
+        <span class="file-tag orange">319 KB</span>
+      </div>
+      <div class="file-row">
+        <a class="file-name" href="assets/港险投保30问.md">📝 港险投保 30 问 · 原 Markdown 稿</a>
+        <span class="file-tag purple">24 KB</span>
+      </div>
+      <div class="file-row">
+        <a class="file-name" href="assets/互联网中层家庭财务自查表.xlsx">📊 互联网中层家庭财务自查表</a>
+        <span class="file-tag green">Excel</span>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+</body>
+</html>
