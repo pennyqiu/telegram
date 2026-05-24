@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>运营统计看板 · 港险综合站</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;color:#1e293b;background:#f1f5f9;line-height:1.6;-webkit-font-smoothing:antialiased;}
+  a{color:inherit;text-decoration:none;}
+  .topbar{background:#fff;padding:14px 24px;border-bottom:1px solid #e2e8f0;position:sticky;top:0;z-index:10;}
+  .topbar-inner{max-width:1280px;margin:0 auto;display:flex;align-items:center;gap:12px;font-size:14px;}
+  .topbar a{color:#475569;font-weight:500;}
+  .topbar a:hover{color:#6366f1;}
+  .topbar .here{color:#6366f1;font-weight:700;}
+  .topbar .sep{color:#cbd5e1;}
+  .hero{background:linear-gradient(135deg,#312e81 0%,#6366f1 100%);color:#fff;padding:32px 24px 44px;}
+  .hero-inner{max-width:1280px;margin:0 auto;}
+  .hero-tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:1.5px;background:rgba(255,255,255,0.18);padding:5px 12px;border-radius:12px;margin-bottom:12px;}
+  .hero h1{font-size:26px;font-weight:800;margin-bottom:4px;}
+  .hero-sub{font-size:13.5px;opacity:0.85;}
+  .container{max-width:1280px;margin:-26px auto 0;padding:0 24px 60px;position:relative;z-index:2;}
+  .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px;}
+  .kpi{background:#fff;border-radius:14px;padding:22px 24px;border:1px solid #e2e8f0;}
+  .kpi-label{font-size:11.5px;color:#64748b;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;}
+  .kpi-value{font-size:36px;font-weight:900;color:#0f172a;line-height:1;letter-spacing:-1px;}
+  .kpi-unit{font-size:13px;color:#64748b;margin-left:4px;font-weight:600;}
+  .kpi-foot{font-size:11.5px;color:#94a3b8;margin-top:10px;}
+  .panels{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:24px;}
+  .panel{background:#fff;border-radius:14px;padding:22px 24px;border:1px solid #e2e8f0;}
+  .panel h2{font-size:14px;font-weight:700;color:#334155;letter-spacing:0.5px;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;}
+  .panel-sub{font-size:11.5px;color:#94a3b8;font-weight:500;}
+
+  /* bars */
+  .bar-row{display:flex;align-items:center;gap:14px;padding:10px 0;}
+  .bar-label{flex:0 0 130px;font-size:13.5px;color:#334155;display:flex;align-items:center;gap:6px;}
+  .bar-icon{font-size:14px;}
+  .bar-track{flex:1;height:14px;background:#f1f5f9;border-radius:7px;overflow:hidden;}
+  .bar-fill{height:100%;border-radius:7px;transition:width 0.6s;}
+  .bar-value{flex:0 0 36px;font-size:14px;font-weight:800;color:#0f172a;text-align:right;font-variant-numeric:tabular-nums;}
+
+  /* pie */
+  .pie-wrap{display:flex;align-items:center;justify-content:center;flex-direction:column;}
+  .pie{width:160px;height:160px;border-radius:50%;background:conic-gradient(#f472b6 0.0deg 121.0deg, #f59e0b 121.0deg 214.1deg, #10b981 214.1deg 260.7deg, #3b82f6 260.7deg 307.2deg, #8b5cf6 307.2deg 353.8deg, #ec4899 353.8deg 360.0deg);position:relative;margin-bottom:16px;}
+  .pie::before{content:'';position:absolute;inset:30px;background:#fff;border-radius:50%;}
+  .pie-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:1;}
+  .pie-num{font-size:30px;font-weight:900;color:#0f172a;line-height:1;}
+  .pie-label{font-size:11px;color:#64748b;margin-top:4px;letter-spacing:0.5px;}
+  .legend{margin-top:8px;font-size:12.5px;color:#475569;width:100%;}
+  .legend-item{display:flex;align-items:center;gap:8px;padding:5px 0;}
+  .legend-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+  .legend-name{flex:1;}
+  .legend-count{font-weight:700;color:#0f172a;font-variant-numeric:tabular-nums;}
+  .legend-pct{color:#94a3b8;font-size:11.5px;width:34px;text-align:right;font-variant-numeric:tabular-nums;}
+
+  /* heatmap */
+  .heatmap{display:grid;grid-template-columns:repeat(30,1fr);gap:5px;margin-bottom:14px;}
+  .heat-cell{aspect-ratio:1;border-radius:4px;position:relative;cursor:default;}
+  .heat-cell:hover .heat-tip{display:block;}
+  .heat-tip{display:none;position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:#0f172a;color:#fff;font-size:11px;padding:4px 8px;border-radius:4px;white-space:nowrap;z-index:5;font-variant-numeric:tabular-nums;}
+  .heat-tip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:4px solid transparent;border-top-color:#0f172a;}
+  .heat-scale{display:flex;align-items:center;gap:6px;font-size:11px;color:#94a3b8;}
+  .heat-scale-cell{width:14px;height:14px;border-radius:3px;}
+
+  /* trend */
+  .trend-row{display:flex;align-items:center;gap:16px;margin-top:14px;padding:12px 16px;background:#f8fafc;border-radius:10px;border:1px solid #e2e8f0;}
+  .trend-num{font-size:22px;font-weight:900;color:#10b981;}
+  .trend-label{font-size:12px;color:#64748b;}
+
+  footer{text-align:center;padding:24px;color:#94a3b8;font-size:12px;background:#fff;border-top:1px solid #e2e8f0;margin-top:30px;}
+  footer a{color:#6366f1;}
+
+  @media (max-width:900px){
+    .kpi-grid{grid-template-columns:repeat(2,1fr);}
+    .panels{grid-template-columns:1fr;}
+    .heatmap{grid-template-columns:repeat(15,1fr);}
+  }
+</style>
+</head>
+<body>
+
+<nav class="topbar">
+  <div class="topbar-inner">
+    <a href="../index.html">🏠 综合站首页</a>
+    <span class="sep">›</span>
+    <a href="index.html">运营中心</a>
+    <span class="sep">›</span>
+    <span class="here">dashboard</span>
+    <span style="margin-left:auto;font-size:12px;color:#94a3b8;">最后刷新: 2026-05-24 15:56</span>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-inner">
+    <span class="hero-tag">DASHBOARD · 运营统计看板</span>
+    <h1>📊 运营统计看板</h1>
+    <div class="hero-sub">实时统计各渠道成稿数、字数累计、近 30 天发布热度</div>
+  </div>
+</header>
+
+<main class="container">
+
+  <div class="kpi-grid">
+    <div class="kpi">
+      <div class="kpi-label">📦 总稿件</div>
+      <div class="kpi-value">116<span class="kpi-unit">篇</span></div>
+      <div class="kpi-foot">覆盖 6 个渠道</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">📝 累计字数</div>
+      <div class="kpi-value">14.1<span class="kpi-unit">万字</span></div>
+      <div class="kpi-foot">含 CPA + 小红书 + 朋友圈</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">🆕 近 7 天</div>
+      <div class="kpi-value">114<span class="kpi-unit">篇</span></div>
+      <div class="kpi-foot" style="color:#10b981;">↑ 112 vs 上周</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">🎯 CPA 旗舰</div>
+      <div class="kpi-value">14<span class="kpi-unit">篇</span></div>
+      <div class="kpi-foot">100% 公众号 + 知乎双发</div>
+    </div>
+  </div>
+
+  <div class="panels">
+    <div class="panel">
+      <h2>📊 各渠道稿件分布 <span class="panel-sub">按数量排序</span></h2>
+      <div class="bar-row">
+        <div class="bar-label"><span class="bar-icon" style="color:#f472b6;">📚</span>小红书单元</div>
+        <div class="bar-track"><div class="bar-fill" style="width:100.0%;background:#f472b6;"></div></div>
+        <div class="bar-value">39</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label"><span class="bar-icon" style="color:#f59e0b;">💬</span>朋友圈素材</div>
+        <div class="bar-track"><div class="bar-fill" style="width:76.92307692307693%;background:#f59e0b;"></div></div>
+        <div class="bar-value">30</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label"><span class="bar-icon" style="color:#10b981;">📨</span>公众号成稿</div>
+        <div class="bar-track"><div class="bar-fill" style="width:38.46153846153847%;background:#10b981;"></div></div>
+        <div class="bar-value">15</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label"><span class="bar-icon" style="color:#3b82f6;">📰</span>知乎成稿</div>
+        <div class="bar-track"><div class="bar-fill" style="width:38.46153846153847%;background:#3b82f6;"></div></div>
+        <div class="bar-value">15</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label"><span class="bar-icon" style="color:#8b5cf6;">📦</span>CPA 发布单元</div>
+        <div class="bar-track"><div class="bar-fill" style="width:38.46153846153847%;background:#8b5cf6;"></div></div>
+        <div class="bar-value">15</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label"><span class="bar-icon" style="color:#ec4899;">🌹</span>小红书散稿</div>
+        <div class="bar-track"><div class="bar-fill" style="width:5.128205128205128%;background:#ec4899;"></div></div>
+        <div class="bar-value">2</div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>🍩 渠道占比</h2>
+      <div class="pie-wrap">
+        <div class="pie">
+          <div class="pie-center">
+            <div class="pie-num">116</div>
+            <div class="pie-label">TOTAL</div>
+          </div>
+        </div>
+        <div class="legend">
+      <div class="legend-item">
+        <span class="legend-dot" style="background:#f472b6;"></span>
+        <span class="legend-name">小红书单元</span>
+        <span class="legend-count">39</span>
+        <span class="legend-pct">34%</span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-dot" style="background:#f59e0b;"></span>
+        <span class="legend-name">朋友圈素材</span>
+        <span class="legend-count">30</span>
+        <span class="legend-pct">26%</span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-dot" style="background:#10b981;"></span>
+        <span class="legend-name">公众号成稿</span>
+        <span class="legend-count">15</span>
+        <span class="legend-pct">13%</span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-dot" style="background:#3b82f6;"></span>
+        <span class="legend-name">知乎成稿</span>
+        <span class="legend-count">15</span>
+        <span class="legend-pct">13%</span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-dot" style="background:#8b5cf6;"></span>
+        <span class="legend-name">CPA 发布单元</span>
+        <span class="legend-count">15</span>
+        <span class="legend-pct">13%</span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-dot" style="background:#ec4899;"></span>
+        <span class="legend-name">小红书散稿</span>
+        <span class="legend-count">2</span>
+        <span class="legend-pct">2%</span>
+      </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>🔥 近 30 天发布热力 <span class="panel-sub">04-25 ～ 05-24</span></h2>
+    <div class="heatmap">
+<div class="heat-cell" style="background:#f1f5f9;" title="04-25 · 0 篇"><span class="heat-tip">04-25 · 0 篇</span></div><div class="heat-cell" style="background:#f1f5f9;" title="04-26 · 0 篇"><span class="heat-tip">04-26 · 0 篇</span></div><div class="heat-cell" style="background:#f1f5f9;" title="04-27 · 0 篇"><span class="heat-tip">04-27 · 0 篇</span></div><div class="heat-cell" style="background:#f1f5f9;" title="04-28 · 0 篇"><span class="heat-tip">04-28 · 0 篇</span></div><div class="heat-cell" style="background:#f1f5f9;" title="04-29 · 0 篇"><span class="heat-tip">04-29 · 0 篇</span></div><div class="heat-cell" style="background:#f1f5f9;" title="04-30 · 0 篇"><span class="heat-tip">04-30 · 0 篇</span></div><div class="heat-cell" style="background:#f1f5f9;" title="05-01 · 0 篇"><span class="heat-tip">05-01 · 0 篇</span></div><div class="heat-cell" style="background:#f1f5f9;" title="05-02 · 0 篇"><span class="heat-tip">05-02 · 0 篇</span></div><div class="heat-cell" style="background:#f1f5f9;" title="05-03 · 0 篇"><span class="heat-tip">05-03 · 0 篇</span></div><div class="heat-cell" style="background:#f1f5f9;" title="05-04 · 0 篇"><span class="heat-tip">05-04 · 0 篇</span></div><div class="heat-cell" style="background:#f1f5f9;" title="05-05 · 0 篇"><span class="heat-tip">05-05 · 0 篇</span></div><div class="heat-cell" style="background:#f1f5f9;" title="05-06 · 0 篇"><span class="heat-tip">05-06 · 0 篇</span></div><div class="heat-cell" style="background:#f1f5f9;" title="05-07 · 0 篇"><span class="heat-tip">05-07 · 0 篇</span></div><div class="heat-cell" style="background:#f1f5f9;" title="05-08 · 0 篇"><span class="heat-tip">05-08 · 0 篇</span></div><div class="heat-cell" style="background:#f1f5f9;" title="05-09 · 0 篇"><span class="heat-tip">05-09 · 0 篇</span></div><div class="heat-cell" style="background:#f1f5f9;" title="05-10 · 0 篇"><span class="heat-tip">05-10 · 0 篇</span></div><div class="heat-cell" style="background:#f1f5f9;" title="05-11 · 0 篇"><span class="heat-tip">05-11 · 0 篇</span></div><div class="heat-cell" style="background:#f1f5f9;" title="05-12 · 0 篇"><span class="heat-tip">05-12 · 0 篇</span></div><div class="heat-cell" style="background:#f1f5f9;" title="05-13 · 0 篇"><span class="heat-tip">05-13 · 0 篇</span></div><div class="heat-cell" style="background:#f1f5f9;" title="05-14 · 0 篇"><span class="heat-tip">05-14 · 0 篇</span></div><div class="heat-cell" style="background:#f1f5f9;" title="05-15 · 0 篇"><span class="heat-tip">05-15 · 0 篇</span></div><div class="heat-cell" style="background:#fef3c7;" title="05-16 · 1 篇"><span class="heat-tip">05-16 · 1 篇</span></div><div class="heat-cell" style="background:#fef3c7;" title="05-17 · 1 篇"><span class="heat-tip">05-17 · 1 篇</span></div><div class="heat-cell" style="background:#f1f5f9;" title="05-18 · 0 篇"><span class="heat-tip">05-18 · 0 篇</span></div><div class="heat-cell" style="background:#f1f5f9;" title="05-19 · 0 篇"><span class="heat-tip">05-19 · 0 篇</span></div><div class="heat-cell" style="background:#f1f5f9;" title="05-20 · 0 篇"><span class="heat-tip">05-20 · 0 篇</span></div><div class="heat-cell" style="background:#f1f5f9;" title="05-21 · 0 篇"><span class="heat-tip">05-21 · 0 篇</span></div><div class="heat-cell" style="background:#f1f5f9;" title="05-22 · 0 篇"><span class="heat-tip">05-22 · 0 篇</span></div><div class="heat-cell" style="background:#f1f5f9;" title="05-23 · 0 篇"><span class="heat-tip">05-23 · 0 篇</span></div><div class="heat-cell" style="background:#d97706;" title="05-24 · 114 篇"><span class="heat-tip">05-24 · 114 篇</span></div>
+    </div>
+    <div class="heat-scale">
+      <span>少</span>
+      <span class="heat-scale-cell" style="background:#f1f5f9;"></span>
+      <span class="heat-scale-cell" style="background:#fef3c7;"></span>
+      <span class="heat-scale-cell" style="background:#fcd34d;"></span>
+      <span class="heat-scale-cell" style="background:#f59e0b;"></span>
+      <span class="heat-scale-cell" style="background:#d97706;"></span>
+      <span>多</span>
+      <span style="margin-left:auto;">本周 114 篇 · 上周 2 篇</span>
+    </div>
+    <div class="trend-row">
+      <span class="trend-num">↑ 112</span>
+      <span class="trend-label">
+        近 7 天发布 <b>114</b> 篇，对比上 7 天 <b>2</b> 篇，
+        保持上升势头
+      </span>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <div>运营统计看板 · 港险综合站 v3.1 · 数据来源：published/ 目录文件 mtime</div>
+  <div style="margin-top:8px;">
+    <a href="../index.html">综合站首页</a> · 
+    <a href="index.html">运营中心</a> · 
+    <a href="published/units/index.html">CPA 发布单元</a> · 
+    <a href="published/xhs-units/index.html">小红书发布单元</a>
+  </div>
+</footer>
+
+</body>
+</html>

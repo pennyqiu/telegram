@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>朋友圈素材仓库 · 运营中心</title>
+<title>朋友圈素材仓库 · 30 条已就绪</title>
 <style>
   *{margin:0;padding:0;box-sizing:border-box;}
   body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;color:#1e293b;background:#f8fafc;line-height:1.6;-webkit-font-smoothing:antialiased;}
@@ -20,11 +20,12 @@
   .hero h1{font-size:28px;font-weight:800;margin-bottom:8px;line-height:1.2;}
   .hero p{font-size:14px;opacity:0.92;line-height:1.7;}
   .hero-stats{display:flex;gap:24px;margin-top:18px;flex-wrap:wrap;}
-  .hero-stat{font-size:12px;opacity:0.9;}
-  .hero-stat b{font-size:20px;display:block;font-weight:800;margin-bottom:2px;}
+  .hero-stat{font-size:12px;opacity:0.92;}
+  .hero-stat b{font-size:22px;display:block;font-weight:800;margin-bottom:2px;}
   .container{max-width:980px;margin:-22px auto 0;padding:0 24px 60px;position:relative;z-index:2;}
-  .section-title{font-size:13px;font-weight:700;color:#64748b;letter-spacing:1px;margin:24px 0 12px;text-transform:uppercase;}
-  .hub-card{display:block;background:linear-gradient(135deg,#fffbeb 0%,#fef3c7 100%);border:2px solid #fcd34d;border-radius:14px;padding:22px 24px;margin-bottom:18px;transition:transform 0.15s, box-shadow 0.15s;}
+  .section-title{font-size:13px;font-weight:700;color:#64748b;letter-spacing:1px;margin:24px 0 12px;text-transform:uppercase;display:flex;align-items:center;justify-content:space-between;}
+  .section-title-sub{font-size:12px;color:#94a3b8;text-transform:none;letter-spacing:0;font-weight:500;}
+  .hub-card{display:block;background:linear-gradient(135deg,#fffbeb 0%,#fef3c7 100%);border:2px solid #fcd34d;border-radius:14px;padding:22px 24px;margin-bottom:18px;transition:transform 0.15s,box-shadow 0.15s;}
   .hub-card:hover{transform:translateY(-2px);box-shadow:0 10px 25px rgba(245,158,11,0.15);}
   .hub-card-head{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
   .hub-card-icon{font-size:32px;}
@@ -36,20 +37,19 @@
   .hub-stat-num{font-size:22px;font-weight:900;color:#92400e;line-height:1;}
   .hub-stat-label{font-size:11px;color:#78350f;letter-spacing:0.5px;margin-top:4px;}
   .hub-cta{margin-top:14px;text-align:right;font-size:13px;color:#92400e;font-weight:700;}
-  .secondary-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px;}
-  .secondary-card{display:block;background:#fff;border:1px solid #fef3c7;border-radius:10px;padding:16px 18px;transition:border 0.15s;}
-  .secondary-card:hover{border-color:#fcd34d;}
-  .secondary-card-title{font-size:14px;font-weight:700;color:#78350f;margin-bottom:6px;}
-  .secondary-card-desc{font-size:12px;color:#92400e;line-height:1.6;}
-  .path-list{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:18px 22px;margin-bottom:18px;}
-  .path-list h3{font-size:14px;font-weight:700;color:#0f172a;margin-bottom:10px;}
-  .path-list ul{padding-left:22px;color:#475569;font-size:13px;line-height:1.9;}
-  .path-list code{background:#fffbeb;color:#92400e;padding:2px 6px;border-radius:4px;font-size:12px;}
-  .status-card{background:#fff7ed;border:1px dashed #fcd34d;border-radius:12px;padding:18px 22px;text-align:center;color:#78350f;}
-  .status-card h3{font-size:15px;font-weight:700;margin-bottom:8px;}
-  .status-card p{font-size:12.5px;line-height:1.7;}
-  .progress{height:6px;background:#fef3c7;border-radius:3px;margin:12px 0 6px;overflow:hidden;}
-  .progress-bar{height:100%;background:#f59e0b;width:0%;}
+  .progress-wrap{background:#fff7ed;border:1px solid #fcd34d;border-radius:12px;padding:16px 22px;margin-bottom:18px;}
+  .progress-text{display:flex;justify-content:space-between;font-size:13px;color:#78350f;margin-bottom:8px;font-weight:600;}
+  .progress-bar{height:8px;background:#fef3c7;border-radius:4px;overflow:hidden;}
+  .progress-fill{height:100%;background:linear-gradient(90deg,#f59e0b 0%,#10b981 100%);width:100%;}
+  .seed-list{background:#fff;border-radius:12px;border:1px solid #e2e8f0;overflow:hidden;}
+  .seed-row{display:flex;align-items:center;padding:14px 18px;border-bottom:1px solid #f1f5f9;transition:background 0.15s;}
+  .seed-row:last-child{border-bottom:none;}
+  .seed-row:hover{background:#fffbeb;}
+  .seed-num{flex:0 0 38px;font-size:18px;font-weight:900;color:#f59e0b;line-height:1;font-variant-numeric:tabular-nums;}
+  .seed-body{flex:1;min-width:0;}
+  .seed-topic{font-size:14px;font-weight:700;color:#0f172a;margin-bottom:3px;}
+  .seed-meta{font-size:11.5px;color:#94a3b8;font-family:Consolas,Monaco,monospace;}
+  .seed-cta{font-size:12px;color:#92400e;font-weight:600;flex-shrink:0;}
   footer{text-align:center;padding:24px;color:#94a3b8;font-size:12px;border-top:1px solid #e2e8f0;background:#fff;margin-top:40px;}
   footer a{color:#f59e0b;}
 </style>
@@ -62,7 +62,7 @@
     <span class="sep">›</span>
     <a href="../../index.html">运营中心</a>
     <span class="sep">›</span><span style="color:#94a3b8;">published/</span><span class="sep">›</span><span class="here">pyq/</span>
-    <span style="margin-left:auto;font-size:12px;color:#94a3b8;">v3.1</span>
+    <span style="margin-left:auto;font-size:12px;color:#94a3b8;">v3.2</span>
   </div>
 </nav>
 
@@ -70,16 +70,25 @@
   <div class="hero-inner">
     <span class="hero-tag">OPERATIONS · 朋友圈</span>
     <h1>朋友圈素材仓库</h1>
-    <p>已有完整的 6 个月运营节奏文档 + 主题分布矩阵，单条素材库建设中（建议从 14 篇 CPA 旗舰研报和 39 篇小红书短文中提炼金句改写）。</p>
+    <p>30 条单条素材已就绪 · 提炼自 14 篇 CPA + 39 篇小红书精品 · 配运营节奏 + 配图建议 + 话题分组。</p>
     <div class="hero-stats">
+      <div class="hero-stat"><b>30</b>单条素材</div>
       <div class="hero-stat"><b>2</b>战略文档</div>
-      <div class="hero-stat"><b>0/30</b>单条素材建设中</div>
-      <div class="hero-stat"><b>53</b>可改写来源（14+39）</div>
+      <div class="hero-stat"><b>5</b>话题分组</div>
+      <div class="hero-stat"><b>≤180</b>单条字数</div>
     </div>
   </div>
 </header>
 
 <main class="container">
+
+  <div class="progress-wrap">
+    <div class="progress-text">
+      <span>素材建设进度</span>
+      <span>30 / 30 · 100% ✅</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill"></div></div>
+  </div>
 
   <div class="section-title">🎯 推荐入口 · 节奏与矩阵</div>
 
@@ -87,9 +96,9 @@
     <div class="hub-card-head">
       <span class="hub-card-icon">📋</span>
       <span class="hub-card-title">朋友圈长线运营矩阵 · 6 个月节奏</span>
-      <span class="hub-card-tag">主推</span>
+      <span class="hub-card-tag">战略</span>
     </div>
-    <div class="hub-card-desc">完整的 6 个月发布节奏 + 内容主题分布 + 触发条件 + 互动话术。避免变销售号、坚持人设。</div>
+    <div class="hub-card-desc">配合下方 30 条素材使用：按战略文档的主题节奏 → 找下方对应主题 → 复制粘贴发布。</div>
     <div class="hub-card-stats">
       <div class="hub-stat">
         <div class="hub-stat-num">6m</div>
@@ -107,43 +116,262 @@
     <div class="hub-cta">查看矩阵 →</div>
   </a>
 
-  <div class="secondary-grid">
-    <a class="secondary-card" href="../../../articles/v22-friend-matrix.html">
-      <div class="secondary-card-title">🎨 v2.2 朋友圈矩阵（HTML 版）</div>
-      <div class="secondary-card-desc">可视化版本的朋友圈矩阵，方便快速预览主题分布。</div>
-    </a>
-    <a class="secondary-card" href="../../strategy/index.html">
-      <div class="secondary-card-title">📚 全部战略文档</div>
-      <div class="secondary-card-desc">公众号 / 知乎 / 小红书 / 朋友圈 全渠道战略集。</div>
-    </a>
+  <div class="section-title">
+    📦 30 条素材 · 已按编号排序
+    <span class="section-title-sub">点击任一条目预览 .md 原文</span>
   </div>
 
-  <div class="section-title">🛠 单条素材生成路径</div>
-
-  <div class="path-list">
-    <h3>从已有内容中提炼朋友圈短文（推荐）</h3>
-    <ul>
-      <li>从 <code>articles/cpa-01 ~ cpa-14</code> 中挑出 1 个金句或数据点 → 改成 100-200 字朋友圈短文</li>
-      <li>从 <code>articles/v22-xhs01 ~ v22-xhs39</code> 中挑出 1 篇 → 浓缩成 80 字朋友圈+话题问句</li>
-      <li>每篇 CPA 至少能产出 3-5 条朋友圈素材，39 篇小红书至少能产出 39 条直接复用</li>
-      <li>建议存档为 <code>operations/published/pyq/pyq_NNN_主题.md</code></li>
-    </ul>
-  </div>
-
-  <div class="status-card">
-    <h3>📭 单条素材库建设中</h3>
-    <p>当前 0 / 计划 30+ 条 · 一旦开始落地，把单条 <code>.md</code> 放进本目录即可自动出现在列表里</p>
-    <div class="progress"><div class="progress-bar"></div></div>
-    <p style="font-size:11px;color:#a16207;">0% · 0 / 30</p>
+  <div class="seed-list">
+    <a class="seed-row" href="pyq_01_crs.md" target="_blank">
+      <div class="seed-num">01</div>
+      <div class="seed-body">
+        <div class="seed-topic">CRS 申报</div>
+        <div class="seed-meta">来源 cpa-09 · 工作日午间 · ~136 字</div>
+      </div>
+      <div class="seed-cta">查看 →</div>
+    </a>
+    <a class="seed-row" href="pyq_02_mainland-law.md" target="_blank">
+      <div class="seed-num">02</div>
+      <div class="seed-body">
+        <div class="seed-topic">内地法律边界</div>
+        <div class="seed-meta">来源 cpa-10 · 周五晚 · ~136 字</div>
+      </div>
+      <div class="seed-cta">查看 →</div>
+    </a>
+    <a class="seed-row" href="pyq_03_option-tax.md" target="_blank">
+      <div class="seed-num">03</div>
+      <div class="seed-body">
+        <div class="seed-topic">期权个税</div>
+        <div class="seed-meta">来源 cpa-11 · 工作日早晨 · ~126 字</div>
+      </div>
+      <div class="seed-cta">查看 →</div>
+    </a>
+    <a class="seed-row" href="pyq_04_cross-border-tax.md" target="_blank">
+      <div class="seed-num">04</div>
+      <div class="seed-body">
+        <div class="seed-topic">跨境税务规划</div>
+        <div class="seed-meta">来源 cpa-13 · 工作日午间 · ~120 字</div>
+      </div>
+      <div class="seed-cta">查看 →</div>
+    </a>
+    <a class="seed-row" href="pyq_05_wealth-arch.md" target="_blank">
+      <div class="seed-num">05</div>
+      <div class="seed-body">
+        <div class="seed-topic">财富架构师视角</div>
+        <div class="seed-meta">来源 cpa-12 · 周末上午 · ~143 字</div>
+      </div>
+      <div class="seed-cta">查看 →</div>
+    </a>
+    <a class="seed-row" href="pyq_06_surrender.md" target="_blank">
+      <div class="seed-num">06</div>
+      <div class="seed-body">
+        <div class="seed-topic">退保亏损实测</div>
+        <div class="seed-meta">来源 cpa-04 · 工作日晚 · ~124 字</div>
+      </div>
+      <div class="seed-cta">查看 →</div>
+    </a>
+    <a class="seed-row" href="pyq_07_pf.md" target="_blank">
+      <div class="seed-num">07</div>
+      <div class="seed-body">
+        <div class="seed-topic">保费融资 PF</div>
+        <div class="seed-meta">来源 cpa-05 · 工作日午间 · ~104 字</div>
+      </div>
+      <div class="seed-cta">查看 →</div>
+    </a>
+    <a class="seed-row" href="pyq_08_transfer.md" target="_blank">
+      <div class="seed-num">08</div>
+      <div class="seed-body">
+        <div class="seed-topic">跨代传承</div>
+        <div class="seed-meta">来源 cpa-06 · 周末晚 · ~99 字</div>
+      </div>
+      <div class="seed-cta">查看 →</div>
+    </a>
+    <a class="seed-row" href="pyq_09_ci-multi.md" target="_blank">
+      <div class="seed-num">09</div>
+      <div class="seed-body">
+        <div class="seed-topic">重疾多次赔付</div>
+        <div class="seed-meta">来源 cpa-07 · 工作日早 · ~123 字</div>
+      </div>
+      <div class="seed-cta">查看 →</div>
+    </a>
+    <a class="seed-row" href="pyq_10_savings-cmp.md" target="_blank">
+      <div class="seed-num">10</div>
+      <div class="seed-body">
+        <div class="seed-topic">储蓄险横评</div>
+        <div class="seed-meta">来源 cpa-08 · 周末上午 · ~127 字</div>
+      </div>
+      <div class="seed-cta">查看 →</div>
+    </a>
+    <a class="seed-row" href="pyq_11_medical-stack.md" target="_blank">
+      <div class="seed-num">11</div>
+      <div class="seed-body">
+        <div class="seed-topic">内地医保叠加</div>
+        <div class="seed-meta">来源 v22-xhs09 · 工作日午间 · ~106 字</div>
+      </div>
+      <div class="seed-cta">查看 →</div>
+    </a>
+    <a class="seed-row" href="pyq_12_couple.md" target="_blank">
+      <div class="seed-num">12</div>
+      <div class="seed-body">
+        <div class="seed-topic">夫妻保单策略</div>
+        <div class="seed-meta">来源 v22-xhs13 · 周末下午 · ~125 字</div>
+      </div>
+      <div class="seed-cta">查看 →</div>
+    </a>
+    <a class="seed-row" href="pyq_13_edu-fund.md" target="_blank">
+      <div class="seed-num">13</div>
+      <div class="seed-body">
+        <div class="seed-topic">教育金 vs 储蓄险</div>
+        <div class="seed-meta">来源 v22-xhs14 · 工作日晚 · ~140 字</div>
+      </div>
+      <div class="seed-cta">查看 →</div>
+    </a>
+    <a class="seed-row" href="pyq_14_dividend-tax.md" target="_blank">
+      <div class="seed-num">14</div>
+      <div class="seed-body">
+        <div class="seed-topic">分红险智商税</div>
+        <div class="seed-meta">来源 cpa-01 · 工作日早 · ~124 字</div>
+      </div>
+      <div class="seed-cta">查看 →</div>
+    </a>
+    <a class="seed-row" href="pyq_15_fulfill.md" target="_blank">
+      <div class="seed-num">15</div>
+      <div class="seed-body">
+        <div class="seed-topic">分红实现率</div>
+        <div class="seed-meta">来源 cpa-02 · 工作日午间 · ~121 字</div>
+      </div>
+      <div class="seed-cta">查看 →</div>
+    </a>
+    <a class="seed-row" href="pyq_16_usd-rmb.md" target="_blank">
+      <div class="seed-num">16</div>
+      <div class="seed-body">
+        <div class="seed-topic">美元 vs 人民币</div>
+        <div class="seed-meta">来源 cpa-03 · 工作日晚 · ~130 字</div>
+      </div>
+      <div class="seed-cta">查看 →</div>
+    </a>
+    <a class="seed-row" href="pyq_17_policy-value.md" target="_blank">
+      <div class="seed-num">17</div>
+      <div class="seed-body">
+        <div class="seed-topic">保单的真实价值</div>
+        <div class="seed-meta">来源 cpa-01 · 周末上午 · ~108 字</div>
+      </div>
+      <div class="seed-cta">查看 →</div>
+    </a>
+    <a class="seed-row" href="pyq_18_compound.md" target="_blank">
+      <div class="seed-num">18</div>
+      <div class="seed-body">
+        <div class="seed-topic">长期持有的复利</div>
+        <div class="seed-meta">来源 cpa-02 · 周末晚 · ~123 字</div>
+      </div>
+      <div class="seed-cta">查看 →</div>
+    </a>
+    <a class="seed-row" href="pyq_19_premium-med.md" target="_blank">
+      <div class="seed-num">19</div>
+      <div class="seed-body">
+        <div class="seed-topic">高端医疗的真实价值</div>
+        <div class="seed-meta">来源 v22-xhs02 · 工作日早 · ~134 字</div>
+      </div>
+      <div class="seed-cta">查看 →</div>
+    </a>
+    <a class="seed-row" href="pyq_20_claim.md" target="_blank">
+      <div class="seed-num">20</div>
+      <div class="seed-body">
+        <div class="seed-topic">理赔现实</div>
+        <div class="seed-meta">来源 v22-xhs10 · 工作日午间 · ~132 字</div>
+      </div>
+      <div class="seed-cta">查看 →</div>
+    </a>
+    <a class="seed-row" href="pyq_21_parents-med.md" target="_blank">
+      <div class="seed-num">21</div>
+      <div class="seed-body">
+        <div class="seed-topic">父母医疗规划</div>
+        <div class="seed-meta">来源 v22-xhs15 · 周末上午 · ~123 字</div>
+      </div>
+      <div class="seed-cta">查看 →</div>
+    </a>
+    <a class="seed-row" href="pyq_22_irr-truth.md" target="_blank">
+      <div class="seed-num">22</div>
+      <div class="seed-body">
+        <div class="seed-topic">IRR 的真相</div>
+        <div class="seed-meta">来源 v22-xhs08 · 工作日晚 · ~112 字</div>
+      </div>
+      <div class="seed-cta">查看 →</div>
+    </a>
+    <a class="seed-row" href="pyq_23_cross-med.md" target="_blank">
+      <div class="seed-num">23</div>
+      <div class="seed-body">
+        <div class="seed-topic">跨境医疗优势</div>
+        <div class="seed-meta">来源 v22-xhs09 · 周末晚 · ~140 字</div>
+      </div>
+      <div class="seed-cta">查看 →</div>
+    </a>
+    <a class="seed-row" href="pyq_24_introvert-cpa.md" target="_blank">
+      <div class="seed-num">24</div>
+      <div class="seed-body">
+        <div class="seed-topic">内向 CPA 的差异化</div>
+        <div class="seed-meta">来源 cpa-14 · 工作日早 · ~122 字</div>
+      </div>
+      <div class="seed-cta">查看 →</div>
+    </a>
+    <a class="seed-row" href="pyq_25_longterm.md" target="_blank">
+      <div class="seed-num">25</div>
+      <div class="seed-body">
+        <div class="seed-topic">长期主义</div>
+        <div class="seed-meta">来源 cpa-14 · 工作日午 · ~123 字</div>
+      </div>
+      <div class="seed-cta">查看 →</div>
+    </a>
+    <a class="seed-row" href="pyq_26_framework.md" target="_blank">
+      <div class="seed-num">26</div>
+      <div class="seed-body">
+        <div class="seed-topic">专业框架</div>
+        <div class="seed-meta">来源 cpa-12 · 工作日午间 · ~126 字</div>
+      </div>
+      <div class="seed-cta">查看 →</div>
+    </a>
+    <a class="seed-row" href="pyq_27_wont-sell.md" target="_blank">
+      <div class="seed-num">27</div>
+      <div class="seed-body">
+        <div class="seed-topic">不卖什么</div>
+        <div class="seed-meta">来源 cpa-14 · 工作日晚 · ~117 字</div>
+      </div>
+      <div class="seed-cta">查看 →</div>
+    </a>
+    <a class="seed-row" href="pyq_28_health-disclosure.md" target="_blank">
+      <div class="seed-num">28</div>
+      <div class="seed-body">
+        <div class="seed-topic">健康告知</div>
+        <div class="seed-meta">来源 v22-xhs10 · 周末上午 · ~107 字</div>
+      </div>
+      <div class="seed-cta">查看 →</div>
+    </a>
+    <a class="seed-row" href="pyq_29_annual-review.md" target="_blank">
+      <div class="seed-num">29</div>
+      <div class="seed-body">
+        <div class="seed-topic">保单年检</div>
+        <div class="seed-meta">来源 cpa-12 · 周末下午 · ~119 字</div>
+      </div>
+      <div class="seed-cta">查看 →</div>
+    </a>
+    <a class="seed-row" href="pyq_30_arch-craft.md" target="_blank">
+      <div class="seed-num">30</div>
+      <div class="seed-body">
+        <div class="seed-topic">财富架构师的修养</div>
+        <div class="seed-meta">来源 cpa-12 · 周末晚 · ~117 字</div>
+      </div>
+      <div class="seed-cta">查看 →</div>
+    </a>
   </div>
 
 </main>
 
 <footer>
-  <div>朋友圈素材仓库 · 运营中心 v3.1</div>
+  <div>朋友圈素材仓库 · 运营中心 v3.2 · 30 条已就绪</div>
   <div style="margin-top:8px;">
     <a href="../../../index.html">综合站首页</a> · 
     <a href="../../index.html">运营中心</a> · 
+    <a href="../../dashboard.html">📊 统计看板</a> · 
     <a href="../../flagship/README.html">旗舰内容索引</a>
   </div>
 </footer>
