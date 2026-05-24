@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>主流储蓄险横评 · 发布单元</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;color:#1e293b;background:#f8fafc;line-height:1.65;}
+  a{color:inherit;text-decoration:none;}
+  .topbar{background:#fff;padding:14px 24px;border-bottom:1px solid #e2e8f0;position:sticky;top:0;z-index:10;}
+  .topbar-inner{max-width:1180px;margin:0 auto;display:flex;align-items:center;gap:12px;font-size:14px;}
+  .topbar a{color:#475569;font-weight:500;}
+  .topbar a:hover{color:#f59e0b;}
+  .topbar .here{color:#f59e0b;font-weight:700;}
+  .topbar .sep{color:#cbd5e1;}
+  .hero{background:linear-gradient(135deg,#1e3a8a 0%,#3b82f6 100%);color:#fff;padding:50px 24px 60px;position:relative;overflow:hidden;}
+  .hero::before{content:'';position:absolute;top:-30%;right:-5%;width:500px;height:500px;background:radial-gradient(circle,rgba(255,255,255,0.1) 0%,transparent 70%);border-radius:50%;}
+  .hero-inner{max-width:1180px;margin:0 auto;position:relative;z-index:1;}
+  .hero-row{display:flex;gap:24px;align-items:flex-start;flex-wrap:wrap;}
+  .hero-num{font-size:96px;font-weight:900;line-height:0.9;color:#fff;letter-spacing:-3px;flex-shrink:0;}
+  .hero-main{flex:1;min-width:300px;}
+  .hero-tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:1.5px;background:rgba(255,255,255,0.18);padding:5px 12px;border-radius:12px;margin-bottom:10px;}
+  .hero h1{font-size:30px;font-weight:800;margin-bottom:10px;line-height:1.3;}
+  .hero p{font-size:15px;opacity:0.92;line-height:1.7;}
+  .hero-stats{display:flex;gap:24px;margin-top:18px;flex-wrap:wrap;align-items:center;}
+  .hero-stat{display:flex;flex-direction:column;}
+  .hero-stat-num{font-size:22px;font-weight:800;line-height:1;}
+  .hero-stat-label{font-size:11px;opacity:0.85;margin-top:4px;letter-spacing:0.5px;}
+  .source-link{display:inline-flex;align-items:center;gap:6px;padding:7px 13px;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.3);border-radius:6px;font-size:12px;font-weight:600;}
+  .container{max-width:1180px;margin:-30px auto 0;padding:0 24px 80px;position:relative;z-index:2;}
+  .section{margin-bottom:36px;}
+  .section-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:16px;padding:0 4px;}
+  .section-title{font-size:20px;font-weight:800;color:#0f172a;}
+  .section-title span{color:#94a3b8;font-weight:500;font-size:13px;margin-left:8px;}
+  .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;}
+  @media(max-width:760px){.grid-2{grid-template-columns:1fr;}}
+  .text-card{background:#fff;border-radius:14px;padding:24px;border:1px solid #e2e8f0;border-left:4px solid var(--ch);}
+  .text-card-head{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+  .text-card-icon{width:32px;height:32px;border-radius:8px;background:var(--ch-bg);display:flex;align-items:center;justify-content:center;font-size:16px;}
+  .text-card-channel{font-size:12px;font-weight:700;color:var(--ch);letter-spacing:1px;}
+  .text-card-title{font-size:17px;font-weight:700;color:#0f172a;margin-bottom:6px;}
+  .text-card-file{font-size:13px;color:#475569;font-family:Consolas,Monaco,monospace;background:#f1f5f9;padding:6px 10px;border-radius:6px;display:inline-block;margin-top:6px;}
+  .text-card-actions{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;}
+  .btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;font-size:13px;font-weight:600;}
+  .btn-primary{background:var(--ch);color:#fff;}
+  .btn-ghost{background:#f1f5f9;color:#475569;}
+  .text-card-tip{font-size:12px;color:#64748b;line-height:1.7;margin-top:14px;padding:10px 14px;background:#fafbfc;border-radius:6px;border-left:2px solid #cbd5e1;}
+  .text-card-tip code{background:#f1f5f9;color:#1e40af;padding:2px 6px;border-radius:4px;font-family:Consolas,Monaco,monospace;font-size:12px;}
+  .text-card.wechat{--ch:#10b981;--ch-bg:#d1fae5;}
+  .text-card.zhihu{--ch:#1a56db;--ch-bg:#dbeafe;}
+  .flow{background:#fff;border-radius:14px;padding:24px;border:1px solid #e2e8f0;}
+  .flow ol{margin:8px 0 0 20px;}
+  .flow li{font-size:14px;color:#334155;margin:10px 0;line-height:1.75;}
+  .flow code{background:#f1f5f9;color:#1e40af;padding:2px 7px;border-radius:4px;font-family:Consolas,Monaco,monospace;font-size:12.5px;}
+  footer{text-align:center;padding:24px;color:#94a3b8;font-size:12px;border-top:1px solid #e2e8f0;background:#fff;margin-top:40px;}
+  footer a{color:#f59e0b;}
+</style>
+</head>
+<body>
+
+<nav class="topbar"><div class="topbar-inner">
+  <a href="../../../index.html">🏠 综合站首页</a>
+  <span class="sep">›</span>
+  <a href="../../index.html">运营中心</a>
+  <span class="sep">›</span>
+  <a href="index.html" style="color:#475569;">units/</a>
+  <span class="sep">›</span>
+  <span class="here">cpa08-savings-compare</span>
+  <span style="margin-left:auto;font-size:12px;color:#94a3b8;">v3.1</span>
+</div></nav>
+
+<header class="hero"><div class="hero-inner">
+  <div class="hero-row">
+    <div class="hero-num">08</div>
+    <div class="hero-main">
+      <span class="hero-tag">📦 发布单元 · CPA 旗舰研报 · 🆕</span>
+      <h1>主流储蓄险横评</h1>
+      <p>友邦 / 保诚 / 安盛 / 宏利 横向对比</p>
+      <div class="hero-stats">
+        <div class="hero-stat"><div class="hero-stat-num">5000+</div><div class="hero-stat-label">原文字数</div></div>
+        <div class="hero-stat"><div class="hero-stat-num">2</div><div class="hero-stat-label">渠道成稿</div></div>
+        <a class="source-link" href="../../../articles/cpa-08-savings-compare.html" target="_blank">📄 查看原文 HTML</a>
+      </div>
+    </div>
+  </div>
+</div></header>
+
+<main class="container">
+
+  <section class="section">
+    <div class="section-head">
+      <h2 class="section-title">📝 文字成稿 <span>—— 浏览器复制 → 粘贴到对应平台</span></h2>
+    </div>
+    <div class="grid-2">
+      <div class="text-card wechat">
+        <div class="text-card-head">
+          <div class="text-card-icon">📢</div>
+          <div class="text-card-channel">WECHAT · 公众号</div>
+        </div>
+        <div class="text-card-title">公众号成稿（HTML 带样式版）</div>
+        <p style="font-size:13.5px;color:#475569;">浏览器打开 HTML → 全选复制 → 粘贴到公众号编辑器，样式全保留。</p>
+        <div class="text-card-file">公众号_港险储蓄险横评CPA视角.html</div>
+        <div class="text-card-actions">
+          <a class="btn btn-primary" href="../wechat/公众号_港险储蓄险横评CPA视角.html" target="_blank">📄 浏览器打开</a>
+          <a class="btn btn-ghost" href="../wechat/公众号_港险储蓄险横评CPA视角.html" download>💾 下载 HTML</a>
+        </div>
+        <div class="text-card-tip">💡 <strong>粘贴流程</strong>：浏览器打开 → <code>Ctrl+A</code> 全选 → <code>Ctrl+C</code> 复制 → 公众号后台 → 新建图文 → <code>Ctrl+V</code></div>
+      </div>
+      <div class="text-card zhihu">
+        <div class="text-card-head">
+          <div class="text-card-icon">💡</div>
+          <div class="text-card-channel">ZHIHU · 知乎</div>
+        </div>
+        <div class="text-card-title">知乎成稿（Markdown 原生版）</div>
+        <p style="font-size:13.5px;color:#475569;">知乎专栏编辑器原生支持 Markdown 粘贴。</p>
+        <div class="text-card-file">知乎_港险储蓄险横评CPA视角.md</div>
+        <div class="text-card-actions">
+          <a class="btn btn-primary" href="../zhihu/知乎_港险储蓄险横评CPA视角.md" target="_blank">📝 查看 Markdown</a>
+          <a class="btn btn-ghost" href="../zhihu/知乎_港险储蓄险横评CPA视角.md" download>💾 下载 .md</a>
+        </div>
+        <div class="text-card-tip">💡 <strong>粘贴流程</strong>：用编辑器打开 .md → 全选复制 → 知乎"写文章" → 粘贴</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head"><h2 class="section-title">🚀 发布流程</h2></div>
+    <div class="flow">
+      <ol>
+        <li><strong>公众号</strong>：浏览器打开 HTML → <code>Ctrl+A</code> + <code>Ctrl+C</code> → 公众号后台新建图文 → <code>Ctrl+V</code> → 推送</li>
+        <li><strong>知乎</strong>：查看 Markdown → 全选复制 → <a href="https://zhuanlan.zhihu.com" target="_blank">知乎专栏</a> 写新文章 → 粘贴 → 发布</li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head"><h2 class="section-title">🔗 相关</h2></div>
+    <div class="flow" style="font-size:13.5px;line-height:2.1;">
+      📄 <a href="../../../articles/cpa-08-savings-compare.html" target="_blank" style="color:#1e40af;font-weight:600;">原文 HTML（articles/cpa-08-savings-compare.html）</a><br>
+      🛠️ <a href="../../tools/convert_single.py" style="color:#1e40af;font-weight:600;">convert_single.py</a> · 重新生成成稿用<br>
+      📦 <a href="index.html" style="color:#1e40af;font-weight:600;">回到发布单元总览</a>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div>主流储蓄险横评 · 发布单元 v3.1</div>
+  <div style="margin-top:8px;">
+    <a href="../../../index.html">综合站首页</a> · 
+    <a href="../../index.html">运营中心</a> · 
+    <a href="index.html">所有发布单元</a>
+  </div>
+</footer>
+
+</body>
+</html>
