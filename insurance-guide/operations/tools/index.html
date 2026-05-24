@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>内容生产工具 · 运营中心</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+       color:#1e293b;background:#f8fafc;line-height:1.6;-webkit-font-smoothing:antialiased;}
+  a{color:inherit;text-decoration:none;}
+
+  .topbar{background:#fff;padding:14px 24px;border-bottom:1px solid #e2e8f0;
+          position:sticky;top:0;z-index:10;}
+  .topbar-inner{max-width:980px;margin:0 auto;display:flex;align-items:center;gap:12px;
+                font-size:14px;}
+  .topbar a{color:#475569;font-weight:500;}
+  .topbar a:hover{color:#f97316;}
+  .topbar .here{color:#f97316;font-weight:700;}
+  .topbar .sep{color:#cbd5e1;}
+
+  .hero{background:linear-gradient(135deg,#9a3412 0%,#f97316 100%);
+        color:#fff;padding:36px 24px 44px;}
+  .hero-inner{max-width:980px;margin:0 auto;}
+  .hero-tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:1.5px;
+            background:rgba(255,255,255,0.18);padding:5px 12px;border-radius:12px;
+            margin-bottom:14px;backdrop-filter:blur(10px);}
+  .hero h1{font-size:28px;font-weight:800;margin-bottom:8px;line-height:1.2;}
+  .hero p{font-size:14px;opacity:0.92;line-height:1.7;}
+  .hero-meta{font-size:12px;font-family:Consolas,Monaco,monospace;opacity:0.85;
+             margin-top:14px;background:rgba(0,0,0,0.18);padding:6px 12px;
+             border-radius:6px;display:inline-block;}
+
+  .container{max-width:980px;margin:-22px auto 0;padding:0 24px 60px;position:relative;z-index:2;}
+
+  .file-list{background:#fff;border-radius:12px;border:1px solid #e2e8f0;
+             overflow:hidden;}
+  .file-row{display:flex;align-items:center;padding:16px 20px;border-bottom:1px solid #f1f5f9;
+            transition:background 0.15s;}
+  .file-row:last-child{border-bottom:none;}
+  .file-row:hover{background:#f8fafc;}
+  .file-icon{width:36px;height:36px;border-radius:8px;display:flex;
+             align-items:center;justify-content:center;font-size:16px;
+             margin-right:14px;flex-shrink:0;}
+  .file-icon.html{background:#dbeafe;color:#1e40af;}
+  .file-icon.md{background:#d1fae5;color:#047857;}
+  .file-icon.pdf{background:#fee2e2;color:#b91c1c;}
+  .file-icon.xlsx{background:#dcfce7;color:#166534;}
+  .file-icon.py{background:#ede9fe;color:#6d28d9;}
+  .file-icon.txt{background:#fef3c7;color:#92400e;}
+  .file-icon.dir{background:#fed7aa;color:#9a3412;}
+  .file-icon.default{background:#e2e8f0;color:#475569;}
+  .file-info{flex:1;min-width:0;}
+  .file-name{font-size:15px;font-weight:600;color:#0f172a;line-height:1.4;
+             overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .file-name a{color:#f97316;}
+  .file-name a:hover{text-decoration:underline;}
+  .file-meta{font-size:12px;color:#94a3b8;margin-top:3px;font-family:Consolas,Monaco,monospace;}
+  .file-size{font-size:12px;color:#64748b;margin-left:14px;font-variant-numeric:tabular-nums;
+             flex-shrink:0;}
+
+  .empty{text-align:center;padding:48px 24px;color:#94a3b8;}
+
+  .desc-box{background:#fff;border-radius:12px;padding:18px 22px;margin-bottom:18px;
+            border:1px solid #e2e8f0;border-left:3px solid #f97316;}
+  .desc-title{font-size:14px;font-weight:700;color:#0f172a;margin-bottom:6px;}
+  .desc-text{font-size:13px;color:#475569;line-height:1.7;}
+  .desc-text code{background:#f1f5f9;padding:2px 6px;border-radius:4px;font-size:12px;color:#f97316;}
+
+  footer{text-align:center;padding:24px;color:#94a3b8;font-size:12px;
+         border-top:1px solid #e2e8f0;background:#fff;margin-top:40px;}
+  footer a{color:#f97316;}
+</style>
+</head>
+<body>
+
+<nav class="topbar">
+  <div class="topbar-inner">
+    <a href="../../index.html">🏠 综合站首页</a>
+    <span class="sep">›</span>
+    <a href="../index.html">运营中心</a>
+    <span class="sep">›</span><span class="here">tools/</span>
+    <span style="margin-left:auto;font-size:12px;color:#94a3b8;">v3.1</span>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-inner">
+    <span class="hero-tag">OPERATIONS · 工具</span>
+    <h1>内容生产工具</h1>
+    <p>HTML → 公众号/知乎 转换器 · Python 脚本。</p>
+    <div class="hero-meta">📁 operations/tools/ · 共 3 个文件</div>
+  </div>
+</header>
+
+<main class="container">
+
+  <div class="desc-box">
+    <div class="desc-title">💡 使用方法</div>
+    <div class="desc-text">终端切到 <code>insurance-guide/operations/tools/</code> 目录，执行：<br><code>python convert_single.py ../../articles/cpa-XX-xxx.html</code><br>会在脚本目录下生成 <code>公众号_xxx.html</code> 和 <code>知乎_xxx.md</code>。详细说明见 README.md。</div>
+  </div>
+
+  <div class="file-list">
+    <div class="file-row">
+      <div class="file-icon md">📝</div>
+      <div class="file-info">
+        <div class="file-name"><a href="README.md">README.md</a></div><div class="file-meta">工具使用说明</div>
+      </div>
+      <div class="file-size">4.0 KB</div>
+    </div>
+    <div class="file-row">
+      <div class="file-icon py">🐍</div>
+      <div class="file-info">
+        <div class="file-name"><a href="convert_single.py">convert_single.py</a></div><div class="file-meta">★ 通用单文章转换器（推荐）</div>
+      </div>
+      <div class="file-size">10.8 KB</div>
+    </div>
+    <div class="file-row">
+      <div class="file-icon py">🐍</div>
+      <div class="file-info">
+        <div class="file-name"><a href="convert_v2.py">convert_v2.py</a></div><div class="file-meta">双版本 (A/B) 转换器</div>
+      </div>
+      <div class="file-size">7.9 KB</div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <div>内容生产工具 · 运营中心 v3.1</div>
+  <div style="margin-top:8px;">
+    <a href="../../index.html">综合站首页</a> · 
+    <a href="../index.html">运营中心</a> · 
+    <a href="../flagship/README.md">旗舰内容索引</a>
+  </div>
+</footer>
+
+</body>
+</html>

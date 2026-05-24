@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>小红书素材仓库 · 运营中心</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+       color:#1e293b;background:#f8fafc;line-height:1.6;-webkit-font-smoothing:antialiased;}
+  a{color:inherit;text-decoration:none;}
+
+  .topbar{background:#fff;padding:14px 24px;border-bottom:1px solid #e2e8f0;
+          position:sticky;top:0;z-index:10;}
+  .topbar-inner{max-width:980px;margin:0 auto;display:flex;align-items:center;gap:12px;
+                font-size:14px;}
+  .topbar a{color:#475569;font-weight:500;}
+  .topbar a:hover{color:#ec4899;}
+  .topbar .here{color:#ec4899;font-weight:700;}
+  .topbar .sep{color:#cbd5e1;}
+
+  .hero{background:linear-gradient(135deg,#9d174d 0%,#ec4899 100%);
+        color:#fff;padding:36px 24px 44px;}
+  .hero-inner{max-width:980px;margin:0 auto;}
+  .hero-tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:1.5px;
+            background:rgba(255,255,255,0.18);padding:5px 12px;border-radius:12px;
+            margin-bottom:14px;backdrop-filter:blur(10px);}
+  .hero h1{font-size:28px;font-weight:800;margin-bottom:8px;line-height:1.2;}
+  .hero p{font-size:14px;opacity:0.92;line-height:1.7;}
+  .hero-meta{font-size:12px;font-family:Consolas,Monaco,monospace;opacity:0.85;
+             margin-top:14px;background:rgba(0,0,0,0.18);padding:6px 12px;
+             border-radius:6px;display:inline-block;}
+
+  .container{max-width:980px;margin:-22px auto 0;padding:0 24px 60px;position:relative;z-index:2;}
+
+  .file-list{background:#fff;border-radius:12px;border:1px solid #e2e8f0;
+             overflow:hidden;}
+  .file-row{display:flex;align-items:center;padding:16px 20px;border-bottom:1px solid #f1f5f9;
+            transition:background 0.15s;}
+  .file-row:last-child{border-bottom:none;}
+  .file-row:hover{background:#f8fafc;}
+  .file-icon{width:36px;height:36px;border-radius:8px;display:flex;
+             align-items:center;justify-content:center;font-size:16px;
+             margin-right:14px;flex-shrink:0;}
+  .file-icon.html{background:#dbeafe;color:#1e40af;}
+  .file-icon.md{background:#d1fae5;color:#047857;}
+  .file-icon.pdf{background:#fee2e2;color:#b91c1c;}
+  .file-icon.xlsx{background:#dcfce7;color:#166534;}
+  .file-icon.py{background:#ede9fe;color:#6d28d9;}
+  .file-icon.txt{background:#fef3c7;color:#92400e;}
+  .file-icon.dir{background:#fed7aa;color:#9a3412;}
+  .file-icon.default{background:#e2e8f0;color:#475569;}
+  .file-info{flex:1;min-width:0;}
+  .file-name{font-size:15px;font-weight:600;color:#0f172a;line-height:1.4;
+             overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .file-name a{color:#ec4899;}
+  .file-name a:hover{text-decoration:underline;}
+  .file-meta{font-size:12px;color:#94a3b8;margin-top:3px;font-family:Consolas,Monaco,monospace;}
+  .file-size{font-size:12px;color:#64748b;margin-left:14px;font-variant-numeric:tabular-nums;
+             flex-shrink:0;}
+
+  .empty{text-align:center;padding:48px 24px;color:#94a3b8;}
+
+  .desc-box{background:#fff;border-radius:12px;padding:18px 22px;margin-bottom:18px;
+            border:1px solid #e2e8f0;border-left:3px solid #ec4899;}
+  .desc-title{font-size:14px;font-weight:700;color:#0f172a;margin-bottom:6px;}
+  .desc-text{font-size:13px;color:#475569;line-height:1.7;}
+  .desc-text code{background:#f1f5f9;padding:2px 6px;border-radius:4px;font-size:12px;color:#ec4899;}
+
+  footer{text-align:center;padding:24px;color:#94a3b8;font-size:12px;
+         border-top:1px solid #e2e8f0;background:#fff;margin-top:40px;}
+  footer a{color:#ec4899;}
+</style>
+</head>
+<body>
+
+<nav class="topbar">
+  <div class="topbar-inner">
+    <a href="../../../index.html">🏠 综合站首页</a>
+    <span class="sep">›</span>
+    <a href="../../index.html">运营中心</a>
+    <span class="sep">›</span><span style="color:#94a3b8;">published/</span><span class="sep">›</span><span class="here">xhs/</span>
+    <span style="margin-left:auto;font-size:12px;color:#94a3b8;">v3.1</span>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-inner">
+    <span class="hero-tag">OPERATIONS · 小红书</span>
+    <h1>小红书素材仓库</h1>
+    <p>短文 bodies + 单篇成稿 · 覆盖港险合法性、IRR 等热门话题。</p>
+    <div class="hero-meta">📁 operations/published/xhs/ · 共 2 个文件</div>
+  </div>
+</header>
+
+<main class="container">
+
+  <div class="desc-box">
+    <div class="desc-title">💡 相关入口</div>
+    <div class="desc-text">👉 还有 <b>v2.2 小红书 39 篇一键发布版</b>（每篇 1000 字内 · 已精简到字数限制）：<br>· 日历视图：<code><a href="../../../articles/v22-xhs-hub.html">articles/v22-xhs-hub.html</a></code><br>· 纯文本版：<code><a href="../../../articles/xhs-publish/index.html">articles/xhs-publish/</a></code></div>
+  </div>
+
+  <div class="file-list">
+    <div class="file-row">
+      <div class="file-icon md">📝</div>
+      <div class="file-info">
+        <div class="file-name"><a href="xhs_short_bodies.md">xhs_short_bodies.md</a></div>
+      </div>
+      <div class="file-size">74.9 KB</div>
+    </div>
+    <div class="file-row">
+      <div class="file-icon md">📝</div>
+      <div class="file-info">
+        <div class="file-name"><a href="小红书01_港险合法性.md">小红书01_港险合法性.md</a></div>
+      </div>
+      <div class="file-size">10.3 KB</div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <div>小红书素材仓库 · 运营中心 v3.1</div>
+  <div style="margin-top:8px;">
+    <a href="../../../index.html">综合站首页</a> · 
+    <a href="../../index.html">运营中心</a> · 
+    <a href="../../flagship/README.md">旗舰内容索引</a>
+  </div>
+</footer>
+
+</body>
+</html>
