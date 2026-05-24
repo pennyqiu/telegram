@@ -6,153 +6,105 @@
 <title>公众号成稿仓库 · 运营中心</title>
 <style>
   *{margin:0;padding:0;box-sizing:border-box;}
-  body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
-       color:#1e293b;background:#f8fafc;line-height:1.6;-webkit-font-smoothing:antialiased;}
+  body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;color:#1e293b;background:#f8fafc;line-height:1.6;}
   a{color:inherit;text-decoration:none;}
-
-  .topbar{background:#fff;padding:14px 24px;border-bottom:1px solid #e2e8f0;
-          position:sticky;top:0;z-index:10;}
+  .topbar{background:#fff;padding:14px 24px;border-bottom:1px solid #e2e8f0;position:sticky;top:0;z-index:10;}
   .topbar-inner{max-width:980px;margin:0 auto;display:flex;align-items:center;gap:12px;font-size:14px;}
   .topbar a{color:#475569;font-weight:500;}
   .topbar a:hover{color:#10b981;}
   .topbar .here{color:#10b981;font-weight:700;}
   .topbar .sep{color:#cbd5e1;}
-
-  .hero{background:linear-gradient(135deg,#047857 0%,#10b981 100%);
-        color:#fff;padding:36px 24px 44px;}
+  .hero{background:linear-gradient(135deg,#047857 0%,#10b981 100%);color:#fff;padding:36px 24px 44px;}
   .hero-inner{max-width:980px;margin:0 auto;}
-  .hero-tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:1.5px;
-            background:rgba(255,255,255,0.18);padding:5px 12px;border-radius:12px;margin-bottom:14px;}
-  .hero h1{font-size:28px;font-weight:800;margin-bottom:8px;line-height:1.2;}
+  .hero-tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:1.5px;background:rgba(255,255,255,0.18);padding:5px 12px;border-radius:12px;margin-bottom:14px;}
+  .hero h1{font-size:28px;font-weight:800;margin-bottom:8px;}
   .hero p{font-size:14px;opacity:0.92;line-height:1.7;}
-  .hero-meta{font-size:12px;font-family:Consolas,Monaco,monospace;opacity:0.85;
-             margin-top:14px;background:rgba(0,0,0,0.18);padding:6px 12px;
-             border-radius:6px;display:inline-block;}
-
+  .hero-meta{font-size:12px;font-family:Consolas,Monaco,monospace;opacity:0.85;margin-top:14px;background:rgba(0,0,0,0.18);padding:6px 12px;border-radius:6px;display:inline-block;}
   .container{max-width:980px;margin:-22px auto 0;padding:0 24px 60px;position:relative;z-index:2;}
-
-  .file-list{background:#fff;border-radius:12px;border:1px solid #e2e8f0;overflow:hidden;}
-  .file-row{display:flex;align-items:center;padding:16px 20px;border-bottom:1px solid #f1f5f9;
-            transition:background 0.15s;}
-  .file-row:last-child{border-bottom:none;}
-  .file-row:hover{background:#f8fafc;}
-  .file-icon{width:36px;height:36px;border-radius:8px;display:flex;
-             align-items:center;justify-content:center;font-size:16px;
-             margin-right:14px;flex-shrink:0;}
-  .file-icon.html{background:#dbeafe;color:#1e40af;}
-  .file-icon.md{background:#d1fae5;color:#047857;}
-  .file-icon.img{background:#fce7f3;color:#9d174d;}
-  .file-icon.default{background:#e2e8f0;color:#475569;}
-  .file-info{flex:1;min-width:0;}
-  .file-name{font-size:15px;font-weight:600;color:#0f172a;line-height:1.4;
-             overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-  .file-name a{color:#10b981;}
-  .file-name a:hover{text-decoration:underline;}
-  .file-meta{font-size:12px;color:#94a3b8;margin-top:3px;font-family:Consolas,Monaco,monospace;}
-  .file-size{font-size:12px;color:#64748b;margin-left:14px;font-variant-numeric:tabular-nums;flex-shrink:0;}
-
-  .desc-box{background:#fff;border-radius:12px;padding:18px 22px;margin-bottom:18px;
-            border:1px solid #e2e8f0;border-left:3px solid #10b981;}
+  .desc-box{background:#fff;border-radius:12px;padding:18px 22px;margin-bottom:18px;border:1px solid #e2e8f0;border-left:3px solid #10b981;}
   .desc-title{font-size:14px;font-weight:700;color:#0f172a;margin-bottom:6px;}
   .desc-text{font-size:13px;color:#475569;line-height:1.7;}
   .desc-text code{background:#f1f5f9;padding:2px 6px;border-radius:4px;font-size:12px;color:#10b981;}
-
-  /* 封面网格 */
-  .cover-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;}
-  .cover-card{background:#fff;border-radius:10px;overflow:hidden;border:1px solid #e2e8f0;
-              transition:all 0.2s;cursor:pointer;display:flex;flex-direction:column;}
-  .cover-card:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(15,23,42,0.1);
-                    border-color:#10b981;}
-  .cover-card img{width:100%;display:block;background:#0f172a;}
-  .cover-meta{padding:10px 14px;font-size:12px;}
-  .cover-name{font-weight:600;color:#0f172a;
-              overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-  .cover-dim{color:#94a3b8;font-family:Consolas,Monaco,monospace;margin-top:3px;}
-
-  footer{text-align:center;padding:24px;color:#94a3b8;font-size:12px;
-         border-top:1px solid #e2e8f0;background:#fff;margin-top:40px;}
+  .file-list{background:#fff;border-radius:12px;border:1px solid #e2e8f0;overflow:hidden;}
+  .file-row{display:flex;align-items:center;padding:16px 20px;border-bottom:1px solid #f1f5f9;}
+  .file-row:last-child{border-bottom:none;}
+  .file-row:hover{background:#f8fafc;}
+  .file-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-right:14px;flex-shrink:0;}
+  .file-icon.html{background:#dbeafe;color:#1e40af;}
+  .file-icon.md{background:#d1fae5;color:#047857;}
+  .file-icon.default{background:#e2e8f0;color:#475569;}
+  .file-info{flex:1;min-width:0;}
+  .file-name{font-size:15px;font-weight:600;color:#0f172a;line-height:1.4;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .file-name a{color:#10b981;}
+  .file-name a:hover{text-decoration:underline;}
+  .file-meta{font-size:12px;color:#94a3b8;margin-top:3px;}
+  .file-size{font-size:12px;color:#64748b;margin-left:14px;flex-shrink:0;font-variant-numeric:tabular-nums;}
+  footer{text-align:center;padding:24px;color:#94a3b8;font-size:12px;border-top:1px solid #e2e8f0;background:#fff;margin-top:40px;}
   footer a{color:#10b981;}
 </style>
 </head>
 <body>
 
-<nav class="topbar">
-  <div class="topbar-inner">
-    <a href="../../../index.html">🏠 综合站首页</a>
-    <span class="sep">›</span>
-    <a href="../../index.html">运营中心</a>
-    <span class="sep">›</span>
-    <span style="color:#94a3b8;">published/</span>
-    <span class="sep">›</span>
-    <span class="here">wechat/</span>
-    <span style="margin-left:auto;font-size:12px;color:#94a3b8;">v3.1</span>
-  </div>
-</nav>
+<nav class="topbar"><div class="topbar-inner">
+  <a href="../../../index.html">🏠 综合站首页</a>
+  <span class="sep">›</span>
+  <a href="../../index.html">运营中心</a>
+  <span class="sep">›</span>
+  <span style="color:#94a3b8;">published/</span>
+  <span class="sep">›</span>
+  <span class="here">wechat/</span>
+  <span style="margin-left:auto;font-size:12px;color:#94a3b8;">v3.1</span>
+</div></nav>
 
-<header class="hero">
-  <div class="hero-inner">
-    <span class="hero-tag">OPERATIONS · WECHAT</span>
-    <h1>公众号成稿仓库</h1>
-    <p>可直接发布的公众号稿件 · HTML 带样式版（浏览器全选复制）+ Markdown 双格式。</p>
-    <div class="hero-meta">📁 operations/published/wechat/ · 4 个文件 + 1 张封面图</div>
-  </div>
-</header>
+<header class="hero"><div class="hero-inner">
+  <span class="hero-tag">OPERATIONS · WECHAT</span>
+  <h1>公众号成稿仓库</h1>
+  <p>可直接发布的公众号稿件 · HTML 带样式版 + Markdown 双格式。</p>
+  <div class="hero-meta">📁 operations/published/wechat/ · 5 个文件</div>
+</div></header>
 
 <main class="container">
-
   <div class="desc-box">
     <div class="desc-title">💡 使用方法</div>
-    <div class="desc-text"><b>HTML 文件</b>：浏览器打开 → Ctrl+A 全选 → Ctrl+C 复制 → 粘贴到公众号编辑器，样式即可保留。<br><b>封面图</b>：900×500 标准头图，直接右键另存上传到公众号即可。<br><b>MD 文件</b>：源 Markdown，用 <code>operations/tools/convert_single.py</code> 可重新生成。</div>
+    <div class="desc-text"><b>HTML 文件</b>：浏览器打开 → Ctrl+A 全选 → Ctrl+C 复制 → 粘贴到公众号编辑器。<br><b>MD 文件</b>：源 Markdown，用 <code>operations/tools/convert_single.py</code> 可重新生成。</div>
   </div>
-
   <div class="file-list">
     <div class="file-row">
       <div class="file-icon html">📄</div>
       <div class="file-info">
-        <div class="file-name"><a href="公众号_在迅雷做了8年总账.html">公众号_在迅雷做了8年总账.html</a></div><div class="file-meta">★ 人设奠基长文（HTML 带样式版）· 浏览器复制即发</div>
+        <div class="file-name"><a href="公众号_在迅雷做了8年总账.html">公众号_在迅雷做了8年总账.html</a></div><div class="file-meta">★ 人设奠基长文 · 在迅雷做了 8 年总账，我为什么把简历交给了安盛</div>
       </div>
       <div class="file-size">10.6 KB</div>
     </div>
     <div class="file-row">
       <div class="file-icon md">📝</div>
       <div class="file-info">
-        <div class="file-name"><a href="公众号_在迅雷做了8年总账.md">公众号_在迅雷做了8年总账.md</a></div><div class="file-meta">人设奠基长文 · Markdown 源版</div>
+        <div class="file-name"><a href="公众号_在迅雷做了8年总账.md">公众号_在迅雷做了8年总账.md</a></div><div class="file-meta">人设奠基长文 · Markdown 源</div>
       </div>
       <div class="file-size">8.5 KB</div>
     </div>
     <div class="file-row">
       <div class="file-icon html">📄</div>
       <div class="file-info">
-        <div class="file-name"><a href="公众号_港险分红实现率CPA横评.html">公众号_港险分红实现率CPA横评.html</a></div><div class="file-meta">🆕 CPA-02 · 分红实现率全解 · HTML 带样式版</div>
+        <div class="file-name"><a href="公众号_港险分红实现率CPA横评.html">公众号_港险分红实现率CPA横评.html</a></div><div class="file-meta">CPA-02 · 5000 字读懂分红实现率</div>
       </div>
       <div class="file-size">14.7 KB</div>
     </div>
     <div class="file-row">
       <div class="file-icon html">📄</div>
       <div class="file-info">
-        <div class="file-name"><a href="公众号_港险分红险智商税CPA拆解.html">公众号_港险分红险智商税CPA拆解.html</a></div><div class="file-meta">CPA-01 · 港险分红险智商税拆解 · HTML 带样式版</div>
+        <div class="file-name"><a href="公众号_港险分红险智商税CPA拆解.html">公众号_港险分红险智商税CPA拆解.html</a></div><div class="file-meta">CPA-01 · 港险分红险到底是不是智商税</div>
       </div>
       <div class="file-size">20.4 KB</div>
     </div>
-  </div>
-
-  <section style="margin-top:32px;">
-    <h2 style="font-size:18px;font-weight:800;color:#0f172a;margin-bottom:14px;
-               padding-left:10px;border-left:3px solid #f59e0b;">
-      📌 配套封面图 <span style="color:#94a3b8;font-weight:500;font-size:13px;
-                                 margin-left:8px;">点击查看大图 / 右键另存</span>
-    </h2>
-    <div class="cover-grid">
-    <a class="cover-card" href="covers/cpa02-fulfillment-ratio_900x500.png" target="_blank">
-      <img src="covers/cpa02-fulfillment-ratio_900x500.png" alt="cpa02-fulfillment-ratio_900x500.png" loading="lazy">
-      <div class="cover-meta">
-        <div class="cover-name">cpa02-fulfillment-ratio_900x500.png</div>
-        <div class="cover-dim">900×500 · 143.4 KB</div>
+    <div class="file-row">
+      <div class="file-icon html">📄</div>
+      <div class="file-info">
+        <div class="file-name"><a href="公众号_港险美元保单VS人民币保单CPA对比.html">公众号_港险美元保单VS人民币保单CPA对比.html</a></div><div class="file-meta">CPA-03 · 🆕 · 美元保单 vs 人民币保单</div>
       </div>
-    </a>
+      <div class="file-size">14.8 KB</div>
     </div>
-  </section>
-
+  </div>
 </main>
 
 <footer>
@@ -160,7 +112,7 @@
   <div style="margin-top:8px;">
     <a href="../../../index.html">综合站首页</a> · 
     <a href="../../index.html">运营中心</a> · 
-    <a href="../../flagship/README.html">旗舰内容索引</a>
+    <a href="../units/index.html">📦 发布单元总览</a>
   </div>
 </footer>
 
