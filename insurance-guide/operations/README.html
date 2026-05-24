@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>运营中心 · 使用说明</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+       color:#1e293b;background:#f8fafc;line-height:1.7;-webkit-font-smoothing:antialiased;}
+  a{color:#1a56db;text-decoration:none;}
+  a:hover{text-decoration:underline;}
+
+  .topbar{background:#fff;padding:14px 24px;border-bottom:1px solid #e2e8f0;
+          position:sticky;top:0;z-index:10;}
+  .topbar-inner{max-width:880px;margin:0 auto;display:flex;align-items:center;gap:12px;
+                font-size:14px;}
+  .topbar a{color:#475569;font-weight:500;}
+  .topbar a:hover{color:#7c3aed;text-decoration:none;}
+  .topbar .here{color:#7c3aed;font-weight:700;}
+  .topbar .sep{color:#cbd5e1;}
+  .topbar .right{margin-left:auto;font-size:12px;color:#94a3b8;}
+  .topbar .source{padding:4px 10px;border:1px solid #e2e8f0;border-radius:6px;
+                  font-size:12px;color:#64748b;}
+  .topbar .source:hover{background:#f1f5f9;color:#7c3aed;}
+
+  .hero{background:linear-gradient(135deg,#581c87 0%,#a855f7 100%);
+        color:#fff;padding:50px 24px 60px;}
+  .hero-inner{max-width:880px;margin:0 auto;}
+  .hero-tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:1.5px;
+            background:rgba(255,255,255,0.18);padding:5px 12px;border-radius:12px;
+            margin-bottom:14px;}
+  .hero h1{font-size:34px;font-weight:800;margin-bottom:10px;line-height:1.25;
+           letter-spacing:-0.5px;}
+  .hero-meta{font-size:13px;opacity:0.88;font-family:Consolas,Monaco,monospace;
+             margin-top:14px;background:rgba(0,0,0,0.2);padding:5px 12px;
+             border-radius:6px;display:inline-block;}
+
+  .container{max-width:880px;margin:-30px auto 0;padding:0 24px 80px;position:relative;z-index:2;}
+
+  article{background:#fff;border-radius:12px;padding:48px 56px;
+          border:1px solid #e2e8f0;box-shadow:0 4px 16px rgba(15,23,42,0.04);}
+  @media(max-width:768px){
+    article{padding:32px 24px;}
+    .hero h1{font-size:26px;}
+  }
+
+  article h1{font-size:30px;font-weight:800;color:#0f172a;margin:32px 0 16px;
+             padding-bottom:12px;border-bottom:2px solid #7c3aed;line-height:1.3;}
+  article h1:first-child{margin-top:0;}
+  article h2{font-size:24px;font-weight:800;color:#0f172a;margin:36px 0 14px;
+             padding-left:14px;border-left:4px solid #7c3aed;line-height:1.3;}
+  article h3{font-size:19px;font-weight:700;color:#1e293b;margin:28px 0 10px;line-height:1.4;}
+  article h4{font-size:16px;font-weight:700;color:#334155;margin:22px 0 8px;}
+  article h5,article h6{font-size:15px;font-weight:700;color:#475569;margin:18px 0 6px;}
+
+  article p{margin:14px 0;color:#334155;font-size:15px;line-height:1.85;}
+  article strong{color:#0f172a;font-weight:700;}
+  article em{color:#475569;}
+
+  article ul,article ol{margin:14px 0 14px 24px;}
+  article li{margin:6px 0;color:#334155;font-size:15px;line-height:1.8;}
+  article li::marker{color:#7c3aed;}
+  article ul ul,article ol ol,article ul ol,article ol ul{margin:6px 0 6px 24px;}
+
+  article blockquote{margin:18px 0;padding:14px 20px;background:#f8fafc;
+                     border-left:3px solid #7c3aed;border-radius:0 8px 8px 0;color:#475569;}
+  article blockquote p{margin:6px 0;}
+
+  article code{background:#f1f5f9;color:#7c3aed;padding:2px 7px;
+               border-radius:4px;font-family:Consolas,"SF Mono",Monaco,monospace;
+               font-size:13.5px;font-weight:500;}
+  article pre{background:#0f172a;color:#e2e8f0;padding:18px 22px;border-radius:8px;
+              overflow-x:auto;margin:18px 0;font-family:Consolas,"SF Mono",Monaco,monospace;
+              font-size:13.5px;line-height:1.6;}
+  article pre code{background:transparent;color:inherit;padding:0;font-size:inherit;}
+
+  article table{width:100%;border-collapse:collapse;margin:18px 0;
+                font-size:14px;background:#fff;border-radius:8px;overflow:hidden;
+                box-shadow:0 0 0 1px #e2e8f0;}
+  article th{background:#f1f5f9;color:#0f172a;font-weight:700;padding:11px 14px;
+             text-align:left;font-size:13px;border-bottom:1px solid #e2e8f0;}
+  article td{padding:10px 14px;border-bottom:1px solid #f1f5f9;color:#334155;
+             vertical-align:top;}
+  article tr:last-child td{border-bottom:none;}
+  article tr:hover td{background:#f8fafc;}
+
+  article hr{border:none;height:1px;background:#e2e8f0;margin:32px 0;}
+
+  article a{color:#7c3aed;font-weight:500;}
+  article a:hover{text-decoration:underline;}
+
+  article img{max-width:100%;border-radius:8px;margin:18px 0;}
+
+  /* 目录侧栏（简易）*/
+  .toc{background:#fef3c7;border:1px solid #fbbf24;border-radius:8px;
+       padding:14px 20px;margin:18px 0 28px;}
+  .toc-title{font-size:13px;font-weight:700;color:#92400e;margin-bottom:8px;
+             letter-spacing:1px;}
+  .toc ul{margin:4px 0 0 18px;}
+  .toc li{font-size:13.5px;margin:3px 0;}
+  .toc a{color:#78350f;}
+
+  footer{text-align:center;padding:24px;color:#94a3b8;font-size:12px;
+         border-top:1px solid #e2e8f0;background:#fff;margin-top:40px;}
+  footer a{color:#7c3aed;}
+</style>
+</head>
+<body>
+
+<nav class="topbar">
+  <div class="topbar-inner">
+    <a href="../index.html">🏠 综合站首页</a>
+    <span class="sep">›</span>
+    <a href="./index.html">运营中心</a>
+    
+    <span class="right">
+      <a class="source" href="README.md" title="查看 Markdown 源文件">📝 .md 源文件</a>
+    </span>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-inner">
+    <span class="hero-tag">OPERATIONS · README</span>
+    <h1>运营中心 · 使用说明</h1>
+    <div class="hero-meta">📁 . / README.md · 572 字</div>
+  </div>
+</header>
+
+<main class="container">
+  <article>
+<div class="toc">
+  <div class="toc-title">📑 目录</div>
+  <ul>
+    <li><a href="#_2">📁 目录结构</a></li>
+    <li><a href="#_3">🚀 快速开始</a></li>
+      <li><a href="#_4">想发一篇文章到公众号 / 知乎？</a></li>
+      <li><a href="#_5">想看运营战略？</a></li>
+      <li><a href="#_6">想给客户发资料？</a></li>
+    <li><a href="#_7">📊 内容数量统计</a></li>
+    <li><a href="#_8">🔗 关联资源</a></li>
+  </ul>
+</div>
+<h1 id="_1">运营中心 · 使用说明</h1>
+<blockquote>
+<p>这里集中存放保险业务的所有运营资料：战略文档、各渠道成稿、转换工具、客户分发材料。</p>
+</blockquote>
+<h2 id="_2">📁 目录结构</h2>
+<div class="codehilite"><pre><span></span><code>operations/
+├── index.html                    ← 运营中心 Dashboard（浏览器打开看）
+├── README.md                     ← 本文件
+│
+├── strategy/                     战略文档
+│   ├── 战略手册.md                完整版（57KB · 最重要）
+│   ├── 公众号6个月内容矩阵.md
+│   ├── 知乎6个月日历.md
+│   ├── 知乎发布SOP.md
+│   └── 朋友圈长线运营矩阵.md
+│
+├── published/                    已生成的成稿（按渠道分类）
+│   ├── wechat/   公众号 HTML + MD
+│   ├── zhihu/    知乎 MD
+│   ├── xhs/      小红书 MD
+│   └── pyq/      朋友圈（待生成）
+│
+├── tools/                        转换工具
+│   ├── convert_single.py         单篇文章 HTML → 公众号 + 知乎双格式
+│   ├── convert_v2.py             双版本文章（A+B 同主题）的转换器
+│   └── README.md                 工具详细说明
+│
+├── assets/                       客户分发资源
+│   ├── 港险投保30问.pdf            打印版
+│   ├── 港险投保30问_网页版.pdf       网页版
+│   ├── 港险投保30问.md             原稿
+│   └── 互联网中层家庭财务自查表.xlsx
+│
+└── reference/                    早期素材稿
+    └── 人设奠基长文.md
+</code></pre></div>
+
+<h2 id="_3">🚀 快速开始</h2>
+<h3 id="_4">想发一篇文章到公众号 / 知乎？</h3>
+<ol>
+<li>打开 <code>insurance-guide/articles/</code> 选一篇喜欢的文章 HTML</li>
+<li>在<strong>项目根目录</strong>运行：<br />
+<code>bash
+   python insurance-guide/operations/tools/convert_single.py "insurance-guide/articles/cpa-02-fulfillment-ratio.html" "港险分红实现率"</code></li>
+<li>项目根目录会生成 <code>公众号_港险分红实现率.html</code> 和 <code>知乎_港险分红实现率.md</code></li>
+<li>把它们移入 <code>operations/published/wechat/</code> 和 <code>operations/published/zhihu/</code></li>
+<li><strong>公众号</strong>：浏览器双击 HTML → Ctrl+A → Ctrl+C → 粘贴到公众号编辑器（样式全保留）</li>
+<li><strong>知乎</strong>：直接打开 MD，复制内容粘贴到知乎"写文章"</li>
+</ol>
+<h3 id="_5">想看运营战略？</h3>
+<p>直接打开 <code>strategy/战略手册.md</code> —— 这是最完整的核心文档。</p>
+<h3 id="_6">想给客户发资料？</h3>
+<p>去 <code>assets/</code> 拿 PDF 和 Excel，直接发即可。</p>
+<h2 id="_7">📊 内容数量统计</h2>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>数量</th>
+<th>路径</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>战略文档</td>
+<td>5</td>
+<td><code>strategy/</code></td>
+</tr>
+<tr>
+<td>公众号成稿</td>
+<td>3+</td>
+<td><code>published/wechat/</code></td>
+</tr>
+<tr>
+<td>知乎成稿</td>
+<td>2+</td>
+<td><code>published/zhihu/</code></td>
+</tr>
+<tr>
+<td>小红书成稿</td>
+<td>2 包</td>
+<td><code>published/xhs/</code></td>
+</tr>
+<tr>
+<td>客户分发资料</td>
+<td>4</td>
+<td><code>assets/</code></td>
+</tr>
+<tr>
+<td>转换工具</td>
+<td>2</td>
+<td><code>tools/</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="_8">🔗 关联资源</h2>
+<ul>
+<li><strong>保险综合站首页</strong>：<a href="../index.html">../index.html</a></li>
+<li><strong>保险全指南</strong>：<a href="../guide.html">../guide.html</a></li>
+<li><strong>专业文章库</strong>：<a href="../articles/v22-xhs-hub.html">../articles/v22-xhs-hub.html</a>（103 篇）</li>
+<li><strong>公众号文章模板库</strong>：<a href="../wechat-copy/">../wechat-copy/</a>（30 篇旧素材）</li>
+<li><strong>小红书模板库</strong>：<a href="../xhs-copy/">../xhs-copy/</a>（12 篇旧素材）</li>
+<li><strong>知乎模板库</strong>：<a href="../zhihu-md/">../zhihu-md/</a>（11 篇旧素材）</li>
+</ul>
+  </article>
+</main>
+
+<footer>
+  <div>运营中心 · 使用说明 · 运营中心 v3.1</div>
+  <div style="margin-top:8px;">
+    <a href="../index.html">综合站首页</a> · 
+    <a href="./index.html">运营中心</a> · 
+    <a href="README.md">📝 Markdown 源</a>
+  </div>
+</footer>
+
+</body>
+</html>

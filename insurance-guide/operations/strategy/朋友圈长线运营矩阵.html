@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>朋友圈长线运营矩阵</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+       color:#1e293b;background:#f8fafc;line-height:1.7;-webkit-font-smoothing:antialiased;}
+  a{color:#1a56db;text-decoration:none;}
+  a:hover{text-decoration:underline;}
+
+  .topbar{background:#fff;padding:14px 24px;border-bottom:1px solid #e2e8f0;
+          position:sticky;top:0;z-index:10;}
+  .topbar-inner{max-width:880px;margin:0 auto;display:flex;align-items:center;gap:12px;
+                font-size:14px;}
+  .topbar a{color:#475569;font-weight:500;}
+  .topbar a:hover{color:#f59e0b;text-decoration:none;}
+  .topbar .here{color:#f59e0b;font-weight:700;}
+  .topbar .sep{color:#cbd5e1;}
+  .topbar .right{margin-left:auto;font-size:12px;color:#94a3b8;}
+  .topbar .source{padding:4px 10px;border:1px solid #e2e8f0;border-radius:6px;
+                  font-size:12px;color:#64748b;}
+  .topbar .source:hover{background:#f1f5f9;color:#f59e0b;}
+
+  .hero{background:linear-gradient(135deg,#92400e 0%,#f59e0b 100%);
+        color:#fff;padding:50px 24px 60px;}
+  .hero-inner{max-width:880px;margin:0 auto;}
+  .hero-tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:1.5px;
+            background:rgba(255,255,255,0.18);padding:5px 12px;border-radius:12px;
+            margin-bottom:14px;}
+  .hero h1{font-size:34px;font-weight:800;margin-bottom:10px;line-height:1.25;
+           letter-spacing:-0.5px;}
+  .hero-meta{font-size:13px;opacity:0.88;font-family:Consolas,Monaco,monospace;
+             margin-top:14px;background:rgba(0,0,0,0.2);padding:5px 12px;
+             border-radius:6px;display:inline-block;}
+
+  .container{max-width:880px;margin:-30px auto 0;padding:0 24px 80px;position:relative;z-index:2;}
+
+  article{background:#fff;border-radius:12px;padding:48px 56px;
+          border:1px solid #e2e8f0;box-shadow:0 4px 16px rgba(15,23,42,0.04);}
+  @media(max-width:768px){
+    article{padding:32px 24px;}
+    .hero h1{font-size:26px;}
+  }
+
+  article h1{font-size:30px;font-weight:800;color:#0f172a;margin:32px 0 16px;
+             padding-bottom:12px;border-bottom:2px solid #f59e0b;line-height:1.3;}
+  article h1:first-child{margin-top:0;}
+  article h2{font-size:24px;font-weight:800;color:#0f172a;margin:36px 0 14px;
+             padding-left:14px;border-left:4px solid #f59e0b;line-height:1.3;}
+  article h3{font-size:19px;font-weight:700;color:#1e293b;margin:28px 0 10px;line-height:1.4;}
+  article h4{font-size:16px;font-weight:700;color:#334155;margin:22px 0 8px;}
+  article h5,article h6{font-size:15px;font-weight:700;color:#475569;margin:18px 0 6px;}
+
+  article p{margin:14px 0;color:#334155;font-size:15px;line-height:1.85;}
+  article strong{color:#0f172a;font-weight:700;}
+  article em{color:#475569;}
+
+  article ul,article ol{margin:14px 0 14px 24px;}
+  article li{margin:6px 0;color:#334155;font-size:15px;line-height:1.8;}
+  article li::marker{color:#f59e0b;}
+  article ul ul,article ol ol,article ul ol,article ol ul{margin:6px 0 6px 24px;}
+
+  article blockquote{margin:18px 0;padding:14px 20px;background:#f8fafc;
+                     border-left:3px solid #f59e0b;border-radius:0 8px 8px 0;color:#475569;}
+  article blockquote p{margin:6px 0;}
+
+  article code{background:#f1f5f9;color:#f59e0b;padding:2px 7px;
+               border-radius:4px;font-family:Consolas,"SF Mono",Monaco,monospace;
+               font-size:13.5px;font-weight:500;}
+  article pre{background:#0f172a;color:#e2e8f0;padding:18px 22px;border-radius:8px;
+              overflow-x:auto;margin:18px 0;font-family:Consolas,"SF Mono",Monaco,monospace;
+              font-size:13.5px;line-height:1.6;}
+  article pre code{background:transparent;color:inherit;padding:0;font-size:inherit;}
+
+  article table{width:100%;border-collapse:collapse;margin:18px 0;
+                font-size:14px;background:#fff;border-radius:8px;overflow:hidden;
+                box-shadow:0 0 0 1px #e2e8f0;}
+  article th{background:#f1f5f9;color:#0f172a;font-weight:700;padding:11px 14px;
+             text-align:left;font-size:13px;border-bottom:1px solid #e2e8f0;}
+  article td{padding:10px 14px;border-bottom:1px solid #f1f5f9;color:#334155;
+             vertical-align:top;}
+  article tr:last-child td{border-bottom:none;}
+  article tr:hover td{background:#f8fafc;}
+
+  article hr{border:none;height:1px;background:#e2e8f0;margin:32px 0;}
+
+  article a{color:#f59e0b;font-weight:500;}
+  article a:hover{text-decoration:underline;}
+
+  article img{max-width:100%;border-radius:8px;margin:18px 0;}
+
+  /* 目录侧栏（简易）*/
+  .toc{background:#fef3c7;border:1px solid #fbbf24;border-radius:8px;
+       padding:14px 20px;margin:18px 0 28px;}
+  .toc-title{font-size:13px;font-weight:700;color:#92400e;margin-bottom:8px;
+             letter-spacing:1px;}
+  .toc ul{margin:4px 0 0 18px;}
+  .toc li{font-size:13.5px;margin:3px 0;}
+  .toc a{color:#78350f;}
+
+  footer{text-align:center;padding:24px;color:#94a3b8;font-size:12px;
+         border-top:1px solid #e2e8f0;background:#fff;margin-top:40px;}
+  footer a{color:#f59e0b;}
+</style>
+</head>
+<body>
+
+<nav class="topbar">
+  <div class="topbar-inner">
+    <a href="../../index.html">🏠 综合站首页</a>
+    <span class="sep">›</span>
+    <a href="../index.html">运营中心</a>
+    <span class="sep">›</span><span class="here">strategy/</span>
+    <span class="right">
+      <a class="source" href="朋友圈长线运营矩阵.md" title="查看 Markdown 源文件">📝 .md 源文件</a>
+    </span>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-inner">
+    <span class="hero-tag">OPERATIONS · 朋友圈</span>
+    <h1>朋友圈长线运营矩阵</h1>
+    <div class="hero-meta">📁 strategy / 朋友圈长线运营矩阵.md · 4583 字</div>
+  </div>
+</header>
+
+<main class="container">
+  <article>
+<div class="toc">
+  <div class="toc-title">📑 目录</div>
+  <ul>
+    <li><a href="#_1">第一章 战略定位重构</a></li>
+      <li><a href="#11-vs">1.1 旧定位 vs 新定位</a></li>
+      <li><a href="#12">1.2 五大底层逻辑（为何朋友圈是被低估的资产）</a></li>
+    <li><a href="#_2">第二章 三维内容矩阵</a></li>
+      <li><a href="#21-a-702010">2.1 维度 A · 内容类型（70/20/10 法则）</a></li>
+      <li><a href="#22-b">2.2 维度 B · 时间节奏</a></li>
+      <li><a href="#23-c">2.3 维度 C · 阶段性任务（与手册三年路线图对齐）</a></li>
+    <li><a href="#_5">第三章 反模式红线（绝对禁区）</a></li>
+    <li><a href="#30">第四章 首月 30 条朋友圈选题日历</a></li>
+      <li><a href="#week-1">Week 1 · 人设确立（基建期开局）</a></li>
+      <li><a href="#week-2">Week 2 · 视角与深度</a></li>
+      <li><a href="#week-3">Week 3 · 学习与机构感</a></li>
+      <li><a href="#week-4">Week 4 · 案例与导流</a></li>
+      <li><a href="#10_1">备用池（10 条 — 用于机会窗口或替换）</a></li>
+    <li><a href="#_6">第五章 高频可复用文案模板</a></li>
+      <li><a href="#1">模板 1 · 建模工作流型</a></li>
+      <li><a href="#2">模板 2 · 冷峻点评型</a></li>
+      <li><a href="#3_1">模板 3 · 学习沉淀型</a></li>
+      <li><a href="#4">模板 4 · 客户致谢型（深度脱敏）</a></li>
+      <li><a href="#5">模板 5 · 内容预告型</a></li>
+    <li><a href="#_7">第六章 度量与迭代</a></li>
+      <li><a href="#61-kpi">6.1 长线 KPI（季度复盘）</a></li>
+      <li><a href="#62">6.2 内容迭代机制</a></li>
+      <li><a href="#63">6.3 工具与执行清单</a></li>
+    <li><a href="#_8">第七章 与战略手册的衔接</a></li>
+      <li><a href="#71-v20">7.1 与 v2.0 手册的修订对应关系</a></li>
+      <li><a href="#72-32">7.2 三个铁律（与手册第 3.2 节铁律融合后的最终版）</a></li>
+  </ul>
+</div>
+<h1 id="v10">朋友圈长线运营矩阵 v1.0</h1>
+<blockquote>
+<p>《内向型 CPA · 香港高净值财富架构师 战略执行手册 v2.0》补充专章</p>
+<p><strong>战略定位升级</strong>：朋友圈不再是「转化触发器」（短期作用），而是 <strong>私域人格资产沉淀地（长线复利）</strong>。</p>
+<p><strong>核心命题</strong>：在香港保险这个高客单价 + 长决策周期 + 强信任驱动的赛道，朋友圈是公域阵地无法替代的「沉默简历 + 决策陪伴 + 社交证明发酵地」。</p>
+</blockquote>
+<hr />
+<h2 id="_1">第一章 战略定位重构</h2>
+<h3 id="11-vs">1.1 旧定位 vs 新定位</h3>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>旧定位（手册 v2.0 第 3.2 节）</th>
+<th>新定位（本专章）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>角色</td>
+<td>转化触发器</td>
+<td>私域人格资产沉淀地</td>
+</tr>
+<tr>
+<td>时间属性</td>
+<td>短期、即时</td>
+<td>长尾、复利</td>
+</tr>
+<tr>
+<td>内容比例</td>
+<td>100% 专业</td>
+<td>70% 专业 + 20% 信任 + 10% 人格</td>
+</tr>
+<tr>
+<td>频率</td>
+<td>每周 3-4 条</td>
+<td>节奏化（锚点 + 机会窗口）</td>
+</tr>
+<tr>
+<td>评价指标</td>
+<td>是否触发咨询</td>
+<td>「被翻看时」的可信度沉淀</td>
+</tr>
+</tbody>
+</table>
+<h3 id="12">1.2 五大底层逻辑（为何朋友圈是被低估的资产）</h3>
+<ol>
+<li><strong>触达成本几乎为零</strong>：不像公域要算法分发，朋友圈对「已加微信的高意向人群」是 100% 触达</li>
+<li><strong>被翻看资产</strong>：新好友会回溯你 30-90 天甚至 1 年的历史朋友圈，等于「时间序列的可信度证明」</li>
+<li><strong>决策周期陪伴</strong>：高净值客户从认识 → 签约平均 6-18 个月，朋友圈是这期间唯一的高频持续触点</li>
+<li><strong>社交证明发酵</strong>：现有客户的点赞/评论 → 潜在客户隐性背书 → 「他都找你做了，我也可以」的从众效应</li>
+<li><strong>人格立体化</strong>：公域只能展示「专业人设」，朋友圈可以适度展示「克制的温度」，二者互补</li>
+</ol>
+<blockquote>
+<p><strong>关键认知</strong>：高净值客户加你微信后的第一个动作不是看你公众号文章，而是 <strong>翻你的历史朋友圈</strong>。</p>
+</blockquote>
+<hr />
+<h2 id="_2">第二章 三维内容矩阵</h2>
+<h3 id="21-a-702010">2.1 维度 A · 内容类型（70/20/10 法则）</h3>
+<h4 id="70">70% 专业型（沿用手册三类 + 扩展）</h4>
+<table>
+<thead>
+<tr>
+<th>子类</th>
+<th>形式</th>
+<th>范例（不直接发，仅作意象）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>建模工作流</strong></td>
+<td>凌晨/深夜的 Excel 截图（隐去客户信息）</td>
+<td>「凌晨 2 点，第 7 版压力测试模型，把单一股票 RSU 腰斩 + 重疾双击的情景跑了一遍。」</td>
+</tr>
+<tr>
+<td><strong>学习沉淀</strong></td>
+<td>安盛闭门培训 / STEP / 监管研讨笔记</td>
+<td>「STEP Diploma Module 2 第 3 章笔记：保单作为信托资产时的法律边界。」</td>
+</tr>
+<tr>
+<td><strong>冷峻点评</strong></td>
+<td>当日财经新闻 1 句 CPA 视角</td>
+<td>「某大行下调全球分红实现率预期 3pp。换算到 30 年长期 IRR，约 0.6%。这就是为什么我从不在前 5 年劝退保。」</td>
+</tr>
+<tr>
+<td><strong>数据派研究</strong></td>
+<td>自制对比表格 / 历史曲线</td>
+<td>「四公司主力储蓄险过去 5 年实际分红实现率横评，数据来源：各公司官网披露。」</td>
+</tr>
+<tr>
+<td><strong>合规科普</strong></td>
+<td>HKIA / 内地税务政策一句话解读</td>
+<td>「CRS 申报现金价值 ≠ 征税。这两个概念被混淆 7 年了。」</td>
+</tr>
+</tbody>
+</table>
+<h4 id="20">20% 信任型（新增 — 社交证明发酵）</h4>
+<table>
+<thead>
+<tr>
+<th>子类</th>
+<th>形式</th>
+<th>合规边界</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>客户致谢截图</strong></td>
+<td>文字对话脱敏（去名字/金额/公司）</td>
+<td>仅展示「专业认可」类话语，不展示「成交」类话语</td>
+</tr>
+<tr>
+<td><strong>机构站台</strong></td>
+<td>安盛奖项、邀约出席、媒体引用</td>
+<td>必须客观陈述，不得自我神化</td>
+</tr>
+<tr>
+<td><strong>行业认可</strong></td>
+<td>同业律师、税务师、私行的转介或互动</td>
+<td>仅露面、不留联系方式</td>
+</tr>
+<tr>
+<td><strong>案例片段（深度脱敏）</strong></td>
+<td>行业 + 痛点 + 方案骨架，不出数字</td>
+<td>必须改名、改地点、改具体数字，且征得客户口头同意</td>
+</tr>
+<tr>
+<td><strong>预告类</strong></td>
+<td>「下周公众号会写……」</td>
+<td>用以触发期待，导流公域深度内容</td>
+</tr>
+</tbody>
+</table>
+<h4 id="10">10% 人格型（新增 — 克制的真实感）</h4>
+<table>
+<thead>
+<tr>
+<th>子类</th>
+<th>可发</th>
+<th>严禁</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>运动打卡</strong></td>
+<td>跑步配速、健身房一角、登山轮廓</td>
+<td>健身房自拍、肌肉炫耀</td>
+</tr>
+<tr>
+<td><strong>阅读笔记</strong></td>
+<td>财务/法律/历史/哲学书摘</td>
+<td>鸡汤书、成功学</td>
+</tr>
+<tr>
+<td><strong>调研路上</strong></td>
+<td>香港中环、深圳福田、机场剪影</td>
+<td>头等舱、奢侈品酒店、米其林</td>
+</tr>
+<tr>
+<td><strong>季节意象</strong></td>
+<td>雨夜、晨光、咖啡馆一隅</td>
+<td>自拍、家庭、消费符号</td>
+</tr>
+<tr>
+<td><strong>观影/听乐</strong></td>
+<td>纪录片、古典乐、严肃文艺</td>
+<td>流量综艺、流量明星</td>
+</tr>
+</tbody>
+</table>
+<h3 id="22-b">2.2 维度 B · 时间节奏</h3>
+<h4 id="_3">黄金时段（按目标人群作息）</h4>
+<table>
+<thead>
+<tr>
+<th>时段</th>
+<th>适配内容</th>
+<th>心理动机</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>7:30 – 8:30</td>
+<td>财经点评 / 政策解读</td>
+<td>通勤刷机，吸收信息</td>
+</tr>
+<tr>
+<td>12:00 – 13:00</td>
+<td>学习笔记 / 数据派</td>
+<td>午休轻阅读</td>
+</tr>
+<tr>
+<td>21:00 – 22:30</td>
+<td>建模工作流 / 案例片段</td>
+<td>睡前深度内容</td>
+</tr>
+</tbody>
+</table>
+<h4 id="3">锚点节奏（每周固定 3 条 — 不可中断）</h4>
+<table>
+<thead>
+<tr>
+<th>时间</th>
+<th>内容类型</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>周一 7:30</td>
+<td>上周财经事件冷峻点评</td>
+<td>树立「视角」标签</td>
+</tr>
+<tr>
+<td>周三 21:30</td>
+<td>建模/学习类沉淀</td>
+<td>树立「专业」标签</td>
+</tr>
+<tr>
+<td>周日 21:00</td>
+<td>本周深度内容预告（导流公众号/知乎）</td>
+<td>树立「持续输出」标签</td>
+</tr>
+</tbody>
+</table>
+<h4 id="_4">机会窗口（不定期但必发）</h4>
+<ul>
+<li>重要政策落地（CRS 升级、内地税法修订、遗产税进展）当日 1 条冷峻解读</li>
+<li>重大行业事件（某公司分红实现率公布、保监局新规）48 小时内 1 条数据派</li>
+<li>客户保单周年 / 理赔到账（脱敏、征求同意）— 每年不超过 4 条</li>
+</ul>
+<h3 id="23-c">2.3 维度 C · 阶段性任务（与手册三年路线图对齐）</h3>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>月份</th>
+<th>朋友圈核心任务</th>
+<th>内容比例</th>
+<th>频率</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>基建期</td>
+<td>M1 – M3</td>
+<td><strong>打底铺垫</strong>：建立「专业且持续学习」的初始印象</td>
+<td>90% 专业 + 10% 人格</td>
+<td>每周 3 条</td>
+</tr>
+<tr>
+<td>跑通期</td>
+<td>M4 – M12</td>
+<td><strong>信任沉淀</strong>：穿插脱敏案例片段、客户对话截图、行业认可</td>
+<td>70% 专业 + 20% 信任 + 10% 人格</td>
+<td>每周 3-4 条</td>
+</tr>
+<tr>
+<td>垂类霸权期</td>
+<td>M13 – M24</td>
+<td><strong>案例武器化</strong>：每月至少 1 条重磅案例预告 + 公众号深度长文联动</td>
+<td>60% 专业 + 30% 信任 + 10% 人格</td>
+<td>每周 3 条</td>
+</tr>
+<tr>
+<td>机构生态期</td>
+<td>M25+</td>
+<td><strong>稀缺性管理</strong>：故意降频，营造「档期紧张的咨询专家」气质</td>
+<td>50% 专业 + 40% 信任 + 10% 人格</td>
+<td>每周 2 条</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="_5">第三章 反模式红线（绝对禁区）</h2>
+<table>
+<thead>
+<tr>
+<th>红线</th>
+<th>为什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>直接发产品/计划书/IRR 截图</strong></td>
+<td>把朋友圈降维成「微商」的最快方式</td>
+</tr>
+<tr>
+<td><strong>促单/限时/返佣暗示</strong></td>
+<td>踩 HKIA 合规红线（手册第 7.1 节）</td>
+</tr>
+<tr>
+<td><strong>晒消费/晒娃/晒情绪</strong></td>
+<td>高净值客户最反感的画像：靠卖保险暴富的炫耀型代理人</td>
+</tr>
+<tr>
+<td><strong>截图客户身份信息</strong></td>
+<td>即使打码也不要，一旦被截图二次传播，职业生涯终结</td>
+</tr>
+<tr>
+<td><strong>群发/复制粘贴感</strong></td>
+<td>高净值客户对「批量话术」的识别度极高，发现即拉黑</td>
+</tr>
+<tr>
+<td><strong>诋毁同业/具体公司</strong></td>
+<td>横评只摆数据，不下价值判断（手册 7.1 节）</td>
+</tr>
+<tr>
+<td><strong>每天发超过 3 条</strong></td>
+<td>「刷屏感」直接抵消所有专业积累</td>
+</tr>
+<tr>
+<td><strong>早 7 点前 / 晚 23 点后发布</strong></td>
+<td>打扰感强，且暴露「卖家焦虑」</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="30">第四章 首月 30 条朋友圈选题日历</h2>
+<blockquote>
+<p>可直接复制使用，按周节奏分布。每条均提供「类型标签 + 文案骨架 + 配图建议」。</p>
+</blockquote>
+<h3 id="week-1">Week 1 · 人设确立（基建期开局）</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>周</th>
+<th>时段</th>
+<th>类型</th>
+<th>文案骨架</th>
+<th>配图建议</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>一 7:30</td>
+<td>冷峻点评</td>
+<td>「人民币兑美元 7.30 关口反复，过去 10 年高净值家庭的资产配置真问题不是『换不换』，而是『何种法律结构持有』。」</td>
+<td>一张 USD/CNH 长期走势图</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>二 21:30</td>
+<td>学习沉淀</td>
+<td>「重读《香港保险业条例》第 41 章。第 23 条关于受益人指定不可撤销的边界——这是太多人用错信托结构的根源。」</td>
+<td>条例书页一角</td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td>三 21:30</td>
+<td>建模工作流</td>
+<td>「为客户跑第 4 版现金流模型。新增『单一股票 -50% + 重疾』双击情景。家庭流动性安全垫从 18 个月降到 9 个月。」</td>
+<td>Excel 局部截图（公式可见、数据涂色）</td>
+<td></td>
+</tr>
+<tr>
+<td>4</td>
+<td>五 12:00</td>
+<td>数据派</td>
+<td>「四公司主力储蓄险 2019-2024 实际分红实现率横评（数据来源：各公司官网披露）。每年公布的分红实现率不等于 IRR——把这两件事讲清楚需要 5000 字。」</td>
+<td>自制对比表格</td>
+<td></td>
+</tr>
+<tr>
+<td>5</td>
+<td>日 21:00</td>
+<td>内容预告</td>
+<td>「本周公众号将发：《CRS 申报现金价值 ≠ 征税：被混淆 7 年的两个概念》。」</td>
+<td>文章封面</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="week-2">Week 2 · 视角与深度</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>周</th>
+<th>时段</th>
+<th>类型</th>
+<th>文案骨架</th>
+<th>配图建议</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>6</td>
+<td>一 7:30</td>
+<td>冷峻点评</td>
+<td>「某大行下调长期分红假设 3pp。换算到 30 年 IRR 约 -0.6%。这就是为什么我从不在前 5 年劝退保。」</td>
+<td>假设表 vs 实现率对比</td>
+<td></td>
+</tr>
+<tr>
+<td>7</td>
+<td>二 22:00</td>
+<td>阅读笔记</td>
+<td>「在读 Michael Pompian《Behavioral Finance and Wealth Management》。第 7 章『锚定偏差』——为什么客户总盯着保单第 30 年的非保证收益。」</td>
+<td>书页 + 咖啡</td>
+<td></td>
+</tr>
+<tr>
+<td>8</td>
+<td>三 21:30</td>
+<td>建模工作流</td>
+<td>「第 9 版压力测试。把客户 RSU 行权时点从 2026 推迟到 2028，IIT 节税空间扩大 47%。但前提是企业不会在 2027 之前 IPO。」</td>
+<td>Excel 公式局部</td>
+<td></td>
+</tr>
+<tr>
+<td>9</td>
+<td>六 8:30</td>
+<td>调研意象</td>
+<td>「中环德辅道，又一次。每月都来，每次问的问题都更深一层。」</td>
+<td>中环街景剪影</td>
+<td></td>
+</tr>
+<tr>
+<td>10</td>
+<td>日 21:00</td>
+<td>内容预告</td>
+<td>「下周知乎万字研报：《港险前 5 年退保本金折损率实测——主动暴露劣势》。」</td>
+<td>知乎草稿截图</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="week-3">Week 3 · 学习与机构感</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>周</th>
+<th>时段</th>
+<th>类型</th>
+<th>文案骨架</th>
+<th>配图建议</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>11</td>
+<td>一 7:30</td>
+<td>政策解读</td>
+<td>「内地最高法院最新判例：企业主连带担保被执行时，配偶名下的香港保单现金价值是否构成共同财产？答案：取决于投保资金来源和受益人指定。」</td>
+<td>判决书摘要</td>
+<td></td>
+</tr>
+<tr>
+<td>12</td>
+<td>二 21:30</td>
+<td>学习沉淀</td>
+<td>「STEP Diploma 第 3 模块第 5 章：保单嵌套信托的税务穿透。这是大陆 CPA 转 STEP 最绕不开的一关。」</td>
+<td>课件局部</td>
+<td></td>
+</tr>
+<tr>
+<td>13</td>
+<td>三 12:00</td>
+<td>数据派</td>
+<td>「过去 10 年，香港某主力储蓄险红利公告 vs 实际派发的方差是 ±2.1%。这个数字比 IRR 本身更值得研究。」</td>
+<td>历史曲线图</td>
+<td></td>
+</tr>
+<tr>
+<td>14</td>
+<td>四 21:30</td>
+<td>行业认可</td>
+<td>「与 X 律师所合伙人讨论企业主公私分离架构。律师做股权和债务，我做保单和现金流，互不越界。」</td>
+<td>仅文字，不带头像</td>
+<td></td>
+</tr>
+<tr>
+<td>15</td>
+<td>日 21:00</td>
+<td>内容预告</td>
+<td>「下周公众号：《一位 D 轮准 IPO 高管的期权行权税务规划全过程》（深度脱敏）。」</td>
+<td>文章封面</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="week-4">Week 4 · 案例与导流</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>周</th>
+<th>时段</th>
+<th>类型</th>
+<th>文案骨架</th>
+<th>配图建议</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>16</td>
+<td>一 7:30</td>
+<td>冷峻点评</td>
+<td>「某省遗产税立法讨论再起。即便最终不落地，倒逼出来的『提前 10 年传承架构』需求是真实的。」</td>
+<td>政策动态截图</td>
+<td></td>
+</tr>
+<tr>
+<td>17</td>
+<td>二 22:00</td>
+<td>阅读笔记</td>
+<td>「在读《Wealth, Actually》。第 4 章谈 Family Governance——『传承的不是钱，是规则』。」</td>
+<td>书页</td>
+<td></td>
+</tr>
+<tr>
+<td>18</td>
+<td>三 21:30</td>
+<td>建模工作流</td>
+<td>「最终交付版第 12 稿。客户的家庭资产负债表从 4 页扩展到 9 页，多出来的 5 页是『或有负债』。」</td>
+<td>Excel 目录页</td>
+<td></td>
+</tr>
+<tr>
+<td>19</td>
+<td>五 12:00</td>
+<td>客户致谢（脱敏）</td>
+<td>「『你给我的不是产品建议，是一份让我睡得着觉的资产负债表。』——这是我做这行最希望听到的一句话。」</td>
+<td>仅文字</td>
+<td></td>
+</tr>
+<tr>
+<td>20</td>
+<td>日 21:00</td>
+<td>月度小结</td>
+<td>「这个月跑了 23 版模型，写了 3 篇深度长文，见了 5 位准客户。下个月继续。」</td>
+<td>月历或台灯一角</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="10_1">备用池（10 条 — 用于机会窗口或替换）</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>类型</th>
+<th>文案骨架</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>21</td>
+<td>政策快评</td>
+<td>「CRS 2.0 草案出台。关注三件事：现金价值阈值、报告频率、协议国扩容。」</td>
+</tr>
+<tr>
+<td>22</td>
+<td>数据派</td>
+<td>「过去 20 年港币兑美元波动区间 7.75-7.85，这是高净值美元配置的『准锚定』基础。」</td>
+</tr>
+<tr>
+<td>23</td>
+<td>学习笔记</td>
+<td>「重读 IFRS 17。保险合同负债的『风险调整』如何反向影响保险公司分红能力。」</td>
+</tr>
+<tr>
+<td>24</td>
+<td>建模碎片</td>
+<td>「把保单融资（Premium Financing）的利率敏感度做了一个 3D 曲面图。客户秒懂。」</td>
+</tr>
+<tr>
+<td>25</td>
+<td>行业事件</td>
+<td>「香港保监局更新合规指引第 X 条。对内地客户赴港投保的影响：仅在流程要件，不在产品准入。」</td>
+</tr>
+<tr>
+<td>26</td>
+<td>调研意象</td>
+<td>「金钟太古广场，等一位从北京飞过来的客户。她想做的不是产品，是『退路结构』。」</td>
+</tr>
+<tr>
+<td>27</td>
+<td>阅读笔记</td>
+<td>「在读 Ray Dalio《Principles for Dealing with the Changing World Order》。这本书对家族财富的真正意义是『百年视角』。」</td>
+</tr>
+<tr>
+<td>28</td>
+<td>客户对话碎片</td>
+<td>「客户问：『你为什么不像别的代理人那样劝我尽快签？』我答：『因为我知道这份保单要陪你 30 年。』」</td>
+</tr>
+<tr>
+<td>29</td>
+<td>数据派</td>
+<td>「重疾险『多次赔付』在精算端的真假：把 6 家公司的疾病组别拆开看，结论会颠覆。」</td>
+</tr>
+<tr>
+<td>30</td>
+<td>视角宣言</td>
+<td>「我不是保险代理人。我是用 CPA 视角、上市公司财务标准，为高净值家庭做资产负债表重构的财富工程师。」</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="_6">第五章 高频可复用文案模板</h2>
+<h3 id="1">模板 1 · 建模工作流型</h3>
+<div class="codehilite"><pre><span></span><code>【时间】+【动作】+【数据点】+【冷峻收尾】
+
+凌晨 X 点，第 N 版 [模型类型]。
+新增 / 调整了 [具体维度]。
+关键数据：[一个具体数字 or 一个对比]。
+[一句不带情绪的判断 / 自省]。
+</code></pre></div>
+
+<p><strong>范例</strong>：</p>
+<blockquote>
+<p>凌晨 2 点，第 9 版压力测试模型。新增「单一股票 -50% + 重疾」双击情景。家庭流动性安全垫从 18 个月降到 9 个月。这就是为什么单一股票配置上限是 30%。</p>
+</blockquote>
+<h3 id="2">模板 2 · 冷峻点评型</h3>
+<div class="codehilite"><pre><span></span><code>【事件简述】+【CPA/精算视角拆解】+【对客户的真实影响】
+
+[事件，1 句话]。
+换算到 [财务/精算维度]，约 [具体数字]。
+对 [目标人群] 意味着 [一个反直觉的结论]。
+</code></pre></div>
+
+<p><strong>范例</strong>：</p>
+<blockquote>
+<p>某大行下调长期分红假设 3pp。换算到 30 年 IRR，约 -0.6%。对正在比较『分红实现率』的客户意味着：不是公司不行，是行业整体在向更保守的精算前提回归。</p>
+</blockquote>
+<h3 id="3_1">模板 3 · 学习沉淀型</h3>
+<div class="codehilite"><pre><span></span><code>【场景】+【知识点】+【与你专业的连接】
+
+[阅读 / 培训 / 课程，地点或时间]。
+今天看到：[一个具体知识点]。
+这是 [大陆 CPA / 港险代理人 / 普通顾问] 最容易忽略的 [缝隙 / 边界]。
+</code></pre></div>
+
+<p><strong>范例</strong>：</p>
+<blockquote>
+<p>STEP Diploma 第 3 模块第 5 章：保单嵌套信托的税务穿透。这是大陆 CPA 转 STEP 最绕不开的一关——也是『保单 ≠ 信托』的法律边界所在。</p>
+</blockquote>
+<h3 id="4">模板 4 · 客户致谢型（深度脱敏）</h3>
+<div class="codehilite"><pre><span></span><code>【一句客户原话】+【不评论、不解释、不延伸】
+
+「[客户原话，仅展示专业认可，不展示成交]。」
+——[行业 + 角色，去身份化]
+</code></pre></div>
+
+<p><strong>范例</strong>：</p>
+<blockquote>
+<p>「你给我的不是产品建议，是一份让我睡得着觉的资产负债表。」<br />
+——某 TMT 上市公司财务负责人</p>
+</blockquote>
+<h3 id="5">模板 5 · 内容预告型</h3>
+<div class="codehilite"><pre><span></span><code>【下周 / 本月将发】+【题目】+【一句钩子】
+
+下周 [公众号 / 知乎] 将发：
+《[具体题目]》
+核心问题：[一句反直觉的钩子]。
+</code></pre></div>
+
+<p><strong>范例</strong>：</p>
+<blockquote>
+<p>下周知乎万字研报：《港险前 5 年退保本金折损率实测——主动暴露劣势》。核心问题：为什么我会主动告诉客户这份保单的劣势？因为这是建立长期信任的唯一方式。</p>
+</blockquote>
+<hr />
+<h2 id="_7">第六章 度量与迭代</h2>
+<h3 id="61-kpi">6.1 长线 KPI（季度复盘）</h3>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>目标</th>
+<th>度量方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>月新增好友</td>
+<td>M1-M3: ≥ 30；M4-M12: ≥ 80；M13+: ≥ 150</td>
+<td>微信通讯录差值</td>
+</tr>
+<tr>
+<td>朋友圈内容触达率</td>
+<td>主动评论/私信 ≥ 加好友数的 5%</td>
+<td>手工统计</td>
+</tr>
+<tr>
+<td>「翻看历史朋友圈后主动发起咨询」占比</td>
+<td>M6 起 ≥ 20%</td>
+<td>KYC 问卷新增字段：「您是从哪条朋友圈/文章对我产生信任的？」</td>
+</tr>
+<tr>
+<td>90 天内删除/屏蔽率</td>
+<td>&lt; 3%</td>
+<td>季度核对</td>
+</tr>
+<tr>
+<td>客户首次咨询前的「关注期长度」</td>
+<td>M12 起平均 ≥ 90 天</td>
+<td>加好友日期 vs 首次咨询日期</td>
+</tr>
+</tbody>
+</table>
+<h3 id="62">6.2 内容迭代机制</h3>
+<ul>
+<li><strong>每月最后一个周日</strong>：复盘当月 12-16 条朋友圈，标记「点赞/评论/私信」最高的 3 条 → 抽象出共性 → 进入下月模板库</li>
+<li><strong>每季度</strong>：删除前 90 天内表现末尾 20% 的朋友圈（保持「时间线质量」）</li>
+<li><strong>每年</strong>：对比当年与上一年的 KPI，调整 70/20/10 比例与节奏</li>
+</ul>
+<h3 id="63">6.3 工具与执行清单</h3>
+<ul>
+<li>[ ] 朋友圈选题日历（Notion / 飞书表格 — 每月初规划下月 12-16 条）</li>
+<li>[ ] 配图素材库（建模截图 / 书摘 / 街景 / 培训现场 — 按类别归档）</li>
+<li>[ ] 客户致谢/对话脱敏库（Word 文档 — 每出现 1 条立即归档，征求同意后才用）</li>
+<li>[ ] 政策快评模板（财政部 / HKIA / 最高法院 / 大行季度报告 — RSS 订阅 + 当日草稿）</li>
+<li>[ ] 月度复盘表（点赞数 / 评论数 / 私信触发数 / 加好友数）</li>
+</ul>
+<hr />
+<h2 id="_8">第七章 与战略手册的衔接</h2>
+<h3 id="71-v20">7.1 与 v2.0 手册的修订对应关系</h3>
+<table>
+<thead>
+<tr>
+<th>手册原节</th>
+<th>修订建议</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>第 3.2 节「朋友圈（转化触发器）」</td>
+<td>标题改为「朋友圈（私域人格资产沉淀地）」，正文替换为本专章第二章三维矩阵</td>
+</tr>
+<tr>
+<td>第 6.1 节 第二阶段 KPI</td>
+<td>新增「朋友圈月新增好友 ≥ 80」「关注期 ≥ 90 天客户占比 ≥ 30%」</td>
+</tr>
+<tr>
+<td>第 7.1 节 合规红线表</td>
+<td>新增「朋友圈不得出现产品/计划书/IRR 截图」「朋友圈案例必须三层脱敏」</td>
+</tr>
+<tr>
+<td>第 8 周 Week 4 启动清单</td>
+<td>「朋友圈开始克制版运营」改为「朋友圈按本专章三维矩阵开始基建期节奏（每周 3 条锚点）」</td>
+</tr>
+</tbody>
+</table>
+<h3 id="72-32">7.2 三个铁律（与手册第 3.2 节铁律融合后的最终版）</h3>
+<ol>
+<li><strong>克制 + 高级感</strong>：绝不发鸡汤、晒娃、晒奢、晒情绪</li>
+<li><strong>70/20/10 法则</strong>：专业 / 信任 / 人格三层比例不可失衡</li>
+<li><strong>复利视角</strong>：每条朋友圈都在为「3 年后某个翻看历史的潜在客户」而写</li>
+</ol>
+<hr />
+<blockquote>
+<p>本专章为内部作战文档，请勿外发。所有内容遵循 HKIA 合规要求与跨境销售法律边界。</p>
+<p>与《战略手册 v2.0》并行使用，每年至少回顾迭代 1 次。</p>
+</blockquote>
+  </article>
+</main>
+
+<footer>
+  <div>朋友圈长线运营矩阵 · 运营中心 v3.1</div>
+  <div style="margin-top:8px;">
+    <a href="../../index.html">综合站首页</a> · 
+    <a href="../index.html">运营中心</a> · 
+    <a href="朋友圈长线运营矩阵.md">📝 Markdown 源</a>
+  </div>
+</footer>
+
+</body>
+</html>

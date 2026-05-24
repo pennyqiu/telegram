@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>知乎 6 个月内容日历</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+       color:#1e293b;background:#f8fafc;line-height:1.7;-webkit-font-smoothing:antialiased;}
+  a{color:#1a56db;text-decoration:none;}
+  a:hover{text-decoration:underline;}
+
+  .topbar{background:#fff;padding:14px 24px;border-bottom:1px solid #e2e8f0;
+          position:sticky;top:0;z-index:10;}
+  .topbar-inner{max-width:880px;margin:0 auto;display:flex;align-items:center;gap:12px;
+                font-size:14px;}
+  .topbar a{color:#475569;font-weight:500;}
+  .topbar a:hover{color:#1a56db;text-decoration:none;}
+  .topbar .here{color:#1a56db;font-weight:700;}
+  .topbar .sep{color:#cbd5e1;}
+  .topbar .right{margin-left:auto;font-size:12px;color:#94a3b8;}
+  .topbar .source{padding:4px 10px;border:1px solid #e2e8f0;border-radius:6px;
+                  font-size:12px;color:#64748b;}
+  .topbar .source:hover{background:#f1f5f9;color:#1a56db;}
+
+  .hero{background:linear-gradient(135deg,#1e3a8a 0%,#3b82f6 100%);
+        color:#fff;padding:50px 24px 60px;}
+  .hero-inner{max-width:880px;margin:0 auto;}
+  .hero-tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:1.5px;
+            background:rgba(255,255,255,0.18);padding:5px 12px;border-radius:12px;
+            margin-bottom:14px;}
+  .hero h1{font-size:34px;font-weight:800;margin-bottom:10px;line-height:1.25;
+           letter-spacing:-0.5px;}
+  .hero-meta{font-size:13px;opacity:0.88;font-family:Consolas,Monaco,monospace;
+             margin-top:14px;background:rgba(0,0,0,0.2);padding:5px 12px;
+             border-radius:6px;display:inline-block;}
+
+  .container{max-width:880px;margin:-30px auto 0;padding:0 24px 80px;position:relative;z-index:2;}
+
+  article{background:#fff;border-radius:12px;padding:48px 56px;
+          border:1px solid #e2e8f0;box-shadow:0 4px 16px rgba(15,23,42,0.04);}
+  @media(max-width:768px){
+    article{padding:32px 24px;}
+    .hero h1{font-size:26px;}
+  }
+
+  article h1{font-size:30px;font-weight:800;color:#0f172a;margin:32px 0 16px;
+             padding-bottom:12px;border-bottom:2px solid #1a56db;line-height:1.3;}
+  article h1:first-child{margin-top:0;}
+  article h2{font-size:24px;font-weight:800;color:#0f172a;margin:36px 0 14px;
+             padding-left:14px;border-left:4px solid #1a56db;line-height:1.3;}
+  article h3{font-size:19px;font-weight:700;color:#1e293b;margin:28px 0 10px;line-height:1.4;}
+  article h4{font-size:16px;font-weight:700;color:#334155;margin:22px 0 8px;}
+  article h5,article h6{font-size:15px;font-weight:700;color:#475569;margin:18px 0 6px;}
+
+  article p{margin:14px 0;color:#334155;font-size:15px;line-height:1.85;}
+  article strong{color:#0f172a;font-weight:700;}
+  article em{color:#475569;}
+
+  article ul,article ol{margin:14px 0 14px 24px;}
+  article li{margin:6px 0;color:#334155;font-size:15px;line-height:1.8;}
+  article li::marker{color:#1a56db;}
+  article ul ul,article ol ol,article ul ol,article ol ul{margin:6px 0 6px 24px;}
+
+  article blockquote{margin:18px 0;padding:14px 20px;background:#f8fafc;
+                     border-left:3px solid #1a56db;border-radius:0 8px 8px 0;color:#475569;}
+  article blockquote p{margin:6px 0;}
+
+  article code{background:#f1f5f9;color:#1a56db;padding:2px 7px;
+               border-radius:4px;font-family:Consolas,"SF Mono",Monaco,monospace;
+               font-size:13.5px;font-weight:500;}
+  article pre{background:#0f172a;color:#e2e8f0;padding:18px 22px;border-radius:8px;
+              overflow-x:auto;margin:18px 0;font-family:Consolas,"SF Mono",Monaco,monospace;
+              font-size:13.5px;line-height:1.6;}
+  article pre code{background:transparent;color:inherit;padding:0;font-size:inherit;}
+
+  article table{width:100%;border-collapse:collapse;margin:18px 0;
+                font-size:14px;background:#fff;border-radius:8px;overflow:hidden;
+                box-shadow:0 0 0 1px #e2e8f0;}
+  article th{background:#f1f5f9;color:#0f172a;font-weight:700;padding:11px 14px;
+             text-align:left;font-size:13px;border-bottom:1px solid #e2e8f0;}
+  article td{padding:10px 14px;border-bottom:1px solid #f1f5f9;color:#334155;
+             vertical-align:top;}
+  article tr:last-child td{border-bottom:none;}
+  article tr:hover td{background:#f8fafc;}
+
+  article hr{border:none;height:1px;background:#e2e8f0;margin:32px 0;}
+
+  article a{color:#1a56db;font-weight:500;}
+  article a:hover{text-decoration:underline;}
+
+  article img{max-width:100%;border-radius:8px;margin:18px 0;}
+
+  /* 目录侧栏（简易）*/
+  .toc{background:#fef3c7;border:1px solid #fbbf24;border-radius:8px;
+       padding:14px 20px;margin:18px 0 28px;}
+  .toc-title{font-size:13px;font-weight:700;color:#92400e;margin-bottom:8px;
+             letter-spacing:1px;}
+  .toc ul{margin:4px 0 0 18px;}
+  .toc li{font-size:13.5px;margin:3px 0;}
+  .toc a{color:#78350f;}
+
+  footer{text-align:center;padding:24px;color:#94a3b8;font-size:12px;
+         border-top:1px solid #e2e8f0;background:#fff;margin-top:40px;}
+  footer a{color:#1a56db;}
+</style>
+</head>
+<body>
+
+<nav class="topbar">
+  <div class="topbar-inner">
+    <a href="../../index.html">🏠 综合站首页</a>
+    <span class="sep">›</span>
+    <a href="../index.html">运营中心</a>
+    <span class="sep">›</span><span class="here">strategy/</span>
+    <span class="right">
+      <a class="source" href="知乎6个月日历.md" title="查看 Markdown 源文件">📝 .md 源文件</a>
+    </span>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-inner">
+    <span class="hero-tag">OPERATIONS · ZHIHU</span>
+    <h1>知乎 6 个月内容日历</h1>
+    <div class="hero-meta">📁 strategy / 知乎6个月日历.md · 5465 字</div>
+  </div>
+</header>
+
+<main class="container">
+  <article>
+<div class="toc">
+  <div class="toc-title">📑 目录</div>
+  <ul>
+    <li><a href="#_1">整体策略</a></li>
+      <li><a href="#_2">知乎与小红书的功能分工</a></li>
+      <li><a href="#_3">主题分布（与小红书完全对应）</a></li>
+      <li><a href="#_4">双赛道分布</a></li>
+    <li><a href="#m1-w1w44">M1 · 人设破圈月（W1–W4，4 篇）</a></li>
+      <li><a href="#1-w1">#1 · W1 周日 · 🟢 人设奠基贴</a></li>
+      <li><a href="#2-w2">#2 · W2 周日 · ⚪ 通识扫盲</a></li>
+      <li><a href="#3-w3">#3 · W3 周日 · ⚪ 产品扫盲</a></li>
+      <li><a href="#4-w4-vs">#4 · W4 周日 · ⚪ 港险 vs 内地险横评</a></li>
+    <li><a href="#m2-w5w84">M2 · 科技中产痛点月（W5–W8，4 篇）</a></li>
+      <li><a href="#5-w5">#5 · W5 周日 · 🟢 互联网人资产负债表诊断</a></li>
+      <li><a href="#6-w6-35">#6 · W6 周日 · 🟢 35 岁危机现金流方案</a></li>
+      <li><a href="#7-w7">#7 · W7 周日 · ⚪ 智商税深拆</a></li>
+      <li><a href="#8-w8">#8 · W8 周日 · 🟢 重疾压力测试</a></li>
+    <li><a href="#m3-w9w135">M3 · 跨境家庭教育金月（W9–W13，5 篇）</a></li>
+      <li><a href="#9-w9-4">#9 · W9 周日 · 🔵 教育金 4 工具横评（破圈款）</a></li>
+      <li><a href="#10-w10-rsu">#10 · W10 周日 · 🟢 RSU 行权决策</a></li>
+      <li><a href="#11-w11">#11 · W11 周日 · 🔵 货币选择论</a></li>
+      <li><a href="#12-w12-kyc">#12 · W12 周日 · 🔵 优才 KYC 自查</a></li>
+      <li><a href="#13-w13">#13 · W13 周日 · 🔵 教育金时间线</a></li>
+    <li><a href="#m4-crs-w14w174">M4 · CRS 与税务身份月（W14–W17，4 篇）</a></li>
+      <li><a href="#14-w14-crs">#14 · W14 周日 · 🟣 CRS 申报全规则（爆款款）</a></li>
+      <li><a href="#15-w15">#15 · W15 周日 · 🔵 优才税务身份</a></li>
+      <li><a href="#16-w16">#16 · W16 周日 · 🟢 互联网中年体检</a></li>
+      <li><a href="#17-w17">#17 · W17 周日 · 🔵 高才落港行动清单</a></li>
+    <li><a href="#m5-w18w214">M5 · 产品深拆月（W18–W21，4 篇）</a></li>
+      <li><a href="#18-w18-p7p8-vs">#18 · W18 周日 · 🟢 P7/P8 vs 普通中层</a></li>
+      <li><a href="#19-w19-pr">#19 · W19 周日 · 🔵 海归 PR 双重税务</a></li>
+      <li><a href="#20-w20">#20 · W20 周日 · 🟢 互联网人财务时间线</a></li>
+      <li><a href="#21-w21">#21 · W21 周日 · 🔵 海外养老与年金</a></li>
+    <li><a href="#m6-w22w265">M6 · 案例与综合月（W22–W26，5 篇）</a></li>
+      <li><a href="#22-w22">#22 · W22 周日 · 🟢 半退休路线图</a></li>
+      <li><a href="#23-w23-crs">#23 · W23 周日 · 🟣 CRS 后真实风险</a></li>
+      <li><a href="#24-w24-pr">#24 · W24 周日 · 🔵 PR 反向卡住的人</a></li>
+      <li><a href="#25-w25">#25 · W25 周日 · 🟢 综合案例库（爆款款）</a></li>
+      <li><a href="#26-w26">#26 · W26 周日 · ⚪ 终篇综述</a></li>
+    <li><a href="#_5">知乎执行铁律</a></li>
+      <li><a href="#_6">发布节奏</a></li>
+      <li><a href="#_7">知乎平台特殊规则</a></li>
+      <li><a href="#_8">与小红书的内容互通</a></li>
+      <li><a href="#_9">月度复盘指标</a></li>
+    <li><a href="#6-kpi">知乎运营 6 个月预期 KPI（保守版）</a></li>
+  </ul>
+</div>
+<h1 id="6-26">知乎 6 个月内容日历（26 篇深度长文）</h1>
+<blockquote>
+<p>与小红书 39 篇日历并行配套 · 双赛道聚焦版 v2.3</p>
+<p>节奏：每周日晚 21:00 发布 1 篇深度长文（5000–10000 字）<br />
+总量：26 周 × 1 篇 = 26 篇<br />
+与小红书的关系：<strong>月度主题完全对应；小红书做"钩子认知"，知乎做"完整论证"，最大化复用研究成果</strong></p>
+</blockquote>
+<hr />
+<h2 id="_1">整体策略</h2>
+<h3 id="_2">知乎与小红书的功能分工</h3>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>小红书</th>
+<th>知乎</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>用户画像</td>
+<td>城市中产女性、家庭决策者</td>
+<td>工程师、企业中层、深度求知者</td>
+</tr>
+<tr>
+<td>内容形式</td>
+<td>视觉化 9 图 + ≤ 1000 字</td>
+<td>5000–10000 字深度论证</td>
+</tr>
+<tr>
+<td>转化路径</td>
+<td>评论区扣【关键词】→ 私信钩子</td>
+<td>长文末尾 CTA → 公众号订阅 / 私信</td>
+</tr>
+<tr>
+<td>流量特征</td>
+<td>短平快、爆款式</td>
+<td>长尾 SEO，发布 6 个月后仍持续带量</td>
+</tr>
+<tr>
+<td>复用规则</td>
+<td>知乎长文拆 5–8 个数据点做小红书</td>
+<td>小红书反馈热点提炼回知乎深挖</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_3">主题分布（与小红书完全对应）</h3>
+<table>
+<thead>
+<tr>
+<th>月</th>
+<th>主题</th>
+<th>篇数</th>
+<th>战略目的</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>M1</td>
+<td>人设破圈月</td>
+<td>4</td>
+<td>建立"CPA 做港险"的专业人设</td>
+</tr>
+<tr>
+<td>M2</td>
+<td>科技中产痛点月</td>
+<td>4</td>
+<td>引爆赛道一（迅雷背景的天然主场）</td>
+</tr>
+<tr>
+<td>M3</td>
+<td>跨境家庭教育金月</td>
+<td>5</td>
+<td>引爆赛道二（教育金破圈话题）</td>
+</tr>
+<tr>
+<td>M4</td>
+<td>CRS 与税务身份月</td>
+<td>4</td>
+<td>切入 L3 深度，建立专业护城河</td>
+</tr>
+<tr>
+<td>M5</td>
+<td>产品深拆月</td>
+<td>4</td>
+<td>横评 + 数据派论证</td>
+</tr>
+<tr>
+<td>M6</td>
+<td>案例与综合月</td>
+<td>5</td>
+<td>案例集中转化（开放 1V1 诊断）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_4">双赛道分布</h3>
+<table>
+<thead>
+<tr>
+<th>类别</th>
+<th>篇数</th>
+<th>占比</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>🟢 科技中产 / 新贵</td>
+<td>9</td>
+<td>35%</td>
+</tr>
+<tr>
+<td>🔵 跨境个人 / 海外身份</td>
+<td>9</td>
+<td>35%</td>
+</tr>
+<tr>
+<td>⚪ 港险通识 / 产品深拆</td>
+<td>6</td>
+<td>23%</td>
+</tr>
+<tr>
+<td>🟣 CRS / 税务深度</td>
+<td>2</td>
+<td>7%</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="m1-w1w44">M1 · 人设破圈月（W1–W4，4 篇）</h2>
+<h3 id="1-w1">#1 · W1 周日 · 🟢 人设奠基贴</h3>
+<ul>
+<li><strong>标题</strong>：《一个 8 年迅雷总账 CPA，为什么转身去做香港保险？》</li>
+<li><strong>字数</strong>：5000+ 字（已成稿，见 <a href="人设奠基长文.html">人设奠基长文.md</a> B 部分）</li>
+<li><strong>知乎适配问题</strong>：</li>
+<li>"做香港保险经纪是一种怎样的体验？"</li>
+<li>"为什么有那么多人选择去香港买保险？"</li>
+<li>"香港分红险到底是不是智商税？"（在末尾置顶回答中链接此文）</li>
+<li><strong>关键数据点</strong>：迅雷 8 年总账经验 / RSU 行权处理 / 资产负债表思维 / 主动暴露港险 4 个劣势</li>
+<li><strong>联动小红书</strong>：呼应小红书 #2「8 年迅雷 CPA 转身做港险」的图文版</li>
+<li><strong>引流落点</strong>：文末附公众号订阅入口</li>
+<li><strong>CTA</strong>：3 类客户对号入座 + 关注</li>
+</ul>
+<h3 id="2-w2">#2 · W2 周日 · ⚪ 通识扫盲</h3>
+<ul>
+<li><strong>标题</strong>：《内地人买港险全流程合规指南：从约访到理赔，CPA 视角逐步拆解》</li>
+<li><strong>字数</strong>：6000+ 字</li>
+<li><strong>知乎适配问题</strong>：</li>
+<li>"去香港买保险流程是怎样的？"</li>
+<li>"香港保险有哪些坑要避开？"</li>
+<li><strong>核心纲要</strong>：</li>
+<li>
+<ol>
+<li>合规底线：内地公域科普 + 主动咨询 + 香港境内签约</li>
+</ol>
+</li>
+<li>
+<ol start="2">
+<li>投保前准备：身份 / 资金证明 / 财务证明 / 健康问卷</li>
+</ol>
+</li>
+<li>
+<ol start="3">
+<li>赴港当天流程：约访 → 体检 → 缴费 → 签单 → 离港</li>
+</ol>
+</li>
+<li>
+<ol start="4">
+<li>投保后服务：保单管理 / 理赔流程 / 受益人变更</li>
+</ol>
+</li>
+<li>
+<ol start="5">
+<li>5 类常见坑：地下保单 / 代签 / 返佣 / 假"持牌" / 未透露分红实现率</li>
+</ol>
+</li>
+<li><strong>关键数据点</strong>：HKIA 持牌查询路径 / 5 种合规缴费方式</li>
+<li><strong>联动小红书</strong>：呼应小红书 #1（合法性）+ #4（赴港流程图）</li>
+<li><strong>引流落点</strong>：扫码领《港险投保前必看 30 问 PDF》</li>
+</ul>
+<h3 id="3-w3">#3 · W3 周日 · ⚪ 产品扫盲</h3>
+<ul>
+<li><strong>标题</strong>：《一次讲清香港保险 5 大类：储蓄 / 重疾 / 医疗 / 年金 / 万用寿险该怎么选》</li>
+<li><strong>字数</strong>：6500+ 字</li>
+<li><strong>知乎适配问题</strong>：</li>
+<li>"香港保险有哪几种类型？"</li>
+<li>"储蓄分红险和年金险有什么区别？"</li>
+<li><strong>核心纲要</strong>：</li>
+<li>
+<ol>
+<li>5 大类产品的法律属性差异（保障型 vs 储蓄型）</li>
+</ol>
+</li>
+<li>
+<ol start="2">
+<li>配置优先级：医疗 → 重疾 → 储蓄 → 年金（保障先于理财）</li>
+</ol>
+</li>
+<li>
+<ol start="3">
+<li>每类产品适合的人群画像（年龄 / 收入 / 资产规模）</li>
+</ol>
+</li>
+<li>
+<ol start="4">
+<li>公司主推产品横评（不点名特定品牌，谈结构）</li>
+</ol>
+</li>
+<li>
+<ol start="5">
+<li>客户最常踩的"配置颠倒"陷阱</li>
+</ol>
+</li>
+<li><strong>联动小红书</strong>：呼应小红书 #5（5 类港险讲清）</li>
+</ul>
+<h3 id="4-w4-vs">#4 · W4 周日 · ⚪ 港险 vs 内地险横评</h3>
+<ul>
+<li><strong>标题</strong>：《港险 vs 内地保险：10 个维度的客观对比（CPA 视角）》</li>
+<li><strong>字数</strong>：7000+ 字</li>
+<li><strong>知乎适配问题</strong>：</li>
+<li>"香港保险和内地保险哪个更好？"</li>
+<li>"为什么有人去香港买保险？"</li>
+<li><strong>核心纲要</strong>：保额 / 病种 / 多次赔付 / 货币 / 分红 / 流动性 / 理赔 / 法律保护 / 税务 / 传承功能 共 10 维度</li>
+<li><strong>关键数据点</strong>：每个维度给出明确的"港优 / 内地优 / 看个人"判断</li>
+<li><strong>联动小红书</strong>：呼应小红书 #3（10 维度对比）</li>
+</ul>
+<hr />
+<h2 id="m2-w5w84">M2 · 科技中产痛点月（W5–W8，4 篇）</h2>
+<h3 id="5-w5">#5 · W5 周日 · 🟢 互联网人资产负债表诊断</h3>
+<ul>
+<li><strong>标题</strong>：《互联网中层的资产负债表诊断 — 90% 资产绑在自家股票上意味着什么？》</li>
+<li><strong>字数</strong>：8000+ 字</li>
+<li><strong>知乎适配问题</strong>：</li>
+<li>"互联网公司中层应该如何配置家庭资产？"</li>
+<li>"RSU 是不是真的让我变富了？"</li>
+<li><strong>核心纲要</strong>：</li>
+<li>
+<ol>
+<li>CPA 视角：资产负债表 vs 利润表的根本差异</li>
+</ol>
+</li>
+<li>
+<ol start="2">
+<li>典型互联网中层财务画像（300 万 - 1500 万净资产）</li>
+</ol>
+</li>
+<li>
+<ol start="3">
+<li>集中度风险拆解：什么叫"或有负债"</li>
+</ol>
+</li>
+<li>
+<ol start="4">
+<li>压力测试 5 场景：股票腰斩 / 失业 / 重疾 / 离婚 / 家长病</li>
+</ol>
+</li>
+<li>
+<ol start="5">
+<li>解决路径：底仓 / 流动性 / 保障 / 多元化</li>
+</ol>
+</li>
+<li><strong>关键数据点</strong>：迅雷 8 年总账经验背书 / 真实股票回撤数据</li>
+<li><strong>联动小红书</strong>：呼应小红书 #7（90% 资产绑自家股票）</li>
+</ul>
+<h3 id="6-w6-35">#6 · W6 周日 · 🟢 35 岁危机现金流方案</h3>
+<ul>
+<li><strong>标题</strong>：《互联网大厂 35 岁被裁，N+1 怎么用才能买断后半生现金流？— CPA 30 年模型实测》</li>
+<li><strong>字数</strong>：8500+ 字</li>
+<li><strong>知乎适配问题</strong>：</li>
+<li>"互联网中年危机如何应对？"</li>
+<li>"失业后的钱应该放哪里？"</li>
+<li><strong>核心纲要</strong>：</li>
+<li>
+<ol>
+<li>计算 N+1 = 多少？（不同薪资档位下的真实测算）</li>
+</ol>
+</li>
+<li>
+<ol start="2">
+<li>失业 12–24 个月家庭存活率模拟</li>
+</ol>
+</li>
+<li>
+<ol start="3">
+<li>4 种 N+1 配置方案对比：定存 / 货币基金 / 港股红利 / 港险储蓄</li>
+</ol>
+</li>
+<li>
+<ol start="4">
+<li>30 年现金流模型（Excel 截图，注明这是免费可领的工具）</li>
+</ol>
+</li>
+<li>
+<ol start="5">
+<li>CPA 给出的"中年现金流补丁"5 步法</li>
+</ol>
+</li>
+<li><strong>关键数据点</strong>：年龄 - 收入 - 消费匹配模型 / Excel 模型截图</li>
+<li><strong>联动小红书</strong>：呼应小红书 #8（35 岁被裁 N+1 怎么用）+ #34（中年现金流补丁）</li>
+<li><strong>引流钩子</strong>：领【互联网中层家庭财务自查表 Excel】</li>
+</ul>
+<h3 id="7-w7">#7 · W7 周日 · ⚪ 智商税深拆</h3>
+<ul>
+<li><strong>标题</strong>：《香港分红险到底是不是智商税？— 一个 CPA 的精算假设全拆解》</li>
+<li><strong>字数</strong>：10000+ 字（爆款备选）</li>
+<li><strong>知乎适配问题</strong>（核心打榜）：</li>
+<li>"香港分红险到底是不是智商税？"（直接对应）</li>
+<li>"香港的分红保险靠谱吗？"</li>
+<li><strong>核心纲要</strong>：</li>
+<li>
+<ol>
+<li>演示书"6.5%"的拆解：保证 1% + 非保证 5%</li>
+</ol>
+</li>
+<li>
+<ol start="2">
+<li>分红实现率历史数据全梳理（4 大公司）</li>
+</ol>
+</li>
+<li>
+<ol start="3">
+<li>主动暴露 4 个港险劣势（流动性 / 分红浮动 / 跨境理赔 / 香港管辖）</li>
+</ol>
+</li>
+<li>
+<ol start="4">
+<li>用 IRR 公式拆解 30 年真实复利</li>
+</ol>
+</li>
+<li>
+<ol start="5">
+<li>不同通胀假设下的购买力平价对比</li>
+</ol>
+</li>
+<li>
+<ol start="6">
+<li>什么人适合买 / 什么人千万别买</li>
+</ol>
+</li>
+<li><strong>关键数据点</strong>：主动暴露劣势建立"盐值"信任度（核心策略）</li>
+<li><strong>联动小红书</strong>：M5 月产品深拆系列前置教育</li>
+<li><strong>预期</strong>：知乎爆款重点款，搜索流量长期收割</li>
+</ul>
+<h3 id="8-w8">#8 · W8 周日 · 🟢 重疾压力测试</h3>
+<ul>
+<li><strong>标题</strong>：《重疾发生在你身上，互联网家庭撑得住几个月？— 真实压力测试模型》</li>
+<li><strong>字数</strong>：6500+ 字</li>
+<li><strong>知乎适配问题</strong>：</li>
+<li>"互联网人重疾险怎么买？"</li>
+<li>"得了大病家庭会怎样？"</li>
+<li><strong>核心纲要</strong>：</li>
+<li>
+<ol>
+<li>重疾实际花费拆解（医疗 + 收入中断 + 康复）</li>
+</ol>
+</li>
+<li>
+<ol start="2">
+<li>没保险下的家庭存活时间测算</li>
+</ol>
+</li>
+<li>
+<ol start="3">
+<li>港险重疾 vs 内地重疾的真实差异</li>
+</ol>
+</li>
+<li>
+<ol start="4">
+<li>多次赔付 + 红利累积的复利价值（30 年保额翻 2-3 倍演示）</li>
+</ol>
+</li>
+<li><strong>联动小红书</strong>：呼应小红书 #11（重疾家庭撑得住几个月）</li>
+</ul>
+<hr />
+<h2 id="m3-w9w135">M3 · 跨境家庭教育金月（W9–W13，5 篇）</h2>
+<h3 id="9-w9-4">#9 · W9 周日 · 🔵 教育金 4 工具横评（破圈款）</h3>
+<ul>
+<li><strong>标题</strong>：《孩子赴美读书要 800 万，这笔教育金应该装在哪里？— 4 工具横评（CPA 视角）》</li>
+<li><strong>字数</strong>：8000+ 字</li>
+<li><strong>知乎适配问题</strong>：</li>
+<li>"孩子留学美国需要多少钱？"</li>
+<li>"如何为孩子准备教育金？"</li>
+<li><strong>核心纲要</strong>：</li>
+<li>
+<ol>
+<li>美国本科 4 年 + 研究生 2 年真实费用（学费 + 生活 + 通胀）</li>
+</ol>
+</li>
+<li>
+<ol start="2">
+<li>4 种教育金工具横评：人民币定存 / 美元定存 / 港股 ETF / 港险储蓄</li>
+</ol>
+</li>
+<li>
+<ol start="3">
+<li>不同通胀假设下 18 年后购买力对比</li>
+</ol>
+</li>
+<li>
+<ol start="4">
+<li>货币错配风险（教育金是美元支出，本金是人民币）</li>
+</ol>
+</li>
+<li>
+<ol start="5">
+<li>CPA 推荐的"3 + 7"分散配置</li>
+</ol>
+</li>
+<li><strong>关键数据点</strong>：详尽的费用拆解表</li>
+<li><strong>联动小红书</strong>：呼应小红书 #13（教育金装哪里）+ #16（货币选择）</li>
+<li><strong>引流钩子</strong>：领【孩子赴海外读书教育金对比 Excel】</li>
+</ul>
+<h3 id="10-w10-rsu">#10 · W10 周日 · 🟢 RSU 行权决策</h3>
+<ul>
+<li><strong>标题</strong>：《RSU 行权前必须想清楚的 5 件事（CPA 8 年总账实战）》</li>
+<li><strong>字数</strong>：7500+ 字</li>
+<li><strong>知乎适配问题</strong>：</li>
+<li>"RSU 应该立刻卖还是持有？"</li>
+<li>"互联网公司股票应该怎么处理？"</li>
+<li><strong>核心纲要</strong>：</li>
+<li>
+<ol>
+<li>RSU 归属当天 = 工资发放，按 45% 边际税率扣税</li>
+</ol>
+</li>
+<li>
+<ol start="2">
+<li>持有 vs 立刻卖出的真实税务差异</li>
+</ol>
+</li>
+<li>
+<ol start="3">
+<li>集中度风险量化（用波动率算）</li>
+</ol>
+</li>
+<li>
+<ol start="4">
+<li>美股 ADR 涉及的境外申报</li>
+</ol>
+</li>
+<li>
+<ol start="5">
+<li>给互联网中层的"RSU 5 步处置法"</li>
+</ol>
+</li>
+<li><strong>关键数据点</strong>：迅雷 8 年总账经验 / 美股 RSU 真实税务案例</li>
+<li><strong>联动小红书</strong>：呼应小红书 #14（RSU 行权 5 件事）+ #15（公司股票算资产吗）</li>
+<li><strong>特别提示</strong>：本文是您远期"期权行权税务规划"赛道的能力孵化原型——<strong>不主推、但开始积累内容样本</strong></li>
+</ul>
+<h3 id="11-w11">#11 · W11 周日 · 🔵 货币选择论</h3>
+<ul>
+<li><strong>标题</strong>：《给孩子留 1000 万到底用什么货币装？— 不同通胀场景的购买力平价测算》</li>
+<li><strong>字数</strong>：6500+ 字</li>
+<li><strong>知乎适配问题</strong>：</li>
+<li>"美元和人民币该如何配置？"</li>
+<li>"孩子未来留学应该存美元还是人民币？"</li>
+<li><strong>核心纲要</strong>：</li>
+<li>
+<ol>
+<li>货币的本质：购买力的容器</li>
+</ol>
+</li>
+<li>
+<ol start="2">
+<li>历史数据：人民币 / 美元 / 港币 30 年购买力变化</li>
+</ol>
+</li>
+<li>
+<ol start="3">
+<li>通胀对教育金的"隐形吞噬"</li>
+</ol>
+</li>
+<li>
+<ol start="4">
+<li>美元长期资产配置的 5 种工具</li>
+</ol>
+</li>
+<li><strong>联动小红书</strong>：呼应小红书 #16（孩子 1000 万用什么货币）+ #25（美元配置 5 工具）</li>
+</ul>
+<h3 id="12-w12-kyc">#12 · W12 周日 · 🔵 优才 KYC 自查</h3>
+<ul>
+<li><strong>标题</strong>：《申请香港优才前，先做这份 KYC 自查 — 10 道题判断你是否真的适合》</li>
+<li><strong>字数</strong>：6000+ 字</li>
+<li><strong>知乎适配问题</strong>：</li>
+<li>"香港优才申请有哪些隐形门槛？"</li>
+<li>"香港优才落地后会面临什么问题？"</li>
+<li><strong>核心纲要</strong>：</li>
+<li>
+<ol>
+<li>优才 vs 高才 vs 专才的核心差异</li>
+</ol>
+</li>
+<li>
+<ol start="2">
+<li>申请前 10 道自查题（身份 / 行业 / 收入 / 家庭 / 税务）</li>
+</ol>
+</li>
+<li>
+<ol start="3">
+<li>落地后 6 个月必做的 5 件事</li>
+</ol>
+</li>
+<li>
+<ol start="4">
+<li>税务居民身份切换的 2 个时间窗口</li>
+</ol>
+</li>
+<li><strong>联动小红书</strong>：呼应小红书 #17（优才 KYC 自查）</li>
+<li><strong>引流钩子</strong>：领【香港优才申请前 KYC 自查表】</li>
+</ul>
+<h3 id="13-w13">#13 · W13 周日 · 🔵 教育金时间线</h3>
+<ul>
+<li><strong>标题</strong>：《计划送娃赴美 / 赴港的家长，10 年存钱时间线该怎么排？》</li>
+<li><strong>字数</strong>：6500+ 字</li>
+<li><strong>核心纲要</strong>：</li>
+<li>
+<ol>
+<li>倒推法：18 岁开学 - 当下年份 = 时间窗口</li>
+</ol>
+</li>
+<li>
+<ol start="2">
+<li>不同时间窗口的工具选择（&lt; 5 年 / 5-10 年 / &gt; 10 年）</li>
+</ol>
+</li>
+<li>
+<ol start="3">
+<li>月供方案 vs 一次性方案对比</li>
+</ol>
+</li>
+<li>
+<ol start="4">
+<li>父母年龄风险（重疾 / 失业）的对冲逻辑</li>
+</ol>
+</li>
+<li><strong>联动小红书</strong>：呼应小红书 #19（10 年存钱时间线）</li>
+</ul>
+<hr />
+<h2 id="m4-crs-w14w174">M4 · CRS 与税务身份月（W14–W17，4 篇）</h2>
+<h3 id="14-w14-crs">#14 · W14 周日 · 🟣 CRS 申报全规则（爆款款）</h3>
+<ul>
+<li><strong>标题</strong>：《CRS 自动信息交换全规则：买香港保险到底报什么、不报什么？》</li>
+<li><strong>字数</strong>：10000+ 字（爆款预备）</li>
+<li><strong>知乎适配问题</strong>：</li>
+<li>"CRS 是什么？买香港保险会被报回内地吗？"</li>
+<li>"CRS 之后，海外资产还安全吗？"</li>
+<li><strong>核心纲要</strong>：</li>
+<li>
+<ol>
+<li>CRS 起源、机制、参与国家清单</li>
+</ol>
+</li>
+<li>
+<ol start="2">
+<li>香港参与 CRS 的法律基础</li>
+</ol>
+</li>
+<li>
+<ol start="3">
+<li>哪些保单产品在申报范围（储蓄类）/ 哪些不在（纯保障类）</li>
+</ol>
+</li>
+<li>
+<ol start="4">
+<li>申报内容详解：账户余额 / 投保人 / 税务居民 / 不包括什么</li>
+</ol>
+</li>
+<li>
+<ol start="5">
+<li>申报 ≠ 征税的真实含义</li>
+</ol>
+</li>
+<li>
+<ol start="6">
+<li>申报后会发生什么（内地税务局视角）</li>
+</ol>
+</li>
+<li>
+<ol start="7">
+<li>多重身份持有者的合规建议</li>
+</ol>
+</li>
+<li><strong>关键数据点</strong>：CRS 流程图 / 申报字段清单</li>
+<li><strong>联动小红书</strong>：呼应小红书 #20（CRS 报回内地）+ #22（CRS 实际报什么）</li>
+<li><strong>引流钩子</strong>：领【CRS 申报快速判断流程图 PDF】</li>
+<li><strong>预期</strong>：长尾 SEO 利器，发布后 12 个月内持续带量</li>
+</ul>
+<h3 id="15-w15">#15 · W15 周日 · 🔵 优才税务身份</h3>
+<ul>
+<li><strong>标题</strong>：《申请香港优才前，必须搞清楚的 3 个税务居民身份问题》</li>
+<li><strong>字数</strong>：7000+ 字</li>
+<li><strong>知乎适配问题</strong>：</li>
+<li>"申请香港优才会变更税务居民身份吗？"</li>
+<li>"香港优才落地后报税怎么办？"</li>
+<li><strong>核心纲要</strong>：</li>
+<li>
+<ol>
+<li>税务居民判定标准（中国 / 香港）</li>
+</ol>
+</li>
+<li>
+<ol start="2">
+<li>申请优才期间的"双重居民"窗口</li>
+</ol>
+</li>
+<li>
+<ol start="3">
+<li>资产是否需要在申请前重新结构化</li>
+</ol>
+</li>
+<li>
+<ol start="4">
+<li>落港后的报税路径（薪俸税 vs 个税）</li>
+</ol>
+</li>
+<li><strong>联动小红书</strong>：呼应小红书 #21（优才税务身份）</li>
+</ul>
+<h3 id="16-w16">#16 · W16 周日 · 🟢 互联网中年体检</h3>
+<ul>
+<li><strong>标题</strong>：《互联网人的"中年体检"该做哪几项？— 医疗 + 财务双视角》</li>
+<li><strong>字数</strong>：6000+ 字</li>
+<li><strong>核心纲要</strong>：</li>
+<li>
+<ol>
+<li>35-45 岁互联网人健康问题分布</li>
+</ol>
+</li>
+<li>
+<ol start="2">
+<li>必做的 8 项身体体检 + 5 项财务体检</li>
+</ol>
+</li>
+<li>
+<ol start="3">
+<li>重疾险与医疗险的搭配逻辑</li>
+</ol>
+</li>
+<li>
+<ol start="4">
+<li>健康问题对未来核保的影响（"先体检后投保"陷阱）</li>
+</ol>
+</li>
+<li><strong>联动小红书</strong>：呼应小红书 #23（中年体检该做哪几项）</li>
+</ul>
+<h3 id="17-w17">#17 · W17 周日 · 🔵 高才落港行动清单</h3>
+<ul>
+<li><strong>标题</strong>：《高才 / 优才落港后第 1 个月要做的 3 件事 — 税务 / 身份 / 资产》</li>
+<li><strong>字数</strong>：6500+ 字</li>
+<li><strong>核心纲要</strong>：</li>
+<li>
+<ol>
+<li>落港当周必办：身份证 / 银行账户 / 税号</li>
+</ol>
+</li>
+<li>
+<ol start="2">
+<li>第一个月必办：MPF 强积金 / 报税表填法 / 医保</li>
+</ol>
+</li>
+<li>
+<ol start="3">
+<li>第一年必办：重疾医疗配置 / 教育路径 / 资产架构</li>
+</ol>
+</li>
+<li><strong>联动小红书</strong>：呼应小红书 #24（高才落港 3 件事）</li>
+</ul>
+<hr />
+<h2 id="m5-w18w214">M5 · 产品深拆月（W18–W21，4 篇）</h2>
+<h3 id="18-w18-p7p8-vs">#18 · W18 周日 · 🟢 P7/P8 vs 普通中层</h3>
+<ul>
+<li><strong>标题</strong>：《大厂 P7/P8 的资产配置 vs 普通中层 — 3 大决策路径差异》</li>
+<li><strong>字数</strong>：7500+ 字</li>
+<li><strong>核心纲要</strong>：</li>
+<li>
+<ol>
+<li>收入结构差异：P5/P6（薪资为主）vs P7/P8（RSU 占大头）</li>
+</ol>
+</li>
+<li>
+<ol start="2">
+<li>流动性管理：高薪人群的"现金断流"风险</li>
+</ol>
+</li>
+<li>
+<ol start="3">
+<li>保障配置：保额随收入等比增长的逻辑</li>
+</ol>
+</li>
+<li>
+<ol start="4">
+<li>美元资产比例建议（按层级）</li>
+</ol>
+</li>
+<li><strong>联动小红书</strong>：呼应小红书 #26（P7 vs 普通中层）</li>
+</ul>
+<h3 id="19-w19-pr">#19 · W19 周日 · 🔵 海归 PR 双重税务</h3>
+<ul>
+<li><strong>标题</strong>：《海归 PR 的"双重税务陷阱" — 3 个真实场景预警》</li>
+<li><strong>字数</strong>：6500+ 字</li>
+<li><strong>核心纲要</strong>：</li>
+<li>
+<ol>
+<li>美国 PR / 加拿大 PR / 澳洲 PR 的全球征税规则</li>
+</ol>
+</li>
+<li>
+<ol start="2">
+<li>港险在 FATCA / PFIC 下的特殊性</li>
+</ol>
+</li>
+<li>
+<ol start="3">
+<li>3 个真实"踩坑"画像</li>
+</ol>
+</li>
+<li>
+<ol start="4">
+<li>海归 PR 投保前必做的税务咨询清单</li>
+</ol>
+</li>
+<li><strong>联动小红书</strong>：呼应小红书 #27（海归 PR 双重陷阱）</li>
+</ul>
+<h3 id="20-w20">#20 · W20 周日 · 🟢 互联网人财务时间线</h3>
+<ul>
+<li><strong>标题</strong>：《给 25-55 岁互联网中层的家庭财务时间线 — 30 年路径图》</li>
+<li><strong>字数</strong>：8000+ 字</li>
+<li><strong>核心纲要</strong>：</li>
+<li>
+<ol>
+<li>25-30 岁：流动性建设期</li>
+</ol>
+</li>
+<li>
+<ol start="2">
+<li>30-35 岁：保障配置 + 美元底仓启动</li>
+</ol>
+</li>
+<li>
+<ol start="3">
+<li>35-40 岁：教育金启动 + 资产分散</li>
+</ol>
+</li>
+<li>
+<ol start="4">
+<li>40-50 岁：退休规划 + 传承架构</li>
+</ol>
+</li>
+<li>
+<ol start="5">
+<li>50-55 岁：现金流转向 + 半退休</li>
+</ol>
+</li>
+<li><strong>联动小红书</strong>：呼应小红书 #29（互联网中层时间线）</li>
+</ul>
+<h3 id="21-w21">#21 · W21 周日 · 🔵 海外养老与年金</h3>
+<ul>
+<li><strong>标题</strong>：《退休后想去香港 / 海外养老，年金怎么配？— 现金流锥形模型》</li>
+<li><strong>字数</strong>：6500+ 字</li>
+<li><strong>核心纲要</strong>：</li>
+<li>
+<ol>
+<li>海外养老的 3 大现金流需求</li>
+</ol>
+</li>
+<li>
+<ol start="2">
+<li>港险年金 vs 内地养老金的真实对比</li>
+</ol>
+</li>
+<li>
+<ol start="3">
+<li>即期年金 vs 延期年金的选择逻辑</li>
+</ol>
+</li>
+<li>
+<ol start="4">
+<li>货币组合（美元 / 港币）的避险作用</li>
+</ol>
+</li>
+<li><strong>联动小红书</strong>：呼应小红书 #30（海外养老年金）</li>
+</ul>
+<hr />
+<h2 id="m6-w22w265">M6 · 案例与综合月（W22–W26，5 篇）</h2>
+<h3 id="22-w22">#22 · W22 周日 · 🟢 半退休路线图</h3>
+<ul>
+<li><strong>标题</strong>：《5 年后想"半退休"的互联网人，从今年开始要做什么？— 完整路线图》</li>
+<li><strong>字数</strong>：8000+ 字</li>
+<li><strong>核心纲要</strong>：</li>
+<li>
+<ol>
+<li>"半退休"的财务定义：被动收入覆盖必要开支</li>
+</ol>
+</li>
+<li>
+<ol start="2">
+<li>倒推法：5 年内必须达成的资产规模</li>
+</ol>
+</li>
+<li>
+<ol start="3">
+<li>资产配置 4 步走：流动 / 保障 / 增值 / 现金流</li>
+</ol>
+</li>
+<li>
+<ol start="4">
+<li>风险压力测试：不工作后家庭能撑多久</li>
+</ol>
+</li>
+<li><strong>联动小红书</strong>：呼应小红书 #32（半退休路线图）</li>
+</ul>
+<h3 id="23-w23-crs">#23 · W23 周日 · 🟣 CRS 后真实风险</h3>
+<ul>
+<li><strong>标题</strong>：《海外资产被 CRS 报回内地：补税还是不补税？— CPA 视角的决策树》</li>
+<li><strong>字数</strong>：7000+ 字</li>
+<li><strong>核心纲要</strong>：</li>
+<li>
+<ol>
+<li>申报 ≠ 征税的法律边界</li>
+</ol>
+</li>
+<li>
+<ol start="2">
+<li>哪些情形会真正触发补税</li>
+</ol>
+</li>
+<li>
+<ol start="3">
+<li>主动申报 vs 被动等待的成本对比</li>
+</ol>
+</li>
+<li>
+<ol start="4">
+<li>CPA 给出的 4 种应对路径</li>
+</ol>
+</li>
+<li><strong>联动小红书</strong>：呼应小红书 #33（CRS 补税还是不补税）</li>
+</ul>
+<h3 id="24-w24-pr">#24 · W24 周日 · 🔵 PR 反向卡住的人</h3>
+<ul>
+<li><strong>标题</strong>：《被 PR 身份反向"卡住"的人 — 3 个真实场景拆解》</li>
+<li><strong>字数</strong>：6500+ 字</li>
+<li><strong>核心纲要</strong>：3 个匿名画像（脱敏）+ 4 步预防方法</li>
+<li><strong>联动小红书</strong>：呼应小红书 #35（PR 反向卡住）</li>
+</ul>
+<h3 id="25-w25">#25 · W25 周日 · 🟢 综合案例库（爆款款）</h3>
+<ul>
+<li><strong>标题</strong>：《6 个月以来，我服务过的 5 类典型客户的脱敏复盘》</li>
+<li><strong>字数</strong>：10000+ 字（爆款款）</li>
+<li><strong>核心纲要</strong>：</li>
+<li>
+<ol>
+<li>互联网 P7 张工：300 万 RSU + 美元底仓配置</li>
+</ol>
+</li>
+<li>
+<ol start="2">
+<li>字节总监李姐：教育金 + 重疾 + VHIS 三件套</li>
+</ol>
+</li>
+<li>
+<ol start="3">
+<li>高才即将赴港陈先生：身份切换前的资产规划</li>
+</ol>
+</li>
+<li>
+<ol start="4">
+<li>海归 PR 王太：PFIC 风险下的工具选择</li>
+</ol>
+</li>
+<li>
+<ol start="5">
+<li>跨境电商老板苏总：个人 vs 企业资金分离（脱敏处理）</li>
+</ol>
+</li>
+<li><strong>联动小红书</strong>：呼应小红书 #38（12 画像九宫格）</li>
+<li><strong>预期</strong>：转化引爆款，前 5 个月所有内容铺垫的"集中收割"</li>
+</ul>
+<h3 id="26-w26">#26 · W26 周日 · ⚪ 终篇综述</h3>
+<ul>
+<li><strong>标题</strong>：《写在 6 个月内容沉淀之后 — CPA 视角的港险价值与边界（开放 1V1 诊断）》</li>
+<li><strong>字数</strong>：8000+ 字</li>
+<li><strong>核心纲要</strong>：</li>
+<li>
+<ol>
+<li>6 个月以来对港险的认知迭代</li>
+</ol>
+</li>
+<li>
+<ol start="2">
+<li>3 类客户最容易踩的"自我欺骗"</li>
+</ol>
+</li>
+<li>
+<ol start="3">
+<li>服务过程中的 5 个反思</li>
+</ol>
+</li>
+<li>
+<ol start="4">
+<li>开放 1V1 财务诊断（限额 / 流程 / 费用说明）</li>
+</ol>
+</li>
+<li><strong>CTA</strong>：明确开放 KYC 问卷预约入口</li>
+<li><strong>预期</strong>：6 个月内容沉淀后的"集中转化"动作</li>
+</ul>
+<hr />
+<h2 id="_5">知乎执行铁律</h2>
+<h3 id="_6">发布节奏</h3>
+<ul>
+<li><strong>铁律时间</strong>：<strong>每周日晚 21:00</strong>，雷打不动</li>
+<li><strong>预热</strong>：周六晚朋友圈预告（"明晚知乎更新一篇 XXX，主要讲...）</li>
+<li><strong>延后</strong>：宁可质量降级，绝不缺位</li>
+<li><strong>质量底线</strong>：每篇 ≥ 5000 字、必含 3+ 数据图表 / 模型截图</li>
+</ul>
+<h3 id="_7">知乎平台特殊规则</h3>
+<ul>
+<li><strong>绑定问题</strong>：每篇必须同步发布在 1–3 个匹配问题下作为长答案，提升搜索权重</li>
+<li><strong>首图</strong>：知乎首图决定 70% 的点击率，建议统一深蓝 + 数据图风格</li>
+<li><strong>关键词分布</strong>：标题 + 前 200 字必含主关键词（"香港保险 / 港险 / CRS / RSU / 优才"等）</li>
+<li><strong>结尾 CTA</strong>：3 类客户对号入座 + 公众号订阅（不放微信号）</li>
+<li><strong>盐值机制</strong>：主动暴露产品劣势 → 知乎特有的"反向信任度"</li>
+</ul>
+<h3 id="_8">与小红书的内容互通</h3>
+<table>
+<thead>
+<tr>
+<th>知乎篇</th>
+<th>小红书联动篇</th>
+<th>互通方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>#1 人设奠基</td>
+<td>#2</td>
+<td>知乎万字版 → 小红书 9 图精华版</td>
+</tr>
+<tr>
+<td>#5 资产负债表诊断</td>
+<td>#7</td>
+<td>知乎深度模型 → 小红书数据卡片</td>
+</tr>
+<tr>
+<td>#6 35 岁 N+1 现金流</td>
+<td>#8 / #34</td>
+<td>知乎 30 年模型 → 小红书 2 篇拆解</td>
+</tr>
+<tr>
+<td>#7 智商税深拆</td>
+<td>M5 系列前置</td>
+<td>知乎万字 → 小红书 5 篇产品深拆</td>
+</tr>
+<tr>
+<td>#9 教育金横评</td>
+<td>#13 / #16</td>
+<td>知乎万字 → 小红书 2 篇拆解</td>
+</tr>
+<tr>
+<td>#14 CRS 申报全规则</td>
+<td>#20 / #22</td>
+<td>知乎万字爆款 → 小红书 2 篇拆解</td>
+</tr>
+<tr>
+<td>#25 综合案例库</td>
+<td>#38</td>
+<td>知乎万字案例 → 小红书 12 画像</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_9">月度复盘指标</h3>
+<ul>
+<li>每月底统计：阅读量 / 收藏 / 评论 / 私信咨询 / KYC 问卷领取数 / 主动添加微信数</li>
+<li>6 个月节点：总阅读量 / 关注数 / 询盘数 / 完成 KYC 数 / 成交数</li>
+<li><strong>最重要的指标不是阅读量，是"完成 KYC 问卷"的人数</strong>——这是真实诊断信号</li>
+</ul>
+<hr />
+<h2 id="6-kpi">知乎运营 6 个月预期 KPI（保守版）</h2>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>M1 末</th>
+<th>M3 末</th>
+<th>M6 末</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>已发布长文数</td>
+<td>4</td>
+<td>13</td>
+<td>26</td>
+</tr>
+<tr>
+<td>总阅读量（累计）</td>
+<td>5 千 - 2 万</td>
+<td>5 万 - 20 万</td>
+<td>30 万 - 80 万</td>
+</tr>
+<tr>
+<td>关注数</td>
+<td>50–200</td>
+<td>500–1500</td>
+<td>2000–5000</td>
+</tr>
+<tr>
+<td>主动私信咨询数</td>
+<td>0–5</td>
+<td>10–30</td>
+<td>50–100</td>
+</tr>
+<tr>
+<td>完成 KYC 问卷数</td>
+<td>0</td>
+<td>3–8</td>
+<td>10–25</td>
+</tr>
+<tr>
+<td>成交单数</td>
+<td>0</td>
+<td>1–2</td>
+<td>3–8</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>第一年 KPI 偏保守，这是内向 + 高质量路线的真实曲线。爆款（#7 智商税、#14 CRS、#25 案例库）出现后，曲线会显著加速。</p>
+</blockquote>
+<hr />
+<blockquote>
+<p>本日历是 <a href="战略手册.html">战略手册.md</a> v2.3 的执行配套文档（与《朋友圈长线运营矩阵.md》《知乎发布SOP.md》构成完整内容生产闭环）。<br />
+与小红书 39 篇日历联动使用，最大化复用研究成果。<br />
+编制：X 会计师 · 最后更新：2026 年 5 月</p>
+</blockquote>
+  </article>
+</main>
+
+<footer>
+  <div>知乎 6 个月内容日历 · 运营中心 v3.1</div>
+  <div style="margin-top:8px;">
+    <a href="../../index.html">综合站首页</a> · 
+    <a href="../index.html">运营中心</a> · 
+    <a href="知乎6个月日历.md">📝 Markdown 源</a>
+  </div>
+</footer>
+
+</body>
+</html>

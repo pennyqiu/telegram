@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>工具使用说明</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+       color:#1e293b;background:#f8fafc;line-height:1.7;-webkit-font-smoothing:antialiased;}
+  a{color:#1a56db;text-decoration:none;}
+  a:hover{text-decoration:underline;}
+
+  .topbar{background:#fff;padding:14px 24px;border-bottom:1px solid #e2e8f0;
+          position:sticky;top:0;z-index:10;}
+  .topbar-inner{max-width:880px;margin:0 auto;display:flex;align-items:center;gap:12px;
+                font-size:14px;}
+  .topbar a{color:#475569;font-weight:500;}
+  .topbar a:hover{color:#f97316;text-decoration:none;}
+  .topbar .here{color:#f97316;font-weight:700;}
+  .topbar .sep{color:#cbd5e1;}
+  .topbar .right{margin-left:auto;font-size:12px;color:#94a3b8;}
+  .topbar .source{padding:4px 10px;border:1px solid #e2e8f0;border-radius:6px;
+                  font-size:12px;color:#64748b;}
+  .topbar .source:hover{background:#f1f5f9;color:#f97316;}
+
+  .hero{background:linear-gradient(135deg,#9a3412 0%,#f97316 100%);
+        color:#fff;padding:50px 24px 60px;}
+  .hero-inner{max-width:880px;margin:0 auto;}
+  .hero-tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:1.5px;
+            background:rgba(255,255,255,0.18);padding:5px 12px;border-radius:12px;
+            margin-bottom:14px;}
+  .hero h1{font-size:34px;font-weight:800;margin-bottom:10px;line-height:1.25;
+           letter-spacing:-0.5px;}
+  .hero-meta{font-size:13px;opacity:0.88;font-family:Consolas,Monaco,monospace;
+             margin-top:14px;background:rgba(0,0,0,0.2);padding:5px 12px;
+             border-radius:6px;display:inline-block;}
+
+  .container{max-width:880px;margin:-30px auto 0;padding:0 24px 80px;position:relative;z-index:2;}
+
+  article{background:#fff;border-radius:12px;padding:48px 56px;
+          border:1px solid #e2e8f0;box-shadow:0 4px 16px rgba(15,23,42,0.04);}
+  @media(max-width:768px){
+    article{padding:32px 24px;}
+    .hero h1{font-size:26px;}
+  }
+
+  article h1{font-size:30px;font-weight:800;color:#0f172a;margin:32px 0 16px;
+             padding-bottom:12px;border-bottom:2px solid #f97316;line-height:1.3;}
+  article h1:first-child{margin-top:0;}
+  article h2{font-size:24px;font-weight:800;color:#0f172a;margin:36px 0 14px;
+             padding-left:14px;border-left:4px solid #f97316;line-height:1.3;}
+  article h3{font-size:19px;font-weight:700;color:#1e293b;margin:28px 0 10px;line-height:1.4;}
+  article h4{font-size:16px;font-weight:700;color:#334155;margin:22px 0 8px;}
+  article h5,article h6{font-size:15px;font-weight:700;color:#475569;margin:18px 0 6px;}
+
+  article p{margin:14px 0;color:#334155;font-size:15px;line-height:1.85;}
+  article strong{color:#0f172a;font-weight:700;}
+  article em{color:#475569;}
+
+  article ul,article ol{margin:14px 0 14px 24px;}
+  article li{margin:6px 0;color:#334155;font-size:15px;line-height:1.8;}
+  article li::marker{color:#f97316;}
+  article ul ul,article ol ol,article ul ol,article ol ul{margin:6px 0 6px 24px;}
+
+  article blockquote{margin:18px 0;padding:14px 20px;background:#f8fafc;
+                     border-left:3px solid #f97316;border-radius:0 8px 8px 0;color:#475569;}
+  article blockquote p{margin:6px 0;}
+
+  article code{background:#f1f5f9;color:#f97316;padding:2px 7px;
+               border-radius:4px;font-family:Consolas,"SF Mono",Monaco,monospace;
+               font-size:13.5px;font-weight:500;}
+  article pre{background:#0f172a;color:#e2e8f0;padding:18px 22px;border-radius:8px;
+              overflow-x:auto;margin:18px 0;font-family:Consolas,"SF Mono",Monaco,monospace;
+              font-size:13.5px;line-height:1.6;}
+  article pre code{background:transparent;color:inherit;padding:0;font-size:inherit;}
+
+  article table{width:100%;border-collapse:collapse;margin:18px 0;
+                font-size:14px;background:#fff;border-radius:8px;overflow:hidden;
+                box-shadow:0 0 0 1px #e2e8f0;}
+  article th{background:#f1f5f9;color:#0f172a;font-weight:700;padding:11px 14px;
+             text-align:left;font-size:13px;border-bottom:1px solid #e2e8f0;}
+  article td{padding:10px 14px;border-bottom:1px solid #f1f5f9;color:#334155;
+             vertical-align:top;}
+  article tr:last-child td{border-bottom:none;}
+  article tr:hover td{background:#f8fafc;}
+
+  article hr{border:none;height:1px;background:#e2e8f0;margin:32px 0;}
+
+  article a{color:#f97316;font-weight:500;}
+  article a:hover{text-decoration:underline;}
+
+  article img{max-width:100%;border-radius:8px;margin:18px 0;}
+
+  /* 目录侧栏（简易）*/
+  .toc{background:#fef3c7;border:1px solid #fbbf24;border-radius:8px;
+       padding:14px 20px;margin:18px 0 28px;}
+  .toc-title{font-size:13px;font-weight:700;color:#92400e;margin-bottom:8px;
+             letter-spacing:1px;}
+  .toc ul{margin:4px 0 0 18px;}
+  .toc li{font-size:13.5px;margin:3px 0;}
+  .toc a{color:#78350f;}
+
+  footer{text-align:center;padding:24px;color:#94a3b8;font-size:12px;
+         border-top:1px solid #e2e8f0;background:#fff;margin-top:40px;}
+  footer a{color:#f97316;}
+</style>
+</head>
+<body>
+
+<nav class="topbar">
+  <div class="topbar-inner">
+    <a href="../../index.html">🏠 综合站首页</a>
+    <span class="sep">›</span>
+    <a href="../index.html">运营中心</a>
+    <span class="sep">›</span><span class="here">tools/</span>
+    <span class="right">
+      <a class="source" href="README.md" title="查看 Markdown 源文件">📝 .md 源文件</a>
+    </span>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-inner">
+    <span class="hero-tag">OPERATIONS · TOOLS</span>
+    <h1>工具使用说明</h1>
+    <div class="hero-meta">📁 tools / README.md · 810 字</div>
+  </div>
+</header>
+
+<main class="container">
+  <article>
+<div class="toc">
+  <div class="toc-title">📑 目录</div>
+  <ul>
+    <li><a href="#_2">🚀 快速使用</a></li>
+      <li><a href="#convert_singlepy">convert_single.py · 单篇通用版（推荐）</a></li>
+      <li><a href="#convert_v2py">convert_v2.py · 双版本专用版</a></li>
+    <li><a href="#html">🎨 公众号 HTML 样式说明</a></li>
+    <li><a href="#_3">📋 复制粘贴流程</a></li>
+      <li><a href="#_4">公众号</a></li>
+      <li><a href="#_5">知乎</a></li>
+    <li><a href="#_6">⚠️ 常见问题</a></li>
+    <li><a href="#_7">🔄 批量转换示例</a></li>
+  </ul>
+</div>
+<h1 id="_1">转换工具使用说明</h1>
+<p>把 <code>insurance-guide/articles/</code> 下的 HTML 文章，一键转换成：<br />
+- <strong>公众号 HTML</strong>（带蓝色样式，浏览器打开后复制粘贴到公众号编辑器，格式全保留）<br />
+- <strong>知乎 Markdown</strong>（原生格式，知乎编辑器直接支持粘贴）</p>
+<h2 id="_2">🚀 快速使用</h2>
+<h3 id="convert_singlepy">convert_single.py · 单篇通用版（推荐）</h3>
+<p>适用于 <code>insurance-guide/articles/</code> 下任意单篇 HTML 文章。</p>
+<p><strong>用法</strong>：</p>
+<div class="codehilite"><pre><span></span><code>python<span class="w"> </span>insurance-guide/operations/tools/convert_single.py<span class="w"> </span>&lt;源HTML路径&gt;<span class="w"> </span>&lt;输出文件主名&gt;
+</code></pre></div>
+
+<p><strong>示例</strong>：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 转换分红险智商税那篇</span>
+python<span class="w"> </span>insurance-guide/operations/tools/convert_single.py<span class="w"> </span><span class="s2">&quot;insurance-guide/articles/cpa-01-dividend-trap.html&quot;</span><span class="w"> </span><span class="s2">&quot;港险分红险智商税CPA拆解&quot;</span>
+
+<span class="c1"># 转换分红实现率那篇</span>
+python<span class="w"> </span>insurance-guide/operations/tools/convert_single.py<span class="w"> </span><span class="s2">&quot;insurance-guide/articles/cpa-02-fulfillment-ratio.html&quot;</span><span class="w"> </span><span class="s2">&quot;港险分红实现率拆解&quot;</span>
+
+<span class="c1"># 转换美元 vs 人民币</span>
+python<span class="w"> </span>insurance-guide/operations/tools/convert_single.py<span class="w"> </span><span class="s2">&quot;insurance-guide/articles/cpa-03-usd-vs-rmb.html&quot;</span><span class="w"> </span><span class="s2">&quot;美元保单vs人民币保单&quot;</span>
+</code></pre></div>
+
+<p><strong>输出</strong>（生成在<strong>项目根目录</strong>）：<br />
+- <code>公众号_&lt;主名&gt;.html</code><br />
+- <code>知乎_&lt;主名&gt;.md</code></p>
+<p><strong>建议工作流</strong>：生成后，把这两个文件移入 <code>operations/published/wechat/</code> 和 <code>operations/published/zhihu/</code> 归档。</p>
+<h3 id="convert_v2py">convert_v2.py · 双版本专用版</h3>
+<p>适用于源 HTML 里同时包含【A】公众号版 + 【B】知乎版的文章（如 <code>v22-persona.html</code>）。</p>
+<div class="codehilite"><pre><span></span><code>python<span class="w"> </span>insurance-guide/operations/tools/convert_v2.py
+</code></pre></div>
+
+<p>（这个脚本目前是硬编码处理 <code>v22-persona.html</code>，如需扩展可参考它的逻辑）</p>
+<h2 id="html">🎨 公众号 HTML 样式说明</h2>
+<p>生成的 HTML 包含以下样式块（在公众号编辑器粘贴后会保留）：</p>
+<table>
+<thead>
+<tr>
+<th>元素</th>
+<th>样式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>h1 主标题</td>
+<td>居中 + 蓝色下边框</td>
+</tr>
+<tr>
+<td>h2 章节</td>
+<td>蓝色左侧竖条 + 主色调</td>
+</tr>
+<tr>
+<td>h3 小节</td>
+<td>深蓝粗体</td>
+</tr>
+<tr>
+<td><strong>加粗</strong></td>
+<td>自动标蓝（视觉重点）</td>
+</tr>
+<tr>
+<td>&gt; 引用块</td>
+<td>浅灰背景 + 蓝左边框</td>
+</tr>
+<tr>
+<td>表格</td>
+<td>蓝表头 + 斑马纹</td>
+</tr>
+<tr>
+<td>列表</td>
+<td>标准缩进</td>
+</tr>
+<tr>
+<td>分割线</td>
+<td>虚线柔和样式</td>
+</tr>
+<tr>
+<td>⚠️ 警告块</td>
+<td>黄色 callout</td>
+</tr>
+<tr>
+<td>💡 关键洞察</td>
+<td>蓝色 callout</td>
+</tr>
+<tr>
+<td>公式块</td>
+<td>等宽字体 + 虚线框</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_3">📋 复制粘贴流程</h2>
+<h3 id="_4">公众号</h3>
+<ol>
+<li>浏览器双击 <code>公众号_*.html</code></li>
+<li>页面上 <code>Ctrl + A</code> 全选</li>
+<li><code>Ctrl + C</code> 复制</li>
+<li>打开 <a href="https://mp.weixin.qq.com">mp.weixin.qq.com</a> → 新建图文</li>
+<li>编辑器里 <code>Ctrl + V</code> 粘贴 → 所有样式保留 ✅</li>
+</ol>
+<h3 id="_5">知乎</h3>
+<ol>
+<li>用编辑器（Cursor / VSCode）打开 <code>知乎_*.md</code></li>
+<li><code>Ctrl + A</code> 全选 → <code>Ctrl + C</code> 复制</li>
+<li>打开知乎 → 写文章 → 直接 <code>Ctrl + V</code> 粘贴</li>
+<li>知乎会自动识别 Markdown 语法 → 标题、加粗、列表、引用、表格全部正确转换 ✅</li>
+</ol>
+<h2 id="_6">⚠️ 常见问题</h2>
+<p><strong>Q: 公众号粘贴后字体变了？</strong><br />
+A: 公众号会用自己默认字体覆盖，这是正常的。<strong>加粗、标题、引用块、列表</strong>等结构性样式都会保留，颜色、对齐方式也保留。</p>
+<p><strong>Q: 表格在公众号显示不全？</strong><br />
+A: 公众号编辑器对表格宽度有限制，如果列数太多可能需要手动调整。建议把宽表格拆成"上下两段"或转成图片。</p>
+<p><strong>Q: 知乎粘贴后没识别 Markdown？</strong><br />
+A: 确认是在"写文章"（不是"写回答"），知乎专栏文章对 Markdown 支持更完整。</p>
+<p><strong>Q: 我想自己改样式？</strong><br />
+A: 编辑 <code>convert_single.py</code> 顶部的 <code>WECHAT_CSS</code> 变量，那是公众号 HTML 用的所有 CSS。</p>
+<h2 id="_7">🔄 批量转换示例</h2>
+<p>如果你想一次转换多篇：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Bash / Git Bash</span>
+<span class="k">for</span><span class="w"> </span>f<span class="w"> </span><span class="k">in</span><span class="w"> </span>insurance-guide/articles/cpa-*.html<span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">    </span><span class="nv">name</span><span class="o">=</span><span class="k">$(</span>basename<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$f</span><span class="s2">&quot;</span><span class="w"> </span>.html<span class="k">)</span>
+<span class="w">    </span>python<span class="w"> </span>insurance-guide/operations/tools/convert_single.py<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$f</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$name</span><span class="s2">&quot;</span>
+<span class="k">done</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="c"># PowerShell</span>
+<span class="nb">Get-ChildItem</span> <span class="n">insurance-guide</span><span class="p">/</span><span class="n">articles</span><span class="p">/</span><span class="n">cpa</span><span class="p">-*.</span><span class="n">html</span> <span class="p">|</span> <span class="k">ForEach</span><span class="n">-Object</span> <span class="p">{</span>
+    <span class="nv">$name</span> <span class="p">=</span> <span class="nv">$_</span><span class="p">.</span><span class="n">BaseName</span>
+    <span class="n">python</span> <span class="n">insurance-guide</span><span class="p">/</span><span class="n">operations</span><span class="p">/</span><span class="n">tools</span><span class="p">/</span><span class="n">convert_single</span><span class="p">.</span><span class="n">py</span> <span class="nv">$_</span><span class="p">.</span><span class="n">FullName</span> <span class="nv">$name</span>
+<span class="p">}</span>
+</code></pre></div>
+  </article>
+</main>
+
+<footer>
+  <div>工具使用说明 · 运营中心 v3.1</div>
+  <div style="margin-top:8px;">
+    <a href="../../index.html">综合站首页</a> · 
+    <a href="../index.html">运营中心</a> · 
+    <a href="README.md">📝 Markdown 源</a>
+  </div>
+</footer>
+
+</body>
+</html>

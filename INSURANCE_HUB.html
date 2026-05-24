@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>香港保险综合站 · 项目总览</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+       color:#1e293b;background:#f8fafc;line-height:1.7;-webkit-font-smoothing:antialiased;}
+  a{color:#1a56db;text-decoration:none;}
+  a:hover{text-decoration:underline;}
+
+  .topbar{background:#fff;padding:14px 24px;border-bottom:1px solid #e2e8f0;
+          position:sticky;top:0;z-index:10;}
+  .topbar-inner{max-width:880px;margin:0 auto;display:flex;align-items:center;gap:12px;
+                font-size:14px;}
+  .topbar a{color:#475569;font-weight:500;}
+  .topbar a:hover{color:#1a56db;text-decoration:none;}
+  .topbar .here{color:#1a56db;font-weight:700;}
+  .topbar .sep{color:#cbd5e1;}
+  .topbar .right{margin-left:auto;font-size:12px;color:#94a3b8;}
+
+  .hero{background:linear-gradient(135deg,#1e3a8a 0%,#3b82f6 100%);
+        color:#fff;padding:50px 24px 60px;}
+  .hero-inner{max-width:880px;margin:0 auto;}
+  .hero-tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:1.5px;
+            background:rgba(255,255,255,0.18);padding:5px 12px;border-radius:12px;
+            margin-bottom:14px;}
+  .hero h1{font-size:34px;font-weight:800;margin-bottom:10px;line-height:1.25;}
+  .hero-meta{font-size:13px;opacity:0.88;font-family:Consolas,Monaco,monospace;
+             margin-top:14px;background:rgba(0,0,0,0.2);padding:5px 12px;
+             border-radius:6px;display:inline-block;}
+
+  .container{max-width:880px;margin:-30px auto 0;padding:0 24px 80px;position:relative;z-index:2;}
+
+  article{background:#fff;border-radius:12px;padding:48px 56px;
+          border:1px solid #e2e8f0;box-shadow:0 4px 16px rgba(15,23,42,0.04);}
+  @media(max-width:768px){article{padding:32px 24px;} .hero h1{font-size:26px;}}
+
+  article h1{font-size:30px;font-weight:800;color:#0f172a;margin:32px 0 16px;
+             padding-bottom:12px;border-bottom:2px solid #1a56db;line-height:1.3;}
+  article h1:first-child{margin-top:0;}
+  article h2{font-size:24px;font-weight:800;color:#0f172a;margin:36px 0 14px;
+             padding-left:14px;border-left:4px solid #1a56db;}
+  article h3{font-size:19px;font-weight:700;color:#1e293b;margin:28px 0 10px;}
+  article h4{font-size:16px;font-weight:700;color:#334155;margin:22px 0 8px;}
+  article p{margin:14px 0;color:#334155;font-size:15px;line-height:1.85;}
+  article strong{color:#0f172a;font-weight:700;}
+  article ul,article ol{margin:14px 0 14px 24px;}
+  article li{margin:6px 0;color:#334155;font-size:15px;line-height:1.8;}
+  article li::marker{color:#1a56db;}
+  article blockquote{margin:18px 0;padding:14px 20px;background:#f8fafc;
+                     border-left:3px solid #1a56db;border-radius:0 8px 8px 0;color:#475569;}
+  article code{background:#f1f5f9;color:#1a56db;padding:2px 7px;border-radius:4px;
+               font-family:Consolas,Monaco,monospace;font-size:13.5px;}
+  article pre{background:#0f172a;color:#e2e8f0;padding:18px 22px;border-radius:8px;
+              overflow-x:auto;margin:18px 0;font-family:Consolas,Monaco,monospace;
+              font-size:13.5px;line-height:1.6;}
+  article pre code{background:transparent;color:inherit;padding:0;}
+  article table{width:100%;border-collapse:collapse;margin:18px 0;font-size:14px;
+                background:#fff;border-radius:8px;overflow:hidden;
+                box-shadow:0 0 0 1px #e2e8f0;}
+  article th{background:#f1f5f9;color:#0f172a;font-weight:700;padding:11px 14px;
+             text-align:left;font-size:13px;border-bottom:1px solid #e2e8f0;}
+  article td{padding:10px 14px;border-bottom:1px solid #f1f5f9;color:#334155;vertical-align:top;}
+  article tr:last-child td{border-bottom:none;}
+  article tr:hover td{background:#f8fafc;}
+  article hr{border:none;height:1px;background:#e2e8f0;margin:32px 0;}
+  article a{color:#1a56db;font-weight:500;}
+
+  footer{text-align:center;padding:24px;color:#94a3b8;font-size:12px;
+         border-top:1px solid #e2e8f0;background:#fff;margin-top:40px;}
+  footer a{color:#1a56db;}
+</style>
+</head>
+<body>
+
+<nav class="topbar">
+  <div class="topbar-inner">
+    <a href="insurance-guide/index.html">🏠 综合站首页</a>
+    <span class="sep">›</span>
+    <span class="here">项目总览</span>
+    <span class="right"><a href="INSURANCE_HUB.md" style="padding:4px 10px;border:1px solid #e2e8f0;border-radius:6px;font-size:12px;color:#64748b;">📝 .md 源</a></span>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-inner">
+    <span class="hero-tag">PROJECT OVERVIEW</span>
+    <h1>香港保险综合站 · 项目总览</h1>
+    <div class="hero-meta">📁 INSURANCE_HUB.md · 整站结构 & 使用说明</div>
+  </div>
+</header>
+
+<main class="container">
+  <article>
+<h1>香港保险综合站 · 总览</h1>
+<p>整个保险业务的内容、知识、运营资料统一入口。</p>
+<h2>🚪 入口</h2>
+<p><strong>👉 浏览器打开</strong>：<a href="insurance-guide/index.html"><code>insurance-guide/index.html</code></a></p>
+<p>这是综合 Dashboard，从这里可以进入：<br />
+- 📚 核心知识库（保险全指南 + 103 篇文章 + IRR 工具 + 30 问等）<br />
+- ✍️ 内容工厂（公众号、知乎、小红书、朋友圈 4 大渠道成稿）<br />
+- 📋 运营战略（6 个月矩阵 + SOP + 战略手册）<br />
+- 🛠️ 工具与资源（转换脚本 + PDF / Excel）</p>
+<h2>📂 目录架构</h2>
+<div class="codehilite"><pre><span></span><code><span class="err">项目根目录</span>
+<span class="err">│</span>
+<span class="err">├──</span><span class="w"> </span><span class="n">insurance</span><span class="o">-</span><span class="n">guide</span><span class="o">/</span><span class="w">                  </span><span class="err">←</span><span class="w"> </span><span class="err">保险综合站根（重点）</span>
+<span class="err">│</span><span class="w">   </span><span class="err">├──</span><span class="w"> </span><span class="n">index</span><span class="o">.</span><span class="n">html</span><span class="w">                    </span><span class="err">🏠</span><span class="w"> </span><span class="err">综合</span><span class="w"> </span><span class="n">Dashboard</span><span class="w"> </span><span class="err">入口（新）</span>
+<span class="err">│</span><span class="w">   </span><span class="err">├──</span><span class="w"> </span><span class="n">guide</span><span class="o">.</span><span class="n">html</span><span class="w">                    </span><span class="err">📖</span><span class="w"> </span><span class="err">完整版保险全指南（原</span><span class="w"> </span><span class="n">index</span><span class="o">.</span><span class="n">html</span><span class="err">）</span>
+<span class="err">│</span><span class="w">   </span><span class="err">├──</span><span class="w"> </span><span class="n">articles</span><span class="o">/</span><span class="w">                     </span><span class="err">📚</span><span class="w"> </span><span class="mi">103</span><span class="w"> </span><span class="err">篇专业文章</span>
+<span class="err">│</span><span class="w">   </span><span class="err">├──</span><span class="w"> </span><span class="n">wechat</span><span class="o">-</span><span class="n">copy</span><span class="o">/</span><span class="w">                  </span><span class="err">公众号旧素材库（</span><span class="mi">30</span><span class="w"> </span><span class="err">篇）</span>
+<span class="err">│</span><span class="w">   </span><span class="err">├──</span><span class="w"> </span><span class="n">xhs</span><span class="o">-</span><span class="n">copy</span><span class="o">/</span><span class="w">                     </span><span class="err">小红书旧素材库（</span><span class="mi">12</span><span class="w"> </span><span class="err">篇）</span>
+<span class="err">│</span><span class="w">   </span><span class="err">├──</span><span class="w"> </span><span class="n">zhihu</span><span class="o">-</span><span class="n">md</span><span class="o">/</span><span class="w">                     </span><span class="err">知乎旧素材库（</span><span class="mi">11</span><span class="w"> </span><span class="err">篇）</span>
+<span class="err">│</span><span class="w">   </span><span class="err">├──</span><span class="w"> </span><span class="mi">30</span><span class="o">-</span><span class="n">questions</span><span class="o">.</span><span class="n">html</span><span class="w">             </span><span class="err">❓</span><span class="w"> </span><span class="err">港险投保</span><span class="w"> </span><span class="mi">30</span><span class="w"> </span><span class="err">问</span>
+<span class="err">│</span><span class="w">   </span><span class="err">├──</span><span class="w"> </span><span class="n">irr</span><span class="o">-</span><span class="n">calculator</span><span class="o">.</span><span class="n">html</span><span class="w">           </span><span class="err">📊</span><span class="w"> </span><span class="n">IRR</span><span class="w"> </span><span class="err">计算器</span>
+<span class="err">│</span><span class="w">   </span><span class="err">├──</span><span class="w"> </span><span class="n">needs</span><span class="o">-</span><span class="n">assessment</span><span class="o">.</span><span class="n">html</span><span class="w">         </span><span class="err">🩺</span><span class="w"> </span><span class="err">家庭需求评估</span>
+<span class="err">│</span><span class="w">   </span><span class="err">├──</span><span class="w"> </span><span class="n">dividend</span><span class="o">-</span><span class="n">rates</span><span class="o">.</span><span class="n">html</span><span class="w">           </span><span class="err">📈</span><span class="w"> </span><span class="err">分红实现率</span>
+<span class="err">│</span><span class="w">   </span><span class="err">│</span>
+<span class="err">│</span><span class="w">   </span><span class="err">└──</span><span class="w"> </span><span class="n">operations</span><span class="o">/</span><span class="w">                   </span><span class="err">📋</span><span class="w"> </span><span class="err">运营中心（新）</span>
+<span class="err">│</span><span class="w">       </span><span class="err">├──</span><span class="w"> </span><span class="n">index</span><span class="o">.</span><span class="n">html</span><span class="w">                </span><span class="err">运营</span><span class="w"> </span><span class="n">Dashboard</span>
+<span class="err">│</span><span class="w">       </span><span class="err">├──</span><span class="w"> </span><span class="n">README</span><span class="o">.</span><span class="n">md</span><span class="w">                 </span><span class="err">使用说明</span>
+<span class="err">│</span><span class="w">       </span><span class="err">├──</span><span class="w"> </span><span class="n">strategy</span><span class="o">/</span><span class="w">                 </span><span class="err">战略文档（</span><span class="mi">6</span><span class="w"> </span><span class="err">个文件）</span>
+<span class="err">│</span><span class="w">       </span><span class="err">├──</span><span class="w"> </span><span class="n">published</span><span class="o">/</span><span class="w">                </span><span class="err">成稿仓库（按渠道分类）</span>
+<span class="err">│</span><span class="w">       </span><span class="err">│</span><span class="w">   </span><span class="err">├──</span><span class="w"> </span><span class="n">wechat</span><span class="o">/</span><span class="w">  </span><span class="n">zhihu</span><span class="o">/</span><span class="w">  </span><span class="n">xhs</span><span class="o">/</span><span class="w">  </span><span class="n">pyq</span><span class="o">/</span>
+<span class="err">│</span><span class="w">       </span><span class="err">├──</span><span class="w"> </span><span class="n">assets</span><span class="o">/</span><span class="w">                   </span><span class="n">PDF</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">Excel</span><span class="w"> </span><span class="err">资源</span>
+<span class="err">│</span><span class="w">       </span><span class="err">├──</span><span class="w"> </span><span class="n">tools</span><span class="o">/</span><span class="w">                    </span><span class="err">转换脚本</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="err">说明</span>
+<span class="err">│</span><span class="w">       </span><span class="err">└──</span><span class="w"> </span><span class="n">reference</span><span class="o">/</span><span class="w">                </span><span class="err">早期素材</span>
+<span class="err">│</span>
+<span class="err">├──</span><span class="w"> </span><span class="err">其他项目文件夹（投资分析、</span><span class="n">Telegram</span><span class="w"> </span><span class="err">项目等，不属于保险站）</span>
+<span class="err">│</span><span class="w">   </span><span class="err">├──</span><span class="w"> </span><span class="n">investment_tracker</span><span class="o">/</span>
+<span class="err">│</span><span class="w">   </span><span class="err">├──</span><span class="w"> </span><span class="n">tg</span><span class="o">-</span><span class="n">club</span><span class="o">/</span>
+<span class="err">│</span><span class="w">   </span><span class="err">├──</span><span class="w"> </span><span class="n">tg</span><span class="o">-</span><span class="n">subscription</span><span class="o">/</span>
+<span class="err">│</span><span class="w">   </span><span class="err">├──</span><span class="w"> </span><span class="n">docs</span><span class="o">/</span>
+<span class="err">│</span><span class="w">   </span><span class="err">└──</span><span class="w"> </span><span class="o">...</span>
+<span class="err">│</span>
+<span class="err">└──</span><span class="w"> </span><span class="n">INSURANCE_HUB</span><span class="o">.</span><span class="n">md</span><span class="w">                  </span><span class="err">←</span><span class="w"> </span><span class="err">本文件（整站总览）</span>
+</code></pre></div>
+
+<h2>📊 内容数量</h2>
+<table>
+<thead>
+<tr>
+<th>区域</th>
+<th>数量</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>专业文章（articles）</td>
+<td>103 篇 HTML</td>
+</tr>
+<tr>
+<td>公众号成稿（published）</td>
+<td>3 篇可发</td>
+</tr>
+<tr>
+<td>公众号旧素材（wechat-copy）</td>
+<td>30 篇</td>
+</tr>
+<tr>
+<td>知乎成稿</td>
+<td>2 篇可发</td>
+</tr>
+<tr>
+<td>知乎旧素材</td>
+<td>11 篇</td>
+</tr>
+<tr>
+<td>小红书成稿</td>
+<td>2 包多条</td>
+</tr>
+<tr>
+<td>小红书旧素材</td>
+<td>12 篇</td>
+</tr>
+<tr>
+<td>战略文档</td>
+<td>6 份</td>
+</tr>
+<tr>
+<td>资源文件（PDF/Excel）</td>
+<td>4 个</td>
+</tr>
+<tr>
+<td>转换工具</td>
+<td>2 个</td>
+</tr>
+</tbody>
+</table>
+<h2>🛠️ 日常工作流</h2>
+<h3>场景 1：发布一篇新文章</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 1. 选文章</span>
+ls<span class="w"> </span>insurance-guide/articles/cpa-*.html
+
+<span class="c1"># 2. 转换成公众号 + 知乎双版本</span>
+python<span class="w"> </span>insurance-guide/operations/tools/convert_single.py<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="s2">&quot;insurance-guide/articles/cpa-02-fulfillment-ratio.html&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="s2">&quot;港险分红实现率拆解&quot;</span>
+
+<span class="c1"># 3. 归档到 published/</span>
+mv<span class="w"> </span>公众号_*.html<span class="w"> </span>公众号_*.md<span class="w"> </span>insurance-guide/operations/published/wechat/
+mv<span class="w"> </span>知乎_*.md<span class="w"> </span>insurance-guide/operations/published/zhihu/
+
+<span class="c1"># 4. 公众号：浏览器打开 HTML → 全选复制 → 粘贴</span>
+<span class="c1"># 5. 知乎：编辑器打开 MD → 复制内容 → 粘贴到知乎&quot;写文章&quot;</span>
+</code></pre></div>
+
+<h3>场景 2：查看运营战略</h3>
+<p>直接打开：<br />
+- <code>insurance-guide/operations/strategy/战略手册.md</code>（最完整）<br />
+- <code>insurance-guide/operations/strategy/公众号6个月内容矩阵.md</code><br />
+- <code>insurance-guide/operations/strategy/知乎6个月日历.md</code></p>
+<h3>场景 3：给客户发资料</h3>
+<ul>
+<li>港险投保 30 问：<code>insurance-guide/operations/assets/港险投保30问_网页版.pdf</code></li>
+<li>家庭财务自查表：<code>insurance-guide/operations/assets/互联网中层家庭财务自查表.xlsx</code></li>
+</ul>
+<h2>🎨 入口预览</h2>
+<p>打开 <code>insurance-guide/index.html</code> 后，你会看到：</p>
+<ul>
+<li>蓝色渐变 Hero 顶部（含统计数字：103+ 文章、4 渠道、50+ 运营资料）</li>
+<li>4 大模块卡片网格：</li>
+<li>📚 核心知识库（6 张卡片，主推「保险全指南」是大卡片）</li>
+<li>✍️ 内容工厂（4 张渠道卡片）</li>
+<li>📋 运营战略（4 张战略卡片）</li>
+<li>🛠️ 工具与资源（3 张卡片）</li>
+<li>底部 Footer 含快速导航链接</li>
+</ul>
+<p>点击「✍️ 内容工厂 → 运营中心」会跳到紫色调的 <code>operations/index.html</code>，里面有更细的成稿列表和工作流说明。</p>
+<h2>🔄 维护建议</h2>
+<ul>
+<li><strong>新增文章</strong>：在 <code>articles/</code> 加新 HTML，回到 dashboard 不用改（文章库统一从 <code>v22-xhs-hub.html</code> 入口）</li>
+<li><strong>新增公众号/知乎成稿</strong>：放到 <code>operations/published/{渠道}/</code>，命名格式 <code>公众号_&lt;主题&gt;.html</code> 或 <code>知乎_&lt;主题&gt;.md</code></li>
+<li><strong>新增战略文档</strong>：放到 <code>operations/strategy/</code>，会自动出现在运营中心的"战略地图"区</li>
+<li><strong>改样式</strong>：编辑 <code>operations/tools/convert_single.py</code> 顶部的 <code>WECHAT_CSS</code></li>
+<li><strong>改 Dashboard 布局</strong>：编辑 <code>insurance-guide/index.html</code>（或 <code>operations/index.html</code>）</li>
+</ul>
+<h2>📝 历史变更</h2>
+<ul>
+<li><strong>v3.0</strong> (2026-05) — 综合站架构完成，新增 Dashboard 入口 + 运营中心</li>
+<li>v2.2 — 文章库扩充到 103 篇</li>
+<li>v1.0 — 单页指南（现归档为 <code>guide.html</code>）</li>
+</ul>
+  </article>
+</main>
+
+<footer>
+  <div>香港保险综合站 v3.1</div>
+  <div style="margin-top:8px;">
+    <a href="insurance-guide/index.html">综合站首页</a> · 
+    <a href="insurance-guide/operations/index.html">运营中心</a> · 
+    <a href="insurance-guide/operations/flagship/README.html">旗舰内容索引</a>
+  </div>
+</footer>
+
+</body>
+</html>

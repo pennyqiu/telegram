@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>知乎发布 SOP</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+       color:#1e293b;background:#f8fafc;line-height:1.7;-webkit-font-smoothing:antialiased;}
+  a{color:#1a56db;text-decoration:none;}
+  a:hover{text-decoration:underline;}
+
+  .topbar{background:#fff;padding:14px 24px;border-bottom:1px solid #e2e8f0;
+          position:sticky;top:0;z-index:10;}
+  .topbar-inner{max-width:880px;margin:0 auto;display:flex;align-items:center;gap:12px;
+                font-size:14px;}
+  .topbar a{color:#475569;font-weight:500;}
+  .topbar a:hover{color:#1a56db;text-decoration:none;}
+  .topbar .here{color:#1a56db;font-weight:700;}
+  .topbar .sep{color:#cbd5e1;}
+  .topbar .right{margin-left:auto;font-size:12px;color:#94a3b8;}
+  .topbar .source{padding:4px 10px;border:1px solid #e2e8f0;border-radius:6px;
+                  font-size:12px;color:#64748b;}
+  .topbar .source:hover{background:#f1f5f9;color:#1a56db;}
+
+  .hero{background:linear-gradient(135deg,#1e3a8a 0%,#3b82f6 100%);
+        color:#fff;padding:50px 24px 60px;}
+  .hero-inner{max-width:880px;margin:0 auto;}
+  .hero-tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:1.5px;
+            background:rgba(255,255,255,0.18);padding:5px 12px;border-radius:12px;
+            margin-bottom:14px;}
+  .hero h1{font-size:34px;font-weight:800;margin-bottom:10px;line-height:1.25;
+           letter-spacing:-0.5px;}
+  .hero-meta{font-size:13px;opacity:0.88;font-family:Consolas,Monaco,monospace;
+             margin-top:14px;background:rgba(0,0,0,0.2);padding:5px 12px;
+             border-radius:6px;display:inline-block;}
+
+  .container{max-width:880px;margin:-30px auto 0;padding:0 24px 80px;position:relative;z-index:2;}
+
+  article{background:#fff;border-radius:12px;padding:48px 56px;
+          border:1px solid #e2e8f0;box-shadow:0 4px 16px rgba(15,23,42,0.04);}
+  @media(max-width:768px){
+    article{padding:32px 24px;}
+    .hero h1{font-size:26px;}
+  }
+
+  article h1{font-size:30px;font-weight:800;color:#0f172a;margin:32px 0 16px;
+             padding-bottom:12px;border-bottom:2px solid #1a56db;line-height:1.3;}
+  article h1:first-child{margin-top:0;}
+  article h2{font-size:24px;font-weight:800;color:#0f172a;margin:36px 0 14px;
+             padding-left:14px;border-left:4px solid #1a56db;line-height:1.3;}
+  article h3{font-size:19px;font-weight:700;color:#1e293b;margin:28px 0 10px;line-height:1.4;}
+  article h4{font-size:16px;font-weight:700;color:#334155;margin:22px 0 8px;}
+  article h5,article h6{font-size:15px;font-weight:700;color:#475569;margin:18px 0 6px;}
+
+  article p{margin:14px 0;color:#334155;font-size:15px;line-height:1.85;}
+  article strong{color:#0f172a;font-weight:700;}
+  article em{color:#475569;}
+
+  article ul,article ol{margin:14px 0 14px 24px;}
+  article li{margin:6px 0;color:#334155;font-size:15px;line-height:1.8;}
+  article li::marker{color:#1a56db;}
+  article ul ul,article ol ol,article ul ol,article ol ul{margin:6px 0 6px 24px;}
+
+  article blockquote{margin:18px 0;padding:14px 20px;background:#f8fafc;
+                     border-left:3px solid #1a56db;border-radius:0 8px 8px 0;color:#475569;}
+  article blockquote p{margin:6px 0;}
+
+  article code{background:#f1f5f9;color:#1a56db;padding:2px 7px;
+               border-radius:4px;font-family:Consolas,"SF Mono",Monaco,monospace;
+               font-size:13.5px;font-weight:500;}
+  article pre{background:#0f172a;color:#e2e8f0;padding:18px 22px;border-radius:8px;
+              overflow-x:auto;margin:18px 0;font-family:Consolas,"SF Mono",Monaco,monospace;
+              font-size:13.5px;line-height:1.6;}
+  article pre code{background:transparent;color:inherit;padding:0;font-size:inherit;}
+
+  article table{width:100%;border-collapse:collapse;margin:18px 0;
+                font-size:14px;background:#fff;border-radius:8px;overflow:hidden;
+                box-shadow:0 0 0 1px #e2e8f0;}
+  article th{background:#f1f5f9;color:#0f172a;font-weight:700;padding:11px 14px;
+             text-align:left;font-size:13px;border-bottom:1px solid #e2e8f0;}
+  article td{padding:10px 14px;border-bottom:1px solid #f1f5f9;color:#334155;
+             vertical-align:top;}
+  article tr:last-child td{border-bottom:none;}
+  article tr:hover td{background:#f8fafc;}
+
+  article hr{border:none;height:1px;background:#e2e8f0;margin:32px 0;}
+
+  article a{color:#1a56db;font-weight:500;}
+  article a:hover{text-decoration:underline;}
+
+  article img{max-width:100%;border-radius:8px;margin:18px 0;}
+
+  /* 目录侧栏（简易）*/
+  .toc{background:#fef3c7;border:1px solid #fbbf24;border-radius:8px;
+       padding:14px 20px;margin:18px 0 28px;}
+  .toc-title{font-size:13px;font-weight:700;color:#92400e;margin-bottom:8px;
+             letter-spacing:1px;}
+  .toc ul{margin:4px 0 0 18px;}
+  .toc li{font-size:13.5px;margin:3px 0;}
+  .toc a{color:#78350f;}
+
+  footer{text-align:center;padding:24px;color:#94a3b8;font-size:12px;
+         border-top:1px solid #e2e8f0;background:#fff;margin-top:40px;}
+  footer a{color:#1a56db;}
+</style>
+</head>
+<body>
+
+<nav class="topbar">
+  <div class="topbar-inner">
+    <a href="../../index.html">🏠 综合站首页</a>
+    <span class="sep">›</span>
+    <a href="../index.html">运营中心</a>
+    <span class="sep">›</span><span class="here">strategy/</span>
+    <span class="right">
+      <a class="source" href="知乎发布SOP.md" title="查看 Markdown 源文件">📝 .md 源文件</a>
+    </span>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-inner">
+    <span class="hero-tag">OPERATIONS · SOP</span>
+    <h1>知乎发布 SOP</h1>
+    <div class="hero-meta">📁 strategy / 知乎发布SOP.md · 2584 字</div>
+  </div>
+</header>
+
+<main class="container">
+  <article>
+<div class="toc">
+  <div class="toc-title">📑 目录</div>
+  <ul>
+    <li><a href="#_1">一、推荐工作流（最稳，损耗最小）</a></li>
+      <li><a href="#step-1-markdown">Step 1 · 用 Markdown 编辑器中转</a></li>
+      <li><a href="#step-2-4">Step 2 · 4 步搬运流程</a></li>
+      <li><a href="#step-3">Step 3 · 文章标题与封面</a></li>
+    <li><a href="#_2">二、知乎编辑器的格式损耗清单</a></li>
+    <li><a href="#seo">三、知乎 SEO 与发布顺序建议</a></li>
+      <li><a href="#32-1">发布节奏（按《战略手册》§3.2 知乎铁律 — 每周日晚 1 篇）</a></li>
+      <li><a href="#5">知乎标签建议（每篇 5 个，组合优化）</a></li>
+      <li><a href="#_3">知乎首段技巧（不要直接粘贴文件中的引用摘要）</a></li>
+    <li><a href="#_4">四、合规与法律检查清单（发布前必看）</a></li>
+      <li><a href="#_5">知乎平台规则（每次发布前自检）</a></li>
+      <li><a href="#hkia">HKIA 合规要求（同步遵守）</a></li>
+    <li><a href="#_6">五、增强建议：让知乎文章「比公众号更好看」</a></li>
+      <li><a href="#1">1. 配图策略</a></li>
+      <li><a href="#2-markdown">2. 配图优于纯 Markdown 表格的场景</a></li>
+      <li><a href="#3">3. 文末引导（合规边界内的最优结构）</a></li>
+    <li><a href="#_7">六、转换脚本日常使用说明</a></li>
+      <li><a href="#_8">转换脚本支持的扩展场景</a></li>
+    <li><a href="#_9">七、常见问题排查</a></li>
+      <li><a href="#q1">Q1：知乎粘贴后表格变成横向单行文字？</a></li>
+      <li><a href="#q2">Q2：粘贴后代码块没有深色背景？</a></li>
+      <li><a href="#q3-emoji">Q3：引用块的 emoji 显示成方块？</a></li>
+      <li><a href="#q4-cpa-xxhtml">Q4：内部链接 (cpa-XX.html) 怎么办？</a></li>
+  </ul>
+</div>
+<h1 id="11-cpa-sop">11 篇 CPA 深度研报 · 知乎发布 SOP</h1>
+<blockquote>
+<p>适用范围：把 <code>insurance-guide/articles/cpa-*.html</code> 的 11 篇深度研报搬运到知乎个人主页。<br />
+配套素材：转换后的 Markdown 文件在 <code>insurance-guide/zhihu-md/</code>，转换脚本在 <code>convert_to_zhihu_md.py</code>。</p>
+</blockquote>
+<hr />
+<h2 id="_1">一、推荐工作流（最稳，损耗最小）</h2>
+<h3 id="step-1-markdown">Step 1 · 用 Markdown 编辑器中转</h3>
+<p>知乎编辑器对<strong>直接粘贴 Markdown 源码</strong>支持有限（部分格式会被识别为纯文本）。最稳的做法是经过 Markdown 编辑器<strong>渲染成富文本</strong>后再粘贴。</p>
+<p>推荐编辑器（任选其一）：<br />
+- <strong>Typora</strong>（macOS/Windows，付费 $14.99，最丝滑）— 所见即所得<br />
+- <strong>Mark Text</strong>（免费、开源、跨平台）<br />
+- <strong>VS Code + Markdown Preview Enhanced 插件</strong>（免费）<br />
+- <strong>Obsidian</strong>（免费）<br />
+- <strong>石墨文档 / 飞书文档 / Notion</strong>（在线，免安装，可直接渲染 Markdown）</p>
+<h3 id="step-2-4">Step 2 · 4 步搬运流程</h3>
+<div class="codehilite"><pre><span></span><code>1. 用 Markdown 编辑器打开 zhihu-md/cpa-01-dividend-trap.md
+2. 切换到「预览模式」或「阅读模式」（看到渲染后的富文本）
+3. Ctrl+A 全选 → Ctrl+C 复制
+4. 知乎写文章 → 在编辑器里 Ctrl+V 粘贴
+</code></pre></div>
+
+<p><strong>预期效果</strong>：<br />
+- ✅ 标题层级（H1–H4）正确保留<br />
+- ✅ 加粗、斜体、列表（含嵌套）保留<br />
+- ✅ 表格保留（知乎自动渲染）<br />
+- ✅ 引用块保留<br />
+- ✅ 代码块保留（知乎渲染为深色背景）<br />
+- ✅ 链接保留</p>
+<h3 id="step-3">Step 3 · 文章标题与封面</h3>
+<ul>
+<li>知乎要求文章标题独立填写（不是从正文 H1 抓）。直接用 Markdown 文件的 H1（第一行的 <code># ...</code>）作为标题。</li>
+<li>封面图建议自制：纯色背景 + 文章标题 + "CPA 深度研报 #N"标签。可用 Canva / Figma 一次性做 11 张 1200×675 的封面。</li>
+</ul>
+<hr />
+<h2 id="_2">二、知乎编辑器的格式损耗清单</h2>
+<table>
+<thead>
+<tr>
+<th>原 HTML 元素</th>
+<th>Markdown 中的形态</th>
+<th>粘贴到知乎后的效果</th>
+<th>是否需要手动补救</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>H2 / H3 / H4 标题</td>
+<td><code>## / ### / ####</code></td>
+<td>✅ 完美保留（知乎只到三级标题，H4 会降级为加粗段落）</td>
+<td>无</td>
+</tr>
+<tr>
+<td>加粗、斜体</td>
+<td><code>**...**</code> / <code>*...*</code></td>
+<td>✅ 完美保留</td>
+<td>无</td>
+</tr>
+<tr>
+<td>无序 / 有序列表（含嵌套）</td>
+<td><code>-</code> / <code>1.</code></td>
+<td>✅ 保留</td>
+<td>无</td>
+</tr>
+<tr>
+<td>表格</td>
+<td>GFM 表格语法</td>
+<td>✅ 保留（行高较大、列宽自适应）</td>
+<td>无</td>
+</tr>
+<tr>
+<td>引用块</td>
+<td><code>&gt; ...</code></td>
+<td>✅ 保留（左边竖线）</td>
+<td>无</td>
+</tr>
+<tr>
+<td>代码块 <code>```</code></td>
+<td><code>```text</code></td>
+<td>✅ 保留（深色背景，支持横向滚动）</td>
+<td>无</td>
+</tr>
+<tr>
+<td>链接</td>
+<td><code>[文字](url)</code></td>
+<td>✅ 保留</td>
+<td>无</td>
+</tr>
+<tr>
+<td>分隔线</td>
+<td><code>---</code></td>
+<td>✅ 保留</td>
+<td>无</td>
+</tr>
+<tr>
+<td>HTML 自定义彩色框（warn / danger / green / callout）</td>
+<td><code>&gt; ⚠️ **劣势暴露：** ...</code></td>
+<td>⚠️ 变为普通引用块（颜色丢失，但 emoji + 加粗标签让语义保留）</td>
+<td><strong>可选</strong>：高优先级提示可加截图配图</td>
+</tr>
+<tr>
+<td>HTML 渐变背景 / 卡片阴影</td>
+<td>无对应</td>
+<td>❌ 丢失</td>
+<td>不影响阅读，不需补救</td>
+</tr>
+<tr>
+<td><code>&lt;div class="formula"&gt;</code> 深色公式框</td>
+<td><code>```text</code> 代码块</td>
+<td>✅ 渲染为深色背景，效果几乎一致</td>
+<td>无</td>
+</tr>
+<tr>
+<td>文末 <code>&lt;p class="cite"&gt;</code> 数据源</td>
+<td><code>*...*</code> 斜体</td>
+<td>✅ 保留</td>
+<td>无</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="seo">三、知乎 SEO 与发布顺序建议</h2>
+<h3 id="32-1">发布节奏（按《战略手册》§3.2 知乎铁律 — 每周日晚 1 篇）</h3>
+<table>
+<thead>
+<tr>
+<th>周次</th>
+<th>推荐发布</th>
+<th>选题理由</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>W1</td>
+<td><strong>#01 香港分红险到底是不是智商税？</strong></td>
+<td>行业最高流量话题，破圈必备，立人设</td>
+</tr>
+<tr>
+<td>W2</td>
+<td><strong>#04 港险前 5 年退保本金折损率实测</strong></td>
+<td>"主动暴露劣势" 系列的第一记重拳，建立信任度</td>
+</tr>
+<tr>
+<td>W3</td>
+<td><strong>#02 5000 字读懂分红实现率</strong></td>
+<td>数据派标签，针对会查分红实现率的进阶读者</td>
+</tr>
+<tr>
+<td>W4</td>
+<td><strong>#08 安盛/保诚/友邦/宏利主力储蓄险横评</strong></td>
+<td>高搜索量、强 SEO 关键词、合规边界示范</td>
+</tr>
+<tr>
+<td>W5</td>
+<td><strong>#03 美元保单 vs 内地年金 PPP 对比</strong></td>
+<td>引入精算模型，差异化于市面浅尝辄止的对比文</td>
+</tr>
+<tr>
+<td>W6</td>
+<td><strong>#09 CRS 下香港保单申报全规则</strong></td>
+<td>CPA 招牌专题，对高净值客户精准引流</td>
+</tr>
+<tr>
+<td>W7</td>
+<td><strong>#10 大陆 CPA 解读 — 港险在内地法律下的效力边界</strong></td>
+<td>民营企业主话题，强法律背书</td>
+</tr>
+<tr>
+<td>W8</td>
+<td><strong>#11 期权行权高税负，港险能不能「递延」？</strong></td>
+<td>大湾区科技新贵专题，赛道一精准爆破</td>
+</tr>
+<tr>
+<td>W9</td>
+<td><strong>#06 第二被保人 + 更换被保人跨代传承</strong></td>
+<td>进阶专题，开始触达超高净值</td>
+</tr>
+<tr>
+<td>W10</td>
+<td><strong>#07 重疾险多次赔付的真假对比</strong></td>
+<td>中间穿插保障险话题，覆盖更广泛人群</td>
+</tr>
+<tr>
+<td>W11</td>
+<td><strong>#05 万用寿险 + 保单融资压力测试</strong></td>
+<td>收官篇，触达顶部 1% 客群</td>
+</tr>
+</tbody>
+</table>
+<h3 id="5">知乎标签建议（每篇 5 个，组合优化）</h3>
+<p>固定标签：<code>香港保险</code>、<code>保险</code><br />
+变动标签（按文章主题选 3 个）：<br />
+- 第 1/2/8 篇：<code>分红型保险</code>、<code>理财</code>、<code>财务规划</code><br />
+- 第 3 篇：<code>通货膨胀</code>、<code>美元</code>、<code>资产配置</code><br />
+- 第 4 篇：<code>保单退保</code>、<code>消费陷阱</code><br />
+- 第 5 篇：<code>高净值人群</code>、<code>财富管理</code><br />
+- 第 6 篇：<code>遗产继承</code>、<code>财产传承</code><br />
+- 第 7 篇：<code>重大疾病保险</code>、<code>保障</code><br />
+- 第 9 篇：<code>税务筹划</code>、<code>CRS</code>、<code>跨境税务</code><br />
+- 第 10 篇：<code>法律</code>、<code>民营企业</code><br />
+- 第 11 篇：<code>股票期权</code>、<code>RSU</code>、<code>员工持股</code></p>
+<h3 id="_3">知乎首段技巧（不要直接粘贴文件中的引用摘要）</h3>
+<p>知乎首段会被作为「文章列表预览」抓取。建议每篇文章手动改写首段为：<br />
+- <strong>疑问句开头</strong>（触发好奇心，提高完读率）<br />
+- <strong>不超过 80 字</strong>（手机端预览最多显示 2 行）<br />
+- <strong>包含核心关键词</strong>（利于知乎搜索 SEO）</p>
+<p>举例（第 1 篇）：</p>
+<p>原文摘要（机械）：</p>
+<blockquote>
+<p>这篇研报不试图说服你买或不买，而是把分红储蓄险的精算假设、费用结构、非保证收益的兑现机制全部摊开...</p>
+</blockquote>
+<p>改写后（知乎首段）：</p>
+<blockquote>
+<p>香港分红险到底是不是智商税？这个问题被问了 6 年，至今没有任何代理给过完整答案。本文用 CPA 视角 + 8500 字，把保单的精算假设、费用结构、非保证收益的兑现机制全部摊开，看完你自己就能判断。</p>
+</blockquote>
+<hr />
+<h2 id="_4">四、合规与法律检查清单（发布前必看）</h2>
+<h3 id="_5">知乎平台规则（每次发布前自检）</h3>
+<ul>
+<li>[ ] 不含直接销售引导（如「私信咨询报价」「VX 加我」）</li>
+<li>[ ] 不含具体公司收益保证语言（如「保 7%」「3 倍回报」）</li>
+<li>[ ] 引用第三方数据 → 标明来源（hkinsu.com / 香港保监局 / Moody's 等）</li>
+<li>[ ] 横评不诋毁同业（保持「只摆数据，不下价值判断」）</li>
+<li>[ ] 案例均已脱敏（无真实姓名、公司、金额）</li>
+<li>[ ] 文末没有微信号 / 手机号（合规底线）</li>
+</ul>
+<h3 id="hkia">HKIA 合规要求（同步遵守）</h3>
+<ul>
+<li>[ ] 不在内地公开发起销售或招揽行为</li>
+<li>[ ] 仅作教育 / 科普 / 学术目的</li>
+<li>[ ] 不承诺非保证收益</li>
+<li>[ ] 不展示返佣信息（保监局明令禁止）</li>
+</ul>
+<hr />
+<h2 id="_6">五、增强建议：让知乎文章「比公众号更好看」</h2>
+<h3 id="1">1. 配图策略</h3>
+<p>知乎对长文的图文比例敏感（图文比 1:200–500 字最佳）。每篇 8000 字研报建议配 6–12 张图：</p>
+<table>
+<thead>
+<tr>
+<th>图位</th>
+<th>内容</th>
+<th>制作方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>文章封面</td>
+<td>标题 + #N 系列编号 + 深色背景</td>
+<td>Canva / Figma 模板</td>
+</tr>
+<tr>
+<td>章首扉页</td>
+<td>阅读地图 → 一张思维导图</td>
+<td>XMind / Whimsical</td>
+</tr>
+<tr>
+<td>数据表格章节</td>
+<td>把 HTML 中的复杂表格截图</td>
+<td>浏览器打开 HTML，对应区块截图（推荐 Edge / Chrome 的「网页截图」插件）</td>
+</tr>
+<tr>
+<td>公式块章节</td>
+<td>HTML 的深色 <code>.formula</code> 区块截图</td>
+<td>同上</td>
+</tr>
+<tr>
+<td>决策矩阵章节</td>
+<td>把 HTML 中决策表格截图</td>
+<td>同上</td>
+</tr>
+<tr>
+<td>文末</td>
+<td>个人头像 + 简介 + 公众号二维码</td>
+<td>个人 VI 模板</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2-markdown">2. 配图优于纯 Markdown 表格的场景</h3>
+<p>知乎渲染的 Markdown 表格虽可读，但视觉上<strong>色彩单调、缺乏强调</strong>。以下场景建议用 HTML 截图替代纯 Markdown 表格：<br />
+- 第 1 篇：04 节 IRR 反向工程的 4 行公式<br />
+- 第 4 篇：损失率 bar 图（<code>.loss-bar</code> 红色高亮）<br />
+- 第 5 篇：4 种利率情景的对比表<br />
+- 第 7 篇：精算寿命表反推真实兑现概率</p>
+<h3 id="3">3. 文末引导（合规边界内的最优结构）</h3>
+<div class="codehilite"><pre><span></span><code>---
+**关于作者**
+注册会计师 (CPA) × 8 年迅雷 (NASDAQ: XNET) 上市公司总账 × 跨境财富架构师。
+专注于用「资产负债表思维」帮高净值家庭做跨境财富结构化。
+
+**系列研报**
+这是 CPA 深度研报矩阵的第 X 篇。完整 11 篇主题：
+- #01 香港分红险到底是不是智商税？
+- #02 5000 字读懂分红实现率
+- ...（全部列出，每篇加知乎站内链接）
+
+**进一步交流**
+本文不构成投资建议。如需针对你家庭情况的具体诊断，欢迎通过公众号「XXX」留言。
+（绝不在公开内容里留个人微信号 — 这是 HKIA 合规底线）
+</code></pre></div>
+
+<hr />
+<h2 id="_7">六、转换脚本日常使用说明</h2>
+<p>如果未来 11 篇研报的 HTML 有更新，重新生成知乎版本只需要：</p>
+<div class="codehilite"><pre><span></span><code>python<span class="w"> </span>convert_to_zhihu_md.py
+</code></pre></div>
+
+<p>输出目录：<code>insurance-guide/zhihu-md/cpa-*.md</code></p>
+<h3 id="_8">转换脚本支持的扩展场景</h3>
+<p>如果未来你要把这套研报同步发布到其他平台（公众号、头条、百家号），可以基于 <code>convert_to_zhihu_md.py</code> 派生：<br />
+- <code>convert_to_wechat_md.py</code>：公众号需要 HTML 富文本，可以保留原 HTML 但替换样式表为公众号兼容版本<br />
+- <code>convert_to_toutiao_md.py</code>：头条号支持 Markdown 但表格渲染较弱，需要做表格转图片预处理</p>
+<hr />
+<h2 id="_9">七、常见问题排查</h2>
+<h3 id="q1">Q1：知乎粘贴后表格变成横向单行文字？</h3>
+<p>A：知乎编辑器对 Markdown 表格的识别要求：表头分隔行 <code>| --- | --- |</code> 必须存在。脚本已自动生成，如果手动调整后丢失，需要补回。</p>
+<h3 id="q2">Q2：粘贴后代码块没有深色背景？</h3>
+<p>A：知乎需要明确的代码语言标识（<code>```text</code>、<code>```python</code> 等）。脚本已统一使用 <code>```text</code>，应该不会出问题。如果仍有问题，手动在知乎编辑器里选中文字，点工具栏的「代码块」按钮。</p>
+<h3 id="q3-emoji">Q3：引用块的 emoji 显示成方块？</h3>
+<p>A：知乎 PC 端 Web 编辑器 emoji 渲染正常，但部分企业内网或老旧浏览器可能显示成方块。如果担心，可以把 emoji 替换为纯文字标签：<br />
+- <code>⚠️ **劣势暴露：**</code> → <code>【劣势暴露】</code><br />
+- <code>🚨 **严重警告：**</code> → <code>【严重警告】</code><br />
+- <code>✅ **合规建议：**</code> → <code>【合规建议】</code><br />
+- <code>💎</code> → <code>【洞察】</code></p>
+<h3 id="q4-cpa-xxhtml">Q4：内部链接 (cpa-XX.html) 怎么办？</h3>
+<p>A：脚本已自动把内部链接转成「<strong>xxx</strong>（见姐妹篇）」的形式。等你在知乎发布了所有 11 篇之后，可以手动把它们替换为知乎站内链接（<code>zhihu.com/p/{文章 ID}</code>）。</p>
+<hr />
+<blockquote>
+<p><strong>维护说明：</strong> 本 SOP 与《战略手册.md》§3.2 知乎铁律、§7 合规红线保持一致。<br />
+任何流程变更请同步更新此文件并 commit。</p>
+</blockquote>
+  </article>
+</main>
+
+<footer>
+  <div>知乎发布 SOP · 运营中心 v3.1</div>
+  <div style="margin-top:8px;">
+    <a href="../../index.html">综合站首页</a> · 
+    <a href="../index.html">运营中心</a> · 
+    <a href="知乎发布SOP.md">📝 Markdown 源</a>
+  </div>
+</footer>
+
+</body>
+</html>

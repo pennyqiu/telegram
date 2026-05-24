@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>公众号 6 个月内容矩阵</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+       color:#1e293b;background:#f8fafc;line-height:1.7;-webkit-font-smoothing:antialiased;}
+  a{color:#1a56db;text-decoration:none;}
+  a:hover{text-decoration:underline;}
+
+  .topbar{background:#fff;padding:14px 24px;border-bottom:1px solid #e2e8f0;
+          position:sticky;top:0;z-index:10;}
+  .topbar-inner{max-width:880px;margin:0 auto;display:flex;align-items:center;gap:12px;
+                font-size:14px;}
+  .topbar a{color:#475569;font-weight:500;}
+  .topbar a:hover{color:#10b981;text-decoration:none;}
+  .topbar .here{color:#10b981;font-weight:700;}
+  .topbar .sep{color:#cbd5e1;}
+  .topbar .right{margin-left:auto;font-size:12px;color:#94a3b8;}
+  .topbar .source{padding:4px 10px;border:1px solid #e2e8f0;border-radius:6px;
+                  font-size:12px;color:#64748b;}
+  .topbar .source:hover{background:#f1f5f9;color:#10b981;}
+
+  .hero{background:linear-gradient(135deg,#047857 0%,#10b981 100%);
+        color:#fff;padding:50px 24px 60px;}
+  .hero-inner{max-width:880px;margin:0 auto;}
+  .hero-tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:1.5px;
+            background:rgba(255,255,255,0.18);padding:5px 12px;border-radius:12px;
+            margin-bottom:14px;}
+  .hero h1{font-size:34px;font-weight:800;margin-bottom:10px;line-height:1.25;
+           letter-spacing:-0.5px;}
+  .hero-meta{font-size:13px;opacity:0.88;font-family:Consolas,Monaco,monospace;
+             margin-top:14px;background:rgba(0,0,0,0.2);padding:5px 12px;
+             border-radius:6px;display:inline-block;}
+
+  .container{max-width:880px;margin:-30px auto 0;padding:0 24px 80px;position:relative;z-index:2;}
+
+  article{background:#fff;border-radius:12px;padding:48px 56px;
+          border:1px solid #e2e8f0;box-shadow:0 4px 16px rgba(15,23,42,0.04);}
+  @media(max-width:768px){
+    article{padding:32px 24px;}
+    .hero h1{font-size:26px;}
+  }
+
+  article h1{font-size:30px;font-weight:800;color:#0f172a;margin:32px 0 16px;
+             padding-bottom:12px;border-bottom:2px solid #10b981;line-height:1.3;}
+  article h1:first-child{margin-top:0;}
+  article h2{font-size:24px;font-weight:800;color:#0f172a;margin:36px 0 14px;
+             padding-left:14px;border-left:4px solid #10b981;line-height:1.3;}
+  article h3{font-size:19px;font-weight:700;color:#1e293b;margin:28px 0 10px;line-height:1.4;}
+  article h4{font-size:16px;font-weight:700;color:#334155;margin:22px 0 8px;}
+  article h5,article h6{font-size:15px;font-weight:700;color:#475569;margin:18px 0 6px;}
+
+  article p{margin:14px 0;color:#334155;font-size:15px;line-height:1.85;}
+  article strong{color:#0f172a;font-weight:700;}
+  article em{color:#475569;}
+
+  article ul,article ol{margin:14px 0 14px 24px;}
+  article li{margin:6px 0;color:#334155;font-size:15px;line-height:1.8;}
+  article li::marker{color:#10b981;}
+  article ul ul,article ol ol,article ul ol,article ol ul{margin:6px 0 6px 24px;}
+
+  article blockquote{margin:18px 0;padding:14px 20px;background:#f8fafc;
+                     border-left:3px solid #10b981;border-radius:0 8px 8px 0;color:#475569;}
+  article blockquote p{margin:6px 0;}
+
+  article code{background:#f1f5f9;color:#10b981;padding:2px 7px;
+               border-radius:4px;font-family:Consolas,"SF Mono",Monaco,monospace;
+               font-size:13.5px;font-weight:500;}
+  article pre{background:#0f172a;color:#e2e8f0;padding:18px 22px;border-radius:8px;
+              overflow-x:auto;margin:18px 0;font-family:Consolas,"SF Mono",Monaco,monospace;
+              font-size:13.5px;line-height:1.6;}
+  article pre code{background:transparent;color:inherit;padding:0;font-size:inherit;}
+
+  article table{width:100%;border-collapse:collapse;margin:18px 0;
+                font-size:14px;background:#fff;border-radius:8px;overflow:hidden;
+                box-shadow:0 0 0 1px #e2e8f0;}
+  article th{background:#f1f5f9;color:#0f172a;font-weight:700;padding:11px 14px;
+             text-align:left;font-size:13px;border-bottom:1px solid #e2e8f0;}
+  article td{padding:10px 14px;border-bottom:1px solid #f1f5f9;color:#334155;
+             vertical-align:top;}
+  article tr:last-child td{border-bottom:none;}
+  article tr:hover td{background:#f8fafc;}
+
+  article hr{border:none;height:1px;background:#e2e8f0;margin:32px 0;}
+
+  article a{color:#10b981;font-weight:500;}
+  article a:hover{text-decoration:underline;}
+
+  article img{max-width:100%;border-radius:8px;margin:18px 0;}
+
+  /* 目录侧栏（简易）*/
+  .toc{background:#fef3c7;border:1px solid #fbbf24;border-radius:8px;
+       padding:14px 20px;margin:18px 0 28px;}
+  .toc-title{font-size:13px;font-weight:700;color:#92400e;margin-bottom:8px;
+             letter-spacing:1px;}
+  .toc ul{margin:4px 0 0 18px;}
+  .toc li{font-size:13.5px;margin:3px 0;}
+  .toc a{color:#78350f;}
+
+  footer{text-align:center;padding:24px;color:#94a3b8;font-size:12px;
+         border-top:1px solid #e2e8f0;background:#fff;margin-top:40px;}
+  footer a{color:#10b981;}
+</style>
+</head>
+<body>
+
+<nav class="topbar">
+  <div class="topbar-inner">
+    <a href="../../index.html">🏠 综合站首页</a>
+    <span class="sep">›</span>
+    <a href="../index.html">运营中心</a>
+    <span class="sep">›</span><span class="here">strategy/</span>
+    <span class="right">
+      <a class="source" href="公众号6个月内容矩阵.md" title="查看 Markdown 源文件">📝 .md 源文件</a>
+    </span>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-inner">
+    <span class="hero-tag">OPERATIONS · WECHAT</span>
+    <h1>公众号 6 个月内容矩阵</h1>
+    <div class="hero-meta">📁 strategy / 公众号6个月内容矩阵.md · 4860 字</div>
+  </div>
+</header>
+
+<main class="container">
+  <article>
+<div class="toc">
+  <div class="toc-title">📑 目录</div>
+  <ul>
+    <li><a href="#_1">第一章 战略定位与基本盘</a></li>
+      <li><a href="#11">1.1 公众号在三层漏斗中的角色</a></li>
+      <li><a href="#12">1.2 三大写作原则</a></li>
+      <li><a href="#13-6-15">1.3 三类内容配比(6 个月 15 篇)</a></li>
+    <li><a href="#6">第二章 6 个月主题地图(与小红书日历对齐)</a></li>
+      <li><a href="#_2">双赛道篇数平衡</a></li>
+    <li><a href="#15">第三章 15 篇详细内容日历</a></li>
+      <li><a href="#m1-w2-w4-2">M1 · 人设奠基月(W2 + W4,共 2 篇)</a></li>
+      <li><a href="#m2-w5w8-3">M2 · 科技中产痛点深拆月(W5–W8,共 3 篇)</a></li>
+      <li><a href="#m3-w10w13-3">M3 · 跨境家庭教育金月(W10–W13,共 3 篇)</a></li>
+      <li><a href="#m4-crs-w15-w17-2">M4 · CRS 与税务身份月(W15 + W17,共 2 篇)</a></li>
+      <li><a href="#m5-w18w21-3">M5 · 产品横评 + 反向揭短月(W18–W21,共 3 篇)</a></li>
+      <li><a href="#m6-w23-w25w26-2">M6 · 案例武器化 + 转化开放月(W23 + W25/W26,共 2 篇)</a></li>
+    <li><a href="#m7">第四章 选题方法论(M7 之后自己选题用)</a></li>
+      <li><a href="#41-5">4.1 5 个选题钩子公式</a></li>
+      <li><a href="#42-5">4.2 每篇必含的 5 个结构件</a></li>
+      <li><a href="#43">4.3 严禁出现的内容(合规红线)</a></li>
+      <li><a href="#44-5-cta">4.4 5 种合规 CTA 模板</a></li>
+    <li><a href="#_3">第五章 跨平台联动机制</a></li>
+      <li><a href="#51">5.1 公众号 ↔ 知乎 ↔ 小红书的内容复用规则</a></li>
+      <li><a href="#52">5.2 每月内容生产流水线(避免重复造轮子)</a></li>
+      <li><a href="#53">5.3 朋友圈预告联动(每篇公众号长文必发)</a></li>
+    <li><a href="#m1">第六章 钩子物料清单(M1 启动前必须备齐)</a></li>
+    <li><a href="#_4">第七章 度量与迭代</a></li>
+      <li><a href="#71-kpi">7.1 月度复盘 KPI</a></li>
+      <li><a href="#72-7">7.2 单篇复盘问题清单(每篇发布 7 天后)</a></li>
+      <li><a href="#73-6-m6-w26">7.3 6 个月末复盘(M6 W26)</a></li>
+    <li><a href="#_5">第八章 执行铁律(贴在工作日历上)</a></li>
+    <li><a href="#_6">第九章 与战略手册的对应关系</a></li>
+    <li><a href="#6-m7m12">第十章 后续 6 个月(M7–M12)选题方向预告</a></li>
+  </ul>
+</div>
+<h1 id="6-v10">微信公众号 6 个月内容矩阵 v1.0</h1>
+<blockquote>
+<p>《内向型 CPA · 香港跨境财富架构师 战略执行手册 v2.3》配套专章</p>
+<p><strong>栏目定位</strong>:「<strong>高净值财富管理内参</strong>」——用 CPA 视角与上市公司财务标准,为科技中产与跨境家庭做资产负债表重构。</p>
+<p><strong>写作铁律</strong>:每月 2–3 篇原创长文,<strong>单篇 3500–6000 字</strong>。三类内容(政策解读 / 匿名案例 / 认知升级)按 30/40/30 配比,与小红书 39 篇日历的月度主题完全对齐。</p>
+</blockquote>
+<hr />
+<h2 id="_1">第一章 战略定位与基本盘</h2>
+<h3 id="11">1.1 公众号在三层漏斗中的角色</h3>
+<div class="codehilite"><pre><span></span><code>小红书(顶部破圈)→ 知乎(中部深度)→ 公众号(底部信任孵化)→ 朋友圈(私域复利)→ 1V1 签约
+</code></pre></div>
+
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>公众号在矩阵中的独特价值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>承接位置</strong></td>
+<td>知乎万字研报的「沉淀地」;小红书钩子的「兑换券」最终归宿</td>
+</tr>
+<tr>
+<td><strong>读者画像</strong></td>
+<td>已经看过你 2–3 篇知乎/小红书内容,带着"想多了解你"的意图来的中后段用户</td>
+</tr>
+<tr>
+<td><strong>决策影响</strong></td>
+<td>客户加你微信前的<strong>最后一道信任验证</strong>;决定他是否愿意进入 KYC 流程</td>
+</tr>
+<tr>
+<td><strong>内容时长</strong></td>
+<td>唯一允许 5000 字+ 完整论证的私域阵地(朋友圈太短、小红书太短、知乎偏公域)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="12">1.2 三大写作原则</h3>
+<ol>
+<li><strong>每篇必须能独立成单</strong>:不依赖前文,新关注者随便点开一篇都能拿到价值</li>
+<li><strong>每篇必须有一个反直觉点</strong>:CPA 视角的"冷峻拆解"是核心壁垒,不是科普文</li>
+<li><strong>每篇都要为「未来某位翻看历史的客户」而写</strong>:3 年后翻看依然有信息价值</li>
+</ol>
+<h3 id="13-6-15">1.3 三类内容配比(6 个月 15 篇)</h3>
+<table>
+<thead>
+<tr>
+<th>内容类型</th>
+<th>篇数</th>
+<th>占比</th>
+<th>核心目标</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>政策解读类</strong></td>
+<td>5 篇</td>
+<td>33%</td>
+<td>树立「跨境合规权威」标签</td>
+</tr>
+<tr>
+<td><strong>匿名案例类</strong></td>
+<td>6 篇</td>
+<td>40%</td>
+<td>案例库武器化,直接推动转化</td>
+</tr>
+<tr>
+<td><strong>认知升级类</strong></td>
+<td>4 篇</td>
+<td>27%</td>
+<td>打破常识,建立"CPA 视角"心智</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⚠️ 配比说明:<strong>匿名案例占比最高</strong>,因为它在 v2.3 手册第 6 章 M13-M24 路线图里被明确定义为「案例库武器化」的核心资产。前 6 个月的 6 篇案例为后期的爆款打底。</p>
+</blockquote>
+<hr />
+<h2 id="6">第二章 6 个月主题地图(与小红书日历对齐)</h2>
+<table>
+<thead>
+<tr>
+<th>月份</th>
+<th>主题</th>
+<th>公众号篇数</th>
+<th>核心定位</th>
+<th>小红书联动</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>M1</strong></td>
+<td>人设奠基 + 立场亮相</td>
+<td>2</td>
+<td>让读者认识"CPA 做港险"是什么样的存在</td>
+<td>配 6 篇小红书人设破圈</td>
+</tr>
+<tr>
+<td><strong>M2</strong></td>
+<td>科技中产痛点深拆</td>
+<td>3</td>
+<td>引爆赛道一,树立"互联网中产财务专家"标签</td>
+<td>配 6 篇小红书 🟢</td>
+</tr>
+<tr>
+<td><strong>M3</strong></td>
+<td>跨境家庭教育金</td>
+<td>3</td>
+<td>引爆赛道二,沉淀跨境家庭粉丝</td>
+<td>配 7 篇小红书 🔵</td>
+</tr>
+<tr>
+<td><strong>M4</strong></td>
+<td>CRS 与税务身份(政策深度)</td>
+<td>2</td>
+<td>树立"跨境合规专家"标签</td>
+<td>配 6 篇小红书 🟣🔵</td>
+</tr>
+<tr>
+<td><strong>M5</strong></td>
+<td>产品横评 + 反向揭短</td>
+<td>3</td>
+<td>主动暴露劣势,反向建立信任</td>
+<td>配 6 篇小红书 ⚪🟢</td>
+</tr>
+<tr>
+<td><strong>M6</strong></td>
+<td>案例武器化 + 转化开放</td>
+<td>2</td>
+<td>集中转化期,首次开放 1V1 诊断名额</td>
+<td>配 8 篇小红书综合</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_2">双赛道篇数平衡</h3>
+<table>
+<thead>
+<tr>
+<th>赛道</th>
+<th>篇数</th>
+<th>占比</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>🟢 赛道一(科技中产/新贵)</td>
+<td>6 篇</td>
+<td>40%</td>
+</tr>
+<tr>
+<td>🔵 赛道二(跨境个人/海外身份)</td>
+<td>6 篇</td>
+<td>40%</td>
+</tr>
+<tr>
+<td>⚪ 港险通识 / 产品横评</td>
+<td>2 篇</td>
+<td>13%</td>
+</tr>
+<tr>
+<td>🟣 CRS / 跨境税务深度</td>
+<td>1 篇</td>
+<td>7%</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="15">第三章 15 篇详细内容日历</h2>
+<blockquote>
+<p>图例:🟢 赛道一(科技中产) · 🔵 赛道二(跨境个人) · ⚪ 港险通识 · 🟣 CRS/税务</p>
+<p>类型缩写:【认知】认知升级 · 【案例】匿名案例 · 【政策】政策解读</p>
+</blockquote>
+<h3 id="m1-w2-w4-2">M1 · 人设奠基月(W2 + W4,共 2 篇)</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>周</th>
+<th>类型</th>
+<th>赛道</th>
+<th>标题</th>
+<th>字数</th>
+<th>核心反直觉点 / 钩子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>01</td>
+<td>W2 周日</td>
+<td>【认知】</td>
+<td>⚪</td>
+<td><strong>一个 8 年迅雷 CPA 为什么转身做香港保险</strong>(✅ 已完成)</td>
+<td>3500</td>
+<td>不是被销售吸引,是被一份"上市公司财务标准能解决普通家庭问题"的可能性吸引</td>
+</tr>
+<tr>
+<td>02</td>
+<td>W4 周日</td>
+<td>【认知】</td>
+<td>🟢</td>
+<td><strong>写给科技中产的"家庭资产负债表"思维入门:把家庭当上市公司管</strong></td>
+<td>5000</td>
+<td>你过去用错了"理财"工具——你需要的不是产品,是一张资产负债表</td>
+</tr>
+</tbody>
+</table>
+<p><strong>M1 核心目的</strong>:在客户第一次翻你公众号时,<strong>前 2 篇就要锁定"专业身份 + 思维框架"</strong>,让后续 4 个月的具体内容都有附着点。</p>
+<hr />
+<h3 id="m2-w5w8-3">M2 · 科技中产痛点深拆月(W5–W8,共 3 篇)</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>周</th>
+<th>类型</th>
+<th>赛道</th>
+<th>标题</th>
+<th>字数</th>
+<th>核心反直觉点 / 钩子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>03</td>
+<td>W6 周日</td>
+<td>【认知】</td>
+<td>🟢</td>
+<td><strong>大厂股票不是"安全资产":一个 CPA 对 90% 互联网人资产结构的诊断</strong></td>
+<td>5000</td>
+<td>你以为分散在腾讯/字节/美团 ≠ 分散;你的"安全资产"和"工作收入"在同一根脆弱链条上</td>
+</tr>
+<tr>
+<td>04</td>
+<td>W7 周日</td>
+<td>【案例】</td>
+<td>🟢</td>
+<td><strong>我是如何帮一位字节 M5 重构家庭资产负债表的(深度脱敏)</strong></td>
+<td>6000</td>
+<td>800 万净资产、85% 集中在 RSU,3 个月跑出 4 版模型——他最后选择了"看起来收益最低"的那个</td>
+</tr>
+<tr>
+<td>05</td>
+<td>W8 周日</td>
+<td>【认知】</td>
+<td>🟢</td>
+<td><strong>35 岁中年危机的"现金流降落伞":N+1 应该装在什么工具里</strong></td>
+<td>5000</td>
+<td>不要把 N+1 当遣散费,把它当一份"重建职业生涯前 18 个月的现金流底仓"</td>
+</tr>
+</tbody>
+</table>
+<p><strong>M2 核心目的</strong>:<strong>赛道一引爆月</strong>。一篇认知文打认知地基、一篇案例文做转化样本、一篇细分痛点文导流公众号关注。<strong>M2 结束时,赛道一画像的客户应该已经能在你的内容里"对号入座"。</strong></p>
+<hr />
+<h3 id="m3-w10w13-3">M3 · 跨境家庭教育金月(W10–W13,共 3 篇)</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>周</th>
+<th>类型</th>
+<th>赛道</th>
+<th>标题</th>
+<th>字数</th>
+<th>核心反直觉点 / 钩子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>06</td>
+<td>W10 周日</td>
+<td>【认知】</td>
+<td>🔵</td>
+<td><strong>孩子赴美读书 20 年教育金:4 种工具横评 + 真实测算</strong></td>
+<td>6000</td>
+<td>不是"越美元越好"——人民币定存、美元定存、港股 ETF、港险储蓄各自适合什么家庭画像</td>
+</tr>
+<tr>
+<td>07</td>
+<td>W11 周日</td>
+<td>【案例】</td>
+<td>🔵</td>
+<td><strong>一位准备送孩子赴美读书的家庭如何用港险锁定 20 年教育金(深度脱敏)</strong></td>
+<td>5500</td>
+<td>客户起初想买美股 ETF,我用"波动率 vs 资金到位时间"两个维度劝他做了重新组合</td>
+</tr>
+<tr>
+<td>08</td>
+<td>W13 周日</td>
+<td>【认知】</td>
+<td>🔵</td>
+<td><strong>人民币还是美元?给孩子留 1000 万的"货币选择"是一道资产负债表题</strong></td>
+<td>5000</td>
+<td>货币选择不是赌汇率,是匹配未来 20 年支出端的币种结构</td>
+</tr>
+</tbody>
+</table>
+<p><strong>M3 核心目的</strong>:<strong>赛道二引爆月</strong>。教育金是跨境家庭最容易出手的"破冰订单",<strong>M3 三篇齐发后,小红书 🔵 钩子("评论区扣【教育金】")的私信转化才会真正跑通</strong>。</p>
+<hr />
+<h3 id="m4-crs-w15-w17-2">M4 · CRS 与税务身份月(W15 + W17,共 2 篇)</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>周</th>
+<th>类型</th>
+<th>赛道</th>
+<th>标题</th>
+<th>字数</th>
+<th>核心反直觉点 / 钩子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>09</td>
+<td>W15 周日</td>
+<td>【政策】</td>
+<td>🟣</td>
+<td><strong>CRS 落地 7 年,香港保单到底报了什么、不报什么(CPA 全拆解)</strong></td>
+<td>6000</td>
+<td>申报 ≠ 征税——这两个概念被混淆 7 年,90% 的代理人都讲错了</td>
+</tr>
+<tr>
+<td>10</td>
+<td>W17 周日</td>
+<td>【案例】</td>
+<td>🔵</td>
+<td><strong>申请香港优才前,他做对了哪些税务身份准备?(深度脱敏)</strong></td>
+<td>5500</td>
+<td>他不是申请前去港买保单——他是先用 8 个月做了完整的"税务身份切换路径图"</td>
+</tr>
+</tbody>
+</table>
+<p><strong>M4 核心目的</strong>:<strong>深度月</strong>。2 篇就够,但每一篇都要做到「全网最深」级。这两篇要成为知乎/公众号长尾流量的"印钞机",<strong>3 年后翻看依然不过时</strong>。</p>
+<hr />
+<h3 id="m5-w18w21-3">M5 · 产品横评 + 反向揭短月(W18–W21,共 3 篇)</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>周</th>
+<th>类型</th>
+<th>赛道</th>
+<th>标题</th>
+<th>字数</th>
+<th>核心反直觉点 / 钩子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>11</td>
+<td>W18 周日</td>
+<td>【认知】</td>
+<td>⚪</td>
+<td><strong>安盛 / 友邦 / 保诚 / 宏利 主力储蓄险横评:数据派全对比</strong></td>
+<td>6000</td>
+<td>不是"哪个公司好"——是"哪个公司适合什么客户画像"。数据 + 利益冲突声明全公开</td>
+</tr>
+<tr>
+<td>12</td>
+<td>W20 周日</td>
+<td>【认知】</td>
+<td>⚪</td>
+<td><strong>港险"分红实现率"为什么比预期收益重要 10 倍:精算假设全拆解</strong></td>
+<td>5500</td>
+<td>你以为分红实现率是"业绩单"——其实它是"未来 30 年精算假设的诚实程度"</td>
+</tr>
+<tr>
+<td>13</td>
+<td>W21 周日</td>
+<td>【案例】</td>
+<td>🟢</td>
+<td><strong>重疾发生在 38 岁互联网总监身上:6 个月的家庭流动性压力测试(深度脱敏)</strong></td>
+<td>5500</td>
+<td>不是讲"重疾险有多重要"——是讲在没有重疾险的情况下,这个家庭 6 个月内的资产负债表怎么塌的</td>
+</tr>
+</tbody>
+</table>
+<p><strong>M5 核心目的</strong>:<strong>反向揭短建立信任</strong>。这 3 篇里至少 2 篇要主动指出港险/产品的劣势,<strong>这是手册第 3.2 节"主动暴露产品劣势"铁律的核心战场</strong>。</p>
+<hr />
+<h3 id="m6-w23-w25w26-2">M6 · 案例武器化 + 转化开放月(W23 + W25/W26,共 2 篇)</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>周</th>
+<th>类型</th>
+<th>赛道</th>
+<th>标题</th>
+<th>字数</th>
+<th>核心反直觉点 / 钩子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>14</td>
+<td>W23 周日</td>
+<td>【案例】</td>
+<td>🟢</td>
+<td><strong>"半退休"5 年规划:一位 42 岁互联网中层的现金流回血方案(深度脱敏)</strong></td>
+<td>6000</td>
+<td>不是"提前退休"——是用 5 年时间把"工作收入"换成"3 类资产驱动的被动现金流"</td>
+</tr>
+<tr>
+<td>15</td>
+<td>W25 周日</td>
+<td>【政策+案例】</td>
+<td>🔵</td>
+<td><strong>PR 身份反向"卡住"的人:3 个真实场景的税务陷阱拆解</strong></td>
+<td>5500</td>
+<td>海归不是免税身份——加拿大 PR / 美国绿卡的全球征税逻辑,可能让你比留在内地交得更多</td>
+</tr>
+</tbody>
+</table>
+<p><strong>附加:W26 周日发一篇短文(2000 字)</strong>:<strong>《6 个月公众号回顾 + 1V1 财务诊断首次开放(限 5 名)》</strong>——年内首次开放、且只针对完成 KYC 问卷的人,标价 2000–5000 元前置费、成交全额抵扣保费。<strong>这是手册第六章 M13 时点前的预备转化动作</strong>。</p>
+<hr />
+<h2 id="m7">第四章 选题方法论(M7 之后自己选题用)</h2>
+<h3 id="41-5">4.1 5 个选题钩子公式</h3>
+<table>
+<thead>
+<tr>
+<th>公式</th>
+<th>范例</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>「X 不是 Y」反共识</strong></td>
+<td>大厂股票不是"安全资产"</td>
+<td>认知升级类</td>
+</tr>
+<tr>
+<td><strong>「N 步法 / N 维度」结构化</strong></td>
+<td>4 种教育金工具横评</td>
+<td>认知升级 + 产品横评</td>
+</tr>
+<tr>
+<td><strong>「我是如何帮 XX 的」案例</strong></td>
+<td>我是如何帮一位字节 M5…</td>
+<td>匿名案例类</td>
+</tr>
+<tr>
+<td><strong>「90% 人误解 / 7 年混淆」</strong></td>
+<td>CRS 申报 ≠ 征税</td>
+<td>政策解读类</td>
+</tr>
+<tr>
+<td><strong>「N 个真实场景 / 陷阱」</strong></td>
+<td>PR 身份反向卡住的 3 个场景</td>
+<td>政策 + 案例混合</td>
+</tr>
+</tbody>
+</table>
+<h3 id="42-5">4.2 每篇必含的 5 个结构件</h3>
+<ol>
+<li><strong>开篇钩子</strong>(200 字内):一个反直觉问题 + 一个具体数字/场景</li>
+<li><strong>CPA 视角声明</strong>(300 字):为什么这个问题非 CPA 视角说不清</li>
+<li><strong>正文论证</strong>(2500–4500 字):数据 + 表格 + 公式 + 图(图至少 3 张)</li>
+<li><strong>主动暴露劣势/边界</strong>(500 字):本方案适合什么、不适合什么</li>
+<li><strong>合规 CTA</strong>(200 字):3 类客户对号入座型,不留微信号(详见 § 4.4)</li>
+</ol>
+<h3 id="43">4.3 严禁出现的内容(合规红线)</h3>
+<blockquote>
+<p>完全沿用手册 § 7.1 的合规底线,公众号专属补充如下:</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>严禁</th>
+<th>替代</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>文中出现具体公司股价、客户姓名、公司名称</td>
+<td>一律使用"某 TMT 上市公司财务负责人"等去身份化表述</td>
+</tr>
+<tr>
+<td>文中出现"立即购买 / 仅剩 / 优惠 / 返佣"</td>
+<td>"如需进一步了解,欢迎私信交流"</td>
+</tr>
+<tr>
+<td>承诺收益数字</td>
+<td>一律标注「非保证 · 基于精算假设 · 仅供参考」</td>
+</tr>
+<tr>
+<td>留微信二维码或微信号</td>
+<td><strong>只留公众号回复关键词领取物料</strong>,微信号通过 1V1 私信发送</td>
+</tr>
+<tr>
+<td>案例使用单一客户原型</td>
+<td>必须<strong>多个真实样本归纳 + 改名 + 改地点 + 改数字</strong></td>
+</tr>
+<tr>
+<td>文末提供产品计划书 PDF</td>
+<td>只提供方法论类物料(自查表 / 流程图)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="44-5-cta">4.4 5 种合规 CTA 模板</h3>
+<table>
+<thead>
+<tr>
+<th>模板</th>
+<th>范例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>3 类客户对号入座</strong></td>
+<td>"符合以下 3 类情况之一的读者,公众号后台回复【诊断】预约..."</td>
+</tr>
+<tr>
+<td><strong>关键词领物料</strong></td>
+<td>"回复关键词【30问】领取《港险投保前必看 30 问 PDF》"</td>
+</tr>
+<tr>
+<td><strong>下期预告导流</strong></td>
+<td>"下期将拆解《XX》,关注公众号不错过"</td>
+</tr>
+<tr>
+<td><strong>知乎导流</strong></td>
+<td>"本文是 5000 字概览版,知乎原文有 12000 字完整测算,请搜索 ID..."</td>
+</tr>
+<tr>
+<td><strong>诊断开放制(M6 后启用)</strong></td>
+<td>"本年度仅开放 5 位 1V1 财务诊断名额,前置咨询费 XXX 元,成交可全额抵扣保费"</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="_3">第五章 跨平台联动机制</h2>
+<h3 id="51">5.1 公众号 ↔ 知乎 ↔ 小红书的内容复用规则</h3>
+<blockquote>
+<p><strong>原则:同一份研究,不同长度、不同侧重、不同 CTA。绝不简单转发。</strong></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>平台</th>
+<th>长度</th>
+<th>侧重</th>
+<th>CTA</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>知乎</strong>(原始母版)</td>
+<td>8000–12000 字</td>
+<td>数据 + 精算 + 公司横评</td>
+<td>文末导流公众号</td>
+</tr>
+<tr>
+<td><strong>公众号</strong>(浓缩 + 视角化)</td>
+<td>3500–6000 字</td>
+<td>CPA 视角 + 案例化 + 反直觉点</td>
+<td>关键词领物料 + 评论留意见</td>
+</tr>
+<tr>
+<td><strong>小红书</strong>(视觉化拆解)</td>
+<td>500 字配图</td>
+<td>一图流 / 表格 / 思维导图</td>
+<td>评论区扣关键词</td>
+</tr>
+</tbody>
+</table>
+<h3 id="52">5.2 每月内容生产流水线(避免重复造轮子)</h3>
+<div class="codehilite"><pre><span></span><code>W1 选题确定 → W1 知乎 12000 字深度稿(周日发)
+                 ↓
+W2 公众号版改写(浓缩 + 案例化)→ 周日发
+                 ↓
+W3-W4 拆解为 3–4 篇小红书图文 → 按双周节奏发
+                 ↓
+W4 沉淀到朋友圈 3 条预告 + 数据派 + 内容预告
+</code></pre></div>
+
+<h3 id="53">5.3 朋友圈预告联动(每篇公众号长文必发)</h3>
+<p>依据《朋友圈长线运营矩阵.md》第五章模板 5「内容预告型」:</p>
+<div class="codehilite"><pre><span></span><code>【发布前 3 天】预告 → 周日 21:00 钉黄金时段发布 → 【发布后 7 天】客户致谢 / 评论摘录脱敏
+</code></pre></div>
+
+<hr />
+<h2 id="m1">第六章 钩子物料清单(M1 启动前必须备齐)</h2>
+<blockquote>
+<p>公众号底部所有 CTA 全部依赖以下物料,<strong>不能让客户回复关键词后看到"敬请期待"</strong>。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>物料名称</th>
+<th>关键词</th>
+<th>用于哪几篇</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>港险投保前必看 30 问 PDF</strong></td>
+<td>【30问】</td>
+<td>全 15 篇通用兜底</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>互联网中层家庭资产负债表自查 Excel</strong></td>
+<td>【自查表】</td>
+<td>#02 / #03 / #04</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>35 岁中年现金流降落伞建模 Excel</strong></td>
+<td>【降落伞】</td>
+<td>#05</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>孩子赴海外读书教育金 4 工具对比 Excel</strong></td>
+<td>【教育金】</td>
+<td>#06 / #07 / #08</td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>CRS 申报快速判断流程图 PDF</strong></td>
+<td>【CRS】</td>
+<td>#09 / #15</td>
+</tr>
+<tr>
+<td>6</td>
+<td><strong>香港优才申请前 KYC 自查表</strong></td>
+<td>【优才自查】</td>
+<td>#10</td>
+</tr>
+<tr>
+<td>7</td>
+<td><strong>4 家保险公司主力储蓄险数据对比 Excel</strong></td>
+<td>【横评】</td>
+<td>#11 / #12</td>
+</tr>
+<tr>
+<td>8</td>
+<td><strong>重疾家庭 6 个月流动性压力测试模型 Excel</strong></td>
+<td>【压力测试】</td>
+<td>#13</td>
+</tr>
+<tr>
+<td>9</td>
+<td><strong>半退休 5 年现金流路线图 Excel</strong></td>
+<td>【半退休】</td>
+<td>#14</td>
+</tr>
+<tr>
+<td>10</td>
+<td><strong>海归 PR 身份双重税务陷阱自查表 PDF</strong></td>
+<td>【PR自查】</td>
+<td>#15</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>💡 <strong>物料制作铁律</strong>:每份物料的最后一页必须含三类信息——<br />
+① 联系方式(公众号 + 知乎,不留微信号)<br />
+② 免责声明(基于公开信息整理,非投资建议)<br />
+③ 内容生产周期(标注"v1.0 · 2026 年 X 月",2 年后必更新)</p>
+</blockquote>
+<hr />
+<h2 id="_4">第七章 度量与迭代</h2>
+<h3 id="71-kpi">7.1 月度复盘 KPI</h3>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>M1-M3 目标</th>
+<th>M4-M6 目标</th>
+<th>度量方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>每篇阅读量</strong></td>
+<td>≥ 800</td>
+<td>≥ 2000</td>
+<td>公众号后台</td>
+</tr>
+<tr>
+<td><strong>每篇在看 / 转发</strong></td>
+<td>在看 ≥ 15 / 转发 ≥ 10</td>
+<td>在看 ≥ 40 / 转发 ≥ 30</td>
+<td>后台</td>
+</tr>
+<tr>
+<td><strong>每篇关键词领取数</strong></td>
+<td>≥ 30</td>
+<td>≥ 80</td>
+<td>自动回复后台</td>
+</tr>
+<tr>
+<td><strong>月新增关注</strong></td>
+<td>≥ 50</td>
+<td>≥ 200</td>
+<td>后台</td>
+</tr>
+<tr>
+<td><strong>关键词领取 → 私信转化率</strong></td>
+<td>≥ 5%</td>
+<td>≥ 10%</td>
+<td>手工统计</td>
+</tr>
+<tr>
+<td><strong>私信 → KYC 完成率</strong></td>
+<td>≥ 20%</td>
+<td>≥ 30%</td>
+<td>手工统计</td>
+</tr>
+</tbody>
+</table>
+<h3 id="72-7">7.2 单篇复盘问题清单(每篇发布 7 天后)</h3>
+<ol>
+<li>反直觉点是否真的反了大众认知?(看评论区反应)</li>
+<li>文中是否有 1 个"被多人引用 / 截图"的金句?</li>
+<li>CTA 钩子物料的领取率达到目标了吗?</li>
+<li>案例的脱敏处理是否完全无法被还原?(请同行 / 客户视角核对)</li>
+<li>是否有 ≥ 3 位读者主动添加 / 私信?</li>
+</ol>
+<h3 id="73-6-m6-w26">7.3 6 个月末复盘(M6 W26)</h3>
+<ul>
+<li><strong>赛道效率对比</strong>:🟢 赛道一篇均阅读/私信 vs 🔵 赛道二篇均阅读/私信,<strong>M7 起调整下半年内容比例</strong></li>
+<li><strong>三类内容效率对比</strong>:政策 vs 案例 vs 认知,哪类带来的高质量私信最多?<strong>调整 M7-M12 配比</strong></li>
+<li><strong>物料领取热度排行</strong>:Top 3 物料对应的选题方向作为 M7 起优先选题</li>
+<li><strong>客户加微信路径调研</strong>:在 KYC 问卷新增"您是从公众号哪篇文章决定关注我的?",<strong>3 个月内得到 ≥ 20 个答案后即可判断"爆款基因"</strong></li>
+</ul>
+<hr />
+<h2 id="_5">第八章 执行铁律(贴在工作日历上)</h2>
+<ol>
+<li><strong>雷打不动的发布时间</strong>:<strong>每周日 21:00</strong>(锚点节奏,与朋友圈周日 21:00 内容预告打通)</li>
+<li><strong>单篇产出耗时上限</strong>:<strong>16 小时</strong>(2 个完整周末工作日)。超时则压缩深度,不能拖延发布日</li>
+<li><strong>必走 3 道质检关</strong>:① 数据来源全部带链接/截图;② 至少 2 个反直觉点;③ 合规审读(任何"建议 / 推荐 / 优选"字眼必须替换)</li>
+<li><strong>绝对不能做的事</strong>:<br />
+   - ❌ 同一篇内容简单转知乎(必须重写)<br />
+   - ❌ 文中放微信二维码 / 手机号 / WhatsApp<br />
+   - ❌ 发布"产品测评 / 优选 / 推荐 / 必买"类标题<br />
+   - ❌ 文中使用"我的客户 / 我成交的 / 我签下的"等表述,<strong>一律使用"案例样本 / 综合归纳的典型画像"</strong></li>
+<li><strong>每月底回顾</strong>:复盘当月 2–3 篇的 KPI,把"领取 Top 1"的物料对应选题列入下月备用题库</li>
+</ol>
+<hr />
+<h2 id="_6">第九章 与战略手册的对应关系</h2>
+<table>
+<thead>
+<tr>
+<th>战略手册章节</th>
+<th>本专章对应</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>第 3.2 节「微信公众号(底部漏斗)」三类内容</td>
+<td>第一章 § 1.3 配比规划 + 第三章 15 篇日历</td>
+</tr>
+<tr>
+<td>第 4 章 L1–L3 知识体系</td>
+<td>15 篇中 L2 中阶 5 篇 / L3 进阶 4 篇 / L1 入门 2 篇 / 混合 4 篇</td>
+</tr>
+<tr>
+<td>第 6 章 M1–M3 基建期任务"1 篇人设奠基贴"</td>
+<td>M1 共 2 篇,#01 已完成,#02 为基建期续作</td>
+</tr>
+<tr>
+<td>第 6 章 M13–M24 "案例库武器化(6–12 篇案例)"</td>
+<td>本 6 个月已沉淀 6 篇匿名案例,占据案例库的 50–100%</td>
+</tr>
+<tr>
+<td>第 7.1 节合规红线</td>
+<td>第四章 § 4.3 + § 4.4 公众号专属补充</td>
+</tr>
+<tr>
+<td>第 9 章下一步动作 #7 "撰写匿名案例库首篇"</td>
+<td>对应 #04《我是如何帮一位字节 M5...》</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="6-m7m12">第十章 后续 6 个月(M7–M12)选题方向预告</h2>
+<blockquote>
+<p>M7 起的内容,需要等 M1–M6 复盘数据后再敲定。但战略方向已定:</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>方向</th>
+<th>预备题目示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>科技中产深化</strong></td>
+<td>期权行权 IIT 税务规划(用自己 / 家人样本)、TUP 与 RSU 的财务结构差异、上市前股权激励的资产负债表化</td>
+</tr>
+<tr>
+<td><strong>跨境个人深化</strong></td>
+<td>香港高才落港首年的 5 步资产规划、加拿大 PR 与中国税务居民双重身份的临界点判定、新加坡 vs 香港的家庭金融结构对比</td>
+</tr>
+<tr>
+<td><strong>L4 远期能力预告</strong></td>
+<td>保单嵌套信托案例介绍篇(说明边界,不主推)、跨代财富传承架构入门</td>
+</tr>
+<tr>
+<td><strong>行业事件机会窗口</strong></td>
+<td>重要政策出台、监管新规、大行年度数据公告——<strong>机会窗口型选题,不固定</strong></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<blockquote>
+<p>本专章为内部作战文档,请勿外发。所有内容严格遵循 HKIA 合规要求与跨境销售法律边界。</p>
+<p>配套阅读:《战略手册 v2.3》第 3.2 节 / 第 4 章 / 第 6 章 / 第 7.1 节、《朋友圈长线运营矩阵.md》第二章 + 第五章。</p>
+<p>当前版本:<strong>v1.0 · 6 个月日历定稿版</strong> · 最后更新:2026 年 5 月</p>
+</blockquote>
+  </article>
+</main>
+
+<footer>
+  <div>公众号 6 个月内容矩阵 · 运营中心 v3.1</div>
+  <div style="margin-top:8px;">
+    <a href="../../index.html">综合站首页</a> · 
+    <a href="../index.html">运营中心</a> · 
+    <a href="公众号6个月内容矩阵.md">📝 Markdown 源</a>
+  </div>
+</footer>
+
+</body>
+</html>
