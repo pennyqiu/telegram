@@ -125,26 +125,12 @@
   <div class="hero-inner">
     <span class="hero-tag">OPERATIONS · TOOLS</span>
     <h1>工具使用说明</h1>
-    <div class="hero-meta">📁 tools / README.md · 810 字</div>
+    <div class="hero-meta">📁 tools / README.md · 1027 字</div>
   </div>
 </header>
 
 <main class="container">
   <article>
-<div class="toc">
-  <div class="toc-title">📑 目录</div>
-  <ul>
-    <li><a href="#_2">🚀 快速使用</a></li>
-      <li><a href="#convert_singlepy">convert_single.py · 单篇通用版（推荐）</a></li>
-      <li><a href="#convert_v2py">convert_v2.py · 双版本专用版</a></li>
-    <li><a href="#html">🎨 公众号 HTML 样式说明</a></li>
-    <li><a href="#_3">📋 复制粘贴流程</a></li>
-      <li><a href="#_4">公众号</a></li>
-      <li><a href="#_5">知乎</a></li>
-    <li><a href="#_6">⚠️ 常见问题</a></li>
-    <li><a href="#_7">🔄 批量转换示例</a></li>
-  </ul>
-</div>
 <h1 id="_1">转换工具使用说明</h1>
 <p>把 <code>insurance-guide/articles/</code> 下的 HTML 文章，一键转换成：<br />
 - <strong>公众号 HTML</strong>（带蓝色样式，浏览器打开后复制粘贴到公众号编辑器，格式全保留）<br />
@@ -171,6 +157,57 @@ python<span class="w"> </span>insurance-guide/operations/tools/convert_single.py
 - <code>公众号_&lt;主名&gt;.html</code><br />
 - <code>知乎_&lt;主名&gt;.md</code></p>
 <p><strong>建议工作流</strong>：生成后，把这两个文件移入 <code>operations/published/wechat/</code> 和 <code>operations/published/zhihu/</code> 归档。</p>
+<h3 id="gen_coverpy">gen_cover.py · 公众号/知乎封面图生成器</h3>
+<p>用 Python PIL（无外部依赖）一键生成 3 种尺寸的封面图：<br />
+- <strong>公众号头图</strong> 900×500（接近 2.35:1 标准）<br />
+- <strong>知乎封面</strong> 1280×720（16:9）<br />
+- <strong>方形版</strong> 800×800（朋友圈 / 小红书 / 备用）</p>
+<p><strong>用法</strong>：在脚本内编辑 \SPEC_CPA02_WECHAT\ 字典里的字段（标题、副标题、编号、配色等），然后运行：</p>
+<p>\ash<br />
+python insurance-guide/operations/tools/gen_cover.py<br />
+\<br />
+输出到：<br />
+- \operations/published/wechat/covers/- \operations/published/zhihu/covers/- \operations/published/promotional/covers/<br />
+<strong>字段说明</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>umber_str\</td>
+<td>大水印数字（如 02）</td>
+</tr>
+<tr>
+<td>\ ag_label\</td>
+<td>金色标签文字（如 CPA 旗舰研报）</td>
+</tr>
+<tr>
+<td>\ itle_accent\</td>
+<td>标题第一行（金色）</td>
+</tr>
+<tr>
+<td>\ itle_main\</td>
+<td>标题第二行（白色）</td>
+</tr>
+<tr>
+<td>\subtitle\</td>
+<td>副标题</td>
+</tr>
+<tr>
+<td>\pills\</td>
+<td>底部小标签数组</td>
+</tr>
+<tr>
+<td>\color_a\ / \color_b\</td>
+<td>背景渐变两端 RGB</td>
+</tr>
+</tbody>
+</table>
+<p><strong>复制粘贴流程</strong>：右键图片另存为，上传到公众号/知乎/小红书的封面图位置即可。</p>
 <h3 id="convert_v2py">convert_v2.py · 双版本专用版</h3>
 <p>适用于源 HTML 里同时包含【A】公众号版 + 【B】知乎版的文章（如 <code>v22-persona.html</code>）。</p>
 <div class="codehilite"><pre><span></span><code>python<span class="w"> </span>insurance-guide/operations/tools/convert_v2.py

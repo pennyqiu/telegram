@@ -35,6 +35,34 @@ python insurance-guide/operations/tools/convert_single.py "insurance-guide/artic
 
 **建议工作流**：生成后，把这两个文件移入 `operations/published/wechat/` 和 `operations/published/zhihu/` 归档。
 
+### gen_cover.py · 公众号/知乎封面图生成器
+
+用 Python PIL（无外部依赖）一键生成 3 种尺寸的封面图：
+- **公众号头图** 900×500（接近 2.35:1 标准）
+- **知乎封面** 1280×720（16:9）
+- **方形版** 800×800（朋友圈 / 小红书 / 备用）
+
+**用法**：在脚本内编辑 \SPEC_CPA02_WECHAT\ 字典里的字段（标题、副标题、编号、配色等），然后运行：
+
+\\ash
+python insurance-guide/operations/tools/gen_cover.py
+\
+输出到：
+- \operations/published/wechat/covers/- \operations/published/zhihu/covers/- \operations/published/promotional/covers/
+**字段说明**：
+
+| 字段 | 用途 |
+|------|------|
+| umber_str\ | 大水印数字（如 02） |
+| \	ag_label\ | 金色标签文字（如 CPA 旗舰研报） |
+| \	itle_accent\ | 标题第一行（金色） |
+| \	itle_main\ | 标题第二行（白色） |
+| \subtitle\ | 副标题 |
+| \pills\ | 底部小标签数组 |
+| \color_a\ / \color_b\ | 背景渐变两端 RGB |
+
+**复制粘贴流程**：右键图片另存为，上传到公众号/知乎/小红书的封面图位置即可。
+
 ### convert_v2.py · 双版本专用版
 
 适用于源 HTML 里同时包含【A】公众号版 + 【B】知乎版的文章（如 `v22-persona.html`）。

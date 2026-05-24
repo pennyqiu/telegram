@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>5000 字读懂分红实现率：方差、历史数据、公司横评</title>
+
+<style>
+  body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+       max-width:677px;margin:30px auto;padding:0 18px;color:#333;
+       font-size:16px;line-height:1.85;background:#fff;}
+  h1{font-size:22px;font-weight:800;color:#1a1a1a;text-align:center;
+     margin:30px 0 18px;padding-bottom:12px;border-bottom:2px solid #1a56db;line-height:1.4;}
+  h2{font-size:19px;font-weight:700;color:#1a56db;margin:34px 0 14px;
+     padding-left:12px;border-left:4px solid #1a56db;line-height:1.4;}
+  h3{font-size:17px;font-weight:700;color:#1e3a5f;margin:24px 0 12px;}
+  h4{font-size:16px;font-weight:700;color:#374151;margin:20px 0 10px;}
+  p{margin:14px 0;text-align:justify;letter-spacing:0.3px;}
+  strong{color:#1a56db;font-weight:700;}
+  blockquote{margin:18px 0;padding:14px 18px;background:#f8fafc;
+             border-left:4px solid #1a56db;border-radius:0 8px 8px 0;
+             color:#475569;font-size:15px;}
+  blockquote p{margin:6px 0;}
+  ul,ol{margin:14px 0;padding-left:24px;}
+  li{margin:8px 0;line-height:1.8;}
+  hr{border:none;border-top:1px dashed #cbd5e1;margin:28px 0;}
+  table{border-collapse:collapse;width:100%;margin:18px 0;font-size:14px;}
+  th,td{border:1px solid #e2e8f0;padding:10px 12px;text-align:left;}
+  th{background:#1a56db;color:#fff;font-weight:700;}
+  tr:nth-child(even) td{background:#f8fafc;}
+  .callout{margin:20px 0;padding:16px 18px;border-radius:10px;font-size:15px;line-height:1.75;}
+  .callout.warning{background:#fef3c7;border-left:4px solid #f59e0b;color:#78350f;}
+  .callout.info{background:#dbeafe;border-left:4px solid #1a56db;color:#1e3a8a;}
+  .callout.success{background:#d1fae5;border-left:4px solid #10b981;color:#064e3b;}
+  .callout.danger{background:#fee2e2;border-left:4px solid #ef4444;color:#7f1d1d;}
+  .formula{margin:18px 0;padding:14px 18px;background:#f1f5f9;border-radius:8px;
+           font-family:"Consolas","SF Mono",monospace;font-size:14px;color:#1e293b;
+           white-space:pre-wrap;line-height:1.7;border:1px dashed #94a3b8;}
+  .warn-block{margin:20px 0;padding:16px 18px;background:#fef3c7;border-left:4px solid #f59e0b;
+              border-radius:0 8px 8px 0;color:#78350f;font-size:15px;line-height:1.75;}
+  .warn-block strong{color:#b45309;}
+  .key-insight,.key-insight-body{margin:20px 0;padding:16px 18px;background:#dbeafe;
+                                 border-left:4px solid #1a56db;border-radius:0 8px 8px 0;
+                                 color:#1e3a8a;font-size:15px;line-height:1.8;}
+  .author-info,.brand-bar{display:none;}
+  .meta{text-align:center;color:#64748b;font-size:13px;margin-bottom:20px;}
+  .summary{margin:20px 0 30px;padding:16px 18px;background:#f8fafc;
+           border-left:3px solid #1a56db;border-radius:0 8px 8px 0;
+           color:#475569;font-size:15px;line-height:1.8;}
+  .toc{margin:24px 0;padding:18px 22px;background:#f1f5f9;border-radius:10px;
+       font-size:14px;color:#475569;}
+  .toc-title{font-weight:700;color:#1a56db;margin-bottom:8px;}
+</style>
+
+</head>
+<body>
+<div class="meta">— CPA × 香港保险 —</div>
+<h1>5000 字读懂分红实现率：方差、历史数据、公司横评</h1>
+<div class="summary">分红实现率（Fulfillment Ratio）= 港险公司的「盈利预测兑现率」。本文从指标定义、计算口径、统计分布、典型陷阱、公司横评 5 个维度，把这个核心指标讲透。</div>
+<h2>01 · 分红实现率是什么 — 监管文本与会计语言的对照</h2><p>香港保监局 GL16 指引（《承保长期保险业务（类别 C 业务除外）指引》）第 38 条要求所有保险公司每年披露分红保单的「Fulfillment Ratio」，中文译为「分红实现率」。监管定义如下：</p><blockquote>「实际派发给保单持有人的非保证红利金额，除以保单生效时演示说明书所列示的同期非保证红利金额。」</blockquote><p>翻译成会计语言：</p><div class="formula">分红实现率 = 实际发生的非保证收益 ÷ 投保时承诺演示的非保证收益
+
+类比公司财务：
+  - 实际 EPS ÷ 业绩指引 EPS = 公司「业绩兑现率」
+  - 100% = 完全兑现
+  - &gt;100% = 超额兑现（投资业绩好于预期）
+  - &lt;100% = 未达预期（投资环境恶化或假设过于乐观）</div><p>但与「上市公司业绩」不同的是：港险公司的演示数字是公司自己设定的（不是市场预期）。所以这个指标的真正含义是：<strong>公司在卖产品时设定的「钓鱼数字」，在 N 年后兑现了多少</strong>。</p><h2>02 · 实现率背后的「3 池模型」</h2><p>分红实现率不是一个数字，而是<strong>三个独立指标</strong>。可惜大多数代理给客户看的，只是其中一个。</p><table>
+<thead><tr><th>红利类型</th><th>实现率口径</th><th>波动特征</th><th>对客户体感的影响</th></tr></thead>
+<tbody>
+<tr><td>现金红利（Annual Dividend）</td><td>当年实际派发现金 ÷ 演示派发现金</td><td>较稳定，年度差异小</td><td>立即可感受、可提取</td></tr>
+<tr><td>复归红利（Reversionary Bonus）</td><td>当年新增保额 ÷ 演示新增保额</td><td>中度波动</td><td>累积感受，退保/身故才完全释放</td></tr>
+<tr><td>终期红利（Terminal Bonus）</td><td>退保时实际派发 ÷ 演示派发</td><td>波动最大</td><td>仅在退保/身故时一次性体现，前期完全感受不到</td></tr>
+</tbody>
+</table><div class="warn-block"><strong>劣势暴露 #1：</strong>很多公司在公告里只披露「现金红利实现率」，故意不披露「终期红利实现率」。这是合规边缘的取巧 — 因为终期红利在你退保之前都不会真正派发，所以技术上「无从计算实现率」。但终期红利占总收益 50%–65%，<strong>等于把最重要的指标藏起来了</strong>。</div><h2>03 · 统计学视角：用方差与中位数看「实现率的稳定性」</h2><p>从精算角度，一个公司的实现率不应该只看「均值」，更要看「方差」。</p><h3>(A) 高均值 + 低方差 = 可信公司</h3><p>比如某公司近 8 年实现率：[98%, 102%, 99%, 101%, 97%, 103%, 100%, 99%]</p><p>均值 = 99.9%，标准差 = 2.0%。这是教科书级别的「分红平滑做得到位」。</p><h3>(B) 高均值 + 高方差 = 投机型公司</h3><p>另一家公司近 8 年实现率：[120%, 80%, 130%, 70%, 110%, 95%, 140%, 60%]</p><p>均值 = 100.6%，标准差 = 27.4%。<strong>均值看起来一样，但你完全不知道下一年会拿到多少</strong>。这种公司通常底层投资策略更激进。</p><h3>(C) 中均值 + 低方差 = 保守型公司</h3><p>第三家公司近 8 年实现率：[92%, 94%, 91%, 93%, 92%, 90%, 93%, 91%]</p><p>均值 = 92.0%，标准差 = 1.3%。<strong>实际兑现略低于演示，但极度稳定</strong>。对高净值家族传承类客户更友好。</p><div class="formula">CPA 视角的实现率评分公式（笔者自创，供参考）：
+
+实现率综合得分 = 均值 × (1 − 标准差/均值) × (历史样本年数权重)
+
+举例：
+  公司A：99.9% × (1 − 2.0/99.9) × 1.0 = 97.9 分
+  公司B：100.6% × (1 − 27.4/100.6) × 0.6 = 44.0 分
+  公司C：92.0% × (1 − 1.3/92.0) × 1.0 = 90.7 分
+
+→ A &gt; C &gt; B（B 因高方差被严重打折）</div><h2>04 · 新保单实现率为何普遍 100%+ — 一个公开的精算秘密</h2><p>如果你打开任何一家公司的实现率披露页面，会发现一个奇怪现象：</p><ul>
+<li>生效不到 5 年的保单：实现率几乎全部 100%–110%</li>
+<li>生效 8–12 年的保单：实现率分布开始拉开，70%–110%</li>
+<li>生效 15 年以上的保单：实现率分布最分散，50%–105%</li>
+</ul><p>这不是巧合，而是<strong>精算与营销共同作用的结果</strong>：</p><h3>原因 #1：新保单的非保证红利体量小，补贴成本低</h3><p>一份生效 3 年的保单，非保证红利每年才几千美元。公司用资本金「凑」到 100% 几乎没有成本，但能在销售话术里说「我们实现率 100%」。<strong>这是商业上的最优解，但也是信息不对称的源头</strong>。</p><h3>原因 #2：新产品没有足够的历史数据校准</h3><p>分红实现率本质上是「投资业绩 - 演示预期」之差。对一个推出才 3 年的新产品，投资业绩样本太少，统计上没有显著性。</p><h3>原因 #3：销售周期与实现率披露的「时间差」</h3><p>客户在 2024 年看到的「2023 年实现率」，对应的是 2015–2020 年生效的保单。这意味着 <strong>2024 年新出的产品要等到 2032 年才有第一个真正有意义的实现率数据</strong>。</p><div class="warn-block"><strong>实操建议：</strong>如果某公司主打「我们某新产品实现率 105%」，请要求代理同时披露「该公司同类老产品（&gt;10 年）的实现率分布」。如果对方答不出来或闪烁其词，建议慎重。</div><h2>05 · 15 家公司近 5 年实现率横评（脱敏数据）</h2><p>下表基于香港保监局公开披露 + Jason 在 hongkongbx.com 整理的实现率 Excel（2025 年 1 月版）。<strong>我刻意不写公司名，只用代号 A-O</strong>。原因是：① 避免商业上的针对性敏感；② 你应该自己去查表对应。</p><table>
+<thead>
+<tr><th>代号</th><th>主力产品类型</th><th>近 5 年均值</th><th>标准差</th><th>评级</th></tr>
+</thead>
+<tbody>
+<tr><td>A</td><td>美元长期储蓄</td><td>100%–105%</td><td>低</td><td>★★★★★</td></tr>
+<tr><td>B</td><td>美元长期储蓄</td><td>98%–102%</td><td>低</td><td>★★★★★</td></tr>
+<tr><td>C</td><td>多元货币储蓄</td><td>95%–100%</td><td>低</td><td>★★★★☆</td></tr>
+<tr><td>D</td><td>美元长期储蓄</td><td>95%–105%</td><td>中</td><td>★★★★☆</td></tr>
+<tr><td>E</td><td>多元货币储蓄</td><td>92%–100%</td><td>中</td><td>★★★★</td></tr>
+<tr><td>F</td><td>港元/美元混合</td><td>90%–100%</td><td>中</td><td>★★★★</td></tr>
+<tr><td>G</td><td>美元长期储蓄</td><td>88%–98%</td><td>中</td><td>★★★★</td></tr>
+<tr><td>H</td><td>美元长期储蓄</td><td>85%–95%</td><td>中</td><td>★★★</td></tr>
+<tr><td>I</td><td>港元长期储蓄</td><td>80%–95%</td><td>高</td><td>★★★</td></tr>
+<tr><td>J</td><td>多元货币储蓄</td><td>80%–100%</td><td>高</td><td>★★★</td></tr>
+<tr><td>K</td><td>美元短期储蓄</td><td>75%–90%</td><td>中</td><td>★★★</td></tr>
+<tr><td>L</td><td>万用寿险</td><td>70%–95%</td><td>极高</td><td>★★</td></tr>
+<tr><td>M</td><td>美元长期储蓄</td><td>70%–90%</td><td>高</td><td>★★</td></tr>
+<tr><td>N</td><td>港元长期储蓄</td><td>65%–85%</td><td>极高</td><td>★★</td></tr>
+<tr><td>O</td><td>多元货币储蓄</td><td>60%–85%</td><td>极高</td><td>★</td></tr>
+</tbody>
+</table><p style="color:#6b7280;font-size:12px">注：以上数据为区间，因为不同保单年份、不同币种、不同产品系列存在差异。具体公司对照请查 Jason 的 Excel（公众号「港险药丸」）或保监局披露。</p><h3>横评关键发现</h3><ul>
+<li><strong>头部 4 家公司（A-D）</strong>：实现率长期稳定在 95%-105%，资本实力强，分红平滑机制扎实。适合长期持有 + 传承用途。</li>
+<li><strong>中部 7 家公司（E-K）</strong>：实现率稳定在 80%-100%，但部分公司方差较大。适合配置一部分，不建议 all-in。</li>
+<li><strong>尾部 4 家公司（L-O）</strong>：实现率波动剧烈，需要谨慎。<strong>不是说一定不能买</strong>，但需要对其投资策略与资本充足率做单独审视。</li>
+</ul><div class="callout"><strong>CPA 提示：</strong>实现率不是唯一指标。HKRBC 偿付能力比率、过往大事件（重组、并购、监管处分）、再保险结构、母公司财报，都需要纳入横评。<strong>单靠实现率选公司 = 单靠 PE 选股票</strong>。</div><h2>06 · 主动暴露劣势：实现率指标本身的 4 个局限</h2><h3>局限 #1：实现率 = 「相对自己当初的承诺」，不是「绝对收益」</h3><p>一家公司演示 IRR 5%、实现率 100%，<strong>实际收益就是 5%</strong>。另一家公司演示 IRR 7%、实现率 80%，实际收益是 5.6%。后者反而更高。所以买保险不要只看实现率，要看「实现率 × 演示收益」的乘积。</p><h3>局限 #2：实现率口径不统一</h3><p>有的公司用「现金红利」单一口径，有的公司用「全部非保证红利」总口径。<strong>跨公司直接比较</strong>在严格意义上是不科学的。需要看披露备注。</p><h3>局限 #3：实现率有「死亡幸存者偏差」</h3><p>已经退保的客户不计入实现率统计。如果一家公司在某年大量客户因不满意而退保，剩下的客户实现率反而可能虚高。</p><h3>局限 #4：实现率不反映「税务、汇率、流动性」</h3><p>所有实现率都是基于「合同币种」计算的。如果你最终要把美元换回人民币使用，汇率波动可能远大于实现率的差异。</p><h2>07 · 实操：投保前必须问代理的 6 个问题</h2><div class="callout green" style="font-size:14px">
+<ol style="margin-left:18px;line-height:1.9">
+<li>「贵公司这款产品最早一批保单（&gt;10 年）的实现率走势是怎样的？请发我官方披露文件链接。」</li>
+<li>「实现率披露口径包括哪些红利类型？终期红利的实现率怎么估算？」</li>
+<li>「贵公司近 8 年实现率的标准差是多少？是否经历过重大下调？」</li>
+<li>「2024 年 7 月 HKRBC 新规后，贵公司偿付能力比率是多少？」</li>
+<li>「这款产品的资产配置策略是？股债比、地区分布、是否含另类？」</li>
+<li>「如果未来 10 年美元利率维持低位，贵公司分红平滑储备能撑多久？」</li>
+</ol>
+</div><p>能完整回答这 6 个问题的代理，<strong>大概率是认真做过功课的</strong>。完全答不出来的，建议换一个咨询对象。</p><div class="key-insight">
+<div class="key-insight-title">一句话总结</div>
+<div class="key-insight-body">分红实现率 = 公司给你的「业绩兑现率」。会看实现率的客户 = 会看公司财报的股东。当你能看懂实现率背后的精算结构与统计分布，你已经超过 95% 的港险消费者。</div>
+</div><p class="cite">本文数据引用：香港保监局 GL16 指引；保监局 2024 HKRBC 实施指引；hongkongbx.com 港险随记 Jason 整理的分红实现率 Excel（2025 年 1 月版）；笔者基于 15 家公司公开披露数据的统计分析。所有公司代号已脱敏，避免商业针对性。</p>
+</body>
+</html>
