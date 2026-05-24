@@ -37,14 +37,19 @@
   .section-link:hover{text-decoration:underline;}
 
   .grid{display:grid;gap:16px;}
+  .grid-2{grid-template-columns:repeat(2,1fr);}
   .grid-3{grid-template-columns:repeat(3,1fr);}
   .grid-4{grid-template-columns:repeat(4,1fr);}
+  .grid-5{grid-template-columns:repeat(5,1fr);}
+  .grid-7{grid-template-columns:repeat(7,1fr);}
   @media(max-width:960px){
-    .grid-3,.grid-4{grid-template-columns:repeat(2,1fr);}
+    .grid-3,.grid-4,.grid-5{grid-template-columns:repeat(2,1fr);}
+    .grid-7{grid-template-columns:repeat(4,1fr);}
     .hero h1{font-size:30px;}
   }
   @media(max-width:560px){
-    .grid-3,.grid-4{grid-template-columns:1fr;}
+    .grid-2,.grid-3,.grid-4,.grid-5{grid-template-columns:1fr;}
+    .grid-7{grid-template-columns:repeat(2,1fr);}
   }
 
   .card{background:#fff;border-radius:14px;padding:22px 20px;
@@ -63,6 +68,7 @@
   .card-badge.orange{background:#fed7aa;color:#9a3412;}
   .card-badge.pink{background:#fce7f3;color:#9d174d;}
   .card-badge.gray{background:#e2e8f0;color:#475569;}
+  .card-badge.red{background:#fee2e2;color:#b91c1c;}
 
   .card-hero{grid-column:span 2;background:linear-gradient(135deg,#1a56db 0%,#3b82f6 100%);
              color:#fff;border:none;}
@@ -76,6 +82,44 @@
   .card-xhs{border-top:3px solid #ec4899;}
   .card-pyq{border-top:3px solid #f59e0b;}
 
+  /* 旗舰区特殊样式 */
+  .flagship-section{background:linear-gradient(135deg,#fef3c7 0%,#fed7aa 100%);
+                    border-radius:16px;padding:28px;margin-bottom:48px;
+                    border:1px solid #fbbf24;}
+  .flagship-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
+  .flagship-title{font-size:22px;font-weight:800;color:#78350f;}
+  .flagship-title span{font-size:14px;color:#92400e;margin-left:8px;font-weight:500;}
+  .flagship-link{font-size:13px;color:#b45309;font-weight:600;}
+
+  .flagship-card{background:#fff;border-radius:12px;padding:18px;
+                 transition:all 0.2s;cursor:pointer;border:1px solid #fde68a;
+                 display:flex;flex-direction:column;}
+  .flagship-card:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(180,83,9,0.15);
+                       border-color:#f59e0b;}
+  .flagship-card-icon{width:36px;height:36px;border-radius:8px;background:#fef3c7;
+                      display:flex;align-items:center;justify-content:center;
+                      font-size:18px;margin-bottom:10px;}
+  .flagship-card-title{font-size:14px;font-weight:700;color:#78350f;margin-bottom:4px;line-height:1.4;}
+  .flagship-card-meta{font-size:11px;color:#a16207;}
+
+  /* CPA 14 篇网格 */
+  .cpa-card{background:#fff;border-radius:10px;padding:14px 12px;
+            transition:all 0.2s;cursor:pointer;border:1px solid #e2e8f0;
+            display:flex;flex-direction:column;align-items:center;text-align:center;}
+  .cpa-card:hover{background:#f0f9ff;border-color:#3b82f6;transform:translateY(-2px);}
+  .cpa-num{font-size:22px;font-weight:800;color:#1e40af;line-height:1;}
+  .cpa-title{font-size:12px;color:#475569;margin-top:6px;line-height:1.4;font-weight:500;
+             min-height:32px;display:flex;align-items:center;}
+
+  /* 小红书 39 篇 mini grid */
+  .xhs-grid{display:grid;grid-template-columns:repeat(13,1fr);gap:6px;}
+  @media(max-width:960px){.xhs-grid{grid-template-columns:repeat(8,1fr);}}
+  @media(max-width:560px){.xhs-grid{grid-template-columns:repeat(6,1fr);}}
+  .xhs-mini{aspect-ratio:1;background:#fff;border:1px solid #fde68a;border-radius:6px;
+            display:flex;align-items:center;justify-content:center;font-size:11px;
+            font-weight:600;color:#92400e;transition:all 0.15s;cursor:pointer;}
+  .xhs-mini:hover{background:#ec4899;color:#fff;border-color:#ec4899;transform:scale(1.05);}
+
   footer{text-align:center;padding:32px 24px;color:#94a3b8;font-size:13px;
          border-top:1px solid #e2e8f0;background:#fff;}
   footer a{color:#1a56db;}
@@ -86,183 +130,299 @@
 
 <header class="hero">
   <div class="hero-inner">
-    <span class="hero-brand">HK INSURANCE HUB · v3.0</span>
+    <span class="hero-brand">HK INSURANCE HUB · v3.1</span>
     <h1>香港保险综合站</h1>
     <p>专业知识库 + 多渠道内容工厂 + 运营战略中心 —— 把保险业务的「知识」「内容」「运营」三件事统一到一个入口。</p>
     <div class="hero-stats">
       <div class="hero-stat"><div class="hero-stat-num">103+</div><div class="hero-stat-label">专业文章</div></div>
+      <div class="hero-stat"><div class="hero-stat-num">14</div><div class="hero-stat-label">CPA 旗舰研报</div></div>
+      <div class="hero-stat"><div class="hero-stat-num">39</div><div class="hero-stat-label">小红书发布版</div></div>
       <div class="hero-stat"><div class="hero-stat-num">4</div><div class="hero-stat-label">发布渠道</div></div>
-      <div class="hero-stat"><div class="hero-stat-num">50+</div><div class="hero-stat-label">运营资料</div></div>
-      <div class="hero-stat"><div class="hero-stat-num">2</div><div class="hero-stat-label">自动化工具</div></div>
     </div>
   </div>
 </header>
 
 <main class="container">
 
+  <!-- ========== 🎯 旗舰内容区（新增）========== -->
+  <section class="flagship-section">
+    <div class="flagship-head">
+      <div class="flagship-title">🎯 v2.2 旗舰组 <span>· 推广主战场 · 直接可用</span></div>
+      <a class="flagship-link" href="operations/flagship/README.md">完整索引 →</a>
+    </div>
+    <div class="grid grid-5">
+      <a class="flagship-card" href="articles/v22-strategy.html">
+        <div class="flagship-card-icon">📕</div>
+        <div class="flagship-card-title">战略手册（双案版）</div>
+        <div class="flagship-card-meta">74 KB · 核心方案</div>
+      </a>
+      <a class="flagship-card" href="articles/v22-persona.html">
+        <div class="flagship-card-icon">👤</div>
+        <div class="flagship-card-title">人设奠基长文</div>
+        <div class="flagship-card-meta">31 KB · 公众号 + 知乎双版</div>
+      </a>
+      <a class="flagship-card" href="articles/v22-30q.html">
+        <div class="flagship-card-icon">❓</div>
+        <div class="flagship-card-title">港险投保 30 问</div>
+        <div class="flagship-card-meta">29 KB · 入门 FAQ</div>
+      </a>
+      <a class="flagship-card" href="articles/v22-xhs-hub.html">
+        <div class="flagship-card-icon">📕</div>
+        <div class="flagship-card-title">小红书 39 篇日历</div>
+        <div class="flagship-card-meta">含一键复制发布版</div>
+      </a>
+      <a class="flagship-card" href="articles/v22-zhihu-cal.html">
+        <div class="flagship-card-icon">📅</div>
+        <div class="flagship-card-title">知乎 6 个月日历</div>
+        <div class="flagship-card-meta">含发布 SOP</div>
+      </a>
+      <a class="flagship-card" href="articles/v22-toolkit.html">
+        <div class="flagship-card-icon">🧰</div>
+        <div class="flagship-card-title">工具箱总览</div>
+        <div class="flagship-card-meta">所有工具一键直达</div>
+      </a>
+      <a class="flagship-card" href="articles/v22-wechat-matrix.html">
+        <div class="flagship-card-icon">📢</div>
+        <div class="flagship-card-title">公众号矩阵</div>
+        <div class="flagship-card-meta">30 KB · 选题矩阵</div>
+      </a>
+      <a class="flagship-card" href="articles/v22-friend-matrix.html">
+        <div class="flagship-card-icon">👥</div>
+        <div class="flagship-card-title">朋友圈矩阵</div>
+        <div class="flagship-card-meta">28 KB · 朋友圈节奏</div>
+      </a>
+      <a class="flagship-card" href="articles/v22-zhihu-sop.html">
+        <div class="flagship-card-icon">📋</div>
+        <div class="flagship-card-title">知乎 SOP（图文版）</div>
+        <div class="flagship-card-meta">18 KB · 发布流程</div>
+      </a>
+      <a class="flagship-card" href="operations/assets/互联网中层家庭财务自查表.xlsx">
+        <div class="flagship-card-icon">📊</div>
+        <div class="flagship-card-title">财务自查表 Excel</div>
+        <div class="flagship-card-meta">客户分发资源</div>
+      </a>
+    </div>
+  </section>
+
+  <!-- ========== ⭐ CPA 14 篇旗舰研报 ========== -->
+  <section class="section">
+    <div class="section-head">
+      <h2 class="section-title">⭐ CPA 旗舰研报 <span>—— 14 篇 5000-10000 字深度长文</span></h2>
+      <a class="section-link" href="articles/v22-xhs-hub.html">全部专业文章 →</a>
+    </div>
+    <div class="grid grid-7">
+      <a class="cpa-card" href="articles/cpa-01-dividend-trap.html"><div class="cpa-num">01</div><div class="cpa-title">分红险智商税</div></a>
+      <a class="cpa-card" href="articles/cpa-02-fulfillment-ratio.html"><div class="cpa-num">02</div><div class="cpa-title">分红实现率</div></a>
+      <a class="cpa-card" href="articles/cpa-03-usd-vs-rmb.html"><div class="cpa-num">03</div><div class="cpa-title">美元 vs 人民币</div></a>
+      <a class="cpa-card" href="articles/cpa-04-surrender-loss.html"><div class="cpa-num">04</div><div class="cpa-title">退保亏损实测</div></a>
+      <a class="cpa-card" href="articles/cpa-05-premium-financing.html"><div class="cpa-num">05</div><div class="cpa-title">保费融资 PF</div></a>
+      <a class="cpa-card" href="articles/cpa-06-generational-transfer.html"><div class="cpa-num">06</div><div class="cpa-title">跨代传承</div></a>
+      <a class="cpa-card" href="articles/cpa-07-ci-multi-payout.html"><div class="cpa-num">07</div><div class="cpa-title">重疾多次赔付</div></a>
+      <a class="cpa-card" href="articles/cpa-08-savings-compare.html"><div class="cpa-num">08</div><div class="cpa-title">储蓄险横评</div></a>
+      <a class="cpa-card" href="articles/cpa-09-crs-rules.html"><div class="cpa-num">09</div><div class="cpa-title">CRS 申报规则</div></a>
+      <a class="cpa-card" href="articles/cpa-10-mainland-law.html"><div class="cpa-num">10</div><div class="cpa-title">内地法律效力</div></a>
+      <a class="cpa-card" href="articles/cpa-11-option-tax.html"><div class="cpa-num">11</div><div class="cpa-title">期权行权税务</div></a>
+      <a class="cpa-card" href="articles/cpa-12-wealth-architecture.html"><div class="cpa-num">12</div><div class="cpa-title">财富架构师</div></a>
+      <a class="cpa-card" href="articles/cpa-13-cross-border-option-tax.html"><div class="cpa-num">13</div><div class="cpa-title">跨境期权税务</div></a>
+      <a class="cpa-card" href="articles/cpa-14-niche-positioning.html"><div class="cpa-num">14</div><div class="cpa-title">内向型 CPA 定位</div></a>
+    </div>
+  </section>
+
+  <!-- ========== 📕 小红书 39 篇一键发布版 ========== -->
+  <section class="section">
+    <div class="section-head">
+      <h2 class="section-title">📕 小红书 39 篇 <span>—— 一键复制发布版（每篇 1000 字内）</span></h2>
+      <a class="section-link" href="articles/v22-xhs-hub.html">日历视图 →</a>
+    </div>
+    <div class="xhs-grid">      <a class="xhs-mini" href="articles/v22-xhs01.html" title="第 1 篇">01</a>
+      <a class="xhs-mini" href="articles/v22-xhs02.html" title="第 2 篇">02</a>
+      <a class="xhs-mini" href="articles/v22-xhs03.html" title="第 3 篇">03</a>
+      <a class="xhs-mini" href="articles/v22-xhs04.html" title="第 4 篇">04</a>
+      <a class="xhs-mini" href="articles/v22-xhs05.html" title="第 5 篇">05</a>
+      <a class="xhs-mini" href="articles/v22-xhs06.html" title="第 6 篇">06</a>
+      <a class="xhs-mini" href="articles/v22-xhs07.html" title="第 7 篇">07</a>
+      <a class="xhs-mini" href="articles/v22-xhs08.html" title="第 8 篇">08</a>
+      <a class="xhs-mini" href="articles/v22-xhs09.html" title="第 9 篇">09</a>
+      <a class="xhs-mini" href="articles/v22-xhs10.html" title="第 10 篇">10</a>
+      <a class="xhs-mini" href="articles/v22-xhs11.html" title="第 11 篇">11</a>
+      <a class="xhs-mini" href="articles/v22-xhs12.html" title="第 12 篇">12</a>
+      <a class="xhs-mini" href="articles/v22-xhs13.html" title="第 13 篇">13</a>
+      <a class="xhs-mini" href="articles/v22-xhs14.html" title="第 14 篇">14</a>
+      <a class="xhs-mini" href="articles/v22-xhs15.html" title="第 15 篇">15</a>
+      <a class="xhs-mini" href="articles/v22-xhs16.html" title="第 16 篇">16</a>
+      <a class="xhs-mini" href="articles/v22-xhs17.html" title="第 17 篇">17</a>
+      <a class="xhs-mini" href="articles/v22-xhs18.html" title="第 18 篇">18</a>
+      <a class="xhs-mini" href="articles/v22-xhs19.html" title="第 19 篇">19</a>
+      <a class="xhs-mini" href="articles/v22-xhs20.html" title="第 20 篇">20</a>
+      <a class="xhs-mini" href="articles/v22-xhs21.html" title="第 21 篇">21</a>
+      <a class="xhs-mini" href="articles/v22-xhs22.html" title="第 22 篇">22</a>
+      <a class="xhs-mini" href="articles/v22-xhs23.html" title="第 23 篇">23</a>
+      <a class="xhs-mini" href="articles/v22-xhs24.html" title="第 24 篇">24</a>
+      <a class="xhs-mini" href="articles/v22-xhs25.html" title="第 25 篇">25</a>
+      <a class="xhs-mini" href="articles/v22-xhs26.html" title="第 26 篇">26</a>
+      <a class="xhs-mini" href="articles/v22-xhs27.html" title="第 27 篇">27</a>
+      <a class="xhs-mini" href="articles/v22-xhs28.html" title="第 28 篇">28</a>
+      <a class="xhs-mini" href="articles/v22-xhs29.html" title="第 29 篇">29</a>
+      <a class="xhs-mini" href="articles/v22-xhs30.html" title="第 30 篇">30</a>
+      <a class="xhs-mini" href="articles/v22-xhs31.html" title="第 31 篇">31</a>
+      <a class="xhs-mini" href="articles/v22-xhs32.html" title="第 32 篇">32</a>
+      <a class="xhs-mini" href="articles/v22-xhs33.html" title="第 33 篇">33</a>
+      <a class="xhs-mini" href="articles/v22-xhs34.html" title="第 34 篇">34</a>
+      <a class="xhs-mini" href="articles/v22-xhs35.html" title="第 35 篇">35</a>
+      <a class="xhs-mini" href="articles/v22-xhs36.html" title="第 36 篇">36</a>
+      <a class="xhs-mini" href="articles/v22-xhs37.html" title="第 37 篇">37</a>
+      <a class="xhs-mini" href="articles/v22-xhs38.html" title="第 38 篇">38</a>
+      <a class="xhs-mini" href="articles/v22-xhs39.html" title="第 39 篇">39</a>
+    </div>
+  </section>
+
+  <!-- ========== 📚 核心知识库 ========== -->
   <section class="section">
     <div class="section-head">
       <h2 class="section-title">📚 核心知识库 <span>—— 给读者看的</span></h2>
     </div>
     <div class="grid grid-3">
-
       <a class="card card-hero" href="guide.html">
         <div class="card-icon">📖</div>
         <div class="card-title">香港保险全指南（主站）</div>
         <div class="card-desc">从行业基础知识、市场分析、独特定位，到 AXA 安盛公司深度解析、学习路径图、差异化打法的完整单页指南。共 6 大模块。</div>
         <span class="card-badge">主推 · 完整指南</span>
       </a>
-
-      <a class="card" href="articles/v22-xhs-hub.html">
-        <div class="card-icon">📚</div>
-        <div class="card-title">专业文章库</div>
-        <div class="card-desc">103 篇深度文章：CPA 视角、小红书短文、Jason 实务、Billy WKOL、跨境系列。</div>
-        <span class="card-badge purple">103 篇</span>
-      </a>
-
       <a class="card" href="30-questions.html">
         <div class="card-icon">❓</div>
         <div class="card-title">港险投保 30 问</div>
         <div class="card-desc">入门必读 · 把客户最常问的 30 个问题一次讲透。</div>
         <span class="card-badge green">入门 FAQ</span>
       </a>
-
       <a class="card" href="irr-calculator.html">
         <div class="card-icon">📊</div>
         <div class="card-title">IRR 计算器</div>
         <div class="card-desc">分红险长期 IRR 在线计算，支持保证 + 非保证拆分。</div>
         <span class="card-badge orange">工具</span>
       </a>
-
       <a class="card" href="needs-assessment.html">
         <div class="card-icon">🩺</div>
         <div class="card-title">家庭需求评估</div>
         <div class="card-desc">引导式问卷，输出资产负债诊断 + 保障缺口分析。</div>
         <span class="card-badge orange">工具</span>
       </a>
-
       <a class="card" href="dividend-rates.html">
         <div class="card-icon">📈</div>
         <div class="card-title">分红实现率库</div>
         <div class="card-desc">主流公司历年分红实现率数据，判断长期信用。</div>
         <span class="card-badge gray">数据</span>
       </a>
-
+      <a class="card" href="articles/v22-xhs-hub.html">
+        <div class="card-icon">📚</div>
+        <div class="card-title">专业文章库（103 篇）</div>
+        <div class="card-desc">CPA 视角、小红书短文、Jason 实务、Billy WKOL、跨境系列全集。</div>
+        <span class="card-badge purple">103 篇</span>
+      </a>
     </div>
   </section>
 
+  <!-- ========== ✍️ 内容工厂 ========== -->
   <section class="section">
     <div class="section-head">
       <h2 class="section-title">✍️ 内容工厂 <span>—— 4 大渠道成稿仓库</span></h2>
       <a class="section-link" href="operations/index.html">运营中心 →</a>
     </div>
     <div class="grid grid-4">
-
       <a class="card card-wechat" href="operations/published/wechat/">
         <div class="card-icon">📢</div>
         <div class="card-title">公众号成稿</div>
         <div class="card-desc">HTML（带样式）+ Markdown 双格式。浏览器打开 HTML 全选复制即可粘贴到公众号编辑器。</div>
         <span class="card-badge green">3 篇 · 可直接发</span>
       </a>
-
       <a class="card card-zhihu" href="operations/published/zhihu/">
         <div class="card-icon">💡</div>
         <div class="card-title">知乎成稿</div>
         <div class="card-desc">Markdown 原生格式，知乎编辑器直接支持粘贴。</div>
         <span class="card-badge">2 篇 · 可直接发</span>
       </a>
-
       <a class="card card-xhs" href="operations/published/xhs/">
         <div class="card-icon">📕</div>
         <div class="card-title">小红书素材</div>
         <div class="card-desc">短文 bodies + 单篇成稿，覆盖港险合法性、IRR 等热门话题。</div>
         <span class="card-badge pink">2 包 · 多条素材</span>
       </a>
-
       <a class="card card-pyq" href="operations/strategy/朋友圈长线运营矩阵.md">
         <div class="card-icon">👥</div>
         <div class="card-title">朋友圈矩阵</div>
         <div class="card-desc">长线运营节奏 + 内容主题分布，避免变销售号。</div>
         <span class="card-badge orange">战略文档</span>
       </a>
-
     </div>
   </section>
 
+  <!-- ========== 📋 运营战略 ========== -->
   <section class="section">
     <div class="section-head">
       <h2 class="section-title">📋 运营战略 <span>—— 6 个月节奏 · SOP · 战略手册</span></h2>
     </div>
     <div class="grid grid-4">
-
       <a class="card" href="operations/strategy/公众号6个月内容矩阵.md">
         <div class="card-icon">🗓️</div>
         <div class="card-title">公众号 6 个月矩阵</div>
         <div class="card-desc">月度选题 + 发布节奏 + 主题轮换。</div>
         <span class="card-badge green">公众号</span>
       </a>
-
       <a class="card" href="operations/strategy/知乎6个月日历.md">
         <div class="card-icon">📅</div>
         <div class="card-title">知乎 6 个月日历</div>
         <div class="card-desc">回答路径 + 长文规划 + 问题适配。</div>
         <span class="card-badge">知乎</span>
       </a>
-
       <a class="card" href="operations/strategy/知乎发布SOP.md">
         <div class="card-icon">📋</div>
         <div class="card-title">知乎发布 SOP</div>
         <div class="card-desc">从选问题到回答到互动，全流程标准化。</div>
         <span class="card-badge">SOP</span>
       </a>
-
       <a class="card" href="operations/strategy/战略手册.md">
         <div class="card-icon">📕</div>
         <div class="card-title">战略手册（完整版）</div>
         <div class="card-desc">人设 / 渠道 / 内容 / 转化全链路战略文档。</div>
         <span class="card-badge purple">核心文档</span>
       </a>
-
     </div>
   </section>
 
+  <!-- ========== 🛠️ 工具与资源 ========== -->
   <section class="section">
     <div class="section-head">
       <h2 class="section-title">🛠️ 工具与资源 <span>—— 转换 · 下载 · 客户工具</span></h2>
     </div>
     <div class="grid grid-3">
-
       <a class="card" href="operations/tools/">
         <div class="card-icon">⚙️</div>
         <div class="card-title">HTML → 公众号/知乎 转换器</div>
         <div class="card-desc"><code>convert_single.py</code> 把 articles/ 下任意 HTML 自动转成公众号 HTML（带样式）+ 知乎 MD。</div>
         <span class="card-badge orange">Python 脚本</span>
       </a>
-
       <a class="card" href="operations/assets/港险投保30问_网页版.pdf">
         <div class="card-icon">📄</div>
         <div class="card-title">港险投保 30 问 · PDF</div>
         <div class="card-desc">客户分发资料 · 网页版 / 打印版双版本。</div>
         <span class="card-badge green">PDF 下载</span>
       </a>
-
       <a class="card" href="operations/assets/互联网中层家庭财务自查表.xlsx">
         <div class="card-icon">📊</div>
         <div class="card-title">家庭财务自查表 · Excel</div>
         <div class="card-desc">资产负债 + 现金流 + 保障缺口三表合一。</div>
         <span class="card-badge orange">Excel</span>
       </a>
-
     </div>
   </section>
 
 </main>
 
 <footer>
-  <div>香港保险综合站 · Built for personal use · 持续迭代中</div>
+  <div>香港保险综合站 v3.1 · Built for personal use · 持续迭代中</div>
   <div style="margin-top:8px;">
     <a href="guide.html">保险全指南</a> · 
     <a href="operations/index.html">运营中心</a> · 
+    <a href="operations/flagship/README.md">旗舰内容索引</a> · 
     <a href="articles/v22-xhs-hub.html">文章库</a> · 
     <a href="operations/README.md">使用说明</a>
   </div>
