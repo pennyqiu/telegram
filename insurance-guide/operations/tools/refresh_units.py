@@ -674,6 +674,79 @@ def update_dashboard_counts():
     print(f'[OK] 计数: 公众号 {wechat_count} 篇, 知乎 {zhihu_count} 篇, 单元 {len(UNITS)} 个')
 
 
+def update_latest_publish_section():
+    """重写主仪表盘 <!-- 最新发布 --> ~ <!-- end:latest --> 区段。
+    取 UNITS 中 cpa- 开头的最后 6 个（按添加顺序倒序）作为「最新发布」。"""
+    cpa_units = [u for u in UNITS if u['slug'].startswith('cpa')]
+    recent = list(reversed(cpa_units))[:6]
+    if not recent:
+        return
+    hero = recent[0]
+    rest = recent[1:]
+
+    rest_cards = ''
+    for u in rest:
+        rest_cards += (
+            f'      <a class="card" href="operations/published/units/{u["slug"]}.html">\n'
+            f'        <div class="card-eyebrow">{u["tag"]}</div>\n'
+            f'        <div class="card-title">{u["title"]}</div>\n'
+            f'        <div class="card-desc">{u["subtitle"]}</div>\n'
+            f'        <div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;font-size:11px;color:#64748b;">\n'
+            f'          <span>\U0001F4E8 公众号</span><span>·</span><span>\U0001F4F0 知乎</span><span>·</span><span>\U0001F4DD {u.get("words","")}字</span>\n'
+            f'        </div>\n'
+            f'      </a>\n'
+        )
+
+    block = (
+        '<!-- ========== \U0001F195 最新发布 ========== -->\n'
+        '  <section class="section" style="margin-bottom:36px;">\n'
+        '    <div class="section-head">\n'
+        '      <h2 class="section-title">\U0001F195 最新发布 <span>—— 已成稿、可一键复制发布</span></h2>\n'
+        '      <a class="section-link" href="operations/published/units/index.html">所有发布单元 →</a>\n'
+        '    </div>\n'
+        '    <div class="grid grid-3">\n'
+        f'      <a class="card" href="operations/published/units/{hero["slug"]}.html"\n'
+        f'         style="background:linear-gradient(135deg,{hero["hero_a"]} 0%,{hero["hero_b"]} 100%);color:#fff;border:none;grid-column:span 2;">\n'
+        '        <div style="display:flex;gap:18px;align-items:flex-start;">\n'
+        f'          <div style="font-size:56px;font-weight:900;line-height:0.9;color:rgba(255,255,255,0.95);letter-spacing:-2px;">{hero["number"]}</div>\n'
+        '          <div style="flex:1;">\n'
+        f'            <div style="font-size:11px;font-weight:700;letter-spacing:1.5px;background:rgba(255,255,255,0.18);padding:4px 10px;border-radius:10px;display:inline-block;margin-bottom:8px;">\U0001F4D8 {hero["tag"]} · 发布单元</div>\n'
+        f'            <div class="card-title" style="color:#fff;font-size:18px;">{hero["title"]}</div>\n'
+        f'            <div class="card-desc" style="color:rgba(255,255,255,0.92);font-size:13px;">{hero["subtitle"]} · 点开即可看到：公众号成稿 + 知乎成稿 + 复制发布流程。</div>\n'
+        '            <div style="display:flex;gap:6px;margin-top:12px;flex-wrap:wrap;">\n'
+        '              <span style="font-size:11px;background:rgba(255,255,255,0.2);padding:3px 8px;border-radius:8px;">\U0001F4E8 公众号 HTML</span>\n'
+        '              <span style="font-size:11px;background:rgba(255,255,255,0.2);padding:3px 8px;border-radius:8px;">\U0001F4F0 知乎 MD</span>\n'
+        f'              <span style="font-size:11px;background:rgba(255,255,255,0.2);padding:3px 8px;border-radius:8px;">\U0001F4DD {hero.get("words","")}字</span>\n'
+        '            </div>\n'
+        '          </div>\n'
+        '        </div>\n'
+        '      </a>\n'
+        '      <a class="card" href="operations/published/units/index.html"\n'
+        '         style="display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;border:2px dashed #fbbf24;background:#fffbeb;">\n'
+        '        <div style="font-size:42px;margin-bottom:8px;">\U0001F4E6</div>\n'
+        '        <div class="card-title" style="color:#92400e;">发布单元总览</div>\n'
+        '        <div class="card-desc" style="font-size:12.5px;">每篇文章一个聚合页：稿件 + 流程，按文章打包查看</div>\n'
+        f'        <span class="card-badge orange">{len(UNITS)} 个单元</span>\n'
+        '      </a>\n'
+        + rest_cards +
+        '    </div>\n'
+        '  </section>\n'
+        '  <!-- end:latest -->'
+    )
+
+    pp = 'insurance-guide/index.html'
+    with open(pp, 'r', encoding='utf-8') as f:
+        c2 = f.read()
+    pattern = re.compile(r'<!--\s*=+\s*[^\n]*?最新发布[^\n]*?=+\s*-->.*?<!--\s*end:latest\s*-->', re.DOTALL)
+    if not pattern.search(c2):
+        print('[WARN] 找不到「最新发布」区段锚点，跳过')
+        return
+    c2 = pattern.sub(block, c2, count=1)
+    with open(pp, 'w', encoding='utf-8') as f:
+        f.write(c2)
+    print(f'[OK] 「最新发布」区已刷新：hero={hero["slug"]}，附带 {len(rest)} 张小卡')
+
+
 def main():
     gen_channel_index(
         'insurance-guide/operations/published/wechat', 'wechat',
@@ -697,6 +770,7 @@ def main():
     print(f'[OK] {len(UNITS)} 个发布单元页生成')
     gen_units_index()
     update_dashboard_counts()
+    update_latest_publish_section()
 
 
 if __name__ == '__main__':
