@@ -299,6 +299,10 @@ const curriculum=[
   {id:'meta-valuation',phase:2,tag:'第11课',title:'Meta估值：广告现金流+元宇宙期权',duration:'80 min'},
   {id:'amzn-valuation',phase:2,tag:'第12课',title:'亚马逊估值：AWS驱动的SOTP拆分',duration:'90 min'},
   {id:'tsmc-valuation',phase:2,tag:'第12b课',title:'台积电估值：AI芯片供应链垄断者如何定价',duration:'90 min'},
+  {id:'current-portfolio-review',phase:2,tag:'第12c课',title:'当前持仓体检：科技集中度、ETF重叠与再平衡',shortTitle:'当前持仓体检',duration:'60 min'},
+  {id:'ibkr-valuation',phase:2,tag:'第12d课',title:'IBKR估值：自动化券商平台如何定价',shortTitle:'IBKR · 自动化券商',duration:'75 min'},
+  {id:'spym-research',phase:2,tag:'第12e课',title:'SPYM深度研究：0.02%费率买入标普500',shortTitle:'SPYM · 标普500低费率',duration:'60 min'},
+  {id:'qqqm-research',phase:2,tag:'第12f课',title:'QQQM深度研究：纳指100低费率长期持有版',shortTitle:'QQQM · 纳指100低费率',duration:'60 min'},
   {id:'qqq-spy-research',phase:2,tag:'第28课',title:'ETF进阶研究：QQQ vs SPY 长期表现与配置策略',shortTitle:'QQQ vs SPY 进阶对比',duration:'100 min'},
   {id:'schd-research',phase:2,tag:'第32课',title:'SCHD深度研究：红利投资的科学与实战',shortTitle:'SCHD · 红利投资',duration:'110 min'},
   {id:'voo-research',phase:2,tag:'第33课',title:'VOO深度研究：买入整个美国的科学与实战',shortTitle:'VOO · 买入整个美国',duration:'90 min'},
@@ -8558,6 +8562,287 @@ CEO薪酬激励：
 </div>
 `,
 
+'current-portfolio-review':`
+<p>本节基于截图中的IBKR持仓做一次组合体检。当前组合约<strong>$307,578</strong>市值，核心由微软、Meta、英伟达、Google、台积电、SPYM、QQQM和IBKR构成。它不是传统意义上的"分散组合"，而是一个<strong>高质量科技/AI集中组合 + 少量大盘ETF缓冲</strong>。</p>
+
+<div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:12px;padding:18px;margin:16px 0">
+<strong style="color:#1e40af">📊 持仓快照（来自截图，按市值近似计算）</strong>
+<div class="table-wrap" style="margin-top:12px"><table>
+<thead><tr><th>标的</th><th>市值</th><th>组合权重</th><th>角色</th><th>课程覆盖</th></tr></thead>
+<tbody>
+<tr><td><strong>MSFT</strong></td><td>$115.2K</td><td><strong>37.5%</strong></td><td>最大核心仓，云+AI平台</td><td>第9课已覆盖</td></tr>
+<tr><td><strong>META</strong></td><td>$38.6K</td><td>12.5%</td><td>AI广告现金流</td><td>第11课已覆盖</td></tr>
+<tr><td><strong>SPYM</strong></td><td>$35.9K</td><td>11.7%</td><td>标普500低费率底仓</td><td>本次新增</td></tr>
+<tr><td><strong>TSM</strong></td><td>$34.4K</td><td>11.2%</td><td>AI芯片制造瓶颈</td><td>第12b课已覆盖</td></tr>
+<tr><td><strong>NVDA</strong></td><td>$32.9K</td><td>10.7%</td><td>AI训练/推理芯片</td><td>第10课已覆盖</td></tr>
+<tr><td><strong>QQQM</strong></td><td>$30.4K</td><td>9.9%</td><td>纳指100低费率成长ETF</td><td>本次新增</td></tr>
+<tr><td><strong>GOOG</strong></td><td>$18.8K</td><td>6.1%</td><td>搜索+云+AI</td><td>第7课已覆盖</td></tr>
+<tr><td><strong>IBKR</strong></td><td>$1.4K</td><td>0.5%</td><td>自动化券商平台</td><td>本次新增</td></tr>
+</tbody></table></div>
+<p style="font-size:12px;color:#64748b;margin-top:8px">注：权重按截图中"市值"列估算，实际应以最新账户数据刷新。</p>
+</div>
+
+<h2>组合的真实暴露：比表面更集中</h2>
+<div class="code-block"><span class="cm">// 表面看有8个标的，实质上是一个AI/大型科技组合</span>
+
+直接个股科技/AI仓位：
+  MSFT 37.5% + META 12.5% + TSM 11.2% + NVDA 10.7% + GOOG 6.1%
+  = <span class="hl">约78.0%</span>
+
+科技成长ETF：
+  QQQM 9.9%（纳指100，前十大仍是NVDA/MSFT/GOOG/META等）
+
+大盘ETF：
+  SPYM 11.7%（标普500，但前十大也包含NVDA/MSFT/GOOG/META）
+
+非科技金融平台：
+  IBKR 0.5%（几乎不影响组合风险）
+
+结论：
+  组合不是"8个标的分散"，而是<span class="hl">微软为核心的AI科技集中组合</span>。
+  ETF并没有完全分散风险，反而再次加仓了相同的巨头。</div>
+
+<h2>最重要的三个问题</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>问题</th><th>当前状态</th><th>建议</th></tr></thead>
+<tbody>
+<tr><td>单一公司集中度</td><td>MSFT约37.5%，明显高于常见10-15%上限</td><td>若这是长期核心信仰仓，可接受；若是养老组合，建议未来新增资金优先投向SPYM/现金/债券而不是继续加MSFT</td></tr>
+<tr><td>主题集中度</td><td>AI相关暴露超过80%，包括云、GPU、晶圆代工、广告AI</td><td>收益弹性强，但若AI资本开支放缓或估值压缩，组合会同步回撤</td></tr>
+<tr><td>ETF重叠</td><td>SPYM和QQQM都含有MSFT/NVDA/GOOG/META，和个股重复</td><td>ETF不是问题，但要把它们视为"继续加大科技巨头敞口"，不是完全防守</td></tr>
+</tbody></table></div>
+
+<h2>情景压力测试</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>情景</th><th>可能触发</th><th>组合影响</th><th>应对策略</th></tr></thead>
+<tbody>
+<tr><td>AI继续超预期</td><td>云AI收入加速、NVDA订单继续爆发、TSM先进制程满载</td><td>组合大概率显著跑赢标普500</td><td>持有，不因短期涨幅过大频繁卖出</td></tr>
+<tr><td>估值压缩</td><td>10年期美债上行、科技Forward P/E从30x压到22x</td><td>可能回撤20-35%，MSFT/QQQM/NVDA同步下跌</td><td>提前设定加仓规则，不在恐慌中被动卖出</td></tr>
+<tr><td>AI CapEx周期放缓</td><td>大厂削减GPU/数据中心支出</td><td>NVDA、TSM受冲击最大，MSFT/GOOG中等，META看广告韧性</td><td>控制NVDA+TSM合计不超过25%，避免供应链单点风险</td></tr>
+<tr><td>美元资产牛市延续</td><td>美国生产率提升、AI利润兑现</td><td>当前组合结构非常受益</td><td>保留核心仓，新增资金做再平衡而非清仓</td></tr>
+</tbody></table></div>
+
+<div class="info-box yellow">
+  <div class="info-box-title">⚠️ 配置建议</div>
+  <strong>不建议立刻大幅卖出</strong>，因为持仓质量很高，且多数公司已有单独估值框架支持。真正的问题是<strong>新增资金怎么投</strong>。<br><br>
+  <strong>未来新增资金优先级：</strong>SPYM/VOO类大盘底仓 ＞ 债券/现金缓冲 ＞ QQQM ＞ 单只科技股。<br><br>
+  <strong>纪律线：</strong>MSFT若超过40%，暂停新增；NVDA+TSM若超过25%，暂停新增AI供应链；QQQM只适合长期持有，不适合短线追涨。
+</div>
+
+<ul class="checklist">
+  <li data-key="cpr1"><div class="check-box">✓</div><span class="check-text">我理解这个组合的核心风险不是个股质量差，而是科技/AI集中度高</span></li>
+  <li data-key="cpr2"><div class="check-box">✓</div><span class="check-text">我知道SPYM和QQQM会与已有科技个股发生重叠</span></li>
+  <li data-key="cpr3"><div class="check-box">✓</div><span class="check-text">我能用新增资金再平衡，而不是被迫卖出优质仓位</span></li>
+</ul>`,
+
+// =====================================================================
+'ibkr-valuation':`
+<p>Interactive Brokers（IBKR）是全球最重要的自动化券商平台之一。它不是传统银行，也不是 Robinhood 式的流量券商，而是以<strong>极低成本、全球市场接入、自动化风控和低保证金利率</strong>吸引专业投资者、机构和高频交易用户的平台型金融公司。</p>
+
+<div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;padding:18px;margin:16px 0">
+<strong style="color:#15803d">📊 IBKR 2026年核心观察</strong>
+<div class="table-wrap" style="margin-top:12px"><table>
+<thead><tr><th>指标</th><th>当前特征</th><th>估值含义</th></tr></thead>
+<tbody>
+<tr><td>税前利润率</td><td>约75-79%，远高于传统券商</td><td>自动化系统带来的结构性成本优势</td></tr>
+<tr><td>账户增长</td><td>30%+区间增长</td><td>平台仍处于扩张期，不是成熟停滞券商</td></tr>
+<tr><td>净利息收入</td><td>客户现金和保证金融资贡献很大</td><td>对利率周期敏感，是估值最大变量</td></tr>
+<tr><td>佣金收入</td><td>交易量、期权、国际市场接入驱动</td><td>市场波动越高，交易收入越有弹性</td></tr>
+<tr><td>估值</td><td>约35-37x盈利区间</td><td>市场已给高质量金融科技平台溢价</td></tr>
+</tbody></table></div>
+</div>
+
+<h2>Step 1：商业模式拆解</h2>
+<div class="code-block"><span class="cm">// IBKR收入来源</span>
+
+1. 净利息收入（NII）
+   客户现金余额、保证金融资、证券借贷
+   → 高利率环境下强劲
+   → 降息周期会压缩收益
+
+2. 佣金收入
+   股票、期权、期货、外汇、债券等多市场交易
+   → 活跃交易者越多，收入越高
+   → 波动率上升通常利好
+
+3. 平台与风控技术
+   SmartRouting、自动风控、全球清算、低保证金利率
+   → 这是IBKR区别于传统券商的核心
+
+4. 新业务期权
+   ForecastEx、加密资产、顾问/机构托管、全球扩张
+   → 当前贡献不大，但提供长期可选性</div>
+
+<h2>Step 2：护城河</h2>
+<div class="info-box green">
+  <div class="info-box-title">✅ IBKR的护城河不是品牌，而是系统成本</div>
+  <strong>自动化成本优势：</strong>几十年把交易、清算、风控、账户管理高度自动化，所以能在低收费下保持极高利润率。<br>
+  <strong>全球市场接入：</strong>一个账户交易多国家股票、期权、期货、外汇和债券，对国际投资者吸引力很强。<br>
+  <strong>低保证金利率：</strong>对专业投资者和机构客户非常关键，形成迁移优势。<br>
+  <strong>高转换成本：</strong>专业交易者迁移券商需要重新适配接口、保证金规则、税务报告和交易流程。
+</div>
+
+<h2>Step 3：估值框架</h2>
+<div class="code-block"><span class="cm">// IBKR不是银行股，也不是普通互联网平台</span>
+
+估值方法：
+  1. P/E：适合横向比较SCHW、HOOD、传统券商
+  2. P/B + ROE：辅助判断金融资产效率
+  3. NII敏感性：判断降息对利润的冲击
+  4. 账户增长 + 客户资产增长：判断平台长期空间
+
+基准假设（2026视角）：
+  收入长期CAGR：8-11%
+  净利润长期CAGR：9-12%
+  合理P/E区间：25-35x
+  高质量溢价区间：35x+（需账户增长继续超预期）
+
+若EPS约$2.4-2.6：
+  25x = $60-65
+  30x = $72-78
+  35x = $84-91
+
+结论：
+  当前$80+附近属于<span class="hl">合理偏高</span>，不是深度低估。
+  若跌到$65-70且账户增长仍强，是更有安全边际的买点。</div>
+
+<h2>Step 4：关键风险</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>风险</th><th>影响</th><th>监控指标</th></tr></thead>
+<tbody>
+<tr><td>降息周期</td><td>NII下降，利润增速放缓</td><td>每25bp降息对年化NII影响、客户现金余额</td></tr>
+<tr><td>交易量下降</td><td>佣金收入回落</td><td>DARTs、期权/股票交易量</td></tr>
+<tr><td>估值过高</td><td>好公司也可能股价长期不涨</td><td>Forward P/E是否高于35x</td></tr>
+<tr><td>监管/系统风险</td><td>券商平台一旦出风控事故，信任受损</td><td>保证金贷款质量、极端行情下系统稳定性</td></tr>
+</tbody></table></div>
+
+<div class="info-box yellow">
+  <div class="info-box-title">⚠️ 当前持仓建议</div>
+  截图中IBKR只有约0.5%仓位，更像观察仓。这个比例很合理。IBKR是好公司，但当前估值已反映大量乐观预期，建议先把它当作<strong>金融科技观察仓</strong>，等降息压低NII预期或股价回调后再考虑加到2-3%。
+</div>
+
+<ul class="checklist">
+  <li data-key="ibkr1"><div class="check-box">✓</div><span class="check-text">我理解IBKR的核心护城河是自动化低成本系统，而不是传统券商品牌</span></li>
+  <li data-key="ibkr2"><div class="check-box">✓</div><span class="check-text">我知道IBKR对利率周期敏感，不能只看账户增长</span></li>
+  <li data-key="ibkr3"><div class="check-box">✓</div><span class="check-text">我能把IBKR作为观察仓，而不是在高估值时追成重仓</span></li>
+</ul>`,
+
+// =====================================================================
+'spym-research':`
+<p>SPYM（State Street SPDR Portfolio S&P 500 ETF）追踪<strong>S&P 500 Index</strong>，本质上是用极低费率买入美国500家大型公司的组合。它和VOO、IVV、SPY的底层逻辑相同，但SPYM的核心卖点是<strong>0.02%超低费率</strong>。</p>
+
+<div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:12px;padding:18px;margin:16px 0">
+<strong style="color:#1e40af">📊 SPYM核心数据（2026年资料）</strong>
+<div class="table-wrap" style="margin-top:12px"><table>
+<thead><tr><th>指标</th><th>SPYM</th><th>解读</th></tr></thead>
+<tbody>
+<tr><td>追踪指数</td><td>S&P 500 Index</td><td>美国大盘核心资产</td></tr>
+<tr><td>费率</td><td><strong>0.02%</strong></td><td>比VOO/IVV常见0.03%还低</td></tr>
+<tr><td>持仓数量</td><td>约504-508只</td><td>覆盖美国大盘股</td></tr>
+<tr><td>成立时间</td><td>2005年11月</td><td>历史较长，非新基金</td></tr>
+<tr><td>前十大</td><td>NVDA、AAPL、MSFT、AMZN、GOOG/GOOGL、META等</td><td>仍然高度受科技巨头影响</td></tr>
+</tbody></table></div>
+<p style="font-size:12px;color:#64748b;margin-top:8px">参考：State Street官方资料、SEC文件与2026年Fact Sheet。</p>
+</div>
+
+<h2>SPYM在组合中的作用</h2>
+<div class="code-block"><span class="cm">// SPYM不是进攻工具，而是底仓工具</span>
+
+优点：
+  1. 费率极低：0.02%，长期复利损耗很小
+  2. 分散度高：500+家公司
+  3. 流动性和规模足够：State Street大型产品线
+  4. 自动再平衡：赢家权重自然上升，输家自然下降
+
+局限：
+  1. 当前标普500本身也很科技化
+  2. 前十大权重高，和你的MSFT/NVDA/GOOG/META重复
+  3. 如果美股整体估值压缩，SPYM也会下跌
+
+结论：
+  SPYM适合作为<span class="hl">新增资金的首选底仓</span>，
+  但不要误以为它能完全对冲科技股风险。</div>
+
+<h2>SPYM vs 你的个股仓位</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>维度</th><th>SPYM</th><th>单只科技股</th></tr></thead>
+<tbody>
+<tr><td>收益来源</td><td>美国企业整体盈利增长</td><td>公司自身成长和估值变化</td></tr>
+<tr><td>波动</td><td>中等</td><td>高</td></tr>
+<tr><td>最大风险</td><td>美国市场整体高估</td><td>单公司竞争、监管、估值错误</td></tr>
+<tr><td>适合用途</td><td>养老底仓、再平衡工具</td><td>增强收益、表达认知优势</td></tr>
+<tr><td>操作方式</td><td>定投、长期持有</td><td>估值纪律、分批加减</td></tr>
+</tbody></table></div>
+
+<div class="info-box green">
+  <div class="info-box-title">✅ 对当前组合的建议</div>
+  你当前SPYM约11.7%，太低，不足以承担"核心底仓"功能。若目标是养老组合，未来新增资金可以优先把SPYM/VOO类大盘ETF逐步提高到<strong>25-40%</strong>，用它稀释MSFT和AI供应链集中度。
+</div>
+
+<ul class="checklist">
+  <li data-key="spym1"><div class="check-box">✓</div><span class="check-text">我理解SPYM是标普500低费率底仓，不是短期交易工具</span></li>
+  <li data-key="spym2"><div class="check-box">✓</div><span class="check-text">我知道SPYM仍然和大型科技股高度重叠</span></li>
+  <li data-key="spym3"><div class="check-box">✓</div><span class="check-text">我能用SPYM承接新增资金，降低单一个股集中度</span></li>
+</ul>`,
+
+// =====================================================================
+'qqqm-research':`
+<p>QQQM（Invesco NASDAQ 100 ETF）追踪纳斯达克100指数，和QQQ持仓几乎完全相同。它的定位很明确：<strong>给长期持有者准备的低费率QQQ版本</strong>。如果你不做期权、不做高频交易，只是长期持有纳指100，QQQM通常比QQQ更适合。</p>
+
+<div style="background:#fdf4ff;border:1px solid #e9d5ff;border-radius:12px;padding:18px;margin:16px 0">
+<strong style="color:#7e22ce">📊 QQQM vs QQQ</strong>
+<div class="table-wrap" style="margin-top:12px"><table>
+<thead><tr><th>指标</th><th>QQQM</th><th>QQQ</th><th>结论</th></tr></thead>
+<tbody>
+<tr><td>追踪指数</td><td>Nasdaq-100</td><td>Nasdaq-100</td><td>底层几乎一样</td></tr>
+<tr><td>费率</td><td><strong>0.15%</strong></td><td>约0.18%</td><td>QQQM长期更省钱</td></tr>
+<tr><td>流动性</td><td>足够普通投资者使用</td><td>全球顶级ETF流动性</td><td>交易者选QQQ，长期持有选QQQM</td></tr>
+<tr><td>适合人群</td><td>定投、买入持有</td><td>期权、短线、机构交易</td><td>你的持仓更适合QQQM</td></tr>
+<tr><td>主要持仓</td><td>NVDA、AAPL、MSFT、AMZN、GOOG、META等</td><td>相同</td><td>不是分散到全市场，而是集中科技成长</td></tr>
+</tbody></table></div>
+</div>
+
+<h2>QQQM在当前组合中的作用</h2>
+<div class="code-block"><span class="cm">// QQQM是科技成长加速器，不是防守仓</span>
+
+你的组合已有：
+  MSFT 37.5%
+  NVDA 10.7%
+  GOOG 6.1%
+  META 12.5%
+
+QQQM又会买入：
+  MSFT、NVDA、GOOG、META、AMZN、AAPL、AVGO、TSLA等
+
+所以QQQM的真实作用：
+  ✅ 补上AAPL/AMZN/AVGO/TSLA等你没单独买的科技巨头
+  ✅ 自动持有纳指100赢家
+  ⚠️ 同时继续加重已有AI巨头暴露
+
+结论：
+  QQQM适合长期持有，但它不是"分散风险"，而是<span class="hl">继续押注美国科技成长</span>。</div>
+
+<h2>估值纪律</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>纳指100估值环境</th><th>行动建议</th></tr></thead>
+<tbody>
+<tr><td>Forward P/E 20-25x</td><td>正常定投，可提高配置</td></tr>
+<tr><td>Forward P/E 25-32x</td><td>持有为主，小额定投</td></tr>
+<tr><td>Forward P/E 32-40x</td><td>暂停大额新增，优先SPYM/现金/债券</td></tr>
+<tr><td>Forward P/E 40x+</td><td>泡沫警戒，除非有极强盈利加速证据</td></tr>
+</tbody></table></div>
+
+<div class="info-box yellow">
+  <div class="info-box-title">⚠️ 对当前持仓建议</div>
+  QQQM约9.9%仓位合理，不算过高。但考虑你已经重仓MSFT、NVDA、GOOG、META，未来若继续加QQQM，本质是在加科技巨头。建议QQQM长期目标控制在<strong>10-15%</strong>，超过后新增资金优先投SPYM类大盘ETF。
+</div>
+
+<ul class="checklist">
+  <li data-key="qqqm1"><div class="check-box">✓</div><span class="check-text">我理解QQQM和QQQ底层几乎相同，区别主要是费率和流动性</span></li>
+  <li data-key="qqqm2"><div class="check-box">✓</div><span class="check-text">我知道QQQM会与现有科技个股重叠，不是防守仓</span></li>
+  <li data-key="qqqm3"><div class="check-box">✓</div><span class="check-text">我能把QQQM作为长期科技成长仓，而不是短线追涨工具</span></li>
+</ul>`,
+
+// =====================================================================
 'qqq-spy-research':`
 <p>QQQ（Invesco QQQ Trust，追踪纳斯达克100）和 SPY（SPDR S&P 500 ETF Trust）是美股最重要的两只 ETF，合计管理规模超 <strong>$1.2 万亿</strong>。本节通过 <strong>40年历史数据</strong>（1985-2025）、学术研究和实战配置策略，解答核心问题：QQQ 的高回报是否值得承担额外波动？两者如何组合配置？</p>
 
