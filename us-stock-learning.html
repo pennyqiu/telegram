@@ -292,6 +292,7 @@ const curriculum=[
   {id:'valuation-metrics',phase:2,phaseLabel:'第二阶段：估值体系',tag:'第5课',title:'估值指标体系',duration:'60 min'},
   {id:'coca-cola-valuation',phase:2,tag:'第6课',title:'传统行业估值：可口可乐DCF实战',duration:'90 min'},
   {id:'google-valuation',phase:2,tag:'第7课',title:'互联网行业估值：谷歌实战',duration:'90 min'},
+  {id:'payment-networks-valuation',phase:2,tag:'第7b课',title:'支付网络估值：Visa与万事达实战',duration:'90 min'},
   {id:'company-analysis',phase:2,tag:'第8课',title:'公司基本面分析框架',duration:'60 min'},
   {id:'msft-valuation',phase:2,tag:'第9课',title:'微软估值：云+AI双引擎DCF实战',duration:'90 min'},
   {id:'nvda-valuation',phase:2,tag:'第10课',title:'英伟达估值：AI超级周期如何定价',duration:'90 min'},
@@ -2481,6 +2482,211 @@ PV（终值）= $4,003B × (1/1.092^10) = $4,003B × 0.422 = <span class="hl">$1
   <li data-key="gv2"><div class="check-box">✓</div><span class="check-text">我能描述谷歌四个业务部门的FY2025规模、增速和估值逻辑</span></li>
   <li data-key="gv3"><div class="check-box">✓</div><span class="check-text">我理解AI对谷歌的威胁已基本被证伪，Cloud是新的增长引擎</span></li>
   <li data-key="gv4"><div class="check-box">✓</div><span class="check-text">我能用SOTP和DCF双重验证法判断当前$178是否低估，并给出配置建议</span></li>
+</ul>`,
+
+// =====================================================================
+'payment-networks-valuation':`
+<p>Visa（V）和万事达（Mastercard, MA）不是银行，也不是借钱给消费者的信用卡公司，而是全球支付网络的"收费公路"。本节用<strong>FY2025实际数据 + 2026年4月市场环境</strong>建立支付网络公司的估值体系，重点理解：为什么它们长期享受高估值、为什么不能用银行股P/B估值，以及什么价格才算有安全边际。</p>
+
+<div style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:12px;padding:18px;margin:16px 0">
+<strong style="color:#075985">📊 Visa / Mastercard 最新财务快照（FY2025实际 · 2026年4月视角）</strong>
+<div class="table-wrap" style="margin-top:12px"><table>
+<thead><tr><th>指标</th><th>Visa (V)</th><th>Mastercard (MA)</th><th>解读</th></tr></thead>
+<tbody>
+<tr><td><strong>收入</strong></td><td>约 $39B</td><td>约 $30B</td><td>Visa规模更大，MA国际化和增速略强</td></tr>
+<tr><td><strong>收入增速</strong></td><td>+10%</td><td>+11%</td><td>由消费金额、跨境交易和服务收入驱动</td></tr>
+<tr><td><strong>运营利润率</strong></td><td>约 67%</td><td>约 58%</td><td>极致轻资产，软件化经济模型</td></tr>
+<tr><td><strong>净利润</strong></td><td>约 $22B</td><td>约 $14B</td><td>税后利润率远高于普通金融公司</td></tr>
+<tr><td><strong>FCF</strong></td><td>约 $20B</td><td>约 $13B</td><td>现金流质量极高，CapEx很低</td></tr>
+<tr><td><strong>ROIC</strong></td><td>50%+</td><td>45%+</td><td>护城河最直观的财务表现</td></tr>
+<tr><td><strong>Forward P/E</strong></td><td>约 28-30x</td><td>约 31-33x</td><td>市场给"高确定性复利"支付溢价</td></tr>
+</tbody></table></div>
+<div style="margin-top:10px;font-size:12px;color:#64748b">
+  📌 当前市价（2026年4月）：Visa约 <strong>$330/股</strong> · Mastercard约 <strong>$560/股</strong>。数据为课程估值示例，实际投资前需用最新10-K/10-Q和股价刷新。
+</div>
+</div>
+
+<h2>Step 1：先搞清楚商业模式</h2>
+<div class="code-block"><span class="cm">// 支付网络不是银行：它们不承担主要信用风险</span>
+
+一笔信用卡/借记卡消费的参与方：
+  消费者 → 发卡行（如Chase）→ Visa/MA网络 → 收单行 → 商户
+
+Visa/MA做什么：
+  1. 授权交易：验证卡片、额度、风控
+  2. 清算结算：把交易信息和资金指令传给银行
+  3. 风控与Token化：降低欺诈，支持Apple Pay/Google Pay等数字钱包
+  4. 跨境支付：外币交易、国际网络、合规处理
+
+收入来源：
+  服务费（按支付金额收取）
+  数据处理费（按交易笔数收取）
+  跨境交易费（利润率最高）
+  增值服务（风控、数据、商业支付、开放银行）
+
+关键结论：
+  <span class="hl">Visa/MA是网络型平台，不是资产负债表型金融机构</span>
+  → 不靠贷款利差赚钱
+  → 不需要大量资本金
+  → P/B没有意义，DCF、P/E、FCF Yield更重要</div>
+
+<div class="info-box green">
+  <div class="info-box-title">✅ 支付网络的核心护城河</div>
+  <strong>双边网络效应：</strong>商户接受Visa/MA，因为持卡人多；消费者愿意用Visa/MA，因为商户覆盖广。<br>
+  <strong>全球接受网络：</strong>200+国家和地区、数千万商户、数十亿张卡，复制成本极高。<br>
+  <strong>高转换成本：</strong>银行、商户、支付服务商、风控系统、合规流程深度绑定，不会轻易切换。<br>
+  <strong>规模经济：</strong>新增一笔交易的边际成本极低，所以收入增长会高度转化为利润和FCF。
+</div>
+
+<h2>Step 2：收入增长公式</h2>
+<div class="formula-box">
+  <div class="formula">收入增长 ≈ 支付金额增长 + 交易笔数增长 + 跨境恢复 + 增值服务渗透</div>
+  <div class="formula-desc">支付网络估值的第一性原理：全球名义消费增长 × 现金转卡 × 电商化 × 跨境化</div>
+</div>
+
+<div class="code-block"><span class="cm">// Visa / MA 长期增长驱动拆解</span>
+
+① 名义消费增长：全球GDP + 通胀
+   长期约 4-6%
+
+② 现金向电子支付迁移：
+   发达市场趋于成熟，新兴市场仍有空间
+   长期贡献约 2-3%
+
+③ 跨境交易：
+   出境旅游、跨境电商、商务差旅
+   利润率高，是估值弹性最大变量
+   长期贡献约 1-2%，但周期波动大
+
+④ 增值服务：
+   风控、数据分析、商业支付、实时支付、开放银行
+   增速通常高于核心刷卡业务
+   长期贡献约 1-2%
+
+合计长期收入增速：
+  Visa：<span class="hl">8-10%</span>
+  Mastercard：<span class="hl">9-11%</span>（国际敞口更高，波动也略高）</div>
+
+<h2>Step 3：财务质量判断</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>维度</th><th>Visa / MA表现</th><th>估值含义</th></tr></thead>
+<tbody>
+<tr><td>毛利率/运营利润率</td><td>运营利润率长期50-65%+</td><td>极强定价权和规模经济，合理享受高倍数</td></tr>
+<tr><td>资本开支</td><td>CapEx占收入比例很低</td><td>净利润大部分能转为FCF，DCF可信度高</td></tr>
+<tr><td>杠杆</td><td>债务可控，现金流覆盖强</td><td>财务风险低，WACC接近权益成本</td></tr>
+<tr><td>回购</td><td>长期大额回购</td><td>EPS增速通常高于净利润增速</td></tr>
+<tr><td>周期性</td><td>与消费、旅游、跨境交易相关</td><td>短期会受衰退影响，但长期恢复力强</td></tr>
+</tbody></table></div>
+
+<h2>Step 4：Visa DCF估值</h2>
+<div class="code-block"><span class="cm">// Visa DCF（FY2025 FCF基础，2026年4月参数）</span>
+
+基础FCF：约 $20.0B
+当前市值：约 $660B（股价$330 × 约2.0B股）
+净债务：接近中性，简化为0
+
+WACC假设：
+  Rf（10年期美债）= 4.3%
+  β（Visa）= 0.95（低于高波动科技股，但高于KO）
+  ERP = 4.5%
+  Ke = 4.3% + 0.95 × 4.5% = <span class="hl">8.6%</span>
+  轻债务结构 → WACC取 <span class="hl">8.5%</span>
+
+增长率假设：
+  2026-2030：FCF CAGR 10%
+  2031-2035：FCF CAGR 7%
+  终值增长率：3%
+
+DCF结果：
+  10年FCF现值：约 $190B
+  终值现值：约 $455B
+  企业价值：约 $645B
+  ÷ 流通股数约2.0B
+  <span class="hl">Visa基准内在价值：约 $322/股</span>
+
+当前约$330 → 接近合理估值，安全边际不足</div>
+
+<h2>Step 5：Mastercard DCF估值</h2>
+<div class="code-block"><span class="cm">// Mastercard DCF（FY2025 FCF基础，2026年4月参数）</span>
+
+基础FCF：约 $13.0B
+当前市值：约 $510B（股价$560 × 约0.91B股）
+
+WACC假设：
+  β（MA）= 1.05（国际和跨境敞口更高）
+  Ke = 4.3% + 1.05 × 4.5% = <span class="hl">9.0%</span>
+  WACC取 <span class="hl">9.0%</span>
+
+增长率假设：
+  2026-2030：FCF CAGR 12%
+  2031-2035：FCF CAGR 8%
+  终值增长率：3%
+
+DCF结果：
+  10年FCF现值：约 $130B
+  终值现值：约 $365B
+  企业价值：约 $495B
+  ÷ 流通股数约0.91B
+  <span class="hl">Mastercard基准内在价值：约 $544/股</span>
+
+当前约$560 → 基本公允，隐含市场相信MA能继续比Visa快1-2个百分点</div>
+
+<h2>Step 6：相对估值对比</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>公司</th><th>业务定位</th><th>Forward P/E</th><th>FCF Yield</th><th>长期EPS增速</th><th>合理性判断</th></tr></thead>
+<tbody>
+<tr><td><strong>Visa (V)</strong></td><td>最大支付网络，规模最强</td><td>28-30x</td><td>约3.0%</td><td>10-12%</td><td>公允偏贵，适合回调买</td></tr>
+<tr><td><strong>Mastercard (MA)</strong></td><td>国际敞口更高，增速略快</td><td>31-33x</td><td>约2.5%</td><td>12-14%</td><td>成长溢价合理，但更怕估值压缩</td></tr>
+<tr><td>American Express (AXP)</td><td>发卡+商户闭环，承担信用风险</td><td>16-18x</td><td>约7%+</td><td>8-10%</td><td>更像金融股，周期性更强</td></tr>
+<tr><td>PayPal (PYPL)</td><td>数字钱包/收单，竞争激烈</td><td>12-15x</td><td>约6%+</td><td>低个位数到中个位数</td><td>便宜但护城河弱化</td></tr>
+</tbody></table></div>
+
+<p style="font-size:12px;color:#64748b;margin-top:6px">* 支付网络不能简单和银行、发卡公司或钱包公司横向比P/E。Visa/MA的估值溢价来自更高利润率、更低信用风险和更稳定的FCF。</p>
+
+<h2>Step 7：敏感性分析</h2>
+<p>Visa/MA的DCF对折现率和终值增长率都敏感，但比早期成长股稳定，因为基础FCF真实且可预测。</p>
+<div class="table-wrap"><table class="sens-table">
+<thead><tr><th>公司 / 情景</th><th>悲观</th><th>基准</th><th>乐观</th><th>触发条件</th></tr></thead>
+<tbody>
+<tr><td><strong>Visa</strong></td><td>$250-280</td><td>$310-340</td><td>$390-430</td><td>跨境交易、监管费率、利率变化</td></tr>
+<tr><td><strong>Mastercard</strong></td><td>$420-470</td><td>$520-570</td><td>$650-720</td><td>国际消费恢复、新兴市场电子支付渗透</td></tr>
+</tbody></table></div>
+
+<div class="info-box yellow">
+  <div class="info-box-title">⚠️ 2026年4月估值结论</div>
+  <strong>Visa：</strong>基准价值约$322/股，当前约$330，属于"好公司合理价"，但没有明显安全边际。理想加仓区间是<strong>$270-300</strong>，对应约10-20%折价。<br><br>
+  <strong>Mastercard：</strong>基准价值约$544/股，当前约$560，同样接近公允。因为估值更高、国际敞口更大，买入纪律应更严格，理想区间是<strong>$460-510</strong>。<br><br>
+  <strong>组合建议：</strong>两家公司可作为长期复利型核心资产，但不宜在高估值时一次性重仓。更适合"底仓 + 回调加仓"，合计占个股组合<strong>5-10%</strong>较合理。
+</div>
+
+<h2>Step 8：持仓监控指标</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>指标</th><th>健康信号</th><th>警示信号</th><th>为什么重要</th></tr></thead>
+<tbody>
+<tr><td>支付金额增速</td><td>维持高个位数</td><td>连续低于名义GDP</td><td>代表核心网络活力</td></tr>
+<tr><td>跨境交易增速</td><td>双位数增长</td><td>旅游/商务需求走弱</td><td>跨境费率高，是利润弹性来源</td></tr>
+<tr><td>Take Rate</td><td>稳定或小幅提升</td><td>监管压低刷卡费</td><td>直接影响收入和利润率</td></tr>
+<tr><td>运营利润率</td><td>Visa 60%+，MA 55%+</td><td>持续下滑</td><td>护城河是否被竞争侵蚀</td></tr>
+<tr><td>实时支付/钱包竞争</td><td>合作多于替代</td><td>绕开卡组织网络</td><td>长期技术替代风险</td></tr>
+</tbody></table></div>
+
+<h2>支付网络 vs 其他估值案例</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>维度</th><th>可口可乐</th><th>谷歌</th><th>Visa / Mastercard</th></tr></thead>
+<tbody>
+<tr><td>核心护城河</td><td>品牌 + 分销</td><td>搜索数据 + AI/云</td><td>双边网络效应 + 全球接受网络</td></tr>
+<tr><td>增长来源</td><td>提价 + 新兴市场</td><td>广告、云、AI</td><td>消费增长、现金转卡、跨境交易</td></tr>
+<tr><td>资本开支</td><td>低</td><td>高（AI数据中心）</td><td>极低</td></tr>
+<tr><td>估值方法</td><td>单一DCF</td><td>SOTP + DCF</td><td>DCF + P/E/FCF Yield</td></tr>
+<tr><td>主要风险</td><td>增速慢、健康趋势</td><td>AI竞争、监管</td><td>刷卡费监管、实时支付替代、消费衰退</td></tr>
+<tr><td>安全边际要求</td><td>20-25%</td><td>25-35%</td><td>20-30%</td></tr>
+</tbody></table></div>
+
+<ul class="checklist">
+  <li data-key="pnv1"><div class="check-box">✓</div><span class="check-text">我理解Visa/万事达不是银行，而是轻资产支付网络平台</span></li>
+  <li data-key="pnv2"><div class="check-box">✓</div><span class="check-text">我能解释支付网络收入增长的四个驱动：消费、现金转卡、跨境、增值服务</span></li>
+  <li data-key="pnv3"><div class="check-box">✓</div><span class="check-text">我知道为什么Visa/MA不能用P/B估值，而应看DCF、P/E和FCF Yield</span></li>
+  <li data-key="pnv4"><div class="check-box">✓</div><span class="check-text">我能判断Visa约$330、Mastercard约$560时为什么是公允而不是明显便宜</span></li>
 </ul>`,
 
 // =====================================================================
