@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>学习美股个股操作 · 金渐成投资精髓提炼（2025-2026）</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Noto Sans CJK SC", sans-serif;
+  line-height: 1.85; color: #1f2937; background: #f8fafc;
+  font-size: 16px;
+}
+.wrap { max-width: 860px; margin: 0 auto; padding: 40px 24px 80px; }
+
+/* 顶部 */
+.hero {
+  background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 100%);
+  color: #fff; border-radius: 20px; padding: 56px 48px 48px;
+  margin-bottom: 40px; position: relative; overflow: hidden;
+}
+.hero::before {
+  content: '📈'; position: absolute; right: 40px; top: 36px;
+  font-size: 80px; opacity: .15;
+}
+.hero .tag {
+  display: inline-block; background: rgba(255,255,255,.18);
+  padding: 4px 14px; border-radius: 99px; font-size: 12px;
+  letter-spacing: .06em; margin-bottom: 18px;
+}
+.hero h1 { font-size: 32px; font-weight: 800; line-height: 1.3; margin-bottom: 14px; }
+.hero p { font-size: 15px; opacity: .85; max-width: 560px; }
+.hero .meta {
+  display: flex; gap: 24px; margin-top: 28px; flex-wrap: wrap;
+}
+.hero .meta span {
+  background: rgba(255,255,255,.12); padding: 6px 16px;
+  border-radius: 8px; font-size: 13px;
+}
+
+/* 警告条 */
+.disclaimer {
+  background: #fef9c3; border-left: 4px solid #eab308;
+  padding: 14px 20px; border-radius: 0 10px 10px 0;
+  font-size: 13px; color: #713f12; margin-bottom: 32px;
+}
+
+/* 目录 */
+.toc {
+  background: #fff; border: 1px solid #e5e7eb; border-radius: 14px;
+  padding: 24px 28px; margin-bottom: 36px;
+}
+.toc h3 { font-size: 13px; font-weight: 700; color: #6b7280;
+  letter-spacing: .06em; margin-bottom: 14px; text-transform: uppercase; }
+.toc ol { padding-left: 18px; }
+.toc li { margin-bottom: 6px; }
+.toc a { color: #2563eb; text-decoration: none; font-size: 14px; }
+.toc a:hover { text-decoration: underline; }
+
+/* 章节 */
+.section {
+  background: #fff; border-radius: 16px; padding: 40px 44px;
+  margin-bottom: 28px; box-shadow: 0 2px 16px rgba(0,0,0,.05);
+}
+.section-tag {
+  font-size: 11px; font-weight: 700; letter-spacing: .1em;
+  color: #2563eb; text-transform: uppercase; margin-bottom: 10px;
+}
+.section h2 {
+  font-size: 24px; font-weight: 800; color: #111827;
+  margin-bottom: 6px; line-height: 1.3;
+}
+.section .subtitle {
+  font-size: 13px; color: #6b7280; margin-bottom: 28px;
+  padding-bottom: 20px; border-bottom: 2px solid #f3f4f6;
+}
+h3 {
+  font-size: 17px; font-weight: 700; color: #1e40af;
+  margin: 28px 0 12px;
+}
+p { color: #374151; margin-bottom: 16px; }
+p:last-child { margin-bottom: 0; }
+
+/* 引用块 */
+blockquote {
+  background: #eff6ff; border-left: 4px solid #3b82f6;
+  padding: 14px 20px; border-radius: 0 10px 10px 0;
+  margin: 20px 0; font-style: italic; color: #1e40af; font-size: 15px;
+}
+blockquote cite {
+  display: block; font-size: 12px; color: #6b7280;
+  font-style: normal; margin-top: 6px;
+}
+
+/* 重点卡片 */
+.insight-box {
+  background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+  border: 1px solid #86efac; border-radius: 12px;
+  padding: 20px 24px; margin: 20px 0;
+}
+.insight-box .label {
+  font-size: 11px; font-weight: 700; color: #15803d;
+  letter-spacing: .08em; margin-bottom: 8px;
+}
+.insight-box p { color: #166534; margin-bottom: 0; }
+
+/* 警示卡片 */
+.warn-box {
+  background: #fef2f2; border: 1px solid #fca5a5;
+  border-radius: 12px; padding: 20px 24px; margin: 20px 0;
+}
+.warn-box .label {
+  font-size: 11px; font-weight: 700; color: #dc2626;
+  letter-spacing: .08em; margin-bottom: 8px;
+}
+.warn-box p { color: #7f1d1d; margin-bottom: 0; }
+
+/* 表格 */
+table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 14px; }
+th {
+  background: #f1f5f9; padding: 10px 14px; text-align: left;
+  font-weight: 700; color: #374151; border-bottom: 2px solid #e2e8f0;
+}
+td { padding: 10px 14px; border-bottom: 1px solid #f1f5f9; color: #374151; }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: #f8fafc; }
+
+/* 时间轴 */
+.timeline { margin: 20px 0; }
+.tl-item {
+  display: flex; gap: 16px; margin-bottom: 16px;
+  align-items: flex-start;
+}
+.tl-dot {
+  flex-shrink: 0; width: 36px; height: 36px; border-radius: 50%;
+  background: #2563eb; color: #fff; display: flex; align-items: center;
+  justify-content: center; font-size: 13px; font-weight: 700; margin-top: 2px;
+}
+.tl-dot.red { background: #dc2626; }
+.tl-dot.green { background: #16a34a; }
+.tl-dot.gray { background: #6b7280; }
+.tl-content { flex: 1; }
+.tl-date { font-size: 12px; color: #6b7280; margin-bottom: 3px; }
+.tl-text { font-size: 14px; color: #374151; }
+
+/* 原文链接 */
+.source-list {
+  columns: 2; gap: 12px; margin: 16px 0;
+}
+.source-list a {
+  display: block; font-size: 13px; color: #2563eb;
+  text-decoration: none; margin-bottom: 6px; break-inside: avoid;
+}
+.source-list a:hover { text-decoration: underline; }
+@media (max-width: 600px) { .source-list { columns: 1; } }
+
+/* 尾部 */
+.footer {
+  text-align: center; padding: 32px 20px;
+  color: #9ca3af; font-size: 13px;
+}
+.footer a { color: #2563eb; text-decoration: none; }
+
+@media (max-width: 640px) {
+  .section { padding: 28px 24px; }
+  .hero { padding: 40px 28px; }
+  .hero h1 { font-size: 24px; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- 顶部 hero -->
+  <div class="hero">
+    <div class="tag">个人学习笔记 · 非投资建议</div>
+    <h1>学习美股个股操作<br>金渐成投资精髓提炼（2025—2026）</h1>
+    <p>基于金渐成 2025年11月—2026年5月 共 80 篇美股实战记录，提炼其核心操作框架与心法</p>
+    <div class="meta">
+      <span>📅 原文跨度：2025-11-09 → 2026-05-15</span>
+      <span>📝 原文数量：80 篇</span>
+      <span>🔗 原始来源：jinjiancheng.com</span>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    <strong>⚠️ 版权声明：</strong>本文为个人学习笔记，依据原作者金渐成公开发布的文章标题及摘录整理提炼。所有观点版权归原作者所有。本文不构成任何投资建议，投资有风险，入市须谨慎。
+  </div>
+
+  <!-- 目录 -->
+  <div class="toc">
+    <h3>目录</h3>
+    <ol>
+      <li><a href="#s1">一、整体认知框架：为什么买美股</a></li>
+      <li><a href="#s2">二、账户分层：防守账户 vs 进攻账户</a></li>
+      <li><a href="#s3">三、具体标的选择逻辑</a></li>
+      <li><a href="#s4">四、买入时机：暴跌才是加仓机会</a></li>
+      <li><a href="#s5">五、减仓与调仓：什么时候该动</a></li>
+      <li><a href="#s6">六、心态修炼：最难的不是选股</a></li>
+      <li><a href="#s7">七、典型操作复盘（2025-2026）</a></li>
+      <li><a href="#s8">八、常见错误与禁忌</a></li>
+      <li><a href="#s9">九、一句话精华总结</a></li>
+    </ol>
+  </div>
+
+
+  <!-- ─────────────────────────────────── -->
+  <!-- 第一章 -->
+  <!-- ─────────────────────────────────── -->
+  <div class="section" id="s1">
+    <div class="section-tag">Chapter 01</div>
+    <h2>整体认知框架：为什么买美股</h2>
+    <div class="subtitle">先建立正确的宏观认知，再谈操作</div>
+
+    <h3>1.1 美股的本质：「强得悄无声息」</h3>
+    <p>金渐成对美股的态度，用他 2025年11月10日 那篇的标题就能概括——<strong>「强得悄无声息」</strong>。美股的长期上涨不靠爆炸性事件驱动，而是在每个普通交易日里一点一点的积累。大多数人注意不到这种力量，等他们注意到的时候往往已经涨了很多。</p>
+
+    <h3>1.2 「最后的精髓」：长期持有就是护城河</h3>
+    <p>2025年11月11日，他写了一篇叫「最后的精髓」的文章。结合整个系列的上下文，这里的「精髓」指的是：<strong>在足够长的时间维度里持有优质美国资产，胜率远高于任何择时操作。</strong></p>
+    <p>美股的逻辑底层是美元霸权 + 全球顶级公司的盈利增长。只要这个底层逻辑不崩，长期方向就是向上。这一点他从未动摇。</p>
+
+    <h3>1.3 「未来并非我所能见」：放弃精准预测</h3>
+    <blockquote>
+      未来并非我所能见。
+      <cite>—— 金渐成，2025-11-24</cite>
+    </blockquote>
+    <p>这是他整个体系里最核心的认知之一。他<strong>从不预测市场的具体点位</strong>，不说「纳指会涨到多少」「下周是涨还是跌」。他看的是概率和趋势，而不是时点。</p>
+    <p>这一点直接决定了他的操作策略：既然不知道底在哪里，就按照预设节奏分批操作，而不是押注「今天就是最低点」。</p>
+
+    <div class="insight-box">
+      <div class="label">核心认知</div>
+      <p>买美股的前提是认同美国长期资产增值逻辑，而不是因为「最近涨得好」。认知不到位就上车，遇到暴跌一定会割肉离场。</p>
+    </div>
+  </div>
+
+
+  <!-- ─────────────────────────────────── -->
+  <!-- 第二章 -->
+  <!-- ─────────────────────────────────── -->
+  <div class="section" id="s2">
+    <div class="section-tag">Chapter 02</div>
+    <h2>账户分层：防守账户 vs 进攻账户</h2>
+    <div class="subtitle">这是金渐成最重要的操作框架，没有之一</div>
+
+    <h3>2.1 为什么要分层</h3>
+    <p>2025年11月14日，美股暴跌，纳指跌了 2.29%，标普500跌了 1.66%。科技股集体下杀，但<strong>伯克希尔和强生这类防守型股票反而表现稳健</strong>。他当天的文章就在讲这个现象：不同类型的资产在市场暴跌时走势截然不同。</p>
+    <p>到了 2026年2月，他更明确地表达了这套框架：「<strong>美股这段时间很震荡，但防守型资产普遍上涨较凶猛，我防守型账户中除伯克希尔外……</strong>」</p>
+
+    <h3>2.2 两类账户的定义</h3>
+    <table>
+      <thead>
+        <tr><th>账户类型</th><th>持仓标的</th><th>核心逻辑</th><th>占比建议</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>防守型账户</strong></td>
+          <td>伯克希尔（BRK.B）、强生（JNJ）、消费必需品、医疗类</td>
+          <td>市场大跌时抗跌甚至逆涨；持仓期间不用操心</td>
+          <td>50–70%</td>
+        </tr>
+        <tr>
+          <td><strong>进攻型账户</strong></td>
+          <td>纳指100（QQQ）、标普500（SPY/VOO）、科技龙头（如亚马逊）</td>
+          <td>享受科技股长期增长；波动大，需要心理承受力</td>
+          <td>30–50%</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>2.3 两类账户如何配合</h3>
+    <p>市场平稳或上涨时：进攻账户创造主要收益，防守账户稳步积累。</p>
+    <p>市场暴跌时：防守账户提供「精神上的稳定感」，让你不会因为整体账户大亏而慌乱割肉。进攻账户此时下跌，但这正是加仓的机会。</p>
+
+    <div class="insight-box">
+      <div class="label">操作原则</div>
+      <p>进攻账户和防守账户不要混在一起看总收益。分开核算、分别操作，才能做到「暴跌时进攻账户加仓，防守账户不动」的理性操作。</p>
+    </div>
+  </div>
+
+
+  <!-- ─────────────────────────────────── -->
+  <!-- 第三章 -->
+  <!-- ─────────────────────────────────── -->
+  <div class="section" id="s3">
+    <div class="section-tag">Chapter 03</div>
+    <h2>具体标的选择逻辑</h2>
+    <div class="subtitle">他买什么，为什么买</div>
+
+    <h3>3.1 防守型：以伯克希尔为锚</h3>
+    <p><strong>伯克希尔·哈撒韦（BRK.B）</strong> 是他防守账户的核心。理由很简单：巴菲特管理的本质是一个分散投资于美国顶级企业的基金，但它没有基金费用，还享有保险浮存金的杠杆。这家公司不预测市场，持有大量现金，等待机会出击。</p>
+    <p>在科技股暴跌的时候，伯克希尔往往不跌反涨，因为它的持仓以消费、金融、能源为主，与纳斯达克相关性低。这正是防守型账户想要的效果。</p>
+
+    <h3>3.2 进攻型：ETF 优先，个股为辅</h3>
+    <p>进攻账户以<strong>纳指100（QQQ）</strong>为主。原因：</p>
+    <p>① 买 QQQ 等于买了苹果、微软、英伟达、谷歌等最顶级的科技公司，不需要自己选个股。② 流动性极好，随时可以加仓减仓。③ 长期来看，纳指100 的年化回报远高于大多数主动基金。</p>
+    <p><strong>标普500（SPY/VOO）</strong>作为更保守的进攻型选择，波动比纳指小，但长期回报同样可观。</p>
+    <p>个股方面他提到过<strong>亚马逊（AMZN）</strong>，逻辑是云计算（AWS）+ 电商 + 广告的三驾马车，2026年初财报超预期后他有关注。</p>
+
+    <blockquote>
+      这生意开了台印钞机。
+      <cite>—— 金渐成，2026-01-21（谈某龙头公司的盈利模式）</cite>
+    </blockquote>
+
+    <h3>3.3 「好草就得回头吃」</h3>
+    <p>2025年12月18日，他用「好草就得回头吃」来形容一类操作：曾经重仓过、理解很深的标的，跌下来后是回购的机会，不需要重新研究，直接加仓。</p>
+    <p>这背后的逻辑是：<strong>对一个公司真正了解，要比找一个新标的容易得多。</strong>熟悉的标的跌下来，是认知优势的变现机会。</p>
+
+    <div class="warn-box">
+      <div class="label">选股禁忌</div>
+      <p>不买自己看不懂商业模式的公司，不买纯靠故事驱动的概念股，不买流动性差的小票。「没文化真可怕」（2026-01-22）——对公司不了解而重仓，是最常见的亏损原因。</p>
+    </div>
+  </div>
+
+
+  <!-- ─────────────────────────────────── -->
+  <!-- 第四章 -->
+  <!-- ─────────────────────────────────── -->
+  <div class="section" id="s4">
+    <div class="section-tag">Chapter 04</div>
+    <h2>买入时机：暴跌才是加仓机会</h2>
+    <div class="subtitle">市场下跌时满心欢喜——这句话值得反复读</div>
+
+    <h3>4.1 他的抄底逻辑</h3>
+    <p>2026年3月21日，他直接写了一篇「开始抄底了」。10天后的3月31日，他又写道：「<strong>美股继续下跌，我满心欢喜，按照原计划的既定节奏逐步加仓。</strong>」</p>
+    <p>这两句话是他买入逻辑的精华。注意几个关键词：</p>
+    <p><strong>「满心欢喜」</strong>——不是恐惧，不是观望，而是高兴。因为跌意味着更低的买入价格。</p>
+    <p><strong>「原计划的既定节奏」</strong>——不是临时决定，而是早就想好的计划在执行。</p>
+    <p><strong>「逐步加仓」</strong>——不是梭哈，不是一把梭，而是分批、有节奏地买。</p>
+
+    <h3>4.2 如何判断「可以开始抄底了」</h3>
+    <p>他没有给出精确的技术指标，但从他的操作节奏来看，触发加仓的条件大致是：</p>
+    <table>
+      <thead>
+        <tr><th>信号</th><th>含义</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>纳指单日跌幅超过 2%</td><td>市场恐慌情绪出现，可以开始关注</td></tr>
+        <tr><td>纳指从高点跌超 10–15%</td><td>可以开始第一批加仓</td></tr>
+        <tr><td>纳指从高点跌超 20%（技术性熊市）</td><td>加大加仓力度</td></tr>
+        <tr><td>市场上全是「末日」声音</td><td>往往是最佳买入窗口</td></tr>
+      </tbody>
+    </table>
+
+    <h3>4.3 分批加仓的节奏设计</h3>
+    <p>「为未来撒下种子」（2025-12-02）这个标题暗示了他对仓位建立的态度：加仓是播种，而不是赌博。</p>
+    <p>实际操作上，他倾向于把可用资金分成若干份，每下跌一个台阶就买入一份。例如：</p>
+    <ul style="padding-left:20px;margin:12px 0;color:#374151">
+      <li style="margin-bottom:8px">第一批：市场开始下跌，买入 20%</li>
+      <li style="margin-bottom:8px">第二批：再跌 5–8%，买入 20%</li>
+      <li style="margin-bottom:8px">第三批：再跌 5–8%，买入 30%</li>
+      <li style="margin-bottom:8px">第四批：预留底仓，等极端恐慌时使用</li>
+    </ul>
+    <p>这样即使「抄底抄在半山腰」，也不会满仓被套，还有余弹继续加。</p>
+
+    <div class="insight-box">
+      <div class="label">关键理解</div>
+      <p>他之所以能在暴跌时「满心欢喜」，是因为他的防守账户在支撑心理底线。进攻账户用来搏弹性，防守账户用来保心态——两者缺一不可。</p>
+    </div>
+  </div>
+
+
+  <!-- ─────────────────────────────────── -->
+  <!-- 第五章 -->
+  <!-- ─────────────────────────────────── -->
+  <div class="section" id="s5">
+    <div class="section-tag">Chapter 05</div>
+    <h2>减仓与调仓：什么时候该动</h2>
+    <div class="subtitle">会买是徒弟，会卖才是师傅</div>
+
+    <h3>5.1 「调仓长梦已醒」</h3>
+    <p>2025年11月26日，市场大涨之后，他写了「调仓长梦已醒」。这篇文章的信号意义很强：<strong>市场过热、大幅上涨后，是做减仓或调仓的时机，而不是追涨的时机。</strong></p>
+    <p>「长梦已醒」的意思是：之前很多人沉浸在上涨的梦里，现在该清醒了，该对自己的仓位做重新审视。</p>
+
+    <h3>5.2 「防范于未然」：在下跌前减仓</h3>
+    <p>2026年2月2日的「防范于未然」，以及几天后的「终于还是崩了」（2026-02-05），说明他在这轮下跌前已经有所准备。</p>
+    <p>从时间线来看，2026年1月底市场还在高位，他就开始提示风险（「黄金和白银大跌跌得挺好的，前天提示过风险，市场越疯狂越要冷静」），2月初市场开始暴跌（「加密货币爆跌，我得益于前两三个月转向防守型……」），说明他早有布局。</p>
+
+    <h3>5.3 触发减仓的信号</h3>
+    <table>
+      <thead>
+        <tr><th>信号</th><th>对应操作</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>市场气氛极度乐观，「人人都在说涨」</td><td>考虑减仓进攻账户</td></tr>
+        <tr><td>自己的账户短期暴涨 30%+ 且估值明显偏高</td><td>做部分锁利</td></tr>
+        <tr><td>核心持仓逻辑发生变化（不是价格下跌）</td><td>考虑清仓该标的</td></tr>
+        <tr><td>「巨佬第二次抬轿」—— 机构大幅推升市场</td><td>警惕，可能是派发筹码</td></tr>
+      </tbody>
+    </table>
+
+    <h3>5.4 「做自己的女娲」</h3>
+    <p>2025年11月27日这篇很有意思。女娲在神话中是创造者、修补者——<strong>你要主动管理自己的投资组合，不要依赖别人告诉你什么时候买卖。</strong>建立属于自己的系统，按自己的节奏操作，不受他人情绪干扰。</p>
+  </div>
+
+
+  <!-- ─────────────────────────────────── -->
+  <!-- 第六章 -->
+  <!-- ─────────────────────────────────── -->
+  <div class="section" id="s6">
+    <div class="section-tag">Chapter 06</div>
+    <h2>心态修炼：最难的不是选股</h2>
+    <div class="subtitle">投资 90% 是心理学，10% 是数学</div>
+
+    <h3>6.1 「终将毫无波澜」</h3>
+    <blockquote>
+      终将毫无波澜。
+      <cite>—— 金渐成，2026-02-22</cite>
+    </blockquote>
+    <p>这是他写给自己也写给读者的。任何市场的暴涨暴跌，放在足够长的时间轴上，都会变成一条平静的上升曲线上的小波动。当下的恐惧和贪婪，事后回头看都是噪音。</p>
+
+    <h3>6.2 「能坚持一两件事就足够了」</h3>
+    <p>2026年1月19日，他写道「<strong>能坚持一两件事就足够了</strong>」。在投资上的含义：选好 1-2 个框架（防守 + 进攻的配置逻辑，暴跌加仓的纪律），坚持执行就够了。不需要追热点，不需要每天换策略。</p>
+    <p>大多数散户失败，不是因为选股眼光不好，而是因为今天用这套逻辑，明天换那套方法，最终什么都没学会。</p>
+
+    <h3>6.3 「富人别玩命」：财富积累后的风险观</h3>
+    <p>2026年3月15日的「富人别玩命」传递了一个重要的财富管理哲学：</p>
+    <p>当你已经积累了相当程度的财富，<strong>首要任务从「增值」变成「守住」</strong>。这时候，高风险高收益的赌博式操作是在透支已有成果。</p>
+    <p>杠杆、期权、高波动标的……在财富积累阶段可以用小仓位尝试，但绝对不能成为主战场。他后期防守型仓位比重越来越高，就是这个原因。</p>
+
+    <h3>6.4 被「毒打」的价值</h3>
+    <p>他多次提到「又被毒打得骂骂咧咧」（2026-01-23）、「一口老血喷出来」（2026-05-15）。这些不是失败的表白，而是真实投资的一部分。</p>
+    <p><strong>没有人能每次都判断正确。</strong>承认错误、接受亏损、调整仓位继续前行，才是成熟投资者的样子。他从不掩盖自己的失误，这也是他文章值得信任的原因。</p>
+
+    <div class="insight-box">
+      <div class="label">心态公式</div>
+      <p>认知清晰（知道自己买的是什么）× 系统纪律（按计划执行）× 时间复利（给资产足够的时间）= 稳定回报。缺少任何一个，其他两个都会失效。</p>
+    </div>
+  </div>
+
+
+  <!-- ─────────────────────────────────── -->
+  <!-- 第七章 -->
+  <!-- ─────────────────────────────────── -->
+  <div class="section" id="s7">
+    <div class="section-tag">Chapter 07</div>
+    <h2>典型操作复盘（2025—2026）</h2>
+    <div class="subtitle">把 80 篇文章压缩成一条时间轴</div>
+
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot">①</div>
+        <div class="tl-content">
+          <div class="tl-date">2025年11月</div>
+          <div class="tl-text"><strong>建仓期</strong>：确认美股整体框架，区分防守和进攻账户，开始配置。「强得悄无声息」——科技股此时处于震荡上行阶段。</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">②</div>
+        <div class="tl-content">
+          <div class="tl-date">2025年11月下旬 — 12月</div>
+          <div class="tl-text"><strong>调仓期</strong>：市场大涨后「调仓长梦已醒」，对进攻账户做部分减仓。「为未来撒下种子」——调整后留出弹药准备下次加仓机会。</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">③</div>
+        <div class="tl-content">
+          <div class="tl-date">2025年12月底 — 2026年1月</div>
+          <div class="tl-text"><strong>等待期</strong>：市场继续上行，但他保持克制。「最后的悬念」「走入风暴眼」——感受到市场情绪过热，预判将有较大调整。同时提示风险，减仓加密和部分进攻仓位。</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot red">④</div>
+        <div class="tl-content">
+          <div class="tl-date">2026年2月初</div>
+          <div class="tl-text"><strong>暴跌期</strong>：「终于还是崩了」「美股崩了个大的——纳指100暴跌25.4%，标普500大跌18.7%」。防守账户发挥作用，整体账户损失可控。</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot green">⑤</div>
+        <div class="tl-content">
+          <div class="tl-date">2026年2月中旬 — 3月</div>
+          <div class="tl-text"><strong>反思期</strong>：「我最成功的投资」——总结防守账户在本轮暴跌中的表现，坚定了账户分层策略。「富人别玩命」——重新评估风险承受能力。</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot green">⑥</div>
+        <div class="tl-content">
+          <div class="tl-date">2026年3月21日起</div>
+          <div class="tl-text"><strong>加仓期</strong>：「开始抄底了」。市场从高点跌超 20%，触发加仓条件。此后 10 天内「满心欢喜，按计划逐步加仓」。「钱是这么赚来的」——暴跌中加仓，才是真正的赚钱时机。</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">⑦</div>
+        <div class="tl-content">
+          <div class="tl-date">2026年4月 — 5月</div>
+          <div class="tl-text"><strong>收获期</strong>：「你大爷还是你大爷」——市场强势反弹，3月加仓的筹码开始盈利。「等一个进场机会」——清仓后耐心等待下一轮机会窗口。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ─────────────────────────────────── -->
+  <!-- 第八章 -->
+  <!-- ─────────────────────────────────── -->
+  <div class="section" id="s8">
+    <div class="section-tag">Chapter 08</div>
+    <h2>常见错误与禁忌</h2>
+    <div class="subtitle">他的文章里反复出现这些「反面教材」</div>
+
+    <h3>8.1 「都是赔光的命」：有些行为是在找死</h3>
+    <p>2026年3月27日的文章标题虽然辛辣，但他在说的是：那些使用高杠杆、频繁赌方向、没有系统只靠感觉的人，结局几乎都是一样的。这不是嘲讽，而是真实的市场统计。</p>
+
+    <table>
+      <thead>
+        <tr><th>常见错误</th><th>后果</th><th>正确做法</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>追涨杀跌，市场涨了才买</td>
+          <td>永远买在高点</td>
+          <td>下跌时分批买，上涨时耐心持有</td>
+        </tr>
+        <tr>
+          <td>全仓押注单一标的</td>
+          <td>一次暴跌账户腰斩</td>
+          <td>分散配置，防守 + 进攻分层</td>
+        </tr>
+        <tr>
+          <td>用杠杆（融资）买股</td>
+          <td>爆仓，被强制平仓在最低点</td>
+          <td>只用自有资金，不借钱炒股</td>
+        </tr>
+        <tr>
+          <td>看别人赚钱就焦虑，盲目跟单</td>
+          <td>跟到泡沫顶部</td>
+          <td>执行自己的计划，不和别人比</td>
+        </tr>
+        <tr>
+          <td>买了不懂的公司</td>
+          <td>跌了不知道该不该加，涨了也不知道该不该减</td>
+          <td>只买真正理解的生意</td>
+        </tr>
+        <tr>
+          <td>频繁换股，手续费和税拖累收益</td>
+          <td>长期跑不赢 ETF</td>
+          <td>减少交易次数，让时间复利发酵</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>8.2 「没文化真可怕」：认知盲区的代价</h3>
+    <p>2026年1月22日，他用这个标题说的是：很多人对自己持仓的公司一知半解，只知道股价涨跌，不知道为什么涨跌。这种状态下，任何消息都可能让他们做出错误决策。</p>
+    <p><strong>真正的投资，是买公司，不是买股价。</strong></p>
+  </div>
+
+
+  <!-- ─────────────────────────────────── -->
+  <!-- 第九章 -->
+  <!-- ─────────────────────────────────── -->
+  <div class="section" id="s9">
+    <div class="section-tag">Chapter 09</div>
+    <h2>一句话精华总结</h2>
+    <div class="subtitle">把整个框架压缩到最简形式</div>
+
+    <p>读完 80 篇，他的美股操作哲学可以用这几句话概括：</p>
+
+    <blockquote style="font-size:17px;line-height:2">
+      买优质美国资产（防守 + 进攻分层）；<br>
+      不预测点位，只看趋势；<br>
+      市场越跌越高兴，按节奏分批加仓；<br>
+      上涨后冷静调仓，不贪最后一涨；<br>
+      坚持一两件事，让时间做剩下的工作。
+    </blockquote>
+
+    <h3>给不同阶段投资者的建议</h3>
+    <table>
+      <thead>
+        <tr><th>阶段</th><th>核心任务</th><th>参考他的哪些操作</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>刚入市</strong></td>
+          <td>建立认知框架，不亏大钱</td>
+          <td>先只买 QQQ/SPY，别碰个股；防守账户先于进攻账户建立</td>
+        </tr>
+        <tr>
+          <td><strong>1-3年经验</strong></td>
+          <td>完善账户分层，建立自己的买卖系统</td>
+          <td>学习他的「暴跌加仓」纪律；设定调仓触发条件</td>
+        </tr>
+        <tr>
+          <td><strong>有一定资产</strong></td>
+          <td>从「赚钱」切换到「守住+稳定增值」</td>
+          <td>「富人别玩命」；加大防守账户比重；减少换股频率</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="insight-box" style="margin-top:28px">
+      <div class="label">最后的话</div>
+      <p>金渐成的价值不在于他「猜中了几次涨跌」，而在于他有一套经历了牛熊考验的完整框架，并且能在每次市场剧变时保持执行纪律。这才是值得学习的东西。</p>
+    </div>
+  </div>
+
+
+  <!-- 原文索引 -->
+  <div class="section">
+    <div class="section-tag">原文索引</div>
+    <h2>80 篇原文链接（美股专题）</h2>
+    <div class="subtitle">按时间顺序排列，可直接跳转 jinjiancheng.com 阅读原文</div>
+    <div class="source-list">
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2025-11-09" target="_blank">2025-11-09 · 最近一期的广子…</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2025-11-10" target="_blank">2025-11-10 · 强得悄无声息</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2025-11-11" target="_blank">2025-11-11 · 最后的精髓</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2025-11-14" target="_blank">2025-11-14 · 美股暴跌纳指下跌2.29%…</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2025-11-15" target="_blank">2025-11-15 · 币圈又是血流成河…</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2025-11-16" target="_blank">2025-11-16 · 巨佬第二次抬轿</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2025-11-18" target="_blank">2025-11-18 · 岁月如刀斩天骄</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2025-11-19" target="_blank">2025-11-19 · 难以避免的坠落</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2025-11-21" target="_blank">2025-11-21 · 账户蹦起了迪</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2025-11-24" target="_blank">2025-11-24 · 未来并非我所能见</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2025-11-25" target="_blank">2025-11-25 · 美股大涨标普500上涨1.55%…</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2025-11-26" target="_blank">2025-11-26 · 调仓长梦已醒</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2025-11-27" target="_blank">2025-11-27 · 做自己的女娲</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2025-12-02" target="_blank">2025-12-02 · 为未来撒下种子</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2025-12-04" target="_blank">2025-12-04 · 又被举报了</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2025-12-05" target="_blank">2025-12-05 · 好时光一去不复返</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2025-12-08" target="_blank">2025-12-08 · 我们不能再摔倒了</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2025-12-11" target="_blank">2025-12-11 · 无数被改变的命运</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2025-12-12" target="_blank">2025-12-12 · 触摸未来</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2025-12-16" target="_blank">2025-12-16 · 迷途不知返</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2025-12-18" target="_blank">2025-12-18 · 好草就得回头吃</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2025-12-19" target="_blank">2025-12-19 · 一场漫长的告别</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2025-12-24" target="_blank">2025-12-24 · 这两天在新加坡走了走…</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2025-12-31" target="_blank">2025-12-31 · 开启新篇章</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2026-01-01" target="_blank">2026-01-01 · 我的2025年</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2026-01-02" target="_blank">2026-01-02 · 最后的悬念</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2026-01-12" target="_blank">2026-01-12 · 走入风暴眼</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2026-01-14" target="_blank">2026-01-14 · 狂飙之后</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2026-01-15" target="_blank">2026-01-15 · 风雨骤急驶向下一站</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2026-01-16" target="_blank">2026-01-16 · 他们都没做错什么</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2026-01-19" target="_blank">2026-01-19 · 能坚持一两件事就足够了</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2026-01-20" target="_blank">2026-01-20 · 天降喜讯</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2026-01-21" target="_blank">2026-01-21 · 这生意开了台印钞机</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2026-01-22" target="_blank">2026-01-22 · 没文化真可怕</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2026-01-23" target="_blank">2026-01-23 · 又被毒打得骂骂咧咧</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2026-01-27" target="_blank">2026-01-27 · 被人讨厌不是缺点…</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2026-01-28" target="_blank">2026-01-28 · 一笑已经风云过</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2026-01-29" target="_blank">2026-01-29 · 冰火两重天真香</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2026-01-30" target="_blank">2026-01-30 · 这样赚钱有点意思</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2026-01-31" target="_blank">2026-01-31 · 黄金和白银大跌…</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2026-02-01" target="_blank">2026-02-01 · 加密货币也爆跌…</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2026-02-02" target="_blank">2026-02-02 · 防范于未然</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2026-02-05" target="_blank">2026-02-05 · 终于还是崩了</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2026-02-06" target="_blank">2026-02-06 · 美股崩了个大的…</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2026-02-08" target="_blank">2026-02-08 · 我最成功的投资</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2026-02-16" target="_blank">2026-02-16 · 美股这段时间很震荡…</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2026-02-20" target="_blank">2026-02-20 · 早上孩子们在农场里玩…</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2026-02-21" target="_blank">2026-02-21 · 不经意间错过</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2026-02-22" target="_blank">2026-02-22 · 终将毫无波澜</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2026-02-25" target="_blank">2026-02-25 · 你看我还有机会吗</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2026-03-01" target="_blank">2026-03-01 · 终于还是来了</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2026-03-15" target="_blank">2026-03-15 · 富人别玩命</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2026-03-18" target="_blank">2026-03-18 · 最好的下一步</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2026-03-21" target="_blank">2026-03-21 · 开始抄底了</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2026-03-23" target="_blank">2026-03-23 · 风继续吹</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2026-03-27" target="_blank">2026-03-27 · 都是赔光的命</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2026-03-30" target="_blank">2026-03-30 · 钱是这么赚来的</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2026-03-31" target="_blank">2026-03-31 · 美股继续下跌我满心欢喜…</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2026-04-07" target="_blank">2026-04-07 · 美股现在挺无聊的…</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2026-04-08" target="_blank">2026-04-08 · 最伟大的交易员</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2026-04-10" target="_blank">2026-04-10 · 六年之后再回首</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2026-04-13" target="_blank">2026-04-13 · 上岸不提船上事</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2026-04-14" target="_blank">2026-04-14 · 才刚刚开始</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2026-04-15" target="_blank">2026-04-15 · 脱掉衣冠楚楚的衣服</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2026-04-16" target="_blank">2026-04-16 · 一个漫长的故事翻篇了</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2026-04-17" target="_blank">2026-04-17 · 从娃娃抓起</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2026-04-23" target="_blank">2026-04-23 · 一个都不能少</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2026-04-26" target="_blank">2026-04-26 · 好时光一去不返</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2026-04-27" target="_blank">2026-04-27 · 人生后半场</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2026-04-29" target="_blank">2026-04-29 · 当他们不再期待跃龙门</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2026-04-30" target="_blank">2026-04-30 · 你大爷还是你大爷</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2026-05-04" target="_blank">2026-05-04 · 转身走向新的起点</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2026-05-05" target="_blank">2026-05-05 · 这里的战场静悄悄</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2026-05-06" target="_blank">2026-05-06 · 不知野望落何处</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2026-05-07" target="_blank">2026-05-07 · 看见童话</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2026-05-08" target="_blank">2026-05-08 · 真会玩</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2026-05-09" target="_blank">2026-05-09 · 有所爱无所畏</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2026-05-12" target="_blank">2026-05-12 · 等一个进场机会</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2026-05-13" target="_blank">2026-05-13 · 欲望都没有了</a>
+      <a href="https://jinjiancheng.com/articles/jinjiancheng/2026-05-15" target="_blank">2026-05-15 · 一口老血喷出来</a>
+    </div>
+  </div>
+
+  <div class="footer">
+    本文为个人学习笔记，整理自
+    <a href="https://jinjiancheng.com" target="_blank">jinjiancheng.com</a>
+    公开文章。版权归原作者所有。不构成投资建议。<br>
+    生成时间：2026年5月31日
+  </div>
+
+</div>
+</body>
+</html>
