@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>知乎6个月日历 · 26篇内容规划</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;color:#1e293b;background:#f8fafc;line-height:1.6;}
+a{color:inherit;text-decoration:none;}
+.topbar{background:#fff;padding:14px 24px;border-bottom:1px solid #e2e8f0;position:sticky;top:0;z-index:10;}
+.topbar-inner{max-width:1080px;margin:0 auto;display:flex;align-items:center;gap:12px;font-size:14px;}
+.topbar a{color:#475569;font-weight:500;transition:color 0.15s;}
+.topbar a:hover{color:#1a56db;}
+.topbar .here{color:#1a56db;font-weight:700;}
+.topbar .sep{color:#cbd5e1;}
+.hero{background:linear-gradient(135deg,#1e3a8a 0%,#1a56db 50%,#3b82f6 100%);color:#fff;padding:44px 24px 52px;position:relative;overflow:hidden;}
+.hero-inner{max-width:1080px;margin:0 auto;position:relative;z-index:1;}
+.hero-tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:1.5px;background:rgba(255,255,255,0.18);padding:5px 12px;border-radius:12px;margin-bottom:14px;}
+.hero h1{font-size:32px;font-weight:800;margin-bottom:10px;line-height:1.2;}
+.hero p{font-size:15px;opacity:0.92;line-height:1.7;}
+.hero-stats{display:flex;gap:28px;margin-top:24px;flex-wrap:wrap;}
+.hero-stat-num{font-size:28px;font-weight:800;}
+.hero-stat-label{font-size:12px;opacity:0.85;margin-top:6px;}
+.container{max-width:1080px;margin:-26px auto 0;padding:0 24px 70px;position:relative;z-index:2;}
+.summary-box{background:#fff;border-radius:14px;padding:24px 28px;margin-bottom:28px;border:1px solid #e2e8f0;}
+.summary-title{font-size:16px;font-weight:700;color:#0f172a;margin-bottom:12px;}
+.summary-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;}
+.summary-item{padding:14px 16px;background:#f8fafc;border-radius:10px;}
+.summary-label{font-size:12px;color:#64748b;}
+.summary-value{font-size:22px;font-weight:800;color:#1a56db;}
+.summary-value.green{color:#059669;}
+.summary-value.orange{color:#ea580c;}
+.progress-bar{height:8px;background:#f1f5f9;border-radius:10px;overflow:hidden;margin-top:8px;}
+.progress-fill{height:100%;background:linear-gradient(90deg,#059669 0%,#10b981 100%);}
+.section{margin-bottom:40px;}
+.section-head{padding:18px 24px;background:#fff;border-radius:12px 12px 0 0;border:1px solid #e2e8f0;border-bottom:none;}
+.section-title{font-size:18px;font-weight:800;color:#0f172a;}
+.month-block{background:#fff;border-radius:0 0 12px 12px;border:1px solid #e2e8f0;margin-bottom:22px;}
+.article-row{display:flex;align-items:center;padding:16px 24px;border-bottom:1px solid #f1f5f9;}
+.article-row:last-child{border-bottom:none;}
+.article-row:hover{background:#f8fafc;}
+.article-row.done{background:#f0fdf4;}
+.article-week{width:46px;height:46px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;margin-right:18px;background:#f1f5f9;color:#475569;}
+.article-row.done .article-week{background:#d1fae5;color:#047857;}
+.article-info{flex:1;}
+.article-title{font-size:15px;font-weight:700;color:#0f172a;margin-bottom:4px;}
+.article-desc{font-size:13px;color:#64748b;}
+.article-badges{display:flex;gap:8px;margin-left:16px;flex-wrap:wrap;}
+.badge{padding:5px 12px;border-radius:12px;font-size:11px;font-weight:700;}
+.badge.done{background:#d1fae5;color:#047857;}
+.badge.pending{background:#fef3c7;color:#92400e;}
+.badge.view{background:#dbeafe;color:#1e40af;cursor:pointer;}
+.badge.view:hover{background:#1e40af;color:#fff;}
+footer{text-align:center;padding:28px;color:#94a3b8;font-size:12px;border-top:1px solid #e2e8f0;background:#fff;}
+footer a{color:#1a56db;}
+</style>
+</head>
+<body>
+<nav class="topbar">
+<div class="topbar-inner">
+<a href="../../../index.html">🏠 综合站首页</a>
+<span class="sep">›</span>
+<a href="../../index.html">运营中心</a>
+<span class="sep">›</span>
+<span class="here">知乎6个月日历</span>
+</div>
+</nav>
+<header class="hero">
+<div class="hero-inner">
+<span class="hero-tag">ZHIHU CALENDAR · 6 MONTHS</span>
+<h1>知乎 6 个月日历</h1>
+<p>26 篇文章规划 · 已完成 15 篇 · 每周一 21:00 发布 1 篇高质量长文（5000-10000 字）</p>
+<div class="hero-stats">
+<div class="hero-stat"><div class="hero-stat-num">26</div><div class="hero-stat-label">篇计划</div></div>
+<div class="hero-stat"><div class="hero-stat-num">15</div><div class="hero-stat-label">已完成</div></div>
+<div class="hero-stat"><div class="hero-stat-num">58%</div><div class="hero-stat-label">进度</div></div>
+</div>
+</div>
+</header>
+<main class="container">
+<div class="summary-box">
+<div class="summary-title">📊 整体进度概览</div>
+<div class="summary-grid">
+<div class="summary-item"><div class="summary-label">已完成</div><div class="summary-value green">15 篇</div></div>
+<div class="summary-item"><div class="summary-label">待完成</div><div class="summary-value orange">11 篇</div></div>
+<div class="summary-item"><div class="summary-label">总计划</div><div class="summary-value">26 篇</div></div>
+<div class="summary-item"><div class="summary-label">完成率</div><div class="summary-value">57.7%</div></div>
+</div>
+<div class="progress-bar"><div class="progress-fill" style="width:57.7%;"></div></div>
+</div>
+<section class="section">
+<div class="section-head">
+<h2 class="section-title">M1 · 大厂精英圈层（W1-W4 · 4 篇）</h2>
+</div>
+<div class="month-block">
+<div class="article-row done">
+<div class="article-week">W1</div>
+<div class="article-info">
+<div class="article-title">#1 大厂精英为什么去香港买保险</div>
+<div class="article-desc">硅谷腾讯快手抖音的 8 个大厂人的选择</div>
+</div>
+<div class="article-badges">
+<span class="badge done">✓ 已完成</span>
+<a href="../zhihu/知乎_8名腾讯CPAexport zhihu/知乎_8名腾讯CPA转向香港保险.md" class="badge view">查看成稿</a>
+</div>
+</div>
+<div class="article-row done">
+<div class="article-week">W2</div>
+<div class="article-info">
+<div class="article-title">#2 香港保险投保全流程合规指南</div>
+<div class="article-desc">从咨询到理赔的完整攻略</div>
+</div>
+<div class="article-badges">
+<span class="badge done">✓ 已完成</span>
+<a href="../zhihu/知乎_大陆居民CPA购买香港保险定位.md" class="badge view">查看成稿</a>
+</div>
+</div>
+<div class="article-row pending">
+<div class="article-week">W3</div>
+<div class="article-info">
+<div class="article-title">#3 香港保险 5 大类产品对比</div>
+<div class="article-desc">储蓄 / 重疾 / 医疗 / 高端 / 信托</div>
+</div>
+<div class="article-badges">
+<span class="badge pending">待完成</span>
+</div>
+</div>
+<div class="article-row pending">
+<div class="article-week">W4</div>
+<div class="article-info">
+<div class="article-title">#4 香港 vs 内地保险 10 维度对比</div>
+<div class="article-desc">费率 / 保障 / 理赔等全方位对比</div>
+</div>
+<div class="article-badges">
+<span class="badge pending">待完成</span>
+</div>
+</div>
+</div>
+</section>
+
+<section class="section">
+<div class="section-head">
+<h2 class="section-title">M2 · 大厂中层焦虑圈（W5-W8 · 4 篇）</h2>
+</div>
+<div class="month-block">
+<div class="article-row done">
+<div class="article-week">W5</div>
+<div class="article-info">
+<div class="article-title">#5 90% 财产押自家股票意味着什么</div>
+<div class="article-desc">大厂中层的财产风险暴露分析</div>
+</div>
+<div class="article-badges">
+<span class="badge done">✓ 已完成</span>
+</div>
+</div>
+<div class="article-row done">
+<div class="article-week">W6</div>
+<div class="article-info">
+<div class="article-title">#6 35 岁被裁，N+1 怎么花才不慌</div>
+<div class="article-desc">30 档现金流模型实战</div>
+</div>
+<div class="article-badges">
+<span class="badge done">✓ 已完成</span>
+</div>
+</div>
+<div class="article-row done">
+<div class="article-week">W7</div>
+<div class="article-info">
+<div class="article-title">#7 香港分红险到底交不交税</div>
+<div class="article-desc">CPA 精算视角全解析</div>
+</div>
+<div class="article-badges">
+<span class="badge done">✓ 已完成</span>
+<a href="../zhihu/知乎_港险分红险缴税税CPA终解.md" class="badge view">查看成稿</a>
+</div>
+</div>
+<div class="article-row done">
+<div class="article-week">W8</div>
+<div class="article-info">
+<div class="article-title">#8 中产家庭的医疗保障升级</div>
+<div class="article-desc">香港高端医疗 vs 内地百万医疗</div>
+</div>
+<div class="article-badges">
+<span class="badge done">✓ 已完成</span>
+<a href="../zhihu/知乎_港险大陆高端医疗CPA权衡.md" class="badge view">查看成稿</a>
+</div>
+</div>
+</div>
+</section>
+
+<section class="section">
+<div class="section-head">
+<h2 class="section-title">M3-M6 · 其他主题（剩余 18 篇）</h2>
+</div>
+<div class="month-block">
+<div class="article-row" style="padding:24px;text-align:center;color:#64748b;">
+<div style="width:100%;">
+<p style="margin-bottom:12px;font-size:14px;">包含移民家庭保障、CRS 税务规划、产品深度解析、综合转化等 4 个主题</p>
+<p style="font-size:13px;">已完成 7 篇，待完成 11 篇</p>
+<div style="margin-top:16px;">
+<a href="../../strategy/知乎6个月日历.md" style="display:inline-block;padding:10px 20px;background:#1a56db;color:#fff;border-radius:8px;font-size:13px;font-weight:700;">查看完整日历 →</a>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+</main>
+<footer>
+<div>知乎 6 个月日历 · v3.2 · 2026-05-24</div>
+<div style="margin-top:8px;">
+<a href="../../../index.html">综合站首页</a> · 
+<a href="../../index.html">运营中心</a> · 
+<a href="../zhihu/index.html">📄 知乎成稿仓库(15篇)</a> ·
+<a href="../../strategy/知乎成稿SOP.md">📋 发布 SOP</a>
+</div>
+</footer>
+</body>
+</html>
