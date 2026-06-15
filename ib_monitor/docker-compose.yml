@@ -1,0 +1,45 @@
+services:
+
+  # ── IB Gateway（无头模式，自动 TOTP 2FA）──────────────────────────
+  ib-gateway:
+    image: ghcr.io/gnzsnz/ib-gateway:latest
+    container_name: ib-gateway
+    restart: unless-stopped
+    environment:
+      - TWS_USERID=${IB_USERNAME}
+      - TWS_PASSWORD=${IB_PASSWORD}
+      - TWOFACTOR_TIMEOUT=180
+      - TWS_ACCEPT_INCOMING=accept
+      - TRADING_MODE=live          # 实盘；模拟盘改为 paper
+      - READ_ONLY_API=yes          # ← 关键：Gateway 层面开启只读 API
+      - TWS_SETTINGS_PATH=/home/ibgateway/Jts
+    ports:
+      - "4001:4003"                # 实盘 API 端口映射
+      - "4002:4004"                # 模拟盘 API 端口映射
+    volumes:
+      - ib-gateway-config:/home/ibgateway/Jts
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "http://localhost:5000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+
+  # ── IB 风控监控程序 ────────────────────────────────────────────────
+  ib-monitor:
+    build: .
+    container_name: ib-monitor
+    restart: unless-stopped
+    depends_on:
+      ib-gateway:
+        condition: service_healthy
+    env_file:
+      - .env
+    environment:
+      - IB_HOST=ib-gateway          # 容器网络内直接用服务名
+      - IB_PORT=4003                 # Gateway 容器内部端口
+    volumes:
+      - ./logs:/app/logs
+
+volumes:
+  ib-gateway-config:
