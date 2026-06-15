@@ -216,53 +216,130 @@ class IBReadOnlyClient:
         self, positions: list[PositionSnapshot]
     ) -> list[PositionSnapshot]:
         """
-        批量补充市场价格和期权 Greeks。
-        使用快照行情（不订阅实时流），避免占用市场数据行。
+        批量补充市场价格和期权 Greeks（含 Delta/Gamma/Vega/Theta/IV）。
+
+        实现原理：
+          - 股票：快照模式 reqTickersAsync，取 last/close 价格即可
+          - 期权：必须使用 reqMktData + genericTickList="13" 请求
+            Model Option Computation（Generic Tick 13），
+            才能获得 modelGreeks（Delta/Gamma等）。
+            快照模式（snapshot=True）不保证返回 Greeks，
+            因此改用"短暂订阅 → 等待数据 → 立即取消"的方式。
+
+        IB 市场数据行限制：
+          - 短暂订阅后立即 cancelMktData，不长期占用数据行
+          - 期权 Greeks 通常在订阅后 1-3 秒内返回
         """
         if not self.is_connected() or not positions:
             return positions
 
-        contracts = []
-        for p in positions:
-            c = Contract()
-            c.symbol = p.symbol
-            c.secType = p.sec_type
-            c.currency = p.currency
-            c.exchange = "SMART"
-            if p.sec_type == "OPT":
-                c.lastTradeDateOrContractMonth = p.expiry
-                c.strike = p.strike
-                c.right = p.right
-                c.multiplier = "100"
-            contracts.append(c)
-
-        try:
-            # 快照行情，不需要持续订阅
-            tickers: list[Ticker] = await self._ib.reqTickersAsync(*contracts)
-            for p, ticker in zip(positions, tickers):
-                if ticker.last and ticker.last > 0:
-                    p.market_price = ticker.last
-                elif ticker.close and ticker.close > 0:
-                    p.market_price = ticker.close
-
-                p.market_value = p.market_price * abs(p.position) * (
-                    100 if p.sec_type == "OPT" else 1
+        # ── 第一步：股票快照（批量，高效）───────────────────────────
+        stk_positions = [p for p in positions if p.sec_type == "STK"]
+        if stk_positions:
+            stk_contracts = []
+            for p in stk_positions:
+                c = Contract()
+                c.symbol = p.symbol
+                c.secType = "STK"
+                c.currency = p.currency
+                c.exchange = "SMART"
+                stk_contracts.append(c)
+            try:
+                tickers = await asyncio.wait_for(
+                    self._ib.reqTickersAsync(*stk_contracts),
+                    timeout=_API_TIMEOUT,
                 )
-                p.unrealized_pnl = (p.market_price - p.avg_cost) * p.position * (
-                    100 if p.sec_type == "OPT" else 1
-                )
+                for p, ticker in zip(stk_positions, tickers):
+                    price = (
+                        ticker.last if (ticker.last and ticker.last > 0)
+                        else ticker.close if (ticker.close and ticker.close > 0)
+                        else 0.0
+                    )
+                    p.market_price = price
+                    p.market_value = price * abs(p.position)
+                    p.unrealized_pnl = (price - p.avg_cost) * p.position
+            except Exception as e:
+                logger.warning("股票快照数据失败（非致命）: %s", e)
 
-                if p.sec_type == "OPT" and ticker.modelGreeks:
-                    g = ticker.modelGreeks
-                    p.delta = g.delta or 0.0
-                    p.gamma = g.gamma or 0.0
-                    p.vega = g.vega or 0.0
-                    p.theta = g.theta or 0.0
-                    p.iv = g.impliedVol or 0.0
-        except Exception as e:
-            logger.warning("补充市场数据失败（非致命）: %s", e)
+        # ── 第二步：期权 Greeks（逐合约订阅，确保获取 modelGreeks）──
+        opt_positions = [p for p in positions if p.sec_type == "OPT"]
+        for p in opt_positions:
+            await self._fetch_option_greeks(p)
 
         return positions
+
+    async def _fetch_option_greeks(self, p: "PositionSnapshot") -> None:
+        """
+        订阅单个期权合约的实时行情，等待 modelGreeks 填充后立即取消订阅。
+
+        Generic Tick 13 = Model Option Computation：
+          IB 服务器用 B-S 模型计算的 Delta/Gamma/Vega/Theta/IV，
+          这是期权展期监控的数据来源。
+        """
+        c = Contract()
+        c.symbol = p.symbol
+        c.secType = "OPT"
+        c.currency = p.currency
+        c.exchange = "SMART"
+        c.lastTradeDateOrContractMonth = p.expiry
+        c.strike = p.strike
+        c.right = p.right
+        c.multiplier = "100"
+
+        ticker = None
+        try:
+            # 订阅行情，请求 Generic Tick 13（Model Greeks）
+            ticker = self._ib.reqMktData(c, genericTickList="13", snapshot=False)
+
+            # 等待 modelGreeks 填充，最多等待 5 秒
+            deadline = 5.0
+            interval = 0.2
+            elapsed = 0.0
+            while elapsed < deadline:
+                await asyncio.sleep(interval)
+                elapsed += interval
+                if ticker.modelGreeks is not None:
+                    break
+
+            # 提取价格
+            price = (
+                ticker.last if (ticker.last and ticker.last > 0)
+                else ticker.close if (ticker.close and ticker.close > 0)
+                else ticker.bid if (ticker.bid and ticker.bid > 0)
+                else 0.0
+            )
+            p.market_price = price
+            p.market_value = price * abs(p.position) * 100
+            p.unrealized_pnl = (price - p.avg_cost) * p.position * 100
+
+            # 提取 Greeks
+            if ticker.modelGreeks:
+                g = ticker.modelGreeks
+                p.delta = g.delta or 0.0
+                p.gamma = g.gamma or 0.0
+                p.vega  = g.vega  or 0.0
+                p.theta = g.theta or 0.0
+                p.iv    = g.impliedVol or 0.0
+                logger.debug(
+                    "%s %.0f%s Delta=%.3f IV=%.1f%%",
+                    p.symbol, p.strike, p.right, p.delta, (p.iv or 0) * 100,
+                )
+            else:
+                logger.warning(
+                    "%s %.0f%s modelGreeks 未返回（盘后或无行情）",
+                    p.symbol, p.strike, p.right,
+                )
+
+        except Exception as e:
+            logger.warning("期权 Greeks 获取失败 %s %.0f%s: %s",
+                           p.symbol, p.strike, p.right, e)
+        finally:
+            # 无论成功与否，立即取消订阅，释放市场数据行
+            if ticker is not None:
+                try:
+                    self._ib.cancelMktData(c)
+                except Exception:
+                    pass
 
     # ── 工具方法 ──────────────────────────────────────────────────
 
