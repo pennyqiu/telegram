@@ -1,0 +1,8 @@
+{
+  "_comment": "记录 Covered Call 开仓时的初始权利金，用于计算50%止盈触发点。",
+  "_format": "key格式: SYMBOL_EXPIRY_STRIKE_C，value: 开仓时收取的权利金（每股，美元）",
+  "_example": {
+    "GOOG_20260620_390_C": 3.50,
+    "MSFT_20260620_425_C": 2.80
+  }
+}

@@ -59,6 +59,9 @@ async def send_daily_report(
     unrealized_pnl: float,
     concentration_lines: list[str],
     gamma_lines: list[str],
+    cc_lines: list[str] | None = None,
+    stock_lines: list[str] | None = None,
+    spym_lines: list[str] | None = None,
 ) -> None:
     """发送每日账户健康报告"""
     from datetime import datetime
@@ -70,8 +73,11 @@ async def send_daily_report(
     el_emoji = "✅" if excess_liquidity_pct >= 0.50 else ("⚠️" if excess_liquidity_pct >= 0.40 else "🚨")
     pnl_emoji = "📈" if unrealized_pnl >= 0 else "📉"
 
-    conc_block = "\n".join(concentration_lines) if concentration_lines else "  无需关注"
+    conc_block  = "\n".join(concentration_lines) if concentration_lines else "  无需关注"
     gamma_block = "\n".join(gamma_lines) if gamma_lines else "  无到期≤14天的ATM空头期权 ✅"
+    cc_block    = "\n".join(cc_lines) if cc_lines else "  所有CC Delta正常 ✅"
+    stock_block = "\n".join(stock_lines) if stock_lines else "  暂无数据"
+    spym_block  = "\n".join(spym_lines) if spym_lines else "  暂无SPYM持仓"
 
     text = (
         f"📊 <b>东线战场健康检查</b>  <code>{now}</code>\n"
@@ -84,6 +90,12 @@ async def send_daily_report(
         f"<b>📌 集中度监控</b>\n{conc_block}\n"
         f"{'─' * 32}\n"
         f"<b>⏰ Gamma 警戒期权</b>\n{gamma_block}\n"
+        f"{'─' * 32}\n"
+        f"<b>📈 CC 展期 / 止盈状态</b>\n{cc_block}\n"
+        f"{'─' * 32}\n"
+        f"<b>🧩 标的凑整状态</b>\n{stock_block}\n"
+        f"{'─' * 32}\n"
+        f"<b>🏦 SPYM 积攒进度</b>\n{spym_block}\n"
         f"{'─' * 32}\n"
         f"<i>⚠️ 本消息为只读监控，不执行任何交易操作。</i>"
     )

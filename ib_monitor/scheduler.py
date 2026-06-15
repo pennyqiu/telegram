@@ -21,7 +21,10 @@ from apscheduler.triggers.cron import CronTrigger
 from apscheduler.triggers.interval import IntervalTrigger
 
 from ib_client import IBReadOnlyClient
-from monitors import check_excess_liquidity, check_concentration, check_gamma_watchdog
+from monitors import (
+    check_excess_liquidity, check_concentration,
+    check_gamma_watchdog, check_cc_roll, check_position_tracker,
+)
 from notifier import send_daily_report, send_connection_status, send_alert, AlertLevel
 import config
 
@@ -67,6 +70,8 @@ async def run_risk_check(client: IBReadOnlyClient) -> None:
         await check_excess_liquidity(snap)
         await check_concentration(positions, snap)
         await check_gamma_watchdog(positions)
+        await check_cc_roll(positions)
+        await check_position_tracker(positions)
 
         # ── 5. 数据正常，重置失败状态 ────────────────────────────────
         if _failure_alerted:
@@ -146,8 +151,8 @@ async def run_daily_report(client: IBReadOnlyClient) -> None:
 
         positions = await client.enrich_with_market_data(positions)
 
-        from monitors.concentration import check_concentration as _cc
-        conc_results = await _cc(positions, snap)
+        from monitors.concentration import check_concentration as _conc
+        conc_results = await _conc(positions, snap)
         conc_lines = [r.summary_line() for r in conc_results if r.is_warn or r.is_red]
         if not conc_lines:
             conc_lines = [
@@ -158,6 +163,15 @@ async def run_daily_report(client: IBReadOnlyClient) -> None:
         gamma_results = await _gw(positions)
         gamma_lines = [r.summary_line() for r in gamma_results]
 
+        from monitors.cc_roll_watchdog import check_cc_roll as _cc
+        cc_results = await _cc(positions)
+        cc_lines = [r.summary_line() for r in cc_results] or ["  所有CC Delta正常，无需展期 ✅"]
+
+        from monitors.position_tracker import check_position_tracker as _pt
+        pt_result = await _pt(positions)
+        stock_lines = [s.summary_line() for s in pt_result.stock_statuses]
+        spym_lines = [pt_result.spym.summary_line()] if pt_result.spym else []
+
         el_pct = snap.excess_liquidity / snap.net_liquidation if snap.net_liquidation > 0 else 0
 
         await send_daily_report(
@@ -167,6 +181,9 @@ async def run_daily_report(client: IBReadOnlyClient) -> None:
             unrealized_pnl=snap.unrealized_pnl,
             concentration_lines=conc_lines,
             gamma_lines=gamma_lines,
+            cc_lines=cc_lines,
+            stock_lines=stock_lines,
+            spym_lines=spym_lines,
         )
         logger.info("每日健康报告已发送")
 
