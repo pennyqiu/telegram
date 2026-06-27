@@ -10,6 +10,8 @@
 | **Telegram 俱乐部系统** | `tg-club/` | FastAPI + React Admin + Mini App | 独立部署，调用订阅系统API | `backend/app/main.py` | 仅此目录，依赖订阅系统 |
 | **保险指南站** | `insurance-guide/` | 静态HTML + FastAPI简报 + 爬虫 | 静态部署 + VPS脚本 | `public/index.html` + `fastapi_app/main.py` | 仅此目录 |
 | **投资工具集** | 根目录散布 | 静态HTML + Python脚本 | 纯本地/静态 | 见下方列表 | 根目录 `*.html` + `investment_tracker/` |
+| **IB 风控监控** | `ib_monitor/` | ib_async + Telegram | Docker（VPS） | `main.py` | 仅此目录（只读） |
+| **IB 量化交易** | `ib_quant/` | ib_async + FastAPI + Telegram/邮箱 | Docker（VPS） | `main.py` + `dashboard/index.html` | 仅此目录（**可下单**） |
 
 ## 投资模块文件清单
 ```

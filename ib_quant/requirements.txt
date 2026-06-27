@@ -1,0 +1,9 @@
+ib_async==2.1.0
+python-telegram-bot==21.10
+python-dotenv==1.0.1
+apscheduler==3.10.4
+pytz==2024.2
+fastapi==0.115.6
+uvicorn==0.34.0
+aiosmtplib==3.0.2
+pydantic==2.10.4

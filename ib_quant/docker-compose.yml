@@ -1,0 +1,49 @@
+services:
+
+  # ── IB Gateway（无头模式，自动 TOTP 2FA）──────────────────────────
+  #  默认 paper 模拟盘。确认无误后再改 live。
+  ib-gateway:
+    image: ghcr.io/gnzsnz/ib-gateway:latest
+    container_name: ibq-gateway
+    restart: unless-stopped
+    environment:
+      - TWS_USERID=${IB_USERNAME}
+      - TWS_PASSWORD=${IB_PASSWORD}
+      - TWOFACTOR_TIMEOUT=180
+      - TWS_ACCEPT_INCOMING=accept
+      - TRADING_MODE=${TRADING_MODE:-paper}   # paper / live
+      - READ_ONLY_API=no                       # ← 交易模块：必须允许下单
+      - TWS_SETTINGS_PATH=/home/ibgateway/Jts
+    ports:
+      - "4001:4003"        # 实盘 API（容器内部 4003）
+      - "4002:4004"        # 模拟盘 API（容器内部 4004）
+    volumes:
+      - ibq-gateway-config:/home/ibgateway/Jts
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "http://localhost:5000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+
+  # ── ib_quant 量化交易程序 ──────────────────────────────────────────
+  ib-quant:
+    build: .
+    container_name: ib-quant
+    restart: unless-stopped
+    depends_on:
+      ib-gateway:
+        condition: service_healthy
+    env_file:
+      - .env
+    environment:
+      - IB_HOST=ibq-gateway
+      # 模拟盘容器内部端口 4004，实盘 4003
+      - IB_PORT=${IB_GATEWAY_INTERNAL_PORT:-4004}
+    ports:
+      - "8800:8800"        # Web 看板（量化策略切页）
+    volumes:
+      - ./logs:/app/logs
+
+volumes:
+  ibq-gateway-config:
