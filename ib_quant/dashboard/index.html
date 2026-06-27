@@ -57,6 +57,17 @@
   .note { color: var(--muted); font-size: 12px; margin-top: 10px; }
   .pill { font-size: 11px; padding: 2px 8px; border-radius: 6px; background: var(--panel2); }
   .sec-title { color: var(--muted); font-size: 13px; margin: 18px 0 8px; }
+  .flow { max-width: 620px; }
+  .step { display: flex; gap: 12px; align-items: flex-start; background: var(--panel2);
+    border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; }
+  .step.guard { border-color: #5c4d1f; background: #2a2410; }
+  .step.out { border-color: #1f4f2a; background: #102a16; }
+  .step .n { flex: 0 0 24px; height: 24px; line-height: 24px; text-align: center;
+    border-radius: 50%; background: var(--blue); color: #fff; font-size: 13px; font-weight: 700; }
+  .step .d { color: var(--muted); font-size: 12px; margin-top: 2px; }
+  .arr { text-align: center; color: var(--muted); margin: 4px 0; font-size: 18px; }
+  #guide table td { vertical-align: top; }
+  #guide table td:first-child { white-space: nowrap; width: 1%; }
   #toast { position: fixed; bottom: 20px; right: 20px; background: var(--panel2);
     border: 1px solid var(--line); padding: 12px 16px; border-radius: 8px;
     opacity: 0; transition: opacity .25s; max-width: 360px; }
@@ -83,15 +94,70 @@
 
   <!-- 切页导航 -->
   <div class="tabs">
-    <div class="tab active" data-tab="overview">📊 概览</div>
+    <div class="tab active" data-tab="guide">📖 说明</div>
+    <div class="tab" data-tab="overview">📊 概览</div>
     <div class="tab" data-tab="strategy">🧠 量化策略</div>
     <div class="tab" data-tab="positions">📦 持仓</div>
     <div class="tab" data-tab="trade">🛒 手动下单</div>
     <div class="tab" data-tab="events">🔔 事件流</div>
   </div>
 
+  <!-- 说明（默认页：讲清楚整套系统在干嘛） -->
+  <section id="guide" class="page active">
+    <div class="panel" style="padding:20px;">
+      <div style="font-size:16px;font-weight:700;margin-bottom:6px;">这是什么？</div>
+      <p style="color:var(--muted);">
+        一套接入 <b>IB（盈透证券）</b> 的量化交易系统：自动按策略盯盘、产生买卖信号、
+        经过多重安全护栏后下单（正股/期权），并把每一步通过 Telegram / 邮箱通知你。
+        本页面是它的<b>实时看板</b>。
+      </p>
+
+      <div style="font-size:15px;font-weight:700;margin:18px 0 10px;">整体流程</div>
+      <div class="flow">
+        <div class="step"><span class="n">1</span><div><b>IB 子账户</b><div class="d">开通正股/期权交易权限 + 订阅市场数据</div></div></div>
+        <div class="arr">↓</div>
+        <div class="step"><span class="n">2</span><div><b>IB Gateway</b><div class="d">用账号密码 + 2FA 登录，开放本地 API 端口（4001/4002）</div></div></div>
+        <div class="arr">↓</div>
+        <div class="step"><span class="n">3</span><div><b>ib_quant 交易程序</b><div class="d">连接 Gateway，每隔 N 秒拉取账户/持仓/行情</div></div></div>
+        <div class="arr">↓</div>
+        <div class="step"><span class="n">4</span><div><b>策略轮询</b><div class="d">策略计算信号（如双均线金叉/死叉）→ 决定买或卖</div></div></div>
+        <div class="arr">↓</div>
+        <div class="step guard"><span class="n">5</span><div><b>安全护栏</b><div class="d">DRY_RUN / 白名单 / 单笔金额 / 持仓 / 单日笔数，任一不过即拒单</div></div></div>
+        <div class="arr">↓</div>
+        <div class="step"><span class="n">6</span><div><b>下单</b><div class="d">DRY_RUN=只记录不发送；放开后发往模拟盘或实盘</div></div></div>
+        <div class="arr">↓</div>
+        <div class="step out"><span class="n">7</span><div><b>触达你</b><div class="d">连接/信号/下单/成交/拒绝/异常/日报 → Telegram + 邮箱 + 本看板事件流</div></div></div>
+      </div>
+
+      <div style="font-size:15px;font-weight:700;margin:20px 0 10px;">各切页是干嘛的</div>
+      <table>
+        <tr><td>📊 <b>概览</b></td><td>账户净值、可用资金、未实现盈亏、当日下单数、当前安全护栏阈值</td></tr>
+        <tr><td>🧠 <b>量化策略</b></td><td>已启用的策略、关注的标的池、最近产生的交易信号</td></tr>
+        <tr><td>📦 <b>持仓</b></td><td>当前正股/期权持仓与成本</td></tr>
+        <tr><td>🛒 <b>手动下单</b></td><td>手动查价、手动下单测试（同样经过全部护栏）</td></tr>
+        <tr><td>🔔 <b>事件流</b></td><td>系统所有事件的时间线（与 Telegram/邮箱推送的内容一致）</td></tr>
+      </table>
+
+      <div style="font-size:15px;font-weight:700;margin:20px 0 10px;">三种运行状态（看右上角徽章）</div>
+      <table>
+        <tr><td><span class="badge dry">DEMO/演示</span></td><td>未连后端，页面是静态示例数据，仅供看界面</td></tr>
+        <tr><td><span class="badge paper">PAPER</span> + <span class="badge dry">DRY_RUN</span></td><td>连模拟盘但<b>不真实下单</b>，用于跑通信号与通知（推荐起步）</td></tr>
+        <tr><td><span class="badge live">LIVE</span></td><td>实盘真实下单，需显式开启 <code>ALLOW_LIVE</code>，请务必谨慎</td></tr>
+      </table>
+
+      <div style="font-size:15px;font-weight:700;margin:20px 0 10px;">怎么用起来</div>
+      <ol style="color:var(--muted);padding-left:20px;line-height:2;">
+        <li>按 <code>guides/01-account-setup.md</code> 开通 IB 权限与市场数据。</li>
+        <li>按 <code>guides/02-api-deployment.md</code> 部署 IB Gateway + 本程序（docker compose up -d）。</li>
+        <li>保持 <code>TRADING_MODE=paper</code> + <code>DRY_RUN=true</code>，访问 <b>http://主机:8800</b> 观察信号与通知。</li>
+        <li>确认无误后逐步放开：模拟盘真实下单 → 实盘（收紧护栏阈值）。</li>
+      </ol>
+      <p class="note">⚠️ 本系统会真实下单，仅供技术研究，不构成投资建议。</p>
+    </div>
+  </section>
+
   <!-- 概览 -->
-  <section id="overview" class="page active">
+  <section id="overview" class="page">
     <div class="grid">
       <div class="card"><div class="k">账户净值 NLV</div><div class="v" id="nlv">—</div></div>
       <div class="card"><div class="k">可用资金</div><div class="v" id="avail">—</div></div>

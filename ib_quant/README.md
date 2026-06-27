@@ -10,12 +10,27 @@ Gateway 层 `READ_ONLY_API=no`、代码层 `readonly=False`。请务必先在
 
 ---
 
+## 🔄 它在干嘛（30 秒看懂）
+
+```
+①IB 子账户(权限+行情) → ②IB Gateway(登录+2FA) → ③ib_quant程序(连接,周期拉数据)
+   → ④策略算信号 → ⑤安全护栏(DRY_RUN/白名单/金额/持仓/笔数) → ⑥下单(模拟/实盘)
+   → ⑦通知触达(Telegram+邮箱+看板事件流)
+```
+
+简单说：**自动盯盘 → 出买卖信号 → 过护栏 → 下单 → 全程通知你**。
+看板页面就是实时窗口（打开默认是「📖 说明」切页，里面有同一张流程图）。
+完整流程见 [`guides/00-overview.md`](guides/00-overview.md)。
+
+---
+
 ## 📁 目录结构
 
 ```
 ib_quant/
 ├── README.md                # 本文件
 ├── guides/
+│   ├── 00-overview.md        # ★先读：这套系统在干嘛（流程总览）
 │   ├── 01-account-setup.md   # 子账户申请、交易权限、市场数据、费用清单
 │   ├── 02-api-deployment.md  # IB API 申请与部署（Gateway/TWS、登录流程、Docker）
 │   └── 03-strategy-guide.md  # 策略框架说明与开发指南
