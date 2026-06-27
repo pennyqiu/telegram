@@ -5,6 +5,10 @@
 
 ---
 
+## 架构图
+
+![ib_quant 系统架构与数据流](../dashboard/architecture.svg)
+
 ## 整体数据流
 
 ```

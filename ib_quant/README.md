@@ -33,7 +33,8 @@ ib_quant/
 │   ├── 00-overview.md        # ★先读：这套系统在干嘛（流程总览）
 │   ├── 01-account-setup.md   # 子账户申请、交易权限、市场数据、费用清单
 │   ├── 02-api-deployment.md  # IB API 申请与部署（Gateway/TWS、登录流程、Docker）
-│   └── 03-strategy-guide.md  # 策略框架说明与开发指南
+│   ├── 03-strategy-guide.md  # 策略框架说明与开发指南
+│   └── 04-vps-deployment.md  # VPS 实战部署（跑起来看到真实数据）
 ├── config.py                # 配置（全部走 .env）
 ├── ib_client.py             # IB 交易客户端：登录/拉列表/查价/下单/周期检查 + 安全护栏
 ├── hooks.py                 # 事件钩子总线（发布-订阅，触达来源）
