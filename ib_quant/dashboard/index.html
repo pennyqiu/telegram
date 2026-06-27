@@ -76,6 +76,11 @@
     </div>
   </header>
 
+  <div id="demoBanner" style="display:none;background:#3d3416;border:1px solid #5c4d1f;color:#f0d98c;padding:10px 14px;border-radius:8px;margin-bottom:14px;font-size:13px;">
+    ⚠️ <b>演示数据</b>：当前未连接到后端 API（你可能是直接打开静态 HTML）。
+    真实数据需通过 <code>python main.py</code> 或 docker 启动后访问 <b>http://主机:8800</b>。
+  </div>
+
   <!-- 切页导航 -->
   <div class="tabs">
     <div class="tab active" data-tab="overview">📊 概览</div>
@@ -180,9 +185,76 @@ async function api(path, opts) {
   return r.json();
 }
 
+// 演示数据：后端不可达时填充，便于静态预览界面
+const DEMO = {
+  status: {
+    mode: "paper", dry_run: true, running: true, paused: false,
+    last_poll: new Date().toISOString().slice(0,19),
+    orders_today: 2,
+    strategies: ["ma_cross"], universe: ["AAPL","MSFT","NVDA"],
+    account: { net_liquidation: 125300, available_funds: 78200,
+               buying_power: 156400, unrealized_pnl: 1840, realized_pnl: 320 },
+    guards: { max_order_notional: 5000, max_position_notional: 20000,
+              max_daily_orders: 20, whitelist: ["AAPL","MSFT","NVDA"] },
+  },
+  positions: [
+    { symbol: "AAPL", sec_type: "STK", position: 10, avg_cost: 201.35 },
+    { symbol: "MSFT", sec_type: "STK", position: 5,  avg_cost: 432.10 },
+    { symbol: "NVDA", sec_type: "OPT", position: -1, avg_cost: 6.20 },
+  ],
+  events: [
+    { event:"signal", ts:new Date().toISOString().slice(0,19),
+      payload:{strategy:"ma_cross",symbol:"AAPL",signal:"BUY",reason:"金叉 短MA=201.8 > 长MA=200.4"} },
+    { event:"order_submitted", ts:new Date(Date.now()-60000).toISOString().slice(0,19),
+      payload:{symbol:"AAPL",action:"BUY",quantity:1,status:"DRY_RUN",dry_run:true} },
+    { event:"connected", ts:new Date(Date.now()-300000).toISOString().slice(0,19),
+      payload:{mode:"模拟盘 PAPER",account:"DU1234567",dry_run:true} },
+  ],
+};
+
+function renderDemo() {
+  $("#demoBanner").style.display = "";
+  const s = DEMO.status;
+  $("#modeBadge").textContent = "PAPER"; $("#modeBadge").className = "badge paper";
+  $("#dryBadge").style.display = "";
+  $("#pollTime").textContent = "演示数据（未连接后端）";
+  $("#pauseBtn").textContent = "暂停策略"; $("#pauseBtn").className = "warn";
+  const a = s.account;
+  $("#nlv").textContent = fmtMoney(a.net_liquidation);
+  $("#avail").textContent = fmtMoney(a.available_funds);
+  $("#bp").textContent = fmtMoney(a.buying_power);
+  $("#upnl").textContent = "+"+fmtMoney(a.unrealized_pnl).slice(1); $("#upnl").className = "v pos";
+  $("#ordersToday").textContent = s.orders_today;
+  const g = s.guards;
+  $("#guards").innerHTML = `
+    <div class="card"><div class="k">单笔金额上限</div><div class="v">${fmtMoney(g.max_order_notional)}</div></div>
+    <div class="card"><div class="k">单标的持仓上限</div><div class="v">${fmtMoney(g.max_position_notional)}</div></div>
+    <div class="card"><div class="k">单日笔数上限</div><div class="v">${g.max_daily_orders}</div></div>
+    <div class="card"><div class="k">白名单</div><div class="v" style="font-size:14px">${g.whitelist.join(", ")}</div></div>`;
+  $("#strategyList").innerHTML = s.strategies.map(x=>`<span class="pill">🧠 ${x}</span>`).join(" ");
+  $("#universe").innerHTML = s.universe.map(x=>`<span class="pill">${x}</span>`).join(" ");
+  $("#posBody").innerHTML = DEMO.positions.map(p=>
+    `<tr><td><b>${p.symbol}</b></td><td>${p.sec_type}</td><td>${p.position}</td><td>$${p.avg_cost.toFixed(2)}</td></tr>`).join("");
+  const render = demoEventRenderer();
+  $("#eventList").innerHTML = DEMO.events.map(render).join("");
+  $("#signalList").innerHTML = DEMO.events.filter(e=>e.event==="signal").map(render).join("");
+}
+
+function demoEventRenderer() {
+  return e => {
+    const ic = ICON[e.event] || "•"; const p = e.payload || {};
+    let line = JSON.stringify(p);
+    if (e.event==="signal") line = `${p.strategy} · ${p.symbol} · <b>${p.signal}</b> · ${p.reason||""}`;
+    else if (e.event.startsWith("order")) line = `${p.symbol||""} ${p.action||""} ${p.quantity||p.shares||""} · ${p.status||""}`;
+    else if (e.event==="connected") line = `${p.mode} · ${p.account}`;
+    return `<div class="ev"><span class="ico">${ic}</span><div><div>${line}</div><div class="meta">${e.event} · ${e.ts.replace("T"," ")}</div></div></div>`;
+  };
+}
+
 async function refresh() {
   try {
     const s = await api("/status");
+    $("#demoBanner").style.display = "none";
     $("#modeBadge").textContent = s.mode.toUpperCase();
     $("#modeBadge").className = "badge " + (s.mode === "live" ? "live" : "paper");
     $("#dryBadge").style.display = s.dry_run ? "" : "none";
@@ -229,7 +301,10 @@ async function refresh() {
     };
     $("#eventList").innerHTML = evs.map(render).join("") || "<div class='ev meta'>暂无事件</div>";
     $("#signalList").innerHTML = evs.filter(e=>e.event==="signal").map(render).join("") || "<div class='ev meta'>暂无信号</div>";
-  } catch (e) { console.error(e); }
+  } catch (e) {
+    console.warn("后端 API 不可达，加载演示数据", e);
+    renderDemo();
+  }
 }
 
 $("#pauseBtn").onclick = async () => {
