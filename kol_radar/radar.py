@@ -411,6 +411,10 @@ def main():
                         help="--since 模式下单个 KOL 最多抓取的条数上限，防止超额扣费（默认 500，约 $2.5）")
     parser.add_argument("--include-replies", action="store_true",
                         help="--since 模式下是否包含回复（默认只抓原创推文，不含转发/回复）")
+    parser.add_argument("--daily", action="store_true",
+                        help="配合 --since/--until 做「精确时间窗口」的每日刷新：仍按精确窗口抓取"
+                             "（避免 --limit 模式重复/遗漏），但产出行为跟日常模式一样——覆盖 "
+                             "index.html/latest.json，不生成 archive_ 系列归档文件")
     args = parser.parse_args()
 
     _load_env()
@@ -426,7 +430,11 @@ def main():
     out_dir = Path(args.output) if args.output else OUTPUT_DIR
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    if args.since:
+    is_archive = bool(args.since) and not args.daily
+    if args.daily and args.since:
+        print(f"📡 每日精确窗口模式：{args.since} ~ {args.until or '现在'}（中国时区），"
+              f"每 KOL 上限 {args.max_tweets} 条（约 ${args.max_tweets * 0.005 * len(kols):.2f}）...")
+    elif is_archive:
         print(f"📡 回溯模式：{args.since} ~ {args.until or '现在'}，"
               f"每 KOL 上限 {args.max_tweets} 条（约 ${args.max_tweets * 0.005 * len(kols):.2f}）...")
     else:
@@ -437,7 +445,7 @@ def main():
                    include_replies=args.include_replies)
 
     stamp = datetime.now().strftime("%Y%m%d_%H%M")
-    if args.since:
+    if is_archive:
         # 归档文件名必须带 handle，否则不同博主同一时间段的回溯会互相覆盖
         handles_tag = "-".join(sorted(k.handle for k in kols)) if len(kols) <= 3 else f"{len(kols)}kols"
         tag = f"archive_{handles_tag}_{args.since}_to_{args.until or 'now'}"
@@ -451,7 +459,7 @@ def main():
     json_path.write_text(json_str, encoding="utf-8")
     html_path.write_text(html_str, encoding="utf-8")
 
-    if args.since:
+    if is_archive:
         # 回溯抓取是一次性研究用途，不覆盖日常简报的固定入口
         print(f"   （回溯模式不会覆盖 index.html / latest.json，避免影响日常简报）")
         index_path = out_dir / "archive_index.html"
@@ -459,14 +467,14 @@ def main():
         print(f"   归档导航页：{index_path}")
     else:
         # 固定文件名快照：始终指向「最新一次」，方便 nginx 用固定 index 托管
-        # （历史时间戳文件仍保留，便于回看/对比）
+        # （历史时间戳文件仍保留，便于回看/对比；--daily 精确窗口模式同样覆盖这里）
         (out_dir / "index.html").write_text(html_str, encoding="utf-8")
         (out_dir / "latest.json").write_text(json_str, encoding="utf-8")
 
     total_tweets = sum(k["tweet_count"] for k in data["kols"])
     total_posts = sum(k["newsletter_count"] for k in data["kols"])
     print(f"\n✅ 完成：{total_tweets} 条推文 + {total_posts} 篇 newsletter")
-    if args.since:
+    if is_archive:
         print(f"   结构化数据：{json_path}")
         print(f"   可读简报：  {html_path}")
     else:

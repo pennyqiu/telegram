@@ -164,23 +164,29 @@ python radar.py --handles aleabitoreddit --since 2026-01-01 --max-tweets 1000
 
 ### 每日定时刷新（网站持续更新）
 
-用 `daily_cron.sh` 包装好了「newsletter 全文 + 每人最新推文」，直接写到 nginx 服务目录，
-配合 crontab 每天跑一次，网站的 `index.html` 就会自动保持最新，不用每天手动跑：
+`daily_cron.sh` 用「精确时间窗口」抓取（中国时区昨天 8 点 ~ 今天 8 点），而不是"最近 N 条"——
+好处是不会因为某天发太多而漏抓，也不会因为发太少而重复展示前一天的内容。窗口用 Python 显式按
+UTC+8 计算，不依赖服务器系统时区。跑完直接覆盖写到 nginx 服务目录，网站 `index.html` 自动保持最新。
+
+一次性把 cron 任务装好（幂等，重复执行不会重复添加）：
 
 ```bash
-crontab -e
+(crontab -l 2>/dev/null | grep -v 'daily_cron.sh'; echo "30 0 * * * /app/telegram/kol_radar/daily_cron.sh /var/www/kol-radar 50") | crontab -
+crontab -l   # 确认写入成功
 ```
 
-加一行（每天早上 8 点跑一次，输出到网站目录，每人抓 15 条最新推文）：
+> ⚠️ 上面的 `30 0 * * *` 是假设**服务器系统时区是 UTC**（云 VPS 最常见的默认设置），
+> 对应中国时间早上 8:30。先用 `date` 确认服务器当前时区：
+> - 如果 `date` 打印的时间跟中国时间一致（服务器已经是 Asia/Shanghai 时区），改成 `30 8 * * *`
+> - 如果服务器是 UTC，用上面默认的 `30 0 * * *` 即可
+> （不管 cron 具体几点触发，`daily_cron.sh` 内部窗口计算都是按中国时区算的，只要 cron 别在
+> 凌晨太早触发导致「今天8点」还没到就行，所以选在中国时间 8:30 左右触发最稳）
 
-```
-0 8 * * * /app/telegram/kol_radar/daily_cron.sh /var/www/kol-radar 15
-```
-
-- 成本：7 位 × 15 条 × $0.005 ≈ $0.5/天 ≈ **$16/月**，记得去 console.x.com 的 **Billing** 里把月度
-  spending limit 调高到能覆盖这个量（之前示例设的是 $10，需要调大，否则超限后会拉取失败）
+- 成本：不再是固定按上限收费，而是按「实际落在这 24 小时窗口内的推文数」计费——正常情况下
+  7 位博主一天合计可能就几条到十几条，成本明显低于旧的「每人固定抓 15 条」方案
+  （`50` 只是防失控的安全上限，不是每天都会用满）
 - 日志会写到 `kol_radar/logs/daily_*.log`（已 gitignore，不会进版本库），自动清理 30 天前的旧日志
-- 想验证效果，先手动跑一次看看：`./daily_cron.sh /var/www/kol-radar 15 && tail -30 logs/daily_*.log`
+- 想验证效果，先手动跑一次看看：`./daily_cron.sh /var/www/kol-radar 50 && tail -30 logs/daily_*.log`
 
 ---
 
