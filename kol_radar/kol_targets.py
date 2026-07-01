@@ -32,7 +32,8 @@ TARGET_KOLS = [
     # --- 1. 半导体与硬核硬件 ---
     KOLProfile(
         name="Dylan Patel",
-        handle="SemiAnalysis",
+        # 官方账号带下划线，不是 @SemiAnalysis（那个 handle 解析不到，会导致 x_api 报错）
+        handle="SemiAnalysis_",
         category="Hardware & Semiconductor",
         focus="AI算力底层架构、先进封装(CoWoS)、超大规模计算中心CapEx跟踪",
         newsletter="SemiAnalysis",
@@ -40,7 +41,8 @@ TARGET_KOLS = [
     ),
     KOLProfile(
         name="Fabricated Knowledge",
-        handle="PhabulousFab",
+        # Doug O'Laughlin 的真实 X handle 是 @FoolAllTheTime（匿名推特），不是 @PhabulousFab
+        handle="FoolAllTheTime",
         category="Hardware & Semiconductor",
         focus="晶圆代工(TSMC/特种代工)、半导体设备(ASML/AMAT)财务模型与估值水位",
         newsletter="Fabricated Knowledge",

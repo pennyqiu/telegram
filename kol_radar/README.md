@@ -16,8 +16,8 @@
 
 | 分类 | KOL | handle | 关注领域 |
 |------|-----|--------|----------|
-| 半导体与硬核硬件 | Dylan Patel | `@SemiAnalysis` | AI 算力架构、先进封装(CoWoS)、数据中心 CapEx |
-| 半导体与硬核硬件 | Fabricated Knowledge | `@PhabulousFab` | 晶圆代工、半导体设备财务模型与估值 |
+| 半导体与硬核硬件 | Dylan Patel | `@SemiAnalysis_` | AI 算力架构、先进封装(CoWoS)、数据中心 CapEx |
+| 半导体与硬核硬件 | Fabricated Knowledge | `@FoolAllTheTime` | 晶圆代工、半导体设备财务模型与估值 |
 | AI 软件与云 | Beth Kindig | `@Beth_Kindig` | AI 软件变现、科技股买入区间 |
 | AI 软件与云 | Jamin Ball | `@jaminball` | SaaS 估值倍数、云景气度 |
 | 宏观与应用科技 | Matthew Ball | `@ballmatthew` | 3D 引擎、空间计算、具身智能 |
@@ -80,7 +80,7 @@ python radar.py --source both                    # 两者都抓（默认）
 python radar.py --news-limit 3                   # 每人抓最近 3 篇 newsletter
 python radar.py --limit 15                       # 每人抓 15 条推文
 python radar.py --no-articles                    # 不抓推文里的外部文章正文（快）
-python radar.py --handles SemiAnalysis,jaminball # 只抓指定 KOL
+python radar.py --handles SemiAnalysis_,jaminball # 只抓指定 KOL
 python radar.py --output /var/www/kol            # 自定义输出目录（服务器部署）
 ```
 
@@ -158,7 +158,7 @@ kol_radar/
   "kols": [
     {
       "name": "Dylan Patel",
-      "handle": "SemiAnalysis",
+      "handle": "SemiAnalysis_",
       "category_label": "半导体与硬核硬件",
       "focus": "...",
       "backend": "x_api",
@@ -166,7 +166,7 @@ kol_radar/
         {
           "text": "推文正文…",
           "created_at": "2026-06-29T...",
-          "tweet_url": "https://x.com/SemiAnalysis/status/...",
+          "tweet_url": "https://x.com/SemiAnalysis_/status/...",
           "article_urls": ["https://semianalysis.com/..."],
           "articles": [
             { "title": "文章标题", "final_url": "...", "excerpt": "正文摘要…", "word_count": 1234, "ok": true }

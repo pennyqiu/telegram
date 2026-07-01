@@ -12,7 +12,7 @@ KOL 雷达 · 主程序
   python radar.py                 # 每个 KOL 抓最近 8 条，抓取引用文章
   python radar.py --limit 15      # 每个 KOL 抓最近 15 条
   python radar.py --no-articles   # 只抓推文，不抓外部文章正文（更快）
-  python radar.py --handles SemiAnalysis,jaminball   # 只抓指定 KOL
+  python radar.py --handles SemiAnalysis_,jaminball   # 只抓指定 KOL
 
   # 回溯模式：一次性拉取指定时间段内某 KOL 的全部原创内容（全档案搜索，按量计费）
   python radar.py --handles aleabitoreddit --since 2026-01-01 --max-tweets 1000

@@ -26,8 +26,8 @@
 
 | 分类 | KOL | X handle | 官方 Newsletter（免费全文源） | 全文情况 |
 |------|-----|----------|-------------------------------|----------|
-| 半导体与硬核硬件 | Dylan Patel | `@SemiAnalysis` | `semianalysis.com/feed` | ✅ 全文（实测 1877 词） |
-| 半导体与硬核硬件 | Fabricated Knowledge | `@PhabulousFab` | `fabricatedknowledge.com/feed` | ✅ 全文（实测 7499 词，深度长文） |
+| 半导体与硬核硬件 | Dylan Patel | `@SemiAnalysis_` | `semianalysis.com/feed` | ✅ 全文（实测 1877 词） |
+| 半导体与硬核硬件 | Fabricated Knowledge | `@FoolAllTheTime` | `fabricatedknowledge.com/feed` | ✅ 全文（实测 7499 词，深度长文） |
 | AI 软件与云 | Beth Kindig | `@Beth_Kindig` | `iofund.substack.com/feed` | ⚠️ 2026-02 起 Substack 关闭迁至 `io-fund.com`，需跟进改地址 |
 | AI 软件与云 | Jamin Ball | `@jaminball` | `cloudedjudgement.substack.com/feed` | ✅ 全文（实测 2757 词，更新到当周） |
 | 宏观与应用科技 | Matthew Ball | `@ballmatthew` | `matthewball.co/all?format=rss` | ⚠️ RSS 仅给摘要（14 词），需抓正文页补全 |
@@ -81,7 +81,7 @@ python3 radar.py --source newsletter --news-limit 5
 ```text
 I am building a small personal research tool for my own use. It periodically
 reads the public timelines of a handful of technology and semiconductor
-analysts on X (for example @SemiAnalysis and @jaminball) and collects the
+analysts on X (for example @SemiAnalysis_ and @jaminball) and collects the
 public articles they link to, so that I can review industry commentary on AI
 infrastructure, chips, and cloud software in one place. The app only reads
 public posts using the App-Only Bearer Token. It does not post, send messages,
@@ -151,7 +151,7 @@ python radar.py --source both                     # 两者都抓
 python radar.py --news-limit 3                    # 每人抓最近 3 篇 newsletter
 python radar.py --limit 15                        # 每人抓 15 条推文
 python radar.py --no-articles                     # 不抓推文里的外部文章正文（更快）
-python radar.py --handles SemiAnalysis,jaminball  # 只抓指定 KOL
+python radar.py --handles SemiAnalysis_,jaminball  # 只抓指定 KOL
 python radar.py --output /var/www/kol             # 自定义输出目录（服务器部署）
 
 # 一次性回溯某 KOL 指定时间段全部内容（全档案搜索，按量计费，见第 5 节）
