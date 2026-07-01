@@ -73,8 +73,19 @@ def _clean_text(raw: str) -> str:
     return text.strip()
 
 
+# X 的自动链接解析会把「数字.交易所后缀」这类股票代码（如 2330.TW / 300376.SZ）
+# 误判成域名并生成 URL 实体，这类假链接要过滤掉，不当文章抓取
+_TICKER_LIKE_RE = re.compile(r"^https?://\d+\.[A-Za-z]{1,4}/?$")
+
+
+def _is_ticker_like(url: str) -> bool:
+    return bool(_TICKER_LIKE_RE.match(url.strip()))
+
+
 def _is_external(url: str) -> bool:
     low = url.lower()
+    if _is_ticker_like(url):
+        return False
     return not any(d in low for d in SELF_DOMAINS)
 
 
