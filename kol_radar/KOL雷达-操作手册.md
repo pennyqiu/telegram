@@ -162,11 +162,25 @@ python radar.py --handles aleabitoreddit --since 2026-01-01 --max-tweets 1000
 ./backfill_all.sh 2026-01-01 1000 /var/www/kol-radar  # 自定义 起始日期/单人上限/输出目录
 ```
 
-定时任务示例（每天早上 8 点跑一次免费轨道）：
+### 每日定时刷新（网站持续更新）
+
+用 `daily_cron.sh` 包装好了「newsletter 全文 + 每人最新推文」，直接写到 nginx 服务目录，
+配合 crontab 每天跑一次，网站的 `index.html` 就会自动保持最新，不用每天手动跑：
 
 ```bash
-0 8 * * *  cd /path/to/kol_radar && /usr/bin/python3 radar.py --source newsletter >> radar.log 2>&1
+crontab -e
 ```
+
+加一行（每天早上 8 点跑一次，输出到网站目录，每人抓 15 条最新推文）：
+
+```
+0 8 * * * /app/telegram/kol_radar/daily_cron.sh /var/www/kol-radar 15
+```
+
+- 成本：7 位 × 15 条 × $0.005 ≈ $0.5/天 ≈ **$16/月**，记得去 console.x.com 的 **Billing** 里把月度
+  spending limit 调高到能覆盖这个量（之前示例设的是 $10，需要调大，否则超限后会拉取失败）
+- 日志会写到 `kol_radar/logs/daily_*.log`（已 gitignore，不会进版本库），自动清理 30 天前的旧日志
+- 想验证效果，先手动跑一次看看：`./daily_cron.sh /var/www/kol-radar 15 && tail -30 logs/daily_*.log`
 
 ---
 
