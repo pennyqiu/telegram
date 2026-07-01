@@ -324,15 +324,22 @@ def main():
     stamp = datetime.now().strftime("%Y%m%d_%H%M")
     json_path = out_dir / f"kol_feed_{stamp}.json"
     html_path = out_dir / f"kol_briefing_{stamp}.html"
+    html_str = build_html(data)
+    json_str = json.dumps(data, ensure_ascii=False, indent=2)
 
-    json_path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
-    html_path.write_text(build_html(data), encoding="utf-8")
+    json_path.write_text(json_str, encoding="utf-8")
+    html_path.write_text(html_str, encoding="utf-8")
+
+    # 固定文件名快照：始终指向「最新一次」，方便 nginx 用固定 index 托管
+    # （历史时间戳文件仍保留，便于回看/对比）
+    (out_dir / "index.html").write_text(html_str, encoding="utf-8")
+    (out_dir / "latest.json").write_text(json_str, encoding="utf-8")
 
     total_tweets = sum(k["tweet_count"] for k in data["kols"])
     total_posts = sum(k["newsletter_count"] for k in data["kols"])
     print(f"\n✅ 完成：{total_tweets} 条推文 + {total_posts} 篇 newsletter")
-    print(f"   结构化数据：{json_path}")
-    print(f"   可读简报：  {html_path}")
+    print(f"   结构化数据：{json_path}（固定入口：{out_dir / 'latest.json'}）")
+    print(f"   可读简报：  {html_path}（固定入口：{out_dir / 'index.html'}）")
 
     if total_tweets == 0 and args.source in ("tweets", "both"):
         print("\n⚠️ 没有抓到推文 —— X 数据源未配置或公共实例不可用。")
