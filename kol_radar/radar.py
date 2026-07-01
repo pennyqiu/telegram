@@ -188,8 +188,12 @@ def _esc(s: str) -> str:
     return (s or "").replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
 
 
-def build_html(data: dict) -> str:
+def build_html(data: dict, archive_index_exists: bool = False) -> str:
     ts = data["generated_at"].replace("T", " ")
+    archive_link = (
+        '<br><a href="archive_index.html" style="color:#38bdf8">🗂️ 查看各博主历史回溯归档 →</a>'
+        if archive_index_exists else ""
+    )
 
     # 按 category 分组（保持 CATEGORY_LABELS 的声明顺序）
     by_cat: dict = {}
@@ -301,8 +305,83 @@ def build_html(data: dict) -> str:
   {''.join(sections)}
   <div class="footer">
     由 kol_radar/radar.py 自动生成 · 数据源见各卡片右上角标签<br>
-    本工具仅供研究，请遵守 X 平台条款与各文章站点版权
+    本工具仅供研究，请遵守 X 平台条款与各文章站点版权{archive_link}
   </div>
+</div>
+</body>
+</html>"""
+
+
+def build_archive_index(out_dir: Path) -> str:
+    """扫描 out_dir 下所有回溯归档产物，按博主分组生成一个导航页，
+    方便从一个入口跳转到各个博主的历史回溯简报，避免记文件名。"""
+    entries = []
+    for json_path in sorted(out_dir.glob("kol_feed_archive_*.json"), reverse=True):
+        html_path = json_path.with_name(json_path.name.replace("kol_feed_", "kol_briefing_")).with_suffix(".html")
+        if not html_path.exists():
+            continue
+        try:
+            data = json.loads(json_path.read_text(encoding="utf-8"))
+        except Exception:  # noqa: BLE001
+            continue
+        for kol in data.get("kols", []):
+            if not kol.get("tweet_count") and not kol.get("newsletter_count"):
+                continue
+            entries.append({
+                "name": kol.get("name", ""),
+                "handle": kol.get("handle", ""),
+                "tweet_count": kol.get("tweet_count", 0),
+                "newsletter_count": kol.get("newsletter_count", 0),
+                "generated_at": data.get("generated_at", ""),
+                "file": html_path.name,
+            })
+
+    by_handle: dict = {}
+    for e in entries:
+        by_handle.setdefault(e["handle"], []).append(e)
+
+    cards = []
+    for handle, items in sorted(by_handle.items(), key=lambda kv: kv[0].lower()):
+        name = items[0]["name"]
+        rows = "".join(
+            f"""
+          <div class="tweet">
+            <div class="tweet-meta">生成于 {_esc(it['generated_at'].replace('T',' '))}</div>
+            <div class="tweet-text"><a href="{_esc(it['file'])}">📄 {it['tweet_count']} 条推文
+              {f"+ {it['newsletter_count']} 篇 newsletter" if it['newsletter_count'] else ""}</a></div>
+          </div>"""
+            for it in items
+        )
+        cards.append(f"""
+        <div class="kol-card">
+          <div class="kol-head">
+            <span class="kol-name">{_esc(name)}</span>
+            <a class="kol-handle" href="https://x.com/{_esc(handle)}" target="_blank">@{_esc(handle)}</a>
+          </div>
+          {rows}
+        </div>""")
+
+    if not cards:
+        cards.append('<div class="empty">暂无回溯归档，先用 --since 拉一次。</div>')
+
+    ts = datetime.now().strftime("%Y-%m-%d %H:%M")
+    return f"""<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KOL 雷达 · 历史回溯归档索引</title>
+{CSS}
+</head>
+<body>
+<div class="container">
+  <h1>🗂️ KOL 雷达 · 历史回溯归档索引</h1>
+  <div class="subtitle">
+    更新时间：{ts} &nbsp;|&nbsp; 每位博主可能有多次回溯记录，按生成时间倒序排列
+    &nbsp;|&nbsp; <a href="index.html" style="color:#38bdf8">← 返回日常简报</a>
+  </div>
+  {''.join(cards)}
+  <div class="footer">由 kol_radar/radar.py --since 模式自动生成</div>
 </div>
 </body>
 </html>"""
@@ -355,10 +434,15 @@ def main():
                    include_replies=args.include_replies)
 
     stamp = datetime.now().strftime("%Y%m%d_%H%M")
-    tag = f"archive_{args.since}_to_{args.until or 'now'}" if args.since else stamp
+    if args.since:
+        # 归档文件名必须带 handle，否则不同博主同一时间段的回溯会互相覆盖
+        handles_tag = "-".join(sorted(k.handle for k in kols)) if len(kols) <= 3 else f"{len(kols)}kols"
+        tag = f"archive_{handles_tag}_{args.since}_to_{args.until or 'now'}"
+    else:
+        tag = stamp
     json_path = out_dir / f"kol_feed_{tag}.json"
     html_path = out_dir / f"kol_briefing_{tag}.html"
-    html_str = build_html(data)
+    html_str = build_html(data, archive_index_exists=(out_dir / "archive_index.html").exists())
     json_str = json.dumps(data, ensure_ascii=False, indent=2)
 
     json_path.write_text(json_str, encoding="utf-8")
@@ -367,6 +451,9 @@ def main():
     if args.since:
         # 回溯抓取是一次性研究用途，不覆盖日常简报的固定入口
         print(f"   （回溯模式不会覆盖 index.html / latest.json，避免影响日常简报）")
+        index_path = out_dir / "archive_index.html"
+        index_path.write_text(build_archive_index(out_dir), encoding="utf-8")
+        print(f"   归档导航页：{index_path}")
     else:
         # 固定文件名快照：始终指向「最新一次」，方便 nginx 用固定 index 托管
         # （历史时间戳文件仍保留，便于回看/对比）
