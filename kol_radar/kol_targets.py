@@ -46,6 +46,15 @@ TARGET_KOLS = [
         newsletter="Fabricated Knowledge",
         newsletter_rss="https://www.fabricatedknowledge.com/feed",
     ),
+    KOLProfile(
+        name="Serenity",
+        handle="aleabitoreddit",
+        category="Hardware & Semiconductor",
+        focus="AI/半导体供应链「瓶颈理论」(Bottleneck Theory)：挖掘被忽视的上游关键供应商",
+        # 前 Reddit WSB 交易者，本人声明「仅用 X 发布，谨防仿号」，无公开 newsletter
+        newsletter="",
+        newsletter_rss="",
+    ),
 
     # --- 2. AI 软件、云基础设施与大盘科技 ---
     KOLProfile(
