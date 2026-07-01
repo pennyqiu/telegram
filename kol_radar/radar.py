@@ -158,6 +158,9 @@ CSS = """
   .tweet-meta{font-size:11px;color:#64748b;margin-bottom:6px}
   .tweet-meta a{color:#64748b;text-decoration:none}
   .tweet-text{font-size:14px;line-height:1.6;color:#e2e8f0;white-space:pre-wrap}
+  .tweet-tags{margin-top:6px}
+  .tag{display:inline-block;background:#1e3a8a;color:#93c5fd;font-size:11px;
+       font-weight:600;border-radius:4px;padding:2px 6px;margin:2px 4px 0 0}
   .article{background:#0f172a;border:1px solid #334155;border-radius:8px;
            padding:10px 12px;margin-top:8px}
   .article-title{font-size:13px;font-weight:600;color:#fbbf24}
@@ -231,10 +234,16 @@ def build_html(data: dict) -> str:
                 meta = _esc(tw.get("created_at", ""))
                 if tw.get("tweet_url"):
                     meta = f'<a href="{_esc(tw["tweet_url"])}" target="_blank">{meta or "查看原推 ↗"}</a>'
+                tags = tw.get("cashtags") or []
+                tags_html = ""
+                if tags:
+                    badges = "".join(f'<span class="tag">${_esc(t)}</span>' for t in tags)
+                    tags_html = f'<div class="tweet-tags">{badges}</div>'
                 tweets_html.append(f"""
           <div class="tweet">
             <div class="tweet-meta">{meta}</div>
             <div class="tweet-text">{_esc(tw.get("text",""))}</div>
+            {tags_html}
             {''.join(arts)}
           </div>""")
 

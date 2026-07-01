@@ -45,6 +45,8 @@ class Tweet:
     created_at: str = ""          # ISO8601 字符串
     tweet_url: str = ""           # 指向推文本身
     article_urls: list = field(default_factory=list)  # 推文里引用的外部文章链接
+    cashtags: list = field(default_factory=list)       # 提到的股票代码，如 ["NVDA","AMZN"]（不含$，已去重）
+    hashtags: list = field(default_factory=list)       # 话题标签（不含#，已去重）
     source: str = ""              # 抓取后端来源（x_api / nitter / rsshub）
 
     def to_dict(self) -> dict:
@@ -101,8 +103,8 @@ def _extract_article_urls(*texts: str) -> list:
 #  后端 1：X 官方 API v2
 # ════════════════════════════════════════════════════════════════════
 
-def _full_text_and_urls(item: dict) -> tuple[str, list]:
-    """从推文 item 中取完整正文 + 外链。
+def _full_text_and_urls(item: dict) -> tuple[str, list, list, list]:
+    """从推文 item 中取完整正文 + 外链 + cashtags/hashtags。
 
     超过 280 字符的长文推文，默认 text 字段会被截断，完整正文在
     note_tweet.text 里（需请求 tweet.fields=note_tweet），对应的
@@ -118,7 +120,14 @@ def _full_text_and_urls(item: dict) -> tuple[str, list]:
         if exp and _is_external(exp):
             urls.append(exp)
     urls = list(dict.fromkeys(urls + _extract_article_urls(text)))
-    return text, urls
+
+    cashtags = list(dict.fromkeys(
+        (c.get("tag", "").upper() for c in entities.get("cashtags", []) if c.get("tag")
+    )))
+    hashtags = list(dict.fromkeys(
+        (h.get("tag", "") for h in entities.get("hashtags", []) if h.get("tag")
+    )))
+    return text, urls, cashtags, hashtags
 
 
 def fetch_via_x_api(handle: str, limit: int = 10) -> list:
@@ -150,7 +159,7 @@ def fetch_via_x_api(handle: str, limit: int = 10) -> list:
     payload = json.loads(raw)
     tweets = []
     for item in payload.get("data", [])[:limit]:
-        text, urls = _full_text_and_urls(item)
+        text, urls, cashtags, hashtags = _full_text_and_urls(item)
         tweets.append(Tweet(
             kol_handle=handle,
             id=item.get("id", ""),
@@ -158,6 +167,8 @@ def fetch_via_x_api(handle: str, limit: int = 10) -> list:
             created_at=item.get("created_at", ""),
             tweet_url=f"https://x.com/{handle}/status/{item.get('id', '')}",
             article_urls=urls,
+            cashtags=cashtags,
+            hashtags=hashtags,
             source="x_api",
         ))
     return tweets
@@ -219,7 +230,7 @@ def fetch_via_x_api_archive(
         if not data:
             break
         for item in data:
-            text, urls = _full_text_and_urls(item)
+            text, urls, cashtags, hashtags = _full_text_and_urls(item)
             tweets.append(Tweet(
                 kol_handle=handle,
                 id=item.get("id", ""),
@@ -227,6 +238,8 @@ def fetch_via_x_api_archive(
                 created_at=item.get("created_at", ""),
                 tweet_url=f"https://x.com/{handle}/status/{item.get('id', '')}",
                 article_urls=urls,
+                cashtags=cashtags,
+                hashtags=hashtags,
                 source="x_api_archive",
             ))
         next_token = payload.get("meta", {}).get("next_token", "")
