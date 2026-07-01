@@ -76,7 +76,10 @@ def collect(kols: list, limit: int, fetch_articles: bool,
         # ── 实时层：X 推文（或 --since 指定时间段的回溯抓取）──
         tweet_dicts = []
         backend = "skipped"
-        if want_tweets:
+        if want_tweets and kol.skip_tweets:
+            backend = "skipped(newsletter-only)"
+            print(f"      推文: 已跳过（该账号确认无原创X内容，仅走 newsletter）")
+        elif want_tweets:
             if since:
                 tweets, backend = fetch_tweets_archive(
                     kol.handle, since, until, max_tweets, include_replies,

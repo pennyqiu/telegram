@@ -17,11 +17,11 @@ SINCE="${1:-2026-01-01}"
 MAX_TWEETS="${2:-1000}"
 OUTPUT="${3:-/var/www/kol-radar}"
 
-# Serenity(aleabitoreddit) 已单独跑过，这里默认只跑剩下 6 位；
-# 如需连它一起重跑（例如换了更晚的 --since），把这行的注释去掉即可。
+# Serenity(aleabitoreddit) 已单独跑过，这里默认只跑剩下几位；
+# 如需连它一起重跑（例如换了更晚的 --since），把对应注释去掉即可。
 HANDLES=(
   SemiAnalysis_
-  FoolAllTheTime
+  # FoolAllTheTime  # 已确认无原创X内容（kol_targets.py 里 skip_tweets=True），历史回溯没有意义
   # aleabitoreddit
   Beth_Kindig
   jaminball

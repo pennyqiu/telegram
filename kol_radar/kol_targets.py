@@ -17,6 +17,8 @@ class KOLProfile:
     focus: str                 # 关注领域
     newsletter: str = ""       # 官方 newsletter / 博客名（无则留空）
     newsletter_rss: str = ""   # newsletter RSS 地址（免费全文源，无则留空）
+    skip_tweets: bool = False  # True 则跳过 X 抓取（daily_cron / backfill 都不再调用 API），
+                                # 用于确认该账号在 X 上没有原创内容、只值得走 newsletter 的情况
 
 
 # 与 KOLProfile.category 对应的中文标签（用于 HTML 分组展示）
@@ -41,12 +43,15 @@ TARGET_KOLS = [
     ),
     KOLProfile(
         name="Fabricated Knowledge",
-        # Doug O'Laughlin 的真实 X handle 是 @FoolAllTheTime（匿名推特），不是 @PhabulousFab
+        # Doug O'Laughlin 的真实 X handle 是 @FoolAllTheTime（匿名推特），不是 @PhabulousFab；
+        # handle 本身没问题（能正常解析用户），但实测无论最近推文还是半年历史回溯都是 0 条原创内容
+        # （他基本只转发自己 newsletter 链接），X track 无增量价值，故关闭，只保留免费的 newsletter
         handle="FoolAllTheTime",
         category="Hardware & Semiconductor",
         focus="晶圆代工(TSMC/特种代工)、半导体设备(ASML/AMAT)财务模型与估值水位",
         newsletter="Fabricated Knowledge",
         newsletter_rss="https://www.fabricatedknowledge.com/feed",
+        skip_tweets=True,
     ),
     KOLProfile(
         name="Serenity",
