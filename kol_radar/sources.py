@@ -21,6 +21,7 @@ import html
 import json
 import urllib.request
 import urllib.error
+import urllib.parse
 from dataclasses import dataclass, field, asdict
 from datetime import datetime, timezone
 from xml.etree import ElementTree as ET
@@ -144,6 +145,83 @@ def fetch_via_x_api(handle: str, limit: int = 10) -> list:
     return tweets
 
 
+def fetch_via_x_api_archive(
+    handle: str,
+    since: str,
+    until: str = "",
+    max_total: int = 500,
+    include_replies: bool = False,
+) -> list:
+    """全档案搜索（/2/tweets/search/all），用于一次性回溯某个时间段内的全部内容。
+
+    需 X_BEARER_TOKEN 且账户为 pay-per-use / Enterprise（2026 起按量付费账户已放开此接口）。
+    每条约 $0.005，请通过 max_total 控制成本上限。
+    since/until 支持 'YYYY-MM-DD' 或完整 ISO8601（自动补全为 UTC）。
+    """
+    token = os.environ.get("X_BEARER_TOKEN", "").strip()
+    if not token:
+        raise RuntimeError("未配置 X_BEARER_TOKEN，无法使用全档案搜索")
+
+    def _to_iso(s: str) -> str:
+        s = s.strip()
+        if not s:
+            return ""
+        if len(s) == 10:  # YYYY-MM-DD
+            s += "T00:00:00Z"
+        elif not s.endswith("Z") and "+" not in s:
+            s += "Z"
+        return s
+
+    start_time = _to_iso(since)
+    end_time = _to_iso(until)
+
+    query = f"from:{handle} -is:retweet"
+    if not include_replies:
+        query += " -is:reply"
+
+    headers = {"Authorization": f"Bearer {token}"}
+    tweets = []
+    next_token = ""
+    while len(tweets) < max_total:
+        params = {
+            "query": query,
+            "max_results": 500,
+            "tweet.fields": "created_at,entities,text",
+        }
+        if start_time:
+            params["start_time"] = start_time
+        if end_time:
+            params["end_time"] = end_time
+        if next_token:
+            params["next_token"] = next_token
+        qs = urllib.parse.urlencode(params)
+        raw = _http_get(f"https://api.x.com/2/tweets/search/all?{qs}", headers=headers)
+        payload = json.loads(raw)
+        data = payload.get("data", [])
+        if not data:
+            break
+        for item in data:
+            urls = []
+            for u in item.get("entities", {}).get("urls", []):
+                exp = u.get("expanded_url") or u.get("url", "")
+                if exp and _is_external(exp):
+                    urls.append(exp)
+            urls = list(dict.fromkeys(urls + _extract_article_urls(item.get("text", ""))))
+            tweets.append(Tweet(
+                kol_handle=handle,
+                id=item.get("id", ""),
+                text=_clean_text(item.get("text", "")),
+                created_at=item.get("created_at", ""),
+                tweet_url=f"https://x.com/{handle}/status/{item.get('id', '')}",
+                article_urls=urls,
+                source="x_api_archive",
+            ))
+        next_token = payload.get("meta", {}).get("next_token", "")
+        if not next_token:
+            break
+    return tweets[:max_total]
+
+
 # ════════════════════════════════════════════════════════════════════
 #  后端 2/3：基于 RSS 的 Nitter / RSSHub
 # ════════════════════════════════════════════════════════════════════
@@ -228,3 +306,17 @@ def fetch_tweets(handle: str, limit: int = 10) -> tuple[list, str]:
             errors.append(f"{name}: {e}")
     # 全部失败：返回空 + 错误摘要
     return [], "FAILED(" + "; ".join(errors) + ")"
+
+
+def fetch_tweets_archive(
+    handle: str, since: str, until: str = "", max_total: int = 500,
+    include_replies: bool = False,
+) -> tuple[list, str]:
+    """回溯抓取模式：仅支持 x_api（需 pay-per-use 权限），失败直接报错，不降级。"""
+    try:
+        tweets = fetch_via_x_api_archive(handle, since, until, max_total, include_replies)
+        return tweets, "x_api_archive"
+    except urllib.error.HTTPError as e:
+        return [], f"FAILED(x_api_archive: HTTP {e.code})"
+    except Exception as e:  # noqa: BLE001
+        return [], f"FAILED(x_api_archive: {e})"

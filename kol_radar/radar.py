@@ -14,6 +14,9 @@ KOL 雷达 · 主程序
   python radar.py --no-articles   # 只抓推文，不抓外部文章正文（更快）
   python radar.py --handles SemiAnalysis,jaminball   # 只抓指定 KOL
 
+  # 回溯模式：一次性拉取指定时间段内某 KOL 的全部原创内容（全档案搜索，按量计费）
+  python radar.py --handles aleabitoreddit --since 2026-01-01 --max-tweets 1000
+
 数据源通过环境变量配置（见 .env.example）：
   KOL_SOURCE=x_api|nitter|rsshub   首选后端（失败自动降级）
   X_BEARER_TOKEN=...               官方 API（推荐）
@@ -34,7 +37,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from kol_targets import TARGET_KOLS, CATEGORY_LABELS, KOLProfile  # noqa: E402
-from sources import fetch_tweets  # noqa: E402
+from sources import fetch_tweets, fetch_tweets_archive  # noqa: E402
 from article_extractor import fetch_article  # noqa: E402
 from newsletters import fetch_newsletter_safe  # noqa: E402
 
@@ -59,7 +62,9 @@ def _load_env():
 # ════════════════════════════════════════════════════════════════════
 
 def collect(kols: list, limit: int, fetch_articles: bool,
-            source: str = "both", news_limit: int = 5) -> dict:
+            source: str = "both", news_limit: int = 5,
+            since: str = "", until: str = "", max_tweets: int = 500,
+            include_replies: bool = False) -> dict:
     results = []
     article_cache: dict = {}  # url -> Article.to_dict()，避免重复抓取
     want_tweets = source in ("tweets", "both")
@@ -68,11 +73,16 @@ def collect(kols: list, limit: int, fetch_articles: bool,
     for kol in kols:
         print(f"  → @{kol.handle} ({kol.name})", flush=True)
 
-        # ── 实时层：X 推文 ──
+        # ── 实时层：X 推文（或 --since 指定时间段的回溯抓取）──
         tweet_dicts = []
         backend = "skipped"
         if want_tweets:
-            tweets, backend = fetch_tweets(kol.handle, limit)
+            if since:
+                tweets, backend = fetch_tweets_archive(
+                    kol.handle, since, until, max_tweets, include_replies,
+                )
+            else:
+                tweets, backend = fetch_tweets(kol.handle, limit)
             print(f"      推文: {len(tweets)} 条 [{backend}]")
             for tw in tweets:
                 articles = []
@@ -302,6 +312,14 @@ def main():
     parser.add_argument("--no-articles", action="store_true", help="不抓取推文里的外部文章正文")
     parser.add_argument("--handles", type=str, default="", help="只抓指定 handle（逗号分隔）")
     parser.add_argument("--output", type=str, default="", help="自定义输出目录")
+    parser.add_argument("--since", type=str, default="",
+                        help="回溯抓取起始日期(YYYY-MM-DD)，指定后改用全档案搜索一次性拉取该时间段全部内容"
+                             "（需 X_BEARER_TOKEN 为 pay-per-use 权限，按量计费，务必配合 --max-tweets 控制成本）")
+    parser.add_argument("--until", type=str, default="", help="回溯抓取结束日期(YYYY-MM-DD)，默认到现在")
+    parser.add_argument("--max-tweets", type=int, default=500,
+                        help="--since 模式下单个 KOL 最多抓取的条数上限，防止超额扣费（默认 500，约 $2.5）")
+    parser.add_argument("--include-replies", action="store_true",
+                        help="--since 模式下是否包含回复（默认只抓原创推文，不含转发/回复）")
     args = parser.parse_args()
 
     _load_env()
@@ -317,29 +335,44 @@ def main():
     out_dir = Path(args.output) if args.output else OUTPUT_DIR
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    print(f"📡 开始采集 {len(kols)} 位 KOL（source={args.source}）...")
+    if args.since:
+        print(f"📡 回溯模式：{args.since} ~ {args.until or '现在'}，"
+              f"每 KOL 上限 {args.max_tweets} 条（约 ${args.max_tweets * 0.005 * len(kols):.2f}）...")
+    else:
+        print(f"📡 开始采集 {len(kols)} 位 KOL（source={args.source}）...")
     data = collect(kols, args.limit, fetch_articles=not args.no_articles,
-                   source=args.source, news_limit=args.news_limit)
+                   source=args.source, news_limit=args.news_limit,
+                   since=args.since, until=args.until, max_tweets=args.max_tweets,
+                   include_replies=args.include_replies)
 
     stamp = datetime.now().strftime("%Y%m%d_%H%M")
-    json_path = out_dir / f"kol_feed_{stamp}.json"
-    html_path = out_dir / f"kol_briefing_{stamp}.html"
+    tag = f"archive_{args.since}_to_{args.until or 'now'}" if args.since else stamp
+    json_path = out_dir / f"kol_feed_{tag}.json"
+    html_path = out_dir / f"kol_briefing_{tag}.html"
     html_str = build_html(data)
     json_str = json.dumps(data, ensure_ascii=False, indent=2)
 
     json_path.write_text(json_str, encoding="utf-8")
     html_path.write_text(html_str, encoding="utf-8")
 
-    # 固定文件名快照：始终指向「最新一次」，方便 nginx 用固定 index 托管
-    # （历史时间戳文件仍保留，便于回看/对比）
-    (out_dir / "index.html").write_text(html_str, encoding="utf-8")
-    (out_dir / "latest.json").write_text(json_str, encoding="utf-8")
+    if args.since:
+        # 回溯抓取是一次性研究用途，不覆盖日常简报的固定入口
+        print(f"   （回溯模式不会覆盖 index.html / latest.json，避免影响日常简报）")
+    else:
+        # 固定文件名快照：始终指向「最新一次」，方便 nginx 用固定 index 托管
+        # （历史时间戳文件仍保留，便于回看/对比）
+        (out_dir / "index.html").write_text(html_str, encoding="utf-8")
+        (out_dir / "latest.json").write_text(json_str, encoding="utf-8")
 
     total_tweets = sum(k["tweet_count"] for k in data["kols"])
     total_posts = sum(k["newsletter_count"] for k in data["kols"])
     print(f"\n✅ 完成：{total_tweets} 条推文 + {total_posts} 篇 newsletter")
-    print(f"   结构化数据：{json_path}（固定入口：{out_dir / 'latest.json'}）")
-    print(f"   可读简报：  {html_path}（固定入口：{out_dir / 'index.html'}）")
+    if args.since:
+        print(f"   结构化数据：{json_path}")
+        print(f"   可读简报：  {html_path}")
+    else:
+        print(f"   结构化数据：{json_path}（固定入口：{out_dir / 'latest.json'}）")
+        print(f"   可读简报：  {html_path}（固定入口：{out_dir / 'index.html'}）")
 
     if total_tweets == 0 and args.source in ("tweets", "both"):
         print("\n⚠️ 没有抓到推文 —— X 数据源未配置或公共实例不可用。")
