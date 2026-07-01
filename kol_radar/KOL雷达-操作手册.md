@@ -118,6 +118,20 @@ python3 radar.py --handles aleabitoreddit --since 2026-01-01 --max-tweets 1000
 - [ ] 用 `aleabitoreddit` 试跑 `--since 2026-01-01 --max-tweets 50` 验证效果和实际条数/费用比例，再决定是否放大到 `--max-tweets 1000+`
 - [ ] 确认该模式只按需手动执行，不要写进 `crontab` 日常任务，避免重复扣费
 
+### 拉完之后：压缩成适合喂 AI 分析的摘要（`digest.py`）
+
+原始 JSON 字段多（id/source/backend/entities 等），直接喂给 AI 会浪费 token。跑完 `backfill_all.sh` 后：
+
+```bash
+python3 digest.py --input-dir /var/www/kol-radar
+```
+
+会在 `/var/www/kol-radar/digest/` 下生成：
+- `digest_<handle>.md` × 每位博主一份（正文+引用链接+cashtags，按时间排序，多次抓取自动去重）
+- `digest_all_timeline.md`：全部博主合并的时间线，适合横向对比分析（比如"这几位对英伟达的观点有什么分歧"）
+
+生成的 `.md` 文件可以直接拖进 AI 对话或用 `@文件名` 引用分析。
+
 ---
 
 ## 6. 已知问题 / 待跟进项
