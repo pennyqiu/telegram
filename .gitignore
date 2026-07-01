@@ -19,3 +19,6 @@ __pycache__/
 # 运行日志
 *.log
 **/logs/
+
+# kol_radar 运行产物
+kol_radar/output/

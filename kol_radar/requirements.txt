@@ -1,0 +1,4 @@
+# kol_radar 依赖
+# 注：核心抓取/RSS 解析用标准库实现，下面两个为「正文提取增强」，强烈建议安装。
+beautifulsoup4>=4.12.0   # 文章正文提取（无则退化为正则，质量下降）
+requests>=2.31.0         # 备用 HTTP（当前代码用 urllib，requests 仅为扩展预留）
