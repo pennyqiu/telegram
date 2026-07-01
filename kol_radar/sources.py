@@ -62,10 +62,13 @@ def _http_get(url: str, headers: dict | None = None, timeout: int = 20) -> bytes
 
 
 def _clean_text(raw: str) -> str:
-    """去 HTML 标签 + 反转义实体，得到纯文本推文。"""
+    """去 HTML 标签 + 反转义实体，得到纯文本推文。保留原有换行/分段，
+    仅压缩同一行内的多余空格、以及超过 2 个的连续空行。"""
     no_tags = re.sub(r"<[^>]+>", " ", raw or "")
     text = html.unescape(no_tags)
-    return re.sub(r"\s+", " ", text).strip()
+    text = re.sub(r"[ \t]+", " ", text)
+    text = re.sub(r"\n{3,}", "\n\n", text)
+    return text.strip()
 
 
 def _is_external(url: str) -> bool:
@@ -98,6 +101,26 @@ def _extract_article_urls(*texts: str) -> list:
 #  后端 1：X 官方 API v2
 # ════════════════════════════════════════════════════════════════════
 
+def _full_text_and_urls(item: dict) -> tuple[str, list]:
+    """从推文 item 中取完整正文 + 外链。
+
+    超过 280 字符的长文推文，默认 text 字段会被截断，完整正文在
+    note_tweet.text 里（需请求 tweet.fields=note_tweet），对应的
+    entities 也要用 note_tweet.entities（而不是外层 entities）。
+    """
+    note = item.get("note_tweet") or {}
+    text = note.get("text") or item.get("text", "")
+    entities = note.get("entities") or item.get("entities", {})
+
+    urls = []
+    for u in entities.get("urls", []):
+        exp = u.get("expanded_url") or u.get("url", "")
+        if exp and _is_external(exp):
+            urls.append(exp)
+    urls = list(dict.fromkeys(urls + _extract_article_urls(text)))
+    return text, urls
+
+
 def fetch_via_x_api(handle: str, limit: int = 10) -> list:
     token = os.environ.get("X_BEARER_TOKEN", "").strip()
     if not token:
@@ -114,9 +137,10 @@ def fetch_via_x_api(handle: str, limit: int = 10) -> list:
         raise RuntimeError(f"x_api 未能解析 @{handle} 的用户 ID")
 
     # 2) 拉取最近推文，展开 entities.urls 拿到 expanded_url
+    #    note_tweet：超过 280 字符的长文推文，完整正文需靠这个字段（否则 text 会被截断）
     params = (
         f"max_results={max(5, min(limit, 100))}"
-        "&tweet.fields=created_at,entities,text"
+        "&tweet.fields=created_at,entities,text,note_tweet"
         "&exclude=retweets,replies"
     )
     raw = _http_get(
@@ -126,17 +150,11 @@ def fetch_via_x_api(handle: str, limit: int = 10) -> list:
     payload = json.loads(raw)
     tweets = []
     for item in payload.get("data", [])[:limit]:
-        urls = []
-        for u in item.get("entities", {}).get("urls", []):
-            exp = u.get("expanded_url") or u.get("url", "")
-            if exp and _is_external(exp):
-                urls.append(exp)
-        # 正文里可能还有未被 entities 收录的链接，补扫一次
-        urls = list(dict.fromkeys(urls + _extract_article_urls(item.get("text", ""))))
+        text, urls = _full_text_and_urls(item)
         tweets.append(Tweet(
             kol_handle=handle,
             id=item.get("id", ""),
-            text=_clean_text(item.get("text", "")),
+            text=_clean_text(text),
             created_at=item.get("created_at", ""),
             tweet_url=f"https://x.com/{handle}/status/{item.get('id', '')}",
             article_urls=urls,
@@ -186,7 +204,7 @@ def fetch_via_x_api_archive(
         params = {
             "query": query,
             "max_results": 500,
-            "tweet.fields": "created_at,entities,text",
+            "tweet.fields": "created_at,entities,text,note_tweet",
         }
         if start_time:
             params["start_time"] = start_time
@@ -201,16 +219,11 @@ def fetch_via_x_api_archive(
         if not data:
             break
         for item in data:
-            urls = []
-            for u in item.get("entities", {}).get("urls", []):
-                exp = u.get("expanded_url") or u.get("url", "")
-                if exp and _is_external(exp):
-                    urls.append(exp)
-            urls = list(dict.fromkeys(urls + _extract_article_urls(item.get("text", ""))))
+            text, urls = _full_text_and_urls(item)
             tweets.append(Tweet(
                 kol_handle=handle,
                 id=item.get("id", ""),
-                text=_clean_text(item.get("text", "")),
+                text=_clean_text(text),
                 created_at=item.get("created_at", ""),
                 tweet_url=f"https://x.com/{handle}/status/{item.get('id', '')}",
                 article_urls=urls,
