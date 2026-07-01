@@ -29,6 +29,7 @@ from __future__ import annotations
 import os
 import sys
 import json
+import time
 import argparse
 from datetime import datetime
 from pathlib import Path
@@ -70,8 +71,15 @@ def collect(kols: list, limit: int, fetch_articles: bool,
     want_tweets = source in ("tweets", "both")
     want_news = source in ("newsletter", "both")
 
+    is_first = True
     for kol in kols:
         print(f"  → @{kol.handle} ({kol.name})", flush=True)
+
+        # search/all 接口对短时内连续请求限流很敏感，多个 KOL 紧挨着抓很容易撞 429，
+        # 每个 KOL 之间留 1.5s 间隔，成本不变，但能大幅减少被限流重试的次数
+        if since and want_tweets and not kol.skip_tweets and not is_first:
+            time.sleep(1.5)
+        is_first = False
 
         # ── 实时层：X 推文（或 --since 指定时间段的回溯抓取）──
         tweet_dicts = []

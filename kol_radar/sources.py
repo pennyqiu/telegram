@@ -19,6 +19,7 @@ import os
 import re
 import html
 import json
+import time
 import urllib.request
 import urllib.error
 import urllib.parse
@@ -57,10 +58,33 @@ class Tweet:
 #  工具函数
 # ════════════════════════════════════════════════════════════════════
 
-def _http_get(url: str, headers: dict | None = None, timeout: int = 20) -> bytes:
+def _http_get(url: str, headers: dict | None = None, timeout: int = 20,
+              max_retries: int = 4) -> bytes:
+    """带重试的 GET：429（限流）/5xx（临时故障）自动退避重试，
+    优先读取响应的 Retry-After 头，没有就用递增等待（2/5/10/20 秒）。
+    连续多个 KOL 紧挨着请求 X 的 search/all 接口很容易撞到短时限流，
+    这里重试比直接放弃更划算——不会多花钱，只是把这次请求往后挪一点。"""
     req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT, **(headers or {})})
-    with urllib.request.urlopen(req, timeout=timeout) as resp:
-        return resp.read()
+    backoffs = [2, 5, 10, 20]
+    last_error: Exception | None = None
+    for attempt in range(max_retries + 1):
+        try:
+            with urllib.request.urlopen(req, timeout=timeout) as resp:
+                return resp.read()
+        except urllib.error.HTTPError as e:
+            last_error = e
+            if e.code not in (429, 500, 502, 503, 504) or attempt == max_retries:
+                raise
+            wait = backoffs[min(attempt, len(backoffs) - 1)]
+            retry_after = e.headers.get("Retry-After") if e.headers else None
+            if retry_after:
+                try:
+                    wait = max(wait, int(float(retry_after)))
+                except ValueError:
+                    pass
+            print(f"      ⏳ HTTP {e.code}，{wait}s 后重试（第 {attempt + 1}/{max_retries} 次）", flush=True)
+            time.sleep(wait)
+    raise last_error  # pragma: no cover
 
 
 def _clean_text(raw: str) -> str:
