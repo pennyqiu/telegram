@@ -199,7 +199,8 @@ def _esc(s: str) -> str:
     return (s or "").replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
 
 
-def build_html(data: dict, archive_index_exists: bool = False, analysis_exists: bool = False) -> str:
+def build_html(data: dict, archive_index_exists: bool = False, analysis_exists: bool = False,
+              show_downloads: bool = False, daily_digest_exists: bool = False) -> str:
     ts = data["generated_at"].replace("T", " ")
     archive_link = (
         '<br><a href="archive_index.html" style="color:#38bdf8">🗂️ 查看各博主历史回溯归档 →</a>'
@@ -209,6 +210,16 @@ def build_html(data: dict, archive_index_exists: bool = False, analysis_exists: 
         '<br><a href="digest/analysis_latest.html" style="color:#38bdf8">🤖 查看今日 AI 分析 →</a>'
         if analysis_exists else ""
     )
+    downloads_link = ""
+    if show_downloads:
+        downloads_link = (
+            '<br><a href="latest.json" download style="color:#38bdf8">⬇️ 下载今日 JSON 数据（latest.json）</a>'
+        )
+        if daily_digest_exists:
+            downloads_link += (
+                '<br><a href="digest/daily_digest_latest.md" download style="color:#38bdf8">'
+                '⬇️ 下载今日精简摘要（Markdown，可直接喂 AI）</a>'
+            )
 
     # 按 category 分组（保持 CATEGORY_LABELS 的声明顺序）
     by_cat: dict = {}
@@ -320,7 +331,7 @@ def build_html(data: dict, archive_index_exists: bool = False, analysis_exists: 
   {''.join(sections)}
   <div class="footer">
     由 kol_radar/radar.py 自动生成 · 数据源见各卡片右上角标签<br>
-    本工具仅供研究，请遵守 X 平台条款与各文章站点版权{archive_link}{analysis_link}
+    本工具仅供研究，请遵守 X 平台条款与各文章站点版权{archive_link}{analysis_link}{downloads_link}
   </div>
 </div>
 </body>
@@ -469,6 +480,8 @@ def main():
         data,
         archive_index_exists=(out_dir / "archive_index.html").exists(),
         analysis_exists=(out_dir / "digest" / "analysis_latest.html").exists(),
+        show_downloads=not is_archive,
+        daily_digest_exists=(out_dir / "digest" / "daily_digest_latest.md").exists(),
     )
     json_str = json.dumps(data, ensure_ascii=False, indent=2)
 
