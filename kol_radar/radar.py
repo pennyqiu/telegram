@@ -110,7 +110,10 @@ def collect(kols: list, limit: int, fetch_articles: bool,
         # ── 深度层：官方 newsletter 全文 ──
         news_dicts = []
         news_status = "skipped"
-        if want_news:
+        if want_news and kol.skip_newsletter:
+            news_status = "skipped(paywalled-no-value)"
+            print(f"      newsletter[{kol.newsletter}]: 已跳过（确认全文付费墙/摘要过短，拉取无分析价值）")
+        elif want_news:
             posts, news_status = fetch_newsletter_safe(kol.handle, kol.newsletter_rss, news_limit)
             if kol.newsletter_rss:
                 print(f"      newsletter[{kol.newsletter}]: {len(posts)} 篇 [{news_status}]")

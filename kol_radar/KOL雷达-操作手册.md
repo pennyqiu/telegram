@@ -30,7 +30,7 @@
 | 半导体与硬核硬件 | Fabricated Knowledge | `@FoolAllTheTime` | `fabricatedknowledge.com/feed` | ✅ 全文（实测 7499 词，深度长文） |
 | AI 软件与云 | Beth Kindig | `@Beth_Kindig` | `iofund.substack.com/feed` | ⚠️ 2026-02 起 Substack 关闭迁至 `io-fund.com`，需跟进改地址 |
 | AI 软件与云 | Jamin Ball | `@jaminball` | `cloudedjudgement.substack.com/feed` | ✅ 全文（实测 2757 词，更新到当周） |
-| 宏观与应用科技 | Matthew Ball | `@ballmatthew` | `matthewball.co/all?format=rss` | ⚠️ RSS 仅给摘要（14 词），需抓正文页补全 |
+| 宏观与应用科技 | Matthew Ball | `@ballmatthew` | `matthewball.co/all?format=rss` | ❌ 实测全部付费墙，RSS 只给几十字摘要，已关闭抓取（`skip_newsletter=True`），只保留 X 推文 |
 | 开源情报 | itsone | `@itsone` | 无 | ❌ 仅能走 X / 历史推文归档 |
 
 ---
@@ -137,7 +137,8 @@ python3 digest.py --input-dir /var/www/kol-radar
 ## 6. 已知问题 / 待跟进项
 
 - [ ] Beth Kindig 的 Substack 将于 2026-02 关闭并迁至 `io-fund.com`，需在 `kol_targets.py` 更新 `newsletter_rss`
-- [ ] Matthew Ball 的 RSS 只给摘要，若需要全文，需扩展 `article_extractor.py` 对 `matthewball.co` 正文页做二次抓取
+- [x] Matthew Ball 的 RSS 只给摘要且全部付费墙：已确认拉取无分析价值，`kol_targets.py` 里设
+      `skip_newsletter=True` 关闭抓取，只保留 X 推文这一路（若之后他开放全文/换渠道，可以改回来）
 - [ ] itsone 暂无覆盖方案，需决定是否值得为单一账号接入历史推文 API
 
 ---

@@ -19,6 +19,8 @@ class KOLProfile:
     newsletter_rss: str = ""   # newsletter RSS 地址（免费全文源，无则留空）
     skip_tweets: bool = False  # True 则跳过 X 抓取（daily_cron / backfill 都不再调用 API），
                                 # 用于确认该账号在 X 上没有原创内容、只值得走 newsletter 的情况
+    skip_newsletter: bool = False  # True 则跳过 newsletter 抓取，用于确认其 newsletter 全是付费墙、
+                                    # RSS 只给几十字摘要、拉下来没有分析价值的情况
 
 
 # 与 KOLProfile.category 对应的中文标签（用于 HTML 分组展示）
@@ -89,7 +91,10 @@ TARGET_KOLS = [
         category="Macro & Applied Tech",
         focus="3D引擎(Unreal/Unity)、空间计算、AI具身智能宏观推演",
         newsletter="MatthewBall.co Essays",
+        # RSS 只给标题+十几个字的摘要（实测全是付费墙），拉下来的 excerpt 没有分析价值，
+        # 故关闭 newsletter 抓取，只保留 X 实时推文这一路
         newsletter_rss="https://www.matthewball.co/all?format=rss",
+        skip_newsletter=True,
     ),
     KOLProfile(
         name="itsone",
