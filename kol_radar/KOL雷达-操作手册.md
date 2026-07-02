@@ -22,6 +22,10 @@
 
 ## 2. KOL 清单与数据源结论表
 
+> 💡 想让某位博主在简报页最顶部单独置顶展示（带 ⭐ 高亮），在 `kol_targets.py` 里给他的
+> `KOLProfile` 加一行 `featured=True` 即可，会自动脱离原来的分类区块单独显示在最前面。
+> 目前 Serenity（`@aleabitoreddit`）已设为 `featured=True`。
+
 在 `kol_targets.py` 维护，每人的最优数据源如下：
 
 | 分类 | KOL | X handle | 官方 Newsletter（免费全文源） | 全文情况 |

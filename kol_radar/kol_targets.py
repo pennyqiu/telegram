@@ -21,6 +21,8 @@ class KOLProfile:
                                 # 用于确认该账号在 X 上没有原创内容、只值得走 newsletter 的情况
     skip_newsletter: bool = False  # True 则跳过 newsletter 抓取，用于确认其 newsletter 全是付费墙、
                                     # RSS 只给几十字摘要、拉下来没有分析价值的情况
+    featured: bool = False     # True 则在简报页最顶部单独置顶展示（不再出现在下面的分类区块里），
+                                # 用于标记重点关注的博主
 
 
 # 与 KOLProfile.category 对应的中文标签（用于 HTML 分组展示）
@@ -32,6 +34,18 @@ CATEGORY_LABELS = {
 
 
 TARGET_KOLS = [
+    # --- 0. 重点关注（featured=True，简报页最顶部单独置顶） ---
+    KOLProfile(
+        name="Serenity",
+        handle="aleabitoreddit",
+        category="Hardware & Semiconductor",
+        focus="AI/半导体供应链「瓶颈理论」(Bottleneck Theory)：挖掘被忽视的上游关键供应商",
+        # 前 Reddit WSB 交易者，本人声明「仅用 X 发布，谨防仿号」，无公开 newsletter
+        newsletter="",
+        newsletter_rss="",
+        featured=True,
+    ),
+
     # --- 1. 半导体与硬核硬件 ---
     KOLProfile(
         name="Dylan Patel",
@@ -53,15 +67,6 @@ TARGET_KOLS = [
         newsletter="Fabricated Knowledge",
         newsletter_rss="https://www.fabricatedknowledge.com/feed",
         skip_tweets=True,
-    ),
-    KOLProfile(
-        name="Serenity",
-        handle="aleabitoreddit",
-        category="Hardware & Semiconductor",
-        focus="AI/半导体供应链「瓶颈理论」(Bottleneck Theory)：挖掘被忽视的上游关键供应商",
-        # 前 Reddit WSB 交易者，本人声明「仅用 X 发布，谨防仿号」，无公开 newsletter
-        newsletter="",
-        newsletter_rss="",
     ),
 
     # --- 2. AI 软件、云基础设施与大盘科技 ---

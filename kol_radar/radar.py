@@ -124,6 +124,7 @@ def collect(kols: list, limit: int, fetch_articles: bool,
             "handle": kol.handle,
             "category": kol.category,
             "category_label": CATEGORY_LABELS.get(kol.category, kol.category),
+            "featured": kol.featured,
             "focus": kol.focus,
             "backend": backend,
             "tweet_count": len(tweet_dicts),
@@ -161,6 +162,10 @@ CSS = """
        border-bottom:1px solid #1e293b;padding-bottom:6px}
   .kol-card{background:#1e293b;border:1px solid #334155;border-radius:12px;
             padding:18px;margin-bottom:18px}
+  .kol-card.featured{border:1px solid #fbbf24;box-shadow:0 0 0 1px rgba(251,191,36,.25),
+                      0 4px 16px rgba(251,191,36,.08)}
+  .cat.featured-cat{color:#fbbf24}
+  .star{filter:drop-shadow(0 0 4px rgba(251,191,36,.6))}
   .kol-head{display:flex;align-items:baseline;gap:10px;margin-bottom:4px}
   .kol-name{font-size:16px;font-weight:700;color:#f8fafc}
   .kol-handle{color:#38bdf8;font-size:13px;text-decoration:none}
@@ -202,6 +207,88 @@ def _esc(s: str) -> str:
     return (s or "").replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
 
 
+def _build_kol_card(kol: dict) -> str:
+    tweets_html = []
+    if kol["backend"] == "skipped":
+        pass  # 本次未抓推文（--source newsletter）
+    elif not kol["tweets"]:
+        tweets_html.append(
+            f'<div class="empty">未抓到推文（{_esc(kol["backend"])}）。'
+            f'需配置 X API，详见 README。</div>'
+        )
+    for tw in kol["tweets"]:
+        arts = []
+        for a in tw.get("articles", []):
+            if a.get("ok") and a.get("excerpt"):
+                arts.append(f"""
+    <div class="article">
+      <div class="article-title"><a href="{_esc(a['final_url'] or a['url'])}" target="_blank">📄 {_esc(a['title'])}</a></div>
+      <div class="article-meta">{_esc(a['final_url'] or a['url'])} · 约 {a.get('word_count',0)} 词</div>
+      <div class="article-excerpt">{_esc(a['excerpt'])}</div>
+    </div>""")
+            elif a.get("ok"):
+                arts.append(f"""
+    <div class="article">
+      <div class="article-title"><a href="{_esc(a['final_url'] or a['url'])}" target="_blank">🔗 {_esc(a['title'] or a['url'])}</a></div>
+    </div>""")
+            else:
+                arts.append(f"""
+    <div class="article">
+      <div class="article-title"><a href="{_esc(a['url'])}" target="_blank">🔗 {_esc(a['url'])}</a></div>
+      <div class="article-err">⚠️ 正文抓取失败：{_esc(a.get('error',''))}</div>
+    </div>""")
+        meta = _esc(tw.get("created_at", ""))
+        if tw.get("tweet_url"):
+            meta = f'<a href="{_esc(tw["tweet_url"])}" target="_blank">{meta or "查看原推 ↗"}</a>'
+        tags = tw.get("cashtags") or []
+        tags_html = ""
+        if tags:
+            badges = "".join(f'<span class="tag">${_esc(t)}</span>' for t in tags)
+            tags_html = f'<div class="tweet-tags">{badges}</div>'
+        tweets_html.append(f"""
+  <div class="tweet">
+    <div class="tweet-meta">{meta}</div>
+    <div class="tweet-text">{_esc(tw.get("text",""))}</div>
+    {tags_html}
+    {''.join(arts)}
+  </div>""")
+
+    # newsletter 全文区块
+    news_html = []
+    for p in kol.get("newsletter_posts", []):
+        pill = '<span class="pill">仅预览/付费</span>' if p.get("paywalled") else ""
+        news_html.append(f"""
+    <div class="post">
+      <div class="post-title"><a href="{_esc(p['link'])}" target="_blank">📰 {_esc(p['title'])}</a>{pill}</div>
+      <div class="post-meta">{_esc(p['published'])} · 约 {p.get('word_count',0)} 词</div>
+      <div class="post-excerpt">{_esc(p['excerpt'])}</div>
+    </div>""")
+
+    # 组装两个区块（有内容才显示对应标题）
+    blocks = []
+    if tweets_html:
+        blocks.append('<div class="section-tag">⚡ X 实时短评</div>' + "".join(tweets_html))
+    if news_html:
+        label = _esc(kol.get("newsletter") or "Newsletter")
+        blocks.append(f'<div class="section-tag">📚 {label} · 深度全文</div>' + "".join(news_html))
+    if not blocks:
+        blocks.append('<div class="empty">本次无内容。</div>')
+
+    backend_label = kol['backend'] if kol['backend'] != 'skipped' else (kol.get('newsletter_status') or '')
+    card_class = "kol-card featured" if kol.get("featured") else "kol-card"
+    star = '<span class="star" title="重点关注">⭐</span> ' if kol.get("featured") else ""
+    return f"""
+<div class="{card_class}">
+  <span class="backend">{_esc(backend_label)}</span>
+  <div class="kol-head">
+    <span class="kol-name">{star}{_esc(kol['name'])}</span>
+    <a class="kol-handle" href="https://x.com/{_esc(kol['handle'])}" target="_blank">@{_esc(kol['handle'])}</a>
+  </div>
+  <div class="kol-focus">🎯 {_esc(kol['focus'])}</div>
+  {''.join(blocks)}
+</div>"""
+
+
 def build_html(data: dict, archive_index_exists: bool = False, analysis_exists: bool = False,
               show_downloads: bool = False, daily_digest_exists: bool = False) -> str:
     ts = data["generated_at"].replace("T", " ")
@@ -224,95 +311,24 @@ def build_html(data: dict, archive_index_exists: bool = False, analysis_exists: 
                 '⬇️ 下载今日精简摘要（Markdown，可直接喂 AI）</a>'
             )
 
-    # 按 category 分组（保持 CATEGORY_LABELS 的声明顺序）
-    by_cat: dict = {}
-    for kol in data["kols"]:
-        by_cat.setdefault(kol["category"], []).append(kol)
+    # 重点关注的博主单独置顶展示，不再出现在下面按 category 分组的区块里
+    featured_kols = [k for k in data["kols"] if k.get("featured")]
+    rest_kols = [k for k in data["kols"] if not k.get("featured")]
 
     sections = []
+    if featured_kols:
+        cards = [_build_kol_card(k) for k in featured_kols]
+        sections.append(f'<div class="cat featured-cat">⭐ 重点关注</div>\n{"".join(cards)}')
+
+    # 按 category 分组（保持 CATEGORY_LABELS 的声明顺序）
+    by_cat: dict = {}
+    for kol in rest_kols:
+        by_cat.setdefault(kol["category"], []).append(kol)
+
     for cat, label in CATEGORY_LABELS.items():
         if cat not in by_cat:
             continue
-        cards = []
-        for kol in by_cat[cat]:
-            tweets_html = []
-            if kol["backend"] == "skipped":
-                pass  # 本次未抓推文（--source newsletter）
-            elif not kol["tweets"]:
-                tweets_html.append(
-                    f'<div class="empty">未抓到推文（{_esc(kol["backend"])}）。'
-                    f'需配置 X API，详见 README。</div>'
-                )
-            for tw in kol["tweets"]:
-                arts = []
-                for a in tw.get("articles", []):
-                    if a.get("ok") and a.get("excerpt"):
-                        arts.append(f"""
-            <div class="article">
-              <div class="article-title"><a href="{_esc(a['final_url'] or a['url'])}" target="_blank">📄 {_esc(a['title'])}</a></div>
-              <div class="article-meta">{_esc(a['final_url'] or a['url'])} · 约 {a.get('word_count',0)} 词</div>
-              <div class="article-excerpt">{_esc(a['excerpt'])}</div>
-            </div>""")
-                    elif a.get("ok"):
-                        arts.append(f"""
-            <div class="article">
-              <div class="article-title"><a href="{_esc(a['final_url'] or a['url'])}" target="_blank">🔗 {_esc(a['title'] or a['url'])}</a></div>
-            </div>""")
-                    else:
-                        arts.append(f"""
-            <div class="article">
-              <div class="article-title"><a href="{_esc(a['url'])}" target="_blank">🔗 {_esc(a['url'])}</a></div>
-              <div class="article-err">⚠️ 正文抓取失败：{_esc(a.get('error',''))}</div>
-            </div>""")
-                meta = _esc(tw.get("created_at", ""))
-                if tw.get("tweet_url"):
-                    meta = f'<a href="{_esc(tw["tweet_url"])}" target="_blank">{meta or "查看原推 ↗"}</a>'
-                tags = tw.get("cashtags") or []
-                tags_html = ""
-                if tags:
-                    badges = "".join(f'<span class="tag">${_esc(t)}</span>' for t in tags)
-                    tags_html = f'<div class="tweet-tags">{badges}</div>'
-                tweets_html.append(f"""
-          <div class="tweet">
-            <div class="tweet-meta">{meta}</div>
-            <div class="tweet-text">{_esc(tw.get("text",""))}</div>
-            {tags_html}
-            {''.join(arts)}
-          </div>""")
-
-            # newsletter 全文区块
-            news_html = []
-            for p in kol.get("newsletter_posts", []):
-                pill = '<span class="pill">仅预览/付费</span>' if p.get("paywalled") else ""
-                news_html.append(f"""
-            <div class="post">
-              <div class="post-title"><a href="{_esc(p['link'])}" target="_blank">📰 {_esc(p['title'])}</a>{pill}</div>
-              <div class="post-meta">{_esc(p['published'])} · 约 {p.get('word_count',0)} 词</div>
-              <div class="post-excerpt">{_esc(p['excerpt'])}</div>
-            </div>""")
-
-            # 组装两个区块（有内容才显示对应标题）
-            blocks = []
-            if tweets_html:
-                blocks.append('<div class="section-tag">⚡ X 实时短评</div>' + "".join(tweets_html))
-            if news_html:
-                label = _esc(kol.get("newsletter") or "Newsletter")
-                blocks.append(f'<div class="section-tag">📚 {label} · 深度全文</div>' + "".join(news_html))
-            if not blocks:
-                blocks.append('<div class="empty">本次无内容。</div>')
-
-            backend_label = kol['backend'] if kol['backend'] != 'skipped' else (kol.get('newsletter_status') or '')
-            cards.append(f"""
-        <div class="kol-card">
-          <span class="backend">{_esc(backend_label)}</span>
-          <div class="kol-head">
-            <span class="kol-name">{_esc(kol['name'])}</span>
-            <a class="kol-handle" href="https://x.com/{_esc(kol['handle'])}" target="_blank">@{_esc(kol['handle'])}</a>
-          </div>
-          <div class="kol-focus">🎯 {_esc(kol['focus'])}</div>
-          {''.join(blocks)}
-        </div>""")
-
+        cards = [_build_kol_card(kol) for kol in by_cat[cat]]
         sections.append(f'<div class="cat">▎{_esc(label)}</div>\n{"".join(cards)}')
 
     return f"""<!DOCTYPE html>
