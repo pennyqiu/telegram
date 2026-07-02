@@ -141,7 +141,12 @@ kol_radar/
 ├── kol_targets.py       # KOL 清单（从 targetKOLs.ts 移植）
 ├── sources.py           # 多后端抓推文：x_api / nitter / rsshub + 自动降级
 ├── article_extractor.py # 跟随 t.co 重定向，抓外部文章并提取标题/正文摘要
+├── newsletters.py        # 官方 newsletter RSS 全文抓取
 ├── radar.py             # 主程序：采集 → 输出 JSON + HTML 简报
+├── digest.py            # JSON → AI 友好的精简 Markdown 摘要（每日/归档两种模式）
+├── ai_analyze.py         # 把 digest.py 的摘要推送给 LLM API 生成分析（可选，无 Key 则跳过）
+├── daily_cron.sh         # 每日定时刷新：精确时间窗口抓取 + 摘要 + AI 分析，一条龙
+├── backfill_all.sh       # 批量历史回溯多位 KOL
 ├── requirements.txt
 ├── .env.example
 └── output/              # 运行产物（已 gitignore）
@@ -178,13 +183,38 @@ kol_radar/
 }
 ```
 
-可直接把 `excerpt` 字段喂给 LLM 做摘要 / 主题聚类 / 观点提取。
+可直接把 `excerpt` 字段喂给 LLM 做摘要 / 主题聚类 / 观点提取；也可以用 `digest.py` 自动
+压缩成更精简的 Markdown（见下一节），体量更小、更适合直接整篇喂给 AI。
+
+---
+
+## 🤖 AI 友好摘要 + 自动分析（可选）
+
+原始 JSON 字段较多（id/source/backend 等），`digest.py` 把它压缩成只保留「日期/正文/引用/cashtag」
+的精简 Markdown，`ai_analyze.py` 再把这份摘要推送给大模型 API 自动生成结构化分析：
+
+```bash
+# 每日模式：只处理当天这一个 JSON（daily_cron.sh 会自动调用，也可以单独手动跑）
+python3 digest.py --daily-json output/latest.json --out-dir output/digest
+python3 ai_analyze.py --input output/digest/daily_digest_latest.md --out-dir output/digest
+
+# 归档模式：把 backfill_all.sh 产出的多份历史归档合并成「每位博主一份 + 全部合并时间线」
+python3 digest.py --pattern "kol_feed_archive_*.json"
+```
+
+`ai_analyze.py` 支持任意 OpenAI 兼容供应商（OpenAI / DeepSeek / Moonshot / 智谱GLM 等，
+换 `.env` 里的 `AI_API_BASE`/`AI_MODEL` 即可，无需改代码），也支持 Claude 原生 API
+（`AI_API_STYLE=anthropic`）。**没配置 `AI_API_KEY` 也不会报错**——跳过自动分析，
+`daily_digest_latest.md` 本身就是可以直接拖进任意 AI 对话框的格式，手动分析同样好用。
 
 ---
 
 ## ⏰ 定时运行（可选）
 
+推荐直接用 `daily_cron.sh`（精确时间窗口抓取 + 摘要 + AI 分析一条龙，详见
+[`KOL雷达-操作手册.md`](./KOL雷达-操作手册.md) 第 7 节），比裸调 `radar.py` 更完整：
+
 ```bash
-# 每天早上 8 点抓一次，输出到固定目录
-0 8 * * *  cd /path/to/kol_radar && /usr/bin/python3 radar.py --output /var/www/kol >> radar.log 2>&1
+# 中国时间早上 8:30 跑一次（服务器系统时区为 UTC 时，对应 crontab 里的 0:30）
+30 0 * * *  /path/to/kol_radar/daily_cron.sh /var/www/kol-radar 50
 ```

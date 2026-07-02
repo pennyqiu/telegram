@@ -188,12 +188,46 @@ crontab -l   # 确认写入成功
 - 日志会写到 `kol_radar/logs/daily_*.log`（已 gitignore，不会进版本库），自动清理 30 天前的旧日志
 - 想验证效果，先手动跑一次看看：`./daily_cron.sh /var/www/kol-radar 50 && tail -30 logs/daily_*.log`
 
+### 每日摘要 + AI 自动分析
+
+`daily_cron.sh` 在 `radar.py` 抓完之后，会自动多跑两步（都写进了同一个日志文件）：
+
+1. **`digest.py --daily-json`**：把当天 `latest.json`（含全部字段：id/source/backend 等元数据）
+   压缩成一份精简 Markdown（只留日期/正文/引用链接/cashtag），写到 `<输出目录>/digest/daily_digest_latest.md`。
+   这份文件本身就是「AI 友好格式」——体量小（一天通常几条到几十条），可以直接拖进任意 AI
+   对话框，或在 Cursor 里 `@digest/daily_digest_latest.md` 直接问。
+2. **`ai_analyze.py`**：尝试把上面这份摘要自动推送给一个大模型 API，生成结构化分析（今日要点/
+   信号分歧/提及标的情绪/待跟踪线索），写成 `digest/analysis_latest.md` + `analysis_latest.html`。
+
+**开启自动分析**：在 `kol_radar/.env` 里配置（任选一个 OpenAI 兼容供应商，无需改代码，参见
+`.env.example` 里的详细注释）：
+
+```bash
+AI_API_KEY=sk-xxxxxxxx
+AI_API_BASE=https://api.deepseek.com/v1   # 或 OpenAI / Moonshot / 智谱GLM 的 base_url
+AI_MODEL=deepseek-chat
+```
+
+**没配置也没关系**：`ai_analyze.py` 会打印清晰提示并直接跳过，不会让 cron 报错中断，
+`daily_digest_latest.md` 照常生成，手动拖给 AI 分析即可（这也是「推送不了就给手动方案」的兜底）。
+
+配置好后，网站首页（`index.html`）footer 会自动出现「🤖 查看今日 AI 分析 →」的链接，
+指向 `digest/analysis_latest.html`，浏览器直接打开就能看，不用改 nginx。
+
+想单独测试这两步（不重新抓取，用已有的 `latest.json`）：
+
+```bash
+python3 digest.py --daily-json /var/www/kol-radar/latest.json --out-dir /var/www/kol-radar/digest
+python3 ai_analyze.py --input /var/www/kol-radar/digest/daily_digest_latest.md --out-dir /var/www/kol-radar/digest
+```
+
 ---
 
 ## 8. 后续可扩展方向（未决策，需用户拍板）
 
-- [ ] 接 Telegram 推送：复用 `ib_quant` 现成的 Bot，把每日简报推到手机
+- [ ] 接 Telegram 推送：复用 `ib_quant` 现成的 Bot，把每日简报 + AI 分析结果推到手机
 - [ ] 对「仅预览/付费」的 newsletter 文章自动抓正文页补全（公开站点有效，付费墙无效）
 - [x] 历史推文回溯：已通过官方全档案搜索实现（`--since`，见第 5 节）
+- [x] AI 友好摘要 + 自动推送分析：已实现（`digest.py --daily-json` + `ai_analyze.py`，见第 7 节）
 
 > 详细的项目结构、JSON 字段说明、模块职责见同目录 [`README.md`](./README.md)；本手册只保留「结论 + 可执行步骤」。

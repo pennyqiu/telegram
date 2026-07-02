@@ -14,6 +14,10 @@ KOL 雷达 · 摘要压缩工具
   python3 digest.py --input-dir /var/www/kol-radar      # 指定 JSON 所在目录（如 nginx 服务目录）
   python3 digest.py --pattern "kol_feed_*.json"         # 连日常简报的 JSON 也一起汇总
   python3 digest.py --out-dir /var/www/kol-radar/digest # 自定义摘要输出目录
+
+  # 每日模式：只处理单个 JSON 文件（如当天 daily_cron.sh 刚产出的 latest.json），
+  # 输出一份合并了「全部博主推文 + newsletter」的精简摘要，供当天的 AI 分析使用
+  python3 digest.py --daily-json /var/www/kol-radar/latest.json --out-dir /var/www/kol-radar/digest
 """
 
 from __future__ import annotations
@@ -113,12 +117,71 @@ def build_combined_timeline(by_handle: dict) -> str:
     return "\n".join(lines)
 
 
+def build_daily_digest(by_handle: dict, generated_at: str) -> str:
+    """单日精简摘要：把当天所有博主的推文按时间合并成一条时间线 + newsletter 更新，
+    体量小（一天通常几条到几十条），适合直接整篇喂给 AI 做当日分析。"""
+    date = (generated_at or "")[:10] or "未知日期"
+    lines = [f"# KOL 每日摘要 · {date}", "", f"> 生成时间：{generated_at}", ""]
+
+    items = []
+    for entry in by_handle.values():
+        for tw in entry["tweets"].values():
+            items.append((tw.get("created_at", ""), entry["name"], entry["handle"], tw))
+    items.sort(key=lambda x: x[0])
+    if items:
+        lines += [f"## ⚡ 今日推文（{len(items)} 条，按时间排序）", ""]
+        for created_at, name, handle, tw in items:
+            d = (created_at or "").replace("T", " ").rstrip("Z") or "未知时间"
+            lines.append(f"**{d} · {name} (@{handle})**{_tag_str(tw.get('cashtags') or [])}")
+            lines.append((tw.get("text") or "").strip())
+            for url in tw.get("article_urls", []) or []:
+                lines.append(f"> 引用: {url}")
+            lines.append("")
+
+    posts = []
+    for entry in by_handle.values():
+        for post in entry["newsletter_posts"].values():
+            posts.append((entry["name"], entry["handle"], post))
+    posts.sort(key=lambda x: x[2].get("published", ""))
+    if posts:
+        lines += [f"## 📚 Newsletter 更新（{len(posts)} 篇）", ""]
+        for name, handle, post in posts:
+            lines.append(f"### {name} (@{handle})")
+            lines.append(post_block(post))
+            lines.append("")
+
+    if not items and not posts:
+        lines.append("_今日窗口内无新内容_")
+    return "\n".join(lines)
+
+
 def main():
     ap = argparse.ArgumentParser(description="把 radar.py 产出的 JSON 压缩成适合喂 AI 分析的精简 Markdown 摘要")
     ap.add_argument("--input-dir", default=str(ROOT / "output"), help="JSON 文件所在目录")
     ap.add_argument("--pattern", default="kol_feed_archive_*.json", help="glob 匹配模式（默认只汇总历史回溯归档）")
     ap.add_argument("--out-dir", default="", help="摘要输出目录（默认 <input-dir>/digest/）")
+    ap.add_argument("--daily-json", default="", help="每日模式：只处理这一个 JSON 文件，"
+                                                       "输出单份当天合并摘要（跳过归档汇总逻辑）")
     args = ap.parse_args()
+
+    if args.daily_json:
+        src = Path(args.daily_json)
+        if not src.exists():
+            print(f"❌ 找不到文件：{src}")
+            return
+        data = json.loads(src.read_text(encoding="utf-8"))
+        by_handle = load_kols([src])
+        out_dir = Path(args.out_dir) if args.out_dir else src.parent / "digest"
+        out_dir.mkdir(parents=True, exist_ok=True)
+        date_tag = (data.get("generated_at", "") or "")[:10] or "unknown"
+        out_path = out_dir / f"daily_digest_{date_tag}.md"
+        out_path.write_text(build_daily_digest(by_handle, data.get("generated_at", "")), encoding="utf-8")
+        latest_path = out_dir / "daily_digest_latest.md"
+        latest_path.write_text(out_path.read_text(encoding="utf-8"), encoding="utf-8")
+        total_tweets = sum(len(e["tweets"]) for e in by_handle.values())
+        total_posts = sum(len(e["newsletter_posts"]) for e in by_handle.values())
+        print(f"✅ {out_path.name}（{total_tweets} 条推文 + {total_posts} 篇 newsletter，固定入口：{latest_path.name}）")
+        return
 
     input_dir = Path(args.input_dir)
     paths = sorted(input_dir.glob(args.pattern))

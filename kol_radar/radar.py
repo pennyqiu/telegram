@@ -199,11 +199,15 @@ def _esc(s: str) -> str:
     return (s or "").replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
 
 
-def build_html(data: dict, archive_index_exists: bool = False) -> str:
+def build_html(data: dict, archive_index_exists: bool = False, analysis_exists: bool = False) -> str:
     ts = data["generated_at"].replace("T", " ")
     archive_link = (
         '<br><a href="archive_index.html" style="color:#38bdf8">🗂️ 查看各博主历史回溯归档 →</a>'
         if archive_index_exists else ""
+    )
+    analysis_link = (
+        '<br><a href="digest/analysis_latest.html" style="color:#38bdf8">🤖 查看今日 AI 分析 →</a>'
+        if analysis_exists else ""
     )
 
     # 按 category 分组（保持 CATEGORY_LABELS 的声明顺序）
@@ -316,7 +320,7 @@ def build_html(data: dict, archive_index_exists: bool = False) -> str:
   {''.join(sections)}
   <div class="footer">
     由 kol_radar/radar.py 自动生成 · 数据源见各卡片右上角标签<br>
-    本工具仅供研究，请遵守 X 平台条款与各文章站点版权{archive_link}
+    本工具仅供研究，请遵守 X 平台条款与各文章站点版权{archive_link}{analysis_link}
   </div>
 </div>
 </body>
@@ -461,7 +465,11 @@ def main():
         tag = stamp
     json_path = out_dir / f"kol_feed_{tag}.json"
     html_path = out_dir / f"kol_briefing_{tag}.html"
-    html_str = build_html(data, archive_index_exists=(out_dir / "archive_index.html").exists())
+    html_str = build_html(
+        data,
+        archive_index_exists=(out_dir / "archive_index.html").exists(),
+        analysis_exists=(out_dir / "digest" / "analysis_latest.html").exists(),
+    )
     json_str = json.dumps(data, ensure_ascii=False, indent=2)
 
     json_path.write_text(json_str, encoding="utf-8")

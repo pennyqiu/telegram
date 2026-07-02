@@ -44,6 +44,12 @@ UNTIL=$(echo "$WINDOW" | awk '{print $2}')
   echo "═══ $(date '+%Y-%m-%d %H:%M:%S') 开始每日刷新（窗口 ${SINCE} ~ ${UNTIL} UTC，即中国时区昨天8点~今天8点） ═══"
   python3 radar.py --output "$OUTPUT" --since "$SINCE" --until "$UNTIL" --daily \
     --max-tweets "$MAX_TWEETS" --source both
+
+  # 把当天 JSON 压缩成精简摘要（AI 友好格式），再尝试推送给大模型自动分析
+  # （没配置 AI_API_KEY 也不会报错中断，只是跳过分析这一步，摘要文件本身也能手动喂给 AI）
+  python3 digest.py --daily-json "$OUTPUT/latest.json" --out-dir "$OUTPUT/digest"
+  python3 ai_analyze.py --input "$OUTPUT/digest/daily_digest_latest.md" --out-dir "$OUTPUT/digest"
+
   echo "═══ $(date '+%Y-%m-%d %H:%M:%S') 完成 ═══"
 } >> "$LOG_FILE" 2>&1
 
