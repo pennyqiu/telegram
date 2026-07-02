@@ -11,7 +11,7 @@
 | 结论 | 说明 |
 |------|------|
 | ✅ 双轨数据源已实现并实测通过 | 「X 实时短评」+「官方 newsletter 深度全文」双轨，代码已在 `kol_radar/` 落地 |
-| ✅ 免费轨道立即可用 | newsletter RSS 无需任何 token，5/6 位 KOL 已验证抓到全文 |
+| ✅ 免费轨道立即可用 | newsletter RSS 无需任何 token，4/6 位 KOL 已验证抓到全文 |
 | ⚠️ X 官方 API 无免费层 | 2026-02 起按量付费，约 `$0.005/条`，本工具用量下约 **$7/月**，需信用卡+设消费上限 |
 | ⚠️ 免费 X 抓取（Nitter/RSSHub）不稳定 | 公共实例常挂，仅作降级备选，不建议作为主力 |
 | 📚 推文只是钩子，干货在 newsletter | Dylan Patel / Doug O'Laughlin / Jamin Ball 的 newsletter 已验证为**全文**，比推文信息密度高得多 |
@@ -30,14 +30,16 @@
 | 半导体与硬核硬件 | Fabricated Knowledge | `@FoolAllTheTime` | `fabricatedknowledge.com/feed` | ✅ 全文（实测 7499 词，深度长文） |
 | AI 软件与云 | Beth Kindig | `@Beth_Kindig` | `iofund.substack.com/feed` | ⚠️ 2026-02 起 Substack 关闭迁至 `io-fund.com`，需跟进改地址 |
 | AI 软件与云 | Jamin Ball | `@jaminball` | `cloudedjudgement.substack.com/feed` | ✅ 全文（实测 2757 词，更新到当周） |
-| 宏观与应用科技 | Matthew Ball | `@ballmatthew` | `matthewball.co/all?format=rss` | ❌ 实测全部付费墙，RSS 只给几十字摘要，已关闭抓取（`skip_newsletter=True`），只保留 X 推文 |
 | 开源情报 | itsone | `@itsone` | 无 | ❌ 仅能走 X / 历史推文归档 |
+
+> Matthew Ball（`@ballmatthew`）已于 2026-07 移除：newsletter 实测全部付费墙、RSS 只给几十字摘要，
+> X 推文贡献也长期有限，整体拉取无分析价值，直接从 `kol_targets.py` 里删掉了整个条目（不只是关掉某个开关）。
 
 ---
 
 ## 3. 立即可执行：免费轨道（无需任何 token）
 
-**用途**：日常研究，覆盖 5/6 位 KOL 的深度全文，零成本。
+**用途**：日常研究，覆盖 4/6 位 KOL 的深度全文，零成本。
 
 ```bash
 cd kol_radar
@@ -137,8 +139,8 @@ python3 digest.py --input-dir /var/www/kol-radar
 ## 6. 已知问题 / 待跟进项
 
 - [ ] Beth Kindig 的 Substack 将于 2026-02 关闭并迁至 `io-fund.com`，需在 `kol_targets.py` 更新 `newsletter_rss`
-- [x] Matthew Ball 的 RSS 只给摘要且全部付费墙：已确认拉取无分析价值，`kol_targets.py` 里设
-      `skip_newsletter=True` 关闭抓取，只保留 X 推文这一路（若之后他开放全文/换渠道，可以改回来）
+- [x] Matthew Ball 的 RSS 只给摘要且全部付费墙、X 贡献也有限：已确认整体无分析价值，
+      2026-07 从 `kol_targets.py` 里彻底移除关注（不再抓取，也不再展示）
 - [ ] itsone 暂无覆盖方案，需决定是否值得为单一账号接入历史推文 API
 
 ---

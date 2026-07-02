@@ -2,8 +2,8 @@
 """
 Newsletter / 博客 RSS 数据源
 
-这 6 位 KOL 里有 5 位运营官方 newsletter（SemiAnalysis / Fabricated Knowledge /
-I/O Fund / Clouded Judgement / MatthewBall.co），且自带 RSS。推文常常只是给长文
+这 6 位 KOL 里有 4 位运营官方 newsletter（SemiAnalysis / Fabricated Knowledge /
+I/O Fund / Clouded Judgement），且自带 RSS。推文常常只是给长文
 引流的「钩子」，真正的深度观点、数据与模型在 newsletter 全文里——所以这是比 X API
 更优质的「研究」来源：免费、稳定、提供全文或长摘要，且不需要任何 token。
 

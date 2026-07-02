@@ -25,7 +25,7 @@ HANDLES=(
   # aleabitoreddit
   Beth_Kindig
   jaminball
-  ballmatthew
+  # ballmatthew  # 已从 kol_targets.py 移除关注（newsletter全付费墙+X贡献有限，无分析价值）
   itsone
 )
 

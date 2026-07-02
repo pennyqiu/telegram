@@ -27,7 +27,6 @@ class KOLProfile:
 CATEGORY_LABELS = {
     "Hardware & Semiconductor": "半导体与硬核硬件",
     "Software & Cloud": "AI 软件与云基础设施",
-    "Macro & Applied Tech": "宏观与应用科技",
     "OSINT & Hyperscalers": "开源情报与超大规模厂商",
 }
 
@@ -84,18 +83,9 @@ TARGET_KOLS = [
         newsletter_rss="https://cloudedjudgement.substack.com/feed",
     ),
 
-    # --- 3. 跨硬件/软件的综合科技投研 ---
-    KOLProfile(
-        name="Matthew Ball",
-        handle="ballmatthew",
-        category="Macro & Applied Tech",
-        focus="3D引擎(Unreal/Unity)、空间计算、AI具身智能宏观推演",
-        newsletter="MatthewBall.co Essays",
-        # RSS 只给标题+十几个字的摘要（实测全是付费墙），拉下来的 excerpt 没有分析价值，
-        # 故关闭 newsletter 抓取，只保留 X 实时推文这一路
-        newsletter_rss="https://www.matthewball.co/all?format=rss",
-        skip_newsletter=True,
-    ),
+    # --- 3. 开源情报与超大规模厂商 ---
+    # （原 Matthew Ball @ballmatthew 已移除：newsletter 全部付费墙只给几十字摘要，
+    #   X 推文也长期贡献有限，整体拉取无分析价值，2026-07 决定不再关注）
     KOLProfile(
         name="itsone",
         handle="itsone",
