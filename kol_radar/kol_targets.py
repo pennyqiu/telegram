@@ -68,6 +68,15 @@ TARGET_KOLS = [
         newsletter_rss="https://www.fabricatedknowledge.com/feed",
         skip_tweets=True,
     ),
+    KOLProfile(
+        name="ArtofSpecuycky",
+        handle="ArtofSpecuycky",
+        category="Hardware & Semiconductor",
+        focus="中文 AI 算力产业链 + 美股大盘/宏观 + 技术面/期权结构的每日复盘与波段解读（存储/光模块/GPU/Neocloud 为主，兼顾加密）",
+        # 中文散户向 swing trader，仅在 X 发布原创内容，无公开 newsletter
+        newsletter="",
+        newsletter_rss="",
+    ),
 
     # --- 2. AI 软件、云基础设施与大盘科技 ---
     KOLProfile(
