@@ -23,6 +23,8 @@ class KOLProfile:
                                     # RSS 只给几十字摘要、拉下来没有分析价值的情况
     featured: bool = False     # True 则在简报页最顶部单独置顶展示（不再出现在下面的分类区块里），
                                 # 用于标记重点关注的博主
+    deprioritized: bool = False  # True 则在简报页最底部单独成区展示（不再出现在上面的分类区块里），
+                                  # 用于标记内容量大（多为长文 newsletter）、想放到最后再看的博主
 
 
 # 与 KOLProfile.category 对应的中文标签（用于 HTML 分组展示）
@@ -67,6 +69,7 @@ TARGET_KOLS = [
         newsletter="Fabricated Knowledge",
         newsletter_rss="https://www.fabricatedknowledge.com/feed",
         skip_tweets=True,
+        deprioritized=True,
     ),
     KOLProfile(
         name="ArtofSpecuycky",
@@ -105,6 +108,7 @@ TARGET_KOLS = [
         newsletter="I/O Fund",
         # 注：I/O Fund 2026-02 将关闭 Substack 迁回 io-fund.com，届时改这里
         newsletter_rss="https://iofund.substack.com/feed",
+        deprioritized=True,
     ),
     KOLProfile(
         name="Jamin Ball",
@@ -113,6 +117,7 @@ TARGET_KOLS = [
         focus="SaaS估值倍数(EV/Forward Revenue)、云基础设施景气度",
         newsletter="Clouded Judgement",
         newsletter_rss="https://cloudedjudgement.substack.com/feed",
+        deprioritized=True,
     ),
 
     # --- 3. 开源情报与超大规模厂商 ---

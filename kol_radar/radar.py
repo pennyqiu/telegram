@@ -125,6 +125,7 @@ def collect(kols: list, limit: int, fetch_articles: bool,
             "category": kol.category,
             "category_label": CATEGORY_LABELS.get(kol.category, kol.category),
             "featured": kol.featured,
+            "deprioritized": kol.deprioritized,
             "focus": kol.focus,
             "backend": backend,
             "tweet_count": len(tweet_dicts),
@@ -311,9 +312,13 @@ def build_html(data: dict, archive_index_exists: bool = False, analysis_exists: 
                 '⬇️ 下载今日精简摘要（Markdown，可直接喂 AI）</a>'
             )
 
-    # 重点关注的博主单独置顶展示，不再出现在下面按 category 分组的区块里
+    # 重点关注的博主单独置顶展示；内容量大的博主(deprioritized)单独置底展示；
+    # 二者都不再出现在中间按 category 分组的区块里。featured 优先级高于 deprioritized。
     featured_kols = [k for k in data["kols"] if k.get("featured")]
-    rest_kols = [k for k in data["kols"] if not k.get("featured")]
+    bottom_kols = [k for k in data["kols"]
+                   if k.get("deprioritized") and not k.get("featured")]
+    rest_kols = [k for k in data["kols"]
+                 if not k.get("featured") and not k.get("deprioritized")]
 
     sections = []
     if featured_kols:
@@ -330,6 +335,13 @@ def build_html(data: dict, archive_index_exists: bool = False, analysis_exists: 
             continue
         cards = [_build_kol_card(kol) for kol in by_cat[cat]]
         sections.append(f'<div class="cat">▎{_esc(label)}</div>\n{"".join(cards)}')
+
+    # 内容量大的博主（多为长文 newsletter）统一放到最底部，避免占满上方版面
+    if bottom_kols:
+        cards = [_build_kol_card(k) for k in bottom_kols]
+        sections.append(
+            '<div class="cat">▎📚 长文深度（信息量大，置于末尾）</div>\n' + "".join(cards)
+        )
 
     return f"""<!DOCTYPE html>
 <html lang="zh-CN">
