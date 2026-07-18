@@ -77,8 +77,26 @@ TARGET_KOLS = [
         newsletter="",
         newsletter_rss="",
     ),
+    KOLProfile(
+        name="Bill Brooklyn",
+        handle="BillBrooklyn10",
+        category="Hardware & Semiconductor",
+        focus="AI 半导体/算力供应链的散户视角深度拆解（GPU/HBM/先进封装/网络与光互连），产业链传导逻辑与个股波段观点",
+        # 仅在 X 发布原创内容，无公开 newsletter
+        newsletter="",
+        newsletter_rss="",
+    ),
 
     # --- 2. AI 软件、云基础设施与大盘科技 ---
+    KOLProfile(
+        name="Gavin Baker",
+        handle="GavinSBaker",
+        category="Software & Cloud",
+        focus="Atreides Management 创始人/CIO：AI 大盘科技、半导体与云基础设施的一线基金经理视角，宏观与 AI 资本开支/竞争格局判断",
+        # 一线基金经理，仅在 X 发布原创观点，无公开 newsletter
+        newsletter="",
+        newsletter_rss="",
+    ),
     KOLProfile(
         name="Beth Kindig",
         handle="Beth_Kindig",
