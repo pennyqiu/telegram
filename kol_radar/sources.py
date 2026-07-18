@@ -48,6 +48,8 @@ class Tweet:
     article_urls: list = field(default_factory=list)  # 推文里引用的外部文章链接
     cashtags: list = field(default_factory=list)       # 提到的股票代码，如 ["NVDA","AMZN"]（不含$，已去重）
     hashtags: list = field(default_factory=list)       # 话题标签（不含#，已去重）
+    edit_history_tweet_ids: list = field(default_factory=list)  # 同一条推被编辑后的所有版本 id
+                                                               # （X API 默认返回，最后一个是最新版本）
     source: str = ""              # 抓取后端来源（x_api / nitter / rsshub）
 
     def to_dict(self) -> dict:
@@ -134,6 +136,42 @@ def _extract_article_urls(*texts: str) -> list:
     return found
 
 
+def _dedupe_edit_versions(tweets: list) -> list:
+    """归并「被编辑过的推文」的多个历史版本，只保留最新版本。
+
+    X 的 search 接口（/2/tweets/search/all 全档案、recent search）会把同一条推
+    被编辑后的每个版本都当成独立结果返回：它们 id 不同、created_at 也不同
+    （分别是「首发时间」和「各次编辑时间」），但正文几乎一样，落到简报里就成了
+    「时间戳差几十秒、内容雷同」的重复推文。
+
+    同一条推的所有版本共享同一个 edit_history_tweet_ids 数组，数组最后一个 id
+    即最新版本。这里按该数组末位 id 分组，每组只保留最新版本（优先 id 命中末位，
+    否则取 created_at 最晚的），保持首次出现顺序。RSS 后端无此字段时退化为按 id
+    去重（仅剔除完全相同的重复项，不误伤）。"""
+    by_chain: dict = {}
+    order: list = []
+
+    def _chain_key(tw: "Tweet") -> str:
+        chain = tw.edit_history_tweet_ids or ([tw.id] if tw.id else [])
+        return chain[-1] if chain else str(id(tw))
+
+    def _score(tw: "Tweet", key: str) -> tuple:
+        # 末位 id（最新版本）优先，其次 created_at 更晚者优先
+        is_latest = 1 if (tw.id and tw.id == key) else 0
+        return (is_latest, tw.created_at or "")
+
+    for tw in tweets:
+        key = _chain_key(tw)
+        prev = by_chain.get(key)
+        if prev is None:
+            by_chain[key] = tw
+            order.append(key)
+        elif _score(tw, key) > _score(prev, key):
+            by_chain[key] = tw
+
+    return [by_chain[k] for k in order]
+
+
 # ════════════════════════════════════════════════════════════════════
 #  后端 1：X 官方 API v2
 # ════════════════════════════════════════════════════════════════════
@@ -184,7 +222,7 @@ def fetch_via_x_api(handle: str, limit: int = 10) -> list:
     #    note_tweet：超过 280 字符的长文推文，完整正文需靠这个字段（否则 text 会被截断）
     params = (
         f"max_results={max(5, min(limit, 100))}"
-        "&tweet.fields=created_at,entities,text,note_tweet"
+        "&tweet.fields=created_at,entities,text,note_tweet,edit_history_tweet_ids"
         "&exclude=retweets,replies"
     )
     raw = _http_get(
@@ -204,9 +242,10 @@ def fetch_via_x_api(handle: str, limit: int = 10) -> list:
             article_urls=urls,
             cashtags=cashtags,
             hashtags=hashtags,
+            edit_history_tweet_ids=item.get("edit_history_tweet_ids", []),
             source="x_api",
         ))
-    return tweets
+    return _dedupe_edit_versions(tweets)
 
 
 def fetch_via_x_api_archive(
@@ -250,7 +289,7 @@ def fetch_via_x_api_archive(
         params = {
             "query": query,
             "max_results": 500,
-            "tweet.fields": "created_at,entities,text,note_tweet",
+            "tweet.fields": "created_at,entities,text,note_tweet,edit_history_tweet_ids",
         }
         if start_time:
             params["start_time"] = start_time
@@ -275,12 +314,14 @@ def fetch_via_x_api_archive(
                 article_urls=urls,
                 cashtags=cashtags,
                 hashtags=hashtags,
+                edit_history_tweet_ids=item.get("edit_history_tweet_ids", []),
                 source="x_api_archive",
             ))
         next_token = payload.get("meta", {}).get("next_token", "")
         if not next_token:
             break
-    return tweets[:max_total]
+    # search 接口会把被编辑推文的每个版本都返回，去重后只保留最新版本再截断
+    return _dedupe_edit_versions(tweets)[:max_total]
 
 
 # ════════════════════════════════════════════════════════════════════
