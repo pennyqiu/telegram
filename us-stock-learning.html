@@ -6472,13 +6472,13 @@ SCHD股息自动覆盖（目标）：
 .rc-stats{font-size:11px;color:#94a3b8;margin-top:5px}
 </style>
 
-<p style="color:#64748b;font-size:14px;margin-bottom:16px">以下四个案例展示在40岁或45岁开始系统投资美股、60岁退休的完整路径。每个案例包含<strong>分阶段配置方案</strong>（随年龄动态调整权益/固收比例）、成长推演及退休启动预测。</p>
+<p style="color:#64748b;font-size:14px;margin-bottom:16px">以下四个案例都是<strong>成长型</strong>配置，展示分别在 35 / 40 / 45 / 50 岁开始系统投资美股、统一 <strong>55 岁退休</strong>的完整路径。组合用四只 ETF——<strong>VOO（宽基）+ QQQ（成长）+ SCHD（股息）+ 5% GLD（黄金对冲）</strong>，<strong>95% 权益 + 5% 黄金、不配债券</strong>（用黄金替代债券做对冲，年化~11%且与股票低相关），综合年化预期约 <strong>10%</strong>（起步越早、QQQ 持有越久，年化越高）。代价是波动更大（临退遇熊市回撤可能 30%+）。起步越晚，起始资产与月投金额越大以弥补时间差。每个案例包含<strong>分阶段配置方案</strong>（随年龄动态调整各标的比例）、成长推演及退休启动预测。</p>
 
 <div style="display:flex;gap:0;border-radius:12px 12px 0 0;overflow:hidden;border:1.5px solid #e2e8f0;border-bottom:none">
-  <button id="rp-tab-0" onclick="rpSwitchCase(0)" style="flex:1;padding:13px 8px;background:#1e293b;color:#fff;border:none;font-size:12px;font-weight:700;cursor:pointer;transition:all 0.2s;line-height:1.4">保守型<br>40岁起·60岁退</button>
-  <button id="rp-tab-1" onclick="rpSwitchCase(1)" style="flex:1;padding:13px 8px;background:#f1f5f9;color:#374151;border:none;border-left:1px solid #e2e8f0;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s;line-height:1.4">保守型<br>45岁起·60岁退</button>
-  <button id="rp-tab-2" onclick="rpSwitchCase(2)" style="flex:1;padding:13px 8px;background:#f1f5f9;color:#374151;border:none;border-left:1px solid #e2e8f0;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s;line-height:1.4">激进型<br>40岁起·60岁退</button>
-  <button id="rp-tab-3" onclick="rpSwitchCase(3)" style="flex:1;padding:13px 8px;background:#f1f5f9;color:#374151;border:none;border-left:1px solid #e2e8f0;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s;line-height:1.4">激进型<br>45岁起·60岁退</button>
+  <button id="rp-tab-0" onclick="rpSwitchCase(0)" style="flex:1;padding:13px 8px;background:#1e293b;color:#fff;border:none;font-size:12px;font-weight:700;cursor:pointer;transition:all 0.2s;line-height:1.4">成长型<br>35岁起·55岁退</button>
+  <button id="rp-tab-1" onclick="rpSwitchCase(1)" style="flex:1;padding:13px 8px;background:#f1f5f9;color:#374151;border:none;border-left:1px solid #e2e8f0;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s;line-height:1.4">成长型<br>40岁起·55岁退</button>
+  <button id="rp-tab-2" onclick="rpSwitchCase(2)" style="flex:1;padding:13px 8px;background:#f1f5f9;color:#374151;border:none;border-left:1px solid #e2e8f0;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s;line-height:1.4">成长型<br>45岁起·55岁退</button>
+  <button id="rp-tab-3" onclick="rpSwitchCase(3)" style="flex:1;padding:13px 8px;background:#f1f5f9;color:#374151;border:none;border-left:1px solid #e2e8f0;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s;line-height:1.4">成长型<br>50岁起·55岁退</button>
 </div>
 
 <div style="border:1.5px solid #e2e8f0;border-radius:0 0 14px 14px;overflow:hidden;margin-bottom:28px">
@@ -6487,148 +6487,143 @@ SCHD股息自动覆盖（目标）：
 <div id="rp-case-0" style="padding:24px">
   <div style="background:linear-gradient(135deg,#1e40af,#1d4ed8);border-radius:12px;padding:20px 24px;color:#fff;margin-bottom:20px">
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
-      <span class="rc-tag" style="background:rgba(255,255,255,0.25);color:#fff">保守型</span>
-      <span style="font-size:13px;opacity:0.8">积累期20年 · 一线/二线城市 · 在职中产</span>
+      <span class="rc-tag" style="background:rgba(255,255,255,0.25);color:#fff">成长型</span>
+      <span style="font-size:13px;opacity:0.8">积累期20年 · 一线/二线城市 · 年轻在职中产</span>
     </div>
-    <div style="font-size:20px;font-weight:800;margin-bottom:10px">40岁开始 → 60岁退休</div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap"><span style="background:rgba(255,255,255,0.18);padding:4px 10px;border-radius:20px;font-size:12px">现有美股 $15万（¥110万）</span><span style="background:rgba(255,255,255,0.18);padding:4px 10px;border-radius:20px;font-size:12px">年新增投入 $5万（≈月投¥3万）</span><span style="background:rgba(255,255,255,0.18);padding:4px 10px;border-radius:20px;font-size:12px">积累期 20年</span><span style="background:rgba(255,255,255,0.18);padding:4px 10px;border-radius:20px;font-size:12px">目标收益率 ~7.5%/年</span></div>
+    <div style="font-size:20px;font-weight:800;margin-bottom:10px">35岁开始 → 55岁退休</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap"><span style="background:rgba(255,255,255,0.18);padding:4px 10px;border-radius:20px;font-size:12px">现有美股 $10万（¥73万）</span><span style="background:rgba(255,255,255,0.18);padding:4px 10px;border-radius:20px;font-size:12px">年新增投入 $4万（≈月投¥2.4万）</span><span style="background:rgba(255,255,255,0.18);padding:4px 10px;border-radius:20px;font-size:12px">积累期 20年</span><span style="background:rgba(255,255,255,0.18);padding:4px 10px;border-radius:20px;font-size:12px">目标收益率 ~10.3%/年</span></div>
   </div>
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px">
     <div style="background:#f8fafc;border-radius:10px;padding:14px 16px">
       <div class="rc-section-title">为什么选这个节奏</div>
       <ul style="padding-left:18px;margin:0;font-size:13px;color:#374151;line-height:1.8">
-        <li style="margin-bottom:5px">40岁正是收入高峰期，月投¥3万不影响生活</li><li style="margin-bottom:5px">距退休20年，时间复利效应非常显著</li><li style="margin-bottom:5px">保守配置目标：到60岁资产稳健、波动可控</li>
+        <li style="margin-bottom:5px">35岁起步最早，时间是最大优势，月投¥2.4万压力小</li><li style="margin-bottom:5px">距退休20年，全程重仓权益（VOO+QQQ+SCHD），充分吃到复利</li><li style="margin-bottom:5px">95%权益+5%黄金：黄金替代债券做对冲，换取高年化，代价是波动更大</li>
       </ul>
     </div>
     <div style="background:#f8fafc;border-radius:10px;padding:14px 16px">
-      <div class="rc-section-title">保守策略的核心逻辑</div>
+      <div class="rc-section-title">成长策略的核心逻辑</div>
       <ul style="padding-left:18px;margin:0;font-size:13px;color:#374151;line-height:1.8">
-        <li style="margin-bottom:5px">宁可少赚，也要睡得着觉</li><li style="margin-bottom:5px">债券+TIPS压低波动，市场暴跌时不慌</li><li style="margin-bottom:5px">SCHD股息持续增长，退休时自动升级</li>
+        <li style="margin-bottom:5px">四只ETF：VOO宽基 + QQQ成长 + SCHD股息 + 5%GLD黄金对冲</li><li style="margin-bottom:5px">早期QQQ占比高换成长，临退逐步转向SCHD/VOO降波动</li><li style="margin-bottom:5px">黄金与股票低相关（年化~11%），代替债券对冲，综合年化仍~10%</li>
       </ul>
     </div>
   </div>
   <div style="margin-bottom:22px">
     <div class="rc-section-title">📅 分阶段配置方案（随年龄动态调整）</div>
     <div style="display:flex;gap:0;border-radius:8px;overflow:hidden;border:1px solid #e2e8f0;margin-bottom:14px;font-size:11px;font-weight:700;text-align:center">
-      <div style="flex:1;padding:8px 4px;background:#1d4ed8;color:#fff;line-height:1.4">40-45岁<br><span style="font-weight:400;opacity:.85">建仓期</span></div>
-      <div style="flex:1;padding:8px 4px;background:#15803d;color:#fff;border-left:1px solid #e2e8f0;line-height:1.4">45-50岁<br><span style="font-weight:400;opacity:.85">加速积累期</span></div>
-      <div style="flex:1;padding:8px 4px;background:#d97706;color:#fff;border-left:1px solid #e2e8f0;line-height:1.4">50-55岁<br><span style="font-weight:400;opacity:.85">稳固期</span></div>
-      <div style="flex:1;padding:8px 4px;background:#7e22ce;color:#fff;border-left:1px solid #e2e8f0;line-height:1.4">55-60岁<br><span style="font-weight:400;opacity:.85">临退守成期</span></div>
+      <div style="flex:1;padding:8px 4px;background:#1d4ed8;color:#fff;line-height:1.4">35-40岁<br><span style="font-weight:400;opacity:.85">高成长建仓期</span></div>
+      <div style="flex:1;padding:8px 4px;background:#15803d;color:#fff;border-left:1px solid #e2e8f0;line-height:1.4">40-45岁<br><span style="font-weight:400;opacity:.85">加速积累期</span></div>
+      <div style="flex:1;padding:8px 4px;background:#d97706;color:#fff;border-left:1px solid #e2e8f0;line-height:1.4">45-50岁<br><span style="font-weight:400;opacity:.85">成长转型期</span></div>
+      <div style="flex:1;padding:8px 4px;background:#7e22ce;color:#fff;border-left:1px solid #e2e8f0;line-height:1.4">50-55岁<br><span style="font-weight:400;opacity:.85">临退降波动期</span></div>
     </div>
   <div style="border:1.5px solid #bfdbfe;border-radius:12px;margin-bottom:14px;overflow:hidden">
     <div style="background:#eff6ff;padding:11px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-      <span style="background:#1d4ed8;color:#fff;font-size:12px;font-weight:800;padding:4px 10px;border-radius:6px">40-45岁</span>
-      <span style="font-weight:700;color:#1e293b;font-size:13px">建仓期</span>
-      <span style="font-size:12px;color:#64748b;margin-left:auto">权益 75% | 固收 25%</span>
+      <span style="background:#1d4ed8;color:#fff;font-size:12px;font-weight:800;padding:4px 10px;border-radius:6px">35-40岁</span>
+      <span style="font-weight:700;color:#1e293b;font-size:13px">高成长建仓期</span>
+      <span style="font-size:12px;color:#64748b;margin-left:auto">权益 95% | 黄金 5%</span>
     </div>
     <div style="padding:14px 16px 10px">
       <div class="table-wrap"><table>
       <thead><tr><th>标的</th><th>比例</th><th>股息/收益率</th><th>本阶段配置逻辑</th></tr></thead>
       <tbody>
-      <tr><td><strong>VOO</strong></td><td>30%</td><td>1.3%+增值</td><td>核心成长底仓，买入整个美国经济，费率仅0.03%</td></tr>
-      <tr><td><strong>SCHD</strong></td><td>25%</td><td>3.5%，年增8-11%</td><td>股息再投入，每季度自动买入更多SCHD，复利发动机</td></tr>
-      <tr><td><strong>VYM</strong></td><td>10%</td><td>2.8%</td><td>高即时股息，分散SCHD集中度，覆盖400+蓝筹</td></tr>
-      <tr><td><strong>BND</strong></td><td>25%</td><td>4.0%</td><td>减震器，市场大跌时涨，让你坚持持有不恐慌卖出</td></tr>
-      <tr><td><strong>TIPS</strong></td><td>5%</td><td>2.5%（通胀联动）</td><td>抵御通胀对本金侵蚀，20年后购买力守护者</td></tr>
-      <tr><td><strong>GLD</strong></td><td>5%</td><td>—</td><td>极端危机保险（战争/货币危机），建仓初期小仓位对冲黑天鹅</td></tr>
+      <tr><td><strong>VOO</strong></td><td>38%</td><td>1.3%+增值</td><td>核心成长底仓，买入整个美国经济，费率仅0.03%</td></tr>
+      <tr><td><strong>QQQ</strong></td><td>33%</td><td>0.6%+高增值</td><td>成长引擎，纳斯达克100，历史年化~15%，距退休远正好承受高波动</td></tr>
+      <tr><td><strong>SCHD</strong></td><td>24%</td><td>3.5%，年增8-11%</td><td>股息再投入，复利发动机，平滑QQQ波动</td></tr>
+      <tr><td><strong>GLD</strong></td><td>5%</td><td>0%股息 · 年化~11%</td><td>黄金对冲，与股票低相关，极端行情的稳定器，替代债券</td></tr>
       </tbody></table></div>
-      <div style="background:#f8fafc;border-left:3px solid #64748b;padding:9px 13px;border-radius:0 8px 8px 0;font-size:12px;color:#475569;margin-top:10px;line-height:1.7">核心动作：月定投 ≥ $3000，股息全部再投入，绝对不要在大跌时卖出。此阶段距退休最远，波动是你的朋友——每次下跌都是以更低价格买入更多份额的机会。</div>
+      <div style="background:#f8fafc;border-left:3px solid #64748b;padding:9px 13px;border-radius:0 8px 8px 0;font-size:12px;color:#475569;margin-top:10px;line-height:1.7">核心动作：月定投 ≥ $2000，股息全部再投入，绝对不要在大跌时卖出。此阶段距退休最远，95%权益+5%黄金、重仓QQQ是合理的——波动是你的朋友，每次下跌都是以更低价格买入更多份额的机会。</div>
     </div>
   </div>
   <div style="border:1.5px solid #bbf7d0;border-radius:12px;margin-bottom:14px;overflow:hidden">
     <div style="background:#f0fdf4;padding:11px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-      <span style="background:#15803d;color:#fff;font-size:12px;font-weight:800;padding:4px 10px;border-radius:6px">45-50岁</span>
+      <span style="background:#15803d;color:#fff;font-size:12px;font-weight:800;padding:4px 10px;border-radius:6px">40-45岁</span>
       <span style="font-weight:700;color:#1e293b;font-size:13px">加速积累期</span>
-      <span style="font-size:12px;color:#64748b;margin-left:auto">权益 75% | 固收 25%</span>
+      <span style="font-size:12px;color:#64748b;margin-left:auto">权益 95% | 黄金 5%</span>
     </div>
     <div style="padding:14px 16px 10px">
       <div class="table-wrap"><table>
       <thead><tr><th>标的</th><th>比例</th><th>股息/收益率</th><th>本阶段配置逻辑</th></tr></thead>
       <tbody>
-      <tr><td><strong>VOO</strong></td><td>25%</td><td>1.3%+增值</td><td>持续持有大盘成长底仓，距退休15年仍是核心</td></tr>
-      <tr><td><strong>SCHD</strong></td><td>30%</td><td>3.5%，年增8-11%</td><td>股息再投入为主，进一步强化复利效果</td></tr>
-      <tr><td><strong>VYM</strong></td><td>10%</td><td>2.8%</td><td>高即时股息稳定现金流，与SCHD形成互补</td></tr>
-      <tr><td><strong>BND</strong></td><td>25%</td><td>4.0%</td><td>维持减震配置，应对市场中期波动</td></tr>
-      <tr><td><strong>TIPS</strong></td><td>10%</td><td>2.5%（通胀联动）</td><td>增配通胀保护，距退休10-15年保住购买力更关键</td></tr>
+      <tr><td><strong>VOO</strong></td><td>40%</td><td>1.3%+增值</td><td>持续持有大盘成长底仓，距退休15年仍是核心</td></tr>
+      <tr><td><strong>QQQ</strong></td><td>26%</td><td>0.6%+高增值</td><td>保持科技成长敞口，享受长期高增值</td></tr>
+      <tr><td><strong>SCHD</strong></td><td>29%</td><td>3.5%，年增8-11%</td><td>股息再投入为主，进一步强化复利效果</td></tr>
+      <tr><td><strong>GLD</strong></td><td>5%</td><td>0%股息 · 年化~11%</td><td>维持5%黄金，分散单一股市风险</td></tr>
       </tbody></table></div>
-      <div style="background:#f8fafc;border-left:3px solid #64748b;padding:9px 13px;border-radius:0 8px 8px 0;font-size:12px;color:#475569;margin-top:10px;line-height:1.7">核心动作：维持月定投，SCHD仓位升至30%，TIPS增配至10%抵御中期通胀压力。开始定期检视整体持仓比例，防止单一标的因涨幅过大导致权重失衡。</div>
+      <div style="background:#f8fafc;border-left:3px solid #64748b;padding:9px 13px;border-radius:0 8px 8px 0;font-size:12px;color:#475569;margin-top:10px;line-height:1.7">核心动作：维持月定投，仍是95%权益+5%黄金。开始定期检视各标的比例，防止QQQ因涨幅过大导致权重失衡，每年再平衡一次。</div>
     </div>
   </div>
   <div style="border:1.5px solid #fde68a;border-radius:12px;margin-bottom:14px;overflow:hidden">
     <div style="background:#fffbeb;padding:11px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-      <span style="background:#d97706;color:#fff;font-size:12px;font-weight:800;padding:4px 10px;border-radius:6px">50-55岁</span>
-      <span style="font-weight:700;color:#1e293b;font-size:13px">稳固期</span>
-      <span style="font-size:12px;color:#64748b;margin-left:auto">权益 65% | 固收 35%</span>
+      <span style="background:#d97706;color:#fff;font-size:12px;font-weight:800;padding:4px 10px;border-radius:6px">45-50岁</span>
+      <span style="font-weight:700;color:#1e293b;font-size:13px">成长转型期</span>
+      <span style="font-size:12px;color:#64748b;margin-left:auto">权益 95% | 黄金 5%</span>
     </div>
     <div style="padding:14px 16px 10px">
       <div class="table-wrap"><table>
       <thead><tr><th>标的</th><th>比例</th><th>股息/收益率</th><th>本阶段配置逻辑</th></tr></thead>
       <tbody>
-      <tr><td><strong>VOO</strong></td><td>20%</td><td>1.3%+增值</td><td>逐步降低纯成长仓位，锁定前10年涨幅</td></tr>
-      <tr><td><strong>SCHD</strong></td><td>30%</td><td>3.5%，年增8-11%</td><td>核心收益来源，股息收入已积累到相当规模</td></tr>
-      <tr><td><strong>VYM</strong></td><td>15%</td><td>2.8%</td><td>增配高即时股息，退休前3-5年现金流提前演练</td></tr>
-      <tr><td><strong>BND</strong></td><td>30%</td><td>4.0%</td><td>提升债券比例，主动降低组合波动率</td></tr>
-      <tr><td><strong>TIPS</strong></td><td>5%</td><td>2.5%（通胀联动）</td><td>维持通胀保护，防止退休后实际购买力缩水</td></tr>
+      <tr><td><strong>VOO</strong></td><td>43%</td><td>1.3%+增值</td><td>宽基底仓保持核心地位，锁定前期涨幅</td></tr>
+      <tr><td><strong>QQQ</strong></td><td>17%</td><td>0.6%+高增值</td><td>逐步降低科技高波动敞口，但仍保留成长</td></tr>
+      <tr><td><strong>SCHD</strong></td><td>35%</td><td>3.5%，年增8-11%</td><td>加大股息宽基，核心收益来源，收入已积累到相当规模</td></tr>
+      <tr><td><strong>GLD</strong></td><td>5%</td><td>0%股息 · 年化~11%</td><td>保留5%黄金，临退阶段的避险压舱石</td></tr>
       </tbody></table></div>
-      <div style="background:#f8fafc;border-left:3px solid #64748b;padding:9px 13px;border-radius:0 8px 8px 0;font-size:12px;color:#475569;margin-top:10px;line-height:1.7">核心动作：开始向"收益型"倾斜，VYM增配至15%。每年做一次组合再平衡，将超配仓位（如VOO涨幅超预期）的收益转移至债券以降低波动。</div>
+      <div style="background:#f8fafc;border-left:3px solid #64748b;padding:9px 13px;border-radius:0 8px 8px 0;font-size:12px;color:#475569;margin-top:10px;line-height:1.7">核心动作：QQQ占比减半，把超额涨幅转移到SCHD与VOO。组合仍是95%权益+5%黄金，但结构更偏股息与宽基，波动开始下降。</div>
     </div>
   </div>
   <div style="border:1.5px solid #e9d5ff;border-radius:12px;margin-bottom:14px;overflow:hidden">
     <div style="background:#fdf4ff;padding:11px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-      <span style="background:#7e22ce;color:#fff;font-size:12px;font-weight:800;padding:4px 10px;border-radius:6px">55-60岁</span>
-      <span style="font-weight:700;color:#1e293b;font-size:13px">临退守成期</span>
-      <span style="font-size:12px;color:#64748b;margin-left:auto">权益 50% | 固收 50%</span>
+      <span style="background:#7e22ce;color:#fff;font-size:12px;font-weight:800;padding:4px 10px;border-radius:6px">50-55岁</span>
+      <span style="font-weight:700;color:#1e293b;font-size:13px">临退降波动期</span>
+      <span style="font-size:12px;color:#64748b;margin-left:auto">权益 95% | 黄金 5%</span>
     </div>
     <div style="padding:14px 16px 10px">
       <div class="table-wrap"><table>
       <thead><tr><th>标的</th><th>比例</th><th>股息/收益率</th><th>本阶段配置逻辑</th></tr></thead>
       <tbody>
-      <tr><td><strong>VOO</strong></td><td>15%</td><td>1.3%+增值</td><td>保留最低成长仓位，不完全清仓，继续享受复利</td></tr>
-      <tr><td><strong>SCHD</strong></td><td>25%</td><td>3.5%，年增8-11%</td><td>退休后主要分红来源之一，可逐步切换为提款模式</td></tr>
-      <tr><td><strong>VYM</strong></td><td>10%</td><td>2.8%</td><td>稳定高额股息，退休后可按季度取息</td></tr>
-      <tr><td><strong>BND</strong></td><td>40%</td><td>4.0%</td><td>大幅提升债券仓位，核心任务是保护本金</td></tr>
-      <tr><td><strong>TIPS</strong></td><td>10%</td><td>2.5%（通胀联动）</td><td>退休前最重要的通胀对冲，保障退休后实际收入</td></tr>
+      <tr><td><strong>VOO</strong></td><td>43%</td><td>1.3%+增值</td><td>保留宽基底仓，不完全清仓，继续享受复利</td></tr>
+      <tr><td><strong>QQQ</strong></td><td>10%</td><td>0.6%+高增值</td><td>少量科技成长尾巴，享受长期复利</td></tr>
+      <tr><td><strong>SCHD</strong></td><td>42%</td><td>3.5%，年增8-11%</td><td>退休后主要分红来源，用高股息宽基降低波动，可逐步切换为提款模式</td></tr>
+      <tr><td><strong>GLD</strong></td><td>5%</td><td>0%股息 · 年化~11%</td><td>5%黄金对冲通胀与股灾，替代债券的防御角色</td></tr>
       </tbody></table></div>
-      <div style="background:#f8fafc;border-left:3px solid #64748b;padding:9px 13px;border-radius:0 8px 8px 0;font-size:12px;color:#475569;margin-top:10px;line-height:1.7">核心动作：债券仓位提升至50%，股票仓位以高股息为主。这3-5年的关键不是赚多少，而是保住前15年积累的成果。退休前1-2年可开始模拟"4%提款"演练，提前适应现金流管理节奏。</div>
+      <div style="background:#f8fafc;border-left:3px solid #64748b;padding:9px 13px;border-radius:0 8px 8px 0;font-size:12px;color:#475569;margin-top:10px;line-height:1.7">核心动作：QQQ降到10%，SCHD升到45%，用高股息宽基降低波动。注意：本组合无债券，临退前建议额外预留1-2年生活费现金，防止退休初期遇熊市被迫低位卖出。</div>
     </div>
   </div>
   </div>
   <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:13px 16px;margin-bottom:20px;font-size:13px;color:#374151">📖 <strong>每只标的的完整解析</strong>（是什么、关键数据、投资逻辑、适用场景）请查看：<span onclick="goToLesson('stock-guide')" style="color:#1d4ed8;cursor:pointer;font-weight:700;text-decoration:underline;margin-left:4px">📚 核心ETF与个股深度指南 →</span></div>
 
   <div style="margin-bottom:20px">
-    <div class="rc-section-title">📈 20年积累期成长推演（起始$15万，每年新增$5万，综合收益率7.5%）</div>
+    <div class="rc-section-title">📈 20年积累期成长推演（起始$10万，每年新增$4万，综合收益率~10.3%）</div>
     <div class="table-wrap"><table>
       <thead><tr><th>时间节点</th><th>年龄</th><th>累计投入</th><th>预计组合市值</th><th>年股息收入</th><th>里程碑</th></tr></thead>
       <tbody>
-<tr><td>第5年</td><td>45岁</td><td>$40万</td><td>~$75万</td><td>~$2.1万</td><td style="font-size:12px;color:#64748b">复利效应开始显现，市值已是投入的1.9倍</td></tr>
-<tr><td>第10年</td><td>50岁</td><td>$65万</td><td>~$185万</td><td>~$5.2万</td><td style="font-size:12px;color:#64748b">超过百万美元，SCHD股息可覆盖基本开销</td></tr>
-<tr><td>第15年</td><td>55岁</td><td>$90万</td><td>~$390万</td><td>~$11万</td><td style="font-size:12px;color:#64748b">接近财务自由临界点，股息已覆盖一般生活</td></tr>
-<tr><td>第20年</td><td>60岁</td><td>$115万</td><td>~$750万</td><td>~$21万</td><td style="font-size:12px;color:#64748b">退休启动，年股息超$20万（≈¥145万）</td></tr>
+<tr><td>第5年</td><td>40岁</td><td>$30万</td><td>~$41万</td><td>~$0.8万</td><td style="font-size:12px;color:#64748b">复利效应开始显现，成长仓位结构成型</td></tr>
+<tr><td>第10年</td><td>45岁</td><td>$50万</td><td>~$91万</td><td>~$1.9万</td><td style="font-size:12px;color:#64748b">市值已是投入的1.8倍，雪球加速滚动</td></tr>
+<tr><td>第15年</td><td>50岁</td><td>$70万</td><td>~$174万</td><td>~$3.6万</td><td style="font-size:12px;color:#64748b">突破百万美元，股息可覆盖基本开销</td></tr>
+<tr><td>第20年</td><td>55岁</td><td>$90万</td><td>~$308万</td><td>~$6.5万</td><td style="font-size:12px;color:#64748b">退休启动，年股息约$6.5万（≈¥47万）</td></tr>
       </tbody>
     </table></div>
-    <p style="font-size:12px;color:#94a3b8;margin-top:6px">假设条件：年化复合收益率7.5%（含股息再投入），不考虑税收与汇率波动。实际收益因市场情况而异。</p>
+    <p style="font-size:12px;color:#94a3b8;margin-top:6px">假设条件：年化复合收益率~10.3%（VOO+QQQ+SCHD+5%GLD、95%权益+5%黄金加权测算，含股息再投入），不考虑税收与汇率波动。含5%黄金对冲、无债券，波动仍高于含债组合，实际收益因市场情况而异。</p>
   </div>
   <div style="margin-bottom:20px">
-    <div class="rc-section-title">🎯 60岁退休启动预测</div>
+    <div class="rc-section-title">🎯 55岁退休启动预测</div>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px">
       <div style="background:linear-gradient(135deg,#f0fdf4,#dcfce7);border-radius:10px;padding:14px;text-align:center">
         <div style="font-size:11px;color:#166534;font-weight:700;margin-bottom:4px">预估组合市值</div>
-        <div style="font-size:20px;font-weight:800;color:#15803d">~$750万</div>
+        <div style="font-size:20px;font-weight:800;color:#15803d">~$308万</div>
       </div>
       <div style="background:linear-gradient(135deg,#eff6ff,#dbeafe);border-radius:10px;padding:14px;text-align:center">
         <div style="font-size:11px;color:#1e40af;font-weight:700;margin-bottom:4px">年股息收入</div>
-        <div style="font-size:20px;font-weight:800;color:#1d4ed8">~$21万/年</div>
+        <div style="font-size:20px;font-weight:800;color:#1d4ed8">~$6.5万/年</div>
       </div>
       <div style="background:linear-gradient(135deg,#fdf4ff,#f3e8ff);border-radius:10px;padding:14px;text-align:center">
         <div style="font-size:11px;color:#6b21a8;font-weight:700;margin-bottom:4px">可支取金额/年</div>
-        <div style="font-size:16px;font-weight:800;color:#7e22ce">~$30万/年 <span style="font-size:11px;font-weight:400">(4%法则)</span></div>
-        <div style="font-size:13px;font-weight:600;color:#9333ea;margin-top:4px">~$22.5万/年 <span style="font-size:11px;font-weight:400">(3%保守)</span></div>
+        <div style="font-size:16px;font-weight:800;color:#7e22ce">~$12.3万/年 <span style="font-size:11px;font-weight:400">(4%法则)</span></div>
+        <div style="font-size:13px;font-weight:600;color:#9333ea;margin-top:4px">~$9.2万/年 <span style="font-size:11px;font-weight:400">(3%保守)</span></div>
       </div>
     </div>
     <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:14px 16px">
       <div style="font-weight:700;color:#92400e;font-size:13px;margin-bottom:8px">💡 关键洞察</div>
       <ul style="padding-left:18px;margin:0;font-size:13px;color:#78350f;line-height:1.8">
-        <li style="margin-bottom:6px">用4%法则：每年可取$30万（≈¥220万），覆盖海外+国内双城生活</li><li style="margin-bottom:6px">股息本身每年$21万，基本不需要卖出任何仓位</li><li style="margin-bottom:6px">SCHD股息每年仍在增长8-11%，退休后越取越多</li><li style="margin-bottom:6px">保守配置意味着组合在市场下跌30%时只跌约15%，心理压力极小</li>
+        <li style="margin-bottom:6px">用4%法则：每年可取$12.3万（≈¥90万），55岁即可支撑非常舒适的退休生活</li><li style="margin-bottom:6px">最大优势是"时间"——35岁起全程95%权益+5%黄金，最低月投也能滚到$300万级别</li><li style="margin-bottom:6px">代价是波动大（QQQ单年可回撤30%+，组合熊市可能回撤35%），需坚持定投纪律不动摇</li><li style="margin-bottom:6px">用5%黄金替代债券做对冲，但黄金不产生现金流，仍务必在退休前预留1-2年现金应对顺序风险</li>
       </ul>
     </div>
   </div>
@@ -6638,127 +6633,123 @@ SCHD股息自动覆盖（目标）：
 <div id="rp-case-1" style="display:none;padding:24px">
   <div style="background:linear-gradient(135deg,#0f766e,#0d9488);border-radius:12px;padding:20px 24px;color:#fff;margin-bottom:20px">
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
-      <span class="rc-tag" style="background:rgba(255,255,255,0.25);color:#fff">保守型</span>
-      <span style="font-size:13px;opacity:0.8">积累期15年 · 二线城市 · 在职中产</span>
+      <span class="rc-tag" style="background:rgba(255,255,255,0.25);color:#fff">成长型</span>
+      <span style="font-size:13px;opacity:0.8">积累期15年 · 一线/二线城市 · 在职中产</span>
     </div>
-    <div style="font-size:20px;font-weight:800;margin-bottom:10px">45岁开始 → 60岁退休</div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap"><span style="background:rgba(255,255,255,0.18);padding:4px 10px;border-radius:20px;font-size:12px">现有美股 $10万（¥73万）</span><span style="background:rgba(255,255,255,0.18);padding:4px 10px;border-radius:20px;font-size:12px">年新增投入 $6万（≈月投¥3.5万）</span><span style="background:rgba(255,255,255,0.18);padding:4px 10px;border-radius:20px;font-size:12px">积累期 15年</span><span style="background:rgba(255,255,255,0.18);padding:4px 10px;border-radius:20px;font-size:12px">目标收益率 ~7.5%/年</span></div>
+    <div style="font-size:20px;font-weight:800;margin-bottom:10px">40岁开始 → 55岁退休</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap"><span style="background:rgba(255,255,255,0.18);padding:4px 10px;border-radius:20px;font-size:12px">现有美股 $15万（¥110万）</span><span style="background:rgba(255,255,255,0.18);padding:4px 10px;border-radius:20px;font-size:12px">年新增投入 $6万（≈月投¥3.6万）</span><span style="background:rgba(255,255,255,0.18);padding:4px 10px;border-radius:20px;font-size:12px">积累期 15年</span><span style="background:rgba(255,255,255,0.18);padding:4px 10px;border-radius:20px;font-size:12px">目标收益率 ~10.2%/年</span></div>
   </div>
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px">
     <div style="background:#f8fafc;border-radius:10px;padding:14px 16px">
       <div class="rc-section-title">为什么选这个节奏</div>
       <ul style="padding-left:18px;margin:0;font-size:13px;color:#374151;line-height:1.8">
-        <li style="margin-bottom:5px">45岁入场虽晚，但收入已进入峰值区</li><li style="margin-bottom:5px">月投¥3.5万比40岁时更大力度补偿时间差</li><li style="margin-bottom:5px">保守配置优先：15年不能有大回撤，要稳健增值</li>
+        <li style="margin-bottom:5px">40岁正是收入高峰期，月投¥3.6万不影响生活</li><li style="margin-bottom:5px">距退休15年，全程重仓权益（VOO+QQQ+SCHD）吃复利</li><li style="margin-bottom:5px">95%权益+5%黄金：黄金替代债券做对冲，换取高年化，代价是波动更大</li>
       </ul>
     </div>
     <div style="background:#f8fafc;border-radius:10px;padding:14px 16px">
-      <div class="rc-section-title">保守策略的核心逻辑</div>
+      <div class="rc-section-title">成长策略的核心逻辑</div>
       <ul style="padding-left:18px;margin:0;font-size:13px;color:#374151;line-height:1.8">
-        <li style="margin-bottom:5px">不追求最高收益，追求"复利+安心"</li><li style="margin-bottom:5px">SCHD+VYM为主，股息再投入是核心武器</li><li style="margin-bottom:5px">BND比例不降，市场大跌时是抄底资金来源</li>
+        <li style="margin-bottom:5px">四只ETF：VOO宽基 + QQQ成长 + SCHD股息 + 5%GLD黄金对冲</li><li style="margin-bottom:5px">前期QQQ占比高换成长，临退逐步转向SCHD/VOO降波动</li><li style="margin-bottom:5px">黄金与股票低相关（年化~11%），代替债券对冲，综合年化约~10.2%</li>
       </ul>
     </div>
   </div>
   <div style="margin-bottom:22px">
     <div class="rc-section-title">📅 分阶段配置方案（随年龄动态调整）</div>
     <div style="display:flex;gap:0;border-radius:8px;overflow:hidden;border:1px solid #e2e8f0;margin-bottom:14px;font-size:11px;font-weight:700;text-align:center">
-      <div style="flex:1;padding:8px 4px;background:#1d4ed8;color:#fff;line-height:1.4">45-50岁<br><span style="font-weight:400;opacity:.85">建仓积累期</span></div>
-      <div style="flex:1;padding:8px 4px;background:#d97706;color:#fff;border-left:1px solid #e2e8f0;line-height:1.4">50-55岁<br><span style="font-weight:400;opacity:.85">稳固期</span></div>
-      <div style="flex:1;padding:8px 4px;background:#7e22ce;color:#fff;border-left:1px solid #e2e8f0;line-height:1.4">55-60岁<br><span style="font-weight:400;opacity:.85">临退守成期</span></div>
+      <div style="flex:1;padding:8px 4px;background:#1d4ed8;color:#fff;line-height:1.4">40-45岁<br><span style="font-weight:400;opacity:.85">高成长建仓期</span></div>
+      <div style="flex:1;padding:8px 4px;background:#d97706;color:#fff;border-left:1px solid #e2e8f0;line-height:1.4">45-50岁<br><span style="font-weight:400;opacity:.85">成长转型期</span></div>
+      <div style="flex:1;padding:8px 4px;background:#7e22ce;color:#fff;border-left:1px solid #e2e8f0;line-height:1.4">50-55岁<br><span style="font-weight:400;opacity:.85">临退降波动期</span></div>
     </div>
   <div style="border:1.5px solid #bfdbfe;border-radius:12px;margin-bottom:14px;overflow:hidden">
     <div style="background:#eff6ff;padding:11px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-      <span style="background:#1d4ed8;color:#fff;font-size:12px;font-weight:800;padding:4px 10px;border-radius:6px">45-50岁</span>
-      <span style="font-weight:700;color:#1e293b;font-size:13px">建仓积累期</span>
-      <span style="font-size:12px;color:#64748b;margin-left:auto">权益 75% | 固收 25%</span>
+      <span style="background:#1d4ed8;color:#fff;font-size:12px;font-weight:800;padding:4px 10px;border-radius:6px">40-45岁</span>
+      <span style="font-weight:700;color:#1e293b;font-size:13px">高成长建仓期</span>
+      <span style="font-size:12px;color:#64748b;margin-left:auto">权益 95% | 黄金 5%</span>
     </div>
     <div style="padding:14px 16px 10px">
       <div class="table-wrap"><table>
       <thead><tr><th>标的</th><th>比例</th><th>股息/收益率</th><th>本阶段配置逻辑</th></tr></thead>
       <tbody>
-      <tr><td><strong>VOO</strong></td><td>25%</td><td>1.3%+增值</td><td>持续持有大盘成长底仓，距退休15年仍是核心</td></tr>
-      <tr><td><strong>SCHD</strong></td><td>30%</td><td>3.5%，年增8-11%</td><td>股息再投入为主，进一步强化复利效果</td></tr>
-      <tr><td><strong>VYM</strong></td><td>10%</td><td>2.8%</td><td>高即时股息稳定现金流，与SCHD形成互补</td></tr>
-      <tr><td><strong>BND</strong></td><td>25%</td><td>4.0%</td><td>维持减震配置，应对市场中期波动</td></tr>
-      <tr><td><strong>TIPS</strong></td><td>10%</td><td>2.5%（通胀联动）</td><td>增配通胀保护，距退休10-15年保住购买力更关键</td></tr>
+      <tr><td><strong>VOO</strong></td><td>40%</td><td>1.3%+增值</td><td>核心成长底仓，距退休15年仍是主力</td></tr>
+      <tr><td><strong>QQQ</strong></td><td>26%</td><td>0.6%+高增值</td><td>成长引擎，纳斯达克100，享受长期高增值</td></tr>
+      <tr><td><strong>SCHD</strong></td><td>29%</td><td>3.5%，年增8-11%</td><td>股息再投入为主，全力开启复利引擎</td></tr>
+      <tr><td><strong>GLD</strong></td><td>5%</td><td>0%股息 · 年化~11%</td><td>黄金对冲，与股票低相关，替代债券做减震</td></tr>
       </tbody></table></div>
-      <div style="background:#f8fafc;border-left:3px solid #64748b;padding:9px 13px;border-radius:0 8px 8px 0;font-size:12px;color:#475569;margin-top:10px;line-height:1.7">核心动作：首要任务是尽快建立核心仓位，VOO+SCHD作为主力，月定投 ≥ $3000，全力开启复利引擎。距退休15年，时间仍然充裕，但比40岁起容错率更低，应避免投机。</div>
+      <div style="background:#f8fafc;border-left:3px solid #64748b;padding:9px 13px;border-radius:0 8px 8px 0;font-size:12px;color:#475569;margin-top:10px;line-height:1.7">核心动作：尽快建立核心仓位，VOO+QQQ+SCHD为主力，月定投 ≥ $3000，全力开启复利引擎。距退休15年，95%权益+5%黄金是合理的，比35岁起容错率略低，避免个股投机。</div>
     </div>
   </div>
   <div style="border:1.5px solid #fde68a;border-radius:12px;margin-bottom:14px;overflow:hidden">
     <div style="background:#fffbeb;padding:11px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-      <span style="background:#d97706;color:#fff;font-size:12px;font-weight:800;padding:4px 10px;border-radius:6px">50-55岁</span>
-      <span style="font-weight:700;color:#1e293b;font-size:13px">稳固期</span>
-      <span style="font-size:12px;color:#64748b;margin-left:auto">权益 65% | 固收 35%</span>
+      <span style="background:#d97706;color:#fff;font-size:12px;font-weight:800;padding:4px 10px;border-radius:6px">45-50岁</span>
+      <span style="font-weight:700;color:#1e293b;font-size:13px">成长转型期</span>
+      <span style="font-size:12px;color:#64748b;margin-left:auto">权益 95% | 黄金 5%</span>
     </div>
     <div style="padding:14px 16px 10px">
       <div class="table-wrap"><table>
       <thead><tr><th>标的</th><th>比例</th><th>股息/收益率</th><th>本阶段配置逻辑</th></tr></thead>
       <tbody>
-      <tr><td><strong>VOO</strong></td><td>20%</td><td>1.3%+增值</td><td>逐步降低纯成长仓位，锁定前10年涨幅</td></tr>
-      <tr><td><strong>SCHD</strong></td><td>30%</td><td>3.5%，年增8-11%</td><td>核心收益来源，股息收入已积累到相当规模</td></tr>
-      <tr><td><strong>VYM</strong></td><td>15%</td><td>2.8%</td><td>增配高即时股息，退休前3-5年现金流提前演练</td></tr>
-      <tr><td><strong>BND</strong></td><td>30%</td><td>4.0%</td><td>提升债券比例，主动降低组合波动率</td></tr>
-      <tr><td><strong>TIPS</strong></td><td>5%</td><td>2.5%（通胀联动）</td><td>维持通胀保护，防止退休后实际购买力缩水</td></tr>
+      <tr><td><strong>VOO</strong></td><td>43%</td><td>1.3%+增值</td><td>宽基底仓保持核心地位，锁定前期涨幅</td></tr>
+      <tr><td><strong>QQQ</strong></td><td>17%</td><td>0.6%+高增值</td><td>逐步降低科技高波动敞口，但仍保留成长</td></tr>
+      <tr><td><strong>SCHD</strong></td><td>35%</td><td>3.5%，年增8-11%</td><td>加大股息宽基，核心收益来源，收入已积累到相当规模</td></tr>
+      <tr><td><strong>GLD</strong></td><td>5%</td><td>0%股息 · 年化~11%</td><td>保留5%黄金，临退阶段的避险压舱石</td></tr>
       </tbody></table></div>
-      <div style="background:#f8fafc;border-left:3px solid #64748b;padding:9px 13px;border-radius:0 8px 8px 0;font-size:12px;color:#475569;margin-top:10px;line-height:1.7">核心动作：开始向收益型倾斜，VYM增配，每年做一次再平衡。此阶段股息收入应已相当可观，继续全额再投入复利。</div>
+      <div style="background:#f8fafc;border-left:3px solid #64748b;padding:9px 13px;border-radius:0 8px 8px 0;font-size:12px;color:#475569;margin-top:10px;line-height:1.7">核心动作：QQQ占比减半，把超额涨幅转移到SCHD与VOO。组合仍是95%权益+5%黄金，但结构更偏股息与宽基，波动开始下降。股息收入应已相当可观，继续全额再投入复利。</div>
     </div>
   </div>
   <div style="border:1.5px solid #e9d5ff;border-radius:12px;margin-bottom:14px;overflow:hidden">
     <div style="background:#fdf4ff;padding:11px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-      <span style="background:#7e22ce;color:#fff;font-size:12px;font-weight:800;padding:4px 10px;border-radius:6px">55-60岁</span>
-      <span style="font-weight:700;color:#1e293b;font-size:13px">临退守成期</span>
-      <span style="font-size:12px;color:#64748b;margin-left:auto">权益 50% | 固收 50%</span>
+      <span style="background:#7e22ce;color:#fff;font-size:12px;font-weight:800;padding:4px 10px;border-radius:6px">50-55岁</span>
+      <span style="font-weight:700;color:#1e293b;font-size:13px">临退降波动期</span>
+      <span style="font-size:12px;color:#64748b;margin-left:auto">权益 95% | 黄金 5%</span>
     </div>
     <div style="padding:14px 16px 10px">
       <div class="table-wrap"><table>
       <thead><tr><th>标的</th><th>比例</th><th>股息/收益率</th><th>本阶段配置逻辑</th></tr></thead>
       <tbody>
-      <tr><td><strong>VOO</strong></td><td>15%</td><td>1.3%+增值</td><td>保留最低成长仓位，不完全清仓，继续享受复利</td></tr>
-      <tr><td><strong>SCHD</strong></td><td>25%</td><td>3.5%，年增8-11%</td><td>退休后主要分红来源之一，可逐步切换为提款模式</td></tr>
-      <tr><td><strong>VYM</strong></td><td>10%</td><td>2.8%</td><td>稳定高额股息，退休后可按季度取息</td></tr>
-      <tr><td><strong>BND</strong></td><td>40%</td><td>4.0%</td><td>大幅提升债券仓位，核心任务是保护本金</td></tr>
-      <tr><td><strong>TIPS</strong></td><td>10%</td><td>2.5%（通胀联动）</td><td>退休前最重要的通胀对冲，保障退休后实际收入</td></tr>
+      <tr><td><strong>VOO</strong></td><td>43%</td><td>1.3%+增值</td><td>保留宽基底仓，不完全清仓，继续享受复利</td></tr>
+      <tr><td><strong>QQQ</strong></td><td>10%</td><td>0.6%+高增值</td><td>少量科技成长尾巴，享受长期复利</td></tr>
+      <tr><td><strong>SCHD</strong></td><td>42%</td><td>3.5%，年增8-11%</td><td>退休后主要分红来源，用高股息宽基降低波动，可逐步切换为提款模式</td></tr>
+      <tr><td><strong>GLD</strong></td><td>5%</td><td>0%股息 · 年化~11%</td><td>5%黄金对冲通胀与股灾，替代债券的防御角色</td></tr>
       </tbody></table></div>
-      <div style="background:#f8fafc;border-left:3px solid #64748b;padding:9px 13px;border-radius:0 8px 8px 0;font-size:12px;color:#475569;margin-top:10px;line-height:1.7">核心动作：保本优先，大幅提升BND至40%。距退休5年，重心从"增长"切换为"守住"。若前期成长良好，可提前准备退休后的提款策略（4%法则/桶形策略）。</div>
+      <div style="background:#f8fafc;border-left:3px solid #64748b;padding:9px 13px;border-radius:0 8px 8px 0;font-size:12px;color:#475569;margin-top:10px;line-height:1.7">核心动作：QQQ降到10%，SCHD升到45%，另有5%黄金降低波动。本组合以黄金替代债券对冲，退休前1-2年仍建议预留1-2年现金，并准备提款策略（4%法则/桶形策略）。</div>
     </div>
   </div>
   </div>
   <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:13px 16px;margin-bottom:20px;font-size:13px;color:#374151">📖 <strong>每只标的的完整解析</strong>（是什么、关键数据、投资逻辑、适用场景）请查看：<span onclick="goToLesson('stock-guide')" style="color:#1d4ed8;cursor:pointer;font-weight:700;text-decoration:underline;margin-left:4px">📚 核心ETF与个股深度指南 →</span></div>
 
   <div style="margin-bottom:20px">
-    <div class="rc-section-title">📈 15年积累期成长推演（起始$10万，每年新增$6万，综合收益率7.5%）</div>
+    <div class="rc-section-title">📈 15年积累期成长推演（起始$15万，每年新增$6万，综合收益率~10.2%）</div>
     <div class="table-wrap"><table>
       <thead><tr><th>时间节点</th><th>年龄</th><th>累计投入</th><th>预计组合市值</th><th>年股息收入</th><th>里程碑</th></tr></thead>
       <tbody>
-<tr><td>第5年</td><td>50岁</td><td>$40万</td><td>~$73万</td><td>~$2万</td><td style="font-size:12px;color:#64748b">5年市值已超投入1.8倍，基础已打牢</td></tr>
-<tr><td>第8年</td><td>53岁</td><td>$58万</td><td>~$140万</td><td>~$3.9万</td><td style="font-size:12px;color:#64748b">持续复利，市值进入高速增长通道</td></tr>
-<tr><td>第12年</td><td>57岁</td><td>$82万</td><td>~$280万</td><td>~$7.8万</td><td style="font-size:12px;color:#64748b">退休前3年组合规模接近三百万</td></tr>
-<tr><td>第15年</td><td>60岁</td><td>$100万</td><td>~$430万</td><td>~$12万</td><td style="font-size:12px;color:#64748b">退休启动，年股息超$12万（≈¥87万）</td></tr>
+<tr><td>第5年</td><td>45岁</td><td>$45万</td><td>~$61万</td><td>~$1.3万</td><td style="font-size:12px;color:#64748b">仓位结构成型，复利开始显现</td></tr>
+<tr><td>第10年</td><td>50岁</td><td>$75万</td><td>~$136万</td><td>~$2.9万</td><td style="font-size:12px;color:#64748b">突破百万美元，股息可覆盖基本开销</td></tr>
+<tr><td>第15年</td><td>55岁</td><td>$105万</td><td>~$258万</td><td>~$5.4万</td><td style="font-size:12px;color:#64748b">退休启动，年股息约$5.4万（≈¥39万）</td></tr>
       </tbody>
     </table></div>
-    <p style="font-size:12px;color:#94a3b8;margin-top:6px">假设条件：年化复合收益率7.5%（含股息再投入），不考虑税收与汇率波动。实际收益因市场情况而异。</p>
+    <p style="font-size:12px;color:#94a3b8;margin-top:6px">假设条件：年化复合收益率~10.2%（VOO+QQQ+SCHD+5%GLD、95%权益+5%黄金加权测算，含股息再投入），不考虑税收与汇率波动。含5%黄金对冲、无债券，波动仍高于含债组合，实际收益因市场情况而异。</p>
   </div>
   <div style="margin-bottom:20px">
-    <div class="rc-section-title">🎯 60岁退休启动预测</div>
+    <div class="rc-section-title">🎯 55岁退休启动预测</div>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px">
       <div style="background:linear-gradient(135deg,#f0fdf4,#dcfce7);border-radius:10px;padding:14px;text-align:center">
         <div style="font-size:11px;color:#166534;font-weight:700;margin-bottom:4px">预估组合市值</div>
-        <div style="font-size:20px;font-weight:800;color:#15803d">~$430万</div>
+        <div style="font-size:20px;font-weight:800;color:#15803d">~$258万</div>
       </div>
       <div style="background:linear-gradient(135deg,#eff6ff,#dbeafe);border-radius:10px;padding:14px;text-align:center">
         <div style="font-size:11px;color:#1e40af;font-weight:700;margin-bottom:4px">年股息收入</div>
-        <div style="font-size:20px;font-weight:800;color:#1d4ed8">~$12万/年</div>
+        <div style="font-size:20px;font-weight:800;color:#1d4ed8">~$5.4万/年</div>
       </div>
       <div style="background:linear-gradient(135deg,#fdf4ff,#f3e8ff);border-radius:10px;padding:14px;text-align:center">
         <div style="font-size:11px;color:#6b21a8;font-weight:700;margin-bottom:4px">可支取金额/年</div>
-        <div style="font-size:16px;font-weight:800;color:#7e22ce">~$17万/年 <span style="font-size:11px;font-weight:400">(4%法则)</span></div>
-        <div style="font-size:13px;font-weight:600;color:#9333ea;margin-top:4px">~$13万/年 <span style="font-size:11px;font-weight:400">(3%保守)</span></div>
+        <div style="font-size:16px;font-weight:800;color:#7e22ce">~$10.3万/年 <span style="font-size:11px;font-weight:400">(4%法则)</span></div>
+        <div style="font-size:13px;font-weight:600;color:#9333ea;margin-top:4px">~$7.7万/年 <span style="font-size:11px;font-weight:400">(3%保守)</span></div>
       </div>
     </div>
     <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:14px 16px">
       <div style="font-weight:700;color:#92400e;font-size:13px;margin-bottom:8px">💡 关键洞察</div>
       <ul style="padding-left:18px;margin:0;font-size:13px;color:#78350f;line-height:1.8">
-        <li style="margin-bottom:6px">用4%法则：每年可取$17万（≈¥124万），满足中等退休生活需求</li><li style="margin-bottom:6px">股息本身每年$12万，日常开支基本靠股息覆盖，无需卖出仓位</li><li style="margin-bottom:6px">保守配置让市场暴跌时只跌一半，持有信心更强</li><li style="margin-bottom:6px">建议同时配置一定比例的国内养老险，形成双重保障</li>
+        <li style="margin-bottom:6px">用4%法则：每年可取$10.3万（≈¥75万），满足相当舒适的退休生活需求</li><li style="margin-bottom:6px">95%权益+5%黄金、无债券拖累，15年可滚到$258万级别，代价是波动更大</li><li style="margin-bottom:6px">比35岁起步少5年，用更高月投（¥3.6万）弥补时间差</li><li style="margin-bottom:6px">黄金替代债券对冲但不产生现金流，仍务必预留1-2年现金，并可配置国内养老险形成双重保障</li>
       </ul>
     </div>
   </div>
@@ -6768,151 +6759,104 @@ SCHD股息自动覆盖（目标）：
 <div id="rp-case-2" style="display:none;padding:24px">
   <div style="background:linear-gradient(135deg,#7c3aed,#6d28d9);border-radius:12px;padding:20px 24px;color:#fff;margin-bottom:20px">
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
-      <span class="rc-tag" style="background:rgba(255,255,255,0.25);color:#fff">激进型</span>
-      <span style="font-size:13px;opacity:0.8">积累期20年 · 一线城市 · 高收入职场人</span>
+      <span class="rc-tag" style="background:rgba(255,255,255,0.25);color:#fff">成长型</span>
+      <span style="font-size:13px;opacity:0.8">积累期10年 · 一线城市 · 高收入职场人</span>
     </div>
-    <div style="font-size:20px;font-weight:800;margin-bottom:10px">40岁开始 → 60岁退休</div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap"><span style="background:rgba(255,255,255,0.18);padding:4px 10px;border-radius:20px;font-size:12px">现有美股 $20万（¥146万）</span><span style="background:rgba(255,255,255,0.18);padding:4px 10px;border-radius:20px;font-size:12px">年新增投入 $8万（≈月投¥4.5万）</span><span style="background:rgba(255,255,255,0.18);padding:4px 10px;border-radius:20px;font-size:12px">积累期 20年</span><span style="background:rgba(255,255,255,0.18);padding:4px 10px;border-radius:20px;font-size:12px">目标收益率 ~10%/年</span></div>
+    <div style="font-size:20px;font-weight:800;margin-bottom:10px">45岁开始 → 55岁退休</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap"><span style="background:rgba(255,255,255,0.18);padding:4px 10px;border-radius:20px;font-size:12px">现有美股 $25万（¥183万）</span><span style="background:rgba(255,255,255,0.18);padding:4px 10px;border-radius:20px;font-size:12px">年新增投入 $9万（≈月投¥5.5万）</span><span style="background:rgba(255,255,255,0.18);padding:4px 10px;border-radius:20px;font-size:12px">积累期 10年</span><span style="background:rgba(255,255,255,0.18);padding:4px 10px;border-radius:20px;font-size:12px">目标收益率 ~10.1%/年</span></div>
   </div>
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px">
     <div style="background:#f8fafc;border-radius:10px;padding:14px 16px">
       <div class="rc-section-title">为什么选这个节奏</div>
       <ul style="padding-left:18px;margin:0;font-size:13px;color:#374151;line-height:1.8">
-        <li style="margin-bottom:5px">40岁高收入，风险承受能力强</li><li style="margin-bottom:5px">可以接受短期剧烈波动（组合可能单年-30%）</li><li style="margin-bottom:5px">目标是到60岁实现超额财富积累</li>
+        <li style="margin-bottom:5px">45岁入场，积累窗口只有10年，容错率较低</li><li style="margin-bottom:5px">用较高起始资产+大月投（¥5.5万）弥补时间差</li><li style="margin-bottom:5px">95%权益+5%黄金：前5年偏成长，后5年转向股息宽基，黄金替代债券对冲</li>
       </ul>
     </div>
     <div style="background:#f8fafc;border-radius:10px;padding:14px 16px">
-      <div class="rc-section-title">激进策略的核心逻辑</div>
+      <div class="rc-section-title">成长策略的核心逻辑</div>
       <ul style="padding-left:18px;margin:0;font-size:13px;color:#374151;line-height:1.8">
-        <li style="margin-bottom:5px">科技成长股+宽基ETF双引擎驱动</li><li style="margin-bottom:5px">不配黄金，超额收益靠权益资产贡献</li><li style="margin-bottom:5px">随年龄增长逐步向防御性转移，控制退休时风险</li>
+        <li style="margin-bottom:5px">四只ETF：VOO宽基 + QQQ成长 + SCHD股息 + 5%GLD黄金对冲</li><li style="margin-bottom:5px">股息再投入是核心武器，SCHD占比随年龄提升</li><li style="margin-bottom:5px">黄金与股票低相关（年化~11%），代替债券对冲，综合年化约~10.1%</li>
       </ul>
     </div>
   </div>
   <div style="margin-bottom:22px">
     <div class="rc-section-title">📅 分阶段配置方案（随年龄动态调整）</div>
     <div style="display:flex;gap:0;border-radius:8px;overflow:hidden;border:1px solid #e2e8f0;margin-bottom:14px;font-size:11px;font-weight:700;text-align:center">
-      <div style="flex:1;padding:8px 4px;background:#c2410c;color:#fff;line-height:1.4">40-45岁<br><span style="font-weight:400;opacity:.85">高成长进攻期</span></div>
-      <div style="flex:1;padding:8px 4px;background:#b45309;color:#fff;border-left:1px solid #e2e8f0;line-height:1.4">45-50岁<br><span style="font-weight:400;opacity:.85">成长转型期</span></div>
-      <div style="flex:1;padding:8px 4px;background:#15803d;color:#fff;border-left:1px solid #e2e8f0;line-height:1.4">50-55岁<br><span style="font-weight:400;opacity:.85">均衡成长期</span></div>
-      <div style="flex:1;padding:8px 4px;background:#475569;color:#fff;border-left:1px solid #e2e8f0;line-height:1.4">55-60岁<br><span style="font-weight:400;opacity:.85">防御保本期</span></div>
+      <div style="flex:1;padding:8px 4px;background:#d97706;color:#fff;line-height:1.4">45-50岁<br><span style="font-weight:400;opacity:.85">成长建仓期</span></div>
+      <div style="flex:1;padding:8px 4px;background:#7e22ce;color:#fff;border-left:1px solid #e2e8f0;line-height:1.4">50-55岁<br><span style="font-weight:400;opacity:.85">临退降波动期</span></div>
     </div>
-  <div style="border:1.5px solid #fed7aa;border-radius:12px;margin-bottom:14px;overflow:hidden">
-    <div style="background:#fff7ed;padding:11px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-      <span style="background:#c2410c;color:#fff;font-size:12px;font-weight:800;padding:4px 10px;border-radius:6px">40-45岁</span>
-      <span style="font-weight:700;color:#1e293b;font-size:13px">高成长进攻期</span>
-      <span style="font-size:12px;color:#64748b;margin-left:auto">权益 100% | 固收 0%</span>
-    </div>
-    <div style="padding:14px 16px 10px">
-      <div class="table-wrap"><table>
-      <thead><tr><th>标的</th><th>比例</th><th>股息/收益率</th><th>本阶段配置逻辑</th></tr></thead>
-      <tbody>
-      <tr><td><strong>VOO</strong></td><td>20%</td><td>1.3%+增值</td><td>大盘兜底，无论市场如何演化，美国经济长期向上</td></tr>
-      <tr><td><strong>QQQ</strong></td><td>20%</td><td>0.6%+高增值</td><td>纳斯达克100，持有科技龙头，历史年化~15%</td></tr>
-      <tr><td><strong>NVDA</strong></td><td>20%</td><td>0.03%+资本利得</td><td>AI时代最强成长引擎，GPU垄断带来爆发式增长，高波动高收益</td></tr>
-      <tr><td><strong>MSFT</strong></td><td>15%</td><td>0.7%+稳定增值</td><td>科技巨头中最稳健的成长股，云计算+AI双重驱动</td></tr>
-      <tr><td><strong>AAPL</strong></td><td>10%</td><td>0.5%+回购</td><td>现金牛机器，生态系统护城河深厚，回购持续增厚每股价值</td></tr>
-      <tr><td><strong>SCHD</strong></td><td>15%</td><td>3.5%，年增8-11%</td><td>唯一配置的收益型ETF，降低纯成长股波动，提供股息再投入</td></tr>
-      </tbody></table></div>
-      <div style="background:#f8fafc;border-left:3px solid #64748b;padding:9px 13px;border-radius:0 8px 8px 0;font-size:12px;color:#475569;margin-top:10px;line-height:1.7">核心动作：此阶段可以承受最高波动，保持100%权益仓位。NVDA/MSFT/AAPL每月定投，遇到市场大跌（>20%）额外加仓。高波动是激进型投资者的优势，不是威胁。</div>
-    </div>
-  </div>
   <div style="border:1.5px solid #fde68a;border-radius:12px;margin-bottom:14px;overflow:hidden">
-    <div style="background:#fef9c3;padding:11px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-      <span style="background:#b45309;color:#fff;font-size:12px;font-weight:800;padding:4px 10px;border-radius:6px">45-50岁</span>
-      <span style="font-weight:700;color:#1e293b;font-size:13px">成长转型期</span>
-      <span style="font-size:12px;color:#64748b;margin-left:auto">权益 80% | 固收 20%</span>
+    <div style="background:#fffbeb;padding:11px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+      <span style="background:#d97706;color:#fff;font-size:12px;font-weight:800;padding:4px 10px;border-radius:6px">45-50岁</span>
+      <span style="font-weight:700;color:#1e293b;font-size:13px">成长建仓期</span>
+      <span style="font-size:12px;color:#64748b;margin-left:auto">权益 95% | 黄金 5%</span>
     </div>
     <div style="padding:14px 16px 10px">
       <div class="table-wrap"><table>
       <thead><tr><th>标的</th><th>比例</th><th>股息/收益率</th><th>本阶段配置逻辑</th></tr></thead>
       <tbody>
-      <tr><td><strong>VOO</strong></td><td>25%</td><td>1.3%+增值</td><td>增配大盘底仓，成长与稳健平衡</td></tr>
-      <tr><td><strong>QQQ</strong></td><td>15%</td><td>0.6%+高增值</td><td>保持科技成长敞口，适当降低集中度</td></tr>
-      <tr><td><strong>SCHD</strong></td><td>20%</td><td>3.5%，年增8-11%</td><td>增配股息，引入稳定现金流，平滑组合波动</td></tr>
-      <tr><td><strong>NVDA</strong></td><td>10%</td><td>0.03%+资本利得</td><td>降低单一高波动仓位，但保留AI红利</td></tr>
-      <tr><td><strong>MSFT</strong></td><td>10%</td><td>0.7%+稳定增值</td><td>低波动科技核心持仓，可持续持有</td></tr>
-      <tr><td><strong>BND</strong></td><td>20%</td><td>4.0%</td><td>首次引入债券缓冲，为后期降波动铺路</td></tr>
+      <tr><td><strong>VOO</strong></td><td>43%</td><td>1.3%+增值</td><td>核心成长底仓，10年积累期仍需成长驱动</td></tr>
+      <tr><td><strong>QQQ</strong></td><td>17%</td><td>0.6%+高增值</td><td>成长引擎，前5年提升复利效率</td></tr>
+      <tr><td><strong>SCHD</strong></td><td>35%</td><td>3.5%，年增8-11%</td><td>股息再投入为主，快速强化复利效果</td></tr>
+      <tr><td><strong>GLD</strong></td><td>5%</td><td>0%股息 · 年化~11%</td><td>黄金对冲，与股票低相关，替代债券做减震</td></tr>
       </tbody></table></div>
-      <div style="background:#f8fafc;border-left:3px solid #64748b;padding:9px 13px;border-radius:0 8px 8px 0;font-size:12px;color:#475569;margin-top:10px;line-height:1.7">核心动作：引入20%的BND作为第一层缓冲，但整体仍以成长为主。逐步降低NVDA等高波动个股仓位，避免单一标的集中风险超过15%。定期检视科技股占比，防止QQQ+NVDA+MSFT合计超过50%。</div>
+      <div style="background:#f8fafc;border-left:3px solid #64748b;padding:9px 13px;border-radius:0 8px 8px 0;font-size:12px;color:#475569;margin-top:10px;line-height:1.7">核心动作：尽快建立核心仓位，VOO+QQQ+SCHD为主力，月定投 ≥ $5000。10年期起步95%权益+5%黄金，QQQ控制在20%以内避免过度集中。</div>
     </div>
   </div>
-  <div style="border:1.5px solid #bbf7d0;border-radius:12px;margin-bottom:14px;overflow:hidden">
-    <div style="background:#f0fdf4;padding:11px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-      <span style="background:#15803d;color:#fff;font-size:12px;font-weight:800;padding:4px 10px;border-radius:6px">50-55岁</span>
-      <span style="font-weight:700;color:#1e293b;font-size:13px">均衡成长期</span>
-      <span style="font-size:12px;color:#64748b;margin-left:auto">权益 70% | 固收 30%</span>
+  <div style="border:1.5px solid #e9d5ff;border-radius:12px;margin-bottom:14px;overflow:hidden">
+    <div style="background:#fdf4ff;padding:11px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+      <span style="background:#7e22ce;color:#fff;font-size:12px;font-weight:800;padding:4px 10px;border-radius:6px">50-55岁</span>
+      <span style="font-weight:700;color:#1e293b;font-size:13px">临退降波动期</span>
+      <span style="font-size:12px;color:#64748b;margin-left:auto">权益 95% | 黄金 5%</span>
     </div>
     <div style="padding:14px 16px 10px">
       <div class="table-wrap"><table>
       <thead><tr><th>标的</th><th>比例</th><th>股息/收益率</th><th>本阶段配置逻辑</th></tr></thead>
       <tbody>
-      <tr><td><strong>VOO</strong></td><td>30%</td><td>1.3%+增值</td><td>核心成长底仓，距退休10年仍需成长驱动</td></tr>
-      <tr><td><strong>SCHD</strong></td><td>25%</td><td>3.5%，年增8-11%</td><td>股息成为重要收益来源，开始为退休分红做准备</td></tr>
-      <tr><td><strong>QQQ</strong></td><td>10%</td><td>0.6%+高增值</td><td>保留科技成长，但大幅降低至低配</td></tr>
-      <tr><td><strong>MSFT</strong></td><td>5%</td><td>0.7%+稳定增值</td><td>低波动蓝筹科技，退休前保留少量</td></tr>
-      <tr><td><strong>BND</strong></td><td>25%</td><td>4.0%</td><td>提升债券保护，控制整体回撤风险</td></tr>
-      <tr><td><strong>TIPS</strong></td><td>5%</td><td>2.5%（通胀联动）</td><td>通胀保护浮现，保障退休后实际购买力</td></tr>
+      <tr><td><strong>VOO</strong></td><td>43%</td><td>1.3%+增值</td><td>保留宽基底仓，不完全清仓，继续享受复利</td></tr>
+      <tr><td><strong>QQQ</strong></td><td>10%</td><td>0.6%+高增值</td><td>少量科技成长尾巴，享受长期复利</td></tr>
+      <tr><td><strong>SCHD</strong></td><td>42%</td><td>3.5%，年增8-11%</td><td>退休后主要分红来源，用高股息宽基降低波动，可逐步切换为提款模式</td></tr>
+      <tr><td><strong>GLD</strong></td><td>5%</td><td>0%股息 · 年化~11%</td><td>5%黄金对冲通胀与股灾，替代债券的防御角色</td></tr>
       </tbody></table></div>
-      <div style="background:#f8fafc;border-left:3px solid #64748b;padding:9px 13px;border-radius:0 8px 8px 0;font-size:12px;color:#475569;margin-top:10px;line-height:1.7">核心动作：科技个股逐步减仓，转向VOO+SCHD的宽基组合。股息收入开始成为可观收益，SCHD股息再投入继续滚动复利。整体波动率应比40岁时下降约30%，平衡"继续增长"与"保护成果"。</div>
-    </div>
-  </div>
-  <div style="border:1.5px solid #e2e8f0;border-radius:12px;margin-bottom:14px;overflow:hidden">
-    <div style="background:#f1f5f9;padding:11px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-      <span style="background:#475569;color:#fff;font-size:12px;font-weight:800;padding:4px 10px;border-radius:6px">55-60岁</span>
-      <span style="font-weight:700;color:#1e293b;font-size:13px">防御保本期</span>
-      <span style="font-size:12px;color:#64748b;margin-left:auto">权益 60% | 固收 40%</span>
-    </div>
-    <div style="padding:14px 16px 10px">
-      <div class="table-wrap"><table>
-      <thead><tr><th>标的</th><th>比例</th><th>股息/收益率</th><th>本阶段配置逻辑</th></tr></thead>
-      <tbody>
-      <tr><td><strong>VOO</strong></td><td>20%</td><td>1.3%+增值</td><td>成长底仓保留，不完全撤出权益</td></tr>
-      <tr><td><strong>SCHD</strong></td><td>25%</td><td>3.5%，年增8-11%</td><td>核心股息来源，退休启动时可转为取息模式</td></tr>
-      <tr><td><strong>VYM</strong></td><td>10%</td><td>2.8%</td><td>补充高即时股息，退休后多一层稳定现金流</td></tr>
-      <tr><td><strong>QQQ</strong></td><td>5%</td><td>0.6%+高增值</td><td>极少量科技成长，享受长期复利尾巴</td></tr>
-      <tr><td><strong>BND</strong></td><td>30%</td><td>4.0%</td><td>防御主力，保护已积累财富不受市场冲击</td></tr>
-      <tr><td><strong>TIPS</strong></td><td>10%</td><td>2.5%（通胀联动）</td><td>通胀防护升至高配，退休后维持实际购买力</td></tr>
-      </tbody></table></div>
-      <div style="background:#f8fafc;border-left:3px solid #64748b;padding:9px 13px;border-radius:0 8px 8px 0;font-size:12px;color:#475569;margin-top:10px;line-height:1.7">核心动作：撤出高波动资产，构建防御性退休组合。NVDA等高波动个股完全清仓。保留QQQ 5%作为长期科技成长的尾部仓位。BND升至30%，TIPS 10%锁定通胀保护。退休前2年开始执行"桶形策略"：现金桶1年生活费，债券桶3-5年，权益桶长期增值。</div>
+      <div style="background:#f8fafc;border-left:3px solid #64748b;padding:9px 13px;border-radius:0 8px 8px 0;font-size:12px;color:#475569;margin-top:10px;line-height:1.7">核心动作：QQQ降到10%，SCHD升到45%，另有5%黄金降低波动。本组合以黄金替代债券对冲，退休前1-2年仍建议预留1-2年现金，并模拟"4%提款"演练。</div>
     </div>
   </div>
   </div>
   <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:13px 16px;margin-bottom:20px;font-size:13px;color:#374151">📖 <strong>每只标的的完整解析</strong>（是什么、关键数据、投资逻辑、适用场景）请查看：<span onclick="goToLesson('stock-guide')" style="color:#1d4ed8;cursor:pointer;font-weight:700;text-decoration:underline;margin-left:4px">📚 核心ETF与个股深度指南 →</span></div>
 
   <div style="margin-bottom:20px">
-    <div class="rc-section-title">📈 20年积累期成长推演（起始$20万，每年新增$8万，综合收益率10%）</div>
+    <div class="rc-section-title">📈 10年积累期成长推演（起始$25万，每年新增$9万，综合收益率~10.1%）</div>
     <div class="table-wrap"><table>
       <thead><tr><th>时间节点</th><th>年龄</th><th>累计投入</th><th>预计组合市值</th><th>年股息收入</th><th>里程碑</th></tr></thead>
       <tbody>
-<tr><td>第5年</td><td>45岁</td><td>$60万</td><td>~$140万</td><td>~$1.5万</td><td style="font-size:12px;color:#64748b">科技牛市加速，市值是投入的2.3倍</td></tr>
-<tr><td>第10年</td><td>50岁</td><td>$100万</td><td>~$420万</td><td>~$5万</td><td style="font-size:12px;color:#64748b">四百万美元关口，SCHD股息可补贴生活</td></tr>
-<tr><td>第15年</td><td>55岁</td><td>$140万</td><td>~$1000万</td><td>~$12万</td><td style="font-size:12px;color:#64748b">千万美元级别，财务自由基本实现</td></tr>
-<tr><td>第20年</td><td>60岁</td><td>$180万</td><td>~$2300万</td><td>~$28万</td><td style="font-size:12px;color:#64748b">退休启动，资产规模达两千三百万美元</td></tr>
+<tr><td>第5年</td><td>50岁</td><td>$70万</td><td>~$96万</td><td>~$2万</td><td style="font-size:12px;color:#64748b">仓位结构成型，股息开始滚动复利</td></tr>
+<tr><td>第8年</td><td>53岁</td><td>$97万</td><td>~$157万</td><td>~$3.3万</td><td style="font-size:12px;color:#64748b">突破百万美元，进入临退过渡期</td></tr>
+<tr><td>第10年</td><td>55岁</td><td>$115万</td><td>~$210万</td><td>~$4.4万</td><td style="font-size:12px;color:#64748b">退休启动，年股息约$4.4万（≈¥32万）</td></tr>
       </tbody>
     </table></div>
-    <p style="font-size:12px;color:#94a3b8;margin-top:6px">假设条件：年化复合收益率10%（含科技股+ETF综合，含股息再投入）。个股波动较大，实际结果区间较宽。</p>
+    <p style="font-size:12px;color:#94a3b8;margin-top:6px">假设条件：年化复合收益率~10.1%（VOO+QQQ+SCHD+5%GLD、95%权益+5%黄金加权测算，含股息再投入），不考虑税收与汇率波动。含5%黄金对冲、无债券，波动仍高于含债组合，实际收益因市场情况而异。</p>
   </div>
   <div style="margin-bottom:20px">
-    <div class="rc-section-title">🎯 60岁退休启动预测</div>
+    <div class="rc-section-title">🎯 55岁退休启动预测</div>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px">
       <div style="background:linear-gradient(135deg,#f0fdf4,#dcfce7);border-radius:10px;padding:14px;text-align:center">
         <div style="font-size:11px;color:#166534;font-weight:700;margin-bottom:4px">预估组合市值</div>
-        <div style="font-size:20px;font-weight:800;color:#15803d">~$2300万</div>
+        <div style="font-size:20px;font-weight:800;color:#15803d">~$210万</div>
       </div>
       <div style="background:linear-gradient(135deg,#eff6ff,#dbeafe);border-radius:10px;padding:14px;text-align:center">
         <div style="font-size:11px;color:#1e40af;font-weight:700;margin-bottom:4px">年股息收入</div>
-        <div style="font-size:20px;font-weight:800;color:#1d4ed8">~$28万/年</div>
+        <div style="font-size:20px;font-weight:800;color:#1d4ed8">~$4.4万/年</div>
       </div>
       <div style="background:linear-gradient(135deg,#fdf4ff,#f3e8ff);border-radius:10px;padding:14px;text-align:center">
         <div style="font-size:11px;color:#6b21a8;font-weight:700;margin-bottom:4px">可支取金额/年</div>
-        <div style="font-size:16px;font-weight:800;color:#7e22ce">~$92万/年 <span style="font-size:11px;font-weight:400">(4%法则)</span></div>
-        <div style="font-size:13px;font-weight:600;color:#9333ea;margin-top:4px">~$69万/年 <span style="font-size:11px;font-weight:400">(3%保守)</span></div>
+        <div style="font-size:16px;font-weight:800;color:#7e22ce">~$8.4万/年 <span style="font-size:11px;font-weight:400">(4%法则)</span></div>
+        <div style="font-size:13px;font-weight:600;color:#9333ea;margin-top:4px">~$6.3万/年 <span style="font-size:11px;font-weight:400">(3%保守)</span></div>
       </div>
     </div>
     <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:14px 16px">
       <div style="font-weight:700;color:#92400e;font-size:13px;margin-bottom:8px">💡 关键洞察</div>
       <ul style="padding-left:18px;margin:0;font-size:13px;color:#78350f;line-height:1.8">
-        <li style="margin-bottom:6px">激进策略的代价是需要承受多次-30%以上的回撤，最难熬在2-3年熊市中坚持不动</li><li style="margin-bottom:6px">NVDA等个股在55-60岁阶段完全清仓，不带高波动资产进入退休期</li><li style="margin-bottom:6px">退休后切换为保守型持仓（VOO+SCHD+BND为主），只提取4%以下</li><li style="margin-bottom:6px">即使按保守3%法则提取，每年也有$69万（≈¥500万），远超绝大多数退休需求</li>
+        <li style="margin-bottom:6px">用4%法则：每年可取$8.4万（≈¥61万），支撑中高等退休生活</li><li style="margin-bottom:6px">10年期靠的是"大本金+大月投"，起始资产与储蓄率仍是关键变量</li><li style="margin-bottom:6px">95%权益+5%黄金、无债券拖累，10年可滚到$210万级别，代价是波动更大</li><li style="margin-bottom:6px">黄金替代债券对冲但不产生现金流，仍务必预留1-2年现金，并可配置国内养老险形成双重保障</li>
       </ul>
     </div>
   </div>
@@ -6922,130 +6866,85 @@ SCHD股息自动覆盖（目标）：
 <div id="rp-case-3" style="display:none;padding:24px">
   <div style="background:linear-gradient(135deg,#be123c,#e11d48);border-radius:12px;padding:20px 24px;color:#fff;margin-bottom:20px">
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
-      <span class="rc-tag" style="background:rgba(255,255,255,0.25);color:#fff">激进型</span>
-      <span style="font-size:13px;opacity:0.8">积累期15年 · 一线城市 · 高收入职场人</span>
+      <span class="rc-tag" style="background:rgba(255,255,255,0.25);color:#fff">成长型</span>
+      <span style="font-size:13px;opacity:0.8">积累期5年 · 一线城市 · 高收入职场人</span>
     </div>
-    <div style="font-size:20px;font-weight:800;margin-bottom:10px">45岁开始 → 60岁退休</div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap"><span style="background:rgba(255,255,255,0.18);padding:4px 10px;border-radius:20px;font-size:12px">现有美股 $15万（¥110万）</span><span style="background:rgba(255,255,255,0.18);padding:4px 10px;border-radius:20px;font-size:12px">年新增投入 $9万（≈月投¥5.3万）</span><span style="background:rgba(255,255,255,0.18);padding:4px 10px;border-radius:20px;font-size:12px">积累期 15年</span><span style="background:rgba(255,255,255,0.18);padding:4px 10px;border-radius:20px;font-size:12px">目标收益率 ~10%/年</span></div>
+    <div style="font-size:20px;font-weight:800;margin-bottom:10px">50岁开始 → 55岁退休</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap"><span style="background:rgba(255,255,255,0.18);padding:4px 10px;border-radius:20px;font-size:12px">现有美股 $40万（¥292万）</span><span style="background:rgba(255,255,255,0.18);padding:4px 10px;border-radius:20px;font-size:12px">年新增投入 $12万（≈月投¥7.3万）</span><span style="background:rgba(255,255,255,0.18);padding:4px 10px;border-radius:20px;font-size:12px">积累期 5年</span><span style="background:rgba(255,255,255,0.18);padding:4px 10px;border-radius:20px;font-size:12px">目标收益率 ~10%/年</span></div>
   </div>
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px">
     <div style="background:#f8fafc;border-radius:10px;padding:14px 16px">
       <div class="rc-section-title">为什么选这个节奏</div>
       <ul style="padding-left:18px;margin:0;font-size:13px;color:#374151;line-height:1.8">
-        <li style="margin-bottom:5px">45岁起步晚，但月投金额大，用资金弥补时间差</li><li style="margin-bottom:5px">高收入+强心脏，可接受短期剧烈波动</li><li style="margin-bottom:5px">科技个股重仓，追求高于平均的回报率</li>
+        <li style="margin-bottom:5px">50岁起步，只有5年窗口，复利空间有限</li><li style="margin-bottom:5px">必须靠"高起始资产+高月投（¥7.3万）"才能达标</li><li style="margin-bottom:5px">95%权益+5%黄金：以SCHD高股息宽基为主控制波动，黄金替代债券对冲</li>
       </ul>
     </div>
     <div style="background:#f8fafc;border-radius:10px;padding:14px 16px">
-      <div class="rc-section-title">激进策略的核心逻辑</div>
+      <div class="rc-section-title">成长策略的核心逻辑</div>
       <ul style="padding-left:18px;margin:0;font-size:13px;color:#374151;line-height:1.8">
-        <li style="margin-bottom:5px">不配黄金，早期100%权益，快速积累</li><li style="margin-bottom:5px">50岁后引入债券缓冲，防止退休前大回撤</li><li style="margin-bottom:5px">55岁后转为防御，锁定已积累财富</li>
+        <li style="margin-bottom:5px">四只ETF：VOO宽基 + QQQ成长 + SCHD股息 + 5%GLD黄金对冲</li><li style="margin-bottom:5px">时间短，QQQ仅10%，以VOO+SCHD为压舱石，黄金~11%年化且抗跌</li><li style="margin-bottom:5px">黄金非现金流，短期防守仍以现金桶为主</li>
       </ul>
     </div>
   </div>
   <div style="margin-bottom:22px">
-    <div class="rc-section-title">📅 分阶段配置方案（随年龄动态调整）</div>
+    <div class="rc-section-title">📅 分阶段配置方案（5年一次到位）</div>
     <div style="display:flex;gap:0;border-radius:8px;overflow:hidden;border:1px solid #e2e8f0;margin-bottom:14px;font-size:11px;font-weight:700;text-align:center">
-      <div style="flex:1;padding:8px 4px;background:#c2410c;color:#fff;line-height:1.4">45-50岁<br><span style="font-weight:400;opacity:.85">高成长建仓期</span></div>
-      <div style="flex:1;padding:8px 4px;background:#15803d;color:#fff;border-left:1px solid #e2e8f0;line-height:1.4">50-55岁<br><span style="font-weight:400;opacity:.85">均衡成长期</span></div>
-      <div style="flex:1;padding:8px 4px;background:#475569;color:#fff;border-left:1px solid #e2e8f0;line-height:1.4">55-60岁<br><span style="font-weight:400;opacity:.85">防御保本期</span></div>
+      <div style="flex:1;padding:8px 4px;background:#7e22ce;color:#fff;line-height:1.4">50-55岁<br><span style="font-weight:400;opacity:.85">临退降波动期</span></div>
     </div>
-  <div style="border:1.5px solid #fed7aa;border-radius:12px;margin-bottom:14px;overflow:hidden">
-    <div style="background:#fff7ed;padding:11px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-      <span style="background:#c2410c;color:#fff;font-size:12px;font-weight:800;padding:4px 10px;border-radius:6px">45-50岁</span>
-      <span style="font-weight:700;color:#1e293b;font-size:13px">高成长建仓期</span>
-      <span style="font-size:12px;color:#64748b;margin-left:auto">权益 80% | 固收 20%</span>
+  <div style="border:1.5px solid #e9d5ff;border-radius:12px;margin-bottom:14px;overflow:hidden">
+    <div style="background:#fdf4ff;padding:11px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+      <span style="background:#7e22ce;color:#fff;font-size:12px;font-weight:800;padding:4px 10px;border-radius:6px">50-55岁</span>
+      <span style="font-weight:700;color:#1e293b;font-size:13px">临退降波动期</span>
+      <span style="font-size:12px;color:#64748b;margin-left:auto">权益 95% | 黄金 5%</span>
     </div>
     <div style="padding:14px 16px 10px">
       <div class="table-wrap"><table>
       <thead><tr><th>标的</th><th>比例</th><th>股息/收益率</th><th>本阶段配置逻辑</th></tr></thead>
       <tbody>
-      <tr><td><strong>VOO</strong></td><td>25%</td><td>1.3%+增值</td><td>增配大盘底仓，成长与稳健平衡</td></tr>
-      <tr><td><strong>QQQ</strong></td><td>15%</td><td>0.6%+高增值</td><td>保持科技成长敞口，适当降低集中度</td></tr>
-      <tr><td><strong>SCHD</strong></td><td>20%</td><td>3.5%，年增8-11%</td><td>增配股息，引入稳定现金流，平滑组合波动</td></tr>
-      <tr><td><strong>NVDA</strong></td><td>10%</td><td>0.03%+资本利得</td><td>降低单一高波动仓位，但保留AI红利</td></tr>
-      <tr><td><strong>MSFT</strong></td><td>10%</td><td>0.7%+稳定增值</td><td>低波动科技核心持仓，可持续持有</td></tr>
-      <tr><td><strong>BND</strong></td><td>20%</td><td>4.0%</td><td>首次引入债券缓冲，为后期降波动铺路</td></tr>
+      <tr><td><strong>VOO</strong></td><td>43%</td><td>1.3%+增值</td><td>宽基底仓，5年也需要成长动力</td></tr>
+      <tr><td><strong>QQQ</strong></td><td>10%</td><td>0.6%+高增值</td><td>少量成长尾巴，提升整体收益弹性</td></tr>
+      <tr><td><strong>SCHD</strong></td><td>42%</td><td>3.5%，年增8-11%</td><td>核心收益来源，高股息宽基降低波动，退休后可直接转为提款模式</td></tr>
+      <tr><td><strong>GLD</strong></td><td>5%</td><td>0%股息 · 年化~11%</td><td>5%黄金对冲通胀与股灾，替代债券的防御角色</td></tr>
       </tbody></table></div>
-      <div style="background:#f8fafc;border-left:3px solid #64748b;padding:9px 13px;border-radius:0 8px 8px 0;font-size:12px;color:#475569;margin-top:10px;line-height:1.7">核心动作：45岁开始需要比40岁更快建立仓位。BND 20%一开始就要配置，作为市场大跌时的再平衡来源。个股NVDA仍可配置但上限15%，避免过度集中。</div>
-    </div>
-  </div>
-  <div style="border:1.5px solid #bbf7d0;border-radius:12px;margin-bottom:14px;overflow:hidden">
-    <div style="background:#f0fdf4;padding:11px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-      <span style="background:#15803d;color:#fff;font-size:12px;font-weight:800;padding:4px 10px;border-radius:6px">50-55岁</span>
-      <span style="font-weight:700;color:#1e293b;font-size:13px">均衡成长期</span>
-      <span style="font-size:12px;color:#64748b;margin-left:auto">权益 70% | 固收 30%</span>
-    </div>
-    <div style="padding:14px 16px 10px">
-      <div class="table-wrap"><table>
-      <thead><tr><th>标的</th><th>比例</th><th>股息/收益率</th><th>本阶段配置逻辑</th></tr></thead>
-      <tbody>
-      <tr><td><strong>VOO</strong></td><td>30%</td><td>1.3%+增值</td><td>核心成长底仓，距退休10年仍需成长驱动</td></tr>
-      <tr><td><strong>SCHD</strong></td><td>25%</td><td>3.5%，年增8-11%</td><td>股息成为重要收益来源，开始为退休分红做准备</td></tr>
-      <tr><td><strong>QQQ</strong></td><td>10%</td><td>0.6%+高增值</td><td>保留科技成长，但大幅降低至低配</td></tr>
-      <tr><td><strong>MSFT</strong></td><td>5%</td><td>0.7%+稳定增值</td><td>低波动蓝筹科技，退休前保留少量</td></tr>
-      <tr><td><strong>BND</strong></td><td>25%</td><td>4.0%</td><td>提升债券保护，控制整体回撤风险</td></tr>
-      <tr><td><strong>TIPS</strong></td><td>5%</td><td>2.5%（通胀联动）</td><td>通胀保护浮现，保障退休后实际购买力</td></tr>
-      </tbody></table></div>
-      <div style="background:#f8fafc;border-left:3px solid #64748b;padding:9px 13px;border-radius:0 8px 8px 0;font-size:12px;color:#475569;margin-top:10px;line-height:1.7">核心动作：距退休10年，开始降低个股仓位，向宽基ETF迁移。SCHD增配至25%，股息收入持续强化。BND提升至25%控制整体波动。</div>
-    </div>
-  </div>
-  <div style="border:1.5px solid #e2e8f0;border-radius:12px;margin-bottom:14px;overflow:hidden">
-    <div style="background:#f1f5f9;padding:11px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-      <span style="background:#475569;color:#fff;font-size:12px;font-weight:800;padding:4px 10px;border-radius:6px">55-60岁</span>
-      <span style="font-weight:700;color:#1e293b;font-size:13px">防御保本期</span>
-      <span style="font-size:12px;color:#64748b;margin-left:auto">权益 60% | 固收 40%</span>
-    </div>
-    <div style="padding:14px 16px 10px">
-      <div class="table-wrap"><table>
-      <thead><tr><th>标的</th><th>比例</th><th>股息/收益率</th><th>本阶段配置逻辑</th></tr></thead>
-      <tbody>
-      <tr><td><strong>VOO</strong></td><td>20%</td><td>1.3%+增值</td><td>成长底仓保留，不完全撤出权益</td></tr>
-      <tr><td><strong>SCHD</strong></td><td>25%</td><td>3.5%，年增8-11%</td><td>核心股息来源，退休启动时可转为取息模式</td></tr>
-      <tr><td><strong>VYM</strong></td><td>10%</td><td>2.8%</td><td>补充高即时股息，退休后多一层稳定现金流</td></tr>
-      <tr><td><strong>QQQ</strong></td><td>5%</td><td>0.6%+高增值</td><td>极少量科技成长，享受长期复利尾巴</td></tr>
-      <tr><td><strong>BND</strong></td><td>30%</td><td>4.0%</td><td>防御主力，保护已积累财富不受市场冲击</td></tr>
-      <tr><td><strong>TIPS</strong></td><td>10%</td><td>2.5%（通胀联动）</td><td>通胀防护升至高配，退休后维持实际购买力</td></tr>
-      </tbody></table></div>
-      <div style="background:#f8fafc;border-left:3px solid #64748b;padding:9px 13px;border-radius:0 8px 8px 0;font-size:12px;color:#475569;margin-top:10px;line-height:1.7">核心动作：完全撤出高波动个股，转向防御性配置。增持VYM提供即时高股息，BND+TIPS合计40%提供本金保护。退休前1-2年开始规划现金桶。</div>
+      <div style="background:#f8fafc;border-left:3px solid #64748b;padding:9px 13px;border-radius:0 8px 8px 0;font-size:12px;color:#475569;margin-top:10px;line-height:1.7">核心动作：一次性建立四只ETF组合，QQQ仅10%、VOO+SCHD为压舱石、5%黄金对冲。月投 ≥ $8000，股息全部再投入。5年期最怕临退前一年遭遇熊市，黄金非现金流，务必预留2年生活费现金（桶形策略）来防守。</div>
     </div>
   </div>
   </div>
   <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:13px 16px;margin-bottom:20px;font-size:13px;color:#374151">📖 <strong>每只标的的完整解析</strong>（是什么、关键数据、投资逻辑、适用场景）请查看：<span onclick="goToLesson('stock-guide')" style="color:#1d4ed8;cursor:pointer;font-weight:700;text-decoration:underline;margin-left:4px">📚 核心ETF与个股深度指南 →</span></div>
 
   <div style="margin-bottom:20px">
-    <div class="rc-section-title">📈 15年积累期成长推演（起始$15万，每年新增$9万，综合收益率10%）</div>
+    <div class="rc-section-title">📈 5年积累期成长推演（起始$40万，每年新增$12万，综合收益率~10%）</div>
     <div class="table-wrap"><table>
       <thead><tr><th>时间节点</th><th>年龄</th><th>累计投入</th><th>预计组合市值</th><th>年股息收入</th><th>里程碑</th></tr></thead>
       <tbody>
-<tr><td>第5年</td><td>50岁</td><td>$60万</td><td>~$160万</td><td>~$2万</td><td style="font-size:12px;color:#64748b">5年内资产规模超160万，科技成长贡献显著</td></tr>
-<tr><td>第8年</td><td>53岁</td><td>$87万</td><td>~$320万</td><td>~$4万</td><td style="font-size:12px;color:#64748b">三百万关口，进入防御转型期</td></tr>
-<tr><td>第12年</td><td>57岁</td><td>$123万</td><td>~$680万</td><td>~$8.5万</td><td style="font-size:12px;color:#64748b">退休前3年进入稳定收获期</td></tr>
-<tr><td>第15年</td><td>60岁</td><td>$150万</td><td>~$1050万</td><td>~$13万</td><td style="font-size:12px;color:#64748b">退休启动，突破千万美元大关</td></tr>
+<tr><td>第2年</td><td>52岁</td><td>$64万</td><td>~$74万</td><td>~$1.5万</td><td style="font-size:12px;color:#64748b">大本金+大月投快速堆量，稳健起步</td></tr>
+<tr><td>第4年</td><td>54岁</td><td>$88万</td><td>~$114万</td><td>~$2.4万</td><td style="font-size:12px;color:#64748b">突破百万美元，进入退休倒计时</td></tr>
+<tr><td>第5年</td><td>55岁</td><td>$100万</td><td>~$138万</td><td>~$2.9万</td><td style="font-size:12px;color:#64748b">退休启动，年股息约$2.9万（≈¥21万）</td></tr>
       </tbody>
     </table></div>
-    <p style="font-size:12px;color:#94a3b8;margin-top:6px">假设条件：年化复合收益率10%（激进权益配置），个股波动较大，实际结果区间宽广。</p>
+    <p style="font-size:12px;color:#94a3b8;margin-top:6px">假设条件：年化复合收益率~10%（VOO+QQQ+SCHD+5%GLD、95%权益+5%黄金加权测算，含股息再投入），不考虑税收与汇率波动。5年期市场收益贡献有限，结果对起始资产最敏感；含5%黄金但仍偏波动，需用现金桶防守。</p>
   </div>
   <div style="margin-bottom:20px">
-    <div class="rc-section-title">🎯 60岁退休启动预测</div>
+    <div class="rc-section-title">🎯 55岁退休启动预测</div>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px">
       <div style="background:linear-gradient(135deg,#f0fdf4,#dcfce7);border-radius:10px;padding:14px;text-align:center">
         <div style="font-size:11px;color:#166534;font-weight:700;margin-bottom:4px">预估组合市值</div>
-        <div style="font-size:20px;font-weight:800;color:#15803d">~$1050万</div>
+        <div style="font-size:20px;font-weight:800;color:#15803d">~$138万</div>
       </div>
       <div style="background:linear-gradient(135deg,#eff6ff,#dbeafe);border-radius:10px;padding:14px;text-align:center">
         <div style="font-size:11px;color:#1e40af;font-weight:700;margin-bottom:4px">年股息收入</div>
-        <div style="font-size:20px;font-weight:800;color:#1d4ed8">~$13万/年</div>
+        <div style="font-size:20px;font-weight:800;color:#1d4ed8">~$2.9万/年</div>
       </div>
       <div style="background:linear-gradient(135deg,#fdf4ff,#f3e8ff);border-radius:10px;padding:14px;text-align:center">
         <div style="font-size:11px;color:#6b21a8;font-weight:700;margin-bottom:4px">可支取金额/年</div>
-        <div style="font-size:16px;font-weight:800;color:#7e22ce">~$42万/年 <span style="font-size:11px;font-weight:400">(4%法则)</span></div>
-        <div style="font-size:13px;font-weight:600;color:#9333ea;margin-top:4px">~$31.5万/年 <span style="font-size:11px;font-weight:400">(3%保守)</span></div>
+        <div style="font-size:16px;font-weight:800;color:#7e22ce">~$5.5万/年 <span style="font-size:11px;font-weight:400">(4%法则)</span></div>
+        <div style="font-size:13px;font-weight:600;color:#9333ea;margin-top:4px">~$4.1万/年 <span style="font-size:11px;font-weight:400">(3%保守)</span></div>
       </div>
     </div>
     <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:14px 16px">
       <div style="font-weight:700;color:#92400e;font-size:13px;margin-bottom:8px">💡 关键洞察</div>
       <ul style="padding-left:18px;margin:0;font-size:13px;color:#78350f;line-height:1.8">
-        <li style="margin-bottom:6px">15年积累同样可突破千万，关键是前5年的高仓位权益配置打下成长基础</li><li style="margin-bottom:6px">激进型15年 vs 保守型15年：差距约在$620万，代价是需忍受多次-30%波动</li><li style="margin-bottom:6px">退休后应立即调整为以VOO+SCHD+BND为主的保守配置，不再持有高波动个股</li><li style="margin-bottom:6px">建议预留1-2年生活费的现金或货币基金，防止退休初期遭遇熊市被迫低位卖出</li>
+        <li style="margin-bottom:6px">用4%法则：每年可取$5.5万（≈¥40万），支撑基本+舒适退休生活</li><li style="margin-bottom:6px">5年期几乎全靠"本金规模+储蓄率"，市场收益贡献很小，起始$40万是门槛</li><li style="margin-bottom:6px">95%权益+5%黄金、无债券，5年短周期风险最高——务必把QQQ控制在10%，以VOO+SCHD为主</li><li style="margin-bottom:6px">黄金能抗跌但非现金流，务必预留2年生活费现金，防止退休初期熊市被迫低位卖出（顺序风险）</li>
       </ul>
     </div>
   </div>
