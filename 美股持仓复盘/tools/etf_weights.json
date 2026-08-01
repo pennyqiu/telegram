@@ -1,0 +1,84 @@
+{
+  "_comment": "ETF 穿透计算的权重表。指数权重会逐日变动，建议每季度复盘时更新一次。数据来源与截止日期记在 _updated 里。",
+  "_updated": "2026-08-01",
+  "_sources": {
+    "NASDAQ-100": "IQQ 公布持仓（etfdb），2026-07",
+    "SP500": "slickcharts，2026-07",
+    "DRAM-ACTIVE": "Roundhill 官方 factsheet，2026-06-30"
+  },
+
+  "indexes": {
+    "NASDAQ-100": {
+      "NVDA": 0.0816,
+      "AAPL": 0.0765,
+      "MSFT": 0.0468,
+      "MU": 0.0447,
+      "AMZN": 0.0436,
+      "AMD": 0.0378,
+      "GOOGL": 0.0344,
+      "META": 0.0321,
+      "GOOG": 0.0320,
+      "TSLA": 0.0313,
+      "AVGO": 0.0296,
+      "WMT": 0.0240,
+      "INTC": 0.0227,
+      "AMAT": 0.0203,
+      "CSCO": 0.0193
+    },
+    "SP500": {
+      "NVDA": 0.0705,
+      "AAPL": 0.0665,
+      "MSFT": 0.0494,
+      "AMZN": 0.0416,
+      "GOOGL": 0.0313,
+      "GOOG": 0.0295,
+      "AVGO": 0.0275,
+      "META": 0.0205,
+      "TSLA": 0.0180,
+      "MU": 0.0170,
+      "BRK.B": 0.0162
+    },
+    "DRAM-ACTIVE": {
+      "MU": 0.2581,
+      "SAMSUNG": 0.2504,
+      "SKHYNIX": 0.2399,
+      "SNDK": 0.0521,
+      "KIOXIA": 0.0436,
+      "WDC": 0.0430,
+      "STX": 0.0419
+    }
+  },
+
+  "etfs": {
+    "QQQM": {
+      "index": "NASDAQ-100",
+      "sectors": { "semiconductor": 0.27, "software": 0.15, "platform": 0.16, "defensive": 0.10 }
+    },
+    "IQQ": {
+      "index": "NASDAQ-100",
+      "sectors": { "semiconductor": 0.27, "software": 0.15, "platform": 0.16, "defensive": 0.10 }
+    },
+    "SPYM": {
+      "index": "SP500",
+      "sectors": { "semiconductor": 0.13, "software": 0.11, "platform": 0.09, "defensive": 0.157 }
+    },
+    "DRAM": {
+      "index": "DRAM-ACTIVE",
+      "sectors": { "semiconductor": 1.00 }
+    }
+  },
+
+  "_sector_note": "sectors 用于行业穿透估算，是【判断/假设】而非精确数据，精度约 ±2 个百分点。semiconductor 含半导体与半导体设备；software 含软件与云；platform 含平台型互联网与数字广告；defensive 含医疗、必需消费、公用事业。各 ETF 的比例之和不等于 1，剩余部分是可选消费、工业、金融等未单独跟踪的行业——所以行业表的合计会小于净值，这是预期行为。",
+
+  "direct_sectors": {
+    "TSM": "semiconductor",
+    "NVDA": "semiconductor",
+    "MSFT": "software",
+    "GOOG": "platform",
+    "GOOGL": "platform",
+    "META": "platform",
+    "TCEHY": "platform",
+    "IBKR": "financial",
+    "QCOM": "semiconductor"
+  }
+}
