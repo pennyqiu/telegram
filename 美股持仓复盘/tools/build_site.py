@@ -236,6 +236,52 @@ function b64utf8(b64){const bin=atob(b64);const bytes=Uint8Array.from(bin,c=>c.c
 
 marked.setOptions({gfm:true, breaks:false, headerIds:true, mangle:false});
 
+// 文档 id / 目录 → 索引的映射，用于把站内 Markdown 链接改写成 hash 跳转
+const ID_MAP = new Map();
+const DIR_MAP = new Map();
+DOCS.forEach((d,i)=>{
+  ID_MAP.set(d.id, i);
+  const parts = d.id.split('/');
+  let acc='';
+  for(let k=0;k<parts.length-1;k++){
+    acc = acc ? acc+'/'+parts[k] : parts[k];
+    if(!DIR_MAP.has(acc)) DIR_MAP.set(acc, i);   // 目录默认落到首篇
+  }
+});
+DOCS.forEach((d,i)=>{                              // 若目录下有 README，优先作为该目录着陆页
+  if(d.id.toLowerCase().endsWith('/readme.md')){
+    DIR_MAP.set(d.id.slice(0, d.id.lastIndexOf('/')), i);
+  }
+});
+
+function resolveRel(baseDir, rel){
+  const stack = baseDir ? baseDir.split('/') : [];
+  rel.split('/').forEach(part=>{
+    if(part==='' || part==='.') return;
+    if(part==='..') stack.pop();
+    else stack.push(part);
+  });
+  return stack.join('/');
+}
+
+// 把当前文档里指向「已收录文档」的相对链接改写成 #hash 跳转（单页站点内部导航）
+function rewriteLinks(d){
+  const baseDir = d.id.includes('/') ? d.id.slice(0, d.id.lastIndexOf('/')) : '';
+  docEl.querySelectorAll('a[href]').forEach(a=>{
+    let href = a.getAttribute('href');
+    if(!href || /^(https?:|mailto:|tel:|#)/i.test(href)) return;   // 外链/锚点不动
+    const hi = href.indexOf('#');
+    if(hi>=0) href = href.slice(0, hi);                            // 去掉 #fragment
+    if(!href) return;
+    let path; try{ path = decodeURIComponent(href); }catch(e){ path = href; }
+    const resolved = resolveRel(baseDir, path);
+    let hitId = null;
+    if(ID_MAP.has(resolved)) hitId = resolved;
+    else { const dir = resolved.replace(/\/+$/,''); if(DIR_MAP.has(dir)) hitId = DOCS[DIR_MAP.get(dir)].id; }
+    if(hitId!=null) a.setAttribute('href', '#'+encodeURIComponent(hitId));
+  });
+}
+
 // 构建侧边栏
 const nav = document.getElementById('nav');
 const groups = {};
@@ -259,6 +305,7 @@ function render(idx){
   if(!d) return;
   docEl.innerHTML = marked.parse(b64utf8(d.b64));
   crumb.textContent = d.path;
+  rewriteLinks(d);
   document.querySelectorAll('.nav a.item').forEach(a=>a.classList.toggle('active', a.dataset.idx==idx));
   document.getElementById('main').scrollTop = 0;
   colorize();
