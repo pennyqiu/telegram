@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>yyang 的持仓策略 · 42岁 / A股红利 + 场内QDII纳指标普</title>
+<style>
+  :root{
+    --primary:#1a56db;--primary-dark:#1e429f;--primary-light:#ebf5ff;
+    --success:#057a55;--success-light:#def7ec;
+    --warning:#c27803;--warning-light:#fdf6b2;
+    --danger:#c81e1e;--danger-light:#fde8e8;
+    --purple:#7e3af2;--purple-light:#edebfe;
+    --accent:#c81e1e;
+    --gray-50:#f9fafb;--gray-100:#f3f4f6;--gray-200:#e5e7eb;--gray-300:#d1d5db;
+    --gray-400:#9ca3af;--gray-500:#6b7280;--gray-600:#4b5563;--gray-700:#374151;
+    --gray-800:#1f2937;--gray-900:#111827;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hiragino Sans GB',sans-serif;background:var(--gray-50);color:var(--gray-800);line-height:1.75;}
+  .wrap{max-width:900px;margin:0 auto;padding:24px 20px 64px;}
+  .backlink{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--primary);text-decoration:none;font-weight:600;margin-bottom:16px;}
+  .backlink:hover{text-decoration:underline;}
+  .hero{background:linear-gradient(135deg,var(--accent),#9b1c1c);color:#fff;border-radius:18px;padding:30px;box-shadow:0 12px 30px rgba(200,30,30,.22);}
+  .hero .eyebrow{font-size:12px;font-weight:700;letter-spacing:.06em;opacity:.85;}
+  .hero h1{font-size:26px;font-weight:900;margin:6px 0 12px;}
+  .hero .stats{display:flex;flex-wrap:wrap;gap:22px;margin-top:6px;}
+  .hero .stat .n{font-size:22px;font-weight:800;}
+  .hero .stat .l{font-size:12px;opacity:.85;}
+  h2{font-size:19px;font-weight:800;color:var(--gray-900);margin:32px 0 12px;padding-bottom:7px;border-bottom:2px solid var(--gray-100);display:flex;align-items:center;gap:9px;}
+  h2::before{content:'';display:block;width:4px;height:19px;border-radius:2px;background:var(--accent);}
+  h3{font-size:16px;font-weight:800;color:var(--gray-800);margin:22px 0 8px;}
+  p{margin-bottom:12px;font-size:15px;color:var(--gray-700);}
+  .info-box{border-radius:10px;padding:14px 18px;margin:18px 0;border-left:4px solid;font-size:14px;}
+  .info-box.blue{background:var(--primary-light);border-color:var(--primary);color:#1e429f;}
+  .info-box.green{background:var(--success-light);border-color:var(--success);color:#03543f;}
+  .info-box.yellow{background:var(--warning-light);border-color:var(--warning);color:#92400e;}
+  .info-box.red{background:var(--danger-light);border-color:var(--danger);color:#9b1c1c;}
+  .info-box.purple{background:var(--purple-light);border-color:var(--purple);color:#4a1d96;}
+  .info-box b{font-weight:800;}
+  .stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:16px 0;}
+  .stat-card{background:#fff;border:1px solid var(--gray-200);border-radius:12px;padding:16px;text-align:center;}
+  .stat-card .num{font-size:22px;font-weight:800;color:var(--accent);}
+  .stat-card .lab{font-size:12px;color:var(--gray-500);margin-top:3px;}
+  .table-wrap{overflow-x:auto;margin:16px 0;border-radius:12px;border:1px solid var(--gray-200);}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;background:#fff;}
+  thead{background:var(--gray-50);}
+  th{padding:10px 13px;text-align:left;font-weight:700;color:var(--gray-700);font-size:12px;white-space:nowrap;}
+  td{padding:10px 13px;border-top:1px solid var(--gray-100);color:var(--gray-600);}
+  tr:hover td{background:var(--gray-50);}
+  .phase-row td{background:var(--danger-light)!important;font-weight:700;color:#9b1c1c;}
+  .code-block{background:var(--gray-900);color:#e2e8f0;border-radius:10px;padding:16px 18px;font-family:'Fira Code','Cascadia Code','Courier New',monospace;font-size:12.5px;line-height:1.8;overflow-x:auto;margin:14px 0;white-space:pre;}
+  .code-block .cm{color:#94a3b8;}
+  .code-block .hl{color:#fbbf24;font-weight:600;}
+  .checklist{list-style:none;margin:14px 0;}
+  .checklist li{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-bottom:1px solid var(--gray-100);font-size:14px;color:var(--gray-700);}
+  .checklist li:last-child{border-bottom:none;}
+  .checklist .box{flex-shrink:0;width:20px;height:20px;border-radius:6px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;}
+  .research{background:linear-gradient(135deg,#fff,#fff8f8);border:1px solid #f5c6c6;border-radius:14px;padding:6px 22px 22px;margin:18px 0;}
+  .research .rt{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#fff;font-size:12px;font-weight:800;padding:5px 12px;border-radius:99px;margin:18px 0 4px;}
+  .disc{background:#fff;border:1px solid var(--gray-200);border-left:4px solid var(--warning);border-radius:10px;padding:14px 18px;font-size:13px;color:var(--gray-600);margin-top:30px;line-height:1.8;}
+  .kpill{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:99px;background:var(--gray-100);color:var(--gray-600);margin-left:6px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="backlink" href="index.html">← 返回朋友持仓策略</a>
+
+  <div class="hero">
+    <div class="eyebrow">Friends · 持仓策略</div>
+    <h1>yyang · A股红利 + 场内 QDII 纳指/标普</h1>
+    <div class="stats">
+      <div class="stat"><div class="n">42 岁</div><div class="l">当前年龄</div></div>
+      <div class="stat"><div class="n">55 岁</div><div class="l">目标退休</div></div>
+      <div class="stat"><div class="n">13 年</div><div class="l">积累窗口</div></div>
+      <div class="stat"><div class="n">在岸 RMB</div><div class="l">资金不出境</div></div>
+    </div>
+  </div>
+
+  <h2>画像与前提</h2>
+  <div class="stat-row">
+    <div class="stat-card"><div class="num">中低</div><div class="lab">风险 / 波动承受</div></div>
+    <div class="stat-card"><div class="num">在岸</div><div class="lab">人民币，不愿把钱放境外</div></div>
+    <div class="stat-card"><div class="num">红利+QDII</div><div class="lab">A股红利 + 场内纳指/标普</div></div>
+    <div class="stat-card"><div class="num">13 年</div><div class="lab">窗口较短，重现金流</div></div>
+  </div>
+  <p>yyang 42 岁，距 55 岁退休 <strong>13 年</strong>，与 juncai 年龄、风险偏好相近，但<strong>资金要留在境内、以人民币投资</strong>，不愿意出境。因此无法直接买原生 QQQ/SPY，而是通过 <strong>A股场内 QDII ETF（跟踪纳斯达克100、标普500）</strong>间接获取美股敞口，并以 <strong>A股红利指数</strong>作为低波动、高股息的现金流底仓。</p>
+  <div class="info-box red">
+    <b>最关键的额外风险 —— 溢价：</b>场内 QDII ETF 受外汇额度限制，热门时常常出现「场内价格 &gt; 基金净值(IOPV)」的溢价。溢价越高，买入越危险——一旦溢价回归，即使美股不跌，你也会亏钱。<b>本页把「溢价、历史年化、买点时机」作为重点专题展开。</b>
+  </div>
+
+  <h2>目标配置：红利打底 + 场内纳指/标普</h2>
+  <p>红利指数波动低、股息高，符合 yyang 中低风险偏好，作为压舱石；场内纳指/标普提供美股成长敞口。随年龄逐步提高红利、降低纳指（高波动）。</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th>阶段</th><th>年龄</th><th>A股红利指数</th><th>场内标普500</th><th>场内纳斯达克100</th><th>组合特征</th></tr></thead>
+    <tbody>
+      <tr class="phase-row"><td>建仓期</td><td>42–46</td><td><strong>45%</strong></td><td>30%</td><td>25%</td><td>红利打底 + 美股成长增强</td></tr>
+      <tr><td>降波期</td><td>47–51</td><td>50%</td><td>30%</td><td>20%</td><td>提高股息底仓，压低波动</td></tr>
+      <tr class="phase-row"><td>退休前保守期</td><td>52–55</td><td><strong>60%</strong></td><td>25%</td><td>15%</td><td>以股息现金流为主，稳为先</td></tr>
+    </tbody>
+  </table></div>
+  <div class="info-box green">
+    <b>红利指数的作用：</b>中证红利/红利低波类指数股息率长期约 4–6%，退休后可作为「类现金流」来源；波动和回撤明显小于纳指，契合中低风险与 13 年短窗口。
+  </div>
+
+  <!-- ============ 专题调研 ============ -->
+  <h2>专题调研：A股场内的「QQQ 与 SPY」</h2>
+  <p>「场内 QQQ / SPY」指在 A 股交易所上市、跟踪<strong>纳斯达克100 / 标普500</strong>的 QDII ETF（人民币交易）。它不是美国原生 QQQ/SPY，而是基金公司用外汇额度在海外复制指数，因此多了 <b>溢价、额度、汇率</b>三重变量。以下从<strong>标的、历史年化、溢价、买点时机</strong>四方面重点论述。</p>
+
+  <div class="research">
+    <div class="rt">① 可选标的（场内 QDII ETF）</div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>跟踪指数</th><th>代表 ETF（代码为示意，以实时为准）</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td rowspan="2"><strong>纳斯达克100<br>（≈ QQQ）</strong></td><td>国泰纳斯达克100ETF（513100）</td><td>规模大、流动性好，最常用</td></tr>
+        <tr><td>广发（159941）/ 华夏（513300）/ 大成（159632）纳指100ETF</td><td>可作分散或比价选择</td></tr>
+        <tr><td rowspan="2"><strong>标普500<br>（≈ SPY）</strong></td><td>博时标普500ETF（513500）</td><td>规模较大，跟踪标普500</td></tr>
+        <tr><td>易方达 / 平安标普500ETF（159612）等</td><td>比价挑溢价更低者买入</td></tr>
+        <tr><td><strong>A股红利<br>（底仓）</strong></td><td>华泰柏瑞红利ETF（510880）、中证红利ETF（515080）、红利低波ETF（512890）</td><td>境内资产，无 QDII 溢价问题</td></tr>
+      </tbody>
+    </table></div>
+    <p style="font-size:12px;color:var(--gray-400)">⚠️ 代码可能变化、产品会新增，实际交易前请在券商 App 核对最新代码、规模、跟踪误差与费率；优先选<strong>规模大、跟踪误差小、当下溢价低</strong>的一只。</p>
+
+    <div class="rt">② 历史年化（跟踪指数长期表现）</div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>指数</th><th>长期年化(USD,近10–15年参考)</th><th>波动 / 最大回撤</th><th>人民币投资者的额外影响</th></tr></thead>
+      <tbody>
+        <tr><td><strong>纳斯达克100</strong></td><td>≈ 17–18%</td><td>高，回撤 -30% ~ -50%+</td><td rowspan="2">收益以美元计价，换算人民币还叠加<strong>美元兑人民币汇率</strong>；人民币贬值会增厚人民币收益，升值则相反</td></tr>
+        <tr><td><strong>标普500</strong></td><td>≈ 12–13%</td><td>中，回撤 -20% ~ -34%</td></tr>
+        <tr><td><strong>中证红利(全收益)</strong></td><td>≈ 8–10%（含股息）</td><td>较低，回撤明显小于上两者</td><td>境内人民币资产，无汇率因素</td></tr>
+      </tbody>
+    </table></div>
+    <div class="info-box yellow" style="margin-top:6px">
+      <b>关键提醒：指数年化 ≠ 你的到手年化。</b>场内 QDII 的实际收益 = 指数涨跌 × 汇率变化 − 跟踪误差 − 费率 ± <b>买卖时的溢价变化</b>。历史上因为「高溢价买入」，出现过「指数涨了、持有人却亏钱」的情况。所以下一节的溢价，是这套方案里最需要盯的变量。
+    </div>
+
+    <div class="rt">③ 溢价（本方案的头号风险）<span class="kpill">重点</span></div>
+    <p><b>溢价率 =（场内价格 − 基金净值 IOPV）/ IOPV。</b>成因：QDII 额度受限 → 基金常<strong>暂停或限制申购</strong> → 一级市场无法「造新份额」压价 → 场内需求旺盛时价格被买高，脱离净值。</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>实时溢价率</th><th>含义</th><th>操作建议</th></tr></thead>
+      <tbody>
+        <tr><td><b style="color:#057a55">0% ~ 2%</b></td><td>基本贴近净值，健康</td><td>可正常买入 / 定投</td></tr>
+        <tr><td><b style="color:#c27803">2% ~ 5%</b></td><td>有一定溢价，需谨慎</td><td>减少买入量或等回落</td></tr>
+        <tr><td><b style="color:#c81e1e">&gt; 5%</b></td><td>明显溢价，追高风险大</td><td><b>坚决不追</b>，换低溢价的同类 ETF 或等待</td></tr>
+        <tr><td><b style="color:#c81e1e">&gt; 10%</b></td><td>历史上纳指/标普QDII 出现过（申购暂停 + 情绪火爆）</td><td>回避；溢价回归可致大幅亏损</td></tr>
+      </tbody>
+    </table></div>
+    <div class="info-box red" style="margin-top:6px">
+      <b>血泪教训：</b>历史上多只跨境 QDII ETF 在申购受限时溢价一度冲到 10%–30%，随后交易所停牌提示风险、溢价快速回归，追高者短期即浮亏 10%+。<b>买入前务必在行情软件看「实时溢价/折价率」或对比 IOPV，宁可不买，不追高溢价。</b>
+    </div>
+
+    <div class="rt">④ 买点时机（怎么买、什么时候买）</div>
+    <ul class="checklist">
+      <li><div class="box">1</div><span><b>先看溢价，再看指数。</b>每次下单前查实时溢价率，&gt;2% 减量、&gt;5% 不买；在几只同类里挑<strong>溢价最低</strong>的那只。</span></li>
+      <li><div class="box">2</div><span><b>优先在「开放申购」时段买。</b>申购开放时套利资金会把溢价压回，价格更贴净值；申购暂停时溢价往往走高。</span></li>
+      <li><div class="box">3</div><span><b>分批定投、不要一次重仓。</b>用定投平滑指数点位、汇率与溢价三重波动，避免单日追高。</span></li>
+      <li><div class="box">4</div><span><b>结合估值分批。</b>美股估值极高时（如标普席勒 PE 处历史高位）放慢买入节奏，大跌 + 低溢价时适度多买。</span></li>
+      <li><div class="box">5</div><span><b>红利底仓可更从容。</b>红利 ETF 是境内资产、无溢价问题，可作为常规定投主力；纳指/标普则「看溢价择时」买。</span></li>
+    </ul>
+  </div>
+  <!-- ============ /专题调研 ============ -->
+
+  <h2>执行：定投与再平衡</h2>
+  <div class="code-block"><span class="cm">// 每月操作（人民币，场内交易）</span>
+
+常规定投主力：
+  A股红利 ETF ： 每月定额（境内资产，无溢价，照常买）
+
+择时买入（看溢价）：
+  场内标普500 ETF ： 溢价 &lt;2% 时买，&gt;5% 暂停
+  场内纳指100 ETF ： 溢价 &lt;2% 时买，&gt;5% 暂停
+  <span class="hl">同类多只比价，永远买溢价最低的那只</span>
+
+再平衡：
+  每年 1 月、7 月各一次
+  偏离目标 &gt; 5 个百分点时，用新增资金补低配一侧
+  纳指/标普补仓时同样先看溢价
+
+滑翔调整：
+  每逢生日复核年龄段，跨段时提高红利、下调纳指</div>
+
+  <h2>行动清单</h2>
+  <ul class="checklist">
+    <li><div class="box">✓</div><span>选定 1 只红利 ETF + 各 1 只标普/纳指 QDII ETF（规模大、误差小）</span></li>
+    <li><div class="box">✓</div><span>在行情软件里加上「实时溢价率 / IOPV」显示</span></li>
+    <li><div class="box">✓</div><span>红利 ETF 设每月定投；纳指/标普按「溢价<2%」择时买</span></li>
+    <li><div class="box">✓</div><span>建立规则：溢价 >5% 一律不买，>10% 回避</span></li>
+    <li><div class="box">✓</div><span>设定 1 月 + 7 月再平衡提醒；每年生日复核年龄段配置</span></li>
+  </ul>
+
+  <div class="disc">⚠️ 本页为个人研究与交流记录，ETF 代码、比例、年化、溢价区间均为示意，<b>不构成投资建议或收益承诺</b>。QDII 存在溢价、外汇额度、汇率与跟踪误差等风险，实际交易前请核对最新产品信息并独立决策。</div>
+</div>
+</body>
+</html>

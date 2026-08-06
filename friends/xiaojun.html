@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>xiaojun 的持仓策略 · 31岁 / 目标55岁退休</title>
+<style>
+  :root{
+    --primary:#1a56db;--primary-dark:#1e429f;--primary-light:#ebf5ff;
+    --success:#057a55;--success-light:#def7ec;
+    --warning:#c27803;--warning-light:#fdf6b2;
+    --danger:#c81e1e;--danger-light:#fde8e8;
+    --purple:#7e3af2;--purple-light:#edebfe;
+    --accent:#7e3af2;
+    --gray-50:#f9fafb;--gray-100:#f3f4f6;--gray-200:#e5e7eb;--gray-300:#d1d5db;
+    --gray-400:#9ca3af;--gray-500:#6b7280;--gray-600:#4b5563;--gray-700:#374151;
+    --gray-800:#1f2937;--gray-900:#111827;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hiragino Sans GB',sans-serif;background:var(--gray-50);color:var(--gray-800);line-height:1.75;}
+  .wrap{max-width:900px;margin:0 auto;padding:24px 20px 64px;}
+  .backlink{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--primary);text-decoration:none;font-weight:600;margin-bottom:16px;}
+  .backlink:hover{text-decoration:underline;}
+  .hero{background:linear-gradient(135deg,var(--accent),#5b21b6);color:#fff;border-radius:18px;padding:30px;box-shadow:0 12px 30px rgba(126,58,242,.22);}
+  .hero .eyebrow{font-size:12px;font-weight:700;letter-spacing:.06em;opacity:.85;}
+  .hero h1{font-size:26px;font-weight:900;margin:6px 0 12px;}
+  .hero .stats{display:flex;flex-wrap:wrap;gap:22px;margin-top:6px;}
+  .hero .stat .n{font-size:22px;font-weight:800;}
+  .hero .stat .l{font-size:12px;opacity:.85;}
+  h2{font-size:19px;font-weight:800;color:var(--gray-900);margin:32px 0 12px;padding-bottom:7px;border-bottom:2px solid var(--gray-100);display:flex;align-items:center;gap:9px;}
+  h2::before{content:'';display:block;width:4px;height:19px;border-radius:2px;background:var(--accent);}
+  h3{font-size:15px;font-weight:700;color:var(--gray-800);margin:20px 0 8px;}
+  p{margin-bottom:12px;font-size:15px;color:var(--gray-700);}
+  .info-box{border-radius:10px;padding:14px 18px;margin:18px 0;border-left:4px solid;font-size:14px;}
+  .info-box.blue{background:var(--primary-light);border-color:var(--primary);color:#1e429f;}
+  .info-box.green{background:var(--success-light);border-color:var(--success);color:#03543f;}
+  .info-box.yellow{background:var(--warning-light);border-color:var(--warning);color:#92400e;}
+  .info-box.red{background:var(--danger-light);border-color:var(--danger);color:#9b1c1c;}
+  .info-box.purple{background:var(--purple-light);border-color:var(--purple);color:#4a1d96;}
+  .info-box b{font-weight:800;}
+  .stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:16px 0;}
+  .stat-card{background:#fff;border:1px solid var(--gray-200);border-radius:12px;padding:16px;text-align:center;}
+  .stat-card .num{font-size:22px;font-weight:800;color:var(--accent);}
+  .stat-card .lab{font-size:12px;color:var(--gray-500);margin-top:3px;}
+  .table-wrap{overflow-x:auto;margin:16px 0;border-radius:12px;border:1px solid var(--gray-200);}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;background:#fff;}
+  thead{background:var(--gray-50);}
+  th{padding:10px 13px;text-align:left;font-weight:700;color:var(--gray-700);font-size:12px;white-space:nowrap;}
+  td{padding:10px 13px;border-top:1px solid var(--gray-100);color:var(--gray-600);}
+  tr:hover td{background:var(--gray-50);}
+  .phase-row td{background:var(--primary-light)!important;font-weight:700;color:var(--primary-dark);}
+  .code-block{background:var(--gray-900);color:#e2e8f0;border-radius:10px;padding:16px 18px;font-family:'Fira Code','Cascadia Code','Courier New',monospace;font-size:12.5px;line-height:1.8;overflow-x:auto;margin:14px 0;white-space:pre;}
+  .code-block .cm{color:#94a3b8;}
+  .code-block .hl{color:#fbbf24;font-weight:600;}
+  .checklist{list-style:none;margin:14px 0;}
+  .checklist li{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-bottom:1px solid var(--gray-100);font-size:14px;color:var(--gray-700);}
+  .checklist li:last-child{border-bottom:none;}
+  .checklist .box{flex-shrink:0;width:20px;height:20px;border-radius:6px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;}
+  .disc{background:#fff;border:1px solid var(--gray-200);border-left:4px solid var(--warning);border-radius:10px;padding:14px 18px;font-size:13px;color:var(--gray-600);margin-top:30px;line-height:1.8;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="backlink" href="index.html">← 返回朋友持仓策略</a>
+
+  <div class="hero">
+    <div class="eyebrow">Friends · 持仓策略</div>
+    <h1>xiaojun · 美股 QQQ + SPY 长期成长</h1>
+    <div class="stats">
+      <div class="stat"><div class="n">31 岁</div><div class="l">当前年龄</div></div>
+      <div class="stat"><div class="n">55 岁</div><div class="l">目标退休</div></div>
+      <div class="stat"><div class="n">24 年</div><div class="l">积累窗口</div></div>
+      <div class="stat"><div class="n">HKD / USD</div><div class="l">离岸资金</div></div>
+    </div>
+  </div>
+
+  <h2>画像与前提</h2>
+  <div class="stat-row">
+    <div class="stat-card"><div class="num">中高</div><div class="lab">风险 / 波动承受</div></div>
+    <div class="stat-card"><div class="num">离岸</div><div class="lab">港币 + 美元，近期不回流</div></div>
+    <div class="stat-card"><div class="num">美股</div><div class="lab">直接买 QQQ + SPY</div></div>
+    <div class="stat-card"><div class="num">24 年</div><div class="lab">可承受多轮完整熊市</div></div>
+  </div>
+  <p>xiaojun 31 岁，距离 55 岁退休还有 <strong>24 年</strong>，是四位朋友里时间最长、最能承受波动的一位。资金为离岸港币与美元、且近期不打算换回境内，因此可以<strong>直接在境外券商买入原生 QQQ + SPY</strong>，无 QDII 溢价、无外汇额度限制，只需承担美股本身的波动与汇率因素。</p>
+  <div class="info-box purple">
+    <b>核心思路：</b>时间就是最大的风险缓冲。前期用 QQQ（纳斯达克100，成长/科技为主）作为增长引擎，SPY（标普500，大盘全市场）作为稳定基石；越接近 55 岁，越把权重从 QQQ 滑向 SPY，降低组合波动、锁定成果。
+  </div>
+
+  <h2>为什么是 QQQ + SPY</h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>ETF</th><th>跟踪指数</th><th>定位</th><th>长期年化(USD,近15年参考)</th><th>典型最大回撤</th></tr></thead>
+    <tbody>
+      <tr><td><strong>QQQ</strong></td><td>纳斯达克100</td><td>成长引擎（科技权重高）</td><td>≈ 17–18%</td><td>-30% ~ -50%+</td></tr>
+      <tr><td><strong>SPY</strong></td><td>标普500</td><td>稳定基石（全市场大盘）</td><td>≈ 12–13%</td><td>-20% ~ -34%</td></tr>
+    </tbody>
+  </table></div>
+  <p style="font-size:12px;color:var(--gray-400)">注：历史年化为示意区间，未来不代表过去；两者长期高度相关（QQQ ⊂ 标普成分风格），组合意义在于「用比例调节成长暴露与波动」。</p>
+
+  <h2>随年龄滑翔的配置路径</h2>
+  <p>目标：31 岁成长冲刺 → 55 岁明显收敛波动。QQQ 权重从 60% 逐级降到 25%。</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th>阶段</th><th>年龄</th><th>QQQ</th><th>SPY</th><th>组合特征</th></tr></thead>
+    <tbody>
+      <tr class="phase-row"><td>成长冲刺期</td><td>31–38</td><td><strong>60%</strong></td><td>40%</td><td>最大化成长暴露，忽略短期回撤</td></tr>
+      <tr><td>稳健增值期</td><td>39–46</td><td>50%</td><td>50%</td><td>成长与稳定平衡</td></tr>
+      <tr><td>降波过渡期</td><td>47–52</td><td>35%</td><td>65%</td><td>逐步降低波动，保护已积累成果</td></tr>
+      <tr class="phase-row"><td>退休前保守期</td><td>53–55</td><td><strong>25%</strong></td><td>75%</td><td>以稳为主，避免退休前腰斩</td></tr>
+    </tbody>
+  </table></div>
+  <div class="info-box yellow">
+    <b>提醒：</b>QQQ 历史最大回撤可达 -50%+（如 2000、2008、2022）。31–45 岁遇到大跌是「打折加仓」的机会；但越接近 55 岁越要提前减 QQQ，防止在退休前一轮熊市里被腰斩而没有时间恢复。
+  </div>
+
+  <h2>执行：定投与再平衡</h2>
+  <div class="code-block"><span class="cm">// 每月发薪后自动执行（金额按个人现金流调整）</span>
+
+每月定投（示意 · 币种 USD）：
+  QQQ ： 60%
+  SPY ： 40%
+  <span class="hl">用离岸港币/美元直接扣款，长期不回流，规避汇兑摩擦</span>
+
+再平衡：
+  每年 1 月、7 月各一次
+  偏离目标比例 &gt; 5 个百分点时，用新增资金优先补低配的一侧
+  尽量少卖出（减少税务与摩擦），靠加仓再平衡
+
+滑翔调整：
+  每逢生日复核一次年龄段，跨段时把 QQQ 下调到新目标</div>
+
+  <h2>行动清单</h2>
+  <ul class="checklist">
+    <li><div class="box">✓</div><span>在境外券商（如 IB）开好账户，确认可交易 QQQ / SPY</span></li>
+    <li><div class="box">✓</div><span>设置每月自动定投，QQQ:SPY = 60:40 起步</span></li>
+    <li><div class="box">✓</div><span>建立投资日志，记录每次买入价与再平衡</span></li>
+    <li><div class="box">✓</div><span>设定 1 月 + 7 月两次再平衡提醒</span></li>
+    <li><div class="box">✓</div><span>每年生日复核年龄段，按滑翔表下调 QQQ 权重</span></li>
+  </ul>
+
+  <div class="disc">⚠️ 本页为个人研究与交流记录，比例、年化、金额均为示意，<b>不构成投资建议或收益承诺</b>。美股与汇率均有风险，请独立决策。</div>
+</div>
+</body>
+</html>
