@@ -188,7 +188,56 @@
     <li><div class="box">✓</div><span>设定 1 月 + 7 月再平衡提醒；每年生日复核年龄段配置</span></li>
   </ul>
 
-  <div class="disc">⚠️ 本页为个人研究与交流记录，ETF 代码、比例、年化、溢价区间均为示意，<b>不构成投资建议或收益承诺</b>。QDII 存在溢价、外汇额度、汇率与跟踪误差等风险，实际交易前请核对最新产品信息并独立决策。</div>
+  <h2>资金回报率测算（投入至50岁 · 复利至60岁）</h2>
+  <div class="info-box red">
+    <b>测算口径：</b>从当前 0 本金起，<b>每年投入 40 万（人民币）</b>，投到 <b>50 岁停止</b>，之后不再投入、仅复利增长到 <b>60 岁</b>；投入按年初一次性计入、当年产生收益。年化取自「标的历史年化 → 悲观取四期限最低、乐观取次低 → 按中枢配置 红利 50% / 标普500 30% / 纳指100 20% 加权」。<b>注：纳指/标普用美元指数年化近似，未额外扣减 QDII 溢价与跟踪误差，实盘会更低。</b>
+  </div>
+
+  <h3>① 标的历史年化（全收益）与悲观/乐观取值</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>标的</th><th>近5年</th><th>近10年</th><th>近15年</th><th>近20年</th><th>悲观(最低)</th><th>乐观(次低)</th></tr></thead>
+    <tbody>
+      <tr><td>中证红利(全收益)</td><td>9.34%</td><td>8.0%</td><td>9.0%</td><td>12.0%</td><td><b>8.0%</b></td><td><b>9.0%</b></td></tr>
+      <tr><td>标普500</td><td>14.4%</td><td>14.8%</td><td>13.5%</td><td>11.0%</td><td><b>11.0%</b></td><td><b>13.5%</b></td></tr>
+      <tr><td>纳指100</td><td>16.5%</td><td>22.1%</td><td>19.6%</td><td>16.8%</td><td><b>16.5%</b></td><td><b>16.8%</b></td></tr>
+    </tbody>
+  </table></div>
+  <p style="font-size:12px;color:var(--gray-400)">数据来源：Wind / 易方达（中证红利全收益，截至2025/10）、Fidelity（标普500）、Invesco / TradeThatSwing（纳指100）；均为含股息总回报，仅供参考。中证红利15/20年为基于近10年与自基日(2004)年化的估算。</p>
+  <div class="info-box red"><b>yyang 组合年化（红利 50% + 标普 30% + 纳指 20%）：</b>悲观 = 50%×8.0% + 30%×11.0% + 20%×16.5% = <b>10.60%</b>；乐观 = 50%×9.0% + 30%×13.5% + 20%×16.8% = <b>11.91%</b>。</div>
+
+  <h3>② 逐年资金回报测算表</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>到达年龄</th><th>当年投入</th><th>年末资产（悲观 10.60%）</th><th>年末资产（乐观 11.91%）</th></tr></thead>
+    <tbody>
+      <tr><td>42岁（起点）</td><td>—</td><td>¥0</td><td>¥0</td></tr>
+      <tr><td>43岁</td><td>40万</td><td>¥44万</td><td>¥45万</td></tr>
+      <tr><td>44岁</td><td>40万</td><td>¥93万</td><td>¥95万</td></tr>
+      <tr><td>45岁</td><td>40万</td><td>¥147万</td><td>¥151万</td></tr>
+      <tr><td>46岁</td><td>40万</td><td>¥207万</td><td>¥214万</td></tr>
+      <tr><td>47岁</td><td>40万</td><td>¥273万</td><td>¥284万</td></tr>
+      <tr><td>48岁</td><td>40万</td><td>¥347万</td><td>¥362万</td></tr>
+      <tr><td>49岁</td><td>40万</td><td>¥428万</td><td>¥450万</td></tr>
+      <tr class="phase-row"><td>50岁（停止投入）</td><td>40万</td><td>¥517万</td><td>¥549万</td></tr>
+      <tr><td>51岁</td><td>—（已停投）</td><td>¥572万</td><td>¥614万</td></tr>
+      <tr><td>52岁</td><td>—（已停投）</td><td>¥633万</td><td>¥687万</td></tr>
+      <tr><td>53岁</td><td>—（已停投）</td><td>¥700万</td><td>¥769万</td></tr>
+      <tr><td>54岁</td><td>—（已停投）</td><td>¥774万</td><td>¥861万</td></tr>
+      <tr class="phase-row"><td>55岁（原退休目标）</td><td>—（已停投）</td><td>¥856万</td><td>¥963万</td></tr>
+      <tr><td>56岁</td><td>—（已停投）</td><td>¥946万</td><td>¥1,078万</td></tr>
+      <tr><td>57岁</td><td>—（已停投）</td><td>¥1,047万</td><td>¥1,206万</td></tr>
+      <tr><td>58岁</td><td>—（已停投）</td><td>¥1,158万</td><td>¥1,350万</td></tr>
+      <tr><td>59岁</td><td>—（已停投）</td><td>¥1,280万</td><td>¥1,511万</td></tr>
+      <tr class="phase-row"><td>60岁（测算终点）</td><td>—（已停投）</td><td>¥1,416万</td><td>¥1,691万</td></tr>
+    </tbody>
+  </table></div>
+  <div class="stat-row">
+    <div class="stat-card"><div class="num">¥320万</div><div class="lab">累计投入本金（8年×40万）</div></div>
+    <div class="stat-card"><div class="num">¥1,416万</div><div class="lab">60岁·悲观情形</div></div>
+    <div class="stat-card"><div class="num">¥1,691万</div><div class="lab">60岁·乐观情形</div></div>
+  </div>
+  <div class="info-box yellow"><b>解读：</b>yyang 与 juncai 同龄同投入，但红利打底使组合年化更低（10.6%–11.9%），60 岁约 <b>1,400–1,700 万</b>，低于 juncai。这是「换取更低波动/更稳现金流」的代价。若考虑 QDII 溢价与跟踪误差，实盘还会再打折扣——因此更要严守「低溢价才买」的纪律。</div>
+
+  <div class="disc">⚠️ 本页为个人研究与交流记录，ETF 代码、比例、年化、溢价区间均为示意，<b>不构成投资建议或收益承诺</b>。QDII 存在溢价、外汇额度、汇率与跟踪误差等风险；历史年化不代表未来，实际交易前请核对最新产品信息并独立决策。</div>
 </div>
 </body>
 </html>
