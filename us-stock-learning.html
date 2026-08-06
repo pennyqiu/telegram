@@ -327,6 +327,7 @@ const curriculum=[
   {id:'withdrawal-strategy',phase:5,tag:'第19课',title:'退休后提取策略',duration:'60 min'},
   {id:'retirement-planner',phase:5,tag:'第20课',title:'个性化退休方案生成器',duration:'10 min'},
   {id:'retirement-cases',phase:5,tag:'第21课',title:'四类典型退休案例参考',duration:'20 min'},
+  {id:'friends-portfolio',phase:5,tag:'👥 好友理财',title:'好友理财 · 朋友持仓策略',shortTitle:'好友理财',duration:'自由阅读'},
   {id:'stock-guide',phase:5,tag:'📖 标的手册',title:'核心ETF与个股深度指南',duration:'15 min'},
   {id:'cpa-tax-easter-egg',phase:5,tag:'🥚 彩蛋',title:'CPA的稀缺赛道：跨境税务深度指南',duration:'30 min'},
   {id:'influencers',phase:6,phaseLabel:'第六阶段：持续成长',tag:'第22课',title:'全球顶级领路人',duration:'40 min'},
@@ -4297,6 +4298,57 @@ $110万 → $55.6万
   <li data-key="r3"><div class="check-box">✓</div><span class="check-text">我制定了50岁时的目标资产金额（保守 ¥2,584万 / 基准 ¥3,095万）</span></li>
   <li data-key="r_rebal"><div class="check-box">✓</div><span class="check-text">我设定了每年1月 + 7月两次再平衡提醒</span></li>
 </ul>`,
+
+// =====================================================================
+'friends-portfolio':`
+<p>这里汇总了为几位朋友按各自<strong>年龄、风险偏好、资金属性</strong>定制的长期养老投资配置。所有方案<strong>统一以 55 岁退休为目标</strong>，采用「随年龄下调波动、逐步降风险」的滑翔路径（glide path）。点击卡片进入每个人的详细策略。</p>
+
+<div class="info-box yellow"><div class="info-box-title">说明</div>本页为个人对朋友情况的投资配置研究与交流记录，比例、金额、年化假设均为示意，<strong>不构成投资建议或收益承诺</strong>。</div>
+
+<h2>四位朋友</h2>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin:16px 0">
+
+  <a href="friends/xiaojun.html" style="display:block;background:#fff;border:1px solid var(--gray-200);border-top:4px solid #7e3af2;border-radius:12px;padding:18px;text-decoration:none;color:inherit;transition:box-shadow .2s" onmouseover="this.style.boxShadow='0 8px 20px rgba(0,0,0,.10)'" onmouseout="this.style.boxShadow='none'">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><span style="width:34px;height:34px;border-radius:50%;background:#7e3af2;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800">X</span><strong style="font-size:16px;color:var(--gray-900)">xiaojun</strong></div>
+    <div style="font-size:12px;color:var(--gray-500);margin-bottom:8px">31 岁 · 离岸 HKD/USD · 中高波动</div>
+    <div style="font-size:13px;color:var(--gray-600)">美股 QQQ+SPY，成长起步（60/40），24 年长窗口滑向稳健。</div>
+    <div style="margin-top:10px;font-size:13px;font-weight:700;color:#7e3af2">查看策略 →</div>
+  </a>
+
+  <a href="friends/huaqing.html" style="display:block;background:#fff;border:1px solid var(--gray-200);border-top:4px solid #1a56db;border-radius:12px;padding:18px;text-decoration:none;color:inherit;transition:box-shadow .2s" onmouseover="this.style.boxShadow='0 8px 20px rgba(0,0,0,.10)'" onmouseout="this.style.boxShadow='none'">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><span style="width:34px;height:34px;border-radius:50%;background:#1a56db;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800">H</span><strong style="font-size:16px;color:var(--gray-900)">huaqing</strong></div>
+    <div style="font-size:12px;color:var(--gray-500);margin-bottom:8px">35 岁 · 离岸 HKD/USD · 中高波动</div>
+    <div style="font-size:13px;color:var(--gray-600)">美股 QQQ+SPY，起步 55/45，20 年窗口更早收敛波动。</div>
+    <div style="margin-top:10px;font-size:13px;font-weight:700;color:#1a56db">查看策略 →</div>
+  </a>
+
+  <a href="friends/juncai.html" style="display:block;background:#fff;border:1px solid var(--gray-200);border-top:4px solid #057a55;border-radius:12px;padding:18px;text-decoration:none;color:inherit;transition:box-shadow .2s" onmouseover="this.style.boxShadow='0 8px 20px rgba(0,0,0,.10)'" onmouseout="this.style.boxShadow='none'">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><span style="width:34px;height:34px;border-radius:50%;background:#057a55;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800">J</span><strong style="font-size:16px;color:var(--gray-900)">juncai</strong></div>
+    <div style="font-size:12px;color:var(--gray-500);margin-bottom:8px">42 岁 · 离岸 HKD/USD · 中低波动</div>
+    <div style="font-size:13px;color:var(--gray-600)">美股 SPY 为主（62/38），13 年窗口重在控回撤。</div>
+    <div style="margin-top:10px;font-size:13px;font-weight:700;color:#057a55">查看策略 →</div>
+  </a>
+
+  <a href="friends/yyang.html" style="display:block;background:#fff;border:1px solid var(--gray-200);border-top:4px solid #c81e1e;border-radius:12px;padding:18px;text-decoration:none;color:inherit;transition:box-shadow .2s" onmouseover="this.style.boxShadow='0 8px 20px rgba(0,0,0,.10)'" onmouseout="this.style.boxShadow='none'">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><span style="width:34px;height:34px;border-radius:50%;background:#c81e1e;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800">Y</span><strong style="font-size:16px;color:var(--gray-900)">yyang</strong></div>
+    <div style="font-size:12px;color:var(--gray-500);margin-bottom:8px">42 岁 · 在岸 RMB · 中低波动</div>
+    <div style="font-size:13px;color:var(--gray-600)">A股红利打底 + 场内 QDII 纳指/标普；含溢价、年化、买点专题调研。</div>
+    <div style="margin-top:10px;font-size:13px;font-weight:700;color:#c81e1e">查看策略 →</div>
+  </a>
+
+</div>
+
+<h2>一览对比</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>朋友</th><th>年龄</th><th>退休目标</th><th>风险偏好</th><th>资金属性</th><th>核心配置</th></tr></thead>
+<tbody>
+<tr><td><strong>xiaojun</strong></td><td>31</td><td>55 岁</td><td>中高波动</td><td>离岸 HKD/USD</td><td>QQQ 60 / SPY 40 起步</td></tr>
+<tr><td><strong>huaqing</strong></td><td>35</td><td>55 岁</td><td>中高波动</td><td>离岸 HKD/USD</td><td>QQQ 55 / SPY 45 起步</td></tr>
+<tr><td><strong>juncai</strong></td><td>42</td><td>55 岁</td><td>中低波动</td><td>离岸 HKD/USD</td><td>SPY 62 / QQQ 38 起步</td></tr>
+<tr><td><strong>yyang</strong></td><td>42</td><td>55 岁</td><td>中低波动</td><td>在岸 RMB</td><td>红利 45 / 标普 30 / 纳指 25</td></tr>
+</tbody></table></div>
+
+<p style="margin-top:16px"><a href="friends/index.html" style="color:var(--primary);font-weight:700;text-decoration:none">打开独立汇总页（新版式）→</a></p>`,
 
 // =====================================================================
 'retirement-42-50-career':`
