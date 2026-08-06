@@ -73,67 +73,6 @@
     </div>
   </div>
 
-  <h2>画像与前提</h2>
-  <div class="stat-row">
-    <div class="stat-card"><div class="num">中低</div><div class="lab">风险 / 波动承受</div></div>
-    <div class="stat-card"><div class="num">离岸</div><div class="lab">港币 + 美元，近期不回流</div></div>
-    <div class="stat-card"><div class="num">美股</div><div class="lab">直接买 QQQ + SPY</div></div>
-    <div class="stat-card"><div class="num">13 年</div><div class="lab">窗口较短，需控回撤</div></div>
-  </div>
-  <p>juncai 42 岁，距 55 岁退休还有 <strong>13 年</strong>，资金同为离岸港币/美元、近期不回流，同样<strong>直接买原生 QQQ + SPY</strong>。与前两位不同的是：juncai 能承受的波动相对较小，且窗口更短——一轮 -40% 的深熊如果发生在临退休前，恢复时间不够。因此从一开始就<strong>以 SPY 为主、QQQ 为辅</strong>，控制组合最大回撤。</p>
-  <div class="info-box green">
-    <b>核心思路：</b>把 SPY 当作压舱石（60% 起步），QQQ 作为有限的成长增强（约 38%）。13 年里稳步降低 QQQ，退休前把波动压到最低，优先「不亏大钱」而非「冲最高收益」。
-  </div>
-
-  <h2>为什么是 QQQ + SPY（且 SPY 更重）</h2>
-  <div class="table-wrap"><table>
-    <thead><tr><th>ETF</th><th>跟踪指数</th><th>定位</th><th>长期年化(USD,近15年参考)</th><th>典型最大回撤</th></tr></thead>
-    <tbody>
-      <tr><td><strong>SPY</strong></td><td>标普500</td><td>压舱石（波动较低、更分散）</td><td>≈ 12–13%</td><td>-20% ~ -34%</td></tr>
-      <tr><td><strong>QQQ</strong></td><td>纳斯达克100</td><td>成长增强（波动大，权重克制）</td><td>≈ 17–18%</td><td>-30% ~ -50%+</td></tr>
-    </tbody>
-  </table></div>
-  <p style="font-size:12px;color:var(--gray-400)">注：历史年化为示意区间。SPY 波动明显低于 QQQ，故作为核心；QQQ 提供有限的成长弹性。</p>
-
-  <h2>随年龄滑翔的配置路径</h2>
-  <p>QQQ 权重从 38% 逐级降到 18%，全程 SPY 占主导。</p>
-  <div class="table-wrap"><table>
-    <thead><tr><th>阶段</th><th>年龄</th><th>QQQ</th><th>SPY</th><th>组合特征</th></tr></thead>
-    <tbody>
-      <tr class="phase-row"><td>稳健建仓期</td><td>42–46</td><td><strong>38%</strong></td><td>62%</td><td>SPY 打底，QQQ 适度增强</td></tr>
-      <tr><td>降波期</td><td>47–51</td><td>28%</td><td>72%</td><td>逐步压低波动</td></tr>
-      <tr class="phase-row"><td>退休前保守期</td><td>52–55</td><td><strong>18%</strong></td><td>82%</td><td>以稳为主，控制回撤</td></tr>
-    </tbody>
-  </table></div>
-  <div class="info-box yellow">
-    <b>提醒：</b>窗口只有 13 年，若在 50 岁后遇到深熊，恢复时间紧张。宁可少赚，也要把临退休前的回撤控制在可承受范围内。若市场大跌，用再平衡纪律加仓 SPY 优先。
-  </div>
-
-  <h2>执行：定投与再平衡</h2>
-  <div class="code-block"><span class="cm">// 每月发薪后自动执行（金额按个人现金流调整）</span>
-
-每月定投（示意 · 币种 USD）：
-  SPY ： 62%
-  QQQ ： 38%
-  <span class="hl">用离岸港币/美元直接扣款，长期不回流</span>
-
-再平衡：
-  每年 1 月、7 月各一次
-  偏离目标 &gt; 5 个百分点时，用新增资金补低配一侧
-  大跌时优先加 SPY，控制组合波动
-
-滑翔调整：
-  每逢生日复核年龄段，跨段时把 QQQ 下调到新目标</div>
-
-  <h2>行动清单</h2>
-  <ul class="checklist">
-    <li><div class="box">✓</div><span>境外券商开户，确认可交易 QQQ / SPY</span></li>
-    <li><div class="box">✓</div><span>设置每月自动定投，SPY:QQQ = 62:38 起步</span></li>
-    <li><div class="box">✓</div><span>明确「控回撤优先」的目标，写进投资日志</span></li>
-    <li><div class="box">✓</div><span>设定 1 月 + 7 月再平衡提醒</span></li>
-    <li><div class="box">✓</div><span>50 岁后严格降 QQQ，退休前把波动降到最低</span></li>
-  </ul>
-
   <h2>资金回报率测算（投入至50岁 · 复利至60岁）</h2>
   <div class="info-box green">
     <b>测算口径：</b>从当前 0 本金起，<b>每年投入 40 万（人民币等值）</b>，投到 <b>50 岁停止</b>，之后不再投入、仅复利增长到 <b>60 岁</b>；投入按年初一次性计入、当年产生收益。年化取自「标的历史年化 → 悲观取四期限最低、乐观取次低 → 按中枢配置 QQQ 30% / SPY 70% 加权」。
@@ -181,6 +120,69 @@
     <div class="stat-card"><div class="num">¥2,388万</div><div class="lab">60岁·乐观情形</div></div>
   </div>
   <div class="info-box yellow"><b>解读：</b>juncai 42 岁起步、只有 8 年投入窗口，本金 320 万，靠 18 年复利到 60 岁约 <b>1,900–2,400 万</b>。窗口短使复利空间明显小于前两位，因此更应保证投入连续、并控制回撤不被深熊打断。</div>
+
+  <h2>随年龄滑翔的配置路径</h2>
+  <p>QQQ 权重从 38% 逐级降到 18%，全程 SPY 占主导。</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th>阶段</th><th>年龄</th><th>QQQ</th><th>SPY</th><th>组合特征</th></tr></thead>
+    <tbody>
+      <tr class="phase-row"><td>稳健建仓期</td><td>42–46</td><td><strong>38%</strong></td><td>62%</td><td>SPY 打底，QQQ 适度增强</td></tr>
+      <tr><td>降波期</td><td>47–51</td><td>28%</td><td>72%</td><td>逐步压低波动</td></tr>
+      <tr class="phase-row"><td>退休前保守期</td><td>52–55</td><td><strong>18%</strong></td><td>82%</td><td>以稳为主，控制回撤</td></tr>
+    </tbody>
+  </table></div>
+  <div class="info-box yellow">
+    <b>提醒：</b>窗口只有 13 年，若在 50 岁后遇到深熊，恢复时间紧张。宁可少赚，也要把临退休前的回撤控制在可承受范围内。若市场大跌，用再平衡纪律加仓 SPY 优先。
+  </div>
+
+  <h2>执行：定投与再平衡</h2>
+  <div class="code-block"><span class="cm">// 每月发薪后自动执行（金额按个人现金流调整）</span>
+
+每月定投（示意 · 币种 USD）：
+  SPY ： 62%
+  QQQ ： 38%
+  <span class="hl">用离岸港币/美元直接扣款，长期不回流</span>
+
+再平衡：
+  每年 1 月、7 月各一次
+  偏离目标 &gt; 5 个百分点时，用新增资金补低配一侧
+  大跌时优先加 SPY，控制组合波动
+
+滑翔调整：
+  每逢生日复核年龄段，跨段时把 QQQ 下调到新目标</div>
+
+  <h2>行动清单</h2>
+  <ul class="checklist">
+    <li><div class="box">✓</div><span>境外券商开户，确认可交易 QQQ / SPY</span></li>
+    <li><div class="box">✓</div><span>设置每月自动定投，SPY:QQQ = 62:38 起步</span></li>
+    <li><div class="box">✓</div><span>明确「控回撤优先」的目标，写进投资日志</span></li>
+    <li><div class="box">✓</div><span>设定 1 月 + 7 月再平衡提醒</span></li>
+    <li><div class="box">✓</div><span>50 岁后严格降 QQQ，退休前把波动降到最低</span></li>
+  </ul>
+
+  <div style="margin:36px 0 6px;padding:12px 16px;background:var(--gray-50);border:1px dashed var(--gray-300);border-radius:10px;text-align:center;font-size:13px;color:var(--gray-500)">⬇︎ 以下为这套方案的<strong>背景与逻辑</strong>（画像、标的选择依据）。<strong>只需照做的话，看上面即可</strong>；想深入了解再往下翻。</div>
+
+  <h2>画像与前提</h2>
+  <div class="stat-row">
+    <div class="stat-card"><div class="num">中低</div><div class="lab">风险 / 波动承受</div></div>
+    <div class="stat-card"><div class="num">离岸</div><div class="lab">港币 + 美元，近期不回流</div></div>
+    <div class="stat-card"><div class="num">美股</div><div class="lab">直接买 QQQ + SPY</div></div>
+    <div class="stat-card"><div class="num">13 年</div><div class="lab">窗口较短，需控回撤</div></div>
+  </div>
+  <p>juncai 42 岁，距 55 岁退休还有 <strong>13 年</strong>，资金同为离岸港币/美元、近期不回流，同样<strong>直接买原生 QQQ + SPY</strong>。与前两位不同的是：juncai 能承受的波动相对较小，且窗口更短——一轮 -40% 的深熊如果发生在临退休前，恢复时间不够。因此从一开始就<strong>以 SPY 为主、QQQ 为辅</strong>，控制组合最大回撤。</p>
+  <div class="info-box green">
+    <b>核心思路：</b>把 SPY 当作压舱石（60% 起步），QQQ 作为有限的成长增强（约 38%）。13 年里稳步降低 QQQ，退休前把波动压到最低，优先「不亏大钱」而非「冲最高收益」。
+  </div>
+
+  <h2>为什么是 QQQ + SPY（且 SPY 更重）</h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>ETF</th><th>跟踪指数</th><th>定位</th><th>长期年化(USD,近15年参考)</th><th>典型最大回撤</th></tr></thead>
+    <tbody>
+      <tr><td><strong>SPY</strong></td><td>标普500</td><td>压舱石（波动较低、更分散）</td><td>≈ 12–13%</td><td>-20% ~ -34%</td></tr>
+      <tr><td><strong>QQQ</strong></td><td>纳斯达克100</td><td>成长增强（波动大，权重克制）</td><td>≈ 17–18%</td><td>-30% ~ -50%+</td></tr>
+    </tbody>
+  </table></div>
+  <p style="font-size:12px;color:var(--gray-400)">注：历史年化为示意区间。SPY 波动明显低于 QQQ，故作为核心；QQQ 提供有限的成长弹性。</p>
 
   <div class="disc">⚠️ 本页为个人研究与交流记录，比例、年化、金额均为示意，<b>不构成投资建议或收益承诺</b>。历史年化不代表未来，实际结果受市场、汇率、投入是否连续等影响，请独立决策。</div>
 </div>
