@@ -120,7 +120,7 @@
 
   <h2>资金回报率测算（投入至50岁 · 复利至60岁）</h2>
   <div class="info-box blue">
-    <b>测算口径：</b>从当前 0 本金起，<b>每年投入 40 万（人民币等值）</b>，投到 <b>50 岁停止</b>，之后不再投入、仅复利增长到 <b>60 岁</b>；投入按年初一次性计入、当年产生收益。年化取自「标的历史年化 → 悲观取四期限最低、乐观取次低 → 按中枢配置 QQQ 45% / SPY 55% 加权」。
+    <b>测算口径：</b>从当前 0 本金起，<b>每年投入 40 万（人民币等值）</b>，投到 <b>50 岁停止</b>，之后不再投入、仅复利到 <b>60 岁</b>；投入按年初一次性计入、当年产生收益。年化取自「标的历史年化 → 悲观取最低、乐观取次低」，<b>再按下方滑翔路径各年龄段配置加权，每年用该年对应的组合年化复利</b>（随年龄下调 QQQ 权重，增长系数同步下降）。
   </div>
 
   <h3>① 标的历史年化（全收益）与悲观/乐观取值</h3>
@@ -131,48 +131,59 @@
       <tr><td>QQQ 纳指100</td><td>16.5%</td><td>22.1%</td><td>19.6%</td><td>16.8%</td><td><b>16.5%</b></td><td><b>16.8%</b></td></tr>
     </tbody>
   </table></div>
-  <p style="font-size:12px;color:var(--gray-400)">数据来源：Fidelity（标普500）、Invesco / TradeThatSwing（QQQ）；均为含股息总回报，截至2025末~2026中，仅供参考。</p>
-  <div class="info-box blue"><b>huaqing 组合年化（QQQ 45% + SPY 55%）：</b>悲观 = 45%×16.5% + 55%×11.0% = <b>13.48%</b>；乐观 = 45%×16.8% + 55%×13.5% = <b>14.99%</b>。</div>
+  <p style="font-size:12px;color:var(--gray-400)">数据来源：Fidelity（标普500）、Invesco / TradeThatSwing（QQQ）；含股息总回报，截至2025末~2026中，仅供参考。</p>
 
-  <h3>② 逐年资金回报测算表</h3>
+  <h3>② 随年龄滑翔的组合年化（每年复利系数）</h3>
+  <p style="font-size:13px;color:var(--gray-600)">配置比例变化后，当年组合年化同步调整。下表为各年龄段使用的复利系数：</p>
   <div class="table-wrap"><table>
-    <thead><tr><th>到达年龄</th><th>当年投入</th><th>累计投入资金</th><th>年末资产（悲观 13.48%）</th><th>年末资产（乐观 14.99%）</th></tr></thead>
+    <thead><tr><th>年龄段</th><th>配置</th><th>悲观年化</th><th>乐观年化</th></tr></thead>
     <tbody>
-      <tr><td>35岁（起点）</td><td>—</td><td>¥0</td><td>¥0</td><td>¥0</td></tr>
-      <tr><td>36岁</td><td>40万</td><td>¥40万</td><td>¥45万</td><td>¥46万</td></tr>
-      <tr><td>37岁</td><td>40万</td><td>¥80万</td><td>¥97万</td><td>¥99万</td></tr>
-      <tr><td>38岁</td><td>40万</td><td>¥120万</td><td>¥155万</td><td>¥160万</td></tr>
-      <tr><td>39岁</td><td>40万</td><td>¥160万</td><td>¥222万</td><td>¥230万</td></tr>
-      <tr><td>40岁</td><td>40万</td><td>¥200万</td><td>¥297万</td><td>¥310万</td></tr>
-      <tr><td>41岁</td><td>40万</td><td>¥240万</td><td>¥382万</td><td>¥402万</td></tr>
-      <tr><td>42岁</td><td>40万</td><td>¥280万</td><td>¥479万</td><td>¥509万</td></tr>
-      <tr><td>43岁</td><td>40万</td><td>¥320万</td><td>¥589万</td><td>¥631万</td></tr>
-      <tr><td>44岁</td><td>40万</td><td>¥360万</td><td>¥714万</td><td>¥772万</td></tr>
-      <tr><td>45岁</td><td>40万</td><td>¥400万</td><td>¥856万</td><td>¥933万</td></tr>
-      <tr><td>46岁</td><td>40万</td><td>¥440万</td><td>¥1,016万</td><td>¥1,119万</td></tr>
-      <tr><td>47岁</td><td>40万</td><td>¥480万</td><td>¥1,199万</td><td>¥1,333万</td></tr>
-      <tr><td>48岁</td><td>40万</td><td>¥520万</td><td>¥1,405万</td><td>¥1,578万</td></tr>
-      <tr><td>49岁</td><td>40万</td><td>¥560万</td><td>¥1,640万</td><td>¥1,861万</td></tr>
-      <tr class="phase-row"><td>50岁（停止投入）</td><td>40万</td><td>¥600万</td><td>¥1,907万</td><td>¥2,186万</td></tr>
-      <tr><td>51岁</td><td>—（已停投）</td><td>¥600万</td><td>¥2,164万</td><td>¥2,513万</td></tr>
-      <tr><td>52岁</td><td>—（已停投）</td><td>¥600万</td><td>¥2,455万</td><td>¥2,890万</td></tr>
-      <tr><td>53岁</td><td>—（已停投）</td><td>¥600万</td><td>¥2,786万</td><td>¥3,323万</td></tr>
-      <tr><td>54岁</td><td>—（已停投）</td><td>¥600万</td><td>¥3,161万</td><td>¥3,821万</td></tr>
-      <tr class="phase-row"><td>55岁（原退休目标）</td><td>—（已停投）</td><td>¥600万</td><td>¥3,587万</td><td>¥4,393万</td></tr>
-      <tr><td>56岁</td><td>—（已停投）</td><td>¥600万</td><td>¥4,071万</td><td>¥5,052万</td></tr>
-      <tr><td>57岁</td><td>—（已停投）</td><td>¥600万</td><td>¥4,619万</td><td>¥5,809万</td></tr>
-      <tr><td>58岁</td><td>—（已停投）</td><td>¥600万</td><td>¥5,242万</td><td>¥6,679万</td></tr>
-      <tr><td>59岁</td><td>—（已停投）</td><td>¥600万</td><td>¥5,948万</td><td>¥7,680万</td></tr>
-      <tr class="phase-row"><td>60岁（测算终点）</td><td>—（已停投）</td><td>¥600万</td><td>¥6,750万</td><td>¥8,831万</td></tr>
+      <tr><td>35–42岁</td><td>QQQ 55% / SPY 45%</td><td><b>14.03%</b></td><td><b>15.32%</b></td></tr>
+      <tr><td>43–49岁</td><td>QQQ 45% / SPY 55%</td><td><b>13.48%</b></td><td><b>14.99%</b></td></tr>
+      <tr><td>50–53岁</td><td>QQQ 32% / SPY 68%</td><td><b>12.76%</b></td><td><b>14.56%</b></td></tr>
+      <tr><td>54–60岁</td><td>QQQ 22% / SPY 78%</td><td><b>12.21%</b></td><td><b>14.23%</b></td></tr>
+    </tbody>
+  </table></div>
+  <div class="info-box blue"><b>算法说明：</b>不再用单一固定比例贯穿全程；<b>每一年按该年龄所属阶段的配置重新加权年化</b>，再对该年资产做复利。滑翔降仓后，后期增速会低于前期。</div>
+
+  <h3>③ 逐年资金回报测算表</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>到达年龄</th><th>当年投入</th><th>累计投入资金</th><th>当年年化(悲观/乐观)</th><th>年末资产（悲观）</th><th>年末资产（乐观）</th></tr></thead>
+    <tbody>
+      <tr><td>35岁（起点）</td><td>—</td><td>¥0</td><td>—</td><td>¥0</td><td>¥0</td></tr>
+      <tr><td>36岁</td><td>40万</td><td>¥40万</td><td>14.03% / 15.32%</td><td>¥46万</td><td>¥46万</td></tr>
+      <tr><td>37岁</td><td>40万</td><td>¥80万</td><td>14.03% / 15.32%</td><td>¥98万</td><td>¥99万</td></tr>
+      <tr><td>38岁</td><td>40万</td><td>¥120万</td><td>14.03% / 15.32%</td><td>¥157万</td><td>¥161万</td></tr>
+      <tr><td>39岁</td><td>40万</td><td>¥160万</td><td>14.03% / 15.32%</td><td>¥225万</td><td>¥231万</td></tr>
+      <tr><td>40岁</td><td>40万</td><td>¥200万</td><td>14.03% / 15.32%</td><td>¥302万</td><td>¥313万</td></tr>
+      <tr><td>41岁</td><td>40万</td><td>¥240万</td><td>14.03% / 15.32%</td><td>¥390万</td><td>¥407万</td></tr>
+      <tr><td>42岁</td><td>40万</td><td>¥280万</td><td>14.03% / 15.32%</td><td>¥490万</td><td>¥515万</td></tr>
+      <tr><td>43岁</td><td>40万</td><td>¥320万</td><td>14.03% / 15.32%</td><td>¥604万</td><td>¥641万</td></tr>
+      <tr><td>44岁</td><td>40万</td><td>¥360万</td><td>13.48% / 14.99%</td><td>¥731万</td><td>¥783万</td></tr>
+      <tr><td>45岁</td><td>40万</td><td>¥400万</td><td>13.48% / 14.99%</td><td>¥875万</td><td>¥946万</td></tr>
+      <tr><td>46岁</td><td>40万</td><td>¥440万</td><td>13.48% / 14.99%</td><td>¥1,038万</td><td>¥1,133万</td></tr>
+      <tr><td>47岁</td><td>40万</td><td>¥480万</td><td>13.48% / 14.99%</td><td>¥1,223万</td><td>¥1,349万</td></tr>
+      <tr><td>48岁</td><td>40万</td><td>¥520万</td><td>13.48% / 14.99%</td><td>¥1,434万</td><td>¥1,597万</td></tr>
+      <tr><td>49岁</td><td>40万</td><td>¥560万</td><td>13.48% / 14.99%</td><td>¥1,672万</td><td>¥1,883万</td></tr>
+      <tr class="phase-row"><td>50岁（停止投入）</td><td>40万</td><td>¥600万</td><td>13.48% / 14.99%</td><td>¥1,943万</td><td>¥2,211万</td></tr>
+      <tr><td>51岁</td><td>—（已停投）</td><td>¥600万</td><td>12.76% / 14.56%</td><td>¥2,191万</td><td>¥2,533万</td></tr>
+      <tr><td>52岁</td><td>—（已停投）</td><td>¥600万</td><td>12.76% / 14.56%</td><td>¥2,470万</td><td>¥2,902万</td></tr>
+      <tr><td>53岁</td><td>—（已停投）</td><td>¥600万</td><td>12.76% / 14.56%</td><td>¥2,785万</td><td>¥3,324万</td></tr>
+      <tr><td>54岁</td><td>—（已停投）</td><td>¥600万</td><td>12.76% / 14.56%</td><td>¥3,141万</td><td>¥3,808万</td></tr>
+      <tr class="phase-row"><td>55岁（原退休目标）</td><td>—（已停投）</td><td>¥600万</td><td>12.21% / 14.23%</td><td>¥3,524万</td><td>¥4,349万</td></tr>
+      <tr><td>56岁</td><td>—（已停投）</td><td>¥600万</td><td>12.21% / 14.23%</td><td>¥3,955万</td><td>¥4,968万</td></tr>
+      <tr><td>57岁</td><td>—（已停投）</td><td>¥600万</td><td>12.21% / 14.23%</td><td>¥4,438万</td><td>¥5,675万</td></tr>
+      <tr><td>58岁</td><td>—（已停投）</td><td>¥600万</td><td>12.21% / 14.23%</td><td>¥4,979万</td><td>¥6,482万</td></tr>
+      <tr><td>59岁</td><td>—（已停投）</td><td>¥600万</td><td>12.21% / 14.23%</td><td>¥5,587万</td><td>¥7,404万</td></tr>
+      <tr class="phase-row"><td>60岁（测算终点）</td><td>—（已停投）</td><td>¥600万</td><td>12.21% / 14.23%</td><td>¥6,270万</td><td>¥8,458万</td></tr>
     </tbody>
   </table></div>
   <div class="stat-row">
     <div class="stat-card"><div class="num">¥600万</div><div class="lab">累计投入本金（15年×40万）</div></div>
-    <div class="stat-card"><div class="num">¥6,750万</div><div class="lab">60岁·悲观情形</div></div>
-    <div class="stat-card"><div class="num">¥8,831万</div><div class="lab">60岁·乐观情形</div></div>
+    <div class="stat-card"><div class="num">¥6,270万</div><div class="lab">60岁·悲观情形</div></div>
+    <div class="stat-card"><div class="num">¥8,458万</div><div class="lab">60岁·乐观情形</div></div>
   </div>
-  <div class="info-box yellow"><b>解读：</b>huaqing 35 岁起步、15 年投入窗口，本金 600 万，靠复利到 60 岁——即便按历史区间里最保守的年化，也接近 <b>6,800 万</b>。越早开始、投入越连续，复利空间越大。</div>
-
+  <div class="info-box yellow"><b>解读：</b>huaqing 35 岁起步、15 年投入窗口；配置随年龄滑翔，组合年化由约 14% 逐步降到约 12%。即便按悲观路径，60 岁也约 <b>¥6,270 万</b>。</div>
   <h2>随年龄滑翔的配置路径</h2>
   <p>QQQ 权重从 55% 逐级降到 22%，随年龄逐步收敛波动。</p>
   <div class="table-wrap"><table>

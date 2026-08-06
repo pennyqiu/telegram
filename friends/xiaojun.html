@@ -121,7 +121,7 @@
 
   <h2>资金回报率测算（投入至50岁 · 复利至60岁）</h2>
   <div class="info-box purple">
-    <b>测算口径：</b>从当前 0 本金起，<b>每年投入 30 万（人民币等值）</b>，投到 <b>50 岁停止</b>，之后不再投入、仅复利增长到 <b>60 岁</b>；投入按年初一次性计入、当年产生收益。年化取自「标的历史年化 → 悲观取四期限最低、乐观取次低 → 按中枢配置 QQQ 50% / SPY 50% 加权」。
+    <b>测算口径：</b>从当前 0 本金起，<b>每年投入 30 万（人民币等值）</b>，投到 <b>50 岁停止</b>，之后不再投入、仅复利到 <b>60 岁</b>；投入按年初一次性计入、当年产生收益。年化取自「标的历史年化 → 悲观取最低、乐观取次低」，<b>再按下方滑翔路径各年龄段配置加权，每年用该年对应的组合年化复利</b>（随年龄下调 QQQ 权重，增长系数同步下降）。
   </div>
 
   <h3>① 标的历史年化（全收益）与悲观/乐观取值</h3>
@@ -132,52 +132,63 @@
       <tr><td>QQQ 纳指100</td><td>16.5%</td><td>22.1%</td><td>19.6%</td><td>16.8%</td><td><b>16.5%</b></td><td><b>16.8%</b></td></tr>
     </tbody>
   </table></div>
-  <p style="font-size:12px;color:var(--gray-400)">数据来源：Fidelity（标普500 5/10/20年总回报，截至2025末）、Invesco / TradeThatSwing（QQQ 5/10/15/20年，截至2025末~2026中）；均为含股息总回报，仅供参考。</p>
-  <div class="info-box blue"><b>xiaojun 组合年化（QQQ 50% + SPY 50%）：</b>悲观 = 50%×16.5% + 50%×11.0% = <b>13.75%</b>；乐观 = 50%×16.8% + 50%×13.5% = <b>15.15%</b>。</div>
+  <p style="font-size:12px;color:var(--gray-400)">数据来源：Fidelity（标普500）、Invesco / TradeThatSwing（QQQ）；含股息总回报，截至2025末~2026中，仅供参考。</p>
 
-  <h3>② 逐年资金回报测算表</h3>
+  <h3>② 随年龄滑翔的组合年化（每年复利系数）</h3>
+  <p style="font-size:13px;color:var(--gray-600)">配置比例变化后，当年组合年化同步调整。下表为各年龄段使用的复利系数：</p>
   <div class="table-wrap"><table>
-    <thead><tr><th>到达年龄</th><th>当年投入</th><th>累计投入资金</th><th>年末资产（悲观 13.75%）</th><th>年末资产（乐观 15.15%）</th></tr></thead>
+    <thead><tr><th>年龄段</th><th>配置</th><th>悲观年化</th><th>乐观年化</th></tr></thead>
     <tbody>
-      <tr><td>31岁（起点）</td><td>—</td><td>¥0</td><td>¥0</td><td>¥0</td></tr>
-      <tr><td>32岁</td><td>30万</td><td>¥30万</td><td>¥34万</td><td>¥35万</td></tr>
-      <tr><td>33岁</td><td>30万</td><td>¥60万</td><td>¥73万</td><td>¥74万</td></tr>
-      <tr><td>34岁</td><td>30万</td><td>¥90万</td><td>¥117万</td><td>¥120万</td></tr>
-      <tr><td>35岁</td><td>30万</td><td>¥120万</td><td>¥167万</td><td>¥173万</td></tr>
-      <tr><td>36岁</td><td>30万</td><td>¥150万</td><td>¥224万</td><td>¥234万</td></tr>
-      <tr><td>37岁</td><td>30万</td><td>¥180万</td><td>¥289万</td><td>¥304万</td></tr>
-      <tr><td>38岁</td><td>30万</td><td>¥210万</td><td>¥363万</td><td>¥384万</td></tr>
-      <tr><td>39岁</td><td>30万</td><td>¥240万</td><td>¥447万</td><td>¥477万</td></tr>
-      <tr><td>40岁</td><td>30万</td><td>¥270万</td><td>¥543万</td><td>¥584万</td></tr>
-      <tr><td>41岁</td><td>30万</td><td>¥300万</td><td>¥652万</td><td>¥707万</td></tr>
-      <tr><td>42岁</td><td>30万</td><td>¥330万</td><td>¥776万</td><td>¥848万</td></tr>
-      <tr><td>43岁</td><td>30万</td><td>¥360万</td><td>¥916万</td><td>¥1,011万</td></tr>
-      <tr><td>44岁</td><td>30万</td><td>¥390万</td><td>¥1,077万</td><td>¥1,199万</td></tr>
-      <tr><td>45岁</td><td>30万</td><td>¥420万</td><td>¥1,259万</td><td>¥1,415万</td></tr>
-      <tr><td>46岁</td><td>30万</td><td>¥450万</td><td>¥1,466万</td><td>¥1,664万</td></tr>
-      <tr><td>47岁</td><td>30万</td><td>¥480万</td><td>¥1,702万</td><td>¥1,951万</td></tr>
-      <tr><td>48岁</td><td>30万</td><td>¥510万</td><td>¥1,970万</td><td>¥2,281万</td></tr>
-      <tr><td>49岁</td><td>30万</td><td>¥540万</td><td>¥2,275万</td><td>¥2,661万</td></tr>
-      <tr class="phase-row"><td>50岁（停止投入）</td><td>30万</td><td>¥570万</td><td>¥2,622万</td><td>¥3,098万</td></tr>
-      <tr><td>51岁</td><td>—（已停投）</td><td>¥570万</td><td>¥2,982万</td><td>¥3,568万</td></tr>
-      <tr><td>52岁</td><td>—（已停投）</td><td>¥570万</td><td>¥3,392万</td><td>¥4,108万</td></tr>
-      <tr><td>53岁</td><td>—（已停投）</td><td>¥570万</td><td>¥3,858万</td><td>¥4,731万</td></tr>
-      <tr><td>54岁</td><td>—（已停投）</td><td>¥570万</td><td>¥4,389万</td><td>¥5,448万</td></tr>
-      <tr class="phase-row"><td>55岁（原退休目标）</td><td>—（已停投）</td><td>¥570万</td><td>¥4,993万</td><td>¥6,273万</td></tr>
-      <tr><td>56岁</td><td>—（已停投）</td><td>¥570万</td><td>¥5,679万</td><td>¥7,223万</td></tr>
-      <tr><td>57岁</td><td>—（已停投）</td><td>¥570万</td><td>¥6,460万</td><td>¥8,318万</td></tr>
-      <tr><td>58岁</td><td>—（已停投）</td><td>¥570万</td><td>¥7,348万</td><td>¥9,578万</td></tr>
-      <tr><td>59岁</td><td>—（已停投）</td><td>¥570万</td><td>¥8,358万</td><td>¥11,029万</td></tr>
-      <tr class="phase-row"><td>60岁（测算终点）</td><td>—（已停投）</td><td>¥570万</td><td>¥9,508万</td><td>¥12,700万</td></tr>
+      <tr><td>31–38岁</td><td>QQQ 60% / SPY 40%</td><td><b>14.30%</b></td><td><b>15.48%</b></td></tr>
+      <tr><td>39–46岁</td><td>QQQ 50% / SPY 50%</td><td><b>13.75%</b></td><td><b>15.15%</b></td></tr>
+      <tr><td>47–52岁</td><td>QQQ 35% / SPY 65%</td><td><b>12.93%</b></td><td><b>14.66%</b></td></tr>
+      <tr><td>53–60岁</td><td>QQQ 25% / SPY 75%</td><td><b>12.38%</b></td><td><b>14.32%</b></td></tr>
+    </tbody>
+  </table></div>
+  <div class="info-box purple"><b>算法说明：</b>不再用单一固定比例贯穿全程；<b>每一年按该年龄所属阶段的配置重新加权年化</b>，再对该年资产做复利。滑翔降仓后，后期增速会低于前期。</div>
+
+  <h3>③ 逐年资金回报测算表</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>到达年龄</th><th>当年投入</th><th>累计投入资金</th><th>当年年化(悲观/乐观)</th><th>年末资产（悲观）</th><th>年末资产（乐观）</th></tr></thead>
+    <tbody>
+      <tr><td>31岁（起点）</td><td>—</td><td>¥0</td><td>—</td><td>¥0</td><td>¥0</td></tr>
+      <tr><td>32岁</td><td>30万</td><td>¥30万</td><td>14.30% / 15.48%</td><td>¥34万</td><td>¥35万</td></tr>
+      <tr><td>33岁</td><td>30万</td><td>¥60万</td><td>14.30% / 15.48%</td><td>¥73万</td><td>¥75万</td></tr>
+      <tr><td>34岁</td><td>30万</td><td>¥90万</td><td>14.30% / 15.48%</td><td>¥118万</td><td>¥121万</td></tr>
+      <tr><td>35岁</td><td>30万</td><td>¥120万</td><td>14.30% / 15.48%</td><td>¥169万</td><td>¥174万</td></tr>
+      <tr><td>36岁</td><td>30万</td><td>¥150万</td><td>14.30% / 15.48%</td><td>¥228万</td><td>¥236万</td></tr>
+      <tr><td>37岁</td><td>30万</td><td>¥180万</td><td>14.30% / 15.48%</td><td>¥295万</td><td>¥307万</td></tr>
+      <tr><td>38岁</td><td>30万</td><td>¥210万</td><td>14.30% / 15.48%</td><td>¥371万</td><td>¥389万</td></tr>
+      <tr><td>39岁</td><td>30万</td><td>¥240万</td><td>14.30% / 15.48%</td><td>¥459万</td><td>¥484万</td></tr>
+      <tr><td>40岁</td><td>30万</td><td>¥270万</td><td>13.75% / 15.15%</td><td>¥556万</td><td>¥592万</td></tr>
+      <tr><td>41岁</td><td>30万</td><td>¥300万</td><td>13.75% / 15.15%</td><td>¥667万</td><td>¥716万</td></tr>
+      <tr><td>42岁</td><td>30万</td><td>¥330万</td><td>13.75% / 15.15%</td><td>¥792万</td><td>¥859万</td></tr>
+      <tr><td>43岁</td><td>30万</td><td>¥360万</td><td>13.75% / 15.15%</td><td>¥935万</td><td>¥1,024万</td></tr>
+      <tr><td>44岁</td><td>30万</td><td>¥390万</td><td>13.75% / 15.15%</td><td>¥1,098万</td><td>¥1,213万</td></tr>
+      <tr><td>45岁</td><td>30万</td><td>¥420万</td><td>13.75% / 15.15%</td><td>¥1,283万</td><td>¥1,432万</td></tr>
+      <tr><td>46岁</td><td>30万</td><td>¥450万</td><td>13.75% / 15.15%</td><td>¥1,494万</td><td>¥1,683万</td></tr>
+      <tr><td>47岁</td><td>30万</td><td>¥480万</td><td>13.75% / 15.15%</td><td>¥1,733万</td><td>¥1,973万</td></tr>
+      <tr><td>48岁</td><td>30万</td><td>¥510万</td><td>12.93% / 14.66%</td><td>¥1,991万</td><td>¥2,296万</td></tr>
+      <tr><td>49岁</td><td>30万</td><td>¥540万</td><td>12.93% / 14.66%</td><td>¥2,282万</td><td>¥2,667万</td></tr>
+      <tr class="phase-row"><td>50岁（停止投入）</td><td>30万</td><td>¥570万</td><td>12.93% / 14.66%</td><td>¥2,611万</td><td>¥3,093万</td></tr>
+      <tr><td>51岁</td><td>—（已停投）</td><td>¥570万</td><td>12.93% / 14.66%</td><td>¥2,949万</td><td>¥3,546万</td></tr>
+      <tr><td>52岁</td><td>—（已停投）</td><td>¥570万</td><td>12.93% / 14.66%</td><td>¥3,330万</td><td>¥4,066万</td></tr>
+      <tr><td>53岁</td><td>—（已停投）</td><td>¥570万</td><td>12.93% / 14.66%</td><td>¥3,760万</td><td>¥4,661万</td></tr>
+      <tr><td>54岁</td><td>—（已停投）</td><td>¥570万</td><td>12.38% / 14.32%</td><td>¥4,226万</td><td>¥5,329万</td></tr>
+      <tr class="phase-row"><td>55岁（原退休目标）</td><td>—（已停投）</td><td>¥570万</td><td>12.38% / 14.32%</td><td>¥4,749万</td><td>¥6,092万</td></tr>
+      <tr><td>56岁</td><td>—（已停投）</td><td>¥570万</td><td>12.38% / 14.32%</td><td>¥5,336万</td><td>¥6,965万</td></tr>
+      <tr><td>57岁</td><td>—（已停投）</td><td>¥570万</td><td>12.38% / 14.32%</td><td>¥5,997万</td><td>¥7,963万</td></tr>
+      <tr><td>58岁</td><td>—（已停投）</td><td>¥570万</td><td>12.38% / 14.32%</td><td>¥6,739万</td><td>¥9,104万</td></tr>
+      <tr><td>59岁</td><td>—（已停投）</td><td>¥570万</td><td>12.38% / 14.32%</td><td>¥7,573万</td><td>¥10,408万</td></tr>
+      <tr class="phase-row"><td>60岁（测算终点）</td><td>—（已停投）</td><td>¥570万</td><td>12.38% / 14.32%</td><td>¥8,510万</td><td>¥11,899万</td></tr>
     </tbody>
   </table></div>
   <div class="stat-row">
     <div class="stat-card"><div class="num">¥570万</div><div class="lab">累计投入本金（19年×30万）</div></div>
-    <div class="stat-card"><div class="num">¥9,508万</div><div class="lab">60岁·悲观情形</div></div>
-    <div class="stat-card"><div class="num">¥12,700万</div><div class="lab">60岁·乐观情形</div></div>
+    <div class="stat-card"><div class="num">¥8,510万</div><div class="lab">60岁·悲观情形</div></div>
+    <div class="stat-card"><div class="num">¥11,899万</div><div class="lab">60岁·乐观情形</div></div>
   </div>
-  <div class="info-box yellow"><b>解读：</b>xiaojun 起步最早、时间最长，复利效应最猛——即便按<strong>历史区间里最保守</strong>的年化，60岁也可达约 <b>9,500 万</b>；本金仅 570 万，其余全靠 29 年复利。这正是「越早开始越值钱」的直观证据。</div>
-
+  <div class="info-box yellow"><b>解读：</b>xiaojun 起步最早、时间最长；虽随年龄下调 QQQ，复利仍最猛——60 岁悲观约 <b>¥8,510 万</b>、乐观约 <b>¥11,899 万</b>（本金仅 570 万）。这正是「越早开始越值钱」的直观证据。</div>
   <h2>随年龄滑翔的配置路径</h2>
   <p>目标：31 岁成长冲刺 → 55 岁明显收敛波动。QQQ 权重从 60% 逐级降到 25%。</p>
   <div class="table-wrap"><table>
