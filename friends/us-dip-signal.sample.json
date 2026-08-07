@@ -1,7 +1,7 @@
 {
   "sample": true,
   "updated_at": "2026-01-01T00:00:00+08:00",
-  "updated_at_text": "示例数据（等待服务器每日刷新）",
+  "updated_at_text": "示例数据（等待服务器每日刷新为真实行情）",
   "title": "美股纳指/标普 ETF · 回撤阶梯买入监控",
   "field_note": "回撤 = (现价 − 历史最高收盘) / 历史最高收盘。按各自分组的阶梯逐档买入；仓位为“计划投入资金”的百分比。非投资建议。",
   "groups_order": ["纳指100", "标普500"],
@@ -21,77 +21,77 @@
   "items": [
     {
       "symbol": "QQQ", "name": "Invesco 纳指100", "group": "纳指100",
-      "price": 480.0, "change_pct": -0.6, "ath": 500.0, "ath_date": "2025-12-01",
-      "drawdown_pct": 4.0, "cum_buy_pct": 0, "signal": "观望",
-      "next": {"drop": 8, "buy": 30, "gap_pct": 4.0, "target_price": 460.0},
+      "price": 705.0, "change_pct": -0.6, "ath": 720.0, "ath_date": "2025-12-01",
+      "drawdown_pct": 2.08, "cum_buy_pct": 0, "signal": "观望",
+      "next": {"drop": 8, "buy": 30, "gap_pct": 5.92, "target_price": 662.4},
       "rungs": [
-        {"drop": 8, "buy": 30, "target_price": 460.0, "hit": false},
-        {"drop": 15, "buy": 40, "target_price": 425.0, "hit": false},
-        {"drop": 20, "buy": 30, "target_price": 400.0, "hit": false}
+        {"drop": 8, "buy": 30, "target_price": 662.4, "hit": false},
+        {"drop": 15, "buy": 40, "target_price": 612.0, "hit": false},
+        {"drop": 20, "buy": 30, "target_price": 576.0, "hit": false}
       ],
       "yahoo_url": "https://finance.yahoo.com/quote/QQQ"
     },
     {
       "symbol": "QQQM", "name": "Invesco 纳指100(低费率)", "group": "纳指100",
-      "price": 197.0, "change_pct": -0.6, "ath": 205.0, "ath_date": "2025-12-01",
-      "drawdown_pct": 3.9, "cum_buy_pct": 0, "signal": "观望",
-      "next": {"drop": 8, "buy": 30, "gap_pct": 4.1, "target_price": 188.6},
+      "price": 290.0, "change_pct": -0.6, "ath": 296.0, "ath_date": "2025-12-01",
+      "drawdown_pct": 2.03, "cum_buy_pct": 0, "signal": "观望",
+      "next": {"drop": 8, "buy": 30, "gap_pct": 5.97, "target_price": 272.32},
       "rungs": [
-        {"drop": 8, "buy": 30, "target_price": 188.6, "hit": false},
-        {"drop": 15, "buy": 40, "target_price": 174.25, "hit": false},
-        {"drop": 20, "buy": 30, "target_price": 164.0, "hit": false}
+        {"drop": 8, "buy": 30, "target_price": 272.32, "hit": false},
+        {"drop": 15, "buy": 40, "target_price": 251.6, "hit": false},
+        {"drop": 20, "buy": 30, "target_price": 236.8, "hit": false}
       ],
       "yahoo_url": "https://finance.yahoo.com/quote/QQQM"
     },
     {
       "symbol": "SPY", "name": "SPDR 标普500", "group": "标普500",
-      "price": 590.0, "change_pct": -0.4, "ath": 610.0, "ath_date": "2025-12-01",
-      "drawdown_pct": 3.28, "cum_buy_pct": 0, "signal": "观望",
-      "next": {"drop": 6, "buy": 30, "gap_pct": 2.72, "target_price": 573.4},
+      "price": 660.0, "change_pct": -0.4, "ath": 672.0, "ath_date": "2025-12-01",
+      "drawdown_pct": 1.79, "cum_buy_pct": 0, "signal": "观望",
+      "next": {"drop": 6, "buy": 30, "gap_pct": 4.21, "target_price": 631.68},
       "rungs": [
-        {"drop": 6, "buy": 30, "target_price": 573.4, "hit": false},
-        {"drop": 10, "buy": 30, "target_price": 549.0, "hit": false},
-        {"drop": 15, "buy": 20, "target_price": 518.5, "hit": false},
-        {"drop": 20, "buy": 20, "target_price": 488.0, "hit": false}
+        {"drop": 6, "buy": 30, "target_price": 631.68, "hit": false},
+        {"drop": 10, "buy": 30, "target_price": 604.8, "hit": false},
+        {"drop": 15, "buy": 20, "target_price": 571.2, "hit": false},
+        {"drop": 20, "buy": 20, "target_price": 537.6, "hit": false}
       ],
       "yahoo_url": "https://finance.yahoo.com/quote/SPY"
     },
     {
       "symbol": "IVV", "name": "iShares 标普500", "group": "标普500",
-      "price": 595.0, "change_pct": -0.4, "ath": 615.0, "ath_date": "2025-12-01",
-      "drawdown_pct": 3.25, "cum_buy_pct": 0, "signal": "观望",
-      "next": {"drop": 6, "buy": 30, "gap_pct": 2.75, "target_price": 578.1},
+      "price": 663.0, "change_pct": -0.4, "ath": 675.0, "ath_date": "2025-12-01",
+      "drawdown_pct": 1.78, "cum_buy_pct": 0, "signal": "观望",
+      "next": {"drop": 6, "buy": 30, "gap_pct": 4.22, "target_price": 634.5},
       "rungs": [
-        {"drop": 6, "buy": 30, "target_price": 578.1, "hit": false},
-        {"drop": 10, "buy": 30, "target_price": 553.5, "hit": false},
-        {"drop": 15, "buy": 20, "target_price": 522.75, "hit": false},
-        {"drop": 20, "buy": 20, "target_price": 492.0, "hit": false}
+        {"drop": 6, "buy": 30, "target_price": 634.5, "hit": false},
+        {"drop": 10, "buy": 30, "target_price": 607.5, "hit": false},
+        {"drop": 15, "buy": 20, "target_price": 573.75, "hit": false},
+        {"drop": 20, "buy": 20, "target_price": 540.0, "hit": false}
       ],
       "yahoo_url": "https://finance.yahoo.com/quote/IVV"
     },
     {
       "symbol": "VOO", "name": "Vanguard 标普500", "group": "标普500",
-      "price": 540.0, "change_pct": -0.4, "ath": 558.0, "ath_date": "2025-12-01",
-      "drawdown_pct": 3.23, "cum_buy_pct": 0, "signal": "观望",
-      "next": {"drop": 6, "buy": 30, "gap_pct": 2.77, "target_price": 524.52},
+      "price": 607.0, "change_pct": -0.4, "ath": 618.0, "ath_date": "2025-12-01",
+      "drawdown_pct": 1.78, "cum_buy_pct": 0, "signal": "观望",
+      "next": {"drop": 6, "buy": 30, "gap_pct": 4.22, "target_price": 580.92},
       "rungs": [
-        {"drop": 6, "buy": 30, "target_price": 524.52, "hit": false},
-        {"drop": 10, "buy": 30, "target_price": 502.2, "hit": false},
-        {"drop": 15, "buy": 20, "target_price": 474.3, "hit": false},
-        {"drop": 20, "buy": 20, "target_price": 446.4, "hit": false}
+        {"drop": 6, "buy": 30, "target_price": 580.92, "hit": false},
+        {"drop": 10, "buy": 30, "target_price": 556.2, "hit": false},
+        {"drop": 15, "buy": 20, "target_price": 525.3, "hit": false},
+        {"drop": 20, "buy": 20, "target_price": 494.4, "hit": false}
       ],
       "yahoo_url": "https://finance.yahoo.com/quote/VOO"
     },
     {
       "symbol": "SPLG", "name": "SPDR 标普500(低费率)", "group": "标普500",
-      "price": 70.0, "change_pct": -0.4, "ath": 72.3, "ath_date": "2025-12-01",
-      "drawdown_pct": 3.18, "cum_buy_pct": 0, "signal": "观望",
-      "next": {"drop": 6, "buy": 30, "gap_pct": 2.82, "target_price": 67.96},
+      "price": 78.0, "change_pct": -0.4, "ath": 79.4, "ath_date": "2025-12-01",
+      "drawdown_pct": 1.76, "cum_buy_pct": 0, "signal": "观望",
+      "next": {"drop": 6, "buy": 30, "gap_pct": 4.24, "target_price": 74.64},
       "rungs": [
-        {"drop": 6, "buy": 30, "target_price": 67.96, "hit": false},
-        {"drop": 10, "buy": 30, "target_price": 65.07, "hit": false},
-        {"drop": 15, "buy": 20, "target_price": 61.46, "hit": false},
-        {"drop": 20, "buy": 20, "target_price": 57.84, "hit": false}
+        {"drop": 6, "buy": 30, "target_price": 74.64, "hit": false},
+        {"drop": 10, "buy": 30, "target_price": 71.46, "hit": false},
+        {"drop": 15, "buy": 20, "target_price": 67.49, "hit": false},
+        {"drop": 20, "buy": 20, "target_price": 63.52, "hit": false}
       ],
       "yahoo_url": "https://finance.yahoo.com/quote/SPLG"
     }
