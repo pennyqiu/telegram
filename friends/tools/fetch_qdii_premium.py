@@ -342,10 +342,7 @@ def render_email(payload: dict[str, Any], cfg: dict[str, Any]) -> tuple[str, str
     subject = f"{tag}{title} · {payload.get('updated_at_text', '')}"
 
     lines = [
-        f"标题：{title}",
-        f"配置：friends/tools/qdii_watchlist.json（git）",
         f"更新时间：{payload.get('updated_at_text')}",
-        f"监控页：{cfg['monitor_url']}",
         "",
         "—— 各组综合参考 ——",
     ]
@@ -396,9 +393,7 @@ def render_email(payload: dict[str, Any], cfg: dict[str, Any]) -> tuple[str, str
     )
     html = f"""<!DOCTYPE html><html><body style="font-family:sans-serif;color:#111">
 <h2 style="color:#b91c1c">{title}</h2>
-<p>配置列表：<code>friends/tools/qdii_watchlist.json</code>（git 维护）<br>
-更新：{payload.get('updated_at_text')}<br>
-<a href="{cfg['monitor_url']}">{cfg['monitor_url']}</a></p>
+<p>更新：{payload.get('updated_at_text')}</p>
 <h3>各组综合参考</h3>
 <ul>{best_html}</ul>
 <table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;font-size:13px">
