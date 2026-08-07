@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A股场内 QDII / 红利 · 溢价监控</title>
+<style>
+  :root{
+    --primary:#1a56db;--danger:#dc2626;--success:#057a55;--warning:#c27803;
+    --gray-50:#f9fafb;--gray-100:#f3f4f6;--gray-200:#e5e7eb;--gray-500:#6b7280;
+    --gray-700:#374151;--gray-900:#111827;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC',sans-serif;background:var(--gray-50);color:var(--gray-900);line-height:1.6;}
+  .wrap{max-width:1000px;margin:0 auto;padding:24px 16px 64px;}
+  .back{display:inline-block;font-size:13px;color:var(--primary);font-weight:600;text-decoration:none;margin-bottom:14px;}
+  .hero{background:linear-gradient(135deg,#b91c1c,#dc2626);color:#fff;border-radius:16px;padding:26px 24px;margin-bottom:20px;}
+  .hero h1{font-size:22px;font-weight:900;margin:4px 0 8px;}
+  .hero p{font-size:13px;opacity:.92;max-width:720px;}
+  .meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;align-items:center;}
+  .pill{background:rgba(255,255,255,.18);padding:4px 10px;border-radius:99px;font-size:12px;font-weight:600;}
+  .btn{border:none;border-radius:8px;padding:7px 14px;font-size:13px;font-weight:700;cursor:pointer;background:#fff;color:#b91c1c;}
+  .btn:disabled{opacity:.5;cursor:wait;}
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:16px 0;}
+  .card{background:#fff;border:1px solid var(--gray-200);border-radius:12px;padding:14px 16px;}
+  .card .g{font-size:12px;color:var(--gray-500);font-weight:700;}
+  .card .c{font-size:18px;font-weight:900;margin:4px 0;color:#b91c1c;}
+  .card .d{font-size:13px;color:var(--gray-700);}
+  .rules{background:#fff;border:1px solid var(--gray-200);border-left:4px solid var(--danger);border-radius:10px;padding:12px 16px;font-size:13px;margin:14px 0;color:var(--gray-700);}
+  .table-wrap{overflow-x:auto;border:1px solid var(--gray-200);border-radius:12px;background:#fff;margin-top:10px;}
+  table{width:100%;border-collapse:collapse;font-size:13px;}
+  th{background:#fef2f2;color:#991b1b;text-align:left;padding:10px 12px;font-size:12px;white-space:nowrap;}
+  td{padding:10px 12px;border-top:1px solid var(--gray-100);color:var(--gray-700);white-space:nowrap;}
+  tr:hover td{background:#fffbeb;}
+  .sig{display:inline-block;padding:2px 8px;border-radius:99px;font-size:11px;font-weight:800;}
+  .sig-buy{background:#def7ec;color:#057a55;}
+  .sig-caution{background:#fdf6b2;color:#92400e;}
+  .sig-avoid{background:#fde8e8;color:#b91c1c;}
+  .sig-unknown{background:var(--gray-100);color:var(--gray-500);}
+  .up{color:#dc2626;font-weight:700;}
+  .dn{color:#057a55;font-weight:700;}
+  .err{background:#fde8e8;color:#9b1c1c;padding:12px 16px;border-radius:10px;margin:12px 0;font-size:13px;}
+  .note{font-size:12px;color:var(--gray-500);margin-top:16px;line-height:1.7;}
+  a.em{color:var(--primary);font-weight:600;text-decoration:none;}
+  h2{font-size:16px;font-weight:800;margin:22px 0 8px;color:#991b1b;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="index.html">← 返回朋友持仓策略</a>
+  <div class="hero">
+    <div style="font-size:12px;font-weight:700;opacity:.85">Friends · yyang 专用</div>
+    <h1>A股场内 QDII / 红利 · 实时溢价监控</h1>
+    <p>自动拉取东财行情：现价、估算 IOPV、溢价率。按 yyang 规则：&lt;2% 可买 · 2–5% 谨慎 · &gt;5% 回避；同类永远买溢价最低的那只。</p>
+    <div class="meta">
+      <span class="pill" id="updated">更新时间：加载中…</span>
+      <span class="pill" id="source">数据源：—</span>
+      <button class="btn" id="refreshBtn" onclick="loadData(true)">刷新</button>
+    </div>
+  </div>
+
+  <div class="rules">
+    <b>操作纪律：</b>纳指/标普先看溢价再买；红利 ETF 可常规定投。美股休市时 QDII 的 IOPV 参考性下降，以溢价率相对比较为主。
+  </div>
+
+  <div id="err" class="err" style="display:none"></div>
+
+  <h2>各组当前最优（溢价最低）</h2>
+  <div class="cards" id="bestCards"></div>
+
+  <h2>全部监控标的</h2>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>分组</th><th>代码</th><th>名称</th><th>现价</th><th>涨跌%</th>
+          <th>估算IOPV</th><th>溢价率%</th><th>信号</th><th>成交额(万)</th><th>东财</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+
+  <p class="note">
+    数据来自东方财富公开行情（push2delay），溢价率由「基金折价率」换算：溢价率 = −折价率；IOPV ≈ 现价 / (1 − 折价率/100)。非投资建议。<br>
+    本地/服务器可用 <code>python3 friends/tools/fetch_qdii_premium.py</code> 刷新 <code>qdii-premium.json</code>；建议交易时段 cron 每 10 分钟跑一次。<br>
+    相关策略：<a class="em" href="yyang.html">yyang 持仓策略页 →</a>
+  </p>
+</div>
+<script>
+const SIG_LABEL = {buy:'✅ 可买', caution:'⚠️ 谨慎', avoid:'🛑 回避', unknown:'—'};
+const SIG_CLASS = {buy:'sig-buy', caution:'sig-caution', avoid:'sig-avoid', unknown:'sig-unknown'};
+
+function fmt(n, d=2){ return (n==null||n===undefined) ? '—' : Number(n).toFixed(d); }
+function chgCls(v){ if(v==null) return ''; return v>0?'up':(v<0?'dn':''); }
+
+async function loadData(force){
+  const btn = document.getElementById('refreshBtn');
+  const err = document.getElementById('err');
+  btn.disabled = true; err.style.display='none';
+  try{
+    // 1) 优先读同目录 JSON（cron 刷新）；带 cache-bust
+    const url = 'qdii-premium.json?t=' + Date.now();
+    let data = null;
+    try{
+      const r = await fetch(url, {cache:'no-store'});
+      if(r.ok) data = await r.json();
+    }catch(e){}
+
+    // 2) 可选：price-api 实时接口（本地 / 或 api.tgfootclub.com）
+    if(!data){
+      for (const api of ['/api/qdii-premium', 'https://api.tgfootclub.com/api/qdii-premium']) {
+        try{
+          const r2 = await fetch(api, {cache:'no-store'});
+          if(r2.ok){ data = await r2.json(); break; }
+        }catch(e){}
+      }
+    }
+
+    if(!data || !data.items){
+      throw new Error('读不到 qdii-premium.json。请先运行：python3 friends/tools/fetch_qdii_premium.py');
+    }
+    render(data);
+  }catch(e){
+    err.style.display='block';
+    err.textContent = String(e.message || e);
+  }finally{
+    btn.disabled = false;
+  }
+}
+
+function render(data){
+  document.getElementById('updated').textContent = '更新时间：' + (data.updated_at_text || data.updated_at || '—');
+  document.getElementById('source').textContent = '数据源：东财 · ' + (data.source ? '已接入' : '—');
+
+  const best = data.best_by_group || {};
+  const cards = document.getElementById('bestCards');
+  cards.innerHTML = ['纳指100','标普500','红利'].map(g=>{
+    const b = best[g];
+    if(!b) return `<div class="card"><div class="g">${g}</div><div class="c">暂无</div></div>`;
+    return `<div class="card">
+      <div class="g">${g} · 最低溢价</div>
+      <div class="c">${b.code}</div>
+      <div class="d">${b.name}<br>现价 ${fmt(b.price,3)} · 溢价 <b class="${b.premium_pct>0?'up':'dn'}">${fmt(b.premium_pct)}%</b>
+      <span class="sig ${SIG_CLASS[b.signal]||''}">${SIG_LABEL[b.signal]||b.signal}</span></div>
+    </div>`;
+  }).join('');
+
+  const tb = document.getElementById('tbody');
+  tb.innerHTML = (data.items||[]).map(r=>{
+    if(r.error){
+      return `<tr><td>${r.group}</td><td>${r.code}</td><td colspan="8">${r.error}</td></tr>`;
+    }
+    const prem = r.premium_pct;
+    return `<tr>
+      <td>${r.group}</td>
+      <td><b>${r.code}</b></td>
+      <td>${r.name}</td>
+      <td>${fmt(r.price,3)}</td>
+      <td class="${chgCls(r.change_pct)}">${fmt(r.change_pct)}</td>
+      <td>${fmt(r.iopv,4)}</td>
+      <td class="${prem>5?'up':(prem>=2?'': (prem!=null?'dn':''))}"><b>${fmt(prem)}</b></td>
+      <td><span class="sig ${SIG_CLASS[r.signal]||''}">${SIG_LABEL[r.signal]||r.signal}</span></td>
+      <td>${fmt(r.amount_wan,1)}</td>
+      <td><a class="em" href="${r.eastmoney_url||'#'}" target="_blank" rel="noopener">查看</a></td>
+    </tr>`;
+  }).join('');
+}
+
+loadData();
+// 页面打开后每 3 分钟自动重读 JSON（依赖 cron 更新文件）
+setInterval(()=>loadData(false), 3*60*1000);
+</script>
+</body>
+</html>

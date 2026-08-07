@@ -115,6 +115,26 @@ async def get_calendar(symbol: str):
     return {"earningsDate": []}
 
 
+@app.get("/api/qdii-premium")
+async def qdii_premium():
+    """A股场内 QDII/红利 ETF 现价与溢价（东方财富）。供 friends/qdii-monitor 使用。"""
+    import importlib.util
+    from pathlib import Path
+
+    script = Path(__file__).resolve().parents[1] / "friends" / "tools" / "fetch_qdii_premium.py"
+    if not script.exists():
+        raise HTTPException(500, f"找不到脚本：{script}")
+    spec = importlib.util.spec_from_file_location("fetch_qdii_premium", script)
+    mod = importlib.util.module_from_spec(spec)
+    assert spec.loader is not None
+    spec.loader.exec_module(mod)
+    try:
+        rows = mod.fetch_quotes()
+        return mod.build_payload(rows)
+    except Exception as e:
+        raise HTTPException(502, f"拉取东财行情失败：{e}")
+
+
 @app.get("/api/health")
 async def health():
     return {"status": "ok"}
