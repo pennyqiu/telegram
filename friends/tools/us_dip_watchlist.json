@@ -1,0 +1,34 @@
+{
+  "title": "美股纳指/标普 ETF · 回撤阶梯买入监控",
+  "groups_order": ["纳指100", "标普500"],
+  "field_note": "回撤 = (现价 − 历史最高收盘) / 历史最高收盘。按各自分组的阶梯逐档买入；仓位为“计划投入资金”的百分比。非投资建议。",
+  "groups": {
+    "纳指100": {
+      "benchmark": "纳斯达克100",
+      "note": "波动更大，阶梯从 -8% 开始。",
+      "ladder": [
+        {"drop": 8,  "buy": 30},
+        {"drop": 15, "buy": 40},
+        {"drop": 20, "buy": 30}
+      ]
+    },
+    "标普500": {
+      "benchmark": "标普500",
+      "note": "更稳，浅回撤先小买；-20% 较难等到，作为最后一档。",
+      "ladder": [
+        {"drop": 6,  "buy": 30},
+        {"drop": 10, "buy": 30},
+        {"drop": 15, "buy": 20},
+        {"drop": 20, "buy": 20}
+      ]
+    }
+  },
+  "items": [
+    {"symbol": "QQQ",  "name": "Invesco 纳指100",        "group": "纳指100", "secid": "105.QQQ"},
+    {"symbol": "QQQM", "name": "Invesco 纳指100(低费率)", "group": "纳指100", "secid": "105.QQQM"},
+    {"symbol": "SPY",  "name": "SPDR 标普500",           "group": "标普500", "secid": "107.SPY"},
+    {"symbol": "VOO",  "name": "Vanguard 标普500",       "group": "标普500", "secid": "107.VOO"},
+    {"symbol": "IVV",  "name": "iShares 标普500",        "group": "标普500", "secid": "107.IVV"},
+    {"symbol": "SPLG", "name": "SPDR 标普500(低费率)",    "group": "标普500", "secid": "107.SPLG"}
+  ]
+}

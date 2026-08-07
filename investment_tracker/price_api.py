@@ -129,10 +129,32 @@ async def qdii_premium():
     assert spec.loader is not None
     spec.loader.exec_module(mod)
     try:
-        rows = mod.fetch_quotes()
-        return mod.build_payload(rows)
+        watch_cfg = mod.load_watchlist()
+        rows = mod.fetch_quotes(watch_cfg)
+        return mod.build_payload(rows, watch_cfg)
     except Exception as e:
         raise HTTPException(502, f"拉取东财行情失败：{e}")
+
+
+@app.get("/api/us-dip")
+async def us_dip():
+    """美股纳指/标普 ETF 回撤阶梯买入信号。供 friends/us-dip.html 使用。"""
+    import importlib.util
+    from pathlib import Path
+
+    script = Path(__file__).resolve().parents[1] / "friends" / "tools" / "fetch_us_dip.py"
+    if not script.exists():
+        raise HTTPException(500, f"找不到脚本：{script}")
+    spec = importlib.util.spec_from_file_location("fetch_us_dip", script)
+    mod = importlib.util.module_from_spec(spec)
+    assert spec.loader is not None
+    spec.loader.exec_module(mod)
+    try:
+        cfg = mod.load_watchlist()
+        quotes = mod.fetch_quotes(cfg)
+        return mod.build_payload(cfg, quotes)
+    except Exception as e:
+        raise HTTPException(502, f"拉取美股行情失败：{e}")
 
 
 @app.get("/api/health")
