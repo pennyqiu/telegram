@@ -16,6 +16,9 @@
   python3 friends/tools/fetch_qdii_premium.py --email          # 按 qdii_email.env 发邮件
   python3 friends/tools/daily_qdii_cron.sh                     # 每日任务入口
 
+监控列表（git 可改，改完 push 后服务器 pull 即生效）：
+  friends/tools/qdii_watchlist.json
+
 每日 cron（服务器，中国时间工作日 15:20）：
   20 15 * * 1-5 /app/telegram/friends/tools/daily_qdii_cron.sh >> /var/log/qdii-premium.log 2>&1
 """
@@ -38,29 +41,38 @@ from typing import Any
 CST = timezone(timedelta(hours=8))
 TOOLS_DIR = Path(__file__).resolve().parent
 ENV_FILE = TOOLS_DIR / "qdii_email.env"
+WATCHLIST_FILE = TOOLS_DIR / "qdii_watchlist.json"
 
-# 纳指100 / 纳斯达克100 全市场宽基（各家）；排除主题（科技/生物等）
-# 标普500 全市场宽基（各家）；排除油气/消费/A股红利等
-WATCHLIST = [
-    # —— 纳指100 ——
-    {"code": "513100", "secid": "1.513100", "name": "纳指ETF国泰", "group": "纳指100", "manager": "国泰"},
-    {"code": "159941", "secid": "0.159941", "name": "纳指ETF广发", "group": "纳指100", "manager": "广发"},
-    {"code": "513300", "secid": "1.513300", "name": "纳斯达克ETF华夏", "group": "纳指100", "manager": "华夏"},
-    {"code": "159632", "secid": "0.159632", "name": "纳斯达克ETF华安", "group": "纳指100", "manager": "华安"},
-    {"code": "513110", "secid": "1.513110", "name": "纳指ETF华泰柏瑞", "group": "纳指100", "manager": "华泰柏瑞"},
-    {"code": "159513", "secid": "0.159513", "name": "纳斯达克100ETF大成", "group": "纳指100", "manager": "大成"},
-    {"code": "159659", "secid": "0.159659", "name": "纳斯达克100ETF招商", "group": "纳指100", "manager": "招商"},
-    {"code": "513390", "secid": "1.513390", "name": "纳指100ETF博时", "group": "纳指100", "manager": "博时"},
-    {"code": "159660", "secid": "0.159660", "name": "纳指ETF汇添富", "group": "纳指100", "manager": "汇添富"},
-    {"code": "159501", "secid": "0.159501", "name": "纳指ETF嘉实", "group": "纳指100", "manager": "嘉实"},
-    {"code": "513870", "secid": "1.513870", "name": "纳指ETF富国", "group": "纳指100", "manager": "富国"},
-    {"code": "159696", "secid": "0.159696", "name": "纳指ETF易方达", "group": "纳指100", "manager": "易方达"},
-    # —— 标普500 ——
-    {"code": "513500", "secid": "1.513500", "name": "标普500ETF博时", "group": "标普500", "manager": "博时"},
-    {"code": "513650", "secid": "1.513650", "name": "标普500ETF南方", "group": "标普500", "manager": "南方"},
-    {"code": "159655", "secid": "0.159655", "name": "标普500ETF华夏", "group": "标普500", "manager": "华夏"},
-    {"code": "159612", "secid": "0.159612", "name": "标普500ETF国泰", "group": "标普500", "manager": "国泰"},
-]
+
+def _secid_for(code: str, explicit: str | None = None) -> str:
+    if explicit:
+        return explicit
+    # 51xxxx/5xxxxx 上交所；15xxxx 深交所
+    return f"1.{code}" if code.startswith(("5", "6")) else f"0.{code}"
+
+
+def load_watchlist(path: Path = WATCHLIST_FILE) -> dict[str, Any]:
+    """从 git 配置文件加载监控列表。"""
+    if not path.exists():
+        raise FileNotFoundError(f"缺少监控列表配置：{path}")
+    cfg = json.loads(path.read_text(encoding="utf-8"))
+    items = cfg.get("items") or []
+    if not items:
+        raise ValueError(f"监控列表为空：{path}")
+    watch: list[dict[str, Any]] = []
+    for it in items:
+        code = str(it["code"]).strip()
+        watch.append({
+            "code": code,
+            "secid": _secid_for(code, it.get("secid")),
+            "name": it.get("name") or code,
+            "group": it.get("group") or "其他",
+            "manager": it.get("manager") or "",
+        })
+    cfg["watch"] = watch
+    cfg.setdefault("title", "场内 QDII 溢价监控")
+    cfg.setdefault("groups_order", [])
+    return cfg
 
 API = (
     "https://push2delay.eastmoney.com/api/qt/ulist.np/get"
@@ -101,8 +113,16 @@ def liquidity_tier(amount: float, shares: float | None) -> str:
     return "低"
 
 
-def fetch_quotes() -> list[dict[str, Any]]:
-    secids = ",".join(x["secid"] for x in WATCHLIST)
+def fetch_quotes(watch_cfg: dict[str, Any]) -> list[dict[str, Any]]:
+    watchlist = watch_cfg["watch"]
+    groups_order = list(watch_cfg.get("groups_order") or [])
+    # 配置未写 groups_order 时，按首次出现顺序
+    for x in watchlist:
+        if x["group"] not in groups_order:
+            groups_order.append(x["group"])
+    group_rank = {g: i for i, g in enumerate(groups_order)}
+
+    secids = ",".join(x["secid"] for x in watchlist)
     url = API.format(secids=secids)
     req = urllib.request.Request(url, headers=HEADERS)
     with urllib.request.urlopen(req, timeout=20) as resp:
@@ -111,7 +131,7 @@ def fetch_quotes() -> list[dict[str, Any]]:
         raise RuntimeError(f"eastmoney 返回异常: {payload.get('rc')} {payload.get('rt')}")
 
     by_code = {str(x.get("f12")): x for x in payload["data"]["diff"]}
-    meta = {x["code"]: x for x in WATCHLIST}
+    meta = {x["code"]: x for x in watchlist}
     rows: list[dict[str, Any]] = []
 
     for code, m in meta.items():
@@ -171,24 +191,26 @@ def fetch_quotes() -> list[dict[str, Any]]:
             "eastmoney_url": f"https://quote.eastmoney.com/{'sh' if m['secid'].startswith('1.') else 'sz'}{code}.html",
         })
 
-    # 组内：先按溢价升序，再按成交额降序
     def sort_key(r: dict[str, Any]):
-        order = {"纳指100": 0, "标普500": 1}.get(r["group"], 9)
         p = r.get("premium_pct")
-        return (order, 999 if p is None else p, -(r.get("amount") or 0))
+        return (group_rank.get(r["group"], 99), 999 if p is None else p, -(r.get("amount") or 0))
 
     rows.sort(key=sort_key)
     return rows
 
 
-def build_payload(rows: list[dict[str, Any]]) -> dict[str, Any]:
+def build_payload(rows: list[dict[str, Any]], watch_cfg: dict[str, Any]) -> dict[str, Any]:
     now = datetime.now(CST)
+    groups_order = list(watch_cfg.get("groups_order") or [])
+    for r in rows:
+        if r.get("group") and r["group"] not in groups_order:
+            groups_order.append(r["group"])
+
     best: dict[str, Any] = {}
-    for g in ("纳指100", "标普500"):
+    for g in groups_order:
         cands = [r for r in rows if r.get("group") == g and r.get("premium_pct") is not None]
         if not cands:
             continue
-        # 综合：优先可买信号，再看溢价，再看流动性
         liq_rank = {"高": 0, "中": 1, "低": 2}
 
         def score(r):
@@ -203,8 +225,12 @@ def build_payload(rows: list[dict[str, Any]]) -> dict[str, Any]:
     return {
         "updated_at": now.isoformat(timespec="seconds"),
         "updated_at_text": now.strftime("%Y-%m-%d %H:%M:%S") + " CST",
+        "title": watch_cfg.get("title") or "场内 QDII 溢价监控",
+        "watchlist_file": "friends/tools/qdii_watchlist.json",
         "source": "eastmoney push2delay ulist (f441=IOPV, f402=折价率, f38=份额)",
-        "field_note": "展示全部纳指100/标普500场内宽基 QDII；决策请综合溢价、流动性、份额，勿只看溢价。",
+        "field_note": watch_cfg.get("field_note")
+        or "决策请综合溢价、流动性、份额，勿只看溢价。",
+        "groups_order": groups_order,
         "rules": {
             "qdii_buy": "溢价 < 2%",
             "qdii_caution": "溢价 2%–5%",
@@ -212,10 +238,7 @@ def build_payload(rows: list[dict[str, Any]]) -> dict[str, Any]:
             "liquidity": "高≈日成交≥1亿或份额≥50亿份；中≈成交≥0.3亿或份额≥15亿；其余为低",
             "note": "同类比价时优先低溢价+够流动性；份额过小易流动性差、溢价更易失控。",
         },
-        "counts": {
-            "纳指100": sum(1 for r in rows if r.get("group") == "纳指100"),
-            "标普500": sum(1 for r in rows if r.get("group") == "标普500"),
-        },
+        "counts": {g: sum(1 for r in rows if r.get("group") == g) for g in groups_order},
         "best_by_group": {
             g: {
                 "code": r["code"],
@@ -283,21 +306,25 @@ def _has_buy(payload: dict[str, Any]) -> bool:
 
 
 def render_email(payload: dict[str, Any], cfg: dict[str, Any]) -> tuple[str, str, str]:
-    """返回 (subject, plain, html)。"""
+    """返回 (subject, plain, html)。邮件内容完全跟随 git 配置的 qdii_watchlist.json。"""
     has_buy = _has_buy(payload)
     best = payload.get("best_by_group") or {}
     items = [r for r in (payload.get("items") or []) if not r.get("error")]
+    groups_order = list(payload.get("groups_order") or best.keys())
+    title = payload.get("title") or "场内 QDII 溢价监控"
 
     tag = "【可买机会】" if has_buy else "【日报】"
-    subject = f"{tag}场内纳指/标普 QDII 溢价 · {payload.get('updated_at_text', '')}"
+    subject = f"{tag}{title} · {payload.get('updated_at_text', '')}"
 
     lines = [
+        f"标题：{title}",
+        f"配置：friends/tools/qdii_watchlist.json（git）",
         f"更新时间：{payload.get('updated_at_text')}",
         f"监控页：{cfg['monitor_url']}",
         "",
         "—— 各组综合参考 ——",
     ]
-    for g in ("纳指100", "标普500"):
+    for g in groups_order:
         b = best.get(g)
         if not b:
             continue
@@ -305,7 +332,7 @@ def render_email(payload: dict[str, Any], cfg: dict[str, Any]) -> tuple[str, str
             f"{g}: {b['code']} {b['name']} | 溢价 {b['premium_pct']}% | "
             f"流动 {b.get('liquidity')} | 份额 {b.get('shares_yi')}亿 | {b['signal']}"
         )
-    lines += ["", "—— 全部标的（按溢价升序）——"]
+    lines += ["", "—— 配置列表全部标的（按溢价升序）——"]
     for r in items:
         lines.append(
             f"{r['group']} {r['code']} {r.get('manager','')} "
@@ -340,11 +367,12 @@ def render_email(payload: dict[str, Any], cfg: dict[str, Any]) -> tuple[str, str
     best_html = "".join(
         f"<li><b>{g}</b>：{b['code']} {b['name']} · 溢价 <b>{b['premium_pct']}%</b> · "
         f"流动 {b.get('liquidity')} · {b['signal']}</li>"
-        for g, b in best.items()
+        for g in groups_order if (b := best.get(g))
     )
     html = f"""<!DOCTYPE html><html><body style="font-family:sans-serif;color:#111">
-<h2 style="color:#b91c1c">场内纳指/标普 QDII 溢价监控</h2>
-<p>更新：{payload.get('updated_at_text')}<br>
+<h2 style="color:#b91c1c">{title}</h2>
+<p>配置列表：<code>friends/tools/qdii_watchlist.json</code>（git 维护）<br>
+更新：{payload.get('updated_at_text')}<br>
 <a href="{cfg['monitor_url']}">{cfg['monitor_url']}</a></p>
 <h3>各组综合参考</h3>
 <ul>{best_html}</ul>
@@ -415,12 +443,13 @@ def main() -> int:
     args = ap.parse_args()
 
     try:
-        rows = fetch_quotes()
-    except (urllib.error.URLError, TimeoutError, RuntimeError, json.JSONDecodeError) as e:
+        watch_cfg = load_watchlist()
+        rows = fetch_quotes(watch_cfg)
+    except (urllib.error.URLError, TimeoutError, RuntimeError, json.JSONDecodeError, FileNotFoundError, ValueError, KeyError) as e:
         print(f"ERROR: {e}", file=sys.stderr)
         return 1
 
-    payload = build_payload(rows)
+    payload = build_payload(rows, watch_cfg)
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 

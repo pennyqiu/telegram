@@ -1,0 +1,23 @@
+{
+  "title": "场内纳指/标普 QDII 溢价监控",
+  "groups_order": ["纳指100", "标普500"],
+  "field_note": "展示全部纳指100/标普500场内宽基 QDII；决策请综合溢价、流动性、份额，勿只看溢价。",
+  "items": [
+    {"code": "513100", "name": "纳指ETF国泰", "group": "纳指100", "manager": "国泰"},
+    {"code": "159941", "name": "纳指ETF广发", "group": "纳指100", "manager": "广发"},
+    {"code": "513300", "name": "纳斯达克ETF华夏", "group": "纳指100", "manager": "华夏"},
+    {"code": "159632", "name": "纳斯达克ETF华安", "group": "纳指100", "manager": "华安"},
+    {"code": "513110", "name": "纳指ETF华泰柏瑞", "group": "纳指100", "manager": "华泰柏瑞"},
+    {"code": "159513", "name": "纳斯达克100ETF大成", "group": "纳指100", "manager": "大成"},
+    {"code": "159659", "name": "纳斯达克100ETF招商", "group": "纳指100", "manager": "招商"},
+    {"code": "513390", "name": "纳指100ETF博时", "group": "纳指100", "manager": "博时"},
+    {"code": "159660", "name": "纳指ETF汇添富", "group": "纳指100", "manager": "汇添富"},
+    {"code": "159501", "name": "纳指ETF嘉实", "group": "纳指100", "manager": "嘉实"},
+    {"code": "513870", "name": "纳指ETF富国", "group": "纳指100", "manager": "富国"},
+    {"code": "159696", "name": "纳指ETF易方达", "group": "纳指100", "manager": "易方达"},
+    {"code": "513500", "name": "标普500ETF博时", "group": "标普500", "manager": "博时"},
+    {"code": "513650", "name": "标普500ETF南方", "group": "标普500", "manager": "南方"},
+    {"code": "159655", "name": "标普500ETF华夏", "group": "标普500", "manager": "华夏"},
+    {"code": "159612", "name": "标普500ETF国泰", "group": "标普500", "manager": "国泰"}
+  ]
+}
