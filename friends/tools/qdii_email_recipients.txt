@@ -1,0 +1,5 @@
+# QDII 溢价邮件收件人（git 维护，一行一个邮箱；# 开头为注释）
+# 改完 push 后，服务器 git pull 即对下次发信生效
+# SMTP 账号/授权码仍在 qdii_email.env（勿提交）
+
+120673235@qq.com

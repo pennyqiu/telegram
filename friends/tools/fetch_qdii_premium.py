@@ -16,7 +16,9 @@
   python3 friends/tools/fetch_qdii_premium.py --email          # 按 qdii_email.env 发邮件
   python3 friends/tools/daily_qdii_cron.sh                     # 每日任务入口
 
-监控列表（git 可改，改完 push 后服务器 pull 即生效）：
+收件人列表（git 可改，改完 push 后服务器 pull 即生效）：
+  friends/tools/qdii_email_recipients.txt
+监控标的列表：
   friends/tools/qdii_watchlist.json
 
 每日 cron（服务器，中国时间工作日 15:20）：
@@ -41,6 +43,7 @@ from typing import Any
 CST = timezone(timedelta(hours=8))
 TOOLS_DIR = Path(__file__).resolve().parent
 ENV_FILE = TOOLS_DIR / "qdii_email.env"
+RECIPIENTS_FILE = TOOLS_DIR / "qdii_email_recipients.txt"
 WATCHLIST_FILE = TOOLS_DIR / "qdii_watchlist.json"
 
 
@@ -282,9 +285,31 @@ def _bool_env(name: str, default: bool = False) -> bool:
     return v.strip().lower() in {"1", "true", "yes", "on"}
 
 
+def load_recipients(path: Path = RECIPIENTS_FILE) -> list[str]:
+    """从 git 维护的收件人列表加载（一行一个邮箱）。"""
+    out: list[str] = []
+    seen: set[str] = set()
+    if not path.exists():
+        return out
+    for line in path.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if not line or line.startswith("#"):
+            continue
+        # 兼容逗号分隔写在同一行
+        for part in line.replace(";", ",").split(","):
+            addr = part.strip()
+            if addr and "@" in addr and addr.lower() not in seen:
+                seen.add(addr.lower())
+                out.append(addr)
+    return out
+
+
 def _email_config() -> dict[str, Any]:
     _load_env_file(ENV_FILE)
-    recipients = [x.strip() for x in os.getenv("EMAIL_RECIPIENTS", "").split(",") if x.strip()]
+    # 优先用 git 收件人列表；文件为空时回退到 env 的 EMAIL_RECIPIENTS
+    recipients = load_recipients()
+    if not recipients:
+        recipients = [x.strip() for x in os.getenv("EMAIL_RECIPIENTS", "").split(",") if x.strip()]
     return {
         "enabled": _bool_env("EMAIL_ENABLED", False),
         "mode": os.getenv("EMAIL_MODE", "daily").strip().lower(),  # daily|alert|both
