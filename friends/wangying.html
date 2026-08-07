@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>wangying 的持仓策略 · 40岁 / A股红利指数（投至60岁）</title>
+<style>
+  :root{
+    --primary:#1a56db;--primary-dark:#1e429f;--primary-light:#ebf5ff;
+    --success:#057a55;--success-light:#def7ec;
+    --warning:#c27803;--warning-light:#fdf6b2;
+    --danger:#c81e1e;--danger-light:#fde8e8;
+    --purple:#7e3af2;--purple-light:#edebfe;
+    --accent:#b45309;
+    --gray-50:#f9fafb;--gray-100:#f3f4f6;--gray-200:#e5e7eb;--gray-300:#d1d5db;
+    --gray-400:#9ca3af;--gray-500:#6b7280;--gray-600:#4b5563;--gray-700:#374151;
+    --gray-800:#1f2937;--gray-900:#111827;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hiragino Sans GB',sans-serif;background:var(--gray-50);color:var(--gray-800);line-height:1.75;}
+  .wrap{max-width:900px;margin:0 auto;padding:24px 20px 64px;}
+  .backlink{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--primary);text-decoration:none;font-weight:600;margin-bottom:16px;}
+  .backlink:hover{text-decoration:underline;}
+  .hero{background:linear-gradient(135deg,var(--accent),#78350f);color:#fff;border-radius:18px;padding:30px;box-shadow:0 12px 30px rgba(180,83,9,.22);}
+  .hero .eyebrow{font-size:12px;font-weight:700;letter-spacing:.06em;opacity:.85;}
+  .hero h1{font-size:26px;font-weight:900;margin:6px 0 12px;}
+  .hero .stats{display:flex;flex-wrap:wrap;gap:22px;margin-top:6px;}
+  .hero .stat .n{font-size:22px;font-weight:800;}
+  .hero .stat .l{font-size:12px;opacity:.85;}
+  h2{font-size:19px;font-weight:800;color:var(--gray-900);margin:32px 0 12px;padding-bottom:7px;border-bottom:2px solid var(--gray-100);display:flex;align-items:center;gap:9px;}
+  h2::before{content:'';display:block;width:4px;height:19px;border-radius:2px;background:var(--accent);}
+  h3{font-size:16px;font-weight:800;color:var(--gray-800);margin:22px 0 8px;}
+  p{margin-bottom:12px;font-size:15px;color:var(--gray-700);}
+  .info-box{border-radius:10px;padding:14px 18px;margin:18px 0;border-left:4px solid;font-size:14px;}
+  .info-box.blue{background:var(--primary-light);border-color:var(--primary);color:#1e429f;}
+  .info-box.green{background:var(--success-light);border-color:var(--success);color:#03543f;}
+  .info-box.yellow{background:var(--warning-light);border-color:var(--warning);color:#92400e;}
+  .info-box.red{background:var(--danger-light);border-color:var(--danger);color:#9b1c1c;}
+  .info-box.amber{background:#fef3c7;border-color:var(--accent);color:#7c2d12;}
+  .info-box b{font-weight:800;}
+  .stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:16px 0;}
+  .stat-card{background:#fff;border:1px solid var(--gray-200);border-radius:12px;padding:16px;text-align:center;}
+  .stat-card .num{font-size:22px;font-weight:800;color:var(--accent);}
+  .stat-card .lab{font-size:12px;color:var(--gray-500);margin-top:3px;}
+  .table-wrap{overflow-x:auto;margin:16px 0;border-radius:12px;border:1px solid var(--gray-200);}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;background:#fff;}
+  thead{background:var(--gray-50);}
+  th{padding:10px 13px;text-align:left;font-weight:700;color:var(--gray-700);font-size:12px;white-space:nowrap;}
+  td{padding:10px 13px;border-top:1px solid var(--gray-100);color:var(--gray-600);}
+  tr:hover td{background:var(--gray-50);}
+  .phase-row td{background:#fef3c7!important;font-weight:700;color:#7c2d12;}
+  .code-block{background:var(--gray-900);color:#e2e8f0;border-radius:10px;padding:16px 18px;font-family:'Fira Code','Cascadia Code','Courier New',monospace;font-size:12.5px;line-height:1.8;overflow-x:auto;margin:14px 0;white-space:pre;}
+  .code-block .cm{color:#94a3b8;}
+  .code-block .hl{color:#fbbf24;font-weight:600;}
+  .checklist{list-style:none;margin:14px 0;}
+  .checklist li{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-bottom:1px solid var(--gray-100);font-size:14px;color:var(--gray-700);}
+  .checklist li:last-child{border-bottom:none;}
+  .checklist .box{flex-shrink:0;width:20px;height:20px;border-radius:6px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;}
+  .research{background:linear-gradient(135deg,#fff,#fffbeb);border:1px solid #fde68a;border-radius:14px;padding:6px 22px 22px;margin:18px 0;}
+  .research .rt{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#fff;font-size:12px;font-weight:800;padding:5px 12px;border-radius:99px;margin:18px 0 4px;}
+  .disc{background:#fff;border:1px solid var(--gray-200);border-left:4px solid var(--warning);border-radius:10px;padding:14px 18px;font-size:13px;color:var(--gray-600);margin-top:30px;line-height:1.8;}
+  .kpill{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:99px;background:var(--gray-100);color:var(--gray-600);margin-left:6px;}
+
+  @media print{
+    *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;color-adjust:exact!important;}
+    body{background:#fff!important;color:#111!important;}
+    .backlink{display:none!important;}
+    .hero{
+      background:#fff!important;
+      color:#b45309!important;
+      border:2px solid #b45309!important;
+      box-shadow:none!important;
+      border-radius:12px!important;
+    }
+    .hero .eyebrow{color:#b45309!important;opacity:1!important;}
+    .hero h1{color:#92400e!important;text-shadow:none!important;}
+    .hero .stat .n{color:#b45309!important;}
+    .hero .stat .l{color:#78350f!important;opacity:1!important;}
+    h2{color:#92400e!important;border-bottom-color:#fde68a!important;}
+    h2::before{background:#b45309!important;}
+    h3{color:#92400e!important;}
+    p,.checklist li,.disc{color:#1f2937!important;}
+    .stat-card{border-color:#fde68a!important;}
+    .stat-card .num{color:#b45309!important;}
+    .stat-card .lab{color:#78350f!important;}
+    th{color:#92400e!important;background:#fef3c7!important;}
+    td{color:#1f2937!important;}
+    .phase-row td{background:#fde68a!important;color:#7c2d12!important;}
+    .info-box{border-left-width:4px!important;}
+    .info-box.red,.info-box.purple,.info-box.blue,.info-box.green,.info-box.yellow,.info-box.amber{color:#7c2d12!important;background:#fffbeb!important;border-color:#b45309!important;}
+    .code-block{background:#111!important;color:#fff!important;-webkit-print-color-adjust:exact!important;}
+    .code-block .hl{color:#fbbf24!important;}
+    .checklist .box{background:#b45309!important;color:#fff!important;}
+  }
+
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="backlink" href="index.html">← 返回朋友持仓策略</a>
+
+  <div class="hero">
+    <div class="eyebrow">Friends · 持仓策略</div>
+    <h1>wangying · A股红利指数（纯红利）</h1>
+    <div class="stats">
+      <div class="stat"><div class="n">40 岁</div><div class="l">当前年龄</div></div>
+      <div class="stat"><div class="n">60 岁</div><div class="l">投资终点</div></div>
+      <div class="stat"><div class="n">20 年</div><div class="l">持续投入</div></div>
+      <div class="stat"><div class="n">3 万/年</div><div class="l">一年两次·各1.5万</div></div>
+    </div>
+  </div>
+
+  <h2>资金回报率测算（40→60岁 · 边投边复利）</h2>
+  <div class="info-box amber">
+    <b>测算口径：</b>从当前 0 本金起，<b>每年投入 3 万（人民币）</b>，分 <b>两次</b>投入（1 月、7 月各 <b>1.5 万</b>），<b>从 40 岁一直投到 60 岁（共 20 年）</b>，边投入边复利、无停投期。年化取自中证红利（全收益）历史区间：<b>悲观 8.0% / 乐观 9.0%</b>。资产按半年一笔精确计息。<b>注：为税前口径，未扣申赎/交易费与跟踪误差，实盘会略低。</b>
+  </div>
+
+  <h3>① 标的历史年化（全收益）与悲观/乐观取值</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>标的</th><th>近5年</th><th>近10年</th><th>近15年</th><th>近20年</th><th>悲观(最低)</th><th>乐观(次低)</th></tr></thead>
+    <tbody>
+      <tr><td>中证红利(全收益)</td><td>9.34%</td><td>8.0%</td><td>9.0%</td><td>12.0%</td><td><b>8.0%</b></td><td><b>9.0%</b></td></tr>
+      <tr><td>红利低波(全收益·参考)</td><td>10.5%</td><td>9.5%</td><td>—</td><td>—</td><td><b>≈8%</b></td><td><b>≈9.5%</b></td></tr>
+    </tbody>
+  </table></div>
+  <p style="font-size:12px;color:var(--gray-400)">数据来源：Wind / 易方达（中证红利全收益）、中证指数公司（红利低波），含股息再投资总回报，仅供参考。测算采用中证红利口径：悲观 8.0%、乐观 9.0%。</p>
+
+  <h3>② 逐年资金回报测算表</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>到达年龄</th><th>当年投入</th><th>累计投入资金</th><th>年化(悲观/乐观)</th><th>年末资产（悲观）</th><th>年末资产（乐观）</th></tr></thead>
+    <tbody>
+      <tr><td>40岁（起点）</td><td>—</td><td>¥0</td><td>—</td><td>¥0</td><td>¥0</td></tr>
+      <tr><td>41岁</td><td>3万</td><td>¥3万</td><td>8.0% / 9.0%</td><td>¥3.2万</td><td>¥3.2万</td></tr>
+      <tr><td>42岁</td><td>3万</td><td>¥6万</td><td>8.0% / 9.0%</td><td>¥6.6万</td><td>¥6.7万</td></tr>
+      <tr><td>43岁</td><td>3万</td><td>¥9万</td><td>8.0% / 9.0%</td><td>¥10.3万</td><td>¥10.5万</td></tr>
+      <tr><td>44岁</td><td>3万</td><td>¥12万</td><td>8.0% / 9.0%</td><td>¥14.3万</td><td>¥14.6万</td></tr>
+      <tr class="phase-row"><td>45岁</td><td>3万</td><td>¥15万</td><td>8.0% / 9.0%</td><td>¥18.6万</td><td>¥19.2万</td></tr>
+      <tr><td>46岁</td><td>3万</td><td>¥18万</td><td>8.0% / 9.0%</td><td>¥23.3万</td><td>¥24.1万</td></tr>
+      <tr><td>47岁</td><td>3万</td><td>¥21万</td><td>8.0% / 9.0%</td><td>¥28.4万</td><td>¥29.5万</td></tr>
+      <tr><td>48岁</td><td>3万</td><td>¥24万</td><td>8.0% / 9.0%</td><td>¥33.8万</td><td>¥35.3万</td></tr>
+      <tr><td>49岁</td><td>3万</td><td>¥27万</td><td>8.0% / 9.0%</td><td>¥39.7万</td><td>¥41.7万</td></tr>
+      <tr class="phase-row"><td>50岁</td><td>3万</td><td>¥30万</td><td>8.0% / 9.0%</td><td>¥46.1万</td><td>¥48.6万</td></tr>
+      <tr><td>51岁</td><td>3万</td><td>¥33万</td><td>8.0% / 9.0%</td><td>¥52.9万</td><td>¥56.2万</td></tr>
+      <tr><td>52岁</td><td>3万</td><td>¥36万</td><td>8.0% / 9.0%</td><td>¥60.3万</td><td>¥64.5万</td></tr>
+      <tr><td>53岁</td><td>3万</td><td>¥39万</td><td>8.0% / 9.0%</td><td>¥68.3万</td><td>¥73.5万</td></tr>
+      <tr><td>54岁</td><td>3万</td><td>¥42万</td><td>8.0% / 9.0%</td><td>¥77.0万</td><td>¥83.3万</td></tr>
+      <tr class="phase-row"><td>55岁</td><td>3万</td><td>¥45万</td><td>8.0% / 9.0%</td><td>¥86.3万</td><td>¥94.0万</td></tr>
+      <tr><td>56岁</td><td>3万</td><td>¥48万</td><td>8.0% / 9.0%</td><td>¥96.4万</td><td>¥105.6万</td></tr>
+      <tr><td>57岁</td><td>3万</td><td>¥51万</td><td>8.0% / 9.0%</td><td>¥107.3万</td><td>¥118.4万</td></tr>
+      <tr><td>58岁</td><td>3万</td><td>¥54万</td><td>8.0% / 9.0%</td><td>¥119.0万</td><td>¥132.2万</td></tr>
+      <tr><td>59岁</td><td>3万</td><td>¥57万</td><td>8.0% / 9.0%</td><td>¥131.8万</td><td>¥147.3万</td></tr>
+      <tr class="phase-row"><td>60岁（测算终点）</td><td>3万</td><td>¥60万</td><td>8.0% / 9.0%</td><td>¥145.5万</td><td>¥163.8万</td></tr>
+    </tbody>
+  </table></div>
+  <div class="stat-row">
+    <div class="stat-card"><div class="num">¥60万</div><div class="lab">累计投入本金（20年×3万）</div></div>
+    <div class="stat-card"><div class="num">¥145.5万</div><div class="lab">60岁·悲观(8%)</div></div>
+    <div class="stat-card"><div class="num">¥163.8万</div><div class="lab">60岁·乐观(9%)</div></div>
+  </div>
+  <div class="info-box yellow"><b>解读：</b>纯红利、低波动，20 年持续定投 60 万本金，60 岁约 <b>¥145.5–163.8 万</b>，即本金翻约 <b>2.4–2.7 倍</b>。红利指数的核心价值不在爆发力，而在<strong>波动小、股息稳</strong>，退休后可把持仓股息当「类现金流」领取，情绪上更拿得住、更适合长期不折腾。</div>
+
+  <h2>目标配置：100% A股红利指数</h2>
+  <p>wangying 只投红利，配置极简：<strong>一只中证红利 + 一只红利低波</strong>组合即可，无需择时、无海外溢价问题。全程<strong>不做滑翔调整</strong>——红利本身就是低波动资产，20 年一以贯之地定投是这套方案的关键。</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th>组成</th><th>建议比例</th><th>代表 ETF（代码示意，以实时为准）</th><th>作用</th></tr></thead>
+    <tbody>
+      <tr class="phase-row"><td><strong>中证红利</strong></td><td>50%</td><td>华泰柏瑞红利ETF(510880)、中证红利ETF(515080)</td><td>高股息、覆盖广，红利核心</td></tr>
+      <tr><td><strong>红利低波</strong></td><td>50%</td><td>红利低波ETF(512890)、红利低波100ETF(515100)</td><td>再降波动，回撤更小</td></tr>
+    </tbody>
+  </table></div>
+  <div class="info-box green">
+    <b>为什么全红利：</b>中证红利/红利低波类指数股息率长期约 4–6%，波动与回撤明显小于成长股。对「只想稳稳积累、退休后靠股息现金流」的目标非常契合，且是境内人民币资产，<strong>没有 QDII 溢价、外汇额度、汇率</strong>这些额外变量，操作简单、心理负担低。
+  </div>
+
+  <h2>执行：定投与操作</h2>
+  <div class="code-block"><span class="cm">// 全年操作（人民币，场内交易，纯红利）</span>
+
+固定定投（一年两次）：
+  <span class="hl">1 月：买入 1.5 万</span>（红利 ETF，中证红利 + 红利低波各半）
+  <span class="hl">7 月：买入 1.5 万</span>（同上）
+  合计每年 3 万，连续投到 60 岁
+
+比例维护：
+  两只红利各占 ~50%
+  每次定投时，优先补当下占比更低的一只（自然再平衡）
+
+原则：
+  不择时、不追涨杀跌；红利是低波资产，重在坚持
+  分红到账后尽量再投入（选“红利再投资”或手动补仓）
+
+复核：
+  每年生日看一眼总资产与本金，确认按计划推进即可</div>
+
+  <h2>行动清单</h2>
+  <ul class="checklist">
+    <li><div class="box">✓</div><span>选定 1 只中证红利 ETF + 1 只红利低波 ETF（规模大、费率低、跟踪误差小）</span></li>
+    <li><div class="box">✓</div><span>设定 1 月 + 7 月两个定投提醒，每次各 1.5 万</span></li>
+    <li><div class="box">✓</div><span>两只红利各占约 50%，每次补占比更低的一只</span></li>
+    <li><div class="box">✓</div><span>分红尽量再投入（开启红利再投资或手动补仓）</span></li>
+    <li><div class="box">✓</div><span>每年生日复核一次总资产与累计本金，坚持到 60 岁</span></li>
+  </ul>
+
+  <div style="margin:36px 0 6px;padding:12px 16px;background:var(--gray-50);border:1px dashed var(--gray-300);border-radius:10px;text-align:center;font-size:13px;color:var(--gray-500)">⬇︎ 以下为这套方案的<strong>背景与逻辑</strong>（画像、红利指数说明）。<strong>只需照做的话，看上面即可</strong>；想深入了解再往下翻。</div>
+
+  <h2>画像与前提</h2>
+  <div class="stat-row">
+    <div class="stat-card"><div class="num">低</div><div class="lab">风险 / 波动偏好</div></div>
+    <div class="stat-card"><div class="num">在岸</div><div class="lab">人民币，境内资产</div></div>
+    <div class="stat-card"><div class="num">纯红利</div><div class="lab">只投红利指数</div></div>
+    <div class="stat-card"><div class="num">20 年</div><div class="lab">长期、重现金流</div></div>
+  </div>
+  <p>wangying 40 岁，计划从现在一直投到 60 岁，共 <strong>20 年</strong>。风险偏好低、追求稳健，只投 <strong>A股红利指数</strong>——用低波动、高股息的资产长期积累，退休后把股息当现金流。资金留在境内、以人民币投资，操作上尽量简单：<strong>一年两次、每次 1.5 万</strong>，其余时间不折腾。</p>
+
+  <h2>专题：读懂红利指数</h2>
+  <div class="research">
+    <div class="rt">① 什么是红利指数</div>
+    <p>红利指数从全市场里筛选<strong>股息率高、分红稳定</strong>的公司加权而成。代表指数：<strong>中证红利</strong>（覆盖沪深高股息公司）、<strong>红利低波</strong>（在高股息基础上再叠加“低波动”因子，回撤更小）。它们的收益由两块组成：<strong>股价上涨 + 持续分红</strong>，其中分红是长期收益的重要来源。</p>
+
+    <div class="rt">② 历史表现与特点</div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>指数</th><th>长期年化(含股息,参考)</th><th>股息率(参考)</th><th>波动 / 回撤</th></tr></thead>
+      <tbody>
+        <tr><td><strong>中证红利</strong></td><td>≈ 8–10%</td><td>约 4–6%</td><td>中低，回撤小于宽基/成长</td></tr>
+        <tr><td><strong>红利低波</strong></td><td>≈ 8–10%</td><td>约 4–6%</td><td>更低，熊市更抗跌</td></tr>
+      </tbody>
+    </table></div>
+    <div class="info-box amber" style="margin-top:6px">
+      <b>红利的长处与短处：</b>长处是<strong>波动小、股息稳、拿得住</strong>，很适合“只想稳稳变多、不想盯盘”的人；短处是<strong>牛市里涨得不如成长股快</strong>。选它就是主动用一部分“上涨弹性”换“更稳的过程和现金流”，这与 wangying 低风险、长期、重现金流的目标一致。
+    </div>
+
+    <div class="rt">③ 为什么“一年两次”也够</div>
+    <ul class="checklist">
+      <li><div class="box">1</div><span><b>红利波动小，定投频率不敏感。</b>相比高波动成长股，红利指数月度择时收益差别不大，一年两次已能平滑大部分波动。</span></li>
+      <li><div class="box">2</div><span><b>操作简单、易坚持。</b>1 月 + 7 月各一次，和年终奖 / 年中结余的节奏也容易对应，减少“忘记投”的概率。</span></li>
+      <li><div class="box">3</div><span><b>分红再投入更重要。</b>把每年到账的股息继续投回去，是红利长期复利的关键，别让分红躺在账户里闲置。</span></li>
+    </ul>
+  </div>
+
+  <div class="disc">⚠️ 本页为个人研究与交流记录，ETF 代码、比例、年化均为示意，<b>不构成投资建议或收益承诺</b>。红利指数同样有股价波动与回撤风险，历史年化不代表未来；实际交易前请核对最新产品信息（规模、费率、跟踪误差、股息率）并独立决策。</div>
+</div>
+</body>
+</html>
