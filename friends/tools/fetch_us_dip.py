@@ -308,26 +308,51 @@ def _bool_env(name: str, default: bool = False) -> bool:
     return default if v is None else v.strip().lower() in {"1", "true", "yes", "on"}
 
 
-def load_recipients(path: Path = RECIPIENTS_FILE) -> list[str]:
+_KIND_ALIASES = {
+    "qdii": "qdii", "a": "qdii", "cn": "qdii", "国内": "qdii",
+    "us": "us", "b": "us", "美股": "us", "qqq": "us", "spy": "us",
+    "all": "all", "both": "all", "*": "all", "": "all",
+}
+
+
+def _parse_recipient_line(line: str) -> tuple[str, set[str]] | None:
+    line = line.strip()
+    if not line or line.startswith("#"):
+        return None
+    parts = line.split()
+    email = parts[0].strip()
+    if "@" not in email:
+        return None
+    raw_tags = " ".join(parts[1:]).replace(";", ",").replace("，", ",")
+    tags = {_KIND_ALIASES.get(t.strip().lower(), t.strip().lower())
+            for t in raw_tags.split(",") if t.strip()}
+    if not tags:
+        tags = {"all"}
+    return email, tags
+
+
+def load_recipients(path: Path = RECIPIENTS_FILE, kind: str | None = None) -> list[str]:
+    """kind='qdii'/'us' 时只返回带该类型或 all 的收件人。"""
     out: list[str] = []
     seen: set[str] = set()
     if not path.exists():
         return out
     for line in path.read_text(encoding="utf-8").splitlines():
-        line = line.strip()
-        if not line or line.startswith("#"):
+        parsed = _parse_recipient_line(line)
+        if not parsed:
             continue
-        for part in line.replace(";", ",").split(","):
-            addr = part.strip()
-            if addr and "@" in addr and addr.lower() not in seen:
-                seen.add(addr.lower())
-                out.append(addr)
+        email, tags = parsed
+        if kind is not None and kind not in tags and "all" not in tags:
+            continue
+        if email.lower() not in seen:
+            seen.add(email.lower())
+            out.append(email)
     return out
 
 
 def _email_config() -> dict[str, Any]:
     _load_env_file(ENV_FILE)
-    recipients = load_recipients()
+    recipients = load_recipients(kind="us")
     if not recipients:
         recipients = [x.strip() for x in os.getenv("EMAIL_RECIPIENTS", "").split(",") if x.strip()]
     return {
