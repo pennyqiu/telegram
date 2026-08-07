@@ -3,3 +3,4 @@
 # SMTP 账号/授权码仍在 qdii_email.env（勿提交）
 
 120673235@qq.com
+411346815@qq.com
