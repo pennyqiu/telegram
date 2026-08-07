@@ -58,7 +58,7 @@
   <div class="hero">
     <div style="font-size:12px;font-weight:700;opacity:.85">Friends · yyang 专用</div>
     <h1>A股场内纳指100 / 标普500 · 全市场 QDII 监控</h1>
-    <p>展示各家宽基场内产品：溢价只是其一。请同时看 <b>IOPV、成交额、份额规模、流动性</b> 再决定买哪只。不含纳指科技/生物等主题、不含境内红利。</p>
+    <p>展示各家宽基场内产品：溢价只是其一。请同时看 <b>参考净值、成交额、市值、流动性</b> 再决定买哪只。不含纳指科技/生物等主题、不含境内红利。</p>
     <div class="meta">
       <span class="pill" id="updated">更新时间：加载中…</span>
       <span class="pill" id="counts">标的：—</span>
@@ -67,7 +67,7 @@
   </div>
 
   <div class="rules">
-    <b>怎么用：</b>① 先看溢价信号（&lt;2% 可投 / 2–5% 谨慎 / &gt;5% 不投）；② 同组里优先「溢价低 + 市值更大 + 流动性够」；③ 市值过小即使溢价略低也慎买。美股休市时 IOPV 参考性下降。
+    <b>怎么用：</b>① 先看溢价信号（&lt;2% 可投 / 2–5% 谨慎 / &gt;5% 不投）；② 同组里优先「溢价低 + 市值更大 + 流动性够」；③ 市值过小即使溢价略低也慎买。美股休市时参考净值有效性下降。
   </div>
 
   <div id="err" class="err" style="display:none"></div>
@@ -86,7 +86,7 @@
       <thead>
         <tr>
           <th>分组</th><th>代码</th><th>名称</th><th>基金公司</th>
-          <th>现价</th><th>涨跌%</th><th>IOPV</th><th>溢价率%</th>
+          <th>现价</th><th>涨跌%</th><th>参考净值</th><th>溢价率%</th>
           <th>信号</th><th>市值(亿)</th><th>流动性</th><th>份额(亿份)</th><th>成交额(万)</th><th>换手%</th><th>东财</th>
         </tr>
       </thead>
@@ -95,7 +95,7 @@
   </div>
 
   <p class="note">
-    数据：东财 <b>f441=IOPV</b>、<b>f402=折价率</b>（溢价=−折价率）、<b>f20=总市值</b>、<b>f38=最新份额</b>、<b>f6=成交额</b>。流动性为脚本粗分，仅供参考。非投资建议。<br>
+    数据：东财 <b>f441=参考净值</b>、<b>f402=折价率</b>（溢价=−折价率）、<b>f20=总市值</b>、<b>f38=最新份额</b>、<b>f6=成交额</b>。流动性为脚本粗分，仅供参考。非投资建议。<br>
     <b>每日刷新：</b>服务器 cron（工作日 15:20）跑 <code>friends/tools/daily_qdii_cron.sh</code> 更新 JSON；可配置邮件日报/可买提醒（<code>qdii_email.env</code>）。<br>
     <b>收件人（git）：</b><code>friends/tools/qdii_email_recipients.txt</code> —— 一行一个邮箱，push 后定向推送。<br>
     <b>监控标的（git）：</b><code>friends/tools/qdii_watchlist.json</code>。<br>
@@ -159,7 +159,7 @@ function render(data){
       <div class="g">${g} · 综合参考</div>
       <div class="c">${b.code}</div>
       <div class="d">${b.name}${b.manager?' · '+b.manager:''}<br>
-      现价 ${fmt(b.price,3)} · IOPV ${fmt(b.iopv,4)} · 溢价 <b class="${b.premium_pct>0?'up':'dn'}">${fmt(b.premium_pct)}%</b><br>
+      现价 ${fmt(b.price,3)} · 参考净值 ${fmt(b.iopv,4)} · 溢价 <b class="${b.premium_pct>0?'up':'dn'}">${fmt(b.premium_pct)}%</b><br>
       市值 ${fmt(b.market_cap_yi,2)}亿 · 流动 <span class="liq-${b.liquidity||''}">${b.liquidity||'—'}</span> · 成交 ${fmt(b.amount_wan,1)}万
       <span class="sig ${SIG_CLASS[b.signal]||''}">${SIG_LABEL[b.signal]||b.signal}</span></div>
     </div>`;

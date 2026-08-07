@@ -419,7 +419,7 @@ def render_email(payload: dict[str, Any], cfg: dict[str, Any]) -> tuple[str, str
 <ul>{best_html}</ul>
 <table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;font-size:13px">
 <thead style="background:#fef2f2"><tr>
-<th>分组</th><th>代码</th><th>名称</th><th>公司</th><th>现价</th><th>IOPV</th>
+<th>分组</th><th>代码</th><th>名称</th><th>公司</th><th>现价</th><th>参考净值</th>
 <th>溢价%</th><th>信号</th><th>市值亿</th><th>流动</th><th>成交万</th>
 </tr></thead>
 <tbody>
@@ -495,7 +495,7 @@ def main() -> int:
     args.out.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
     print(f"wrote {args.out}  ({payload['updated_at_text']})  n={len(rows)}")
-    print(f"{'代码':<8} {'分组':<8} {'公司':<8} {'现价':>7} {'IOPV':>8} {'溢价%':>7} {'市值亿':>7} {'成交万':>8} {'流动':>4} {'信号'}")
+    print(f"{'代码':<8} {'分组':<8} {'公司':<8} {'现价':>7} {'参考净值':>8} {'溢价%':>7} {'市值亿':>7} {'成交万':>8} {'流动':>4} {'信号'}")
     for r in rows:
         if r.get("error"):
             print(f"{r['code']:<8} ERROR {r['error']}")
