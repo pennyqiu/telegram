@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>A股场内 QDII / 红利 · 溢价监控</title>
+<title>A股场内纳指/标普 QDII · 溢价监控</title>
 <style>
   :root{
     --primary:#1a56db;--danger:#dc2626;--success:#057a55;--warning:#c27803;
@@ -50,8 +50,8 @@
   <a class="back" href="index.html">← 返回朋友持仓策略</a>
   <div class="hero">
     <div style="font-size:12px;font-weight:700;opacity:.85">Friends · yyang 专用</div>
-    <h1>A股场内 QDII / 红利 · 实时溢价监控</h1>
-    <p>自动拉取东财行情：现价、<b>IOPV（f441）</b>、溢价率（由 f402 折价率换算）。<b>QDII</b> 按 yyang 规则：&lt;2% 可买 · 2–5% 谨慎 · &gt;5% 回避。<b>境内红利 ETF</b> 套利畅通，溢价通常≈0，不做 QDII 式判断。</p>
+    <h1>A股场内纳指 / 标普 · QDII 溢价监控</h1>
+    <p>只盯跨境 QDII：现价、<b>IOPV</b>、溢价率。按 yyang 规则：&lt;2% 可买 · 2–5% 谨慎 · &gt;5% 回避；同类永远买溢价最低的那只。红利等境内 ETF 不展示。</p>
     <div class="meta">
       <span class="pill" id="updated">更新时间：加载中…</span>
       <span class="pill" id="source">数据源：—</span>
@@ -60,7 +60,7 @@
   </div>
 
   <div class="rules">
-    <b>操作纪律：</b>纳指/标普（QDII）先看溢价再买，同类永远买溢价最低的那只；<b>红利等境内股票 ETF 几乎无「额度溢价」问题</b>，可常规定投（监控里仅展示贴净值情况）。美股休市时 QDII 的 IOPV 参考性下降。
+    <b>操作纪律：</b>纳指100 / 标普500 场内 QDII 先看溢价再买；同类永远买溢价最低的那只。美股休市时 IOPV 参考性下降，以溢价相对比较为主。
   </div>
 
   <div id="err" class="err" style="display:none"></div>
@@ -73,7 +73,7 @@
     <table>
       <thead>
         <tr>
-          <th>分组</th><th>类型</th><th>代码</th><th>名称</th><th>现价</th><th>涨跌%</th>
+          <th>分组</th><th>代码</th><th>名称</th><th>现价</th><th>涨跌%</th>
           <th>IOPV</th><th>溢价率%</th><th>信号</th><th>成交额(万)</th><th>东财</th>
         </tr>
       </thead>
@@ -88,14 +88,8 @@
   </p>
 </div>
 <script>
-const SIG_LABEL = {
-  buy:'✅ 可买', caution:'⚠️ 谨慎', avoid:'🛑 回避',
-  ok:'✅ 贴净值', anomaly:'❗ 异常偏离', unknown:'—'
-};
-const SIG_CLASS = {
-  buy:'sig-buy', caution:'sig-caution', avoid:'sig-avoid',
-  ok:'sig-buy', anomaly:'sig-avoid', unknown:'sig-unknown'
-};
+const SIG_LABEL = {buy:'✅ 可买', caution:'⚠️ 谨慎', avoid:'🛑 回避', unknown:'—'};
+const SIG_CLASS = {buy:'sig-buy', caution:'sig-caution', avoid:'sig-avoid', unknown:'sig-unknown'};
 
 function fmt(n, d=2){ return (n==null||n===undefined) ? '—' : Number(n).toFixed(d); }
 function chgCls(v){ if(v==null) return ''; return v>0?'up':(v<0?'dn':''); }
@@ -141,12 +135,11 @@ function render(data){
 
   const best = data.best_by_group || {};
   const cards = document.getElementById('bestCards');
-  cards.innerHTML = ['纳指100','标普500','红利'].map(g=>{
+  cards.innerHTML = ['纳指100','标普500'].map(g=>{
     const b = best[g];
     if(!b) return `<div class="card"><div class="g">${g}</div><div class="c">暂无</div></div>`;
-    const title = g==='红利' ? `${g} · 贴近净值` : `${g} · 最低溢价`;
     return `<div class="card">
-      <div class="g">${title}</div>
+      <div class="g">${g} · 最低溢价</div>
       <div class="c">${b.code}</div>
       <div class="d">${b.name}<br>现价 ${fmt(b.price,3)} · IOPV ${fmt(b.iopv,4)} · 溢价 <b class="${b.premium_pct>0?'up':'dn'}">${fmt(b.premium_pct)}%</b>
       <span class="sig ${SIG_CLASS[b.signal]||''}">${SIG_LABEL[b.signal]||b.signal}</span></div>
@@ -156,16 +149,12 @@ function render(data){
   const tb = document.getElementById('tbody');
   tb.innerHTML = (data.items||[]).map(r=>{
     if(r.error){
-      return `<tr><td>${r.group}</td><td colspan="10">${r.error}</td></tr>`;
+      return `<tr><td>${r.group}</td><td colspan="9">${r.error}</td></tr>`;
     }
     const prem = r.premium_pct;
-    const kind = r.kind==='domestic' ? '境内' : 'QDII';
-    const premCls = r.kind==='domestic'
-      ? (Math.abs(prem||0)>1 ? 'up' : 'dn')
-      : (prem>5?'up':(prem>=2?'': (prem!=null?'dn':'')));
+    const premCls = prem>5?'up':(prem>=2?'': (prem!=null?'dn':''));
     return `<tr>
       <td>${r.group}</td>
-      <td>${kind}</td>
       <td><b>${r.code}</b></td>
       <td>${r.name}</td>
       <td>${fmt(r.price,3)}</td>

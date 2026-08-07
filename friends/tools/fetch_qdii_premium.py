@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-拉取 A股场内 QDII / 红利 ETF 现价与折溢价（东方财富）
+拉取 A股场内纳指100 / 标普500 QDII ETF 现价与折溢价（东方财富）
+（不含红利等境内 ETF）
 
 正确字段（akshare fund_etf_spot_em 同源）：
   - f441 = IOPV 实时估值
@@ -37,9 +38,6 @@ WATCHLIST = [
     {"code": "159632", "secid": "0.159632", "name": "纳斯达克ETF华安", "group": "纳指100", "kind": "qdii", "priority": 4},
     {"code": "513500", "secid": "1.513500", "name": "标普500ETF博时", "group": "标普500", "kind": "qdii", "priority": 1},
     {"code": "159612", "secid": "0.159612", "name": "标普500ETF国泰", "group": "标普500", "kind": "qdii", "priority": 2},
-    {"code": "510880", "secid": "1.510880", "name": "红利ETF华泰柏瑞", "group": "红利", "kind": "domestic", "priority": 1},
-    {"code": "515080", "secid": "1.515080", "name": "中证红利ETF招商", "group": "红利", "kind": "domestic", "priority": 2},
-    {"code": "512890", "secid": "1.512890", "name": "红利低波ETF华泰柏瑞", "group": "红利", "kind": "domestic", "priority": 3},
 ]
 
 # f441=IOPV, f402=基金折价率（正确）；勿再用 f184
@@ -60,17 +58,8 @@ def _num(v: Any) -> float | None:
     return None
 
 
-def signal_for(premium_pct: float | None, kind: str) -> str:
-    """境内股票 ETF 不套用 QDII 溢价纪律；QDII 按 yyang 阈值。"""
-    if kind == "domestic":
-        if premium_pct is None:
-            return "unknown"
-        # 境内一般贴近净值；仅当异常偏离时提示
-        if abs(premium_pct) < 0.5:
-            return "ok"
-        if abs(premium_pct) < 1.5:
-            return "caution"
-        return "anomaly"
+def signal_for(premium_pct: float | None, kind: str = "qdii") -> str:
+    """QDII 按 yyang 阈值：<2% 可买 / 2–5% 谨慎 / >5% 回避。"""
     if premium_pct is None:
         return "unknown"
     if premium_pct < 2:
@@ -161,27 +150,21 @@ def fetch_quotes() -> list[dict[str, Any]]:
 def build_payload(rows: list[dict[str, Any]]) -> dict[str, Any]:
     now = datetime.now(CST)
     best: dict[str, Any] = {}
-    for g in ("纳指100", "标普500", "红利"):
+    for g in ("纳指100", "标普500"):
         cands = [r for r in rows if r.get("group") == g and r.get("premium_pct") is not None]
         if not cands:
             continue
-        if g in ("纳指100", "标普500"):
-            # QDII：选溢价最低且优先可买
-            best[g] = min(cands, key=lambda r: (0 if r.get("signal") == "buy" else 1, r["premium_pct"]))
-        else:
-            # 红利：展示贴近净值最好的一只
-            best[g] = min(cands, key=lambda r: abs(r["premium_pct"]))
+        best[g] = min(cands, key=lambda r: (0 if r.get("signal") == "buy" else 1, r["premium_pct"]))
 
     return {
         "updated_at": now.isoformat(timespec="seconds"),
         "updated_at_text": now.strftime("%Y-%m-%d %H:%M:%S") + " CST",
         "source": "eastmoney push2delay ulist (f441=IOPV, f402=基金折价率)",
-        "field_note": "f184 是主力净流入占比，不是折价率；已改用 f402/f441。",
+        "field_note": "仅监控场内纳指100 / 标普500 QDII；红利等境内 ETF 不展示。",
         "rules": {
             "qdii_buy": "溢价 < 2%",
             "qdii_caution": "溢价 2%–5%",
             "qdii_avoid": "溢价 > 5%",
-            "domestic": "境内股票 ETF（红利等）套利畅通，溢价通常接近 0；不做 QDII 式「可买/回避」判断。",
             "note": "同类 QDII 多只比价，永远买溢价最低的那只。",
         },
         "best_by_group": {
@@ -217,10 +200,7 @@ def main() -> int:
     args.out.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
     print(f"wrote {args.out}  ({payload['updated_at_text']})")
-    sig_map = {
-        "buy": "✅可买", "caution": "⚠️谨慎", "avoid": "🛑回避",
-        "ok": "✅贴净值", "anomaly": "❗异常偏离", "unknown": "?",
-    }
+    sig_map = {"buy": "✅可买", "caution": "⚠️谨慎", "avoid": "🛑回避", "unknown": "?"}
     print(f"{'代码':<8} {'分组':<8} {'kind':<9} {'现价':>8} {'IOPV':>8} {'溢价%':>8} {'信号':<10}")
     for r in rows:
         if r.get("error"):
