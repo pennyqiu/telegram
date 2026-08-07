@@ -7,6 +7,7 @@
   - f441 = IOPV 实时估值
   - f402 = 基金折价率%  → 溢价率% = -f402
   - f38  = 最新份额
+  - f20  = 总市值（元）
   - f6   = 成交额
 
 不含：纳指科技/生物等主题、标普油气/消费等非标普500、境内红利。
@@ -80,7 +81,7 @@ def load_watchlist(path: Path = WATCHLIST_FILE) -> dict[str, Any]:
 API = (
     "https://push2delay.eastmoney.com/api/qt/ulist.np/get"
     "?fltt=2&invt=2"
-    "&fields=f12,f14,f2,f3,f5,f6,f8,f18,f38,f152,f402,f441"
+    "&fields=f12,f14,f2,f3,f5,f6,f8,f18,f20,f38,f152,f402,f441"
     "&secids={secids}"
 )
 HEADERS = {
@@ -96,13 +97,14 @@ def _num(v: Any) -> float | None:
 
 
 def signal_for(premium_pct: float | None) -> str:
+    """信号用中文：可投 / 谨慎 / 不投。"""
     if premium_pct is None:
-        return "unknown"
+        return "未知"
     if premium_pct < 2:
-        return "buy"
+        return "可投"
     if premium_pct < 5:
-        return "caution"
-    return "avoid"
+        return "谨慎"
+    return "不投"
 
 
 def liquidity_tier(amount: float, shares: float | None) -> str:
@@ -147,7 +149,7 @@ def fetch_quotes(watch_cfg: dict[str, Any]) -> list[dict[str, Any]]:
                 "manager": m["manager"],
                 "kind": "qdii",
                 "error": "未返回行情",
-                "signal": "unknown",
+                "signal": "未知",
             })
             continue
 
@@ -159,6 +161,7 @@ def fetch_quotes(watch_cfg: dict[str, Any]) -> list[dict[str, Any]]:
         volume = _num(raw.get("f5")) or 0.0
         turnover = _num(raw.get("f8"))
         shares = _num(raw.get("f38"))
+        market_cap = _num(raw.get("f20"))  # 东财总市值
         prev_close = _num(raw.get("f18"))
         name = raw.get("f14") or m["name"]
 
@@ -170,6 +173,13 @@ def fetch_quotes(watch_cfg: dict[str, Any]) -> list[dict[str, Any]]:
             if premium is None or abs(premium_from_iopv - premium) > 0.3:
                 premium = premium_from_iopv
                 discount = -premium
+
+        # 缺 f20 时用 份额×现价 估算市值；净资产规模≈份额×IOPV
+        if market_cap is None and shares is not None and price is not None:
+            market_cap = shares * price
+        aum = None
+        if shares is not None and iopv is not None:
+            aum = shares * iopv
 
         rows.append({
             "code": code,
@@ -189,6 +199,10 @@ def fetch_quotes(watch_cfg: dict[str, Any]) -> list[dict[str, Any]]:
             "turnover_pct": round(turnover, 2) if turnover is not None else None,
             "shares": int(shares) if shares is not None else None,
             "shares_yi": round(shares / 1e8, 2) if shares is not None else None,
+            "market_cap": int(market_cap) if market_cap is not None else None,
+            "market_cap_yi": round(market_cap / 1e8, 2) if market_cap is not None else None,
+            "aum": int(aum) if aum is not None else None,
+            "aum_yi": round(aum / 1e8, 2) if aum is not None else None,
             "liquidity": liquidity_tier(amount, shares),
             "signal": signal_for(premium),
             "eastmoney_url": f"https://quote.eastmoney.com/{'sh' if m['secid'].startswith('1.') else 'sz'}{code}.html",
@@ -214,13 +228,16 @@ def build_payload(rows: list[dict[str, Any]], watch_cfg: dict[str, Any]) -> dict
         cands = [r for r in rows if r.get("group") == g and r.get("premium_pct") is not None]
         if not cands:
             continue
+        # 综合：优先可投，再低溢价，再流动性，再大市值
         liq_rank = {"高": 0, "中": 1, "低": 2}
+        sig_rank = {"可投": 0, "谨慎": 1, "不投": 2, "未知": 3}
 
         def score(r):
             return (
-                0 if r.get("signal") == "buy" else (1 if r.get("signal") == "caution" else 2),
+                sig_rank.get(r.get("signal"), 9),
                 r["premium_pct"],
                 liq_rank.get(r.get("liquidity"), 9),
+                -(r.get("market_cap") or 0),
             )
 
         best[g] = min(cands, key=score)
@@ -230,16 +247,16 @@ def build_payload(rows: list[dict[str, Any]], watch_cfg: dict[str, Any]) -> dict
         "updated_at_text": now.strftime("%Y-%m-%d %H:%M:%S") + " CST",
         "title": watch_cfg.get("title") or "场内 QDII 溢价监控",
         "watchlist_file": "friends/tools/qdii_watchlist.json",
-        "source": "eastmoney push2delay ulist (f441=IOPV, f402=折价率, f38=份额)",
+        "source": "eastmoney push2delay ulist (f441=IOPV, f402=折价率, f38=份额, f20=市值)",
         "field_note": watch_cfg.get("field_note")
-        or "决策请综合溢价、流动性、份额，勿只看溢价。",
+        or "决策请综合溢价、流动性、市值，勿只看溢价。",
         "groups_order": groups_order,
         "rules": {
-            "qdii_buy": "溢价 < 2%",
-            "qdii_caution": "溢价 2%–5%",
-            "qdii_avoid": "溢价 > 5%",
+            "qdii_buy": "溢价 < 2% → 可投",
+            "qdii_caution": "溢价 2%–5% → 谨慎",
+            "qdii_avoid": "溢价 > 5% → 不投",
             "liquidity": "高≈日成交≥1亿或份额≥50亿份；中≈成交≥0.3亿或份额≥15亿；其余为低",
-            "note": "同类比价时优先低溢价+够流动性；份额过小易流动性差、溢价更易失控。",
+            "note": "同类比价时优先低溢价+够流动性+更大市值；份额过小易流动性差、溢价更易失控。",
         },
         "counts": {g: sum(1 for r in rows if r.get("group") == g) for g in groups_order},
         "best_by_group": {
@@ -253,6 +270,8 @@ def build_payload(rows: list[dict[str, Any]], watch_cfg: dict[str, Any]) -> dict
                 "liquidity": r.get("liquidity"),
                 "amount_wan": r.get("amount_wan"),
                 "shares_yi": r.get("shares_yi"),
+                "market_cap_yi": r.get("market_cap_yi"),
+                "aum_yi": r.get("aum_yi"),
                 "signal": r["signal"],
             }
             for g, r in best.items()
@@ -327,7 +346,7 @@ def _email_config() -> dict[str, Any]:
 
 
 def _has_buy(payload: dict[str, Any]) -> bool:
-    return any(r.get("signal") == "buy" for r in payload.get("items") or [])
+    return any(r.get("signal") == "可投" for r in payload.get("items") or [])
 
 
 def render_email(payload: dict[str, Any], cfg: dict[str, Any]) -> tuple[str, str, str]:
@@ -338,7 +357,7 @@ def render_email(payload: dict[str, Any], cfg: dict[str, Any]) -> tuple[str, str
     groups_order = list(payload.get("groups_order") or best.keys())
     title = payload.get("title") or "场内 QDII 溢价监控"
 
-    tag = "【可买机会】" if has_buy else "【日报】"
+    tag = "【可投机会】" if has_buy else "【日报】"
     subject = f"{tag}{title} · {payload.get('updated_at_text', '')}"
 
     lines = [
@@ -352,22 +371,24 @@ def render_email(payload: dict[str, Any], cfg: dict[str, Any]) -> tuple[str, str
             continue
         lines.append(
             f"{g}: {b['code']} {b['name']} | 溢价 {b['premium_pct']}% | "
-            f"流动 {b.get('liquidity')} | 份额 {b.get('shares_yi')}亿 | {b['signal']}"
+            f"市值 {b.get('market_cap_yi')}亿 | 流动 {b.get('liquidity')} | {b['signal']}"
         )
-    lines += ["", "—— 配置列表全部标的（按溢价升序）——"]
+    lines += ["", "—— 全部标的（按溢价升序）——"]
     for r in items:
         lines.append(
             f"{r['group']} {r['code']} {r.get('manager','')} "
-            f"溢价{r.get('premium_pct')}% 流动{r.get('liquidity')} "
-            f"份额{r.get('shares_yi')}亿 成交{r.get('amount_wan')}万 → {r.get('signal')}"
+            f"溢价{r.get('premium_pct')}% 市值{r.get('market_cap_yi')}亿 "
+            f"流动{r.get('liquidity')} 成交{r.get('amount_wan')}万 → {r.get('signal')}"
         )
     if has_buy:
-        buys = [r for r in items if r.get("signal") == "buy"]
-        lines += ["", "★ 当前可买（溢价<2%）："]
+        buys = [r for r in items if r.get("signal") == "可投"]
+        lines += ["", "★ 当前可投（溢价<2%）："]
         for r in buys:
-            lines.append(f"  {r['code']} {r['name']} 溢价 {r['premium_pct']}%")
+            lines.append(
+                f"  {r['code']} {r['name']} 溢价 {r['premium_pct']}% 市值 {r.get('market_cap_yi')}亿"
+            )
     else:
-        lines += ["", "当前无「可买」信号（全部溢价≥2%）。"]
+        lines += ["", "当前无「可投」信号（全部溢价≥2%）。"]
     plain = "\n".join(lines)
 
     def row_html(r: dict[str, Any]) -> str:
@@ -381,14 +402,14 @@ def render_email(payload: dict[str, Any], cfg: dict[str, Any]) -> tuple[str, str
             f"<td>{r.get('name')}</td><td>{r.get('manager') or ''}</td>"
             f"<td>{r.get('price')}</td><td>{r.get('iopv')}</td>"
             f"<td style='color:{color};font-weight:700'>{prem}%</td>"
-            f"<td>{r.get('signal')}</td><td>{r.get('liquidity')}</td>"
-            f"<td>{r.get('shares_yi')}</td><td>{r.get('amount_wan')}</td>"
+            f"<td>{r.get('signal')}</td><td>{r.get('market_cap_yi')}</td>"
+            f"<td>{r.get('liquidity')}</td><td>{r.get('amount_wan')}</td>"
             f"</tr>"
         )
 
     best_html = "".join(
         f"<li><b>{g}</b>：{b['code']} {b['name']} · 溢价 <b>{b['premium_pct']}%</b> · "
-        f"流动 {b.get('liquidity')} · {b['signal']}</li>"
+        f"市值 {b.get('market_cap_yi')}亿 · 流动 {b.get('liquidity')} · {b['signal']}</li>"
         for g in groups_order if (b := best.get(g))
     )
     html = f"""<!DOCTYPE html><html><body style="font-family:sans-serif;color:#111">
@@ -399,12 +420,12 @@ def render_email(payload: dict[str, Any], cfg: dict[str, Any]) -> tuple[str, str
 <table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;font-size:13px">
 <thead style="background:#fef2f2"><tr>
 <th>分组</th><th>代码</th><th>名称</th><th>公司</th><th>现价</th><th>IOPV</th>
-<th>溢价%</th><th>信号</th><th>流动</th><th>份额亿</th><th>成交万</th>
+<th>溢价%</th><th>信号</th><th>市值亿</th><th>流动</th><th>成交万</th>
 </tr></thead>
 <tbody>
 {''.join(row_html(r) for r in items)}
 </tbody></table>
-<p style="color:#6b7280;font-size:12px">规则：溢价&lt;2%可买 · 2–5%谨慎 · &gt;5%回避。请综合流动性与份额，勿只看溢价。非投资建议。</p>
+<p style="color:#6b7280;font-size:12px">规则：溢价&lt;2%可投 · 2–5%谨慎 · &gt;5%不投。同组优先更大市值。非投资建议。</p>
 </body></html>"""
     return subject, plain, html
 
@@ -424,7 +445,7 @@ def send_email(payload: dict[str, Any], force: bool = False) -> str:
     has_buy = _has_buy(payload)
     if not force:
         if mode == "alert" and not has_buy:
-            return "skip: EMAIL_MODE=alert 且当前无可买信号"
+            return "skip: EMAIL_MODE=alert 且当前无可投信号"
         if mode not in {"daily", "alert", "both"}:
             return f"skip: 未知 EMAIL_MODE={mode}"
 
@@ -474,8 +495,7 @@ def main() -> int:
     args.out.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
     print(f"wrote {args.out}  ({payload['updated_at_text']})  n={len(rows)}")
-    sig_map = {"buy": "✅可买", "caution": "⚠️谨慎", "avoid": "🛑回避", "unknown": "?"}
-    print(f"{'代码':<8} {'分组':<8} {'公司':<8} {'现价':>7} {'IOPV':>8} {'溢价%':>7} {'份额亿':>7} {'成交万':>8} {'流动':>4} {'信号'}")
+    print(f"{'代码':<8} {'分组':<8} {'公司':<8} {'现价':>7} {'IOPV':>8} {'溢价%':>7} {'市值亿':>7} {'成交万':>8} {'流动':>4} {'信号'}")
     for r in rows:
         if r.get("error"):
             print(f"{r['code']:<8} ERROR {r['error']}")
@@ -483,12 +503,15 @@ def main() -> int:
         print(
             f"{r['code']:<8} {r['group']:<8} {r['manager']:<8} "
             f"{r['price']:>7.3f} {r['iopv']:>8.4f} {r['premium_pct']:>7.2f} "
-            f"{(r.get('shares_yi') or 0):>7.2f} {r['amount_wan']:>8.1f} "
-            f"{r['liquidity']:>4} {sig_map.get(r['signal'], r['signal'])}"
+            f"{(r.get('market_cap_yi') or 0):>7.2f} {r['amount_wan']:>8.1f} "
+            f"{r['liquidity']:>4} {r['signal']}"
         )
-    print("\n各组综合参考（溢价优先，兼顾流动性）：")
+    print("\n各组综合参考（溢价优先，兼顾流动性与市值）：")
     for g, b in payload["best_by_group"].items():
-        print(f"  {g}: {b['code']} {b['name']} 溢价{b['premium_pct']}% 流动{b['liquidity']} → {b['signal']}")
+        print(
+            f"  {g}: {b['code']} {b['name']} 溢价{b['premium_pct']}% "
+            f"市值{b.get('market_cap_yi')}亿 流动{b['liquidity']} → {b['signal']}"
+        )
 
     if args.email or args.email_force:
         status = send_email(payload, force=args.email_force)
