@@ -13,22 +13,31 @@
 
 用法：
   python3 friends/tools/fetch_qdii_premium.py
+  python3 friends/tools/fetch_qdii_premium.py --email          # 按 qdii_email.env 发邮件
+  python3 friends/tools/daily_qdii_cron.sh                     # 每日任务入口
 
-建议 cron：
-  */10 9-15 * * 1-5 cd /app/telegram && python3 friends/tools/fetch_qdii_premium.py >> /var/log/qdii-premium.log 2>&1
+每日 cron（服务器，中国时间工作日 15:20）：
+  20 15 * * 1-5 /app/telegram/friends/tools/daily_qdii_cron.sh >> /var/log/qdii-premium.log 2>&1
 """
 from __future__ import annotations
 
 import argparse
 import json
+import os
+import smtplib
+import ssl
 import sys
 import urllib.error
 import urllib.request
 from datetime import datetime, timezone, timedelta
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 from pathlib import Path
 from typing import Any
 
 CST = timezone(timedelta(hours=8))
+TOOLS_DIR = Path(__file__).resolve().parent
+ENV_FILE = TOOLS_DIR / "qdii_email.env"
 
 # 纳指100 / 纳斯达克100 全市场宽基（各家）；排除主题（科技/生物等）
 # 标普500 全市场宽基（各家）；排除油气/消费/A股红利等
@@ -226,10 +235,183 @@ def build_payload(rows: list[dict[str, Any]]) -> dict[str, Any]:
     }
 
 
+def _load_env_file(path: Path) -> dict[str, str]:
+    """简易 KEY=VALUE 加载（支持 # 注释），不覆盖已有环境变量。"""
+    out: dict[str, str] = {}
+    if not path.exists():
+        return out
+    for line in path.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        k, v = line.split("=", 1)
+        k, v = k.strip(), v.strip().strip('"').strip("'")
+        if k and k not in os.environ:
+            os.environ[k] = v
+        out[k] = v
+    return out
+
+
+def _bool_env(name: str, default: bool = False) -> bool:
+    v = os.getenv(name)
+    if v is None:
+        return default
+    return v.strip().lower() in {"1", "true", "yes", "on"}
+
+
+def _email_config() -> dict[str, Any]:
+    _load_env_file(ENV_FILE)
+    recipients = [x.strip() for x in os.getenv("EMAIL_RECIPIENTS", "").split(",") if x.strip()]
+    return {
+        "enabled": _bool_env("EMAIL_ENABLED", False),
+        "mode": os.getenv("EMAIL_MODE", "daily").strip().lower(),  # daily|alert|both
+        "host": os.getenv("SMTP_HOST", ""),
+        "port": int(os.getenv("SMTP_PORT", "587")),
+        "use_tls": _bool_env("SMTP_USE_TLS", True),
+        "username": os.getenv("SMTP_USERNAME", ""),
+        "password": os.getenv("SMTP_PASSWORD", ""),
+        "sender": os.getenv("EMAIL_SENDER") or os.getenv("SMTP_USERNAME", ""),
+        "recipients": recipients,
+        "monitor_url": os.getenv(
+            "MONITOR_URL", "https://learn.tgfootclub.com/friends/qdii-monitor.html"
+        ),
+    }
+
+
+def _has_buy(payload: dict[str, Any]) -> bool:
+    return any(r.get("signal") == "buy" for r in payload.get("items") or [])
+
+
+def render_email(payload: dict[str, Any], cfg: dict[str, Any]) -> tuple[str, str, str]:
+    """返回 (subject, plain, html)。"""
+    has_buy = _has_buy(payload)
+    best = payload.get("best_by_group") or {}
+    items = [r for r in (payload.get("items") or []) if not r.get("error")]
+
+    tag = "【可买机会】" if has_buy else "【日报】"
+    subject = f"{tag}场内纳指/标普 QDII 溢价 · {payload.get('updated_at_text', '')}"
+
+    lines = [
+        f"更新时间：{payload.get('updated_at_text')}",
+        f"监控页：{cfg['monitor_url']}",
+        "",
+        "—— 各组综合参考 ——",
+    ]
+    for g in ("纳指100", "标普500"):
+        b = best.get(g)
+        if not b:
+            continue
+        lines.append(
+            f"{g}: {b['code']} {b['name']} | 溢价 {b['premium_pct']}% | "
+            f"流动 {b.get('liquidity')} | 份额 {b.get('shares_yi')}亿 | {b['signal']}"
+        )
+    lines += ["", "—— 全部标的（按溢价升序）——"]
+    for r in items:
+        lines.append(
+            f"{r['group']} {r['code']} {r.get('manager','')} "
+            f"溢价{r.get('premium_pct')}% 流动{r.get('liquidity')} "
+            f"份额{r.get('shares_yi')}亿 成交{r.get('amount_wan')}万 → {r.get('signal')}"
+        )
+    if has_buy:
+        buys = [r for r in items if r.get("signal") == "buy"]
+        lines += ["", "★ 当前可买（溢价<2%）："]
+        for r in buys:
+            lines.append(f"  {r['code']} {r['name']} 溢价 {r['premium_pct']}%")
+    else:
+        lines += ["", "当前无「可买」信号（全部溢价≥2%）。"]
+    plain = "\n".join(lines)
+
+    def row_html(r: dict[str, Any]) -> str:
+        prem = r.get("premium_pct")
+        color = "#b91c1c" if (prem is not None and prem > 5) else (
+            "#c27803" if (prem is not None and prem >= 2) else "#057a55"
+        )
+        return (
+            f"<tr>"
+            f"<td>{r.get('group')}</td><td><b>{r.get('code')}</b></td>"
+            f"<td>{r.get('name')}</td><td>{r.get('manager') or ''}</td>"
+            f"<td>{r.get('price')}</td><td>{r.get('iopv')}</td>"
+            f"<td style='color:{color};font-weight:700'>{prem}%</td>"
+            f"<td>{r.get('signal')}</td><td>{r.get('liquidity')}</td>"
+            f"<td>{r.get('shares_yi')}</td><td>{r.get('amount_wan')}</td>"
+            f"</tr>"
+        )
+
+    best_html = "".join(
+        f"<li><b>{g}</b>：{b['code']} {b['name']} · 溢价 <b>{b['premium_pct']}%</b> · "
+        f"流动 {b.get('liquidity')} · {b['signal']}</li>"
+        for g, b in best.items()
+    )
+    html = f"""<!DOCTYPE html><html><body style="font-family:sans-serif;color:#111">
+<h2 style="color:#b91c1c">场内纳指/标普 QDII 溢价监控</h2>
+<p>更新：{payload.get('updated_at_text')}<br>
+<a href="{cfg['monitor_url']}">{cfg['monitor_url']}</a></p>
+<h3>各组综合参考</h3>
+<ul>{best_html}</ul>
+<table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;font-size:13px">
+<thead style="background:#fef2f2"><tr>
+<th>分组</th><th>代码</th><th>名称</th><th>公司</th><th>现价</th><th>IOPV</th>
+<th>溢价%</th><th>信号</th><th>流动</th><th>份额亿</th><th>成交万</th>
+</tr></thead>
+<tbody>
+{''.join(row_html(r) for r in items)}
+</tbody></table>
+<p style="color:#6b7280;font-size:12px">规则：溢价&lt;2%可买 · 2–5%谨慎 · &gt;5%回避。请综合流动性与份额，勿只看溢价。非投资建议。</p>
+</body></html>"""
+    return subject, plain, html
+
+
+def send_email(payload: dict[str, Any], force: bool = False) -> str:
+    """
+    发送邮件。返回状态说明字符串。
+    force=True 时忽略 EMAIL_MODE 的 alert 过滤（仍要求 EMAIL_ENABLED）。
+    """
+    cfg = _email_config()
+    if not cfg["enabled"]:
+        return "skip: EMAIL_ENABLED=false（配置 friends/tools/qdii_email.env 后开启）"
+    if not cfg["host"] or not cfg["recipients"] or not cfg["sender"]:
+        return "skip: SMTP/收件人未配置完整"
+
+    mode = cfg["mode"]
+    has_buy = _has_buy(payload)
+    if not force:
+        if mode == "alert" and not has_buy:
+            return "skip: EMAIL_MODE=alert 且当前无可买信号"
+        if mode not in {"daily", "alert", "both"}:
+            return f"skip: 未知 EMAIL_MODE={mode}"
+
+    subject, plain, html = render_email(payload, cfg)
+    msg = MIMEMultipart("alternative")
+    msg["Subject"] = subject
+    msg["From"] = cfg["sender"]
+    msg["To"] = ", ".join(cfg["recipients"])
+    msg.attach(MIMEText(plain, "plain", "utf-8"))
+    msg.attach(MIMEText(html, "html", "utf-8"))
+
+    try:
+        if cfg["use_tls"]:
+            context = ssl.create_default_context()
+            with smtplib.SMTP(cfg["host"], cfg["port"], timeout=30) as server:
+                server.starttls(context=context)
+                if cfg["username"]:
+                    server.login(cfg["username"], cfg["password"])
+                server.send_message(msg)
+        else:
+            with smtplib.SMTP(cfg["host"], cfg["port"], timeout=30) as server:
+                if cfg["username"]:
+                    server.login(cfg["username"], cfg["password"])
+                server.send_message(msg)
+        return f"sent: → {', '.join(cfg['recipients'])} | {subject}"
+    except Exception as e:
+        return f"error: 邮件发送失败：{e}"
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description="拉取场内纳指100/标普500全部 QDII 溢价")
     root = Path(__file__).resolve().parents[1]
     ap.add_argument("--out", type=Path, default=root / "qdii-premium.json")
+    ap.add_argument("--email", action="store_true", help="按 qdii_email.env 发送邮件提醒")
+    ap.add_argument("--email-force", action="store_true", help="强制发邮件（忽略 alert 过滤）")
     args = ap.parse_args()
 
     try:
@@ -258,6 +440,12 @@ def main() -> int:
     print("\n各组综合参考（溢价优先，兼顾流动性）：")
     for g, b in payload["best_by_group"].items():
         print(f"  {g}: {b['code']} {b['name']} 溢价{b['premium_pct']}% 流动{b['liquidity']} → {b['signal']}")
+
+    if args.email or args.email_force:
+        status = send_email(payload, force=args.email_force)
+        print(f"email: {status}")
+        if status.startswith("error:"):
+            return 2
     return 0
 
 

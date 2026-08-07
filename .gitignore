@@ -15,6 +15,10 @@ __pycache__/
 .env
 **/.env
 !**/.env.example
+friends/tools/qdii_email.env
+
+# QDII 溢价监控：由服务器 cron 每日刷新，避免 git pull 覆盖
+friends/qdii-premium.json
 
 # 运行日志
 *.log
