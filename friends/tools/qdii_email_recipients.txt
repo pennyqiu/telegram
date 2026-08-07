@@ -11,4 +11,5 @@
 # SMTP 账号/授权码在 qdii_email.env（勿提交）
 
 120673235@qq.com  all
-# 411346815@qq.com  us
+1447024819@qq.com  us
+#411346815@qq.com  qdii
