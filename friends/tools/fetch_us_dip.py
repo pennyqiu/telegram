@@ -20,8 +20,8 @@
   python3 friends/tools/fetch_us_dip.py --email
   python3 friends/tools/fetch_us_dip.py --email-force
 
-每日 cron（服务器，中国时间约 09:30，周二~周六；用前一晚美股收盘数据）：
-  30 9 * * 2-6 /app/telegram/friends/tools/daily_us_dip_cron.sh >> /var/log/us-dip.log 2>&1
+每日 cron（服务器 UTC；北京 09:30 = UTC 01:30，周二~周六）：
+  30 1 * * 2-6 TZ=Asia/Shanghai /app/telegram/friends/tools/daily_us_dip_cron.sh >> /var/log/us-dip.log 2>&1
 
 邮件投递（见 qdii_email_recipients.txt）：
   all  → 每次定时任务都发（心跳/失败通知）

@@ -5,10 +5,13 @@
 #   1. 取各 ETF 现价与历史最高，算回撤 → 写入 friends/us-dip-signal.json
 #   2. 若配置了 qdii_email.env 且 EMAIL_ENABLED=true → 发邮件（复用同一套 SMTP/收件人）
 #
-# 安装到服务器 crontab（中国时间约 09:30，周二~周六；用前一晚美股收盘数据）：
+# 安装到服务器 crontab：
+#   ⚠ 服务器系统时区是 UTC。crontab 数字按 UTC 解释；
+#     命令前的 TZ=Asia/Shanghai 只影响脚本内部时间，不改触发时刻。
+#   北京 09:30 = UTC 01:30（周二~周六；用前一晚美股收盘数据）
 #   chmod +x /app/telegram/friends/tools/daily_us_dip_cron.sh
 #   (crontab -l 2>/dev/null | grep -v 'daily_us_dip_cron.sh'; \
-#     echo "30 9 * * 2-6 TZ=Asia/Shanghai /app/telegram/friends/tools/daily_us_dip_cron.sh >> /var/log/us-dip.log 2>&1") | crontab -
+#     echo "30 1 * * 2-6 TZ=Asia/Shanghai /app/telegram/friends/tools/daily_us_dip_cron.sh >> /var/log/us-dip.log 2>&1") | crontab -
 #   crontab -l
 #
 # 邮件：all 每次都发；us 仅买点触发时发（见 qdii_email_recipients.txt）

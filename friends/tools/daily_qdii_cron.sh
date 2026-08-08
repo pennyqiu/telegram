@@ -5,10 +5,13 @@
 #   1. 拉取东财最新溢价 → 写入 friends/qdii-premium.json（供监控页读取）
 #   2. 若配置了 qdii_email.env 且 EMAIL_ENABLED=true → 发邮件
 #
-# 安装到服务器 crontab（中国时间工作日约 09:35，错开 us-dip 的 09:30；用上一交易日收盘溢价）：
+# 安装到服务器 crontab：
+#   ⚠ 服务器系统时区是 UTC。crontab 数字按 UTC 解释；
+#     命令前的 TZ=Asia/Shanghai 只影响脚本内部时间，不改触发时刻。
+#   北京 09:35 = UTC 01:35（工作日，错开 us-dip 的 01:30 UTC；用上一交易日收盘溢价）
 #   chmod +x /app/telegram/friends/tools/daily_qdii_cron.sh
 #   (crontab -l 2>/dev/null | grep -v 'daily_qdii_cron.sh'; \
-#     echo "35 9 * * 1-5 TZ=Asia/Shanghai /app/telegram/friends/tools/daily_qdii_cron.sh >> /var/log/qdii-premium.log 2>&1") | crontab -
+#     echo "35 1 * * 1-5 TZ=Asia/Shanghai /app/telegram/friends/tools/daily_qdii_cron.sh >> /var/log/qdii-premium.log 2>&1") | crontab -
 #   crontab -l
 #
 # 邮件配置：
