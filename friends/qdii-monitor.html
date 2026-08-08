@@ -96,7 +96,7 @@
 
   <p class="note">
     数据：东财 <b>f441=参考净值</b>、<b>f402=折价率</b>（溢价=−折价率）、<b>f20=总市值</b>、<b>f38=最新份额</b>、<b>f6=成交额</b>。流动性为脚本粗分，仅供参考。非投资建议。<br>
-    <b>每日刷新：</b>服务器 cron（工作日 15:20）跑 <code>friends/tools/daily_qdii_cron.sh</code> 更新 JSON；可配置邮件日报/可买提醒（<code>qdii_email.env</code>）。<br>
+    <b>每日刷新：</b>服务器 cron（工作日约 09:35）跑 <code>friends/tools/daily_qdii_cron.sh</code> 更新 JSON；邮件：<code>all</code> 每次都发、<code>qdii</code> 仅可投机会时发（<code>qdii_email_recipients.txt</code>）。<br>
     <b>收件人（git）：</b><code>friends/tools/qdii_email_recipients.txt</code> —— 一行一个邮箱，push 后定向推送。<br>
     <b>监控标的（git）：</b><code>friends/tools/qdii_watchlist.json</code>。<br>
     手动：<code>python3 friends/tools/fetch_qdii_premium.py --email</code> · 策略页：<a class="em" href="yyang.html">yyang →</a>

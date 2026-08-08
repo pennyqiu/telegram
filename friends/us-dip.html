@@ -95,7 +95,7 @@
 
   <p class="note">
     数据源：优先 yfinance（历史最高=全历史最高收盘），不可用时回退东方财富。<br>
-    <b>每日刷新：</b>服务器 cron 跑 <code>friends/tools/daily_us_dip_cron.sh</code> 更新 <code>us-dip-signal.json</code>；可配置邮件提醒（复用 <code>qdii_email.env</code> 与 <code>qdii_email_recipients.txt</code>）。<br>
+    <b>每日刷新：</b>服务器 cron（约 09:30，周二~周六）跑 <code>friends/tools/daily_us_dip_cron.sh</code> 更新 <code>us-dip-signal.json</code>；邮件：<code>all</code> 每次都发、<code>us</code> 仅买点触发时发（<code>qdii_email_recipients.txt</code>）。<br>
     <b>监控标的 / 阶梯（git）：</b><code>friends/tools/us_dip_watchlist.json</code>。<br>
     手动：<code>python3 friends/tools/fetch_us_dip.py --email</code>
   </p>

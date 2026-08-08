@@ -1,14 +1,17 @@
 # 邮件收件人（git 维护；# 开头为注释）。改完 push，服务器 git pull 即对下次发信生效。
-# 两个策略共用此文件，用「类型」区分谁收哪个：
+# 两个策略共用此文件，用「类型」区分「收哪个策略」+「何时发」：
 #   格式：邮箱<空格>类型     多个类型用逗号，如 qdii,us
-#     qdii = 国内 A股 QDII 溢价策略（qdii-monitor）
-#     us   = 美股 QQQ/SPY 回撤阶梯策略（us-dip）
-#     all  = 两个都收（不写类型也默认 all）
+#     qdii = 国内 A股 QDII 溢价策略 → 仅「可投」机会时发
+#     us   = 美股 QQQ/SPY 回撤阶梯策略 → 仅「买点触发」时发
+#     all  = 两个策略都收，且每次定时任务都发（心跳日报；失败也会通知）
+#            用途：确认流程跑通，还是确实没到触发点
 #   示例：
-#     a@qq.com qdii        只收国内策略
-#     b@qq.com us          只收美股策略
-#     c@qq.com qdii,us     两个都收
+#     a@qq.com qdii        国内策略，有机会才发
+#     b@qq.com us          美股策略，有买点才发
+#     c@qq.com qdii,us     两个策略都收，但仍只在有机会时发
+#     d@qq.com all         两个都收 + 每次跑都发（运维/自查）
 # SMTP 账号/授权码在 qdii_email.env（勿提交）
+# 定时：中国时间约 09:30（见 daily_*_cron.sh）
 
 120673235@qq.com  all
 1447024819@qq.com  us

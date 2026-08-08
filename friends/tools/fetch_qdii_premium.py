@@ -22,8 +22,12 @@
 监控标的列表：
   friends/tools/qdii_watchlist.json
 
-每日 cron（服务器，中国时间工作日 15:20）：
-  20 15 * * 1-5 /app/telegram/friends/tools/daily_qdii_cron.sh >> /var/log/qdii-premium.log 2>&1
+每日 cron（服务器，中国时间工作日约 09:35，错开 us-dip 的 09:30；用上一交易日收盘溢价）：
+  35 9 * * 1-5 /app/telegram/friends/tools/daily_qdii_cron.sh >> /var/log/qdii-premium.log 2>&1
+
+邮件投递（见 qdii_email_recipients.txt）：
+  all  → 每次定时任务都发（心跳/失败通知）
+  qdii → 仅「可投」机会时发
 """
 from __future__ import annotations
 
@@ -328,41 +332,69 @@ def _parse_recipient_line(line: str) -> tuple[str, set[str]] | None:
     return email, tags
 
 
-def load_recipients(path: Path = RECIPIENTS_FILE, kind: str | None = None) -> list[str]:
-    """从 git 维护的收件人列表加载。kind='qdii'/'us' 时只返回带该类型或 all 的收件人。"""
-    out: list[str] = []
-    seen: set[str] = set()
+def load_recipients_split(
+    path: Path = RECIPIENTS_FILE, kind: str = "qdii"
+) -> tuple[list[str], list[str]]:
+    """
+    按投递策略拆分收件人。kind='us'|'qdii'。
+    返回 (always, alert_only)：
+      - always: 标签含 all → 每次定时任务都发（心跳日报；失败也通知）
+      - alert_only: 标签含 kind 且不含 all → 仅机会触发时发
+    """
+    always: list[str] = []
+    alert: list[str] = []
+    seen_a: set[str] = set()
+    seen_b: set[str] = set()
     if not path.exists():
-        return out
+        return always, alert
     for line in path.read_text(encoding="utf-8").splitlines():
         parsed = _parse_recipient_line(line)
         if not parsed:
             continue
         email, tags = parsed
-        if kind is not None and kind not in tags and "all" not in tags:
-            continue
-        if email.lower() not in seen:
-            seen.add(email.lower())
-            out.append(email)
-    return out
+        key = email.lower()
+        if "all" in tags:
+            if key not in seen_a:
+                seen_a.add(key)
+                always.append(email)
+        elif kind in tags:
+            if key not in seen_b:
+                seen_b.add(key)
+                alert.append(email)
+    return always, alert
+
+
+def load_recipients(path: Path = RECIPIENTS_FILE, kind: str | None = None) -> list[str]:
+    """兼容旧接口：kind 下 always + alert_only 合并去重。"""
+    if kind is None:
+        always, alert = load_recipients_split(path, "qdii")
+        always2, alert2 = load_recipients_split(path, "us")
+        out, seen = [], set()
+        for e in always + alert + always2 + alert2:
+            if e.lower() not in seen:
+                seen.add(e.lower())
+                out.append(e)
+        return out
+    always, alert = load_recipients_split(path, kind)
+    return always + [e for e in alert if e.lower() not in {x.lower() for x in always}]
 
 
 def _email_config() -> dict[str, Any]:
     _load_env_file(ENV_FILE)
-    # 优先用 git 收件人列表（只取 qdii/all 类型）；文件为空时回退到 env 的 EMAIL_RECIPIENTS
-    recipients = load_recipients(kind="qdii")
-    if not recipients:
-        recipients = [x.strip() for x in os.getenv("EMAIL_RECIPIENTS", "").split(",") if x.strip()]
+    always, alert = load_recipients_split(kind="qdii")
+    if not always and not alert:
+        fallback = [x.strip() for x in os.getenv("EMAIL_RECIPIENTS", "").split(",") if x.strip()]
+        always = fallback  # 环境变量备用视为心跳收件人
     return {
         "enabled": _bool_env("EMAIL_ENABLED", False),
-        "mode": os.getenv("EMAIL_MODE", "daily").strip().lower(),  # daily|alert|both
         "host": os.getenv("SMTP_HOST", ""),
         "port": int(os.getenv("SMTP_PORT", "587")),
         "use_tls": _bool_env("SMTP_USE_TLS", True),
         "username": os.getenv("SMTP_USERNAME", ""),
         "password": os.getenv("SMTP_PASSWORD", ""),
         "sender": os.getenv("EMAIL_SENDER") or os.getenv("SMTP_USERNAME", ""),
-        "recipients": recipients,
+        "always": always,
+        "alert": alert,
         "monitor_url": os.getenv(
             "MONITOR_URL", "https://learn.tgfootclub.com/friends/qdii-monitor.html"
         ),
@@ -454,33 +486,13 @@ def render_email(payload: dict[str, Any], cfg: dict[str, Any]) -> tuple[str, str
     return subject, plain, html
 
 
-def send_email(payload: dict[str, Any], force: bool = False) -> str:
-    """
-    发送邮件。返回状态说明字符串。
-    force=True 时忽略 EMAIL_MODE 的 alert 过滤（仍要求 EMAIL_ENABLED）。
-    """
-    cfg = _email_config()
-    if not cfg["enabled"]:
-        return "skip: EMAIL_ENABLED=false（配置 friends/tools/qdii_email.env 后开启）"
-    if not cfg["host"] or not cfg["recipients"] or not cfg["sender"]:
-        return "skip: SMTP/收件人未配置完整"
-
-    mode = cfg["mode"]
-    has_buy = _has_buy(payload)
-    if not force:
-        if mode == "alert" and not has_buy:
-            return "skip: EMAIL_MODE=alert 且当前无可投信号"
-        if mode not in {"daily", "alert", "both"}:
-            return f"skip: 未知 EMAIL_MODE={mode}"
-
-    subject, plain, html = render_email(payload, cfg)
+def _smtp_send(cfg: dict[str, Any], subject: str, plain: str, html: str, recipients: list[str]) -> str:
     msg = MIMEMultipart("alternative")
     msg["Subject"] = subject
     msg["From"] = cfg["sender"]
-    msg["To"] = ", ".join(cfg["recipients"])
+    msg["To"] = ", ".join(recipients)
     msg.attach(MIMEText(plain, "plain", "utf-8"))
     msg.attach(MIMEText(html, "html", "utf-8"))
-
     try:
         if cfg["use_tls"]:
             context = ssl.create_default_context()
@@ -494,9 +506,60 @@ def send_email(payload: dict[str, Any], force: bool = False) -> str:
                 if cfg["username"]:
                     server.login(cfg["username"], cfg["password"])
                 server.send_message(msg)
-        return f"sent: → {', '.join(cfg['recipients'])} | {subject}"
-    except Exception as e:
+        return f"sent: → {', '.join(recipients)} | {subject}"
+    except Exception as e:  # noqa: BLE001
         return f"error: 邮件发送失败：{e}"
+
+
+def send_email(payload: dict[str, Any], force: bool = False) -> str:
+    """
+    投递规则（收件人标签优先，不再依赖 EMAIL_MODE）：
+      - all  → 每次都发
+      - qdii → 仅「可投」机会（或 --email-force）时发
+    """
+    cfg = _email_config()
+    if not cfg["enabled"]:
+        return "skip: EMAIL_ENABLED=false（配置 friends/tools/qdii_email.env 后开启）"
+    if not cfg["host"] or not cfg["sender"]:
+        return "skip: SMTP 未配置完整"
+
+    has_buy = _has_buy(payload)
+    recipients = list(cfg["always"])
+    if force or has_buy:
+        for e in cfg["alert"]:
+            if e.lower() not in {x.lower() for x in recipients}:
+                recipients.append(e)
+    if not recipients:
+        if not cfg["always"] and not cfg["alert"]:
+            return "skip: 收件人为空"
+        return "skip: 无可投信号；仅 all 类型收心跳日报（当前无 all 收件人）"
+
+    subject, plain, html = render_email(payload, cfg)
+    return _smtp_send(cfg, subject, plain, html, recipients)
+
+
+def send_failure_email(error: str) -> str:
+    """流程失败时只通知 all（心跳）收件人，便于区分「挂了」还是「没触发」。"""
+    cfg = _email_config()
+    if not cfg["enabled"]:
+        return "skip: EMAIL_ENABLED=false"
+    if not cfg["host"] or not cfg["sender"] or not cfg["always"]:
+        return "skip: SMTP/all 收件人未配置"
+    title = "场内 QDII 溢价监控"
+    now = datetime.now(CST).strftime("%Y-%m-%d %H:%M")
+    subject = f"【失败】{title} · {now}"
+    plain = (
+        f"定时任务执行失败，请检查服务器日志 /var/log/qdii-premium.log\n\n"
+        f"时间：{now}\n错误：{error}\n"
+    )
+    html = (
+        f"<!DOCTYPE html><html><body style='font-family:sans-serif'>"
+        f"<h2 style='color:#b91c1c'>【失败】{title}</h2>"
+        f"<p>时间：{now}</p><pre style='background:#fef2f2;padding:12px'>{error}</pre>"
+        f"<p style='color:#6b7280;font-size:12px'>日志：/var/log/qdii-premium.log</p>"
+        f"</body></html>"
+    )
+    return _smtp_send(cfg, subject, plain, html, cfg["always"])
 
 
 def main() -> int:
@@ -512,6 +575,9 @@ def main() -> int:
         rows = fetch_quotes(watch_cfg)
     except (urllib.error.URLError, TimeoutError, RuntimeError, json.JSONDecodeError, FileNotFoundError, ValueError, KeyError) as e:
         print(f"ERROR: {e}", file=sys.stderr)
+        if args.email or args.email_force:
+            status = send_failure_email(str(e))
+            print(f"email: {status}")
         return 1
 
     payload = build_payload(rows, watch_cfg)

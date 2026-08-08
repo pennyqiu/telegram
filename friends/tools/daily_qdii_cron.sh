@@ -5,20 +5,22 @@
 #   1. 拉取东财最新溢价 → 写入 friends/qdii-premium.json（供监控页读取）
 #   2. 若配置了 qdii_email.env 且 EMAIL_ENABLED=true → 发邮件
 #
-# 安装到服务器 crontab（中国时间工作日 15:20，A股收盘后）：
+# 安装到服务器 crontab（中国时间工作日约 09:35，错开 us-dip 的 09:30；用上一交易日收盘溢价）：
 #   chmod +x /app/telegram/friends/tools/daily_qdii_cron.sh
 #   (crontab -l 2>/dev/null | grep -v 'daily_qdii_cron.sh'; \
-#     echo "20 15 * * 1-5 TZ=Asia/Shanghai /app/telegram/friends/tools/daily_qdii_cron.sh >> /var/log/qdii-premium.log 2>&1") | crontab -
+#     echo "35 9 * * 1-5 TZ=Asia/Shanghai /app/telegram/friends/tools/daily_qdii_cron.sh >> /var/log/qdii-premium.log 2>&1") | crontab -
 #   crontab -l
 #
 # 邮件配置：
 #   cp /app/telegram/friends/tools/qdii_email.env.example /app/telegram/friends/tools/qdii_email.env
 #   # 编辑填写 SMTP，设 EMAIL_ENABLED=true
-#   # EMAIL_MODE=daily|alert|both
+#   # 投递由 qdii_email_recipients.txt 标签控制：
+#   #   all  = 每次都发（心跳/失败通知）
+#   #   qdii = 仅「可投」机会时发
 #
 # 手动试跑：
 #   ./friends/tools/daily_qdii_cron.sh
-#   ./friends/tools/daily_qdii_cron.sh --email-force   # 强制发一封测试邮件
+#   ./friends/tools/daily_qdii_cron.sh --email-force   # 强制发一封（含 us/qdii 机会收件人）
 
 set -uo pipefail
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
