@@ -33,10 +33,11 @@ OUT_FILE = OUT_DIR / "index.html"
 GROUP_ORDER = {
     "核心文档": 0,
     "标的档案": 1,
-    "操作手册": 2,
-    "历史复盘": 3,
-    "提示词与模板": 4,
-    "工具": 5,
+    "预选标的": 2,
+    "操作手册": 3,
+    "历史复盘": 4,
+    "提示词与模板": 5,
+    "工具": 6,
     "其他": 9,
 }
 
@@ -52,10 +53,17 @@ CORE_ORDER = [
     "美股持仓深度分析提示词.md",
 ]
 
-# 标的档案内部优先排序（大致按穿透仓位）
+# 标的档案内部优先排序（大致按穿透仓位；仅已持仓）
 SYMBOL_ORDER = [
     "MSFT.md", "TSM.md", "NVDA.md", "GOOG.md", "META.md",
-    "QCOM.md", "ETF-宽基与主题.md", "候选清单.md", "_模板.md",
+    "QCOM.md", "ETF-宽基与主题.md", "_模板.md",
+]
+
+# 预选标的内部排序（索引在前，其后按前瞻 → 隐形）
+CANDIDATE_ORDER = [
+    "候选清单.md",
+    "MA.md", "V.md", "JPM.md",
+    "AAPL.md", "AMZN.md", "MU.md",
 ]
 
 # 提示词/模板类文件名关键词
@@ -68,6 +76,10 @@ def classify(rel: Path) -> tuple[str, int]:
     name = rel.name
 
     if parts[0] == "标的档案":
+        # 子目录 标的档案/预选标的/ → 单独分组，不与已持仓混排
+        if len(parts) >= 2 and parts[1] == "预选标的":
+            idx = CANDIDATE_ORDER.index(name) if name in CANDIDATE_ORDER else 100
+            return "预选标的", idx
         idx = SYMBOL_ORDER.index(name) if name in SYMBOL_ORDER else 100
         return "标的档案", idx
     if parts[0] == "历史复盘":
