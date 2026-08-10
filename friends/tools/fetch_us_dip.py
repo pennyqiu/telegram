@@ -571,15 +571,20 @@ def main() -> int:
     args.out.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
     print(f"wrote {args.out}  ({payload['updated_at_text']})  n={len(payload['items'])}")
-    print(f"{'代码':<6} {'分组':<8} {'现价':>9} {'历史最高':>9} {'距高点%':>8} {'累计买%':>7} {'信号'}")
-    for r in payload["items"]:
-        if r.get("error"):
-            print(f"{r['symbol']:<6} {r.get('group',''):<8} ERROR {r['error']}")
-            continue
-        print(
-            f"{r['symbol']:<6} {r['group']:<8} {r['price']:>9.2f} {r['ath']:>9.2f} "
-            f"{r['drawdown_pct']:>7.2f}% {r['cum_buy_pct']:>6}% {r['signal']}"
-        )
+
+    # 控制台摘要仅供人看；任何格式化异常都不得阻断邮件推送。
+    try:
+        print(f"{'代码':<6} {'分组':<8} {'现价':>9} {'历史最高':>9} {'距高点%':>8} {'累计买%':>7} {'信号'}")
+        for r in payload["items"]:
+            if r.get("error"):
+                print(f"{r['symbol']:<6} {r.get('group',''):<8} ERROR {r['error']}")
+                continue
+            print(
+                f"{r['symbol']:<6} {r['group']:<8} {r['price']:>9.2f} {r['ath']:>9.2f} "
+                f"{r['drawdown_pct']:>7.2f}% {r['cum_buy_pct']:>6}% {r['signal']}"
+            )
+    except Exception as e:  # noqa: BLE001  控制台摘要失败不影响邮件推送
+        print(f"[warn] 控制台摘要渲染失败（不影响邮件）：{e}", file=sys.stderr)
 
     if args.email or args.email_force:
         status = send_email(payload, force=args.email_force)

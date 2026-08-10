@@ -585,23 +585,33 @@ def main() -> int:
     args.out.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
     print(f"wrote {args.out}  ({payload['updated_at_text']})  n={len(rows)}")
-    print(f"{'代码':<8} {'分组':<8} {'公司':<8} {'现价':>7} {'参考净值':>8} {'溢价%':>7} {'市值亿':>7} {'成交万':>8} {'流动':>4} {'信号'}")
-    for r in rows:
-        if r.get("error"):
-            print(f"{r['code']:<8} ERROR {r['error']}")
-            continue
-        print(
-            f"{r['code']:<8} {r['group']:<8} {r['manager']:<8} "
-            f"{r['price']:>7.3f} {r['iopv']:>8.4f} {r['premium_pct']:>7.2f} "
-            f"{(r.get('market_cap_yi') or 0):>7.2f} {r['amount_wan']:>8.1f} "
-            f"{r['liquidity']:>4} {r['signal']}"
-        )
-    print("\n各组综合参考（溢价优先，兼顾流动性与市值）：")
-    for g, b in payload["best_by_group"].items():
-        print(
-            f"  {g}: {b['code']} {b['name']} 溢价{b['premium_pct']}% "
-            f"市值{b.get('market_cap_yi')}亿 流动{b['liquidity']} → {b['signal']}"
-        )
+
+    # 控制台摘要仅供人看；盘初个别 ETF 可能字段为 None，任何格式化异常都不得阻断邮件推送。
+    def _n(v: Any, width: int, prec: int | None = None) -> str:
+        if v is None:
+            return f"{'-':>{width}}"
+        return f"{v:>{width}}" if prec is None else f"{v:>{width}.{prec}f}"
+
+    try:
+        print(f"{'代码':<8} {'分组':<8} {'公司':<8} {'现价':>7} {'参考净值':>8} {'溢价%':>7} {'市值亿':>7} {'成交万':>8} {'流动':>4} {'信号'}")
+        for r in rows:
+            if r.get("error"):
+                print(f"{r['code']:<8} ERROR {r['error']}")
+                continue
+            print(
+                f"{r['code']:<8} {r['group']:<8} {r['manager']:<8} "
+                f"{_n(r.get('price'), 7, 3)} {_n(r.get('iopv'), 8, 4)} {_n(r.get('premium_pct'), 7, 2)} "
+                f"{_n(r.get('market_cap_yi') or 0, 7, 2)} {_n(r.get('amount_wan'), 8, 1)} "
+                f"{(r.get('liquidity') or '-'):>4} {r.get('signal')}"
+            )
+        print("\n各组综合参考（溢价优先，兼顾流动性与市值）：")
+        for g, b in payload["best_by_group"].items():
+            print(
+                f"  {g}: {b['code']} {b['name']} 溢价{b['premium_pct']}% "
+                f"市值{b.get('market_cap_yi')}亿 流动{b['liquidity']} → {b['signal']}"
+            )
+    except Exception as e:  # noqa: BLE001  控制台摘要失败不影响邮件推送
+        print(f"[warn] 控制台摘要渲染失败（不影响邮件）：{e}", file=sys.stderr)
 
     if args.email or args.email_force:
         status = send_email(payload, force=args.email_force)
