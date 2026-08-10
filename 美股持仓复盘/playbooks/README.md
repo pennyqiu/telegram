@@ -34,6 +34,7 @@ flowchart LR
 | QCOM 高通 | [QCOM-飞轮策略操作手册.md](./QCOM-飞轮策略操作手册.md) | 飞轮（Sell Put → 持股 → Covered Call） | 核心·投资 | [QCOM.md](../标的档案/QCOM.md) | 已完成 |
 | NVDA 英伟达 | [NVDA-飞轮策略操作手册.md](./NVDA-飞轮策略操作手册.md) | 飞轮，中近虚值收肥权利金 | 核心·投资 | [NVDA.md](../标的档案/NVDA.md) | 已完成 |
 | DRAM 存储ETF | [DRAM-波动率收割操作手册.md](./DRAM-波动率收割操作手册.md) | 深虚值 Sell Put 收割极端 IV | **卫星·投机** | [ETF-宽基与主题.md](../标的档案/ETF-宽基与主题.md) | 已完成 |
+| 组合（SPY/QQQ/科技） | [组合-满仓卖Put引擎操作手册.md](./组合-满仓卖Put引擎操作手册.md) | 满仓（0%现金）30SPY+50QQQ+20%科技 + 融资卖 Put 引擎 | **组合·进取** | — | 已完成 |
 | MSFT 微软 | 待补充 | 备兑修复 | 核心·投资 | [MSFT.md](../标的档案/MSFT.md) | 计划中 |
 
 ## 飞轮策略的前提：必须真的愿意且有能力接货
