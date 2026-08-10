@@ -40,6 +40,7 @@ import urllib.request
 from datetime import datetime, timezone, timedelta
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from html import escape as _html_escape
 from pathlib import Path
 from typing import Any
 
@@ -540,7 +541,7 @@ def send_failure_email(error: str) -> str:
     html = (
         f"<!DOCTYPE html><html><body style='font-family:sans-serif'>"
         f"<h2 style='color:#b91c1c'>【失败】{title}</h2>"
-        f"<p>时间：{now}</p><pre style='background:#fef2f2;padding:12px'>{error}</pre>"
+        f"<p>时间：{now}</p><pre style='background:#fef2f2;padding:12px'>{_html_escape(error)}</pre>"
         f"<p style='color:#6b7280;font-size:12px'>日志：/var/log/us-dip.log</p>"
         f"</body></html>"
     )

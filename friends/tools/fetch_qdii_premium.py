@@ -37,11 +37,13 @@ import os
 import smtplib
 import ssl
 import sys
+import time
 import urllib.error
 import urllib.request
 from datetime import datetime, timezone, timedelta
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from html import escape as _html_escape
 from pathlib import Path
 from typing import Any
 
@@ -94,6 +96,21 @@ HEADERS = {
 }
 
 
+def _fetch_json(url: str, *, timeout: int = 20, retries: int = 3, backoff: float = 3.0) -> dict[str, Any]:
+    """带重试的 JSON GET：东财偶发 SSL 握手/连接超时，重试几次避免一次抖动就判失败。"""
+    last_err: Exception | None = None
+    for i in range(retries):
+        try:
+            req = urllib.request.Request(url, headers=HEADERS)
+            with urllib.request.urlopen(req, timeout=timeout) as resp:
+                return json.loads(resp.read().decode("utf-8"))
+        except (urllib.error.URLError, TimeoutError, ssl.SSLError, OSError) as e:
+            last_err = e
+            if i < retries - 1:
+                time.sleep(backoff * (i + 1))
+    raise RuntimeError(f"请求失败（已重试{retries}次）：{last_err}")
+
+
 def _num(v: Any) -> float | None:
     if isinstance(v, (int, float)) and v == v:
         return float(v)
@@ -133,9 +150,7 @@ def fetch_quotes(watch_cfg: dict[str, Any]) -> list[dict[str, Any]]:
 
     secids = ",".join(x["secid"] for x in watchlist)
     url = API.format(secids=secids)
-    req = urllib.request.Request(url, headers=HEADERS)
-    with urllib.request.urlopen(req, timeout=20) as resp:
-        payload = json.loads(resp.read().decode("utf-8"))
+    payload = _fetch_json(url)
     if payload.get("rc") != 0 or not payload.get("data") or not payload["data"].get("diff"):
         raise RuntimeError(f"eastmoney 返回异常: {payload.get('rc')} {payload.get('rt')}")
 
@@ -555,7 +570,7 @@ def send_failure_email(error: str) -> str:
     html = (
         f"<!DOCTYPE html><html><body style='font-family:sans-serif'>"
         f"<h2 style='color:#b91c1c'>【失败】{title}</h2>"
-        f"<p>时间：{now}</p><pre style='background:#fef2f2;padding:12px'>{error}</pre>"
+        f"<p>时间：{now}</p><pre style='background:#fef2f2;padding:12px'>{_html_escape(error)}</pre>"
         f"<p style='color:#6b7280;font-size:12px'>日志：/var/log/qdii-premium.log</p>"
         f"</body></html>"
     )
