@@ -34,6 +34,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import smtplib
 import ssl
 import sys
@@ -52,6 +53,7 @@ TOOLS_DIR = Path(__file__).resolve().parent
 ENV_FILE = TOOLS_DIR / "qdii_email.env"
 RECIPIENTS_FILE = TOOLS_DIR / "qdii_email_recipients.txt"
 WATCHLIST_FILE = TOOLS_DIR / "qdii_watchlist.json"
+FEES_CACHE_FILE = TOOLS_DIR / "qdii_fees_cache.json"
 
 
 def _secid_for(code: str, explicit: str | None = None) -> str:
@@ -78,6 +80,9 @@ def load_watchlist(path: Path = WATCHLIST_FILE) -> dict[str, Any]:
             "name": it.get("name") or code,
             "group": it.get("group") or "其他",
             "manager": it.get("manager") or "",
+            # 抓不到费率页时的兜底值（可选，单位 %/年）
+            "fee_mgmt_pct": it.get("fee_mgmt_pct"),
+            "fee_custody_pct": it.get("fee_custody_pct"),
         })
     cfg["watch"] = watch
     cfg.setdefault("title", "场内 QDII 溢价监控")
@@ -117,6 +122,89 @@ def _num(v: Any) -> float | None:
     return None
 
 
+FEE_PAGE = "https://fundf10.eastmoney.com/jbgk_{code}.html"
+FEE_HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
+    "Referer": "https://fundf10.eastmoney.com/",
+}
+
+
+def _fetch_text(url: str, headers: dict[str, str], *, timeout: int = 20, retries: int = 2) -> str:
+    last_err: Exception | None = None
+    for i in range(retries):
+        try:
+            req = urllib.request.Request(url, headers=headers)
+            with urllib.request.urlopen(req, timeout=timeout) as resp:
+                return resp.read().decode("utf-8", "ignore")
+        except (urllib.error.URLError, TimeoutError, ssl.SSLError, OSError) as e:
+            last_err = e
+            if i < retries - 1:
+                time.sleep(2.0 * (i + 1))
+    raise RuntimeError(f"请求失败：{last_err}")
+
+
+def _parse_fee_pct(html: str, label: str) -> float | None:
+    """从东财基金概况页取「管理费率 / 托管费率」的年费率百分数。"""
+    flat = re.sub(r"\s+", "", html)
+    m = re.search(label + r"</th><td[^>]*>(.*?)</td>", flat)
+    if not m:
+        return None
+    m2 = re.search(r"([\d.]+)%", re.sub(r"<[^>]+>", "", m.group(1)))
+    return float(m2.group(1)) if m2 else None
+
+
+def load_fees_cache(path: Path = FEES_CACHE_FILE) -> dict[str, Any]:
+    if not path.exists():
+        return {}
+    try:
+        return json.loads(path.read_text(encoding="utf-8")) or {}
+    except (json.JSONDecodeError, OSError):
+        return {}
+
+
+def fetch_fees(codes: list[str], *, use_cache_only: bool = False) -> dict[str, dict[str, Any]]:
+    """
+    抓每只基金的管理费率/托管费率。费率一年难得改一次，抓失败就用本地缓存兜底，
+    保证行情正常时不会因为费率页抽风而整体失败。
+    """
+    cache = load_fees_cache()
+    out: dict[str, dict[str, Any]] = {}
+    today = datetime.now(CST).strftime("%Y-%m-%d")
+    changed = False
+
+    for code in codes:
+        cached = cache.get(code) or {}
+        if use_cache_only:
+            if cached:
+                out[code] = cached
+            continue
+        try:
+            html = _fetch_text(FEE_PAGE.format(code=code), FEE_HEADERS)
+            mgmt = _parse_fee_pct(html, "管理费率")
+            custody = _parse_fee_pct(html, "托管费率")
+        except RuntimeError:
+            mgmt = custody = None
+        if mgmt is None and custody is None:
+            if cached:
+                out[code] = cached
+            continue
+        rec = {"mgmt": mgmt, "custody": custody, "fetched_at": today}
+        out[code] = rec
+        if cached.get("mgmt") != mgmt or cached.get("custody") != custody:
+            changed = True
+        cache[code] = rec
+
+    if changed or (not use_cache_only and out):
+        try:
+            FEES_CACHE_FILE.write_text(
+                json.dumps(cache, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
+                encoding="utf-8",
+            )
+        except OSError:
+            pass
+    return out
+
+
 def signal_for(premium_pct: float | None) -> str:
     """信号用中文：可投 / 谨慎 / 不投。"""
     if premium_pct is None:
@@ -139,7 +227,7 @@ def liquidity_tier(amount: float, shares: float | None) -> str:
     return "低"
 
 
-def fetch_quotes(watch_cfg: dict[str, Any]) -> list[dict[str, Any]]:
+def fetch_quotes(watch_cfg: dict[str, Any], *, with_fees: bool = True) -> list[dict[str, Any]]:
     watchlist = watch_cfg["watch"]
     groups_order = list(watch_cfg.get("groups_order") or [])
     # 配置未写 groups_order 时，按首次出现顺序
@@ -156,9 +244,17 @@ def fetch_quotes(watch_cfg: dict[str, Any]) -> list[dict[str, Any]]:
 
     by_code = {str(x.get("f12")): x for x in payload["data"]["diff"]}
     meta = {x["code"]: x for x in watchlist}
+    fees = fetch_fees(list(meta.keys()), use_cache_only=not with_fees)
     rows: list[dict[str, Any]] = []
 
     for code, m in meta.items():
+        fee = fees.get(code) or {}
+        fee_mgmt = fee.get("mgmt") if fee.get("mgmt") is not None else m.get("fee_mgmt_pct")
+        fee_custody = fee.get("custody") if fee.get("custody") is not None else m.get("fee_custody_pct")
+        fee_total = None
+        if fee_mgmt is not None or fee_custody is not None:
+            fee_total = round((fee_mgmt or 0.0) + (fee_custody or 0.0), 3)
+
         raw = by_code.get(code)
         if not raw:
             rows.append({
@@ -167,6 +263,9 @@ def fetch_quotes(watch_cfg: dict[str, Any]) -> list[dict[str, Any]]:
                 "group": m["group"],
                 "manager": m["manager"],
                 "kind": "qdii",
+                "fee_mgmt_pct": fee_mgmt,
+                "fee_custody_pct": fee_custody,
+                "fee_total_pct": fee_total,
                 "error": "未返回行情",
                 "signal": "未知",
             })
@@ -206,6 +305,9 @@ def fetch_quotes(watch_cfg: dict[str, Any]) -> list[dict[str, Any]]:
             "group": m["group"],
             "manager": m["manager"],
             "kind": "qdii",
+            "fee_mgmt_pct": fee_mgmt,
+            "fee_custody_pct": fee_custody,
+            "fee_total_pct": fee_total,
             "price": round(price, 4) if price is not None else None,
             "change_pct": round(chg, 2) if chg is not None else None,
             "prev_close": round(prev_close, 4) if prev_close is not None else None,
@@ -242,24 +344,58 @@ def build_payload(rows: list[dict[str, Any]], watch_cfg: dict[str, Any]) -> dict
         if r.get("group") and r["group"] not in groups_order:
             groups_order.append(r["group"])
 
+    liq_rank = {"高": 0, "中": 1, "低": 2}
+    sig_rank = {"可投": 0, "谨慎": 1, "不投": 2, "未知": 3}
+
     best: dict[str, Any] = {}
+    cheapest: dict[str, Any] = {}
     for g in groups_order:
         cands = [r for r in rows if r.get("group") == g and r.get("premium_pct") is not None]
         if not cands:
             continue
-        # 综合：优先可投，再低溢价，再流动性，再大市值
-        liq_rank = {"高": 0, "中": 1, "低": 2}
-        sig_rank = {"可投": 0, "谨慎": 1, "不投": 2, "未知": 3}
 
+        # 短期买点：优先可投，再低溢价，再流动性，再大市值
         def score(r):
             return (
                 sig_rank.get(r.get("signal"), 9),
                 r["premium_pct"],
+                r.get("fee_total_pct") if r.get("fee_total_pct") is not None else 9,
                 liq_rank.get(r.get("liquidity"), 9),
                 -(r.get("market_cap") or 0),
             )
 
+        # 长期持有：费率是每年确定要付的成本，先看费率，再看流动性/规模，溢价只作提示
+        def score_longhold(r):
+            return (
+                r.get("fee_total_pct") if r.get("fee_total_pct") is not None else 9,
+                liq_rank.get(r.get("liquidity"), 9),
+                -(r.get("market_cap") or 0),
+                r["premium_pct"],
+            )
+
         best[g] = min(cands, key=score)
+        with_fee = [r for r in cands if r.get("fee_total_pct") is not None]
+        if with_fee:
+            cheapest[g] = min(with_fee, key=score_longhold)
+
+    def brief(r: dict[str, Any]) -> dict[str, Any]:
+        return {
+            "code": r["code"],
+            "name": r["name"],
+            "manager": r.get("manager"),
+            "premium_pct": r["premium_pct"],
+            "price": r["price"],
+            "iopv": r.get("iopv"),
+            "fee_mgmt_pct": r.get("fee_mgmt_pct"),
+            "fee_custody_pct": r.get("fee_custody_pct"),
+            "fee_total_pct": r.get("fee_total_pct"),
+            "liquidity": r.get("liquidity"),
+            "amount_wan": r.get("amount_wan"),
+            "shares_yi": r.get("shares_yi"),
+            "market_cap_yi": r.get("market_cap_yi"),
+            "aum_yi": r.get("aum_yi"),
+            "signal": r["signal"],
+        }
 
     return {
         "updated_at": now.isoformat(timespec="seconds"),
@@ -275,26 +411,12 @@ def build_payload(rows: list[dict[str, Any]], watch_cfg: dict[str, Any]) -> dict
             "qdii_caution": "溢价 2%–5% → 谨慎",
             "qdii_avoid": "溢价 > 5% → 不投",
             "liquidity": "高≈日成交≥1亿或份额≥50亿份；中≈成交≥0.3亿或份额≥15亿；其余为低",
-            "note": "同类比价时优先低溢价+够流动性+更大市值；份额过小易流动性差、溢价更易失控。",
+            "fee": "合计费率 = 管理费 + 托管费（每年从净值中扣，不单独收）；长期持有时每年少 0.2% 约等于 10 年少 2% 收益。",
+            "note": "短期买点看溢价，长期持有看费率；两者都要够流动性与规模。",
         },
         "counts": {g: sum(1 for r in rows if r.get("group") == g) for g in groups_order},
-        "best_by_group": {
-            g: {
-                "code": r["code"],
-                "name": r["name"],
-                "manager": r.get("manager"),
-                "premium_pct": r["premium_pct"],
-                "price": r["price"],
-                "iopv": r.get("iopv"),
-                "liquidity": r.get("liquidity"),
-                "amount_wan": r.get("amount_wan"),
-                "shares_yi": r.get("shares_yi"),
-                "market_cap_yi": r.get("market_cap_yi"),
-                "aum_yi": r.get("aum_yi"),
-                "signal": r["signal"],
-            }
-            for g, r in best.items()
-        },
+        "best_by_group": {g: brief(r) for g, r in best.items()},
+        "cheapest_by_group": {g: brief(r) for g, r in cheapest.items()},
         "items": rows,
     }
 
@@ -424,6 +546,7 @@ def render_email(payload: dict[str, Any], cfg: dict[str, Any]) -> tuple[str, str
     """返回 (subject, plain, html)。邮件内容完全跟随 git 配置的 qdii_watchlist.json。"""
     has_buy = _has_buy(payload)
     best = payload.get("best_by_group") or {}
+    cheapest = payload.get("cheapest_by_group") or {}
     items = [r for r in (payload.get("items") or []) if not r.get("error")]
     groups_order = list(payload.get("groups_order") or best.keys())
     title = payload.get("title") or "场内 QDII 溢价监控"
@@ -434,7 +557,7 @@ def render_email(payload: dict[str, Any], cfg: dict[str, Any]) -> tuple[str, str
     lines = [
         f"更新时间：{payload.get('updated_at_text')}",
         "",
-        "—— 各组综合参考 ——",
+        "—— 短期买点参考（溢价优先）——",
     ]
     for g in groups_order:
         b = best.get(g)
@@ -442,14 +565,24 @@ def render_email(payload: dict[str, Any], cfg: dict[str, Any]) -> tuple[str, str
             continue
         lines.append(
             f"{g}: {b['code']} {b['name']} | 溢价 {b['premium_pct']}% | "
-            f"市值 {b.get('market_cap_yi')}亿 | 流动 {b.get('liquidity')} | {b['signal']}"
+            f"合计费率 {b.get('fee_total_pct')}%/年 | 市值 {b.get('market_cap_yi')}亿 | {b['signal']}"
         )
+    if cheapest:
+        lines += ["", "—— 长期持有参考（费率优先）——"]
+        for g in groups_order:
+            c = cheapest.get(g)
+            if not c:
+                continue
+            lines.append(
+                f"{g}: {c['code']} {c['name']} | 管理费 {c.get('fee_mgmt_pct')}% + 托管 {c.get('fee_custody_pct')}% "
+                f"= {c.get('fee_total_pct')}%/年 | 当前溢价 {c['premium_pct']}%"
+            )
     lines += ["", "—— 全部标的（按溢价升序）——"]
     for r in items:
         lines.append(
             f"{r['group']} {r['code']} {r.get('manager','')} "
-            f"溢价{r.get('premium_pct')}% 市值{r.get('market_cap_yi')}亿 "
-            f"流动{r.get('liquidity')} 成交{r.get('amount_wan')}万 → {r.get('signal')}"
+            f"溢价{r.get('premium_pct')}% 合计费率{r.get('fee_total_pct')}%/年 "
+            f"市值{r.get('market_cap_yi')}亿 → {r.get('signal')}"
         )
     if has_buy:
         buys = [r for r in items if r.get("signal") == "可投"]
@@ -474,29 +607,36 @@ def render_email(payload: dict[str, Any], cfg: dict[str, Any]) -> tuple[str, str
             f"<td>{r.get('price')}</td><td>{r.get('iopv')}</td>"
             f"<td style='color:{color};font-weight:700'>{prem}%</td>"
             f"<td>{r.get('signal')}</td><td>{r.get('market_cap_yi')}</td>"
-            f"<td>{r.get('liquidity')}</td><td>{r.get('amount_wan')}</td>"
+            f"<td>{r.get('fee_mgmt_pct')}</td><td><b>{r.get('fee_total_pct')}</b></td>"
             f"</tr>"
         )
 
     best_html = "".join(
         f"<li><b>{g}</b>：{b['code']} {b['name']} · 溢价 <b>{b['premium_pct']}%</b> · "
-        f"市值 {b.get('market_cap_yi')}亿 · 流动 {b.get('liquidity')} · {b['signal']}</li>"
+        f"合计费率 {b.get('fee_total_pct')}%/年 · 市值 {b.get('market_cap_yi')}亿 · {b['signal']}</li>"
         for g in groups_order if (b := best.get(g))
     )
+    cheap_html = "".join(
+        f"<li><b>{g}</b>：{c['code']} {c['name']} · 管理费 {c.get('fee_mgmt_pct')}% + 托管 "
+        f"{c.get('fee_custody_pct')}% = <b>{c.get('fee_total_pct')}%/年</b> · 当前溢价 {c['premium_pct']}%</li>"
+        for g in groups_order if (c := cheapest.get(g))
+    )
+    cheap_block = f"<h3>长期持有参考（费率优先）</h3><ul>{cheap_html}</ul>" if cheap_html else ""
     html = f"""<!DOCTYPE html><html><body style="font-family:sans-serif;color:#111">
 <h2 style="color:#b91c1c">{title}</h2>
 <p>更新：{payload.get('updated_at_text')}</p>
-<h3>各组综合参考</h3>
+<h3>短期买点参考（溢价优先）</h3>
 <ul>{best_html}</ul>
+{cheap_block}
 <table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;font-size:13px">
 <thead style="background:#fef2f2"><tr>
 <th>分组</th><th>代码</th><th>名称</th><th>公司</th><th>现价</th><th>参考净值</th>
-<th>溢价%</th><th>信号</th><th>市值亿</th><th>流动</th><th>成交万</th>
+<th>溢价%</th><th>信号</th><th>市值亿</th><th>管理费%</th><th>合计费率%</th>
 </tr></thead>
 <tbody>
 {''.join(row_html(r) for r in items)}
 </tbody></table>
-<p style="color:#6b7280;font-size:12px">规则：溢价&lt;2%可投 · 2–5%谨慎 · &gt;5%不投。同组优先更大市值。非投资建议。</p>
+<p style="color:#6b7280;font-size:12px">规则：溢价&lt;2%可投 · 2–5%谨慎 · &gt;5%不投。费率为每年从净值中扣除，长期持有影响更大。非投资建议。</p>
 </body></html>"""
     return subject, plain, html
 
@@ -583,11 +723,12 @@ def main() -> int:
     ap.add_argument("--out", type=Path, default=root / "qdii-premium.json")
     ap.add_argument("--email", action="store_true", help="按 qdii_email.env 发送邮件提醒")
     ap.add_argument("--email-force", action="store_true", help="强制发邮件（忽略 alert 过滤）")
+    ap.add_argument("--no-fees", action="store_true", help="不抓费率页，直接用本地缓存 qdii_fees_cache.json")
     args = ap.parse_args()
 
     try:
         watch_cfg = load_watchlist()
-        rows = fetch_quotes(watch_cfg)
+        rows = fetch_quotes(watch_cfg, with_fees=not args.no_fees)
     except (urllib.error.URLError, TimeoutError, RuntimeError, json.JSONDecodeError, FileNotFoundError, ValueError, KeyError) as e:
         print(f"ERROR: {e}", file=sys.stderr)
         if args.email or args.email_force:
@@ -608,7 +749,7 @@ def main() -> int:
         return f"{v:>{width}}" if prec is None else f"{v:>{width}.{prec}f}"
 
     try:
-        print(f"{'代码':<8} {'分组':<8} {'公司':<8} {'现价':>7} {'参考净值':>8} {'溢价%':>7} {'市值亿':>7} {'成交万':>8} {'流动':>4} {'信号'}")
+        print(f"{'代码':<8} {'分组':<8} {'公司':<8} {'现价':>7} {'参考净值':>8} {'溢价%':>7} {'管理费%':>7} {'合计费%':>7} {'市值亿':>7} {'信号'}")
         for r in rows:
             if r.get("error"):
                 print(f"{r['code']:<8} ERROR {r['error']}")
@@ -616,14 +757,20 @@ def main() -> int:
             print(
                 f"{r['code']:<8} {r['group']:<8} {r['manager']:<8} "
                 f"{_n(r.get('price'), 7, 3)} {_n(r.get('iopv'), 8, 4)} {_n(r.get('premium_pct'), 7, 2)} "
-                f"{_n(r.get('market_cap_yi') or 0, 7, 2)} {_n(r.get('amount_wan'), 8, 1)} "
-                f"{(r.get('liquidity') or '-'):>4} {r.get('signal')}"
+                f"{_n(r.get('fee_mgmt_pct'), 7, 2)} {_n(r.get('fee_total_pct'), 7, 2)} "
+                f"{_n(r.get('market_cap_yi') or 0, 7, 2)} {r.get('signal')}"
             )
-        print("\n各组综合参考（溢价优先，兼顾流动性与市值）：")
+        print("\n短期买点参考（溢价优先）：")
         for g, b in payload["best_by_group"].items():
             print(
                 f"  {g}: {b['code']} {b['name']} 溢价{b['premium_pct']}% "
-                f"市值{b.get('market_cap_yi')}亿 流动{b['liquidity']} → {b['signal']}"
+                f"合计费率{b.get('fee_total_pct')}%/年 市值{b.get('market_cap_yi')}亿 → {b['signal']}"
+            )
+        print("\n长期持有参考（费率优先）：")
+        for g, c in (payload.get("cheapest_by_group") or {}).items():
+            print(
+                f"  {g}: {c['code']} {c['name']} 管理费{c.get('fee_mgmt_pct')}%+托管{c.get('fee_custody_pct')}%"
+                f"={c.get('fee_total_pct')}%/年 当前溢价{c['premium_pct']}%"
             )
     except Exception as e:  # noqa: BLE001  控制台摘要失败不影响邮件推送
         print(f"[warn] 控制台摘要渲染失败（不影响邮件）：{e}", file=sys.stderr)

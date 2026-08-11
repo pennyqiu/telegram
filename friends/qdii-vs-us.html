@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A股场内 QDII vs QQQ / SPY · 近十年走势对比</title>
+<style>
+  :root{
+    --primary:#1d4ed8;--danger:#dc2626;--success:#057a55;--warning:#c27803;
+    --gray-50:#f9fafb;--gray-100:#f3f4f6;--gray-200:#e5e7eb;--gray-400:#9ca3af;
+    --gray-500:#6b7280;--gray-700:#374151;--gray-900:#111827;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC',sans-serif;background:var(--gray-50);color:var(--gray-900);line-height:1.6;}
+  .wrap{max-width:1100px;margin:0 auto;padding:24px 16px 64px;}
+  .back{display:inline-block;font-size:13px;color:var(--primary);font-weight:600;text-decoration:none;margin-bottom:14px;}
+  .hero{background:linear-gradient(135deg,#1e3a8a,#1d4ed8);color:#fff;border-radius:16px;padding:26px 24px;margin-bottom:20px;}
+  .hero h1{font-size:22px;font-weight:900;margin:4px 0 8px;}
+  .hero p{font-size:13px;opacity:.92;max-width:820px;}
+  .meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;align-items:center;}
+  .pill{background:rgba(255,255,255,.18);padding:4px 10px;border-radius:99px;font-size:12px;font-weight:600;}
+  h2{font-size:16px;font-weight:800;margin:26px 0 8px;color:#1e3a8a;}
+  h3{font-size:14px;font-weight:800;margin:16px 0 6px;color:var(--gray-700);}
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px;margin:14px 0;}
+  .card{background:#fff;border:1px solid var(--gray-200);border-radius:12px;padding:14px 16px;}
+  .card .g{font-size:12px;color:var(--gray-500);font-weight:700;}
+  .card .c{font-size:20px;font-weight:900;margin:4px 0;color:#1e3a8a;}
+  .card .d{font-size:12.5px;color:var(--gray-700);}
+  .box{background:#fff;border:1px solid var(--gray-200);border-radius:12px;padding:14px 16px;font-size:13px;color:var(--gray-700);line-height:1.8;}
+  .box.blue{border-left:4px solid var(--primary);}
+  .box.green{border-left:4px solid var(--success);}
+  .box.amber{border-left:4px solid var(--warning);}
+  .tabs{display:flex;gap:8px;margin:10px 0;flex-wrap:wrap;}
+  .tab{border:1px solid var(--gray-200);background:#fff;border-radius:8px;padding:6px 12px;font-size:12px;font-weight:700;cursor:pointer;color:var(--gray-700);}
+  .tab.on{background:var(--primary);color:#fff;border-color:var(--primary);}
+  .chart-card{background:#fff;border:1px solid var(--gray-200);border-radius:12px;padding:14px 8px 8px;}
+  .chart-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;padding:0 8px;}
+  .chart-title{font-size:13px;font-weight:800;color:var(--gray-900);}
+  .chart-sub{font-size:12px;color:var(--gray-500);}
+  .legend{display:flex;flex-wrap:wrap;gap:12px;padding:8px 8px 2px;font-size:12px;}
+  .legend span.k{display:inline-block;width:16px;height:3px;border-radius:2px;vertical-align:middle;margin-right:5px;}
+  .chart-host{position:relative;}
+  svg{display:block;width:100%;height:auto;}
+  .tip{position:absolute;pointer-events:none;background:rgba(17,24,39,.94);color:#fff;font-size:11.5px;line-height:1.55;border-radius:8px;padding:8px 10px;white-space:nowrap;opacity:0;transition:opacity .1s;z-index:5;}
+  .tip b{font-weight:700;}
+  .table-wrap{overflow-x:auto;border:1px solid var(--gray-200);border-radius:12px;background:#fff;margin-top:10px;}
+  table{width:100%;border-collapse:collapse;font-size:12.5px;}
+  th{background:#eff6ff;color:#1e3a8a;text-align:left;padding:9px 10px;font-size:11px;white-space:nowrap;}
+  td{padding:9px 10px;border-top:1px solid var(--gray-100);color:var(--gray-700);white-space:nowrap;}
+  tr:hover td{background:#f8fafc;}
+  tr.group-sep td{background:#f9fafb;font-weight:800;color:#1e3a8a;border-top:2px solid #bfdbfe;}
+  .up{color:#dc2626;font-weight:700;}
+  .dn{color:#057a55;font-weight:700;}
+  .neg{color:#b91c1c;font-weight:800;}
+  .pos{color:#057a55;font-weight:800;}
+  .muted{color:var(--gray-400);}
+  .err{background:#fde8e8;color:#9b1c1c;padding:12px 16px;border-radius:10px;margin:12px 0;font-size:13px;}
+  .note{font-size:12px;color:var(--gray-500);margin-top:18px;line-height:1.8;}
+  a.em{color:var(--primary);font-weight:600;text-decoration:none;}
+  .kpi{display:flex;gap:6px;align-items:baseline;}
+  .kpi b{font-size:17px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="qdii-monitor.html">← 返回场内溢价监控</a>
+  <div class="hero">
+    <div style="font-size:12px;font-weight:700;opacity:.85">Friends · 长期视角</div>
+    <h1>在 A 股买纳指 / 标普，长期比直接买 QQQ / SPY 差多少？</h1>
+    <p>同一批股票、同一个指数，A 股场内 QDII 的净值曲线长期会稳定地慢一点点。慢的原因主要是三块：<b>每年的管理费+托管费</b>、<b>跟踪误差与现金拖累</b>、以及买入那一刻的 <b>溢价</b>。下面用真实净值把这三块拆开看。</p>
+    <div class="meta">
+      <span class="pill" id="updated">更新时间：加载中…</span>
+      <span class="pill" id="asof">数据截至：—</span>
+      <span class="pill" id="fxpill">USDCNY：—</span>
+    </div>
+  </div>
+
+  <div id="err" class="err" style="display:none"></div>
+
+  <h2>一句话结论</h2>
+  <div class="cards" id="summaryCards"></div>
+  <div class="box blue" id="summaryText">加载中…</div>
+
+  <div id="groups"></div>
+
+  <h2>溢价的额外成本（一次性，但会跟着你很久）</h2>
+  <div class="box amber" id="premiumBox">加载中…</div>
+
+  <h2>怎么用这页</h2>
+  <div class="box green">
+    <b>1. 长期持有，先挑费率。</b>同为纳指100，费率 0.60%/年 与 1.00%/年 的差距会一年不差地体现在净值上，十年约差 4 个百分点。<br>
+    <b>2. 买入时机看溢价。</b>溢价 8% 买进去，等于净值曲线从 −8% 起跑；如果只打算持有两三年，这一下比费率的影响大得多。<br>
+    <b>3. 汇率是双向的，别当成收益。</b>过去十年人民币兑美元几乎原地，汇率对收益的贡献接近 0；而近一年人民币升值，反而吃掉了一部分美股涨幅。真正稳定影响你的是费率与溢价。<br>
+    <b>4. 如果你有美股账户</b>，直接买 QQQ / SPY（费率 0.20% / 0.09%）在成本上有明显优势；QDII 的价值在于人民币账户就能买、免去换汇与境外开户，代价就是上面这 1%–1.5%/年。
+  </div>
+
+  <p class="note" id="method"></p>
+</div>
+
+<script>
+const COLORS = ['#dc2626','#ea580c','#7c3aed','#0891b2','#be185d'];
+const C_BENCH_CNY = '#1d4ed8';
+const C_BENCH_USD = '#9ca3af';
+let DATA = null, PREMIUM = null;
+const SEL = {};   // 每组当前选中的窗口
+
+function fmt(n, d=2){ return (n==null||isNaN(n)) ? '—' : Number(n).toFixed(d); }
+function pct(n, d=1){ return (n==null||isNaN(n)) ? '—' : (n>0?'+':'') + Number(n).toFixed(d) + '%'; }
+function cls(n){ return n==null ? '' : (n>0 ? 'pos' : (n<0 ? 'neg' : '')); }
+function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+async function loadJSON(urls){
+  for(const u of urls){
+    try{
+      const r = await fetch(u, {cache:'no-store'});
+      if(r.ok){ const d = await r.json(); if(d) return d; }
+    }catch(e){}
+  }
+  return null;
+}
+
+async function load(){
+  DATA = await loadJSON([
+    'qdii-history.json?t=' + Date.now(),
+    'qdii-history.sample.json',
+    '/api/qdii-history',
+    'https://api.tgfootclub.com/api/qdii-history',
+  ]);
+  PREMIUM = await loadJSON([
+    'qdii-premium.json?t=' + Date.now(),
+    'qdii-premium.sample.json',
+    '/api/qdii-premium',
+  ]);
+  if(!DATA || !DATA.groups){
+    const e = document.getElementById('err');
+    e.style.display = 'block';
+    e.textContent = '读不到走势数据。请运行：python3 friends/tools/fetch_qdii_history.py';
+    return;
+  }
+  render();
+}
+
+/* ---------------------------------------------------------------- 折线图 */
+const CH = {W:880, H:330, PL:46, PR:14, PT:14, PB:28};
+
+function chartSVG(ch, id){
+  const {W, H, PL, PR, PT, PB} = CH;
+  const n = ch.dates.length;
+  const all = [];
+  ch.series.forEach(s => s.values.forEach(v => { if(v!=null) all.push(v); }));
+  if(!all.length) return '';
+  let lo = Math.min(...all), hi = Math.max(...all);
+  const padY = (hi - lo) * 0.08 || 5;
+  lo = Math.max(0, lo - padY); hi = hi + padY;
+  const x = i => PL + (n<=1 ? 0 : i * (W - PL - PR) / (n - 1));
+  const y = v => PT + (hi - v) / (hi - lo) * (H - PT - PB);
+
+  // 横向网格：取 5 档整数刻度
+  const step = niceStep((hi - lo) / 5);
+  const gridStart = Math.ceil(lo / step) * step;
+  let grid = '';
+  for(let g = gridStart; g <= hi; g += step){
+    grid += `<line x1="${PL}" y1="${y(g).toFixed(1)}" x2="${W-PR}" y2="${y(g).toFixed(1)}" stroke="#eef2f7" stroke-width="1"/>`
+         +  `<text x="${PL-6}" y="${(y(g)+4).toFixed(1)}" text-anchor="end" font-size="10" fill="#9ca3af">${Math.round(g)}</text>`;
+  }
+  // 纵向年份刻度
+  let xaxis = '';
+  ch.dates.forEach((ym, i) => {
+    const isJan = ym.slice(5) === '01';
+    const everyN = n > 80 ? 24 : 12;
+    if(isJan && (i % everyN < 12)){
+      xaxis += `<line x1="${x(i).toFixed(1)}" y1="${PT}" x2="${x(i).toFixed(1)}" y2="${H-PB}" stroke="#f3f4f6" stroke-width="1"/>`
+            +  `<text x="${x(i).toFixed(1)}" y="${H-PB+16}" text-anchor="middle" font-size="10" fill="#9ca3af">${ym.slice(0,4)}</text>`;
+    }
+  });
+
+  let paths = '', qi = 0;
+  ch.series.forEach(s => {
+    const color = s.kind === 'bench_cny' ? C_BENCH_CNY : (s.kind === 'bench_usd' ? C_BENCH_USD : COLORS[qi++ % COLORS.length]);
+    s._color = color;
+    const w = s.kind === 'bench_cny' ? 2.8 : (s.kind === 'bench_usd' ? 1.8 : 2);
+    const dash = s.kind === 'bench_usd' ? ' stroke-dasharray="5 4"' : '';
+    let d = '', open = false;
+    s.values.forEach((v, i) => {
+      if(v == null){ open = false; return; }
+      d += (open ? 'L' : 'M') + x(i).toFixed(1) + ' ' + y(v).toFixed(1) + ' ';
+      open = true;
+    });
+    paths += `<path d="${d.trim()}" fill="none" stroke="${color}" stroke-width="${w}"${dash} stroke-linejoin="round"/>`;
+  });
+
+  const dots = ch.series.map(s => `<circle r="3.5" fill="${s._color}" opacity="0" data-dot="1"/>`).join('');
+  return `<svg viewBox="0 0 ${W} ${H}" id="${id}">
+    <rect x="${PL}" y="${PT}" width="${W-PL-PR}" height="${H-PT-PB}" fill="#fff"/>
+    ${grid}${xaxis}
+    <line x1="${PL}" y1="${PT}" x2="${PL}" y2="${H-PB}" stroke="#e5e7eb"/>
+    <line x1="${PL}" y1="${H-PB}" x2="${W-PR}" y2="${H-PB}" stroke="#e5e7eb"/>
+    ${paths}
+    <line data-cursor="1" x1="0" y1="${PT}" x2="0" y2="${H-PB}" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3 3" opacity="0"/>
+    ${dots}
+    <rect data-hit="1" x="${PL}" y="${PT}" width="${W-PL-PR}" height="${H-PT-PB}" fill="transparent"/>
+  </svg>`;
+}
+
+function niceStep(raw){
+  const p = Math.pow(10, Math.floor(Math.log10(raw)));
+  const m = raw / p;
+  return (m < 1.5 ? 1 : m < 3 ? 2 : m < 7 ? 5 : 10) * p;
+}
+
+function bindChart(host, ch, id){
+  const svg = host.querySelector('#' + id);
+  const tip = host.querySelector('.tip');
+  if(!svg || !tip) return;
+  const {W, H, PL, PR, PT, PB} = CH;
+  const n = ch.dates.length;
+  const all = [];
+  ch.series.forEach(s => s.values.forEach(v => { if(v!=null) all.push(v); }));
+  let lo = Math.min(...all), hi = Math.max(...all);
+  const padY = (hi - lo) * 0.08 || 5;
+  lo = Math.max(0, lo - padY); hi = hi + padY;
+  const xOf = i => PL + (n<=1 ? 0 : i * (W - PL - PR) / (n - 1));
+  const yOf = v => PT + (hi - v) / (hi - lo) * (H - PT - PB);
+  const cursor = svg.querySelector('[data-cursor]');
+  const dots = svg.querySelectorAll('[data-dot]');
+
+  function move(ev){
+    const box = svg.getBoundingClientRect();
+    const px = (ev.touches ? ev.touches[0].clientX : ev.clientX) - box.left;
+    const vx = px / box.width * W;
+    let i = Math.round((vx - PL) / ((W - PL - PR) / Math.max(1, n - 1)));
+    i = Math.max(0, Math.min(n - 1, i));
+    cursor.setAttribute('x1', xOf(i)); cursor.setAttribute('x2', xOf(i));
+    cursor.setAttribute('opacity', '1');
+    const rows = [];
+    ch.series.forEach((s, k) => {
+      const v = s.values[i];
+      const dot = dots[k];
+      if(v == null){ dot.setAttribute('opacity', '0'); return; }
+      dot.setAttribute('cx', xOf(i)); dot.setAttribute('cy', yOf(v)); dot.setAttribute('opacity', '1');
+      rows.push({label:s.label, color:s._color, v});
+    });
+    rows.sort((a,b) => b.v - a.v);
+    tip.innerHTML = `<b>${ch.dates[i]}</b><br>` + rows.map(r =>
+      `<span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:${r.color};margin-right:5px"></span>`
+      + `${esc(r.label)} <b>${r.v.toFixed(1)}</b>（${pct(r.v-100,1)}）`).join('<br>');
+    tip.style.opacity = '1';
+    const hostBox = host.getBoundingClientRect();
+    let left = px + 14;
+    if(left + 250 > hostBox.width) left = Math.max(4, px - 250);
+    tip.style.left = left + 'px';
+    tip.style.top = '10px';
+  }
+  const hide = () => { tip.style.opacity = '0'; cursor.setAttribute('opacity','0'); dots.forEach(d=>d.setAttribute('opacity','0')); };
+  svg.addEventListener('mousemove', move);
+  svg.addEventListener('touchmove', move, {passive:true});
+  svg.addEventListener('mouseleave', hide);
+  svg.addEventListener('touchend', hide);
+}
+
+/* ---------------------------------------------------------------- 渲染 */
+function render(){
+  document.getElementById('updated').textContent = '更新时间：' + (DATA.updated_at_text || '—');
+  document.getElementById('asof').textContent = '数据截至：' + (DATA.as_of || '—');
+  const fx = DATA.fx || {};
+  document.getElementById('fxpill').textContent = 'USDCNY：' + fmt(fx.latest, 4)
+    + (fx.windows && fx.windows['10y'] ? '（近十年 ' + pct(fx.windows['10y'].cum_pct) + '）' : '');
+
+  renderSummary();
+  renderGroups();
+  renderPremium();
+  const m = DATA.method || {};
+  document.getElementById('method').innerHTML =
+    `<b>口径：</b>QDII 用${esc(m.qdii||'累计净值')}；基准用 ${esc(m.bench||'Yahoo adjclose')}；汇率 ${esc(m.fx||'')}。<br>`
+    + `<b>为什么用净值而不是场内价格：</b>净值反映基金真实持仓表现，剔除了溢价忽高忽低带来的噪音；溢价的影响单独在上面一节里算。<br>`
+    + `<b>为什么基准要看两条线：</b>「美元口径」是 QQQ/SPY 本身的涨幅，「人民币口径」= 美元涨幅 × 汇率变动，才是人民币投资者能拿到的收益，也是与 QDII 唯一公平的比较对象。<br>`
+    + `<b>刷新：</b><code>python3 friends/tools/fetch_qdii_history.py</code>（建议每周一次）· 溢价监控：<a class="em" href="qdii-monitor.html">qdii-monitor →</a> · 非投资建议。`;
+}
+
+function pickLongest(rows){
+  // 取有最长历史的一只作为「代表」
+  let best = null, bestW = null;
+  for(const r of rows){
+    for(const w of ['10y','5y','3y','1y']){
+      if(r.windows[w]){ if(!bestW || ['1y','3y','5y','10y'].indexOf(w) > ['1y','3y','5y','10y'].indexOf(bestW)){ best = r; bestW = w; } break; }
+    }
+  }
+  return [best, bestW];
+}
+
+function renderSummary(){
+  const cards = [], texts = [];
+  for(const g of DATA.groups_order){
+    const gd = DATA.groups[g];
+    const [rep, w] = pickLongest(gd.table);
+    if(!rep) continue;
+    const x = rep.windows[w];
+    const label = (DATA.windows_label||{})[w] || w;
+    cards.push(`<div class="card">
+      <div class="g">${esc(g)} · ${esc(label)}（${esc(rep.code)} ${esc(rep.manager)}）</div>
+      <div class="c">少赚 ${fmt(Math.abs(x.gap_cum_pct),0)} 个百分点</div>
+      <div class="d">累计 <b>${pct(x.cum_pct,0)}</b> vs ${esc(gd.benchmark)}人民币口径 <b>${pct(x.bench_cny_cum_pct,0)}</b><br>
+        年化 ${fmt(x.cagr_pct)}% vs ${fmt(x.bench_cny_cagr_pct)}% → 每年落后 <b class="neg">${fmt(Math.abs(x.gap_cagr_pct))}%</b><br>
+        同期 ${esc(gd.benchmark)} 美元口径 ${pct(x.bench_usd_cum_pct,0)} · 汇率 ${pct(x.fx_cum_pct,1)}</div>
+    </div>`);
+    texts.push(`<b>${esc(g)}</b>：${esc(label)}里，${esc(rep.code)} 的净值涨了 ${pct(x.cum_pct,0)}，直接持有 ${esc(gd.benchmark)}（换成人民币算）涨 ${pct(x.bench_cny_cum_pct,0)}，`
+      + `差 <b class="neg">${fmt(Math.abs(x.gap_cum_pct),0)} 个百分点</b>，折成每年约 <b class="neg">${fmt(Math.abs(x.gap_cagr_pct))}%</b>；`
+      + `它的合计费率是 ${fmt(rep.fee_total_pct)}%/年 —— <b>差距基本就是费率</b>${Math.abs(x.gap_cagr_pct) > (rep.fee_total_pct||0) + 0.15 ? '，再加上一点跟踪误差与现金拖累' : ''}。`);
+  }
+  const fx10 = ((DATA.fx||{}).windows||{})['10y'], fx1 = ((DATA.fx||{}).windows||{})['1y'];
+  if(fx10){
+    cards.push(`<div class="card" style="border-left:4px solid #0891b2">
+      <div class="g">汇率的作用（USDCNY）</div>
+      <div class="c" style="color:#0e7490">${pct(fx10.cum_pct,1)}</div>
+      <div class="d">近十年人民币兑美元几乎原地，汇率对收益的贡献接近 <b>0</b>。<br>
+        近一年：<b class="${cls(fx1?fx1.cum_pct:null)}">${fx1?pct(fx1.cum_pct,1):'—'}</b>（人民币升值会吃掉美股涨幅）<br>
+        当前 USDCNY ${fmt((DATA.fx||{}).latest,4)}</div>
+    </div>`);
+  }
+  document.getElementById('summaryCards').innerHTML = cards.join('');
+  document.getElementById('summaryText').innerHTML = texts.join('<br><br>');
+}
+
+function renderGroups(){
+  const host = document.getElementById('groups');
+  host.innerHTML = DATA.groups_order.map(g => {
+    const gd = DATA.groups[g];
+    const wins = gd.charts.map(c => c.window);
+    // 支持 #w=5y 之类的链接，方便分享「近五年」这种特定视角
+    const want = (location.hash.match(/w=([0-9]+y)/) || [])[1];
+    if(!SEL[g]) SEL[g] = wins.includes(want) ? want : wins[0];
+    return `<h2>${esc(g)} vs ${esc(gd.benchmark_label || gd.benchmark)}</h2>
+      <div class="tabs" data-group="${esc(g)}">
+        ${gd.charts.map(c => `<button class="tab ${c.window===SEL[g]?'on':''}" data-w="${c.window}">${esc(c.title.replace('（统一起点归一到 100）',''))}</button>`).join('')}
+      </div>
+      <div id="chart-${esc(g)}"></div>
+      <h3>全部标的 · ${esc(g)}（按合计费率从低到高）</h3>
+      <div id="table-${esc(g)}"></div>`;
+  }).join('');
+
+  host.querySelectorAll('.tabs').forEach(tabs => {
+    tabs.addEventListener('click', ev => {
+      const btn = ev.target.closest('.tab');
+      if(!btn) return;
+      SEL[tabs.dataset.group] = btn.dataset.w;
+      tabs.querySelectorAll('.tab').forEach(t => t.classList.toggle('on', t === btn));
+      drawGroup(tabs.dataset.group);
+    });
+  });
+  DATA.groups_order.forEach(drawGroup);
+}
+
+function drawGroup(g){
+  const gd = DATA.groups[g];
+  const ch = gd.charts.find(c => c.window === SEL[g]) || gd.charts[0];
+  const id = 'svg-' + g.replace(/[^a-zA-Z0-9]/g, '') + '-' + ch.window;
+  const host = document.getElementById('chart-' + g);
+  const svg = chartSVG(ch, id);
+  const legend = ch.series.map(s =>
+    `<span><span class="k" style="background:${s._color};${s.kind==='bench_usd'?'opacity:.85':''}"></span>${esc(s.label)}
+     <b style="color:${s._color}">${pct(s.cum_pct,0)}</b></span>`).join('');
+  host.innerHTML = `<div class="chart-card">
+    <div class="chart-head">
+      <div class="chart-title">${esc(ch.title)}</div>
+      <div class="chart-sub">${esc(ch.start)} → ${esc(ch.end)}　起点 = 100，按月末取值（与下表精确到日的数字会有小幅差异）</div>
+    </div>
+    <div class="legend">${legend}</div>
+    <div class="chart-host">${svg}<div class="tip"></div></div>
+  </div>
+  ${ch.window === '3y' ? `<p class="note" style="margin-top:8px">近三年这张图里，<b>灰色虚线（美元口径）明显高于蓝线（人民币口径）</b>，中间的落差就是这几年人民币升值吃掉的部分 —— 对人民币投资者来说，蓝线才是真实的机会成本。三年是短窗口，QDII 与蓝线几乎贴在一起，个别产品甚至略微领先，这更多来自估值汇率与时点差异，判断长期跟踪质量请看近五年、近十年。</p>` : ''}`;
+  bindChart(host, ch, id);
+  drawTable(g);
+}
+
+function premiumOf(code){
+  const it = ((PREMIUM||{}).items || []).find(r => r.code === code);
+  return it ? it.premium_pct : null;
+}
+
+function drawTable(g){
+  const gd = DATA.groups[g];
+  const w = SEL[g];
+  const label = (DATA.windows_label||{})[w] || w;
+  const shown = gd.table.filter(r => r.windows[w]);
+  const missing = gd.table.filter(r => !r.windows[w]);
+  const rows = shown.map(r => {
+    const x = r.windows[w];
+    const prem = premiumOf(r.code);
+    const other = x.gap_cagr_pct + (r.fee_total_pct || 0);   // 扣掉费率后剩下的差异
+    return `<tr>
+      <td><b>${esc(r.code)}</b></td><td>${esc(r.name)}</td><td>${esc(r.manager)}</td>
+      <td>${fmt(r.fee_mgmt_pct)}</td><td><b>${fmt(r.fee_total_pct)}</b></td><td>${esc(r.inception)}</td>
+      <td><b>${fmt(x.cagr_pct)}</b></td><td>${fmt(x.bench_cny_cagr_pct)}</td>
+      <td class="${cls(x.gap_cagr_pct)}">${pct(x.gap_cagr_pct,2)}</td>
+      <td class="${cls(other)}">${pct(other,2)}</td>
+      <td class="${cls(x.gap_cum_pct)}">${pct(x.gap_cum_pct,0)}</td>
+      <td class="${prem>5?'up':''}">${fmt(prem)}</td>
+    </tr>`;
+  }).join('');
+  document.getElementById('table-' + g).innerHTML = `<div class="table-wrap"><table>
+    <thead><tr>
+      <th>代码</th><th>名称</th><th>公司</th><th>管理费%</th><th>合计费率%</th><th>成立日</th>
+      <th>${esc(label)}年化%</th><th>基准(人民币)年化%</th><th>年化差</th><th>扣掉费率后</th><th>累计差(pp)</th><th>当前溢价%</th>
+    </tr></thead>
+    <tbody>${rows}</tbody></table></div>
+    ${missing.length ? `<p class="note" style="margin-top:8px">另有 ${missing.length} 只成立不足${esc(label.replace('近 ',''))}（${missing.map(r=>esc(r.code)+' '+esc(r.manager)).join('、')}），切换到更短的窗口查看。</p>` : ''}
+    <p class="note" style="margin-top:8px">「年化差」= 该 QDII 净值年化 − ${esc(gd.benchmark)} 人民币口径年化（负数=落后）。
+    「扣掉费率后」= 年化差 + 合计费率，接近 0 说明落后基本可由费率解释；明显为负说明还有跟踪误差、现金拖累或额度受限的影响；为正则多来自估值汇率与时点差异、证券出借等增强收益 —— 窗口越短（1–3 年）这项噪音越大，别据此认为费率不用付。
+    「当前溢价」来自实时监控页，仅供参考。</p>`;
+}
+
+function renderPremium(){
+  const box = document.getElementById('premiumBox');
+  if(!PREMIUM || !PREMIUM.items){ box.textContent = '溢价数据未加载（先跑 fetch_qdii_premium.py）。'; return; }
+  const lines = [];
+  for(const g of DATA.groups_order){
+    const items = PREMIUM.items.filter(r => r.group === g && r.premium_pct != null);
+    if(!items.length) continue;
+    const lowest = items.reduce((a,b) => a.premium_pct <= b.premium_pct ? a : b);
+    const p = lowest.premium_pct;
+    const y3 = (Math.pow(1 + p/100, 1/3) - 1) * 100;
+    const y5 = (Math.pow(1 + p/100, 1/5) - 1) * 100;
+    const y10 = (Math.pow(1 + p/100, 1/10) - 1) * 100;
+    lines.push(`<b>${esc(g)}</b>：当前全组最低溢价是 ${esc(lowest.code)} ${esc(lowest.manager)} 的 <b class="up">${fmt(p)}%</b>。`
+      + `按这个价格买入、并假设卖出时溢价回到 0，这笔溢价相当于每年多付：持有 3 年 <b class="neg">−${fmt(y3)}%</b>／年、`
+      + `5 年 <b class="neg">−${fmt(y5)}%</b>／年、10 年 <b class="neg">−${fmt(y10)}%</b>／年。`
+      + `对照它 ${fmt(lowest.fee_total_pct)}%/年 的费率：<b>持有越短，溢价越致命；持有越久，费率越重要</b>。`);
+  }
+  lines.push(`溢价不会凭空消失，只会转移：你买的时候多付，卖的时候看运气。QDII 额度紧张时溢价可以长期维持在高位，也可能在额度放开后一夜回落。所以规则不变 —— <b>溢价 &gt; 5% 宁可不买</b>，等回落或走场外申购（<a class="em" href="qdii-channels.html">场外渠道对照 →</a>）。`);
+  box.innerHTML = lines.join('<br><br>');
+}
+
+load();
+</script>
+</body>
+</html>

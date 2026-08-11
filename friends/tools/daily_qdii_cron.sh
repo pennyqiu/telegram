@@ -2,8 +2,9 @@
 # 场内纳指/标普 QDII · 每日刷新 +（可选）邮件提醒
 #
 # 做什么：
-#   1. 拉取东财最新溢价 → 写入 friends/qdii-premium.json（供监控页读取）
-#   2. 若配置了 qdii_email.env 且 EMAIL_ENABLED=true → 发邮件
+#   1. 拉取东财最新溢价与管理费/托管费 → 写入 friends/qdii-premium.json（供监控页读取）
+#   2. 刷新长期走势对比 → friends/qdii-history.json（供 qdii-vs-us.html 读取；失败不影响主流程）
+#   3. 若配置了 qdii_email.env 且 EMAIL_ENABLED=true → 发邮件
 #
 # 安装到服务器 crontab：
 #   ⚠ 服务器系统时区是 UTC。crontab 数字按 UTC 解释；
@@ -40,7 +41,19 @@ if [[ "${DAILY_QDII_EMAIL:-1}" != "0" ]]; then
 fi
 
 echo "[$(date '+%Y-%m-%d %H:%M:%S %Z')] daily_qdii_cron start ROOT=$ROOT"
-python3 "$ROOT/friends/tools/fetch_qdii_premium.py" "${EXTRA_ARGS[@]}"
+# 空数组在 bash 3.2 + set -u 下会报 unbound variable（DAILY_QDII_EMAIL=0 且无参数时）
+python3 "$ROOT/friends/tools/fetch_qdii_premium.py" ${EXTRA_ARGS[@]+"${EXTRA_ARGS[@]}"}
 rc=$?
+
+# 长期走势是慢变量（且依赖 Yahoo，偶发限流），失败只记日志，不影响溢价监控与邮件
+if [[ "${DAILY_QDII_HISTORY:-1}" != "0" ]]; then
+  if python3 "$ROOT/friends/tools/fetch_qdii_history.py" >/tmp/qdii_history.out 2>&1; then
+    tail -n 3 /tmp/qdii_history.out
+  else
+    echo "[warn] fetch_qdii_history.py 失败（不影响溢价监控）："
+    tail -n 5 /tmp/qdii_history.out
+  fi
+fi
+
 echo "[$(date '+%Y-%m-%d %H:%M:%S %Z')] daily_qdii_cron done rc=$rc"
 exit $rc
