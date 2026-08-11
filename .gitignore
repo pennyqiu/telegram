@@ -19,12 +19,15 @@ friends/tools/qdii_email.env
 
 # QDII 溢价监控：由服务器 cron 每日刷新，避免 git pull 覆盖
 friends/qdii-premium.json
+friends/qdii-history.json
+friends/tools/qdii_fees_cache.json
 
 # 美股回撤阶梯监控：由服务器 cron 每日刷新，避免 git pull 覆盖
 friends/us-dip-signal.json
 
 # 回测脚本的本地数据缓存（可随时重新拉取）
 friends/tools/.bt_cache/
+friends/tools/.hist_cache/
 
 # 运行日志
 *.log

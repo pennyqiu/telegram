@@ -43,6 +43,8 @@
   .liq-低{color:#9ca3af;font-weight:600;}
   .up{color:#dc2626;font-weight:700;}
   .dn{color:#057a55;font-weight:700;}
+  .fee-low{background:#f0fdf4;color:#057a55;}
+  .tagmin{display:inline-block;background:#def7ec;color:#057a55;border-radius:99px;padding:1px 6px;font-size:10px;font-weight:800;}
   .err{background:#fde8e8;color:#9b1c1c;padding:12px 16px;border-radius:10px;margin:12px 0;font-size:13px;}
   .note{font-size:12px;color:var(--gray-500);margin-top:16px;line-height:1.7;}
   a.em{color:var(--primary);font-weight:600;text-decoration:none;}
@@ -50,6 +52,10 @@
   .tabs{display:flex;gap:8px;margin:8px 0 4px;flex-wrap:wrap;}
   .tab{border:1px solid var(--gray-200);background:#fff;border-radius:8px;padding:6px 12px;font-size:12px;font-weight:700;cursor:pointer;color:var(--gray-700);}
   .tab.on{background:#dc2626;color:#fff;border-color:#dc2626;}
+  .cta{display:flex;align-items:center;gap:12px;background:linear-gradient(135deg,#fff,#eff6ff);border:1px solid #bfdbfe;border-radius:14px;padding:14px 16px;text-decoration:none;color:inherit;margin:14px 0;font-size:13px;}
+  .cta:hover{border-color:#60a5fa;}
+  .cta-ico{font-size:22px;}
+  .cta-sub{color:var(--gray-500);font-size:12px;}
 </style>
 </head>
 <body>
@@ -58,7 +64,7 @@
   <div class="hero">
     <div style="font-size:12px;font-weight:700;opacity:.85">Friends · yyang 专用</div>
     <h1>A股场内纳指100 / 标普500 · 全市场 QDII 监控</h1>
-    <p>展示各家宽基场内产品：溢价只是其一。请同时看 <b>参考净值、成交额、市值、流动性</b> 再决定买哪只。不含纳指科技/生物等主题、不含境内红利。</p>
+    <p>展示各家宽基场内产品：溢价只是其一。请同时看 <b>参考净值、管理费、合计费率、市值</b> 再决定买哪只。不含纳指科技/生物等主题、不含境内红利。</p>
     <div class="meta">
       <span class="pill" id="updated">更新时间：加载中…</span>
       <span class="pill" id="counts">标的：—</span>
@@ -67,13 +73,24 @@
   </div>
 
   <div class="rules">
-    <b>怎么用：</b>① 先看溢价信号（&lt;2% 可投 / 2–5% 谨慎 / &gt;5% 不投）；② 同组里优先「溢价低 + 市值更大 + 流动性够」；③ 市值过小即使溢价略低也慎买。美股休市时参考净值有效性下降。
+    <b>怎么用：</b>① 先看溢价信号（&lt;2% 可投 / 2–5% 谨慎 / &gt;5% 不投）；② 同组里优先「溢价低 + 费率低 + 市值更大」；③ 市值过小即使溢价略低也慎买。美股休市时参考净值有效性下降。
   </div>
+
+  <a class="cta" href="qdii-vs-us.html">
+    <span class="cta-ico">📈</span>
+    <span><b>近十年走势：中国场内 QDII vs QQQ / SPY</b><br>
+    <span class="cta-sub">看清楚你买 A 股纳指/标普，长期到底比直接买美股 ETF 少赚多少、汇率帮了多少 →</span></span>
+  </a>
 
   <div id="err" class="err" style="display:none"></div>
 
-  <h2>各组综合参考（溢价优先，兼顾市值与流动性）</h2>
+  <h2>短期买点参考（溢价优先）</h2>
   <div class="cards" id="bestCards"></div>
+
+  <h2>长期持有参考（费率优先）</h2>
+  <div class="cards" id="cheapCards"></div>
+  <div class="rules" style="border-left-color:#057a55">
+    <b>费率怎么看：</b>管理费 + 托管费每天从净值里扣，不单独收钱，也不会出现在你的账单上。同为纳指100，最便宜 0.60%/年 与最贵 1.00%/年 相差 0.4%/年，持有 10 年约差 4% 收益。<b>溢价是一次性代价，费率是每年都付</b>：短线看溢价，长期定投看费率。</div>
 
   <h2>全部标的明细</h2>
   <div class="tabs">
@@ -87,7 +104,7 @@
         <tr>
           <th>分组</th><th>代码</th><th>名称</th><th>基金公司</th>
           <th>现价</th><th>涨跌%</th><th>参考净值</th><th>溢价率%</th>
-          <th>信号</th><th>市值(亿)</th><th>流动性</th><th>份额(亿份)</th><th>成交额(万)</th><th>换手%</th><th>东财</th>
+          <th>信号</th><th>市值(亿)</th><th>管理费%/年</th><th>托管费%/年</th><th>合计费率%/年</th><th>东财</th>
         </tr>
       </thead>
       <tbody id="tbody"></tbody>
@@ -95,11 +112,12 @@
   </div>
 
   <p class="note">
-    数据：东财 <b>f441=参考净值</b>、<b>f402=折价率</b>（溢价=−折价率）、<b>f20=总市值</b>、<b>f38=最新份额</b>、<b>f6=成交额</b>。流动性为脚本粗分，仅供参考。非投资建议。<br>
+    数据：东财 <b>f441=参考净值</b>、<b>f402=折价率</b>（溢价=−折价率）、<b>f20=总市值</b>；<b>管理费/托管费</b>取自东财基金概况页（每日抓取，缓存于 <code>friends/tools/qdii_fees_cache.json</code>）。费率不含指数许可费、申赎与交易佣金等隐性成本，实际差距可能略大于表中数字。非投资建议。<br>
     <b>每日刷新：</b>服务器 cron（北京约 09:35 = UTC 01:35，工作日）跑 <code>friends/tools/daily_qdii_cron.sh</code> 更新 JSON；邮件：<code>all</code> 每次都发、<code>qdii</code> 仅可投机会时发（<code>qdii_email_recipients.txt</code>）。<br>
     <b>收件人（git）：</b><code>friends/tools/qdii_email_recipients.txt</code> —— 一行一个邮箱，push 后定向推送。<br>
     <b>监控标的（git）：</b><code>friends/tools/qdii_watchlist.json</code>。<br>
     手动：<code>python3 friends/tools/fetch_qdii_premium.py --email</code> ·
+    长期走势对比：<a class="em" href="qdii-vs-us.html">qdii-vs-us →</a> ·
     场外对照（支付宝/理财通）：<a class="em" href="qdii-channels.html">qdii-channels →</a> ·
     策略页：<a class="em" href="yyang.html">yyang →</a>
   </p>
@@ -138,6 +156,7 @@ async function loadData(){
       }catch(e){}
     }
     if(!data || !data.items) throw new Error('读不到数据。请运行：python3 friends/tools/fetch_qdii_premium.py 或等待每日 cron 刷新');
+    await fillFees(data);
     DATA = data;
     render(data);
   }catch(e){
@@ -146,6 +165,49 @@ async function loadData(){
   }finally{
     btn.disabled = false;
   }
+}
+
+async function fillFees(data){
+  // 服务器 cron 的 JSON 可能还是旧脚本产出的（没有费率字段），这时从随代码发布的
+  // sample 文件补齐费率，避免刚上线那一天费率列整列空着。
+  if((data.items || []).some(r => r.fee_total_pct != null)) return;
+  let fallback = null;
+  try{
+    const r = await fetch('qdii-premium.sample.json', {cache:'no-store'});
+    if(r.ok) fallback = await r.json();
+  }catch(e){}
+  if(!fallback || !fallback.items) return;
+  const byCode = {};
+  fallback.items.forEach(r => { byCode[r.code] = r; });
+  data.items.forEach(r => {
+    const f = byCode[r.code];
+    if(!f) return;
+    r.fee_mgmt_pct = f.fee_mgmt_pct;
+    r.fee_custody_pct = f.fee_custody_pct;
+    r.fee_total_pct = f.fee_total_pct;
+  });
+  data.fee_from_fallback = true;
+  ['best_by_group','cheapest_by_group'].forEach(k => {
+    Object.values(data[k] || {}).forEach(b => {
+      const f = byCode[b.code];
+      if(f){ b.fee_mgmt_pct = f.fee_mgmt_pct; b.fee_custody_pct = f.fee_custody_pct; b.fee_total_pct = f.fee_total_pct; }
+    });
+  });
+  if(!data.cheapest_by_group) data.cheapest_by_group = cheapestByGroup(data.items);
+}
+
+function cheapestByGroup(items){
+  const liq = {'高':0,'中':1,'低':2};
+  const out = {};
+  for(const r of items){
+    if(r.error || r.fee_total_pct == null) continue;
+    const b = out[r.group];
+    const score = x => [x.fee_total_pct, liq[x.liquidity] ?? 9, -(x.market_cap || 0), x.premium_pct ?? 99];
+    if(!b) { out[r.group] = r; continue; }
+    const a = score(r), c = score(b);
+    for(let i = 0; i < a.length; i++){ if(a[i] !== c[i]){ if(a[i] < c[i]) out[r.group] = r; break; } }
+  }
+  return out;
 }
 
 function render(data){
@@ -158,12 +220,26 @@ function render(data){
     const b = best[g];
     if(!b) return `<div class="card"><div class="g">${g}</div><div class="c">暂无</div></div>`;
     return `<div class="card">
-      <div class="g">${g} · 综合参考</div>
+      <div class="g">${g} · 溢价最低</div>
       <div class="c">${b.code}</div>
       <div class="d">${b.name}${b.manager?' · '+b.manager:''}<br>
       现价 ${fmt(b.price,3)} · 参考净值 ${fmt(b.iopv,4)} · 溢价 <b class="${b.premium_pct>0?'up':'dn'}">${fmt(b.premium_pct)}%</b><br>
-      市值 ${fmt(b.market_cap_yi,2)}亿 · 流动 <span class="liq-${b.liquidity||''}">${b.liquidity||'—'}</span> · 成交 ${fmt(b.amount_wan,1)}万
+      合计费率 <b>${fmt(b.fee_total_pct)}%/年</b> · 市值 ${fmt(b.market_cap_yi,2)}亿
       <span class="sig ${SIG_CLASS[b.signal]||''}">${SIG_LABEL[b.signal]||b.signal}</span></div>
+    </div>`;
+  }).join('');
+
+  const cheap = data.cheapest_by_group || {};
+  document.getElementById('cheapCards').innerHTML = ['纳指100','标普500'].map(g=>{
+    const c = cheap[g];
+    if(!c) return `<div class="card"><div class="g">${g}</div><div class="c">暂无</div></div>`;
+    return `<div class="card" style="border-left:4px solid #057a55">
+      <div class="g">${g} · 费率最低</div>
+      <div class="c" style="color:#057a55">${c.code}</div>
+      <div class="d">${c.name}${c.manager?' · '+c.manager:''}<br>
+      管理费 <b>${fmt(c.fee_mgmt_pct)}%</b> + 托管 ${fmt(c.fee_custody_pct)}% = <b>${fmt(c.fee_total_pct)}%/年</b><br>
+      市值 ${fmt(c.market_cap_yi,2)}亿 · 当前溢价 <b class="${c.premium_pct>0?'up':'dn'}">${fmt(c.premium_pct)}%</b>
+      <span class="sig ${SIG_CLASS[c.signal]||''}">${SIG_LABEL[c.signal]||c.signal}</span></div>
     </div>`;
   }).join('');
 
@@ -174,19 +250,23 @@ function renderTable(data){
   const items = (data.items||[]).filter(r => FILTER==='all' || r.group===FILTER);
   const tb = document.getElementById('tbody');
   let lastGroup = null;
+  const minFee = {};
   const lines = [];
   for(const r of items){
     if(r.group !== lastGroup){
       lastGroup = r.group;
       const n = items.filter(x=>x.group===r.group).length;
-      lines.push(`<tr class="group-sep"><td colspan="15">${r.group}（${n} 只，按溢价从低到高）</td></tr>`);
+      const cheap = Math.min(...items.filter(x=>x.group===r.group && x.fee_total_pct!=null).map(x=>x.fee_total_pct));
+      minFee[r.group] = isFinite(cheap) ? cheap : null;
+      lines.push(`<tr class="group-sep"><td colspan="14">${r.group}（${n} 只，按溢价从低到高${minFee[r.group]!=null?'；本组最低费率 '+minFee[r.group]+'%/年':''}）</td></tr>`);
     }
     if(r.error){
-      lines.push(`<tr><td>${r.group}</td><td>${r.code}</td><td colspan="13">${r.error}</td></tr>`);
+      lines.push(`<tr><td>${r.group}</td><td>${r.code}</td><td colspan="12">${r.error}</td></tr>`);
       continue;
     }
     const prem = r.premium_pct;
     const premCls = prem>5?'up':(prem>=2?'': (prem!=null?'dn':''));
+    const isCheapest = r.fee_total_pct!=null && minFee[r.group]!=null && r.fee_total_pct<=minFee[r.group]+1e-9;
     lines.push(`<tr>
       <td>${r.group}</td>
       <td><b>${r.code}</b></td>
@@ -198,10 +278,9 @@ function renderTable(data){
       <td class="${premCls}"><b>${fmt(prem)}</b></td>
       <td><span class="sig ${SIG_CLASS[r.signal]||''}">${SIG_LABEL[r.signal]||r.signal}</span></td>
       <td><b>${fmt(r.market_cap_yi,2)}</b></td>
-      <td class="liq-${r.liquidity||''}">${r.liquidity||'—'}</td>
-      <td>${fmt(r.shares_yi,2)}</td>
-      <td>${fmt(r.amount_wan,1)}</td>
-      <td>${fmt(r.turnover_pct,2)}</td>
+      <td>${fmt(r.fee_mgmt_pct)}</td>
+      <td>${fmt(r.fee_custody_pct)}</td>
+      <td class="${isCheapest?'fee-low':''}"><b>${fmt(r.fee_total_pct)}</b>${isCheapest?' <span class="tagmin">最低</span>':''}</td>
       <td><a class="em" href="${r.eastmoney_url||'#'}" target="_blank" rel="noopener">查看</a></td>
     </tr>`);
   }
