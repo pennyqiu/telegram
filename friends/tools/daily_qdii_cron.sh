@@ -4,7 +4,8 @@
 # 做什么：
 #   1. 拉取东财最新溢价与管理费/托管费 → 写入 friends/qdii-premium.json（供监控页读取）
 #   2. 刷新长期走势对比 → friends/qdii-history.json（供 qdii-vs-us.html 读取；失败不影响主流程）
-#   3. 若配置了 qdii_email.env 且 EMAIL_ENABLED=true → 发邮件
+#   3. 每周一重跑量化回测 → friends/qdii-quant.json（供 qdii-quant.html 读取；失败不影响主流程）
+#   4. 若配置了 qdii_email.env 且 EMAIL_ENABLED=true → 发邮件
 #
 # 安装到服务器 crontab：
 #   ⚠ 服务器系统时区是 UTC。crontab 数字按 UTC 解释；
@@ -52,6 +53,22 @@ if [[ "${DAILY_QDII_HISTORY:-1}" != "0" ]]; then
   else
     echo "[warn] fetch_qdii_history.py 失败（不影响溢价监控）："
     tail -n 5 /tmp/qdii_history.out
+  fi
+fi
+
+# 量化回测结论几乎不随一天的行情变化，每周一重跑一次即可（DAILY_QDII_QUANT=1 可强制）
+if [[ "${DAILY_QDII_QUANT:-auto}" != "0" ]]; then
+  if [[ "${DAILY_QDII_QUANT:-auto}" == "1" || "$(date +%u)" == "1" ]]; then
+    {
+      python3 "$ROOT/friends/tools/fetch_qdii_quant_data.py" --stale-days 4 &&
+      python3 "$ROOT/friends/tools/qdii_quant.py" --json "$ROOT/friends/qdii-quant.json"
+    } >/tmp/qdii_quant.out 2>&1
+    if [[ $? -eq 0 ]]; then
+      tail -n 2 /tmp/qdii_quant.out
+    else
+      echo "[warn] qdii_quant 刷新失败（页面会回退 qdii-quant.sample.json）："
+      tail -n 6 /tmp/qdii_quant.out
+    fi
   fi
 fi
 
