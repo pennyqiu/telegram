@@ -74,7 +74,7 @@
   <div class="hero">
     <div style="font-size:12px;font-weight:700;opacity:.85">Friends · 量化研究</div>
     <h1>场内 QDII 该怎么买：13 条规则的真实回测</h1>
-    <p>同一笔钱、同一段历史，换十几种买入规则跑一遍，看哪条规则真的赚到钱。所有规则共用一套资金约束：<b>每月固定入账，没投出去的钱按货基计息</b>，所以“空仓等机会”的机会成本会如实体现在成绩里。持仓走后复权成交价，溢价、汇率、跟踪误差、费率全都算在内。</p>
+    <p>同一笔钱、同一段历史，换十几种买入规则跑一遍，看哪条规则真的赚到钱。所有规则共用一套资金约束：<b>每月固定入账，没投出去的钱按货基计息</b>，所以“空仓等机会”的机会成本会如实体现在成绩里。持仓走后复权成交价，溢价、汇率、跟踪误差、费率全都算在内。溢价用<b>真溢价口径</b>——常见的「收盘价 ÷ 披露净值」会把整晚的美股涨跌混进来，据此得出的结论比真实情况强得多。</p>
     <div class="meta">
       <span class="pill" id="updated">更新时间：加载中…</span>
       <span class="pill" id="range">回测区间：—</span>
@@ -88,7 +88,11 @@
   <div class="cards" id="topCards"></div>
   <div class="box indigo" id="topText">加载中…</div>
 
-  <h2>证据一：溢价确实会回来，而且回得很准</h2>
+  <h2>证据零：先把溢价算对，否则会看见一条不存在的规律</h2>
+  <div class="box red" id="calText">加载中…</div>
+  <div class="table-wrap" id="calTable"></div>
+
+  <h2>证据一：溢价高到一定程度，确实会还回来</h2>
   <div class="box amber" id="evText">加载中…</div>
   <div id="evChart"></div>
   <div class="table-wrap" id="evTable"></div>
@@ -128,7 +132,7 @@
   <h2>这份回测的边界</h2>
   <div class="box">
     <b>1. 回测期几乎全是美股牛市。</b>纳指 13 年定投年化 20%+ 是历史给的，不是策略给的。所有规则的相对差异才是本页要看的东西，绝对收益不要当预期。<br>
-    <b>2. 溢价用收盘价与披露净值算，决策再滞后一个交易日</b>，避免用到当天还没公布的净值。实盘中券商的 IOPV 是实时的，所以真实可用的信号质量只会比这里更好一点。<br>
+    <b>2. 溢价用真溢价口径</b>（披露净值先折算到下单时已知的最新美股收盘，见证据零），决策再滞后一个交易日，避免用到当天还没公布的净值。折算用的是「基准指数 × 汇率」，因此基金实际持仓与指数的偏离、当日盘中的汇率变动都还留在残差里；实盘中券商的 IOPV 更精确，可用的信号质量会比这里再好一点。<br>
     <b>3. 买卖只计 0.03% 单边成本，没算买卖价差。</b>小规模、溢价常年偏低的新 ETF 盘口更薄，实盘滑点会吃掉一部分“低溢价”的便宜。<br>
     <b>4. 选券层只有不到 3 年样本</b>（12 只纳指 QDII 要等到 2023-11 才全部上市），结论比择时层弱得多，只能当参考。<br>
     <b>5. 不含税费差异与场外申赎。</b>本页只讨论场内买卖。
@@ -229,6 +233,51 @@ function legendHTML(items, toggleable){
   ).join('') + `</div>`;
 }
 
+// ---------------------------------------------------------------- 证据零：口径
+function drawCalibration(){
+  const cal = DATA.premium_calibration;
+  const elT = document.getElementById('calText'), elTab = document.getElementById('calTable');
+  if(!cal || !cal.n){ elT.innerHTML = ''; elTab.innerHTML = ''; return; }
+  const w = cal.worst || null;
+  const corrs = (cal.per_code||[]).map(r=>r.nav_ref_corr).filter(v=>v!=null);
+  const cmin = corrs.length ? Math.min(...corrs) : null, cmax = corrs.length ? Math.max(...corrs) : null;
+  elT.innerHTML =
+    `场内 QDII 的溢价通常写成「收盘价 ÷ 披露净值 − 1」。这个算法有个隐蔽的毛病：<b>两边看的不是同一场美股</b>。`
+    + `基金 T 日的披露净值已经包含了 T 日当晚的美股行情，而 A 股 T 日 15:00 收盘时，你最新只能看到前一晚那场。`
+    + `于是美股当晚一大涨，这个公式就会显示成<b>假折价</b>——恰恰诱你在贵的时候动手。<br>`
+    + `本页因此改用<b>真溢价</b>：先把披露净值按「基准指数 × 汇率」的变动折算到你下单那一刻已知的最新美股收盘，再和收盘价比。`
+    + `净值到底参考哪一场不靠猜，用「净值日收益」与「基准折人民币日收益」的相关性去认`
+    + (cmin!=null ? `：${cal.per_code.length} 只标的一致指向「含当晚行情」，相关性 ${cmin.toFixed(2)}~${cmax.toFixed(2)}` : '')
+    + `。<br>`
+    + `顺便说清楚责任范围：<a class="em" href="qdii-monitor.html">实时监控页</a>用的是东财 IOPV（实时估算净值），`
+    + `口径本来就是对的；会踩这个坑的是<b>历史回测</b>——十几年的 IOPV 序列没处可查，只能拿披露净值代替，`
+    + `于是必须自己把时点对齐回来。<br>`
+    + `改完之后<b>平均值几乎没动</b>（日均差 ${sv(cal.mean_diff)}），但<b>单日结论经常相反</b>：`
+    + `波动一个标准差就有 ${pv(cal.sd_diff,2)}，`
+    + `<b>${pv(cal.flip_share,1)} 的交易日</b>（${cal.flip_days} 个标的-交易日）「现在能不能买」的答案是反的。`
+    + (w ? `最典型的一次假绿灯是 ${esc(w.code)} ${esc(w.name)} ${esc(w.date)}：旧算法显示只有 ${sv(w.naive)}、看着可以下手，`
+           + `真溢价其实高达 ${sv(w.true)}。` : '')
+    + `<br>下面这张表是代价：<b>同一段历史、同一个统计，只因为溢价算错，就会得出一条强得多的假规律。</b>`;
+
+  const ev = DATA.premium_evidence, evn = DATA.premium_evidence_naive;
+  if(!evn){ elTab.innerHTML = ''; return; }
+  const H = '60';
+  let h = `<table><thead><tr><th>买入当日溢价</th>`
+    + `<th>60日超额 · 真溢价</th><th>胜率 · 真溢价</th>`
+    + `<th>60日超额 · 旧算法</th><th>胜率 · 旧算法</th><th>真 − 旧</th></tr></thead><tbody>`;
+  EV_ORDER.forEach(l=>{
+    const a = ev[H][l], b = evn[H] && evn[H][l];
+    if(!a || !b) return;
+    const gap = a.mean - b.mean;
+    h += `<tr><td><b>${esc(l)}</b></td>`
+      + `<td class="${cls(a.mean)}"><b>${sv(a.mean)}</b></td><td>${pv(a.win,1)}</td>`
+      + `<td class="${cls(b.mean)}">${sv(b.mean)}</td><td class="muted">${pv(b.win,1)}</td>`
+      + `<td class="muted">${sv(gap)}</td></tr>`;
+  });
+  h += `</tbody></table>`;
+  elTab.innerHTML = h;
+}
+
 // ---------------------------------------------------------------- 证据一：溢价
 const EV_ORDER = ['折价 <0%','0~1%','1~2%','2~5%','>5%'];
 
@@ -265,17 +314,21 @@ function drawEvidence(){
   h += `</tbody></table>`;
   document.getElementById('evTable').innerHTML = h;
 
-  const worst = ev['60']['>5%'], best = ev['60']['折价 <0%'];
+  const worst = ev['60']['>5%'], disc = ev['60']['折价 <0%'];
+  const mid = ev['60']['2~5%'], low = ev['60']['0~1%'], one = ev['60']['1~2%'];
   const sp = DATA.premium_spread || {};
   const spTxt = Object.entries(sp).map(([g,s])=>
     `${esc(g)} 同一天最贵与最便宜的那只差 <b>${pv(s.median,2)}</b>（中位）、极端能到 ${pv(s.max,1)}`
   ).join('；');
   document.getElementById('evText').innerHTML =
-    `把每一天按“当天溢价多少”分档，再看买进去之后 20/60/120 个交易日里，<b>市价涨得比净值多还是少</b>。`
+    `把每一天按“当天真溢价多少”分档，再看买进去之后 20/60/120 个交易日里，<b>市价涨得比净值多还是少</b>。`
     + `净值怎么走跟你什么时候买没关系，所以这个差额就是溢价回归给你的额外损益，是一份很干净的证据。<br>`
-    + `结果是完美单调的：<b>折价买入</b>，60 日后平均比净值多赚 ${sv(best.mean)}，胜率 ${pv(best.win,0)}；`
-    + `<b>溢价 5% 以上买入</b>，60 日后平均比净值少赚 ${sv(worst.mean)}，胜率只有 ${pv(worst.win,0)}。`
-    + `换句话说，你多付的溢价基本会在一个季度内还回去。<br>`
+    + `<b>胜率是单调的</b>：从折价的 ${pv(disc.win,0)} 一路降到溢价 5% 以上的 ${pv(worst.win,0)}，越贵越可能吃亏。`
+    + `但幅度上有个明显的拐点：溢价在 2% 以内买，60 日后平均还比净值多赚 ${sv(one.mean)}~${sv(low.mean)}；`
+    + `到 <b>2%~5% 这一档就已经白干</b>（${sv(mid.mean)}，胜率 ${pv(mid.win,0)} 已低于一半）；`
+    + `<b>5% 以上才是真亏</b>——平均比净值少赚 ${pv(Math.abs(worst.mean),2)}，胜率只剩 ${pv(worst.win,0)}，多付的溢价基本在一个季度内还回去。<br>`
+    + `还有一个反直觉的细节：<b>苦等折价并不比在 0~1% 时买更划算</b>（${sv(disc.mean)} vs ${sv(low.mean)}）。`
+    + `深折价往往出现在美股刚大跌、场内还没跟上的时候，等来的通常不是便宜货而是一段下跌。<br>`
     + (spTxt ? `顺带一个数：${spTxt}。看起来比价空间很大，但下面第三部分会说明这笔便宜为什么常常拿不到。` : '');
 }
 
@@ -319,12 +372,26 @@ function drawTiming(){
 
   const get = id => rows.find(r=>r.id===id) || {};
   const T1=get('T1'), T7=get('T7'), T5=get('T5'), TZ=get('TZ'), T9=get('T9'), T4=get('T4');
+  const rstat = (t.rolling && t.rolling.stats) || {};
+  const oGs = Object.keys(DATA.timing).filter(g=>g!==SEL.timing);
+  const oT = oGs.length ? DATA.timing[oGs[0]] : null;
+  const oR1 = oT && oT.rolling && oT.rolling.stats ? oT.rolling.stats['T1'] : null;
+  const beat1 = rstat['T1'] ? pv(rstat['T1'].beat_base,0) : null;
+  const beatZ = rstat['TZ'] ? pv(rstat['TZ'].beat_base,0) : null;
   document.getElementById('timingText').innerHTML =
-    `<b>纪律有用，但价值很小；乱择时有害，代价很大。</b>这张表最该看的是两端的不对称：<br>`
-    + `· <b>只在溢价 &lt;2% 时买</b>：每 100 元买入的溢价成本从 ${sv(base.prem_paid_pct)} 降到 ${sv(T1.prem_paid_pct)}，`
-    + `终值 ${sv(T1.final/base.final-1)}。省下的溢价是真的，但大部分交易日溢价本来就不高，能省的总量有限。<br>`
-    + `· <b>反面对照“专挑贵的买”</b>付出 ${sv(TZ.prem_paid_pct)} 的溢价，终值 ${sv(TZ.final/base.final-1)}——追高的代价，`
-    + `跟前面证据一给出的“溢价一个季度内会还回去”对得上。<br>`
+    `<b>把溢价纪律做成买入规则，几乎值不了钱；而为了等便宜离开市场，代价是它的上百倍。</b>`
+    + `这张表最该看的是这个极度不对称：<br>`
+    + `· <b>只在溢价 &lt;2% 时买</b>：每 100 元买入的溢价成本确实从 ${sv(base.prem_paid_pct)} 压到了 ${sv(T1.prem_paid_pct)}，`
+    + `但终值只差 ${sv(T1.final/base.final-1)}`
+    + (beat1 ? `，滚动窗口里 ${beat1} 的窗口跑赢无脑定投` : '')
+    + (oR1 ? `（${esc(oGs[0])} 那组 ${pv(oR1.beat_base,0)}）` : '')
+    + `。<b>换个标的、换个起点，结论就摇摆</b>，这说明它更像噪音而不是一条规律。`
+    + `原因就写在基准那一行：无脑定投本身的平均买入溢价只有 ${sv(base.prem_paid_pct)}，`
+    + `你本来就很少撞上贵的日子，纪律能省下的总量有限。<br>`
+    + `· <b>反面对照“专挑贵的买”</b>付出 ${sv(TZ.prem_paid_pct)} 的溢价，终值 ${sv(TZ.final/base.final-1)}`
+    + (beatZ ? `，滚动窗口只有 ${beatZ} 跑赢` : '')
+    + `。这一侧是明确的：<b>溢价的伤害是真的，但普通定投已经天然避开了大部分</b>，`
+    + `所以你要防的是「主动追高」，不是「没等到便宜」。<br>`
     + `· <b>真正伤人的是离开市场</b>：200 日线择时清仓 ${sv(T7.final/base.final-1)}、整仓动量轮动 ${sv(T9.final/base.final-1)}、`
     + `溢价高就改买红利 ${sv(T4.final/base.final-1)}、留着弹药等回撤 ${sv(T5.final/base.final-1)}。`
     + `它们回撤并没有明显更小，但收益少了一大截：在一个长期向上的资产上，空仓与换仓的机会成本远大于溢价。`;
@@ -536,34 +603,46 @@ function drawTop(){
   const roll = t.rolling && t.rolling.stats ? t.rolling.stats['T1'] : null;
 
   const yrs = base.years ? base.years.toFixed(0) : '13';
-  const cards = [
+  const cal = DATA.premium_calibration;
+  const cards = [];
+  if(cal && cal.n) cards.push({g:'先把溢价算对', c:pv(cal.flip_share,1)+' 的交易日',
+    d:`用「收盘价 ÷ 披露净值」算溢价，这么多天「现在能不能买」的答案是反的——`
+      + `因为披露净值含了当晚美股。本页全部改用真溢价，下面这些结论也跟着变了。`});
+  cards.push(
     {g:'溢价会不会回来', c:sv(ev60['>5%'].mean),
-     d:`溢价 &gt;5% 买入，60 个交易日后平均跑输净值这么多，胜率仅 ${pv(ev60['>5%'].win,0)}。溢价是真成本。`},
+     d:`真溢价 &gt;5% 买入，60 个交易日后平均跑输净值这么多，胜率仅 ${pv(ev60['>5%'].win,0)}。`
+       + `贵到这个程度，代价是确定的。`},
     {g:'守纪律值多少', c: sv(T1.final/base.final-1),
-     d: `只在溢价 &lt;2% 的日子买，${yrs} 年终值差这么多——很小。`
-        + (roll ? `但它稳：${t.rolling.n_windows} 个滚动 3 年窗口里 ${pv(roll.beat_base,0)} 跑赢无脑定投，平均年化 ${sv(roll.mean_gap)}。` : '')},
+     d: `只在溢价 &lt;2% 的日子买，${yrs} 年终值就差这么多。`
+        + (roll ? `滚动 3 年窗口里 ${pv(roll.beat_base,0)} 跑赢无脑定投——跟抛硬币差不多。` : '')
+        + `旧口径下它看起来能赢九成以上窗口，那是算错溢价造成的假象。`},
     {g:'离开市场的代价', c:sv(T7.final/base.final-1),
-     d:`200 日线下穿就清仓，${yrs} 年下来终值差这么多，回撤还更深。同口径下，这是溢价纪律收益的两百多倍。`},
+     d:`200 日线下穿就清仓，${yrs} 年下来终值差这么多，回撤还更深。`
+       + `跟上一张卡放在一起看：该防的从来不是溢价，是自己被吓出市场。`},
     {g:'选券该看什么', c:'跟踪＞费率＞溢价',
      d:`同组各家净值年化能差 1.7 个百分点，而费率只差 0.4；追当日最低溢价反而跑输。`},
-  ];
+  );
   document.getElementById('topCards').innerHTML = cards.map(c=>
     `<div class="card"><div class="g">${esc(c.g)}</div><div class="c">${esc(c.c)}</div><div class="d">${c.d}</div></div>`
   ).join('');
 
   document.getElementById('topText').innerHTML =
-    `<b>一句话：不要用溢价来决定“要不要买”，只用它来决定“今天买不买”。</b><br>`
+    `<b>一句话：溢价只配当一条底线，不配当一套策略。</b><br>`
     + `十几条规则跑下来，凡是“为了等一个更好的价格而离开市场”的（等回撤、跌破均线清仓、换到红利、整仓轮动），`
-    + `在这段历史里全部大幅跑输；而“钱照投，只是把买入日挪到溢价不贵的那几天”几乎不花成本，还能稳定省下一点。`
-    + `溢价这件事的正确用法是<b>底线思维</b>：别在溢价 5% 以上的日子买，其余时候按计划投。`
-    + `至于买哪一只，费率和跟踪质量的长期影响比溢价大得多，别为了 1% 的溢价差频繁换基金。`;
+    + `在这段历史里全部大幅跑输，量级是几十个百分点；而“只在溢价便宜的日子买”这条纪律，`
+    + `换成正确的溢价口径之后<b>几乎不产生收益</b>，换个标的、换个起点就会翻脸。`
+    + `唯一稳的是那条底线：<b>别在溢价明显高企（5% 以上）的日子加仓，其余时候按计划投</b>。`
+    + `至于买哪一只，费率和跟踪质量的长期影响比溢价大得多，别为了 1% 的溢价差频繁换基金。<br>`
+    + `顺便说，本页最值得带走的可能不是任何一条规则，而是<b>先确认自己算的那个指标到底对不对</b>：`
+    + `同一段历史、同一套统计，只因为溢价算法有偏，就会得出一条强得多、也完全不存在的“规律”。`;
 
   document.getElementById('playbook').innerHTML =
     `<b>1. 定投照做，别停。</b>每月固定金额，落在“溢价不贵”的那几天就行。回测里所有停投、清仓、蓄水等回撤的规则都跑输了。<br>`
     + `<b>2. 设一条硬红线：溢价 ≥5% 当天不买。</b>这一档的证据最硬——60 日后平均跑输净值 ${sv(ev60['>5%'].mean)}，胜率只有 ${pv(ev60['>5%'].win,0)}。`
     + `真遇上（比如 513100 被停牌又高溢价那种日子），把这笔钱推到下一个交易日，而不是推到下个月。<br>`
-    + `<b>3. 溢价 &lt;2% 是常态，不必苛求折价。</b>历史上七成以上交易日溢价都在 2% 以下，等太久的代价大于省下的溢价：`
-    + `“溢价&lt;1%才买”和“&lt;2%才买”的成绩几乎没差别。<br>`
+    + `<b>3. 别把红线往下挪，也不必苦等折价。</b>“&lt;2% 才买”“&lt;1% 才买”“等历史后 30% 分位”这几条的成绩几乎没差别，`
+    + `换个起点还会互相反超；而折价档的表现并不比溢价 0~1% 时买更好——深折价往往是美股刚大跌、场内还没跟上，`
+    + `等来的不是便宜货而是一段下跌。<br>`
     + `<b>4. 选券先看费率与跟踪记录，再看溢价。</b>把候选缩到费率最低那一档的两三只，然后在这几只里买当日溢价最低的那只——`
     + `这条规则在纳指组的滚动窗口里 ${(function(){const r=(DATA.picking['纳指100']||{}).rolling; const s=r&&r.stats&&r.stats['C6']; return s?pv(s.beat_base,0):'六成以上';})()} 的窗口跑赢固定买老牌。<br>`
     + `<b>5. 不要止盈。</b>“溢价冲到 95 分位卖一点”在两组里一正一负，滚动窗口胜率不到四成，属于噪声级别的操作。<br>`
@@ -595,6 +674,9 @@ function drawNow(){
              : warn ? `<span class="tag y">2%–5% 之间</span> 可以买，但没必要加量。`
                     : `<span class="pos">在 2% 以内，按计划买入即可。</span>`);
   });
+  h += `<br><br><b>这几个数可以直接照用。</b>监控页的溢价取自东财 <b>IOPV（实时估算净值）</b>，`
+    + `跟本页真溢价是同一个思路——都把净值对齐到当下已知的最新行情，所以不存在证据零里那种假折价。`
+    + `历史回测之所以要自己折算，是因为 IOPV 只有实时值、没有十几年的历史序列可查。`;
   el.innerHTML = h;
 }
 
@@ -626,6 +708,7 @@ async function load(){
     `每月入账 ${(p.monthly/1e4).toFixed(1)} 万 · 闲钱按 ${(p.cash_rate*100).toFixed(1)}% 计息 · 单边成本 ${(p.trade_cost*1e4).toFixed(1)}bp`;
 
   drawTop();
+  drawCalibration();
   drawEvidence();
   drawTiming();
   drawRolling();
@@ -636,8 +719,10 @@ async function load(){
   drawNow();
 
   document.getElementById('method').innerHTML =
-    `方法：持仓市值走东财后复权成交价（分红再投），溢价＝不复权收盘价 ÷ 单位净值 − 1，`
-    + `决策时只用上一交易日及更早的溢价；基金真实业绩用累计净值，基准用 QQQ / SPY 的美元含息价乘 USDCNY。`
+    `方法：持仓市值走东财后复权成交价（分红再投），溢价＝不复权收盘价 ÷ 折算后净值 − 1——`
+    + `折算是把披露净值按「基准 × 汇率」的变动搬到下单时已知的最新美股收盘（见证据零），`
+    + `净值参考哪一场由日收益相关性判定；决策时只用上一交易日及更早的溢价。`
+    + `基金真实业绩用累计净值，基准用 QQQ / SPY 的美元含息价乘 USDCNY。`
     + `所有规则共用“每月入账 ${(p.monthly/1e4).toFixed(1)} 万、闲钱按 ${(p.cash_rate*100).toFixed(1)}% 计息、`
     + `单边成本 ${(p.trade_cost*1e4).toFixed(1)}bp”的资金约束，IRR 按月度现金流计算，因此空仓的机会成本已包含在内。`
     + `脚本：friends/tools/qdii_quant.py（数据由 fetch_qdii_quant_data.py 抓取）。`

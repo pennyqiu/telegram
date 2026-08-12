@@ -18,7 +18,10 @@
 
 口径：
   - 持仓市值走后复权成交价（分红再投），溢价波动、汇率、跟踪误差、费率全在里面
-  - 溢价 =（不复权收盘价 − 单位净值）/ 单位净值，与 fetch_qdii_premium.py 一致
+  - 溢价用「真溢价」：披露净值先折算到 A 股收盘时已知的最新美股收盘，再和收盘价比。
+    直接除披露净值（naive 口径）会混进整晚的标的涨跌——美股当晚大涨显示成假折价，
+    两口径日均只差 0.07%，但 10.3% 的交易日「能不能买」的结论是反的。详见 Market
+    ._true_premium，以及 backtest_qdii_true_premium.py 里更完整的口径论证
   - 决策只用 ≤ 当日的数据；净值披露滞后 1 日左右，故当日读到的是最近一个已披露溢价
 
 数据：friends/tools/fetch_qdii_quant_data.py 抓取的 CSV
@@ -36,7 +39,7 @@ import csv
 import json
 import math
 import statistics
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from pathlib import Path
 from typing import Callable
 
@@ -80,7 +83,8 @@ def load_csv(path: Path) -> dict[str, float]:
 class Market:
     """所有序列 + 派生信号。所有取值函数都只回看，不会碰到未来数据。"""
 
-    def __init__(self, codes: list[str], extra: list[str]) -> None:
+    def __init__(self, codes: list[str], extra: list[str],
+                 groups: dict[str, str] | None = None) -> None:
         self.adj: dict[str, dict[str, float]] = {}
         self.raw: dict[str, dict[str, float]] = {}
         self.nav: dict[str, dict[str, float]] = {}
@@ -91,27 +95,110 @@ class Market:
             self.nav[c] = load_csv(NAV_DIR / f"{c}.csv")
             self.acc[c] = load_csv(ACC_DIR / f"{c}.csv")
         self.fx = load_csv(DATA_DIR / "USDCNY.csv")
+        self.fx_days = sorted(self.fx)
         for b in ("QQQ", "SPY"):
             self.adj[b] = load_csv(DATA_DIR / f"{b}.csv")
+        self._bench_days = {b: sorted(self.adj[b]) for b in ("QQQ", "SPY")}
 
-        # 溢价序列 + 有序日期，供分位数与滞后查找
+        # 溢价序列 + 有序日期，供分位数与滞后查找。
+        # 主口径是真溢价，naive 口径留着做对比——两者差别有多大是页面的一个结论。
         self.prem: dict[str, dict[str, float]] = {}
         self.prem_days: dict[str, list[str]] = {}
+        self.prem_naive: dict[str, dict[str, float]] = {}
+        self.nav_ref: dict[str, tuple[int, float] | None] = {}
+        groups = groups or {}
         for c in codes:
-            s = {
+            naive = {
                 d: self.raw[c][d] / self.nav[c][d] - 1
                 for d in sorted(set(self.raw[c]) & set(self.nav[c]))
                 if self.nav[c][d] > 0
                 and abs(self.raw[c][d] / self.nav[c][d] - 1) < PREM_MAX_ABS
             }
-            self.prem[c] = s
-            self.prem_days[c] = sorted(s)
+            self.prem_naive[c] = naive
+            bench = BENCH_USD.get(groups.get(c, ""), "")
+            self.nav_ref[c] = self._nav_ref_shift(c, bench) if bench else None
+            ref = self.nav_ref[c]
+            self.prem[c] = (
+                self._true_premium(c, bench, ref[0]) if ref else dict(naive)
+            )
+            self.prem_days[c] = sorted(self.prem[c])
+        self.prem_naive_days = {c: sorted(s) for c, s in self.prem_naive.items()}
 
         self.adj_days = {c: sorted(s) for c, s in self.adj.items()}
         self._ma_cache: dict[tuple[str, int], dict[str, float]] = {}
         self._prem_idx = {
             c: {d: i for i, d in enumerate(days)} for c, days in self.prem_days.items()
         }
+
+    # ---- 真溢价 ----
+    def _us_day_le(self, bench: str, d: str, back: int = 0) -> str | None:
+        """从「≤ d 的最后一个美股交易日」再往前数 back 场"""
+        days = self._bench_days.get(bench) or []
+        i = _bisect_right(days, d) - back
+        return days[i - 1] if i >= 1 else None
+
+    def _bench_rmb(self, bench: str, us_day: str) -> float | None:
+        """基准在某场美股收盘时的人民币值。基准用后复权价，因为基金净值同样含分红收益"""
+        px = self.adj.get(bench, {}).get(us_day)
+        if not px:
+            return None
+        i = _bisect_right(self.fx_days, us_day)
+        return px * self.fx[self.fx_days[i - 1]] if i else None
+
+    def _nav_ref_shift(self, code: str, bench: str) -> tuple[int, float] | None:
+        """判定披露净值参考的是哪一场美股收盘，返回 (往前几场, 相关性)。
+
+        不假设滞后几天，让数据说话：把「净值日收益」与「基准折人民币的日收益」在
+        三种对齐下算相关性，取最高者。back=0 表示净值(T) 参考 T 日当晚那场（收在
+        北京时间 T+1 凌晨）。实测 16 只标的全部落在 0，另两个候选贴近 0，判得很干净。
+        """
+        nav = self.nav.get(code) or {}
+        days = sorted(nav)
+        best: tuple[int, float] | None = None
+        for back in (0, 1, 2):
+            xs, ys = [], []
+            for prev, cur in zip(days, days[1:]):
+                if nav[prev] <= 0:
+                    continue
+                u1, u0 = self._us_day_le(bench, cur, back), self._us_day_le(bench, prev, back)
+                if not u1 or not u0 or u1 == u0:
+                    continue
+                b1, b0 = self._bench_rmb(bench, u1), self._bench_rmb(bench, u0)
+                if not b1 or not b0:
+                    continue
+                xs.append(nav[cur] / nav[prev] - 1)
+                ys.append(b1 / b0 - 1)
+            if len(xs) < 200:
+                continue
+            corr = _pearson(xs, ys)
+            if best is None or corr > best[1]:
+                best = (back, corr)
+        return best
+
+    def _true_premium(self, code: str, bench: str, back: int) -> dict[str, float]:
+        """把披露净值折算到「A 股收盘时已知的最新美股收盘」这个统一时点后的溢价。
+
+        naive 溢价（收盘价 ÷ 披露净值）的毛病是两边看的不是同一场美股：净值(T) 已经
+        含了 T 日当晚的行情，而 A 股 T 日 15:00 收盘时最新只能看到前一晚那场。于是
+        美股当晚大涨会显示成假折价——恰恰诱你在贵的时候买。折算办法：
+            NAV_est(T) = 净值(T) × 基准RMB(收盘时已知的最新一场) / 基准RMB(净值参考的那场)
+        """
+        out: dict[str, float] = {}
+        raw, nav = self.raw.get(code) or {}, self.nav.get(code) or {}
+        for d in sorted(set(raw) & set(nav)):
+            if nav[d] <= 0:
+                continue
+            ref = self._us_day_le(bench, d, back)
+            cur = self._us_day_le(bench, _prev_day(d))
+            if not ref or not cur:
+                continue
+            b_ref, b_cur = self._bench_rmb(bench, ref), self._bench_rmb(bench, cur)
+            if not b_ref or not b_cur:
+                continue
+            p = raw[d] / (nav[d] * b_cur / b_ref) - 1
+            if abs(p) < PREM_MAX_ABS:
+                out[d] = p
+        return out
 
     # ---- 价格 ----
     def price(self, code: str, d: str) -> float | None:
@@ -200,6 +287,20 @@ def _bisect_right(days: list[str], d: str) -> int:
 
 def _to_date(d: str) -> date:
     return datetime.strptime(d, "%Y-%m-%d").date()
+
+
+def _prev_day(d: str) -> str:
+    return (_to_date(d) - timedelta(days=1)).isoformat()
+
+
+def _pearson(xs: list[float], ys: list[float]) -> float:
+    n = len(xs)
+    mx, my = sum(xs) / n, sum(ys) / n
+    sx = math.sqrt(sum((x - mx) ** 2 for x in xs))
+    sy = math.sqrt(sum((y - my) ** 2 for y in ys))
+    if sx == 0 or sy == 0:
+        return 0.0
+    return sum((x - mx) * (y - my) for x, y in zip(xs, ys)) / (sx * sy)
 
 
 def _shift_months(d: str, delta: int) -> str:
@@ -736,12 +837,16 @@ def make_picking_rules(codes: list[str], fees: dict[str, float]) -> list[dict]:
 # ============================================================================
 # 溢价证据：买在高溢价日，未来到底亏多少
 # ============================================================================
-def premium_evidence(mkt: Market, codes: list[str], horizons=(20, 60, 120)) -> dict:
+def premium_evidence(mkt: Market, codes: list[str], horizons=(20, 60, 120),
+                     prem_src: dict[str, dict[str, float]] | None = None) -> dict:
     """按买入日溢价分档，统计未来 N 日「市价收益 − 净值收益」
 
     市价收益用后复权价、净值收益用累计净值，两者之差就是溢价变化带来的损益。
     净值收益本身与买点无关，所以这个差额是溢价择时的干净证据。
+
+    prem_src 默认真溢价；传 mkt.prem_naive 可以复现旧口径，看偏差把结论夸大了多少。
     """
+    src = prem_src if prem_src is not None else mkt.prem
     buckets = [
         ("折价 <0%", -9.9, 0.0),
         ("0~1%", 0.0, 0.01),
@@ -753,7 +858,7 @@ def premium_evidence(mkt: Market, codes: list[str], horizons=(20, 60, 120)) -> d
     for h in horizons:
         rows = {label: [] for label, _, _ in buckets}
         for c in codes:
-            days = mkt.prem_days.get(c) or []
+            days = sorted(src.get(c) or {})
             adj, acc = mkt.adj.get(c) or {}, mkt.acc.get(c) or {}
             common = sorted(set(adj) & set(acc))
             idx = {d: i for i, d in enumerate(common)}
@@ -767,7 +872,7 @@ def premium_evidence(mkt: Market, codes: list[str], horizons=(20, 60, 120)) -> d
                 if adj[d] <= 0 or acc[d] <= 0:
                     continue
                 excess = (adj[d2] / adj[d]) / (acc[d2] / acc[d]) - 1
-                p = mkt.prem[c][d]
+                p = src[c][d]
                 for label, lo, hi in buckets:
                     if lo <= p < hi:
                         rows[label].append(excess)
@@ -781,6 +886,65 @@ def premium_evidence(mkt: Market, codes: list[str], horizons=(20, 60, 120)) -> d
             }
             for label, v in rows.items()
         }
+    return out
+
+
+def premium_calibration(mkt: Market, codes: list[str], names: dict[str, str],
+                        threshold: float = 0.02) -> dict:
+    """两种溢价口径差多少。
+
+    结论是「平均看几乎一样，单日看常常相反」：日均只差百分之零点零几，但每十天
+    就有一天「能不能买」的判断是反的，而且偏差在美股大波动那几天最大——正好是最
+    想加仓的时候。
+    """
+    diffs: list[float] = []
+    flips = tot = 0
+    per_code = []
+    worst_all: tuple[float, str, str, float, float] | None = None
+    for c in codes:
+        true_s, naive_s = mkt.prem.get(c) or {}, mkt.prem_naive.get(c) or {}
+        common = sorted(set(true_s) & set(naive_s))
+        if not common:
+            continue
+        dd = [true_s[d] - naive_s[d] for d in common]
+        # 举例挑「旧算法给了绿灯、其实很贵」的那种日子——比单纯差得最多更能说明危害
+        false_green = [d for d in common
+                       if naive_s[d] < threshold <= true_s[d]]
+        fl = sum(1 for d in common
+                 if (naive_s[d] < threshold) != (true_s[d] < threshold))
+        worst = max(false_green or common,
+                    key=lambda d: abs(true_s[d] - naive_s[d]))
+        gap = abs(true_s[worst] - naive_s[worst])
+        if worst_all is None or gap > worst_all[0]:
+            worst_all = (gap, c, worst, naive_s[worst], true_s[worst])
+        diffs += dd
+        flips += fl
+        tot += len(common)
+        ref = mkt.nav_ref.get(c)
+        per_code.append({
+            "code": c, "name": names.get(c, c), "n": len(common),
+            "flip_share": fl / len(common),
+            "sd": statistics.stdev(dd) if len(dd) > 2 else float("nan"),
+            "nav_ref_back": ref[0] if ref else None,
+            "nav_ref_corr": ref[1] if ref else None,
+        })
+    if not diffs:
+        return {}
+    out = {
+        "n": tot,
+        "threshold": threshold,
+        "mean_diff": statistics.fmean(diffs),
+        "sd_diff": statistics.stdev(diffs) if len(diffs) > 2 else float("nan"),
+        "share_gap_gt1pct": sum(1 for x in diffs if abs(x) > 0.01) / len(diffs),
+        "flip_days": flips,
+        "flip_share": flips / tot,
+        "per_code": sorted(per_code, key=lambda r: -r["flip_share"]),
+    }
+    if worst_all:
+        _, c, d, pn, pt = worst_all
+        out["worst"] = {"code": c, "name": names.get(c, c), "date": d,
+                        "naive": pn, "true": pt,
+                        "false_green": pn < threshold <= pt}
     return out
 
 
@@ -984,7 +1148,7 @@ def main() -> int:
         for it in items
     }
 
-    mkt = Market(codes, [DIVIDEND])
+    mkt = Market(codes, [DIVIDEND], groups)
 
     # ---- 数据总览 ----
     print("=" * 112)
@@ -1005,7 +1169,7 @@ def main() -> int:
     pstats = premium_stats(mkt, ready, names)
     print()
     print("=" * 112)
-    print("② 历史溢价分布（日频，=不复权收盘/单位净值−1，剔除份额折算错位）")
+    print("② 历史真溢价分布（日频，净值已折算到下单时已知的最新美股收盘，剔除份额折算错位）")
     print("=" * 112)
     print(f"  {'代码':7s} {'名称':20s} {'天数':>5s} {'中位':>7s} {'均值':>7s} "
           f"{'P10':>7s} {'P90':>7s} {'最大':>7s} {'<2%占比':>8s} {'>5%占比':>8s} {'波动':>7s}")
@@ -1026,8 +1190,31 @@ def main() -> int:
                   f"中位 {s['median']:.2%}、P90 {s['p90']:.2%}、最大 {s['max']:.2%}"
                   f"；最常最便宜：{top}")
 
-    # ---- ③ 溢价证据 ----
+    # ---- ③ 溢价证据（先交代口径，再看分档）----
+    cal = premium_calibration(mkt, ready, names)
+    if cal:
+        print()
+        print("=" * 112)
+        print("③ 先把溢价算对：披露净值参考的是当晚美股，直接除它会混进整晚的标的涨跌")
+        print("=" * 112)
+        backs = sorted({r["nav_ref_back"] for r in cal["per_code"]})
+        corrs = [r["nav_ref_corr"] for r in cal["per_code"] if r["nav_ref_corr"]]
+        print(f"  净值参考时点判定：{len(cal['per_code'])} 只标的全部落在 back="
+              f"{backs[0] if len(backs) == 1 else backs}"
+              f"（即 T 日净值含 T 日当晚行情），相关性 {min(corrs):.2f}~{max(corrs):.2f}")
+        print(f"  真溢价 − naive：日均 {cal['mean_diff']:+.3%}（几乎不动），"
+              f"标准差 {cal['sd_diff']:.2%}，|差|>1% 的占 {cal['share_gap_gt1pct']:.1%}")
+        print(f"  「溢价 <{cal['threshold']:.0%} 可投」的信号被翻转："
+              f"{cal['flip_days']} 个标的-交易日，占 {cal['flip_share']:.1%}")
+        if cal.get("worst"):
+            w = cal["worst"]
+            tail = ("旧口径给了绿灯，实际已经很贵" if w.get("false_green")
+                    else f"差 {abs(w['true'] - w['naive']):.2%}")
+            print(f"  最典型的假信号：{w['code']} {w['name']} {w['date']}，"
+                  f"旧口径 {w['naive']:+.2%}、真溢价 {w['true']:+.2%}（{tail}）")
+
     ev = premium_evidence(mkt, ready)
+    ev_naive = premium_evidence(mkt, ready, prem_src=mkt.prem_naive)
     print()
     print("=" * 112)
     print("③ 溢价到底值多少钱：按买入日溢价分档，未来 N 日「市价收益 − 净值收益」")
@@ -1046,6 +1233,16 @@ def main() -> int:
         f"N={h}: " + "/".join(str(ev[h][l]["n"]) for l in ("折价 <0%", "0~1%", "1~2%", "2~5%", ">5%"))
         for h in ev
     ))
+    print()
+    print("  同一张表用旧口径（收盘价 ÷ 披露净值）复现，看偏差把结论夸大了多少：")
+    print(f"  {'溢价档':12s}" + "".join(f"{'N='+h:>18s}" for h in ev_naive))
+    print(f"  {'':12s}" + "".join(f"{'均值':>9s}{'胜率':>9s}" for _ in ev_naive))
+    for label in ("折价 <0%", "0~1%", "1~2%", "2~5%", ">5%"):
+        line = f"  {label:12s}"
+        for h in ev_naive:
+            b = ev_naive[h][label]
+            line += f"{b['mean']:9.2%}{b['win']:9.1%}" if b["n"] else f"{'—':>9s}{'—':>9s}"
+        print(line)
 
     # ---- ④ 跟踪质量 ----
     trk = tracking_quality(mkt, ready, names, groups, fees)
@@ -1175,7 +1372,9 @@ def main() -> int:
             ],
             "premium_stats": pstats,
             "premium_spread": spread,
+            "premium_calibration": cal,
             "premium_evidence": ev,
+            "premium_evidence_naive": ev_naive,
             "tracking": trk,
             "timing": timing_out,
             "picking": picking_out,
