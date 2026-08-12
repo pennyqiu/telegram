@@ -74,7 +74,7 @@
   <div class="hero">
     <div style="font-size:12px;font-weight:700;opacity:.85">Friends · 量化研究</div>
     <h1>场内 QDII 该怎么买：14 条规则的真实回测</h1>
-    <p>同一笔钱、同一段历史，换十几种买入规则跑一遍，看哪条规则真的赚到钱。所有规则共用一套资金约束：<b>每月固定入账，没投出去的钱按货基计息</b>，所以“空仓等机会”的机会成本会如实体现在成绩里。持仓走后复权成交价，溢价、汇率、跟踪误差、费率全都算在内。溢价用<b>真溢价口径</b>——常见的「收盘价 ÷ 披露净值」会把整晚的美股涨跌混进来，据此得出的结论比真实情况强得多。</p>
+    <p>同一笔钱、同一段历史，换十几种买入规则跑一遍，看哪条规则真的赚到钱。所有规则共用一套资金约束：<b>每月固定入账，没投出去的钱按货基计息</b>，所以“空仓等机会”的机会成本会如实体现在成绩里。持仓走后复权成交价，溢价、汇率、跟踪误差、费率全都算在内。溢价用<b>真溢价口径</b>——常见的「收盘价 ÷ 披露净值」会把整晚的美股涨跌混进来，据此得出的结论比真实情况强得多。最后两节把结论落成一条能照着做的规则，并且明说这条规则要花多少钱、买到的到底是什么。</p>
     <div class="meta">
       <span class="pill" id="updated">更新时间：加载中…</span>
       <span class="pill" id="range">回测区间：—</span>
@@ -126,6 +126,15 @@
   <div class="table-wrap" id="premTable"></div>
   <div class="box" id="premText" style="margin-top:10px"></div>
 
+  <h2>证据四：把这条底线写成规则 —— 门槛定几个点、最多等几天</h2>
+  <div class="box amber" id="execText">加载中…</div>
+  <div class="tabs" id="execTabs"></div>
+  <div class="table-wrap" id="execTable"></div>
+
+  <h3>底线、跨组分散、年度再平衡各自值多少钱</h3>
+  <div class="table-wrap" id="varTable"></div>
+  <div class="box indigo" id="varText" style="margin-top:10px">加载中…</div>
+
   <h2>可以照着做的规则</h2>
   <div class="box green" id="playbook">加载中…</div>
 
@@ -139,7 +148,8 @@
     <b>3. 买卖只计 0.03% 单边成本，没算买卖价差。</b>小规模、溢价常年偏低的新 ETF 盘口更薄，实盘滑点会吃掉一部分“低溢价”的便宜。<br>
     <b>4. 滚动窗口的“跑赢比例”被重叠夸大。</b>相邻窗口共享绝大部分数据，所以那一列只说明偏移方向一致，不代表把握有多大；判断一条规则时请看「不重叠窗口胜负」那两列，独立样本只有 4 段。<br>
     <b>5. 选券层只有不到 3 年样本</b>（12 只纳指 QDII 要等到 2023-11 才全部上市），结论比择时层弱得多，只能当参考。<br>
-    <b>6. 不含税费差异与场外申赎。</b>本页只讨论场内买卖。
+    <b>6. 不含税费差异与场外申赎。</b>本页只讨论场内买卖。<br>
+    <b>7. 证据四里的门槛与等待上限是在同一段历史上扫出来的，</b>所以别把「5%、最多 5 天」当成精确最优值。它能拿出来用，靠的是那一整片区域（门槛 3%~10%、上限 5~10 日）的结果都差不多——如果只有某一格好看，那就是过拟合，不该照抄。
   </div>
 
   <p class="note" id="method"></p>
@@ -148,7 +158,7 @@
 <script>
 const COLORS = ['#4338ca','#dc2626','#0891b2','#c2410c','#7c3aed','#059669','#be185d','#a16207'];
 let DATA = null, PREMIUM = null;
-const SEL = {timing:null, pick:null, curve:'rel'};
+const SEL = {timing:null, pick:null, curve:'rel', exec:null};
 const CURVE_ON = {};
 
 const esc = s => String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -666,6 +676,146 @@ function drawPremStats(){
     + `<b>把这一列和上面的跟踪质量放在一起看，才是选券的完整依据。</b>`;
 }
 
+// ---------------------------------------------------------------- 证据四：执行层
+function execFloor(){
+  const f = (DATA.execution||{}).floor || {};
+  const gs = Object.keys(f);
+  if(!gs.length) return null;
+  if(!SEL.exec || !f[SEL.exec]) SEL.exec = gs[0];
+  return {groups:gs, cur:f[SEL.exec], all:f};
+}
+
+function drawExec(){
+  const elT = document.getElementById('execText'), elTab = document.getElementById('execTable');
+  const elTabs = document.getElementById('execTabs');
+  const fx = execFloor();
+  if(!fx){ elT.innerHTML=''; elTab.innerHTML=''; elTabs.innerHTML=''; return; }
+  elTabs.innerHTML = fx.groups.map(g=>
+    `<button class="tab ${g===SEL.exec?'on':''}" data-g="${esc(g)}">${esc(g)} · ${esc(fx.all[g].primary)}</button>`
+  ).join('');
+  document.querySelectorAll('#execTabs .tab').forEach(b=>b.onclick=()=>{
+    SEL.exec = b.dataset.g; drawExec();
+  });
+
+  const f = fx.cur, grid = f.grid || [];
+  const at = (th,w) => grid.find(r=>Math.abs(r.threshold-th)<1e-9 && r.max_wait===w) || {};
+  const ths = [...new Set(grid.map(r=>r.threshold))];
+  const waits = [null,10,5,2];
+  const wlab = w => w===null ? '一直等' : `最多等${w}日`;
+
+  let h = `<table><thead><tr><th>底线门槛</th><th>历史上挡住</th>`
+    + waits.map(w=>`<th>相对无脑定投 · ${wlab(w)}</th>`).join('')
+    + `<th>每100元付的溢价<br><span class="muted">最多等5日</span></th>`
+    + `<th>最差那段不重叠窗口<br><span class="muted">最多等5日</span></th></tr></thead><tbody>`;
+  ths.forEach(th=>{
+    const b = (f.blocked_share||{})[String(th)];
+    const w5 = at(th,5);
+    const pick = Math.abs(th-0.05)<1e-9;
+    h += `<tr${pick?' class="best"':''}><td><b>溢价 ≥ ${(th*100).toFixed(0)}% 不买</b>`
+      + (pick?'<span class="tag g">本页采用</span>':'') + `</td>`
+      + `<td class="muted">${b==null?'—':pv(b,1)} 的交易日</td>`
+      + waits.map(w=>{ const r = at(th,w);
+          return `<td class="${cls(r.rel_final)}">${sv(r.rel_final)}</td>`; }).join('')
+      + `<td class="${cls(-w5.prem_paid_pct)}">${sv(w5.prem_paid_pct)}</td>`
+      + `<td class="${cls(w5.dj_min_gap)}">${sv(w5.dj_min_gap)}</td></tr>`;
+  });
+  h += `<tr><td><b>不设底线（无脑定投）</b><span class="tag b">基准</span></td><td class="muted">0%</td>`
+    + waits.map(()=>`<td class="muted">0.00%</td>`).join('')
+    + `<td class="muted">${sv(f.base_prem_paid_pct)}</td><td class="muted">0.00%</td></tr>`;
+  h += `</tbody></table>`;
+  elTab.innerHTML = h;
+
+  // 两组同时看：一条规则要是在两组上一正一负，就不该当成收益来源
+  const spread = [], sameTh = [];
+  fx.groups.forEach(g=>{
+    const gg = DATA.execution.floor[g].grid || [];
+    const vals = gg.map(r=>r.rel_final).filter(x=>x!=null);
+    if(vals.length) spread.push({g, lo:Math.min(...vals), hi:Math.max(...vals)});
+    const pick = gg.find(r=>Math.abs(r.threshold-0.05)<1e-9 && r.max_wait===5);
+    if(pick) sameTh.push({g, v:pick.rel_final});
+  });
+  const rangeTxt = spread.map(s=>`${esc(s.g)}组落在 ${sv(s.lo)} ~ ${sv(s.hi)}`).join('，');
+  const flip = sameTh.length>1 && Math.min(...sameTh.map(s=>s.v))<0
+                               && Math.max(...sameTh.map(s=>s.v))>0;
+  const w5min = at(0.05,5), wInf = at(0.05,null), w2 = at(0.05,2);
+  const base5 = f.base_prem_paid_pct;
+  // 「一直等」的风险在两组里表现不同，取最难看的那组来说事
+  const infWorst = fx.groups.map(g=>{
+    const gg = DATA.execution.floor[g].grid || [];
+    const r = gg.find(x=>Math.abs(x.threshold-0.05)<1e-9 && x.max_wait===null);
+    return r ? {g, dj:r.dj_min_gap, idle:r.idle_mean, rel:r.rel_final} : null;
+  }).filter(Boolean).sort((a,b)=>a.dj-b.dj)[0];
+  elT.innerHTML =
+    `到这里该做的事只剩一件：把「别在贵的时候买」写成一条自己真能执行的规则。规则要定两个数——`
+    + `<b>门槛几个点</b>，以及<b>最多等几天</b>。这张表把两个数的所有组合都跑了一遍，`
+    + `要找的不是收益最高的那格（那是过拟合），而是<b>哪一片区域对收益基本无害</b>：`
+    + `无害才说明这条纪律是免费的，你可以放心长期守着它。<br>`
+    + `· <b>门槛定在哪几乎不影响收益。</b>整张表 32 种组合，${rangeTxt}——`
+    + `十几年累计下来全都不到半个百分点，`
+    + (flip ? `而且同一个门槛在两组标的上还<b>一正一负</b>（5% 门槛：`
+              + sameTh.map(s=>`${esc(s.g)} ${sv(s.v)}`).join('、') + `）。`
+           : `而且换一组标的方向就变。`)
+    + `所以别再纠结 2% 还是 3% 了：<b>溢价不是收益信号。</b><br>`
+    + `· <b>它真正改变的是你付出的价格。</b>不设底线时每 100 元买入要付 ${sv(base5)} 的溢价，`
+    + `设了 5% 底线、最多等 5 天之后是 ${sv(w5min.prem_paid_pct)}，`
+    + (wInf.prem_paid_pct!=null ? `愿意一直等到便宜为止能压到 ${sv(wInf.prem_paid_pct)}。` : '')
+    + `注意省下的溢价并没有变成收益（等待期间指数自己涨掉了），`
+    + `它换来的是另一件实在的东西：<b>你不会在溢价 20% 那天把一个月的钱全砸进去</b>。`
+    + `这条底线买的是尾部保护，不是超额收益——想清楚这点，才不会因为它没赚钱就放弃它。<br>`
+    + `· <b>「最多等几天」这个数必须写下来。</b>`
+    + (infWorst && infWorst.dj<0
+        ? `不设上限、一直等到便宜为止，在${esc(infWorst.g)}组最差那段不重叠窗口要落后 `
+          + `${pv(Math.abs(infWorst.dj),2)}，终值 ${sv(infWorst.rel)}——`
+          + `<b>钱开始在账上排队，纪律就此悄悄变成了择时</b>；` : '')
+    + `而上限压到 2 天又太短，溢价还没来得及回落就被迫买入，`
+    + `这一档在两组里基本都是负的（本组 ${sv(w2.rel_final)}）。`
+    + `<b>5 到 10 个交易日是那片怎么设都不会搞坏的区间</b>，本页的规则取 5 天。`;
+}
+
+function drawVariants(){
+  const v = (DATA.execution||{}).variants;
+  const elTab = document.getElementById('varTable'), elT = document.getElementById('varText');
+  if(!v || !v.rows){ elTab.innerHTML=''; elT.innerHTML=''; return; }
+  const segs = v.disjoint || [];
+  let h = `<table><thead><tr><th>做法</th><th>做法说明</th><th>终值</th><th>年化IRR</th>`
+    + `<th>相对无脑定投</th><th>每100元付的溢价</th><th>最大回撤</th><th>买/卖次数</th>`
+    + segs.map(s=>`<th>${esc(s.start.slice(0,7))} 起<br><span class="muted">3年年化差</span></th>`).join('')
+    + `</tr></thead><tbody>`;
+  v.rows.forEach(r=>{
+    h += `<tr><td><b>${esc(r.name)}</b>` + (r.id==='X0'?'<span class="tag b">基准</span>':'') + `</td>`
+      + `<td class="muted" style="white-space:normal;max-width:230px">${esc(r.note)}</td>`
+      + `<td><b>${wan(r.final)}</b></td><td>${pv(r.irr)}</td>`
+      + `<td class="${cls(r.rel_final)}">${sv(r.rel_final)}</td>`
+      + `<td class="${cls(-r.prem_paid_pct)}">${sv(r.prem_paid_pct)}</td>`
+      + `<td class="neg">${pv(r.nav_max_dd,1)}</td>`
+      + `<td class="muted">${r.n_buys}/${r.n_sells}</td>`
+      + (r.dj_gaps||[]).map(g=>`<td class="${cls(g)}">${sv(g)}</td>`).join('')
+      + `</tr>`;
+  });
+  h += `</tbody></table>`;
+  elTab.innerHTML = h;
+
+  const get = id => v.rows.find(r=>r.id===id) || {};
+  const X0=get('X0'), X2=get('X2'), X3=get('X3'), X5=get('X5');
+  const rebalCost = (X5.final!=null && X3.final) ? X5.final/X3.final-1 : null;
+  const yrs = ((new Date(v.end)-new Date(v.start))/(365.25*24*3600*1000)).toFixed(1);
+  elT.innerHTML =
+    `把三件常被混在一起谈的事拆开算，各自的价钱差了几个数量级：<br>`
+    + `· <b>底线（${sv(X2.rel_final)}）</b>：${yrs} 年下来几乎为零，`
+    + `和上面那张表说的是同一件事——它是风控条款，不是收益条款。<br>`
+    + `· <b>跨组分散（${sv(X3.rel_final)}）</b>：纳指标普各半，这段历史里少赚了 ${pv(Math.abs(X3.rel_final),2)}。`
+    + `但别急着下结论：拆成 ${segs.length} 段互不相交的三年窗口是 `
+    + `<b>${X3.dj_beat}/${segs.length} 赢</b>（${(X3.dj_gaps||[]).map(g=>sv(g)).join('、')}），`
+    + `一半赢一半输。<b>那 ${sv(X3.rel_final)} 是「纳指过去比标普强」的结果，不是分散本身无效。</b>`
+    + `该配纳指还是标普、还是各半，属于你愿意承担多少集中风险，`
+    + `<b>回测在这个问题上给不出答案，别假装它给了。</b><br>`
+    + `· <b>年度再平衡（相对各半 ${rebalCost==null?'—':sv(rebalCost)}）</b>：${yrs} 年只触发了 ${X5.n_sells} 次卖出，`
+    + `成本可以忽略，收益也没有变化。<b>这正好回答了「什么时候卖」：</b>`
+    + `再平衡是唯一一种便宜到可以常态化的卖出，但它是控制配置漂移的工具，不是收益来源。`
+    + `除此之外只剩一个卖出理由——你要用这笔钱。`
+    + `顺便看一眼回撤那一列：${pv(X0.nav_max_dd,1)}，所以三年内要用的钱本来就不该放在这里。`;
+}
+
 // ---------------------------------------------------------------- 总结与当下
 function drawTop(){
   const gs = Object.keys(DATA.timing);
@@ -689,6 +839,19 @@ function drawTop(){
      d: `只在溢价 &lt;2% 的日子买，${yrs} 年终值就差这么多。`
         + (roll ? `滚动 3 年窗口里 ${pv(roll.beat_base,0)} 跑赢无脑定投——跟抛硬币差不多。` : '')
         + `旧口径下它看起来能赢九成以上窗口，那是算错溢价造成的假象。`},
+  );
+  const xv = ((DATA.execution||{}).variants||{});
+  const X2c = (xv.rows||[]).find(r=>r.id==='X2');
+  const X0c = (xv.rows||[]).find(r=>r.id==='X0');
+  const X1c = (xv.rows||[]).find(r=>r.id==='X1');
+  const xYrs = xv.start ?
+    ((new Date(xv.end)-new Date(xv.start))/(365.25*24*3600*1000)).toFixed(1)+' 年' : '十二年';
+  if(X2c) cards.push({g:'这条底线的价钱', c:sv(X2c.rel_final),
+    d:`把「溢价 ≥${((xv.threshold||0.05)*100).toFixed(0)}% 就顺延、最多等 ${xv.max_wait||5} 天」当成规则跑 ${xYrs}，`
+      + `收益几乎不动，每 100 元买入付的溢价从 ${sv(X0c?X0c.prem_paid_pct:null)} 降到 ${sv(X2c.prem_paid_pct)}`
+      + (X1c ? `（愿意一直等到便宜为止是 ${sv(X1c.prem_paid_pct)}）` : '') + `。`
+      + `<b>它是保险，不是收益</b>——想清楚这点才守得住。`});
+  cards.push(
     {g:'离开市场的代价', c:sv(T7.final/base.final-1),
      d:`200 日线下穿就清仓，${yrs} 年下来终值差这么多，回撤还更深。`
        + `跟上一张卡放在一起看：该防的从来不是溢价，是自己被吓出市场。`},
@@ -710,25 +873,45 @@ function drawTop(){
     + `<b>先确认自己算的那个指标到底对不对</b>（溢价算错，就会看见一条强得多、其实站不住的“规律”），`
     + `以及<b>别把重叠窗口的胜率当成把握</b>（同一段行情数几十遍，再小的偏移也能显得压倒性）。`;
 
+  const ex = DATA.execution || {};
+  const exF = (ex.floor||{})[g0] || (ex.floor||{})[Object.keys(ex.floor||{})[0]] || {};
+  const exVar = ex.variants || {};
+  const vget = id => (exVar.rows||[]).find(r=>r.id===id) || {};
+  const X2 = vget('X2'), X5 = vget('X5');
+  const th = exVar.threshold!=null ? exVar.threshold : 0.05;
+  const mw = exVar.max_wait!=null ? exVar.max_wait : 5;
+  const blocked = (exF.blocked_share||{})[String(th)];
+  const exYrs = exVar.start ?
+    ((new Date(exVar.end)-new Date(exVar.start))/(365.25*24*3600*1000)).toFixed(1)+' 年' : '十二年';
+  const C6 = (function(){const r=(DATA.picking['纳指100']||{}).rolling; const s=r&&r.stats&&r.stats['C6']; return s?pv(s.beat_base,0):'六成以上';})();
   document.getElementById('playbook').innerHTML =
-    `<b>1. 定投照做，别停。</b>每月固定金额，落在“溢价不贵”的那几天就行。回测里所有停投、清仓、蓄水等回撤的规则都跑输了。<br>`
-    + `<b>2. 设一条硬红线：溢价 ≥5% 当天不买。</b>这一档的证据最硬——60 日后平均跑输净值 ${sv(ev60['>5%'].mean)}，胜率只有 ${pv(ev60['>5%'].win,0)}。`
-    + `真遇上（比如 513100 被停牌又高溢价那种日子），把这笔钱推到下一个交易日，而不是推到下个月。<br>`
-    + `<b>3. 别把红线往下挪，也不必苦等折价。</b>“&lt;2% 才买”“&lt;1% 才买”“等历史后 30% 分位”这几条的成绩几乎没差别，`
-    + `换个起点还会互相反超；而折价档的表现并不比溢价 0~1% 时买更好——深折价往往是美股刚大跌、场内还没跟上，`
-    + `等来的不是便宜货而是一段下跌。<br>`
-    + `<b>4. 选券先看费率与跟踪记录，再看溢价。</b>把候选缩到费率最低那一档的两三只，然后在这几只里买当日溢价最低的那只——`
-    + `这条规则在纳指组的滚动窗口里 ${(function(){const r=(DATA.picking['纳指100']||{}).rolling; const s=r&&r.stats&&r.stats['C6']; return s?pv(s.beat_base,0):'六成以上';})()} 的窗口跑赢固定买老牌。<br>`
-    + `<b>5. 不要止盈。</b>“溢价冲到 95 分位卖一点”`
+    `六条规则，前三条决定你亏不亏，后三条决定你多赚多少。<br><br>`
+    + `<b>1. 钱到账当天就投，不预测。</b>回测里所有停投、清仓、蓄水等回撤、跌破均线离场的规则都跑输，`
+    + `最狠的一条 ${sv(T7.final/base.final-1)}。这是全页最硬的结论，也是唯一一条“做错了会伤到本金量级”的。<br>`
+    + `<b>2. 唯一的例外：溢价 ≥${(th*100).toFixed(0)}% 那天不买，顺延到下一个交易日，最多顺延 ${mw} 天，第 ${mw} 天无论多少照买。</b>`
+    + `这一档的证据最硬（60 日后平均跑输净值 ${sv(ev60['>5%'].mean)}，胜率只有 ${pv(ev60['>5%'].win,0)}），`
+    + (blocked!=null ? `历史上只挡住 ${pv(blocked,1)} 的交易日，` : '')
+    + `${exYrs}的收益影响只有 ${sv(X2.rel_final)}——<b>它是保险，不是收益</b>。`
+    + `“最多 ${mw} 天”这半句和前半句一样重要：不写上限，某次高溢价长期不落，你就在不知不觉中做了一次择时。<br>`
+    + `<b>3. 别把门槛往下挪，也不必苦等折价。</b>门槛从 2% 到 15% 的收益差异不到半个百分点，同一个门槛换一组标的还会一正一负；`
+    + `折价档的表现也不比溢价 0~1% 时买更好——深折价往往是美股刚大跌、场内还没跟上，等来的不是便宜货而是一段下跌。<br>`
+    + `<b>4. 把选券当成真正的超额来源。</b>同一段区间、同一个指数，各家净值年化能差 1.7 个百分点，而费率只差 0.4——`
+    + `所以<b>先看跟踪记录再看费率，最后才看溢价</b>：把候选缩到费率最低那一档的两三只，在这几只里买当日溢价最低的那只，`
+    + `这条规则在纳指组 ${C6} 的滚动窗口跑赢固定买老牌。这 1 个多百分点不需要你预测任何事，是全页性价比最高的一件事，`
+    + `代价只是每年花十分钟复核一次排名。<br>`
+    + `<b>5. 卖只有两个理由：再平衡，和你要用钱。</b>年度再平衡（偏离目标配置 5% 以上才动）${exYrs}只触发 ${X5.n_sells} 次卖出，`
+    + `成本可忽略、收益也不变，是可以常态化的风险管理；而“溢价冲到 95 分位卖一点”这种止盈`
     + (function(){
         const bits = Object.keys(DATA.timing).map(g=>{
           const s = (((DATA.timing[g].rolling||{}).stats)||{})['TB'];
           return s && s.dj_n ? `${g}赢 ${s.dj_beat}/${s.dj_n} 段` : '';
         }).filter(Boolean);
-        return bits.length ? `在不重叠窗口里${bits.join('、')}——两组反向就是没规律。` : '在两组里一正一负。';
+        return bits.length ? `在不重叠窗口里${bits.join('、')}——两组反向就是没规律，` : '在两组里一正一负，';
       })()
     + `别为它增加操作。<br>`
-    + `<b>6. 汇率与美股行情不在你的控制范围内</b>，能控制的只有费率、溢价、以及别把自己吓出市场这三件事。`;
+    + `<b>6. 该配纳指还是标普，这页答不了。</b>各半在这段历史里少赚 ${pv(Math.abs(vget('X3').rel_final||0),2)}，`
+    + `但拆成互不相交的三年窗口是一半赢一半输——那个差额是“纳指过去比标普强”，不是分散无效。`
+    + `这属于你愿意承担多少集中风险，和汇率、美股行情一样不在回测的射程里。`;
 }
 
 function drawNow(){
@@ -799,6 +982,8 @@ async function load(){
   drawPicking();
   drawTrack();
   drawPremStats();
+  drawExec();
+  drawVariants();
   drawNow();
 
   document.getElementById('method').innerHTML =

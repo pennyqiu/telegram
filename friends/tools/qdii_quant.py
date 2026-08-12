@@ -1,14 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-场内纳指/标普 QDII 的量化策略回测（择时层 + 选券层 + 溢价证据）。
+场内纳指/标普 QDII 的量化策略回测（择时层 + 选券层 + 执行层 + 溢价证据）。
 
-回答三个问题：
+回答四个问题：
   ① 什么时候买：溢价过滤、回撤阶梯、趋势过滤、动量轮动、价值平均、溢价止盈
      ——十条规则在 513100（2013 起）/ 513500（2013 起）上跑同一套资金约束
   ② 买哪一只：16 只同指数 QDII 里按费率 / 溢价 / 综合分选，看终值差多少
   ③ 溢价到底值多少钱：按买入日溢价分组，看未来 20/60/120 日「市价收益 − 净值收益」
      ——这是溢价择时有没有用的直接证据，不是靠讲道理
+  ④ 那到底该怎么执行：底线门槛定几个点、最多等几天、要不要跨组分散、要不要再平衡
+     ——把①的结论落成一条能照着做的规则，并检验它是不是「免费」的
 
 资金约束（所有策略共用，否则没法公平比）：
   - 每月首个交易日固定入账 MONTHLY 元进现金池
@@ -892,6 +894,217 @@ def make_picking_rules(codes: list[str], fees: dict[str, float]) -> list[dict]:
 
 
 # ============================================================================
+# 执行层：把「别买贵的」写成一条能照着做的规则
+# ============================================================================
+FLOOR_THRESHOLDS = (0.02, 0.03, 0.04, 0.05, 0.06, 0.08, 0.10, 0.15)
+FLOOR_WAITS: tuple[int | None, ...] = (None, 10, 5, 2)
+REBAL_BAND = 0.05           # 目标配置偏离超过这个比例才动手
+
+
+def dca_rule(codes: list[str]) -> Rule:
+    """钱到账当天等额买入，不预测任何东西——所有比较的基准"""
+    def rule(ctx: Context) -> None:
+        if not ctx.is_contrib_day:
+            return
+        avail = [c for c in codes if ctx.mkt.last_price(c, ctx.d)]
+        if not avail:
+            return
+        each = ctx.port.cash / len(avail)
+        for c in avail:
+            ctx.port.buy(c, each, ctx.d)
+    return rule
+
+
+def floor_rule(codes: list[str], threshold: float, max_wait: int | None) -> Rule:
+    """溢价 ≥ threshold 就把这笔钱顺延一天，最多顺延 max_wait 个交易日
+
+    等待上限决定了这还算不算「纪律」：没有上限，一旦溢价长期停在门槛之上，
+    它就悄悄变成了一次没有胜算的择时。到期那天无论溢价多少都照买。
+    """
+    def rule(ctx: Context) -> None:
+        st = ctx.state
+        if ctx.is_contrib_day:
+            st["pending"] = st.get("pending", 0.0) + ctx.monthly
+            st["waited"] = 0
+        if st.get("pending", 0.0) <= 0:
+            return
+        cheap = 0
+        for c in codes:
+            p = ctx.mkt.premium(c, ctx.d)
+            if p is None or p < threshold:
+                cheap += 1
+        forced = max_wait is not None and st.get("waited", 0) >= max_wait
+        # 只买便宜的那半会破坏目标配置，所以要么一起买，要么一起等
+        if cheap < len(codes) and not forced:
+            st["waited"] = st.get("waited", 0) + 1
+            return
+        amount = min(st["pending"], ctx.port.cash)
+        each = amount / len(codes)
+        for c in codes:
+            ctx.port.buy(c, min(each, ctx.port.cash), ctx.d)
+        st["pending"] = 0.0
+    return rule
+
+
+def rebalance_rule(codes: list[str], inner: Rule, band: float = REBAL_BAND) -> Rule:
+    """在 inner 之上叠一次年度再平衡：每年第一个交易日把配置调回等权"""
+    def rule(ctx: Context) -> None:
+        inner(ctx)
+        st = ctx.state
+        if st.get("rebal_year") == ctx.d[:4]:
+            return
+        st["rebal_year"] = ctx.d[:4]
+        vals = {
+            c: ctx.port.units.get(c, 0.0) * (ctx.mkt.last_price(c, ctx.d) or 0.0)
+            for c in codes
+        }
+        total = sum(vals.values())
+        if total <= 0:
+            return
+        target = total / len(codes)
+        for c, v in vals.items():
+            if v > target * (1 + band):
+                ctx.port.sell(c, (v - target) / v, ctx.d)
+        for c, v in vals.items():
+            if v < target * (1 - band):
+                ctx.port.buy(c, min(target - v, ctx.port.cash), ctx.d)
+    return rule
+
+
+def disjoint_segments(days: list[str], span_months: int) -> list[list[str]]:
+    starts = month_start_indices(days)
+    segs, k = [], 0
+    while k + span_months < len(starts):
+        segs.append(days[starts[k]: starts[k + span_months]])
+        k += span_months
+    return segs
+
+
+def floor_grid(mkt: Market, primary: str, group: str, days: list[str],
+               monthly: float, span_months: int = 36) -> dict:
+    """底线门槛该定在几个点、等待上限设几天
+
+    要找的不是「哪个门槛收益最高」（那是过拟合），而是哪一段门槛区间对收益
+    基本无害：这才说明这条纪律是免费的。同时盯住空仓比例，它一旦抬头，
+    纪律就已经变成择时了。
+    """
+    base_rule = dca_rule([primary])
+    base = run_strategy(mkt, base_rule, days, primary, group, monthly,
+                        keep_curve=False)
+    segs = disjoint_segments(days, span_months)
+    base_seg = [
+        run_strategy(mkt, base_rule, s, primary, group, monthly,
+                     keep_curve=False)["irr"] for s in segs
+    ]
+
+    prem = [p for p in (mkt.premium(primary, d) for d in days) if p is not None]
+    blocked = {
+        f"{th}": sum(1 for p in prem if p >= th) / len(prem)
+        for th in FLOOR_THRESHOLDS
+    } if prem else {}
+
+    grid = []
+    for th in FLOOR_THRESHOLDS:
+        for wait in FLOOR_WAITS:
+            rule = floor_rule([primary], th, wait)
+            r = run_strategy(mkt, rule, days, primary, group, monthly,
+                             keep_curve=False)
+            gaps = [
+                run_strategy(mkt, rule, s, primary, group, monthly,
+                             keep_curve=False)["irr"] - b
+                for s, b in zip(segs, base_seg)
+            ]
+            grid.append({
+                "threshold": th,
+                "max_wait": wait,
+                "irr": r["irr"],
+                "rel_final": r["final"] / base["final"] - 1,
+                "prem_paid_pct": r["prem_paid_pct"],
+                "idle_mean": r["idle_mean"],
+                "dj_mean_gap": statistics.fmean(gaps) if gaps else float("nan"),
+                "dj_min_gap": min(gaps) if gaps else float("nan"),
+                "dj_beat": sum(1 for g in gaps if g > 1e-9),
+            })
+    return {
+        "primary": primary,
+        "start": days[0],
+        "end": days[-1],
+        "span_months": span_months,
+        "n_disjoint": len(segs),
+        "base_irr": base["irr"],
+        "base_prem_paid_pct": base["prem_paid_pct"],
+        "blocked_share": blocked,
+        "grid": grid,
+    }
+
+
+def execution_variants(mkt: Market, nas: str, spx: str, monthly: float,
+                       threshold: float = 0.05, max_wait: int = 5,
+                       span_months: int = 36) -> dict:
+    """把「底线 / 跨组分散 / 年度再平衡」三件事拆开，各自值多少钱"""
+    days = [d for d in mkt.adj_days[nas] if d in mkt.adj[spx]][1:]
+    if len(days) < 500:
+        return {}
+    both = [nas, spx]
+    specs = [
+        {"id": "X0", "name": "无脑定投（纳指）", "note": "基准：钱到账就买，不看任何指标",
+         "rule": dca_rule([nas])},
+        {"id": "X1", "name": f"溢价<{threshold:.0%}才买·可无限等",
+         "note": "底线的极端版：等到便宜为止，看它会不会变成择时",
+         "rule": floor_rule([nas], threshold, None)},
+        {"id": "X2", "name": f"溢价≥{threshold:.0%}顺延·最多等{max_wait}日",
+         "note": "能写进纪律的版本：钱一定投出去，只是尽量不在最贵那几天动手",
+         "rule": floor_rule([nas], threshold, max_wait)},
+        {"id": "X3", "name": "纳指标普各半·到账即投", "note": "只加跨组分散，不做任何择时",
+         "rule": dca_rule(both)},
+        {"id": "X4", "name": "各半+底线顺延", "note": "分散叠底线",
+         "rule": floor_rule(both, threshold, max_wait)},
+        {"id": "X5", "name": "各半+每年再平衡",
+         "note": f"回答「什么时候卖」：偏离 {REBAL_BAND:.0%} 以上才调回等权",
+         "rule": rebalance_rule(both, dca_rule(both))},
+        {"id": "X6", "name": "各半+底线+再平衡", "note": "三件事一起上",
+         "rule": rebalance_rule(both, floor_rule(both, threshold, max_wait))},
+    ]
+    segs = disjoint_segments(days, span_months)
+    base = run_strategy(mkt, specs[0]["rule"], days, nas, "纳指100", monthly,
+                        keep_curve=False)
+    base_seg = [
+        run_strategy(mkt, specs[0]["rule"], s, nas, "纳指100", monthly,
+                     keep_curve=False)["irr"] for s in segs
+    ]
+    rows = []
+    for spec in specs:
+        r = run_strategy(mkt, spec["rule"], days, nas, "纳指100", monthly,
+                         keep_curve=False)
+        gaps = [
+            run_strategy(mkt, spec["rule"], s, nas, "纳指100", monthly,
+                         keep_curve=False)["irr"] - b
+            for s, b in zip(segs, base_seg)
+        ]
+        rows.append({
+            "id": spec["id"], "name": spec["name"], "note": spec["note"],
+            "final": r["final"], "irr": r["irr"],
+            "rel_final": r["final"] / base["final"] - 1,
+            "prem_paid_pct": r["prem_paid_pct"], "nav_max_dd": r["nav_max_dd"],
+            "idle_mean": r["idle_mean"],
+            "n_buys": r["n_buys"], "n_sells": r["n_sells"],
+            "dj_gaps": gaps,
+            "dj_beat": sum(1 for g in gaps if g > 1e-9),
+            "dj_min_gap": min(gaps) if gaps else float("nan"),
+        })
+    return {
+        "codes": both,
+        "threshold": threshold,
+        "max_wait": max_wait,
+        "start": days[0],
+        "end": days[-1],
+        "span_months": span_months,
+        "disjoint": [{"start": s[0], "end": s[-1]} for s in segs],
+        "rows": rows,
+    }
+
+
+# ============================================================================
 # 溢价证据：买在高溢价日，未来到底亏多少
 # ============================================================================
 def premium_evidence(mkt: Market, codes: list[str], horizons=(20, 60, 120),
@@ -1417,6 +1630,55 @@ def main() -> int:
             "rolling": roll_pick,
         }
 
+    # ---- ⑦ 执行层：把纪律写成规则 ----
+    execution: dict[str, dict] = {"floor": {}}
+    for group, primary in (("纳指100", "513100"), ("标普500", "513500")):
+        if primary not in ready:
+            continue
+        days = mkt.adj_days[primary][1:]
+        if len(days) < 500:
+            continue
+        fg = floor_grid(mkt, primary, group, days, args.monthly)
+        execution["floor"][group] = fg
+        print()
+        print("=" * 112)
+        print(f"⑦ 执行层 · {group}：底线门槛定在几个点、最多等几天"
+              f"（{fg['start']}→{fg['end']}，基准=无脑定投 IRR {fg['base_irr']:.2%}、"
+              f"平均买入溢价 {fg['base_prem_paid_pct']:.2%}）")
+        print("=" * 112)
+        print("  " + "；".join(
+            f"门槛 {float(k):.0%} 挡住 {v:.1%} 的交易日"
+            for k, v in fg["blocked_share"].items()
+        ))
+        print(f"  {'门槛':>6s} {'等待上限':>8s} {'vs定投':>9s} {'买入溢价':>9s} "
+              f"{'空仓占比':>9s} {'不重叠最差':>10s} {'不重叠均值':>10s} "
+              f"{'赢/'+str(fg['n_disjoint']):>8s}")
+        for r in fg["grid"]:
+            wait = "不限" if r["max_wait"] is None else f"{r['max_wait']}日"
+            print(f"  {r['threshold']:6.0%} {wait:>8s} {r['rel_final']:+9.2%} "
+                  f"{r['prem_paid_pct']:9.2%} {r['idle_mean']:9.1%} "
+                  f"{r['dj_min_gap']:+10.2%} {r['dj_mean_gap']:+10.2%} "
+                  f"{r['dj_beat']:8d}")
+
+    var = execution_variants(mkt, "513100", "513500", args.monthly)
+    if var:
+        execution["variants"] = var
+        print()
+        print("=" * 112)
+        print(f"⑦ 执行层 · 底线 / 跨组分散 / 年度再平衡各自值多少钱"
+              f"（{var['start']}→{var['end']}，{len(var['disjoint'])} 段不重叠 "
+              f"{var['span_months']//12} 年窗口）")
+        print("=" * 112)
+        print(f"  {'':4s} {'做法':26s} {'终值':>9s} {'IRR':>8s} {'vs定投':>9s} "
+              f"{'最大回撤':>8s} {'买入溢价':>8s} {'买/卖':>9s} "
+              + "".join(f"{w['start'][:7]:>9s}" for w in var["disjoint"]))
+        for r in var["rows"]:
+            print(f"  {r['id']:4s} {r['name']:26s} {r['final']/1e4:8.1f}万 "
+                  f"{r['irr']:8.2%} {r['rel_final']:+9.2%} {r['nav_max_dd']:8.1%} "
+                  f"{r['prem_paid_pct']:8.2%} "
+                  f"{str(r['n_buys'])+'/'+str(r['n_sells']):>9s} "
+                  + "".join(f"{g:+9.2%}" for g in r["dj_gaps"]))
+
     if args.json:
         out = {
             "title": "场内 QDII 量化策略回测",
@@ -1440,6 +1702,7 @@ def main() -> int:
             "tracking": trk,
             "timing": timing_out,
             "picking": picking_out,
+            "execution": execution,
         }
         p = Path(args.json)
         p.parent.mkdir(parents=True, exist_ok=True)
