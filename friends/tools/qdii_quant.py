@@ -511,7 +511,13 @@ def rolling_analysis(
     span_months: int = 36,
     base_id: str = "T0",
 ) -> dict:
-    """在所有可能的起点上重跑一遍，看结论是不是只在某一段行情里成立"""
+    """在所有可能的起点上重跑一遍，看结论是不是只在某一段行情里成立
+
+    注意重叠窗口的胜率会骗人：相邻两个 3 年窗口共享 35 个月的数据，所以
+    「124 个窗口里 98% 跑赢」远不是 124 份独立证据，一个极小的系统性偏移会被
+    重复计数成压倒性优势。因此另算一份互不相交的窗口（disjoint），那才是独立
+    样本的真实数量，通常只有 4 段。
+    """
     starts = month_start_indices(days)
     n_win = len(starts) - span_months
     if n_win < 12:
@@ -527,6 +533,20 @@ def rolling_analysis(
         }
         per_window.append(row)
 
+    dj_windows: list[dict] = []
+    k = 0
+    while k + span_months < len(starts):
+        seg = days[starts[k]: starts[k + span_months]]
+        dj_windows.append({
+            "start": seg[0], "end": seg[-1],
+            "irr": {
+                s["id"]: run_strategy(mkt, s["rule"], seg, primary, group,
+                                      monthly, keep_curve=False)["irr"]
+                for s in specs
+            },
+        })
+        k += span_months
+
     stats = {}
     for s in specs:
         sid = s["id"]
@@ -537,6 +557,10 @@ def rolling_analysis(
         ]
         if not vals:
             continue
+        dj_gaps = [
+            w["irr"][sid] - w["irr"][base_id] for w in dj_windows
+            if not (math.isnan(w["irr"][sid]) or math.isnan(w["irr"][base_id]))
+        ]
         stats[sid] = {
             "name": s["name"],
             "n": len(vals),
@@ -547,6 +571,10 @@ def rolling_analysis(
             "max": max(vals),
             "mean_gap": statistics.fmean(gaps) if gaps else float("nan"),
             "beat_base": sum(1 for g in gaps if g > 0) / len(gaps) if gaps else float("nan"),
+            "dj_n": len(dj_gaps),
+            "dj_beat": sum(1 for g in dj_gaps if g > 0),
+            "dj_mean_gap": statistics.fmean(dj_gaps) if dj_gaps else float("nan"),
+            "dj_min_gap": min(dj_gaps) if dj_gaps else float("nan"),
         }
     return {
         "span_months": span_months,
@@ -555,6 +583,10 @@ def rolling_analysis(
         "last_start": days[starts[n_win - 1]],
         "base": base_id,
         "stats": stats,
+        "disjoint": {
+            "n": len(dj_windows),
+            "windows": [{"start": w["start"], "end": w["end"]} for w in dj_windows],
+        },
     }
 
 
@@ -702,6 +734,28 @@ def make_timing_rules(primary: str, alt: str) -> list[dict]:
             ctx.port.buy(ctx.primary, ctx.port.cash, ctx.d)
             st["trimmed"] = False
 
+    def prem_fixed_naive(threshold: float) -> Rule:
+        """对照：用旧口径溢价做同一条纪律。
+
+        旧口径 ≈ 真溢价 − 昨夜美股涨跌，两件事混在一起。它在决策日读得到，
+        所以确实可执行；留着它是为了量出「口径算错会让人相信什么」。
+        """
+        def rule(ctx: Context) -> None:
+            days = ctx.mkt.prem_naive_days.get(ctx.primary) or []
+            i = _bisect_right(days, ctx.d) - PREM_LAG
+            p = None
+            if i > 0:
+                last = days[i - 1]
+                if (_to_date(ctx.d) - _to_date(last)).days <= NAV_STALE_MAX:
+                    p = ctx.mkt.prem_naive[ctx.primary][last]
+            if p is None:
+                if ctx.is_contrib_day:
+                    ctx.port.buy(ctx.primary, ctx.port.cash, ctx.d)
+                return
+            if p < threshold:
+                ctx.port.buy(ctx.primary, ctx.port.cash, ctx.d)
+        return rule
+
     def prem_chase(ctx: Context) -> None:
         """反面对照：只在溢价冲进历史前 30% 时买，量化「追高」的代价
 
@@ -742,6 +796,9 @@ def make_timing_rules(primary: str, alt: str) -> list[dict]:
          "rule": prem_take_profit},
         {"id": "TZ", "name": "反面对照·专挑贵的买", "note": "只在溢价前30%时买（等满6个月强制投）",
          "rule": prem_chase},
+        {"id": "TN", "name": "对照·旧口径溢价<2%才买",
+         "note": "同一条纪律换成有偏的溢价：看它凭什么显得更强",
+         "rule": prem_fixed_naive(0.02)},
     ]
 
 
@@ -1121,13 +1178,18 @@ def print_rolling(title: str, roll: dict) -> None:
     print(f"  {roll['n_windows']} 个滚动 {roll['span_months'] // 12} 年窗口，"
           f"起点 {roll['first_start']} → {roll['last_start']}")
     print("=" * 118)
-    print(f"  {'':3s} {'策略':22s} {'IRR最差':>9s} {'P25':>9s} {'中位':>9s} "
-          f"{'P75':>9s} {'最好':>9s} {'平均超额':>9s} {'跑赢定投':>9s}")
+    dj = (roll.get("disjoint") or {}).get("n") or 0
+    print(f"  重叠窗口只共享同一段历史，独立证据其实只有 {dj} 段互不相交的窗口")
+    print("=" * 118)
+    print(f"  {'':3s} {'策略':22s} {'IRR最差':>9s} {'中位':>9s} {'最好':>9s} "
+          f"{'平均超额':>9s} {'跑赢定投':>9s} {'不重叠段':>9s} {'最差那段':>9s}")
     print("  " + "-" * 114)
     for sid, s in roll["stats"].items():
-        print(f"  {sid:3s} {s['name']:22s} {s['min']:9.2%} {s['p25']:9.2%} "
-              f"{s['median']:9.2%} {s['p75']:9.2%} {s['max']:9.2%} "
-              f"{s['mean_gap']:+9.2%} {s['beat_base']:9.1%}")
+        djs = (f"{s['dj_beat']}/{s['dj_n']}" if s.get("dj_n") else "—")
+        djw = (f"{s['dj_min_gap']:+9.2%}" if s.get("dj_n") else f"{'—':>9s}")
+        print(f"  {sid:3s} {s['name']:22s} {s['min']:9.2%} "
+              f"{s['median']:9.2%} {s['max']:9.2%} "
+              f"{s['mean_gap']:+9.2%} {s['beat_base']:9.1%} {djs:>9s} {djw}")
     print()
 
 
