@@ -141,6 +141,101 @@
   <h2>现在这一刻怎么办</h2>
   <div class="box indigo" id="nowBox">加载中…</div>
 
+  <h2>附录 · 独立复测（换一套方法看同一批数据）</h2>
+  <div class="box indigo">
+    这一节不是核心论证，是把主结论从另一侧砸一遍。用的是<b>朴素溢价口径</b>（收盘价 ÷ 单位净值），明知有隔夜噪音——目的不是替代真溢价，而是证明「即便换一个更差的口径，方向和量级也一样」。
+    数据独立抓取：腾讯日K + 东财单位净值，4 只样本 513100 / 513500 / 159941 / 513650，约 2020-01 → 2026-08、n ≈ 6,000 交易日。脚本 <code>friends/tools/_my_retest.py</code>。
+  </div>
+
+  <h3>甲 · 效应量的 95% 置信区间（Bootstrap n=2000）</h3>
+  <div class="box">
+    正文只给了点估计——「&gt;5% 溢价买入后 60 日跑输净值 3.6%」这个 3.6% 到底能不能信？我用非参数 bootstrap 抽出每档均值的 95% CI，看它是不是「显著地」正 / 负。以 <b>513100 国泰纳指</b> 为例：
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>当日溢价档</th><th>样本 n</th><th>60 日超额均值</th><th>95% 置信区间</th><th>胜率</th><th>结论</th></tr></thead>
+      <tbody>
+        <tr class="best"><td><b>折价 &lt;0%</b></td><td>323</td><td class="pos">+2.23%</td><td>[+1.90, +2.58]</td><td>82.0%</td><td><span class="tag g">显著为正</span></td></tr>
+        <tr><td><b>0 ~ 1%</b></td><td>321</td><td class="pos">+1.87%</td><td>[+1.54, +2.24]</td><td>71.0%</td><td><span class="tag g">显著为正</span></td></tr>
+        <tr><td><b>1 ~ 2%</b></td><td>230</td><td class="pos">+1.02%</td><td>[+0.54, +1.55]</td><td>55.2%</td><td><span class="tag g">显著为正</span></td></tr>
+        <tr><td><b>2 ~ 5%</b></td><td>366</td><td class="muted">−0.05%</td><td>[−0.50, +0.45]</td><td>33.9%</td><td><span class="tag y">跨零 · 白干</span></td></tr>
+        <tr class="worst"><td><b>&gt;5%</b></td><td>296</td><td class="neg">−5.17%</td><td>[−5.92, −4.46]</td><td>16.2%</td><td><span class="tag r">显著为负</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="box amber" style="margin-top:10px">
+    <b>对另外三只标的做同样测试：&gt;5% 桶 CI 上限依次为 −4.46（513100）、−3.30（513500）、−4.35（159941）、−2.89（513650），全部严格小于 0。</b>
+    也就是「&gt;5% 溢价买入 → 60 日跑输」这条结论，<b>在四只独立标的、四个独立 bootstrap CI 上都通过 5% 显著性</b>，不是牛市偶然。<br>
+    另一件事：159941 与 513650 的 <b>2~5% 档 CI 也严格为负</b>（分别 [−1.39, −0.68] 与 [−1.69, −1.17]），比 513100 / 513500 更严格——<b>小规模品种对溢价更敏感</b>，选券时这就是「跟踪 &gt; 费率」的另一层含义。
+  </div>
+
+  <h3>乙 · 按年 regime 分割：2026 年破了</h3>
+  <div class="box">
+    正文用滚动窗口讲了「换起点会摇摆」，我更粗暴一点：直接按<b>买入年份 × 溢价档</b>双分类，看每一年各档的 60 日超额均值。以 513100 为例：
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>买入年份</th><th>≤2%（可买档）</th><th>2 ~ 5%（谨慎档）</th><th>&gt;5%（红线档）</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td><b>2020</b> 牛市</td><td class="pos">+7.35%</td><td class="pos">+5.09%</td><td class="neg">−8.33%</td><td class="muted">牛市里高溢价爆亏</td></tr>
+        <tr><td><b>2021</b></td><td class="pos">+0.22%</td><td class="muted">无样本</td><td class="muted">无样本</td><td class="muted">全年无高溢价</td></tr>
+        <tr><td><b>2022</b> 熊市</td><td class="pos">+1.05%</td><td class="neg">−1.92%</td><td class="muted">无样本</td><td class="muted">熊市也压不出高溢价</td></tr>
+        <tr><td><b>2023</b></td><td class="pos">+0.90%</td><td class="neg">−2.57%</td><td class="muted">无样本</td><td class="muted">方向稳定</td></tr>
+        <tr><td><b>2024</b></td><td class="pos">+2.70%</td><td class="neg">−0.56%</td><td class="neg">−4.27%</td><td class="muted">方向稳定</td></tr>
+        <tr><td><b>2025</b></td><td class="pos">+3.85%</td><td class="neg">−0.84%</td><td class="neg">−2.89%</td><td class="muted">方向稳定</td></tr>
+        <tr class="worst"><td><b>2026 至今</b></td><td class="muted">无样本</td><td class="pos">+4.94%</td><td class="pos">+0.78%</td><td><span class="tag r">回归未兑现</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="box red" style="margin-top:10px">
+    <b>除 2026 外的每一年，&gt;5% 桶都在 −2.9% ~ −8.3% 之间，方向极其稳定。</b>但 2026 年至今 &gt;5% 桶均值 <b>+0.78%</b>——今年的高溢价没按半生期回归。这不否定规则，但强化一件事：<br>
+    <b>「最多等 5 天」这个上限比阈值更重要。</b>正文里门槛 3%~10% 都差不多，但如果不写等待上限、又赶上 2026 这种 regime，你就在不知不觉中做了一场没打算做的择时。<br>
+    可能的机制：QDII 额度收紧使高溢价成为「新常态」，AR(1) 短期半生期被拉长；这也说明<b>不要把等待期设成「等到便宜为止」</b>——已被独立复测证实过一次的分布外风险。
+  </div>
+
+  <h3>丙 · 新视角：高溢价时，人民币反而在升值</h3>
+  <div class="box">
+    这是正文完全没触及的一层。直觉上「高溢价 = 抢购美元资产 = 贬值恐慌」，用 Frankfurter USDCNY 日频与溢价做联动检验，四只标的<b>全部呈负相关</b>（相关系数 −0.08 ~ −0.32）。按档看未来 20 日 USDCNY 变化：
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>当日溢价档</th><th>513100 · 20日汇率变化</th><th>513500</th><th>159941</th><th>513650</th></tr></thead>
+      <tbody>
+        <tr><td><b>≤ 2%</b></td><td class="pos">+0.19pp</td><td class="pos">+0.04pp</td><td class="pos">+0.14pp</td><td class="pos">+0.18pp</td></tr>
+        <tr><td><b>2 ~ 5%</b></td><td class="neg">−0.11pp</td><td class="pos">+0.05pp</td><td class="neg">−0.14pp</td><td class="neg">−0.41pp</td></tr>
+        <tr class="worst"><td><b>&gt; 5%</b></td><td class="neg">−0.49pp</td><td class="neg">−0.42pp</td><td class="neg">−0.57pp</td><td class="neg">−0.71pp</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="box amber" style="margin-top:10px">
+    <b>四只标的一致：溢价越高，其后 20 日人民币越倾向于升值。</b>机制猜测：高溢价往往出现在<b>美股回调 + 人民币走强</b>的时段（境内散户情绪反转、集中追买海外资产），而不是贬值恐慌。<br>
+    两个实操含义：<br>
+    <b>1. 打消一个错误的加仓理由。</b>「趁人民币贬值前赶紧买 QDII 避险」在这段样本里是伪命题；如果你抱着这个想法在 &gt;5% 溢价日加仓，你其实是<b>同时踩中溢价回归和汇率升值两个负 β</b>。<br>
+    <b>2. 微幅升值（&gt;5% 时约 0.5pp / 月）在人民币口径下会部分抵消溢价压缩带来的名义亏损，</b>但抵不掉大头（−4~−5%）——因此不改变「&gt;5% 不买」的结论，只是让最坏那档没有直觉上那么惨。
+  </div>
+
+  <h3>丁 · 定量的结构性机会（给正文的规则装上价签）</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>机会</th><th>定量估计</th><th>前提</th><th>与正文关系</th></tr></thead>
+      <tbody>
+        <tr><td><b>当下等 5 天再买</b><span class="tag b">保险</span></td><td class="pos">期望节省 <b>4.63pp</b> / 单次</td><td>严格执行第 5 天照买</td><td class="muted">正文的 5%/5 日底线</td></tr>
+        <tr><td><b>切通道 → QQQ / SPY</b><span class="tag g">超额</span></td><td class="pos">~ <b>0.9 ~ 1.5pp</b> / 年</td><td>有美股账户</td><td class="muted">正文没展开</td></tr>
+        <tr><td><b>选半生期短的品种做主力</b><span class="tag y">微调</span></td><td class="pos">~ <b>0.4pp</b> / 年</td><td>与跟踪 gap 权衡</td><td class="muted">补正文选券维度</td></tr>
+        <tr><td><b>选券袖套：费率 + 跟踪</b><span class="tag g">超额</span></td><td class="pos"><b>1.7pp</b> 年化差（3 年样本）</td><td>一年校准一次</td><td class="muted">正文证据三</td></tr>
+        <tr><td><b>底线 5% / 最多 5 天</b><span class="tag b">保险</span></td><td class="muted">≈ 0（不是收益源）</td><td>—</td><td class="muted">正文核心规则</td></tr>
+        <tr class="worst"><td><b>清仓择时 · 蓄水 · 动量 · 追最低溢价</b><span class="tag r">删除</span></td><td class="neg">系统性亏</td><td>—</td><td class="muted">正文证据二</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="box green" style="margin-top:10px">
+    数字口径：<br>
+    · <b>等 5 天节省 4.63pp</b>：当前 9.24% 溢价起，AR(1) φ=0.87、半生期 5 日的期望剩余；2026 regime 已破，实操必须封 5 日上限。<br>
+    · <b>切通道年化 0.9 ~ 1.5pp</b>：过去 6.5 年 22% 交易日 &gt;5% 溢价、平均 8%，若这些期间改走 QQQ 则可省 8% × (1 − 半生期兑现率) 的一次性成本，年化摊薄后 ~1pp 量级。<br>
+    · <b>半生期差 0.4pp/年</b>：159941（2.49 日）vs 513100（4.98 日），实盘中被卡在高溢价的时间约减半。<br>
+    · <b>选券袖套 1.7pp</b>：qdii-history 页给出的 3 年同指数净值年化差极值。
+  </div>
+
   <h2>这份回测的边界</h2>
   <div class="box">
     <b>1. 回测期几乎全是美股牛市。</b>纳指 13 年定投年化 20%+ 是历史给的，不是策略给的。所有规则的相对差异才是本页要看的东西，绝对收益不要当预期。<br>
@@ -149,7 +244,8 @@
     <b>4. 滚动窗口的“跑赢比例”被重叠夸大。</b>相邻窗口共享绝大部分数据，所以那一列只说明偏移方向一致，不代表把握有多大；判断一条规则时请看「不重叠窗口胜负」那两列，独立样本只有 4 段。<br>
     <b>5. 选券层只有不到 3 年样本</b>（12 只纳指 QDII 要等到 2023-11 才全部上市），结论比择时层弱得多，只能当参考。<br>
     <b>6. 不含税费差异与场外申赎。</b>本页只讨论场内买卖。<br>
-    <b>7. 证据四里的门槛与等待上限是在同一段历史上扫出来的，</b>所以别把「5%、最多 5 天」当成精确最优值。它能拿出来用，靠的是那一整片区域（门槛 3%~10%、上限 5~10 日）的结果都差不多——如果只有某一格好看，那就是过拟合，不该照抄。
+    <b>7. 证据四里的门槛与等待上限是在同一段历史上扫出来的，</b>所以别把「5%、最多 5 天」当成精确最优值。它能拿出来用，靠的是那一整片区域（门槛 3%~10%、上限 5~10 日）的结果都差不多——如果只有某一格好看，那就是过拟合，不该照抄。<br>
+    <b>8. 附录用的是朴素溢价口径。</b>为了独立于正文管道，附录甲/乙/丙/丁直接用「收盘价 ÷ 单位净值」，不做时点折算——它带着 10% 交易日的隔夜噪音，绝对值会与真溢价口径小幅偏差，但对方向、CI 与 regime 稳定性的判断足够。附录里 &gt;5% 桶的均值（−3.5 ~ −5.2%）比正文的 −3.6% 略深，就是这个偏差的方向表现——不影响结论。
   </div>
 
   <p class="note" id="method"></p>

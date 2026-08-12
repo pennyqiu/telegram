@@ -1,0 +1,715 @@
+{
+  "generated_at": "2026-08-12T21:47:26+08:00",
+  "method": "本地缓存的 A 股场内价 ÷ 单位净值(朴素溢价) + Frankfurter USDCNY",
+  "funds": {
+    "513100": {
+      "code": "513100",
+      "name": "国泰纳指",
+      "n_days": 1596,
+      "start": "2020-01-08",
+      "end": "2026-08-11",
+      "prem_median_pct": 1.643,
+      "prem_p90_pct": 8.352,
+      "share_gt5_pct": 22.1,
+      "share_lt2_pct": 54.8,
+      "ar1_phi": 0.8702,
+      "half_life_days": 4.98,
+      "buckets_with_ci": {
+        "0~1%": {
+          "n": 321,
+          "mean_pct": 1.873,
+          "ci95_pct": [
+            1.539,
+            2.238
+          ],
+          "significant_neg": false,
+          "significant_pos": true,
+          "win_pct": 71.0
+        },
+        "1~2%": {
+          "n": 230,
+          "mean_pct": 1.022,
+          "ci95_pct": [
+            0.54,
+            1.546
+          ],
+          "significant_neg": false,
+          "significant_pos": true,
+          "win_pct": 55.2
+        },
+        "2~5%": {
+          "n": 366,
+          "mean_pct": -0.046,
+          "ci95_pct": [
+            -0.503,
+            0.445
+          ],
+          "significant_neg": false,
+          "significant_pos": false,
+          "win_pct": 33.9
+        },
+        ">5%": {
+          "n": 296,
+          "mean_pct": -5.169,
+          "ci95_pct": [
+            -5.917,
+            -4.465
+          ],
+          "significant_neg": true,
+          "significant_pos": false,
+          "win_pct": 16.2
+        },
+        "折价 <0%": {
+          "n": 323,
+          "mean_pct": 2.229,
+          "ci95_pct": [
+            1.9,
+            2.577
+          ],
+          "significant_neg": false,
+          "significant_pos": true,
+          "win_pct": 82.0
+        }
+      },
+      "by_year": {
+        "2020": {
+          "lt2": {
+            "n": 56,
+            "mean_pct": 7.347
+          },
+          "2-5": {
+            "n": 37,
+            "mean_pct": 5.093
+          },
+          "gt5": {
+            "n": 146,
+            "mean_pct": -8.334
+          }
+        },
+        "2021": {
+          "lt2": {
+            "n": 232,
+            "mean_pct": 0.217
+          }
+        },
+        "2022": {
+          "lt2": {
+            "n": 170,
+            "mean_pct": 1.051
+          },
+          "2-5": {
+            "n": 68,
+            "mean_pct": -1.922
+          }
+        },
+        "2023": {
+          "2-5": {
+            "n": 46,
+            "mean_pct": -2.566
+          },
+          "lt2": {
+            "n": 194,
+            "mean_pct": 0.895
+          }
+        },
+        "2024": {
+          "2-5": {
+            "n": 101,
+            "mean_pct": -0.563
+          },
+          "lt2": {
+            "n": 121,
+            "mean_pct": 2.697
+          },
+          "gt5": {
+            "n": 20,
+            "mean_pct": -4.272
+          }
+        },
+        "2025": {
+          "gt5": {
+            "n": 81,
+            "mean_pct": -2.888
+          },
+          "2-5": {
+            "n": 65,
+            "mean_pct": -0.842
+          },
+          "lt2": {
+            "n": 97,
+            "mean_pct": 3.845
+          }
+        },
+        "2026": {
+          "gt5": {
+            "n": 44,
+            "mean_pct": 0.778
+          },
+          "2-5": {
+            "n": 38,
+            "mean_pct": 4.94
+          }
+        }
+      },
+      "fx_link": {
+        "corr_prem_vs_fx20d": -0.2018,
+        "n": 1576,
+        "by_bucket": {
+          "lt2": {
+            "n": 874,
+            "mean_pp": 0.191,
+            "median_pp": 0.022
+          },
+          "2-5": {
+            "n": 369,
+            "mean_pp": -0.109,
+            "median_pp": -0.157
+          },
+          "gt5": {
+            "n": 333,
+            "mean_pp": -0.494,
+            "median_pp": -0.62
+          }
+        }
+      }
+    },
+    "513500": {
+      "code": "513500",
+      "name": "博时标普",
+      "n_days": 1581,
+      "start": "2020-01-03",
+      "end": "2026-08-11",
+      "prem_median_pct": 0.818,
+      "prem_p90_pct": 6.145,
+      "share_gt5_pct": 14.2,
+      "share_lt2_pct": 64.7,
+      "ar1_phi": 0.8177,
+      "half_life_days": 3.44,
+      "buckets_with_ci": {
+        "1~2%": {
+          "n": 189,
+          "mean_pct": 0.617,
+          "ci95_pct": [
+            0.191,
+            1.062
+          ],
+          "significant_neg": false,
+          "significant_pos": true,
+          "win_pct": 44.4
+        },
+        "折价 <0%": {
+          "n": 465,
+          "mean_pct": 1.165,
+          "ci95_pct": [
+            1.016,
+            1.316
+          ],
+          "significant_neg": false,
+          "significant_pos": true,
+          "win_pct": 79.1
+        },
+        "0~1%": {
+          "n": 367,
+          "mean_pct": 0.627,
+          "ci95_pct": [
+            0.402,
+            0.851
+          ],
+          "significant_neg": false,
+          "significant_pos": true,
+          "win_pct": 53.1
+        },
+        "2~5%": {
+          "n": 303,
+          "mean_pct": 0.126,
+          "ci95_pct": [
+            -0.22,
+            0.481
+          ],
+          "significant_neg": false,
+          "significant_pos": false,
+          "win_pct": 49.5
+        },
+        ">5%": {
+          "n": 197,
+          "mean_pct": -3.758,
+          "ci95_pct": [
+            -4.244,
+            -3.297
+          ],
+          "significant_neg": true,
+          "significant_pos": false,
+          "win_pct": 11.7
+        }
+      },
+      "by_year": {
+        "2020": {
+          "lt2": {
+            "n": 187,
+            "mean_pct": 0.324
+          },
+          "2-5": {
+            "n": 27,
+            "mean_pct": -3.988
+          },
+          "gt5": {
+            "n": 20,
+            "mean_pct": -8.808
+          }
+        },
+        "2021": {
+          "lt2": {
+            "n": 230,
+            "mean_pct": 0.072
+          }
+        },
+        "2022": {
+          "lt2": {
+            "n": 219,
+            "mean_pct": 0.178
+          }
+        },
+        "2023": {
+          "lt2": {
+            "n": 220,
+            "mean_pct": 1.025
+          },
+          "2-5": {
+            "n": 22,
+            "mean_pct": -1.884
+          }
+        },
+        "2024": {
+          "lt2": {
+            "n": 40,
+            "mean_pct": 3.977
+          },
+          "2-5": {
+            "n": 137,
+            "mean_pct": 1.686
+          },
+          "gt5": {
+            "n": 65,
+            "mean_pct": -3.262
+          }
+        },
+        "2025": {
+          "gt5": {
+            "n": 74,
+            "mean_pct": -3.512
+          },
+          "2-5": {
+            "n": 48,
+            "mean_pct": -0.873
+          },
+          "lt2": {
+            "n": 121,
+            "mean_pct": 3.031
+          }
+        },
+        "2026": {
+          "gt5": {
+            "n": 38,
+            "mean_pct": -2.424
+          },
+          "2-5": {
+            "n": 44,
+            "mean_pct": 1.598
+          }
+        }
+      },
+      "fx_link": {
+        "corr_prem_vs_fx20d": -0.0843,
+        "n": 1561,
+        "by_bucket": {
+          "lt2": {
+            "n": 1023,
+            "mean_pp": 0.036,
+            "median_pp": -0.122
+          },
+          "2-5": {
+            "n": 324,
+            "mean_pp": 0.045,
+            "median_pp": -0.014
+          },
+          "gt5": {
+            "n": 214,
+            "mean_pp": -0.422,
+            "median_pp": -0.599
+          }
+        }
+      }
+    },
+    "159941": {
+      "code": "159941",
+      "name": "广发纳指",
+      "n_days": 1596,
+      "start": "2020-01-08",
+      "end": "2026-08-11",
+      "prem_median_pct": 1.136,
+      "prem_p90_pct": 6.261,
+      "share_gt5_pct": 14.3,
+      "share_lt2_pct": 62.4,
+      "ar1_phi": 0.7572,
+      "half_life_days": 2.49,
+      "buckets_with_ci": {
+        "折价 <0%": {
+          "n": 433,
+          "mean_pct": 2.507,
+          "ci95_pct": [
+            2.159,
+            2.868
+          ],
+          "significant_neg": false,
+          "significant_pos": true,
+          "win_pct": 84.8
+        },
+        "1~2%": {
+          "n": 234,
+          "mean_pct": 0.473,
+          "ci95_pct": [
+            0.124,
+            0.848
+          ],
+          "significant_neg": false,
+          "significant_pos": true,
+          "win_pct": 50.9
+        },
+        "0~1%": {
+          "n": 329,
+          "mean_pct": 1.348,
+          "ci95_pct": [
+            1.045,
+            1.633
+          ],
+          "significant_neg": false,
+          "significant_pos": true,
+          "win_pct": 65.0
+        },
+        "2~5%": {
+          "n": 367,
+          "mean_pct": -1.055,
+          "ci95_pct": [
+            -1.387,
+            -0.682
+          ],
+          "significant_neg": true,
+          "significant_pos": false,
+          "win_pct": 26.7
+        },
+        ">5%": {
+          "n": 173,
+          "mean_pct": -4.961,
+          "ci95_pct": [
+            -5.614,
+            -4.353
+          ],
+          "significant_neg": true,
+          "significant_pos": false,
+          "win_pct": 6.4
+        }
+      },
+      "by_year": {
+        "2020": {
+          "lt2": {
+            "n": 136,
+            "mean_pct": 3.575
+          },
+          "2-5": {
+            "n": 48,
+            "mean_pct": -4.345
+          },
+          "gt5": {
+            "n": 55,
+            "mean_pct": -9.433
+          }
+        },
+        "2021": {
+          "lt2": {
+            "n": 233,
+            "mean_pct": 0.23
+          }
+        },
+        "2022": {
+          "lt2": {
+            "n": 183,
+            "mean_pct": 0.897
+          },
+          "2-5": {
+            "n": 54,
+            "mean_pct": -1.67
+          }
+        },
+        "2023": {
+          "2-5": {
+            "n": 42,
+            "mean_pct": -2.431
+          },
+          "lt2": {
+            "n": 200,
+            "mean_pct": 0.858
+          }
+        },
+        "2024": {
+          "2-5": {
+            "n": 95,
+            "mean_pct": -0.97
+          },
+          "lt2": {
+            "n": 132,
+            "mean_pct": 2.726
+          }
+        },
+        "2025": {
+          "gt5": {
+            "n": 81,
+            "mean_pct": -3.28
+          },
+          "2-5": {
+            "n": 58,
+            "mean_pct": -1.501
+          },
+          "lt2": {
+            "n": 104,
+            "mean_pct": 3.267
+          }
+        },
+        "2026": {
+          "2-5": {
+            "n": 60,
+            "mean_pct": 3.787
+          }
+        }
+      },
+      "fx_link": {
+        "corr_prem_vs_fx20d": -0.1867,
+        "n": 1576,
+        "by_bucket": {
+          "lt2": {
+            "n": 996,
+            "mean_pp": 0.135,
+            "median_pp": -0.017
+          },
+          "2-5": {
+            "n": 372,
+            "mean_pp": -0.144,
+            "median_pp": -0.218
+          },
+          "gt5": {
+            "n": 208,
+            "mean_pp": -0.568,
+            "median_pp": -0.629
+          }
+        }
+      }
+    },
+    "513650": {
+      "code": "513650",
+      "name": "南方标普",
+      "n_days": 813,
+      "start": "2023-04-04",
+      "end": "2026-08-11",
+      "prem_median_pct": 1.1,
+      "prem_p90_pct": 4.333,
+      "share_gt5_pct": 5.4,
+      "share_lt2_pct": 63.2,
+      "ar1_phi": 0.7489,
+      "half_life_days": 2.4,
+      "buckets_with_ci": {
+        "0~1%": {
+          "n": 210,
+          "mean_pct": 1.52,
+          "ci95_pct": [
+            1.236,
+            1.807
+          ],
+          "significant_neg": false,
+          "significant_pos": true,
+          "win_pct": 69.5
+        },
+        "折价 <0%": {
+          "n": 181,
+          "mean_pct": 1.765,
+          "ci95_pct": [
+            1.479,
+            2.048
+          ],
+          "significant_neg": false,
+          "significant_pos": true,
+          "win_pct": 87.8
+        },
+        "1~2%": {
+          "n": 113,
+          "mean_pct": 0.632,
+          "ci95_pct": [
+            0.287,
+            1.013
+          ],
+          "significant_neg": false,
+          "significant_pos": true,
+          "win_pct": 61.9
+        },
+        "2~5%": {
+          "n": 213,
+          "mean_pct": -1.436,
+          "ci95_pct": [
+            -1.694,
+            -1.171
+          ],
+          "significant_neg": true,
+          "significant_pos": false,
+          "win_pct": 26.8
+        },
+        ">5%": {
+          "n": 36,
+          "mean_pct": -3.552,
+          "ci95_pct": [
+            -4.202,
+            -2.893
+          ],
+          "significant_neg": true,
+          "significant_pos": false,
+          "win_pct": 2.8
+        }
+      },
+      "by_year": {
+        "2023": {
+          "lt2": {
+            "n": 181,
+            "mean_pct": 0.348
+          }
+        },
+        "2024": {
+          "lt2": {
+            "n": 145,
+            "mean_pct": 2.053
+          },
+          "2-5": {
+            "n": 91,
+            "mean_pct": -1.193
+          }
+        },
+        "2025": {
+          "gt5": {
+            "n": 25,
+            "mean_pct": -3.238
+          },
+          "2-5": {
+            "n": 70,
+            "mean_pct": -1.829
+          },
+          "lt2": {
+            "n": 148,
+            "mean_pct": 1.694
+          }
+        },
+        "2026": {
+          "2-5": {
+            "n": 51,
+            "mean_pct": -1.315
+          },
+          "lt2": {
+            "n": 30,
+            "mean_pct": 3.286
+          }
+        }
+      },
+      "fx_link": {
+        "corr_prem_vs_fx20d": -0.3246,
+        "n": 793,
+        "by_bucket": {
+          "lt2": {
+            "n": 514,
+            "mean_pp": 0.178,
+            "median_pp": 0.059
+          },
+          "2-5": {
+            "n": 242,
+            "mean_pp": -0.412,
+            "median_pp": -0.493
+          },
+          "gt5": {
+            "n": 37,
+            "mean_pp": -0.712,
+            "median_pp": -0.759
+          }
+        }
+      }
+    }
+  },
+  "pricing": {
+    "current_premium": {
+      "ndx_min": 0.0924,
+      "spx_min": 0.0635
+    },
+    "wait_expected_saving_ndx": [
+      {
+        "wait_days": 0,
+        "expected_prem_pct": 9.24,
+        "expected_saving_pp": 0.0
+      },
+      {
+        "wait_days": 1,
+        "expected_prem_pct": 8.039,
+        "expected_saving_pp": 1.201
+      },
+      {
+        "wait_days": 5,
+        "expected_prem_pct": 4.607,
+        "expected_saving_pp": 4.633
+      },
+      {
+        "wait_days": 10,
+        "expected_prem_pct": 2.297,
+        "expected_saving_pp": 6.943
+      },
+      {
+        "wait_days": 15,
+        "expected_prem_pct": 1.145,
+        "expected_saving_pp": 8.095
+      },
+      {
+        "wait_days": 20,
+        "expected_prem_pct": 0.571,
+        "expected_saving_pp": 8.669
+      }
+    ],
+    "wait_expected_saving_spx": [
+      {
+        "wait_days": 0,
+        "expected_prem_pct": 6.35,
+        "expected_saving_pp": 0.0
+      },
+      {
+        "wait_days": 1,
+        "expected_prem_pct": 5.191,
+        "expected_saving_pp": 1.159
+      },
+      {
+        "wait_days": 5,
+        "expected_prem_pct": 2.319,
+        "expected_saving_pp": 4.031
+      },
+      {
+        "wait_days": 10,
+        "expected_prem_pct": 0.847,
+        "expected_saving_pp": 5.503
+      },
+      {
+        "wait_days": 15,
+        "expected_prem_pct": 0.309,
+        "expected_saving_pp": 6.041
+      },
+      {
+        "wait_days": 20,
+        "expected_prem_pct": 0.113,
+        "expected_saving_pp": 6.237
+      }
+    ],
+    "s6_channel_cost_pp_year": {
+      "assumption": "假设一年有 3 个月场内溢价 >5%，平均 8%，若被迫定投则每月 8% 亏损、20 日后回落 2.2pp",
+      "cost_estimate_pp": 1.45,
+      "note": "换到美股账户可完全避免这部分税，加汇率成本 <0.3%"
+    }
+  }
+}
