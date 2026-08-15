@@ -11,10 +11,11 @@
 #     c@qq.com qdii,us     两个策略都收，但仍只在有机会时发
 #     d@qq.com all         两个都收 + 每次跑都发（运维/自查）
 # SMTP 账号/授权码在 qdii_email.env（勿提交）
-# 定时：中国时间约 09:30（见 daily_*_cron.sh）
+# 定时（中国时间，见 daily_*_cron.sh）：QDII 工作日 11:00 与 14:00；美股回撤 周二~周六 09:30
 
 120673235@qq.com  all
-1447024819@qq.com  us
-946815268@qq.com us
-411346815@qq.com  qdii
-lianjuncaidayu@126.com us
+
+#1447024819@qq.com  us
+#946815268@qq.com us
+#411346815@qq.com  qdii
+#lianjuncaidayu@126.com us
