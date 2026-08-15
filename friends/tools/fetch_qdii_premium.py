@@ -565,7 +565,7 @@ def render_email(payload: dict[str, Any], cfg: dict[str, Any]) -> tuple[str, str
         if not b:
             continue
         lines.append(
-            f"{g}: {b['code']} {b['name']} | 溢价 {b['premium_pct']}% | "
+            f"{g}: {b['code']} {b.get('manager') or ''} | 溢价 {b['premium_pct']}% | "
             f"合计费率 {b.get('fee_total_pct')}%/年 | 市值 {b.get('market_cap_yi')}亿 | {b['signal']}"
         )
     if cheapest:
@@ -575,7 +575,7 @@ def render_email(payload: dict[str, Any], cfg: dict[str, Any]) -> tuple[str, str
             if not c:
                 continue
             lines.append(
-                f"{g}: {c['code']} {c['name']} | 管理费 {c.get('fee_mgmt_pct')}% + 托管 {c.get('fee_custody_pct')}% "
+                f"{g}: {c['code']} {c.get('manager') or ''} | 管理费 {c.get('fee_mgmt_pct')}% + 托管 {c.get('fee_custody_pct')}% "
                 f"= {c.get('fee_total_pct')}%/年 | 当前溢价 {c['premium_pct']}%"
             )
     lines += ["", "—— 全部标的（按溢价升序）——"]
@@ -590,7 +590,7 @@ def render_email(payload: dict[str, Any], cfg: dict[str, Any]) -> tuple[str, str
         lines += ["", "★ 当前可投（溢价<2%）："]
         for r in buys:
             lines.append(
-                f"  {r['code']} {r['name']} 溢价 {r['premium_pct']}% 市值 {r.get('market_cap_yi')}亿"
+                f"  {r['group']} {r['code']} {r.get('manager') or ''} 溢价 {r['premium_pct']}% 市值 {r.get('market_cap_yi')}亿"
             )
     else:
         lines += ["", "当前无「可投」信号（全部溢价≥2%）。"]
@@ -602,11 +602,11 @@ def render_email(payload: dict[str, Any], cfg: dict[str, Any]) -> tuple[str, str
             "#c27803" if (prem is not None and prem >= 2) else "#057a55"
         )
         # 不列参考净值与管理费：溢价已含净值信息（现价/净值−1），费率决策只看合计。
-        # 公司名是「名称」的后缀（如 纳指ETF嘉实），不再单列。
+        # 用公司名而非基金全名：「分组」已经说明跟的是哪个指数，全名只是第三次重复。
         return (
             f"<tr>"
             f"<td>{r.get('group')}</td><td><b>{r.get('code')}</b></td>"
-            f"<td>{r.get('name')}</td>"
+            f"<td>{r.get('manager') or ''}</td>"
             f"<td>{r.get('price')}</td>"
             f"<td style='color:{color};font-weight:700'>{prem}%</td>"
             f"<td>{r.get('signal')}</td><td>{r.get('market_cap_yi')}</td>"
@@ -615,12 +615,12 @@ def render_email(payload: dict[str, Any], cfg: dict[str, Any]) -> tuple[str, str
         )
 
     best_html = "".join(
-        f"<li><b>{g}</b>：{b['code']} {b['name']} · 溢价 <b>{b['premium_pct']}%</b> · "
+        f"<li><b>{g}</b>：{b['code']} {b.get('manager') or ''} · 溢价 <b>{b['premium_pct']}%</b> · "
         f"合计费率 {b.get('fee_total_pct')}%/年 · 市值 {b.get('market_cap_yi')}亿 · {b['signal']}</li>"
         for g in groups_order if (b := best.get(g))
     )
     cheap_html = "".join(
-        f"<li><b>{g}</b>：{c['code']} {c['name']} · 管理费 {c.get('fee_mgmt_pct')}% + 托管 "
+        f"<li><b>{g}</b>：{c['code']} {c.get('manager') or ''} · 管理费 {c.get('fee_mgmt_pct')}% + 托管 "
         f"{c.get('fee_custody_pct')}% = <b>{c.get('fee_total_pct')}%/年</b> · 当前溢价 {c['premium_pct']}%</li>"
         for g in groups_order if (c := cheapest.get(g))
     )
@@ -633,7 +633,7 @@ def render_email(payload: dict[str, Any], cfg: dict[str, Any]) -> tuple[str, str
 {cheap_block}
 <table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;font-size:13px">
 <thead style="background:#fef2f2"><tr>
-<th>分组</th><th>代码</th><th>名称</th><th>现价</th>
+<th>分组</th><th>代码</th><th>公司</th><th>现价</th>
 <th>溢价%</th><th>信号</th><th>市值亿</th><th>合计费率%</th>
 </tr></thead>
 <tbody>
