@@ -25,6 +25,12 @@ friends/tools/qdii_fees_cache.json
 # QDII 量化回测：cron 每周重跑，页面读不到时回退 qdii-quant.sample.json
 friends/qdii-quant.json
 
+# QDII 溢价曲线：cron 每日重算，HTML 把数据内联进去了（便于单文件转发），
+# 所以两个产物都不入库，避免 git pull 冲突。新环境跑一次
+# `python3 friends/tools/build_qdii_premium_curve.py` 即可生成。
+friends/qdii-premium-curve.json
+friends/qdii-premium-curve.html
+
 # 美股回撤阶梯监控：由服务器 cron 每日刷新，避免 git pull 覆盖
 friends/us-dip-signal.json
 

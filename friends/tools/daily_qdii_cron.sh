@@ -5,7 +5,8 @@
 #   1. 拉取东财最新溢价与管理费/托管费 → 写入 friends/qdii-premium.json（供监控页读取）
 #   2. 刷新长期走势对比 → friends/qdii-history.json（供 qdii-vs-us.html 读取；失败不影响主流程）
 #   3. 每周一重跑量化回测 → friends/qdii-quant.json（供 qdii-quant.html 读取；失败不影响主流程）
-#   4. 若配置了 qdii_email.env 且 EMAIL_ENABLED=true → 发邮件
+#   4. 重算 5 只纳指 QDII 近三年逐日溢价曲线 → friends/qdii-premium-curve.{json,html}（自包含页）
+#   5. 若配置了 qdii_email.env 且 EMAIL_ENABLED=true → 发邮件
 #
 # 安装到服务器 crontab：
 #   ⚠ 服务器系统时区是 UTC。crontab 数字按 UTC 解释；
@@ -69,6 +70,20 @@ if [[ "${DAILY_QDII_QUANT:-auto}" != "0" ]]; then
       echo "[warn] qdii_quant 刷新失败（页面会回退 qdii-quant.sample.json）："
       tail -n 6 /tmp/qdii_quant.out
     fi
+  fi
+fi
+
+# 溢价曲线页：补最近几天的行情/净值再重算（无重型计算，十几秒；失败不影响主流程）
+if [[ "${DAILY_QDII_CURVE:-1}" != "0" ]]; then
+  {
+    python3 "$ROOT/friends/tools/topup_price_tail.py" &&
+    python3 "$ROOT/friends/tools/build_qdii_premium_curve.py"
+  } >/tmp/qdii_curve.out 2>&1
+  if [[ $? -eq 0 ]]; then
+    tail -n 3 /tmp/qdii_curve.out
+  else
+    echo "[warn] 溢价曲线刷新失败（页面沿用上次生成的结果）："
+    tail -n 6 /tmp/qdii_curve.out
   fi
 fi
 

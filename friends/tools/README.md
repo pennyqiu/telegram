@@ -91,8 +91,9 @@ flowchart TB
 | 09:30 周二–周六 | `daily_us_dip_cron.sh` | `fetch_us_dip.py` | `us-dip-signal.json` → `us-dip.html` |
 | 09:35 周一–周五 | `daily_qdii_cron.sh` | `fetch_qdii_premium.py` | `qdii-premium.json` → `qdii-monitor.html` |
 | 同上（附带） | 同上 | `fetch_qdii_history.py` | `qdii-history.json` → `qdii-vs-us.html` |
+| 同上（附带） | 同上 | `topup_price_tail.py` + `build_qdii_premium_curve.py` | `qdii-premium-curve.json` + 自包含的 `qdii-premium-curve.html` |
 
-错开 5 分钟是为了避免两个任务抢数据源。`fetch_qdii_history.py` 是慢变量且依赖 Yahoo，失败只记日志、不影响主流程。
+错开 5 分钟是为了避免两个任务抢数据源。`fetch_qdii_history.py` 是慢变量且依赖 Yahoo，失败只记日志、不影响主流程。溢价曲线那一步不联网做重活（补数十几秒 + 纯本地计算），失败时页面沿用上次结果。
 
 手动试跑与安装命令写在两个 `.sh` 的头部注释里，包括 `--email-force` 强制发一封。
 
@@ -112,6 +113,8 @@ flowchart TB
 | `backtest_qdii_true_premium.py` | 真溢价（估算净值口径）+ 净值滞后经验判定 + 新旧信号对比 | ✅ 现役 |
 | `qdii_quant.py` | 场内 QDII 择时 14 条 + 选券 7 条 + 溢价证据 + 滚动窗口 + 执行层（门槛×等待上限扫描、分散、再平衡），已用真溢价口径 | ✅ 现役，周更 `qdii-quant.json` |
 | `fetch_qdii_quant_data.py` | 上面那个的数据层：16 只的后复权价/不复权价/单位净值/累计净值 + QQQ/SPY/汇率/510880 | ✅ 现役 |
+| `build_qdii_premium_curve.py` | 5 只纳指 QDII 近三年逐日溢价曲线，两个口径都算，直接产出自包含 HTML（数据内联，可转发） | ✅ 现役，日更 |
+| `topup_price_tail.py` | 东财 kline 限流时的兜底补数：腾讯（A股）/新浪（美股）补尾部 + pingzhongdata 覆盖净值 | ✅ 现役 |
 | `backtest_us_dip.py` | 旧的单起点阶梯回测 | ⚠️ 已弃用，四个缺陷见文件头 |
 | `backtest_qdii_premium.py` | 旧的披露净值溢价回测 | ⚠️ 口径有偏，只能看趋势 |
 | `fetch_qdii_history.py` | QDII 长期收益拆解（标的收益 + 汇率 − 费率 − 跟踪误差） | 🟡 骨架在，右边各项还没逐项量化 |
@@ -130,6 +133,9 @@ python backtest_dip_sweep.py --report .bt_cache/sweep.txt
 
 # QDII 真溢价 + 新旧对比
 python backtest_qdii_true_premium.py --start 20250101 --report .bt_cache/tp.txt
+
+# 5 只纳指 QDII 溢价曲线页（先补数，再算；补数失败时也能用已有 CSV 直接算）
+python topup_price_tail.py && python build_qdii_premium_curve.py
 ```
 
 Windows 控制台是 GBK 会把中文显示成乱码，所有脚本都支持 `--report` 输出 UTF-8 文本文件，看那个文件即可。
@@ -175,6 +181,8 @@ Windows 控制台是 GBK 会把中文显示成乱码，所有脚本都支持 `--
 修正后的影响：均值几乎不动（差 0.06pp），但**单日信号有 3.9%~13.4% 的交易日是错的**（16 只标的的中位约 9.5%；各标的 9~28 天假绿灯 + 6~25 天漏买，共 388 个交易日），且**偏差在高波动期最大**——恰好是最想加仓的时候。另外旧口径最深"折价" −9.35% 全是假的，真实最深折价只有 −1.62%。
 
 顺带的市场事实：即使每天挑同组最便宜的那只，纳指组真溢价中位 **2.44%**、标普组 **1.85%**，可投日（<2%）只占 45%/52%。有美股账户的话，直接买 QQQ/VOO 优于走 QDII 通道。
+
+**推论（`build_qdii_premium_curve.py` 上验证）：口径只影响"能不能买"，不影响"买哪一只"。** 同组标的判定出的净值参考时点相同，当天的折算因子就是同一个数，等于给各只净值乘同一常数 —— 溢价高低的排序因此完全不变。5 只纳指 QDII 近三年 675 个交易日里，"当日最便宜"的天数占比两个口径逐只完全相等（42.2% / 13.3% / 12.9% / 8.9% / 22.7%）。所以横向挑标的直接用 App 上的溢价即可，只有对着 2% 门槛做绝对判断时才必须修隔夜噪音。
 
 ### 5.2 回撤阶梯赚不到钱（SPY，2001–2026，187 个 10 年滚动起点）
 
