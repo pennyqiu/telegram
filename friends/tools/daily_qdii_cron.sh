@@ -11,10 +11,13 @@
 # 安装到服务器 crontab：
 #   ⚠ 服务器系统时区是 UTC。crontab 数字按 UTC 解释；
 #     命令前的 TZ=Asia/Shanghai 只影响脚本内部时间，不改触发时刻。
-#   北京 09:35 = UTC 01:35（工作日，错开 us-dip 的 01:30 UTC；用上一交易日收盘溢价）
+#   A 股盘中跑两次（工作日），这时 IOPV 与现价都是实时的，溢价可直接用于当天下单：
+#     北京 11:00 = UTC 03:00 → 全量（溢价 + 历史 + 周一量化 + 溢价曲线）
+#     北京 14:00 = UTC 06:00 → --light，只刷溢价 JSON + 邮件
 #   chmod +x /app/telegram/friends/tools/daily_qdii_cron.sh
 #   (crontab -l 2>/dev/null | grep -v 'daily_qdii_cron.sh'; \
-#     echo "35 1 * * 1-5 TZ=Asia/Shanghai /app/telegram/friends/tools/daily_qdii_cron.sh >> /var/log/qdii-premium.log 2>&1") | crontab -
+#     echo "0 3 * * 1-5 TZ=Asia/Shanghai /app/telegram/friends/tools/daily_qdii_cron.sh >> /var/log/qdii-premium.log 2>&1"; \
+#     echo "0 6 * * 1-5 TZ=Asia/Shanghai /app/telegram/friends/tools/daily_qdii_cron.sh --light >> /var/log/qdii-premium.log 2>&1") | crontab -
 #   crontab -l
 #
 # 邮件配置：
@@ -27,22 +30,35 @@
 # 手动试跑：
 #   ./friends/tools/daily_qdii_cron.sh
 #   ./friends/tools/daily_qdii_cron.sh --email-force   # 强制发一封（含 us/qdii 机会收件人）
+#   ./friends/tools/daily_qdii_cron.sh --light         # 只刷溢价 JSON + 邮件
 
 set -uo pipefail
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 cd "$ROOT"
 
 EXTRA_ARGS=()
+LIGHT=0
 for a in "$@"; do
+  # --light 由本脚本消费，不传给 python
+  if [[ "$a" == "--light" ]]; then
+    LIGHT=1
+    continue
+  fi
   EXTRA_ARGS+=("$a")
 done
+
+# 慢变量（长期走势、量化回测、溢价曲线）一天刷一次够了，盘中第二次运行只要溢价与邮件。
+# 用 := 赋值，显式传入的 DAILY_QDII_* 仍然优先。
+if [[ "$LIGHT" == "1" ]]; then
+  : "${DAILY_QDII_HISTORY:=0}" "${DAILY_QDII_QUANT:=0}" "${DAILY_QDII_CURVE:=0}"
+fi
 
 # 默认带 --email；若只想刷新 JSON：DAILY_QDII_EMAIL=0 ./daily_qdii_cron.sh
 if [[ "${DAILY_QDII_EMAIL:-1}" != "0" ]]; then
   EXTRA_ARGS+=(--email)
 fi
 
-echo "[$(date '+%Y-%m-%d %H:%M:%S %Z')] daily_qdii_cron start ROOT=$ROOT"
+echo "[$(date '+%Y-%m-%d %H:%M:%S %Z')] daily_qdii_cron start ROOT=$ROOT light=$LIGHT"
 # 空数组在 bash 3.2 + set -u 下会报 unbound variable（DAILY_QDII_EMAIL=0 且无参数时）
 python3 "$ROOT/friends/tools/fetch_qdii_premium.py" ${EXTRA_ARGS[@]+"${EXTRA_ARGS[@]}"}
 rc=$?

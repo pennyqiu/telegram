@@ -89,11 +89,14 @@ flowchart TB
 | 北京时间 | 触发 | 脚本 | 产物 → 页面 |
 |---|---|---|---|
 | 09:30 周二–周六 | `daily_us_dip_cron.sh` | `fetch_us_dip.py` | `us-dip-signal.json` → `us-dip.html` |
-| 09:35 周一–周五 | `daily_qdii_cron.sh` | `fetch_qdii_premium.py` | `qdii-premium.json` → `qdii-monitor.html` |
+| 11:00 周一–周五 | `daily_qdii_cron.sh` | `fetch_qdii_premium.py` | `qdii-premium.json` → `qdii-monitor.html` |
 | 同上（附带） | 同上 | `fetch_qdii_history.py` | `qdii-history.json` → `qdii-vs-us.html` |
 | 同上（附带） | 同上 | `topup_price_tail.py` + `build_qdii_premium_curve.py` | `qdii-premium-curve.json` + 自包含的 `qdii-premium-curve.html` |
+| 14:00 周一–周五 | `daily_qdii_cron.sh --light` | `fetch_qdii_premium.py` | 同上，只刷溢价 JSON 与邮件 |
 
-错开 5 分钟是为了避免两个任务抢数据源。`fetch_qdii_history.py` 是慢变量且依赖 Yahoo，失败只记日志、不影响主流程。溢价曲线那一步不联网做重活（补数十几秒 + 纯本地计算），失败时页面沿用上次结果。
+QDII 两次都落在 A 股连续竞价时段（11:00 距午休前 30 分钟、14:00 距收盘 1 小时），现价与 IOPV 都是实时的，邮件里的溢价可以直接拿来下单；`--light` 让第二次跳过历史/量化/曲线，避免慢变量一天算两遍。us-dip 用的是前一晚美股收盘，跟 QDII 已经错开几小时，不会抢数据源。`fetch_qdii_history.py` 是慢变量且依赖 Yahoo，失败只记日志、不影响主流程。溢价曲线那一步不联网做重活（补数十几秒 + 纯本地计算），失败时页面沿用上次结果。
+
+> 曲线用的日线尾部在盘中抓到的是快照而非收盘价，`topup_price_tail.py` 会在次日运行时覆盖重叠日修正——这一点与之前 09:35 跑时相同，没有变化。
 
 手动试跑与安装命令写在两个 `.sh` 的头部注释里，包括 `--email-force` 强制发一封。
 

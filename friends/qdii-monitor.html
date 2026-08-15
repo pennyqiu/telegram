@@ -119,7 +119,7 @@
 
   <p class="note">
     数据：东财 <b>f441=参考净值</b>、<b>f402=折价率</b>（溢价=−折价率）、<b>f20=总市值</b>；<b>管理费/托管费</b>取自东财基金概况页（每日抓取，缓存于 <code>friends/tools/qdii_fees_cache.json</code>）。费率不含指数许可费、申赎与交易佣金等隐性成本，实际差距可能略大于表中数字。非投资建议。<br>
-    <b>每日刷新：</b>服务器 cron（北京约 09:35 = UTC 01:35，工作日）跑 <code>friends/tools/daily_qdii_cron.sh</code> 更新 JSON；邮件：<code>all</code> 每次都发、<code>qdii</code> 仅可投机会时发（<code>qdii_email_recipients.txt</code>）。<br>
+    <b>每日刷新：</b>服务器 cron（北京 11:00 与 14:00，工作日，均在 A 股盘中）跑 <code>friends/tools/daily_qdii_cron.sh</code> 更新 JSON；邮件：<code>all</code> 每次都发、<code>qdii</code> 仅可投机会时发（<code>qdii_email_recipients.txt</code>）。<br>
     <b>收件人（git）：</b><code>friends/tools/qdii_email_recipients.txt</code> —— 一行一个邮箱，push 后定向推送。<br>
     <b>监控标的（git）：</b><code>friends/tools/qdii_watchlist.json</code>。<br>
     手动：<code>python3 friends/tools/fetch_qdii_premium.py --email</code> ·
