@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>40岁起 · 每年10万 · 激进版大陆ETF定投策略（含历史回测）</title>
+<style>
+  :root{
+    --accent:#ea580c;--accent-dark:#9a3412;--accent-light:#fff7ed;
+    --primary:#1a56db;--primary-light:#ebf5ff;
+    --success:#057a55;--success-light:#def7ec;
+    --warning:#c27803;--warning-light:#fdf6b2;
+    --danger:#c81e1e;--danger-light:#fde8e8;
+    --purple:#7e3af2;--purple-light:#edebfe;
+    --gray-50:#f9fafb;--gray-100:#f3f4f6;--gray-200:#e5e7eb;--gray-300:#d1d5db;
+    --gray-400:#9ca3af;--gray-500:#6b7280;--gray-600:#4b5563;--gray-700:#374151;
+    --gray-800:#1f2937;--gray-900:#111827;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hiragino Sans GB',sans-serif;background:var(--gray-50);color:var(--gray-800);line-height:1.75;}
+  .wrap{max-width:920px;margin:0 auto;padding:24px 20px 64px;}
+  .backlink{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--accent);text-decoration:none;font-weight:600;margin-bottom:16px;}
+  .backlink:hover{text-decoration:underline;}
+  .hero{background:linear-gradient(135deg,var(--accent),#9a3412);color:#fff;border-radius:18px;padding:30px;box-shadow:0 12px 30px rgba(234,88,12,.22);}
+  .hero .eyebrow{font-size:12px;font-weight:700;letter-spacing:.06em;opacity:.9;}
+  .hero h1{font-size:25px;font-weight:900;margin:6px 0 12px;}
+  .hero .stats{display:flex;flex-wrap:wrap;gap:22px;margin-top:6px;}
+  .hero .stat .n{font-size:21px;font-weight:800;}
+  .hero .stat .l{font-size:12px;opacity:.88;}
+  h2{font-size:19px;font-weight:800;color:var(--accent-dark);margin:34px 0 12px;padding-bottom:7px;border-bottom:2px solid var(--gray-100);display:flex;align-items:center;gap:9px;}
+  h2::before{content:'';display:block;width:4px;height:19px;border-radius:2px;background:var(--accent);}
+  h3{font-size:16px;font-weight:800;color:var(--accent-dark);margin:22px 0 8px;}
+  p{margin-bottom:12px;font-size:15px;color:var(--gray-700);}
+  .info-box{border-radius:10px;padding:14px 18px;margin:18px 0;border-left:4px solid;font-size:14px;}
+  .info-box.orange{background:var(--accent-light);border-color:var(--accent);color:#9a3412;}
+  .info-box.blue{background:var(--primary-light);border-color:var(--primary);color:#1e429f;}
+  .info-box.green{background:var(--success-light);border-color:var(--success);color:#03543f;}
+  .info-box.yellow{background:var(--warning-light);border-color:var(--warning);color:#92400e;}
+  .info-box.red{background:var(--danger-light);border-color:var(--danger);color:#9b1c1c;}
+  .info-box.purple{background:var(--purple-light);border-color:var(--purple);color:#4a1d96;}
+  .info-box b{font-weight:800;}
+  .stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:16px 0;}
+  .stat-card{background:#fff;border:1px solid var(--gray-200);border-radius:12px;padding:16px;text-align:center;}
+  .stat-card .num{font-size:21px;font-weight:800;color:var(--accent);}
+  .stat-card .lab{font-size:12px;color:var(--gray-500);margin-top:3px;}
+  .table-wrap{overflow-x:auto;margin:16px 0;border-radius:12px;border:1px solid var(--gray-200);}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;background:#fff;}
+  thead{background:var(--gray-50);}
+  th{padding:10px 12px;text-align:left;font-weight:700;color:var(--accent-dark);font-size:12px;white-space:nowrap;}
+  td{padding:9px 12px;border-top:1px solid var(--gray-100);color:var(--gray-600);}
+  tr:hover td{background:var(--gray-50);}
+  td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;}
+  .phase-row td{background:#fff7ed!important;font-weight:700;color:#9a3412;}
+  .best td{background:#ecfdf5!important;}
+  .code-block{background:var(--gray-900);color:#e2e8f0;border-radius:10px;padding:16px 18px;font-family:'Fira Code','Cascadia Code','Courier New',monospace;font-size:12.5px;line-height:1.85;overflow-x:auto;margin:14px 0;white-space:pre;}
+  .code-block .cm{color:#94a3b8;}
+  .code-block .hl{color:#fbbf24;font-weight:600;}
+  .code-block .bad{color:#fca5a5;}
+  .checklist{list-style:none;margin:14px 0;}
+  .checklist li{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-bottom:1px solid var(--gray-100);font-size:14px;color:var(--gray-700);}
+  .checklist li:last-child{border-bottom:none;}
+  .checklist .box{flex-shrink:0;width:20px;height:20px;border-radius:6px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;}
+  .research{background:linear-gradient(135deg,#fff,#fff8f3);border:1px solid #fed7aa;border-radius:14px;padding:6px 22px 22px;margin:18px 0;}
+  .research .rt{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#fff;font-size:12px;font-weight:800;padding:5px 12px;border-radius:99px;margin:18px 0 4px;}
+  .disc{background:#fff;border:1px solid var(--gray-200);border-left:4px solid var(--warning);border-radius:10px;padding:14px 18px;font-size:13px;color:var(--gray-600);margin-top:30px;line-height:1.8;}
+  .kpill{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:99px;background:var(--gray-100);color:var(--gray-600);margin-left:6px;}
+  .chart{background:#fff;border:1px solid var(--gray-200);border-radius:12px;padding:12px 8px 4px;margin:16px 0;}
+  .chart svg{width:100%;height:auto;display:block;}
+  .legend{display:flex;gap:18px;flex-wrap:wrap;font-size:12px;color:var(--gray-600);padding:2px 12px 10px;}
+  .legend i{display:inline-block;width:22px;height:3px;border-radius:2px;margin-right:6px;vertical-align:middle;}
+  .src{font-size:12px;color:var(--gray-400);margin-top:-6px;}
+  .tldr{background:linear-gradient(135deg,#fff7ed,#ffedd5);border:1px solid #fdba74;border-radius:14px;padding:20px 22px;margin:18px 0;}
+  .tldr h3{margin-top:0;color:#9a3412;}
+  .tldr ul{margin:8px 0 0 18px;font-size:14.5px;color:#7c2d12;}
+  .tldr li{margin-bottom:7px;}
+
+  @media print{
+    *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;color-adjust:exact!important;}
+    body{background:#fff!important;color:#111!important;}
+    .backlink{display:none!important;}
+    .hero{background:#fff!important;color:#9a3412!important;border:2px solid var(--accent)!important;box-shadow:none!important;border-radius:12px!important;}
+    .hero .eyebrow{color:var(--accent)!important;opacity:1!important;}
+    .hero h1{color:#9a3412!important;}
+    .hero .stat .n{color:var(--accent)!important;}
+    .hero .stat .l{color:#7c2d12!important;opacity:1!important;}
+    h2{color:#9a3412!important;border-bottom-color:#fed7aa!important;}
+    h3{color:#9a3412!important;}
+    p,.checklist li,.disc{color:#1f2937!important;}
+    .stat-card{border-color:#fed7aa!important;}
+    th{background:#fff7ed!important;}
+    td{color:#1f2937!important;}
+    .code-block{background:#111!important;color:#fff!important;}
+    .checklist .box{background:var(--accent)!important;color:#fff!important;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="backlink" href="index.html">← 返回朋友持仓策略</a>
+
+  <div class="hero">
+    <div class="eyebrow">Friends · 激进版养老定投 · 全程历史回测</div>
+    <h1>40 岁起投 · 每年 10 万 · 激进版大陆 ETF 策略</h1>
+    <div class="stats">
+      <div class="stat"><div class="n">40 岁</div><div class="l">起投年龄</div></div>
+      <div class="stat"><div class="n">10 年</div><div class="l">投入窗口（40–49岁）</div></div>
+      <div class="stat"><div class="n">10 万/年</div><div class="l">约 8,333 元/月</div></div>
+      <div class="stat"><div class="n">100 万</div><div class="l">累计本金</div></div>
+      <div class="stat"><div class="n">60 岁</div><div class="l">测算终点</div></div>
+    </div>
+  </div>
+
+  <div class="tldr">
+    <h3>先看结论</h3>
+    <ul>
+      <li><b>配置</b>：投入期（40–49岁）<b>纳指100 50% / 标普500 30% / 红利 20%</b>，50 岁后每 5 年降一档纳指、补一档红利。</li>
+      <li><b>回测结果</b>：用 2007 年以来的真实大陆 ETF 数据、115 个滚动 10 年定投窗口，投入期年化（IRR）<b>中位 14.10%、最差窗口 11.41%</b>。</li>
+      <li><b>60 岁终值</b>：100 万本金 → <b>悲观 298 万 / 中性 680 万 / 乐观 847 万</b>。</li>
+      <li><b>最坏起点实测</b>：2007 年 2 月起投（下一年就撞上 2008 年崩盘），60 岁前仍到 <b>616 万</b>，年化 12.92%——代价是账户曾浮亏 <b>−55%</b>。</li>
+      <li><b>两个反直觉发现</b>：① 红利并不是「低波压舱石」，2008 年跌 63%、最大回撤 −72.9%，比纳指更深；② 「溢价高就改买红利」这条规则<b>确定性有害</b>（−2.4% ~ −7.1%），正确做法是<b>把钱留着等溢价回落</b>。</li>
+    </ul>
+  </div>
+
+  <h2>一、目标配置与滑翔路径</h2>
+  <p>沿用 yyang 那套「A 股红利 + 场内 QDII 纳指/标普」的框架——资金留在境内、人民币交易、不出境——但因为起投早 2 年、投入期长 10 年、总周期 20 年，把成长仓位大幅上调，并且<strong>整个投入期不降仓</strong>，50 岁停投后才开始滑翔降波。</p>
+
+  <div class="table-wrap"><table>
+    <thead><tr><th>阶段</th><th>年龄</th><th class="num">纳斯达克100</th><th class="num">标普500</th><th class="num">A股红利</th><th>这一段在干什么</th></tr></thead>
+    <tbody>
+      <tr class="phase-row"><td>积累期</td><td>40–49</td><td class="num"><strong>50%</strong></td><td class="num">30%</td><td class="num">20%</td><td>全程满仓成长，不因年龄降仓</td></tr>
+      <tr><td>降波一档</td><td>50–54</td><td class="num">40%</td><td class="num">30%</td><td class="num">30%</td><td>停止投入，开始把波动交给红利</td></tr>
+      <tr><td>降波二档</td><td>55–59</td><td class="num">30%</td><td class="num">25%</td><td class="num">45%</td><td>红利过半，为取钱做准备</td></tr>
+      <tr><td>领取期</td><td>60+</td><td class="num">20%</td><td class="num">25%</td><td class="num">55%</td><td>以股息现金流为主</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="info-box orange">
+    <b>为什么投入期不降仓？</b>回测里「45 岁就开始降纳指」的方案（激进A）10 年 IRR 中位 13.83%，而「投入期一路满仓」（本方案）是 <b>14.10%</b>，最差窗口也从 10.78% 提到 <b>11.41%</b>——两头都更好。原因很直白：<b>40 多岁定投的钱，绝大部分要在 15–20 年后才用</b>，此时降波只是提前放弃复利。真正需要降波的是「钱快要用了」的 50 岁以后。
+  </div>
+
+  <h2>二、逐年资金测算（40 → 60 岁）</h2>
+  <div class="info-box orange">
+    <b>测算口径：</b>0 本金起，40 岁起<b>每月投入 8,333 元</b>（每年 10 万），投满 <b>10 年到 49 岁</b>止，之后不再投入、只按滑翔路径复利到 <b>60 岁</b>。按月计息。三档年化<b>不是拍的</b>，而是各年龄段对应配置在 2007 年以来所有滚动 10 年窗口里的<b>实际分位数</b>：悲观取 p10、中性取中位数、乐观取 p90。
+  </div>
+
+  <div class="table-wrap"><table>
+    <thead><tr>
+      <th>年龄段</th><th>配置（纳指/标普/红利）</th>
+      <th class="num">悲观 p10</th><th class="num">中性 中位</th><th class="num">乐观 p90</th>
+      <th class="num">历史最差</th><th class="num">回撤中位</th>
+    </tr></thead>
+    <tbody>
+      <tr class="phase-row"><td>40–49岁</td><td>50 / 30 / 20</td><td class="num"><b>8.37%</b></td><td class="num"><b>14.32%</b></td><td class="num"><b>16.05%</b></td><td class="num">5.95%</td><td class="num">−17.4%</td></tr>
+      <tr><td>50–54岁</td><td>40 / 30 / 30</td><td class="num">7.68%</td><td class="num">13.27%</td><td class="num">14.76%</td><td class="num">4.76%</td><td class="num">−14.5%</td></tr>
+      <tr><td>55–59岁</td><td>30 / 25 / 45</td><td class="num">6.13%</td><td class="num">11.79%</td><td class="num">13.18%</td><td class="num">3.12%</td><td class="num">−17.6%</td></tr>
+      <tr><td>60岁+</td><td>20 / 25 / 55</td><td class="num">4.91%</td><td class="num">10.38%</td><td class="num">12.04%</td><td class="num">1.83%</td><td class="num">−20.7%</td></tr>
+    </tbody>
+  </table></div>
+  <p class="src">口径：每组权重按年再平衡，取 2007-01 以来全部 115 个滚动 10 年窗口的年化收益分位数。</p>
+
+  <h3>逐年资产表</h3>
+  <div class="table-wrap"><table>
+    <thead><tr>
+      <th>到达年龄</th><th class="num">当年投入</th><th class="num">累计本金</th>
+      <th class="num">悲观年末</th><th class="num">中性年末</th><th class="num">乐观年末</th>
+    </tr></thead>
+    <tbody>
+      <tr><td>40岁（起点）</td><td class="num">—</td><td class="num">¥0</td><td class="num">¥0</td><td class="num">¥0</td><td class="num">¥0</td></tr>
+      <tr><td>41岁</td><td class="num">10万</td><td class="num">10万</td><td class="num">10万</td><td class="num">11万</td><td class="num">11万</td></tr>
+      <tr><td>42岁</td><td class="num">10万</td><td class="num">20万</td><td class="num">22万</td><td class="num">23万</td><td class="num">23万</td></tr>
+      <tr><td>43岁</td><td class="num">10万</td><td class="num">30万</td><td class="num">34万</td><td class="num">37万</td><td class="num">38万</td></tr>
+      <tr><td>44岁</td><td class="num">10万</td><td class="num">40万</td><td class="num">47万</td><td class="num">53万</td><td class="num">54万</td></tr>
+      <tr><td>45岁</td><td class="num">10万</td><td class="num">50万</td><td class="num">61万</td><td class="num">71万</td><td class="num">74万</td></tr>
+      <tr><td>46岁</td><td class="num">10万</td><td class="num">60万</td><td class="num">77万</td><td class="num">92万</td><td class="num">96万</td></tr>
+      <tr><td>47岁</td><td class="num">10万</td><td class="num">70万</td><td class="num">94万</td><td class="num">115万</td><td class="num">122万</td></tr>
+      <tr><td>48岁</td><td class="num">10万</td><td class="num">80万</td><td class="num">112万</td><td class="num">142万</td><td class="num">153万</td></tr>
+      <tr><td>49岁</td><td class="num">10万</td><td class="num">90万</td><td class="num">132万</td><td class="num">174万</td><td class="num">188万</td></tr>
+      <tr class="phase-row"><td>50岁（停止投入）</td><td class="num">10万</td><td class="num"><b>100万</b></td><td class="num"><b>153万</b></td><td class="num"><b>209万</b></td><td class="num"><b>229万</b></td></tr>
+      <tr><td>51岁</td><td class="num">—</td><td class="num">100万</td><td class="num">165万</td><td class="num">237万</td><td class="num">263万</td></tr>
+      <tr><td>52岁</td><td class="num">—</td><td class="num">100万</td><td class="num">177万</td><td class="num">268万</td><td class="num">302万</td></tr>
+      <tr><td>53岁</td><td class="num">—</td><td class="num">100万</td><td class="num">191万</td><td class="num">304万</td><td class="num">346万</td></tr>
+      <tr><td>54岁</td><td class="num">—</td><td class="num">100万</td><td class="num">206万</td><td class="num">344万</td><td class="num">397万</td></tr>
+      <tr class="phase-row"><td>55岁</td><td class="num">—</td><td class="num">100万</td><td class="num">222万</td><td class="num">390万</td><td class="num">456万</td></tr>
+      <tr><td>56岁</td><td class="num">—</td><td class="num">100万</td><td class="num">235万</td><td class="num">436万</td><td class="num">516万</td></tr>
+      <tr><td>57岁</td><td class="num">—</td><td class="num">100万</td><td class="num">249万</td><td class="num">487万</td><td class="num">584万</td></tr>
+      <tr><td>58岁</td><td class="num">—</td><td class="num">100万</td><td class="num">265万</td><td class="num">544万</td><td class="num">661万</td></tr>
+      <tr><td>59岁</td><td class="num">—</td><td class="num">100万</td><td class="num">281万</td><td class="num">609万</td><td class="num">748万</td></tr>
+      <tr class="phase-row"><td>60岁（测算终点）</td><td class="num">—</td><td class="num"><b>100万</b></td><td class="num"><b>298万</b></td><td class="num"><b>680万</b></td><td class="num"><b>847万</b></td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="stat-row">
+    <div class="stat-card"><div class="num">¥100万</div><div class="lab">累计本金（10年×10万）</div></div>
+    <div class="stat-card"><div class="num">¥298万</div><div class="lab">60岁 · 悲观（各段 p10）</div></div>
+    <div class="stat-card"><div class="num">¥680万</div><div class="lab">60岁 · 中性（各段中位）</div></div>
+    <div class="stat-card"><div class="num">¥847万</div><div class="lab">60岁 · 乐观（各段 p90）</div></div>
+  </div>
+
+  <div class="info-box yellow">
+    <b>怎么读这三个数：</b>「悲观 298 万」不是最坏情况，而是<b>每一段都恰好落在历史最差 10% 区间</b>的连续倒霉情形，本金仍能翻到 3 倍。真正的地板是各段都取历史最差值，约 <b>200 万上下</b>。反过来说，中性情形 680 万也不是保证——它假设未来 20 年美股和当下这 19 年一样能打，这个前提<b>很可能偏乐观</b>，第六节专门做了打折压力测试。
+  </div>
+
+  <h2>三、执行手册：每月具体怎么操作</h2>
+  <div class="code-block"><span class="cm">// 每月固定动作（人民币，场内交易，约 8,333 元/月）</span>
+
+第 1 步 · 拆钱
+  红利 ETF      1,667 元  <span class="cm">（20%，境内资产，无溢价问题，照买）</span>
+  标普500 QDII  2,500 元  <span class="cm">（30%）</span>
+  纳指100 QDII  4,167 元  <span class="cm">（50%）</span>
+
+第 2 步 · 买 QDII 前先看实时溢价率
+  溢价 &lt; 3%   → 正常买入
+  溢价 ≥ 3%   → <span class="hl">这笔钱留在货币基金里，等溢价回落到 3% 以下再补买</span>
+  溢价 &gt; 10%  → 绝对不碰，这是历史上亏钱最快的方式
+  <span class="bad">✗ 不要「溢价高就改买红利」——回测证明这条规则确定性亏钱</span>
+
+第 3 步 · 同指数多只之间比价
+  纳指100：513100（国泰）· 159941（广发）· 513300（华夏）
+  标普500：513500（博时）· 159612（平安）
+  <span class="hl">买当下溢价最低、且规模足够大的那只</span>
+
+再平衡
+  每年 1 月、7 月各查一次
+  偏离目标 &gt; 5 个百分点 → 用新增资金补低配的一侧
+  偏离 &gt; 10 个百分点 → 才动用卖出调仓（省税费、省摩擦）
+
+滑翔
+  50 岁、55 岁、60 岁三个生日各降一档纳指、补一档红利</div>
+
+  <div class="info-box green">
+    <b>为什么阈值是 3% 而不是 yyang 原方案的 2%？</b>回测了 1% / 2% / 3% / 5% / 10% 五档：阈值定在 <b>3%</b> 时「留现金等回落」这条规则效果最好（纳指 +0.01%、标普 +0.51%）；<b>定在 1% 反而处处受限</b>（纳指 −0.58%），因为场内纳指 QDII 有四分之一的交易日溢价都在 2% 以上，卡太死会长期买不进去。详见第五节。
+  </div>
+
+  <h2>四、买什么：标的清单与选择依据</h2>
+
+  <h3>成长仓：场内纳指 / 标普 QDII</h3>
+  <p>这类基金用外汇额度在海外复制指数，热门时会出现「场内价格 &gt; 基金净值」的溢价。下表是各只 ETF 上市以来<strong>逐日溢价率的真实分布</strong>，用来决定谁当主力、谁只做备选。</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th>跟踪指数</th><th>ETF</th><th>统计区间</th><th class="num">溢价中位</th><th class="num">溢价均值</th><th class="num">&gt;2% 天数占比</th><th class="num">&gt;5% 天数占比</th><th class="num">历史最高</th></tr></thead>
+    <tbody>
+      <tr class="best"><td rowspan="3"><strong>纳斯达克100</strong></td><td><b>513100 国泰</b>（主力）</td><td>2013-05 起</td><td class="num">0.45%</td><td class="num">1.45%</td><td class="num">26.1%</td><td class="num">11.2%</td><td class="num">28.0%</td></tr>
+      <tr class="best"><td><b>159941 广发</b>（比价备选）</td><td>2015-07 起</td><td class="num">0.30%</td><td class="num">1.08%</td><td class="num">27.4%</td><td class="num">10.3%</td><td class="num">25.2%</td></tr>
+      <tr><td>513300 华夏</td><td>2020-11 起</td><td class="num">1.04%</td><td class="num">1.76%</td><td class="num">36.6%</td><td class="num">13.0%</td><td class="num">12.0%</td></tr>
+      <tr class="best"><td rowspan="2"><strong>标普500</strong></td><td><b>513500 博时</b>（主力）</td><td>2014-01 起</td><td class="num">0.26%</td><td class="num">1.35%</td><td class="num">25.1%</td><td class="num">10.6%</td><td class="num">36.3%</td></tr>
+      <tr><td>159612 平安 <span class="kpill">慎用</span></td><td>2022-05 起</td><td class="num"><b>2.29%</b></td><td class="num"><b>3.77%</b></td><td class="num"><b>54.2%</b></td><td class="num"><b>27.6%</b></td><td class="num">28.2%</td></tr>
+    </tbody>
+  </table></div>
+  <div class="info-box red">
+    <b>数据直接给出的结论：</b>513100 与 513500 是溢价最健康的两只（中位溢价 0.45% / 0.26%），适合当主力；<b>159612 有一半以上交易日溢价都超过 2%、四分之一超过 5%</b>，长期定投用它会持续多付钱，只在临时比价占优时才考虑。<br>
+    另外注意：<b>159941 在 2022-07-04 做过份额折算</b>，公开行情里那天会算出 +297% 的假溢价，别被吓到，也别用那天的数据做判断。
+  </div>
+
+  <h3>底仓：A 股红利（境内资产，无溢价、无额度问题）</h3>
+  <p>红利这一档选哪只，差别比想象中大得多。三只常见标的在共同区间的实际表现：</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th>ETF</th><th>跟踪</th><th class="num">年化（2019-12→2026-08）</th><th class="num">年化波动</th><th class="num">最大回撤</th></tr></thead>
+    <tbody>
+      <tr class="best"><td><b>512890</b> 华泰柏瑞红利低波</td><td>红利低波</td><td class="num"><b>10.30%</b></td><td class="num">17.39%</td><td class="num">−11.6%</td></tr>
+      <tr class="best"><td><b>515080</b> 招商中证红利</td><td>中证红利</td><td class="num"><b>9.92%</b></td><td class="num">14.80%</td><td class="num">−10.1%</td></tr>
+      <tr><td>510880 华泰柏瑞上证红利 <span class="kpill">不推荐</span></td><td>上证红利</td><td class="num">4.92%</td><td class="num">11.64%</td><td class="num">−10.2%</td></tr>
+    </tbody>
+  </table></div>
+  <div class="info-box green">
+    <b>底仓建议：512890 与 515080 各一半。</b>两者跟踪的中证红利/红利低波，股息率和成分股质量都明显优于上证红利——同一段时间年化差了 <b>5 个百分点</b>。<br>
+    <b>要特别说明的是</b>：本页的长期回测里，红利这一档用的恰恰是表现最差的 510880（因为只有它有 2007 年至今的完整历史）。也就是说，<b>回测数字对红利仓是偏保守的</b>，实际用 512890/515080 大概率更好——第六节做了「红利 +1.5%/年」的敏感性测试来量化这一点。
+  </div>
+
+  <h3>考察过但不纳入的标的</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>标的</th><th class="num">年化</th><th class="num">年化波动</th><th class="num">最大回撤</th><th>为什么不用</th></tr></thead>
+    <tbody>
+      <tr><td>513050 中概互联</td><td class="num">1.33%</td><td class="num">27.97%</td><td class="num">−64.6%</td><td>2017 年至今年化仅 1.33%，承担了最高波动却几乎没有回报；加进组合会把 IRR 从 16.11% 拉到 14.97%</td></tr>
+      <tr><td>159915 创业板</td><td class="num">11.06%</td><td class="num">33.00%</td><td class="num">−65.2%</td><td>年化不输纳指但波动高出 60%，且只有 2011 年底以来数据，回测窗口全在有利区间，不可信</td></tr>
+      <tr><td>588000 科创50</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td>2020 年 11 月才上市，历史太短，无法进入 10 年窗口回测</td></tr>
+    </tbody>
+  </table></div>
+
+  <div style="margin:36px 0 6px;padding:12px 16px;background:var(--gray-50);border:1px dashed var(--gray-300);border-radius:10px;text-align:center;font-size:13px;color:var(--gray-500)">⬇︎ 以下是<strong>回测过程、方法与依据</strong>。<strong>只想照做的话，看上面三节就够了</strong>；想知道数字怎么来的再往下翻。</div>
+
+  <h2>五、回测怎么做的</h2>
+
+  <div class="research">
+    <div class="rt">① 数据口径：用真实场内 ETF，而不是指数年化</div>
+    <p>市面上多数测算直接拿「纳指 100 长期年化 17%」套公式，但大陆投资者<strong>买不到指数</strong>，只能买场内 QDII，中间隔着<strong>溢价、外汇额度、汇率、跟踪误差、管理费</strong>五重损耗。本次回测全部改用<strong>真实场内 ETF 的后复权成交价</strong>（分红再投），上面这些损耗天然含在价格里。</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>资产</th><th>回测用的序列</th><th>可用区间</th><th class="num">年化</th><th class="num">年化波动</th><th class="num">最差单月</th><th class="num">最大回撤</th></tr></thead>
+      <tbody>
+        <tr><td><strong>纳指100</strong></td><td>513100 真实价格；2013 年前用 QQQ×汇率补齐</td><td>2007-01 → 2026-07</td><td class="num">14.59%</td><td class="num">20.24%</td><td class="num">−15.64%</td><td class="num">−54.2%</td></tr>
+        <tr><td><strong>标普500</strong></td><td>513500 真实价格；2014 年前用 SPY×汇率补齐</td><td>2007-01 → 2026-07</td><td class="num">9.18%</td><td class="num">16.44%</td><td class="num">−16.68%</td><td class="num">−55.7%</td></tr>
+        <tr><td><strong>A股红利</strong></td><td>510880 真实价格（全程真实，无合成）</td><td>2007-01 → 2026-07</td><td class="num">4.38%</td><td class="num">25.33%</td><td class="num">−30.07%</td><td class="num">−72.9%</td></tr>
+      </tbody>
+    </table></div>
+    <p class="src">数据来源：东方财富日 K（后复权，与仓库现有 QDII 溢价监控同源）；汇率取 frankfurter（ECB 口径）美元兑人民币。区间含 2008、2015、2018、2020、2022 五轮大跌。</p>
+
+    <div class="rt">② 大陆 QDII 比原生美股 ETF 到底差多少</div>
+    <p>2013 年前大陆还没有纳指 QDII，那一段只能用「QQQ 美元全收益 × 美元兑人民币」合成。合成会高估收益，所以要先量出「包装损耗」再扣掉。方法是拿<strong>重叠期</strong>的真实场内 ETF 和合成序列对比：</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>标的</th><th>重叠期</th><th class="num">真实场内年化</th><th class="num">美元ETF×汇率年化</th><th class="num">差额 = 包装损耗</th></tr></thead>
+      <tbody>
+        <tr><td>513100 国泰纳指100</td><td>2013-05 → 2026-08（159 个月）</td><td class="num">20.00%</td><td class="num">21.01%</td><td class="num"><b>−0.83%/年</b></td></tr>
+        <tr><td>513500 博时标普500</td><td>2014-01 → 2026-08（151 个月）</td><td class="num">14.70%</td><td class="num">15.48%</td><td class="num"><b>−0.67%/年</b></td></tr>
+      </tbody>
+    </table></div>
+    <div class="info-box blue" style="margin-top:6px">
+      <b>这个数字本身就是有用的结论：</b>场内 QDII 相对「直接买 QQQ/SPY」每年大约漏掉 <b>0.7–0.8%</b>，主要是管理费加跟踪误差，比很多人担心的要小。合成段已按这个幅度逐月扣减，因此回测<b>没有占合成数据的便宜</b>。
+    </div>
+
+    <div class="rt">③ 策略执行规则（回测与实操完全一致）</div>
+    <ul class="checklist">
+      <li><div class="box">1</div><span>每月<b>月末</b>按当期目标比例投入 8,333 元，新增资金优先补低配的资产</span></li>
+      <li><div class="box">2</div><span>每年 <b>1 月 / 7 月</b>检查，偏离目标超过 <b>5 个百分点</b>才再平衡</span></li>
+      <li><div class="box">3</div><span>再平衡按换手金额计 <b>0.03%</b> 交易成本（佣金 + 冲击），不做无摩擦假设</span></li>
+      <li><div class="box">4</div><span>生日跨年龄段时切换目标比例</span></li>
+      <li><div class="box">5</div><span>收益率用<b>资金加权 IRR</b>（不是简单年化），如实反映定投的资金进入节奏</span></li>
+    </ul>
+
+    <div class="rt">④ 窗口设计：115 个滚动 10 年</div>
+    <p>把「40 岁起投、投 10 年」这个 120 个月的窗口，从 <strong>2007-02 一直滑到 2016-08</strong>，共 <strong>115 个起点</strong>，每个起点都完整跑一遍策略。停投后的 50→60 岁那 10 年，另外用 <strong>115 个滚动 10 年窗口</strong>统计。这样得到的是<strong>分布</strong>，而不是单一路径的运气。</p>
+    <div class="info-box yellow" style="margin-top:6px">
+      <b>必须承认的局限：</b>可用历史只有 19.5 年，而完整计划要跨 20 年，所以「投入 10 年 + 复利 11 年」这条完整路径只有<strong>一个</strong>真实样本（就是下面第七节那条）。滚动窗口之间高度重叠，不是独立样本，分位数只能当参考、不能当概率。
+    </div>
+  </div>
+
+  <h2>六、几套配置的横向对比</h2>
+  <p>同样是每月 8,333 元、同样 115 个滚动 10 年窗口，只改配置：</p>
+  <div class="table-wrap"><table>
+    <thead><tr>
+      <th>配置</th><th>投入期比例（纳指/标普/红利）</th>
+      <th class="num">IRR 最差</th><th class="num">IRR p10</th><th class="num">IRR 中位</th><th class="num">IRR p90</th>
+      <th class="num">50岁终值中位</th><th class="num">策略回撤中位</th>
+    </tr></thead>
+    <tbody>
+      <tr class="best"><td><b>本方案</b>（投入期不降仓）</td><td>50 / 30 / 20</td><td class="num">11.41%</td><td class="num">12.53%</td><td class="num"><b>14.10%</b></td><td class="num">15.88%</td><td class="num"><b>207万</b></td><td class="num">−17.0%</td></tr>
+      <tr><td>更激进：投入期完全不要红利</td><td>60 / 40 / 0</td><td class="num">12.68%</td><td class="num">13.92%</td><td class="num">15.74%</td><td class="num">18.04%</td><td class="num">225万</td><td class="num">−22.0%</td></tr>
+      <tr><td>激进但 45 岁起降仓</td><td>55 / 30 / 15 起，逐步降</td><td class="num">10.78%</td><td class="num">11.84%</td><td class="num">13.83%</td><td class="num">15.29%</td><td class="num">204万</td><td class="num">−15.7%</td></tr>
+      <tr><td>加中概互联做卫星</td><td>50 / 25 / 15 + 中概 10</td><td class="num" colspan="4" style="text-align:center">数据仅 114 个月，凑不满一个 10 年窗口</td><td class="num">—</td><td class="num">−16.0%</td></tr>
+      <tr><td><b>yyang 原方案</b>（中低风险对照）</td><td>25 / 30 / 45</td><td class="num">8.64%</td><td class="num">9.72%</td><td class="num">11.22%</td><td class="num">12.39%</td><td class="num">178万</td><td class="num">−17.3%</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="info-box purple">
+    <b>「投入期完全不要红利」明显更赚，为什么不推荐？</b>它中位 IRR 高出 1.6 个百分点、50 岁多 18 万，代价是<b>回撤中位从 −17% 扩到 −22%</b>，而且组合 100% 押在美股 + 美元上。留 20% 红利换来三件事：<b>①</b> 一个永远买得到的去处（QDII 遇到暂停申购、溢价飙高时，红利没有这个问题）；<b>②</b> 人民币资产与股息现金流，退休后能直接领息；<b>③</b> 万一美股未来 20 年不再是过去 20 年，不至于全军覆没。<b>如果你能接受账户腰斩且完全不介意单一市场风险，60/40 那行就是更优解。</b>
+  </div>
+
+  <h3>压力测试：如果未来跑不出过去这么好？</h3>
+  <p>回测窗口全部落在美股长牛里（纳指人民币计价 19.5 年年化 14.59%），这个前提很可能偏乐观。所以把纳指和标普<strong>每年砍 3 个百分点</strong>，同时把红利<strong>每年加 1.5 个百分点</strong>（对应实际用 512890/515080 而非 510880），重跑全部窗口：</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th>情景</th><th class="num">本方案 IRR 中位</th><th class="num">本方案 IRR 最差</th><th class="num">yyang 原方案 IRR 中位</th><th class="num">2007 年起投至 59.5 岁</th></tr></thead>
+    <tbody>
+      <tr><td>基准（纯历史数据）</td><td class="num">14.10%</td><td class="num">11.41%</td><td class="num">11.22%</td><td class="num">616万</td></tr>
+      <tr><td>红利 +1.5%/年</td><td class="num">14.51%</td><td class="num">11.83%</td><td class="num">12.03%</td><td class="num">662万</td></tr>
+      <tr><td>美股 −3%/年</td><td class="num">11.56%</td><td class="num">8.80%</td><td class="num">9.44%</td><td class="num">452万</td></tr>
+      <tr class="phase-row"><td><b>最严苛：红利 +1.5% 且美股 −3%</b></td><td class="num"><b>11.89%</b></td><td class="num"><b>9.22%</b></td><td class="num">10.25%</td><td class="num"><b>485万</b></td></tr>
+    </tbody>
+  </table></div>
+  <div class="info-box green">
+    <b>结论稳健：</b>即使给美股打三个点的折、同时把红利往上调，本方案中位 IRR 仍有 <b>11.89%</b>，依旧高于 yyang 原方案在同等假设下的 10.25%。<b>「纳指为核 + 少量红利」的相对优势不依赖于美股继续长牛</b>——因为原方案的红利重仓在同一情景里也一起打折。
+  </div>
+
+  <h2>七、最坏起点实测：2007 年 2 月起投</h2>
+  <p>如果你 40 岁那年正好是 2007 年 2 月——A 股 6124 点大泡沫的半山腰，下一年就撞上 2008 年全球金融危机——按本方案闭着眼睛执行到今天（59.5 岁）会是什么结果？</p>
+
+  <div class="chart">
+    <svg viewBox="0 0 880 270" role="img" aria-label="2007年起投的资产曲线与累计本金对比">
+      <line x1="52" y1="240" x2="866" y2="240" stroke="#d1d5db" stroke-width="1"/>
+      <line x1="52" y1="174" x2="866" y2="174" stroke="#f3f4f6" stroke-width="1"/>
+      <line x1="52" y1="108" x2="866" y2="108" stroke="#f3f4f6" stroke-width="1"/>
+      <line x1="52" y1="42"  x2="866" y2="42"  stroke="#f3f4f6" stroke-width="1"/>
+      <text x="46" y="244" text-anchor="end" font-size="10" fill="#9ca3af">0</text>
+      <text x="46" y="178" text-anchor="end" font-size="10" fill="#9ca3af">200万</text>
+      <text x="46" y="112" text-anchor="end" font-size="10" fill="#9ca3af">400万</text>
+      <text x="46" y="46"  text-anchor="end" font-size="10" fill="#9ca3af">600万</text>
+      <line x1="471" y1="16" x2="471" y2="240" stroke="#fdba74" stroke-width="1" stroke-dasharray="4 3"/>
+      <text x="475" y="26" font-size="10" fill="#ea580c">50岁·停止投入</text>
+      <polyline fill="none" stroke="#9ca3af" stroke-width="1.6" stroke-dasharray="5 3"
+        points="52,240 73,238 94,236 115,235 136,233 157,231 178,230 199,228 220,227 241,225 262,223 283,222 304,220 324,218 345,217 366,215 387,213 408,212 429,210 450,208 471,207 492,207 513,207 534,207 555,207 576,207 597,207 618,207 639,207 660,207 681,207 702,207 723,207 744,207 765,207 786,207 807,207 828,207 849,207 866,207"/>
+      <polyline fill="none" stroke="#ea580c" stroke-width="2.4"
+        points="52,240 73,238 94,237 115,236 136,236 157,232 178,229 199,229 220,224 241,224 262,220 283,218 304,216 324,213 345,207 366,203 387,196 408,193 429,193 450,183 471,176 492,173 513,167 534,161 555,165 576,157 597,150 618,127 639,135 660,114 681,123 702,121 723,121 744,103 765,88 786,81 807,74 828,62 849,50 866,37"/>
+      <text x="94"  y="256" text-anchor="middle" font-size="10" fill="#9ca3af">2008</text>
+      <text x="220" y="256" text-anchor="middle" font-size="10" fill="#9ca3af">2011</text>
+      <text x="345" y="256" text-anchor="middle" font-size="10" fill="#9ca3af">2014</text>
+      <text x="471" y="256" text-anchor="middle" font-size="10" fill="#9ca3af">2017</text>
+      <text x="597" y="256" text-anchor="middle" font-size="10" fill="#9ca3af">2020</text>
+      <text x="723" y="256" text-anchor="middle" font-size="10" fill="#9ca3af">2023</text>
+      <text x="849" y="256" text-anchor="middle" font-size="10" fill="#9ca3af">2026</text>
+    </svg>
+    <div class="legend">
+      <span><i style="background:#ea580c"></i>账户市值</span>
+      <span><i style="background:#9ca3af"></i>累计投入本金</span>
+    </div>
+  </div>
+
+  <div class="table-wrap"><table>
+    <thead><tr><th>方案</th><th class="num">50岁（2017-01 停投）</th><th class="num">59.5岁（2026-07）</th><th class="num">本金倍数</th><th class="num">IRR</th><th class="num">策略最大回撤</th></tr></thead>
+    <tbody>
+      <tr class="best"><td><b>本方案</b>（50/30/20）</td><td class="num">188万</td><td class="num"><b>616万</b></td><td class="num">6.16x</td><td class="num"><b>12.92%</b></td><td class="num">−55.5%</td></tr>
+      <tr><td>更激进（60/40/0）</td><td class="num">201万</td><td class="num">655万</td><td class="num">6.55x</td><td class="num">13.37%</td><td class="num">−54.5%</td></tr>
+      <tr><td>yyang 原方案（25/30/45）</td><td class="num">167万</td><td class="num">406万</td><td class="num">4.06x</td><td class="num">9.90%</td><td class="num">−58.1%</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="info-box red">
+    <b>这条曲线真正想说的：</b>起点糟到不能再糟，本方案 19.5 年仍把 100 万变成 616 万。但请看清代价——组合本身从高点回撤 <b>55.5%</b>；更难受的是，<b>2008 年 11 月账户只剩 11.4 万，而已经投进去 18.3 万，浮亏 38%</b>，并且账户市值<b>连续 24 个月低于已投本金</b>（2008-01 至 2009-10）。也就是说，头两年多的时间里，你每个月往里打钱，看到的都是「越投越亏」。<b>能不能在这两年里继续按月扣款，比选哪个配置重要得多。</b><br>
+    也请注意：中低风险的 yyang 原方案在这条路径上回撤 <b>−58.1%，反而比激进方案更深</b>。原因见下一节。
+  </div>
+
+  <h2>八、两个反直觉的发现</h2>
+
+  <div class="research">
+    <div class="rt">发现一：红利不是「低波压舱石」<span class="kpill">重点</span></div>
+    <p>「红利指数波动低、回撤小，适合当底仓」是这类方案的通用说法。但把 2007 年以来的真实数据摆出来，事实正好相反：</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>资产</th><th class="num">2008 年全年</th><th class="num">最大回撤</th><th class="num">回撤底部</th><th class="num">年化波动</th><th class="num">最差单月</th></tr></thead>
+      <tbody>
+        <tr><td><strong>A股红利（510880）</strong></td><td class="num"><b>−63.0%</b></td><td class="num"><b>−72.9%</b></td><td class="num">2008-10</td><td class="num"><b>25.33%</b></td><td class="num">−30.07%</td></tr>
+        <tr><td>纳指100（人民币）</td><td class="num">−37.4%</td><td class="num">−54.2%</td><td class="num">2009-02</td><td class="num">20.24%</td><td class="num">−15.64%</td></tr>
+        <tr><td>标普500（人民币）</td><td class="num">−36.5%</td><td class="num">−55.7%</td><td class="num">2009-02</td><td class="num">16.44%</td><td class="num">−16.68%</td></tr>
+      </tbody>
+    </table></div>
+    <div class="info-box red" style="margin-top:6px">
+      红利的波动、最大回撤、最差单月<b>三项全部差于纳指</b>。「红利低波」是相对<b>其他 A 股指数</b>而言的，不是相对美股宽基。<br>
+      这也解释了第七节那个反常结果：<b>红利占 45% 的「保守」方案，回撤比纳指占 50% 的「激进」方案还深</b>（−58.1% vs −55.5%）。在本方案里，红利的作用应该被重新定义为<b>「人民币资产 + 股息现金流 + 永远买得到」</b>，而不是「降低波动」。降波要靠 50 岁以后的滑翔和现金垫，不能指望红利。
+    </div>
+
+    <div class="rt">发现二：溢价纪律能防灾，但不能增收</div>
+    <p>yyang 方案把「溢价 &lt; 2% 才买」列为头号纪律。这条纪律到底值多少钱？拿 513100（2013-05 起，160 个月）和 513500（2014-01 起，152 个月）的<strong>逐日真实溢价</strong>，把四条买入规则各跑一遍定投：</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>买入规则</th><th class="num">纳指 513100 相对无脑买</th><th class="num">标普 513500 相对无脑买</th><th>评价</th></tr></thead>
+      <tbody>
+        <tr><td>无脑按月买（基准）</td><td class="num">—</td><td class="num">—</td><td>580.7万 / 355.1万</td></tr>
+        <tr class="best"><td><b>溢价≥3% 就留现金等回落</b></td><td class="num"><b>+0.01%</b></td><td class="num"><b>+0.51%</b></td><td>基本不亏，且避开了高溢价买入的尾部风险</td></tr>
+        <tr><td>同类比价买溢价最低的</td><td class="num">−1.54%</td><td class="num">−0.20%</td><td>小幅拖累：溢价最低的那只往往跟踪也差一点</td></tr>
+        <tr><td>溢价≥3% 就改买红利</td><td class="num"><b>−2.42%</b></td><td class="num"><b>−4.86%</b></td><td>明显有害</td></tr>
+      </tbody>
+    </table></div>
+    <p>把「改买红利」这条规则的阈值调紧，亏得更多——卡得越死，越多的成长仓被永久换成低收益资产：</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>阈值</th><th class="num">改买红利（纳指）</th><th class="num">留现金等回落（纳指）</th><th class="num">触发月数</th></tr></thead>
+      <tbody>
+        <tr><td>≥1%</td><td class="num">−17.86%</td><td class="num">−0.58%</td><td class="num">69 / 160</td></tr>
+        <tr><td>≥2%（yyang 原规则）</td><td class="num">−7.05%</td><td class="num">−0.12%</td><td class="num">40 / 160</td></tr>
+        <tr class="best"><td>≥3%（本方案采用）</td><td class="num">−2.42%</td><td class="num">+0.01%</td><td class="num">25 / 160</td></tr>
+        <tr><td>≥5%</td><td class="num">−1.87%</td><td class="num">+0.02%</td><td class="num">19 / 160</td></tr>
+        <tr><td>≥10%</td><td class="num">−0.93%</td><td class="num">+0.11%</td><td class="num">8 / 160</td></tr>
+      </tbody>
+    </table></div>
+    <div class="info-box orange" style="margin-top:6px">
+      <b>正确的理解方式：</b>溢价纪律是<b>保险</b>，不是<b>阿尔法</b>。历史上「等溢价回落」这件事，省下的溢价和错过的涨幅大致相抵（−0.6% ~ +0.5%）。它真正的价值在于挡住尾部——<b>2020 年 9 月 513100 溢价一度冲到 28.0%、159941 到 25.2%，2020 年 3 月疫情暴跌时 513100 也到过 22.8%</b>，在那些位置买入，即使指数不跌，溢价回归也够亏掉 20%。<br>
+      所以规则应该是：<b>宁可不买、也不追高溢价；但绝不把成长仓永久换成红利。</b>
+    </div>
+  </div>
+
+  <h2>九、停投之后：50 → 60 岁那 10 年</h2>
+  <p>50 岁停止投入后，这笔钱要在没有新增资金的情况下再滚 10 年。按滑翔路径持有、每年再平衡，115 个滚动 10 年窗口的结果：</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th>方案</th><th class="num">10年年化 最差</th><th class="num">p10</th><th class="num">中位</th><th class="num">p90</th><th class="num">最好</th><th class="num">期间回撤中位</th><th class="num">期间回撤最深</th></tr></thead>
+    <tbody>
+      <tr class="best"><td><b>本方案</b></td><td class="num">4.74%</td><td class="num">6.86%</td><td class="num"><b>12.08%</b></td><td class="num">13.52%</td><td class="num">14.75%</td><td class="num">−14.1%</td><td class="num">−57.4%</td></tr>
+      <tr><td>更激进（投入期 60/40）</td><td class="num">4.92%</td><td class="num">6.96%</td><td class="num">12.17%</td><td class="num">13.84%</td><td class="num">15.09%</td><td class="num">−14.5%</td><td class="num">−57.7%</td></tr>
+      <tr><td>yyang 原方案</td><td class="num">1.91%</td><td class="num">4.45%</td><td class="num">9.89%</td><td class="num">11.36%</td><td class="num">12.19%</td><td class="num">−22.3%</td><td class="num">−61.2%</td></tr>
+    </tbody>
+  </table></div>
+  <div class="info-box yellow">
+    <b>这一段是整个计划风险最集中的地方。</b>60 岁前后如果赶上一次 −20% 以上的回撤，又正好要开始取钱，就会被迫在低点卖出（序列风险）。两个应对动作：<br>
+    <b>①</b> 55 岁起把红利提到 45%、60 岁提到 55%，靠股息覆盖一部分开支，减少卖出本金的需要；<br>
+    <b>②</b> 58 岁前后开始准备 <b>2–3 年生活费的现金垫</b>，市场大跌时动用现金垫、不动股票仓位。
+  </div>
+
+  <h2>十、行动清单</h2>
+  <ul class="checklist">
+    <li><div class="box">✓</div><span>开通场内交易，确认可买 <b>513100 / 513500 / 512890 / 515080</b> 四只，并加 159941 到自选做比价</span></li>
+    <li><div class="box">✓</div><span>行情软件里打开「<b>实时溢价率 / IOPV</b>」显示（这是本方案唯一必须每次看的指标）</span></li>
+    <li><div class="box">✓</div><span>设每月定投提醒：红利 1,667 元 + 标普 2,500 元 + 纳指 4,167 元</span></li>
+    <li><div class="box">✓</div><span>写死纪律：<b>溢价 ≥3% 转货币基金等回落，&gt;10% 一律不碰，永不改买红利</b></span></li>
+    <li><div class="box">✓</div><span>设 1 月 / 7 月再平衡提醒，偏离 &gt;5pp 用新增资金补，&gt;10pp 才卖出调仓</span></li>
+    <li><div class="box">✓</div><span>在 50 / 55 / 60 岁三个生日设滑翔降仓提醒</span></li>
+    <li><div class="box">✓</div><span>提前想清楚一件事：<b>账户可能腰斩</b>。历史最坏路径回撤 −55%，拿不住这个策略就不成立</span></li>
+  </ul>
+
+  <h2>十一、和其他方案的关系</h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>方案</th><th>年龄 / 投入</th><th>核心配置</th><th>风险偏好</th><th class="num">10年定投 IRR 中位</th></tr></thead>
+    <tbody>
+      <tr class="best"><td><b>本页（40岁·每年10万·激进）</b></td><td>40→49岁，10年×10万</td><td>纳指50 / 标普30 / 红利20</td><td>激进</td><td class="num"><b>14.10%</b></td></tr>
+      <tr><td><a href="yyang.html" style="color:var(--accent);font-weight:700">yyang</a></td><td>42→49岁，8年×40万</td><td>红利45 / 标普30 / 纳指25</td><td>中低</td><td class="num">11.22%</td></tr>
+      <tr><td><a href="wangying.html" style="color:var(--accent);font-weight:700">wangying</a></td><td>44→60岁，16年</td><td>纯红利</td><td>低</td><td class="num">—</td></tr>
+      <tr><td><a href="dividend-42.html" style="color:var(--accent);font-weight:700">42岁起·每年3万</a></td><td>42→60岁，18年×3万</td><td>纯红利</td><td>低</td><td class="num">—</td></tr>
+    </tbody>
+  </table></div>
+  <div class="info-box blue">
+    <b>口径差异提示：</b>本页的年化<b>全部来自真实场内 ETF 的历史回测</b>（含溢价、汇率、跟踪误差、交易成本），而 yyang 等早先几页用的是「标的历史年化 → 取最低/次低」的估算法，两者不能直接横比。表中 yyang 那一行的 11.22% 是<b>用本页同一套回测重算</b>的结果，可以和本方案对比。
+  </div>
+
+  <h2>十二、复现方式</h2>
+  <p>本页所有数字都由脚本生成，可随时重跑核对：</p>
+  <div class="code-block"><span class="cm"># 1. 抓数据（东方财富日K后复权 + frankfurter 汇率）</span>
+python3 friends/tools/fetch_backtest_data.py
+
+<span class="cm"># 2. 策略回测：滚动窗口、滑翔路径、敏感性</span>
+python3 friends/tools/backtest_cn_etf.py --json /tmp/bt.json
+python3 friends/tools/backtest_cn_etf.py --us-haircut 0.03 --div-boost 0.015
+
+<span class="cm"># 3. 溢价纪律回测（四条买入规则 × 五档阈值）</span>
+python3 friends/tools/backtest_premium_rule.py --threshold 0.03
+
+<span class="cm"># 4. 汇总成本页用到的全部数字与逐年表</span>
+python3 friends/tools/report_numbers.py --json /tmp/report.json</div>
+
+  <div class="disc">⚠️ 本页为个人研究与交流记录。<b>历史回测不代表未来</b>：回测区间（2007–2026）恰好覆盖美股一轮长牛与人民币由强转弱，未来 20 年完全可能不同；滚动窗口高度重叠，分位数只能当参考，不是概率。ETF 代码、规模、费率会变化，交易前请在券商 App 核对。QDII 存在溢价、外汇额度、汇率与跟踪误差风险，A 股红利存在指数编制变更与股息率下行风险。<b>本页不构成投资建议或收益承诺</b>，实际操作请结合自身情况独立决策。</div>
+</div>
+</body>
+</html>
