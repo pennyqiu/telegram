@@ -35,9 +35,10 @@ GROUP_ORDER = {
     "标的档案": 1,
     "预选标的": 2,
     "操作手册": 3,
-    "历史复盘": 4,
-    "提示词与模板": 5,
-    "工具": 6,
+    "期权专题": 4,
+    "历史复盘": 5,
+    "提示词与模板": 6,
+    "工具": 7,
     "其他": 9,
 }
 
@@ -66,6 +67,9 @@ CANDIDATE_ORDER = [
     "AAPL.md", "AMZN.md", "MU.md",
 ]
 
+# 期权专题讨论区：README 作为着陆页，其余按编号
+OPTIONS_ORDER = ["README.md"]
+
 # 提示词/模板类文件名关键词
 PROMPT_KEYWORDS = ("提示词", "模板")
 
@@ -87,6 +91,9 @@ def classify(rel: Path) -> tuple[str, int]:
         return "历史复盘", -_date_key(name)
     if parts[0] == "playbooks":
         return "操作手册", 0
+    if parts[0] == "期权专题":
+        # README 置顶，其余靠文件名前缀的编号自然排序
+        return "期权专题", OPTIONS_ORDER.index(name) if name in OPTIONS_ORDER else 100
     if parts[0] == "tools":
         return "工具", 0
 
