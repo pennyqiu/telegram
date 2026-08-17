@@ -89,14 +89,17 @@ flowchart TB
 | 北京时间 | 触发 | 脚本 | 产物 → 页面 |
 |---|---|---|---|
 | 09:30 周二–周六 | `daily_us_dip_cron.sh` | `fetch_us_dip.py` | `us-dip-signal.json` → `us-dip.html` |
-| 11:00 周一–周五 | `daily_qdii_cron.sh` | `fetch_qdii_premium.py` | `qdii-premium.json` → `qdii-monitor.html` |
-| 同上（附带） | 同上 | `fetch_qdii_history.py` | `qdii-history.json` → `qdii-vs-us.html` |
+| 11:00 周一–周五 | `daily_qdii_cron.sh --light` | `fetch_qdii_premium.py` | `qdii-premium.json` → `qdii-monitor.html` + **邮件** |
+| 14:00 周一–周五 | `daily_qdii_cron.sh --light` | 同上 | 同上（当天第二封邮件） |
+| 15:30 周一–周五 | `DAILY_QDII_EMAIL=0 daily_qdii_cron.sh` | `fetch_qdii_history.py` | `qdii-history.json` → `qdii-vs-us.html` |
 | 同上（附带） | 同上 | `topup_price_tail.py` + `build_qdii_premium_curve.py` | `qdii-premium-curve.json` + 自包含的 `qdii-premium-curve.html` |
-| 14:00 周一–周五 | `daily_qdii_cron.sh --light` | `fetch_qdii_premium.py` | 同上，只刷溢价 JSON 与邮件 |
+| 同上（仅周一） | 同上 | `fetch_qdii_quant_data.py` + `qdii_quant.py` | `qdii-quant.json` → `qdii-quant.html` |
 
-QDII 两次都落在 A 股连续竞价时段（11:00 距午休前 30 分钟、14:00 距收盘 1 小时），现价与 IOPV 都是实时的，邮件里的溢价可以直接拿来下单；`--light` 让第二次跳过历史/量化/曲线，避免慢变量一天算两遍。us-dip 用的是前一晚美股收盘，跟 QDII 已经错开几小时，不会抢数据源。`fetch_qdii_history.py` 是慢变量且依赖 Yahoo，失败只记日志、不影响主流程。溢价曲线那一步不联网做重活（补数十几秒 + 纯本地计算），失败时页面沿用上次结果。
+**为什么这么排**：邮件只需要溢价，而溢价是实时值，所以发信的两次都用 `--light` 几秒跑完，且都落在 A 股连续竞价时段（11:00 距午休前 30 分钟、14:00 距收盘 1 小时），数字可以直接拿来下单。三个慢变量（长期走势、量化回测、溢价曲线）在邮件里**没有任何体现**，只喂网页，且都是日线口径——收盘后 15:30 跑才拿得到真收盘价，盘中抓到的是快照，要等次日 `topup_price_tail.py` 覆盖重叠日才修正。收盘那次用 `DAILY_QDII_EMAIL=0` 关掉发信，免得多出第三封重复邮件（代价是这次挂了不会有失败通知，看 `/var/log/qdii-premium.log`）。
 
-> 曲线用的日线尾部在盘中抓到的是快照而非收盘价，`topup_price_tail.py` 会在次日运行时覆盖重叠日修正——这一点与之前 09:35 跑时相同，没有变化。
+us-dip 用的是前一晚美股收盘，跟 QDII 错开几小时，不会抢数据源。`fetch_qdii_history.py` 依赖 Yahoo，失败只记日志、不影响主流程；溢价曲线那一步不联网做重活（补数十几秒 + 纯本地计算），失败时页面沿用上次结果。
+
+> ⚠ 溢价曲线在**服务器上必然失败**：它依赖 `friends/tools/backtest_data/` 与产物 `qdii-premium-curve.{json,html}`，三者都在 `.gitignore` 里、只存在本地开发机。服务器那一步纯粹刷 warn，页面得靠本地生成后 push（产物一旦提交进 git 就能正常上线）。
 
 手动试跑与安装命令写在两个 `.sh` 的头部注释里，包括 `--email-force` 强制发一封。
 

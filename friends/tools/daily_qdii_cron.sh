@@ -11,13 +11,16 @@
 # 安装到服务器 crontab：
 #   ⚠ 服务器系统时区是 UTC。crontab 数字按 UTC 解释；
 #     命令前的 TZ=Asia/Shanghai 只影响脚本内部时间，不改触发时刻。
-#   A 股盘中跑两次（工作日），这时 IOPV 与现价都是实时的，溢价可直接用于当天下单：
-#     北京 11:00 = UTC 03:00 → 全量（溢价 + 历史 + 周一量化 + 溢价曲线）
-#     北京 14:00 = UTC 06:00 → --light，只刷溢价 JSON + 邮件
+#   工作日三条：两次盘中发邮件（IOPV 与现价都是实时的，溢价可直接用于当天下单），
+#   收盘后一次只维护网页数据（日线类产物要用真收盘价，盘中抓到的是快照）。
+#     北京 11:00 = UTC 03:00 → --light，溢价 + 邮件
+#     北京 14:00 = UTC 06:00 → --light，溢价 + 邮件
+#     北京 15:30 = UTC 07:30 → 全量但不发信（历史 + 周一量化 + 溢价曲线）
 #   chmod +x /app/telegram/friends/tools/daily_qdii_cron.sh
 #   (crontab -l 2>/dev/null | grep -v 'daily_qdii_cron.sh'; \
-#     echo "0 3 * * 1-5 TZ=Asia/Shanghai /app/telegram/friends/tools/daily_qdii_cron.sh >> /var/log/qdii-premium.log 2>&1"; \
-#     echo "0 6 * * 1-5 TZ=Asia/Shanghai /app/telegram/friends/tools/daily_qdii_cron.sh --light >> /var/log/qdii-premium.log 2>&1") | crontab -
+#     echo "0 3 * * 1-5 TZ=Asia/Shanghai /app/telegram/friends/tools/daily_qdii_cron.sh --light >> /var/log/qdii-premium.log 2>&1"; \
+#     echo "0 6 * * 1-5 TZ=Asia/Shanghai /app/telegram/friends/tools/daily_qdii_cron.sh --light >> /var/log/qdii-premium.log 2>&1"; \
+#     echo "30 7 * * 1-5 TZ=Asia/Shanghai DAILY_QDII_EMAIL=0 /app/telegram/friends/tools/daily_qdii_cron.sh >> /var/log/qdii-premium.log 2>&1") | crontab -
 #   crontab -l
 #
 # 邮件配置：

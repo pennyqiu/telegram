@@ -22,9 +22,11 @@
 监控标的列表：
   friends/tools/qdii_watchlist.json
 
-每日 cron（服务器 UTC；A 股盘中跑两次，工作日）：
-  0 3 * * 1-5 TZ=Asia/Shanghai /app/telegram/friends/tools/daily_qdii_cron.sh >> /var/log/qdii-premium.log 2>&1          # 北京 11:00 全量
-  0 6 * * 1-5 TZ=Asia/Shanghai /app/telegram/friends/tools/daily_qdii_cron.sh --light >> /var/log/qdii-premium.log 2>&1  # 北京 14:00 只刷溢价+邮件
+每日 cron（服务器 UTC，工作日；邮件只由盘中两次发出）：
+  0 3 * * 1-5  ... daily_qdii_cron.sh --light   # 北京 11:00 溢价 + 邮件
+  0 6 * * 1-5  ... daily_qdii_cron.sh --light   # 北京 14:00 溢价 + 邮件
+  30 7 * * 1-5 ... DAILY_QDII_EMAIL=0 daily_qdii_cron.sh   # 北京 15:30 收盘后只维护网页数据
+完整命令见 daily_qdii_cron.sh 头部注释。
 
 邮件投递（见 qdii_email_recipients.txt）：
   all  → 每次定时任务都发（心跳/失败通知）
