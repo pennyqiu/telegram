@@ -99,7 +99,21 @@ flowchart TB
 
 us-dip 用的是前一晚美股收盘，跟 QDII 错开几小时，不会抢数据源。`fetch_qdii_history.py` 依赖 Yahoo，失败只记日志、不影响主流程；溢价曲线那一步不联网做重活（补数十几秒 + 纯本地计算），失败时页面沿用上次结果。
 
-> ⚠ 溢价曲线在**服务器上必然失败**：它依赖 `friends/tools/backtest_data/` 与产物 `qdii-premium-curve.{json,html}`，三者都在 `.gitignore` 里、只存在本地开发机。服务器那一步纯粹刷 warn，页面得靠本地生成后 push（产物一旦提交进 git 就能正常上线）。
+### 服务器种子数据（一次性，2026-08-18 已完成）
+
+曲线与量化两步要读 `backtest_data/` 里的日线/净值 CSV，而这些 CSV 和产物 `qdii-premium-curve.{json,html}` 都在 `.gitignore` 里——**这是故意的**：服务器每天会往 CSV 追加新交易日，一旦纳入 git，服务器工作区就天天是脏的，`git pull` 会因"本地改动会被覆盖"而失败。所以做法是**播种一次**，之后 `topup_price_tail.py` 每天自己往后接：
+
+```bash
+# ① 本地打包（2.3 MB / 77 个文件）并传过去
+tar czf /tmp/qdii_backtest_data.tgz -C friends/tools backtest_data
+scp /tmp/qdii_backtest_data.tgz root@202.182.104.186:/tmp/
+
+# ② 服务器解包并当场验证（期望 topup 输出 ok 而非 FAIL，末尾列出两个产物路径）
+tar xzf /tmp/qdii_backtest_data.tgz -C /app/telegram/friends/tools
+cd /app/telegram && DAILY_QDII_EMAIL=0 ./friends/tools/daily_qdii_cron.sh 2>&1 | tail -15
+```
+
+播种后曲线页由服务器每日 15:30 自动重算，本地不用再管。GNU tar 会刷一串 `Ignoring unknown extended header keyword 'LIBARCHIVE.xattr.*'`，那是 macOS 的扩展属性，可无视。**服务器重建后需重做这一步**，否则曲线那步会退回 `No such file or directory`。
 
 手动试跑与安装命令写在两个 `.sh` 的头部注释里，包括 `--email-force` 强制发一封。
 
