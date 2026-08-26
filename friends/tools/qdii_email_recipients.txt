@@ -14,7 +14,7 @@
 # 定时（中国时间，见 daily_*_cron.sh）：QDII 工作日 11:00 与 14:00；美股回撤 周二~周六 09:30
 
 120673235@qq.com  all
-466154603@qq.com  all
+466154603@qq.com  qdii
 #larry leo gadin
 356661627@qq.com  qdii
 76462378@qq.com   qdii
