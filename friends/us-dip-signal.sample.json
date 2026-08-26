@@ -83,7 +83,7 @@
       "yahoo_url": "https://finance.yahoo.com/quote/VOO"
     },
     {
-      "symbol": "SPLG", "name": "SPDR 标普500(低费率)", "group": "标普500",
+      "symbol": "SPYM", "name": "State Street 标普500(低费率)", "group": "标普500",
       "price": 78.0, "change_pct": -0.4, "ath": 79.4, "ath_date": "2025-12-01",
       "drawdown_pct": 1.76, "cum_buy_pct": 0, "signal": "观望",
       "next": {"drop": 6, "buy": 30, "gap_pct": 4.24, "target_price": 74.64},
@@ -93,7 +93,7 @@
         {"drop": 15, "buy": 20, "target_price": 67.49, "hit": false},
         {"drop": 20, "buy": 20, "target_price": 63.52, "hit": false}
       ],
-      "yahoo_url": "https://finance.yahoo.com/quote/SPLG"
+      "yahoo_url": "https://finance.yahoo.com/quote/SPYM"
     }
   ]
 }

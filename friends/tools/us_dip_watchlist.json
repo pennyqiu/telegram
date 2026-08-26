@@ -29,6 +29,6 @@
     {"symbol": "SPY",  "name": "SPDR 标普500",           "group": "标普500", "secid": "107.SPY"},
     {"symbol": "VOO",  "name": "Vanguard 标普500",       "group": "标普500", "secid": "107.VOO"},
     {"symbol": "IVV",  "name": "iShares 标普500",        "group": "标普500", "secid": "107.IVV"},
-    {"symbol": "SPLG", "name": "SPDR 标普500(低费率)",    "group": "标普500", "secid": "107.SPLG"}
+    {"symbol": "SPYM", "name": "State Street 标普500(低费率)", "group": "标普500", "secid": "107.SPYM"}
   ]
 }
