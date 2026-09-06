@@ -85,7 +85,7 @@
       <thead>
         <tr>
           <th>分组</th><th>代码</th><th>名称</th>
-          <th>现价</th><th>涨跌%</th><th>历史最高</th><th>最高日期</th>
+          <th>现价</th><th>价格日期</th><th>涨跌%</th><th>历史最高</th><th>最高日期</th>
           <th>距高点</th><th>累计应买</th><th>信号</th><th>下一档</th><th>各档触发</th><th>行情</th>
         </tr>
       </thead>
@@ -94,7 +94,7 @@
   </div>
 
   <p class="note">
-    数据源：优先 yfinance（历史最高=全历史最高收盘），不可用时回退东方财富。<br>
+    数据源：优先 yfinance（历史最高=全历史最高收盘），不可用时回退东方财富；「价格日期」若标红 ⚠慢1天，说明当天数据源没跟上最新收盘，回撤仍按此价算出，请对照券商确认。<br>
     <b>每日刷新：</b>服务器 cron（北京约 09:30 = UTC 01:30，周二~周六）跑 <code>friends/tools/daily_us_dip_cron.sh</code> 更新 <code>us-dip-signal.json</code>；邮件：<code>all</code> 每次都发、<code>us</code> 仅买点触发时发（<code>qdii_email_recipients.txt</code>）。<br>
     <b>监控标的 / 阶梯（git）：</b><code>friends/tools/us_dip_watchlist.json</code>。<br>
     手动：<code>python3 friends/tools/fetch_us_dip.py --email</code>
@@ -187,20 +187,24 @@ function renderTable(data){
     if(r.group !== lastGroup){
       lastGroup = r.group;
       const n = items.filter(x=>x.group===r.group).length;
-      lines.push(`<tr class="group-sep"><td colspan="13">${r.group}（${n} 只，按回撤从深到浅）</td></tr>`);
+      lines.push(`<tr class="group-sep"><td colspan="14">${r.group}（${n} 只，按回撤从深到浅）</td></tr>`);
     }
     if(r.error){
-      lines.push(`<tr><td>${r.group}</td><td>${r.symbol}</td><td colspan="11">${r.error}</td></tr>`);
+      lines.push(`<tr><td>${r.group}</td><td>${r.symbol}</td><td colspan="12">${r.error}</td></tr>`);
       continue;
     }
     const s = SIG[r.signal] || SIG['未知'];
     const nxt = r.next ? `-${r.next.drop}%（再跌 ${r.next.gap_pct}% → ${fmt(r.next.target_price)}）` : '已到底档';
     const rungs = (r.rungs||[]).map(x=>`<span class="rung ${x.hit?'hit':''}">-${x.drop}%·${x.buy}%</span>`).join('');
-    lines.push(`<tr>
+    // last_date 应恰好等于「昨天」（expected_date）——这套 cron 排班从不跨周末，
+    // 不等于就说明数据源那天没跟上，回撤仍按此价算出，标红提醒去对照券商。
+    const lag = !!r.lag_unexpected;
+    lines.push(`<tr${lag?' style="background:#fef2f2"':''}>
       <td>${r.group}</td>
       <td><b>${r.symbol}</b></td>
       <td>${r.name||'—'}</td>
       <td>${fmt(r.price)}</td>
+      <td style="${lag?'color:#dc2626;font-weight:700':'color:#9ca3af'}">${r.last_date||'—'}${lag?' ⚠慢1天':''}</td>
       <td class="${chgCls(r.change_pct)}">${fmt(r.change_pct)}</td>
       <td>${fmt(r.ath)}</td>
       <td style="color:#9ca3af">${r.ath_date||'—'}</td>

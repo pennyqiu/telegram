@@ -10,8 +10,12 @@
      - 距下一档还要再跌多少、对应目标价
   3. 用状态文件区分「本轮首次触发某一档」与「仍停在同一档」，只为前者提醒
   4. 读待投资金台账，算等待天数与现金拖累成本（README 5.5：等待确定亏钱）
-  5. 写入 friends/us-dip-signal.json（供 us-dip.html 读取）
-  6. 可选：--email 按 qdii_email.env / qdii_email_recipients.txt 发提醒
+  5. 核对每只标的的收盘日期是否恰好是「昨天」——这套 cron 只在周二~周六早上跑，
+     不该跨周末，差一天就说明数据源（尤其东财兜底）没跟上，仍显示但标红提醒
+     （README 5.7：2026-09-05 实测过一次，6 只全部因东财兜底慢了一天，价格本身
+     合理、回撤也不异常，跟 SPLG 那次同一个模式）
+  6. 写入 friends/us-dip-signal.json（供 us-dip.html 读取）
+  7. 可选：--email 按 qdii_email.env / qdii_email_recipients.txt 发提醒
 
 数据源：优先 yfinance（VPS 已装）；不可用时回退东方财富（stdlib）。
 
@@ -133,6 +137,7 @@ def fetch_via_yfinance(symbols: list[str]) -> dict[str, dict[str, Any]]:
                 "ath_date": ath_date,
                 "last_date": last_dt.strftime("%Y-%m-%d") if hasattr(last_dt, "strftime") else str(last_dt)[:10],
                 "n": int(len(closes)),
+                "source": "yfinance",
             }
         except Exception as e:  # noqa: BLE001
             out[sym] = {"error": f"yfinance: {e}"}
@@ -188,6 +193,7 @@ def fetch_via_eastmoney(items: list[dict[str, Any]]) -> dict[str, dict[str, Any]
                 "ath_date": ath_date,
                 "last_date": last_close[0] if last_close else None,
                 "n": len(klines),
+                "source": "eastmoney",
             }
         except Exception as e:  # noqa: BLE001
             out[sym] = {"error": f"eastmoney: {e}"}
@@ -195,6 +201,17 @@ def fetch_via_eastmoney(items: list[dict[str, Any]]) -> dict[str, dict[str, Any]
 
 
 def fetch_quotes(cfg: dict[str, Any]) -> dict[str, dict[str, Any]]:
+    """
+    yfinance 主、东财兜底。兜底本身也可能滞后——2026-09-05 实测过一次：
+    watchlist 全部 6 只当天都从 yfinance 失败（大概率是 VPS 出向 Yahoo 被限流，
+    period="max" 每天拉全历史更容易撞上），整批转东财后，东财当时的最新一条比
+    Yahoo 晚了一整个交易日，且价格本身完全合理，回撤算出来也不异常，
+    跟 5.6 节 SPLG 那次同一个模式：**停更的行情不会报错**。
+
+    所以这里不只是"取不到就兜底"，还要把「谁在用哪个源、兜底了几只」打到日志里
+    （随 cron 进 /var/log/us-dip.log），下次全批兜底时至少能在日志里看到线索；
+    真正让人当天就能发现的检查在 build_payload 里按「昨天」精确比对 last_date。
+    """
     items = cfg["items"]
     symbols = [it["symbol"] for it in items]
     data: dict[str, dict[str, Any]] = {}
@@ -209,6 +226,16 @@ def fetch_quotes(cfg: dict[str, Any]) -> dict[str, dict[str, Any]]:
         for sym, v in em.items():
             if not v.get("error") or sym not in data:
                 data[sym] = v
+
+    ok = [s for s in symbols if not (data.get(s) or {}).get("error")]
+    n_yf = sum(1 for s in ok if data[s].get("source") == "yfinance")
+    n_em = sum(1 for s in ok if data[s].get("source") == "eastmoney")
+    print(f"[info] 数据源：yfinance {n_yf} 只 / 东财兜底 {n_em} 只 / 全部失败 {len(symbols) - len(ok)} 只",
+          file=sys.stderr)
+    if symbols and n_yf == 0 and n_em > 0:
+        print("[warn] yfinance 本轮 0 只成功，全部标的都在用东财兜底——"
+              "回撤数字仍会正常显示，但价格可能比 yfinance 慢，请对照邮件里每行的收盘日期核实",
+              file=sys.stderr)
     return data
 
 
@@ -478,6 +505,17 @@ def build_payload(
         drawdown = (ath - price) / ath * 100.0 if ath else 0.0
         ladder = cfg["groups"].get(g, {}).get("ladder", [])
         st = _ladder_status(drawdown, ladder, ath)
+
+        # 这套 cron 只在北京周二~周六早上跑，取"前一晚"美股收盘——在这个排班下，
+        # (今天−1 自然日) 永远是上一个交易日，从不跨周末（周六的前一天是周五）。
+        # 所以「last_date 应该恰好等于昨天」是一个可以精确核对的不变量，不是猜测；
+        # 2026-09-05 那次全部 6 只都晚了一天，靠的正是这条能被发现，而不是宽松的
+        # STALE_AFTER_WEEKDAYS=5（那个阈值只挡得住 SPLG 那种停更几个月的极端情况，
+        # 挡不住"整批兜底源慢一天"这种轻微但会误导当天买点判断的偏差）。
+        # 手动在非 cron 时段跑，或遇到美股假日时，这条会正常误报，只提示不拦截信号。
+        expected_date = (now.date() - timedelta(days=1)).isoformat()
+        lag_unexpected = bool(last_date) and last_date != expected_date
+
         rows.append({
             "symbol": sym,
             "name": it.get("name") or sym,
@@ -487,6 +525,9 @@ def build_payload(
             "ath": round(ath, 2),
             "ath_date": q.get("ath_date"),
             "last_date": last_date,
+            "expected_date": expected_date,
+            "lag_unexpected": lag_unexpected,
+            "source": q.get("source"),
             "drawdown_pct": round(drawdown, 2),
             "cum_buy_pct": st["cum_buy_pct"],
             "next": st["next"],
@@ -642,6 +683,11 @@ def _has_new_trigger(payload: dict[str, Any]) -> bool:
     return any(r.get("new_rungs") for r in payload.get("items") or [])
 
 
+def _lagged_items(payload: dict[str, Any]) -> list[dict[str, Any]]:
+    """last_date 不等于「昨天」的那些行——见 build_payload 里的不变量说明。"""
+    return [r for r in (payload.get("items") or []) if not r.get("error") and r.get("lag_unexpected")]
+
+
 def _trigger_events(payload: dict[str, Any]) -> list[dict[str, Any]]:
     """展开成「每个新触发的档位一条」，深档在前。"""
     out: list[dict[str, Any]] = []
@@ -709,10 +755,18 @@ def render_email(
     events = _trigger_events(payload)
     cash = payload.get("cash") if include_cash else None
 
+    lagged = _lagged_items(payload)
+    lagged_symbols = {r["symbol"] for r in lagged}
+    events_lagged = any(e["symbol"] in lagged_symbols for e in events)
+
     if events:
-        tag = "【新触发档位】"
+        # 新触发档位若恰好用了滞后价格算出来，这是最该被看见的情况——
+        # 朋友那封信只在这类事件时发出，绝不能让这条提示被淹没在正文里。
+        tag = "【新触发档位·数据滞后】" if events_lagged else "【新触发档位】"
     elif problems:
         tag = "【数据异常】"
+    elif lagged:
+        tag = "【价格日期异常】"
     elif cash and cash.get("over_limit_count"):
         tag = "【资金待投超期】"
     else:
@@ -720,6 +774,14 @@ def render_email(
     subject = f"{tag}{title} · {payload.get('updated_at_text', '')}"
 
     lines = [f"更新时间：{payload.get('updated_at_text')}", ""]
+    if lagged:
+        lines.append(
+            f"⚠ 价格日期异常：以下 {len(lagged)} 只本该显示昨天（{lagged[0]['expected_date']}）的收盘价，"
+            f"实际还停在更早的一天——可能是数据源当天没取到最新数据，回撤仍按此价算出，请对照券商确认："
+        )
+        for r in lagged:
+            lines.append(f"　- {r['symbol']} 现价对应 {r['last_date']} 收盘（源：{r.get('source') or '未知'}）")
+        lines.append("")
     if problems:
         lines.append(f"⚠ 数据异常（以下 {len(problems)} 只本封不可用，未参与任何信号判定）")
         for r in problems:
@@ -750,8 +812,10 @@ def render_email(
         for r in gitems:
             nxt = r.get("next")
             nxt_txt = (f"，距下一档 -{nxt['drop']}% 还需跌 {nxt['gap_pct']}%" if nxt else "，已到底档")
+            date_txt = f"（{r['last_date']}收盘）" if r.get("last_date") else ""
+            flag = " ⚠比预期慢1天" if r.get("lag_unexpected") else ""
             lines.append(
-                f"{r['symbol']} {r.get('name','')} 现价{r['price']} "
+                f"{r['symbol']} {r.get('name','')} 现价{r['price']}{date_txt}{flag} "
                 f"距高点{r['drawdown_pct']}% 累计应买{r['cum_buy_pct']}% [{r['signal']}]{nxt_txt}"
             )
         lines.append("")
@@ -767,10 +831,17 @@ def render_email(
             "border-radius:3px;font-size:11px;margin-left:4px'>新</span>"
             if r.get("new_rungs") else ""
         )
+        lag = r.get("lag_unexpected")
+        date_color = "#dc2626" if lag else "#9ca3af"
+        date_txt = (
+            f"<br><span style='color:{date_color};font-size:11px'>"
+            f"{r.get('last_date') or '—'}{' ⚠慢1天' if lag else ''}</span>"
+        )
+        tr_attr = " style='background:#fef2f2'" if lag else ""
         return (
-            f"<tr>"
+            f"<tr{tr_attr}>"
             f"<td>{r.get('group')}</td><td><b>{r.get('symbol')}</b>{badge}</td>"
-            f"<td>{r.get('name')}</td><td>{r.get('price')}</td>"
+            f"<td>{r.get('name')}</td><td>{r.get('price')}{date_txt}</td>"
             f"<td>{r.get('ath')}<br><span style='color:#9ca3af;font-size:11px'>{r.get('ath_date')}</span></td>"
             f"<td style='color:#b91c1c;font-weight:700'>-{dd}%</td>"
             f"<td style='color:{color};font-weight:700'>{r.get('cum_buy_pct')}%</td>"
@@ -845,6 +916,20 @@ def render_email(
             f"margin:12px 0'><b>本轮新触发档位</b><ul style='margin:8px 0 0'>{li}</ul></div>"
         )
 
+    lag_html = ""
+    if lagged:
+        li = "".join(
+            f"<li><b>{_html_escape(r['symbol'])}</b> 现价对应 <b>{r['last_date']}</b> 收盘"
+            f"（源：{_html_escape(str(r.get('source') or '未知'))}）</li>"
+            for r in lagged
+        )
+        lag_html = (
+            "<div style='background:#fef2f2;border-left:4px solid #dc2626;padding:10px 14px;"
+            f"margin:12px 0'><b>⚠ 价格日期异常</b>：以下 {len(lagged)} 只本该显示昨天"
+            f"（{lagged[0]['expected_date']}）的收盘价，实际还停在更早的一天——"
+            f"回撤仍按此价算出，请对照券商确认<ul style='margin:8px 0 0'>{li}</ul></div>"
+        )
+
     problems_html = ""
     if problems:
         li = "".join(
@@ -862,6 +947,7 @@ def render_email(
 <h2 style="color:#1e429f">{title}</h2>
 <p>更新：{payload.get('updated_at_text')}</p>
 {problems_html}
+{lag_html}
 {cash_html}
 {events_html}
 <h3>阶梯规则</h3>
