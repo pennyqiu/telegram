@@ -10,14 +10,15 @@
      - 距下一档还要再跌多少、对应目标价
   3. 用状态文件区分「本轮首次触发某一档」与「仍停在同一档」，只为前者提醒
   4. 读待投资金台账，算等待天数与现金拖累成本（README 5.5：等待确定亏钱）
-  5. 核对每只标的的收盘日期是否恰好是「昨天」——这套 cron 只在周二~周六早上跑，
-     不该跨周末，差一天就说明数据源（尤其东财兜底）没跟上，仍显示但标红提醒
-     （README 5.7：2026-09-05 实测过一次，6 只全部因东财兜底慢了一天，价格本身
-     合理、回撤也不异常，跟 SPLG 那次同一个模式）
+  5. 核对每只标的的收盘日期是否等于「上一工作日」——cron 在周二~周六早上跑时
+     就是前一晚美股收盘；不等于就标红提醒，但不拦截信号
+     （README 5.7：2026-09-05 实测过一次，6 只全部因东财 kline 兜底慢了一天）
   6. 写入 friends/us-dip-signal.json（供 us-dip.html 读取）
   7. 可选：--email 按 qdii_email.env / qdii_email_recipients.txt 发提醒
 
-数据源：优先 yfinance（VPS 已装）；不可用时回退东方财富（stdlib）。
+数据源：优先 yfinance（VPS 已装）；失败后依次回退新浪日线、东方财富。
+  新浪日线自带完整 OHLCV，日期与 Yahoo 对齐；东财 kline 曾整批慢一天（README 5.7），
+  故放到最后，且价格改走东财实时 ulist、只用 kline 算 ATH。
 
 配置与状态：
   us_dip_watchlist.json    监控列表 + 阶梯阈值（git 可改）
@@ -110,42 +111,133 @@ def load_watchlist(path: Path = WATCHLIST_FILE) -> dict[str, Any]:
 # ---------------------------------------------------------------------------
 # 数据源：yfinance 主
 # ---------------------------------------------------------------------------
-def fetch_via_yfinance(symbols: list[str]) -> dict[str, dict[str, Any]]:
-    import yfinance as yf  # 延迟导入：本地无此依赖时可回退东财
+def _hist_to_quote(hist: Any, *, source: str) -> dict[str, Any] | None:
+    """把带 Open/High/Low/Close 的日线表收成监控用的一条行情。"""
+    if hist is None or getattr(hist, "empty", True):
+        return None
+    closes = hist["Close"].dropna()
+    highs = hist["High"].dropna()
+    if closes.empty or highs.empty:
+        return None
+    price = float(closes.iloc[-1])
+    prev = float(closes.iloc[-2]) if len(closes) >= 2 else price
+    change_pct = (price - prev) / prev * 100 if prev else 0.0
+    ath = float(highs.max())
+    ath_dt = highs.idxmax()
+    ath_date = ath_dt.strftime("%Y-%m-%d") if hasattr(ath_dt, "strftime") else str(ath_dt)[:10]
+    last_dt = closes.index[-1]
+    return {
+        "price": price,
+        "change_pct": change_pct,
+        "ath": ath,
+        "ath_date": ath_date,
+        "last_date": last_dt.strftime("%Y-%m-%d") if hasattr(last_dt, "strftime") else str(last_dt)[:10],
+        "n": int(len(closes)),
+        "source": source,
+    }
 
-    out: dict[str, dict[str, Any]] = {}
+
+def fetch_via_yfinance(symbols: list[str]) -> dict[str, dict[str, Any]]:
+    """
+    一次 download 拉齐所有标的，避免 6 次 history(period=max) 更容易撞 Yahoo 限流。
+    历史窗口用 10y：这些宽基 ETF 的 ATH 都在近年，不必每天拉全历史。
+    """
+    import yfinance as yf  # 延迟导入：本地无此依赖时可回退
+
+    out: dict[str, dict[str, Any]] = {sym: {"error": "yfinance: 未返回"} for sym in symbols}
+    if not symbols:
+        return out
+    try:
+        raw = yf.download(
+            tickers=" ".join(symbols),
+            period="10y",
+            auto_adjust=False,
+            group_by="ticker",
+            threads=True,
+            progress=False,
+        )
+    except Exception as e:  # noqa: BLE001
+        return {sym: {"error": f"yfinance: {e}"} for sym in symbols}
+
     for sym in symbols:
         try:
-            hist = yf.Ticker(sym).history(period="max", auto_adjust=False)
-            if hist is None or hist.empty:
-                continue
-            closes = hist["Close"].dropna()
-            highs = hist["High"].dropna()
-            if closes.empty or highs.empty:
-                continue
-            price = float(closes.iloc[-1])
-            prev = float(closes.iloc[-2]) if len(closes) >= 2 else price
-            change_pct = (price - prev) / prev * 100 if prev else 0.0
-            ath = float(highs.max())
-            ath_dt = highs.idxmax()
-            ath_date = ath_dt.strftime("%Y-%m-%d") if hasattr(ath_dt, "strftime") else str(ath_dt)
-            last_dt = closes.index[-1]
-            out[sym] = {
-                "price": price,
-                "change_pct": change_pct,
-                "ath": ath,
-                "ath_date": ath_date,
-                "last_date": last_dt.strftime("%Y-%m-%d") if hasattr(last_dt, "strftime") else str(last_dt)[:10],
-                "n": int(len(closes)),
-                "source": "yfinance",
-            }
+            if getattr(raw.columns, "nlevels", 1) > 1:
+                if sym not in raw.columns.get_level_values(0):
+                    out[sym] = {"error": "yfinance: 无此标的"}
+                    continue
+                hist = raw[sym].dropna(how="all")
+            else:
+                hist = raw.dropna(how="all")
+            q = _hist_to_quote(hist, source="yfinance")
+            out[sym] = q if q else {"error": "yfinance: 空数据"}
         except Exception as e:  # noqa: BLE001
             out[sym] = {"error": f"yfinance: {e}"}
     return out
 
 
 # ---------------------------------------------------------------------------
-# 数据源：东方财富 兜底（stdlib）
+# 数据源：新浪日线（第一兜底；日期与 Yahoo 对齐，stdlib）
+# ---------------------------------------------------------------------------
+def fetch_via_sina(symbols: list[str]) -> dict[str, dict[str, Any]]:
+    """新浪 US_MinKService 日线：字段 d/o/h/l/c，完整历史够算 ATH，最新交易日通常与 Yahoo 同步。"""
+    out: dict[str, dict[str, Any]] = {}
+    for sym in symbols:
+        url = (
+            "https://stock.finance.sina.com.cn/usstock/api/json_v2.php/"
+            f"US_MinKService.getDailyK?symbol={sym}"
+        )
+        try:
+            req = urllib.request.Request(
+                url,
+                headers={
+                    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
+                    "Referer": "https://finance.sina.com.cn",
+                },
+            )
+            with urllib.request.urlopen(req, timeout=30) as resp:
+                text = resp.read().decode("utf-8", "replace")
+            i = text.find("[")
+            rows = json.loads(text[i:]) if i >= 0 else []
+            if not rows:
+                out[sym] = {"error": "sina: 空数据"}
+                continue
+            ath = 0.0
+            ath_date = None
+            closes: list[tuple[str, float]] = []
+            for r in rows:
+                d = str(r.get("d") or "")[:10]
+                h = r.get("h")
+                c = r.get("c")
+                if not d or c in (None, ""):
+                    continue
+                close = float(c)
+                closes.append((d, close))
+                if h not in (None, ""):
+                    high = float(h)
+                    if high > ath:
+                        ath = high
+                        ath_date = d
+            if not closes or ath <= 0:
+                out[sym] = {"error": "sina: 缺收盘或最高价"}
+                continue
+            price = closes[-1][1]
+            prev = closes[-2][1] if len(closes) >= 2 else price
+            out[sym] = {
+                "price": price,
+                "change_pct": (price - prev) / prev * 100 if prev else 0.0,
+                "ath": ath,
+                "ath_date": ath_date,
+                "last_date": closes[-1][0],
+                "n": len(closes),
+                "source": "sina",
+            }
+        except Exception as e:  # noqa: BLE001
+            out[sym] = {"error": f"sina: {e}"}
+    return out
+
+
+# ---------------------------------------------------------------------------
+# 数据源：东方财富（最后兜底；stdlib）
 # ---------------------------------------------------------------------------
 def _em_get(url: str) -> dict[str, Any]:
     req = urllib.request.Request(url, headers=EM_HEADERS)
@@ -154,7 +246,31 @@ def _em_get(url: str) -> dict[str, Any]:
 
 
 def fetch_via_eastmoney(items: list[dict[str, Any]]) -> dict[str, dict[str, Any]]:
+    """
+    价格走实时 ulist（与新浪/Yahoo 最新收盘对齐），ATH 仍用 kline。
+    旧实现直接取 kline 最后一条，2026-09-05 整批慢过一天；实时接口没有这个问题。
+    last_date：ulist 不带交易日，用「上一个美股交易日」近似（cron 在北京早盘跑时就是昨天）。
+    """
     out: dict[str, dict[str, Any]] = {}
+    by_secid = {it["secid"]: it for it in items if it.get("secid")}
+    live: dict[str, dict[str, Any]] = {}
+    if by_secid:
+        try:
+            url = (
+                "https://push2delay.eastmoney.com/api/qt/ulist.np/get?fltt=2&invt=2"
+                "&fields=f12,f14,f2,f3,f15,f18&secids=" + ",".join(by_secid)
+            )
+            diff = ((_em_get(url).get("data") or {}).get("diff")) or []
+            for row in diff:
+                code = str(row.get("f12") or "")
+                if code:
+                    live[code] = row
+        except Exception as e:  # noqa: BLE001
+            print(f"[warn] 东财实时 ulist 失败，退回 kline 末条：{e}", file=sys.stderr)
+
+    # cron 在周二~周六早盘跑时，上一个美股交易日 = 昨天自然日
+    approx_last = (datetime.now(CST).date() - timedelta(days=1)).isoformat()
+
     for it in items:
         sym = it["symbol"]
         secid = it.get("secid")
@@ -181,17 +297,25 @@ def fetch_via_eastmoney(items: list[dict[str, Any]]) -> dict[str, dict[str, Any]
                     ath_date = p[0]
                 prev_close = last_close
                 last_close = (p[0], close)
-            price = last_close[1] if last_close else None
-            change_pct = (
-                (price - prev_close[1]) / prev_close[1] * 100
-                if (price is not None and prev_close) else 0.0
-            )
+
+            live_row = live.get(sym) or {}
+            price = live_row.get("f2")
+            change_pct = live_row.get("f3")
+            last_date = approx_last
+            if price is None:
+                price = last_close[1] if last_close else None
+                change_pct = (
+                    (price - prev_close[1]) / prev_close[1] * 100
+                    if (price is not None and prev_close) else 0.0
+                )
+                last_date = last_close[0] if last_close else None
+
             out[sym] = {
-                "price": price,
-                "change_pct": change_pct,
+                "price": float(price) if price is not None else None,
+                "change_pct": float(change_pct) if change_pct is not None else 0.0,
                 "ath": ath,
                 "ath_date": ath_date,
-                "last_date": last_close[0] if last_close else None,
+                "last_date": last_date,
                 "n": len(klines),
                 "source": "eastmoney",
             }
@@ -200,17 +324,41 @@ def fetch_via_eastmoney(items: list[dict[str, Any]]) -> dict[str, dict[str, Any]
     return out
 
 
+def _previous_weekday(d: date) -> date:
+    """上一个周一~周五（不含美股假日）。周一跑脚本时期望收盘日是上周五，而不是日历昨天。"""
+    cur = d - timedelta(days=1)
+    while cur.weekday() >= 5:
+        cur -= timedelta(days=1)
+    return cur
+
+
+def _stale_symbols(data: dict[str, dict[str, Any]], symbols: list[str], expected: str) -> list[str]:
+    """
+    收盘日落后于同批其他标的、或整批落后于上一交易日的标的。
+
+    同批都是美股，交易日必然一致，所以组内最大日期就是本轮该有的收盘日；只跟组内比
+    可免疫美股假日（假日里全组一致，不会误判）。再叠加一条整批落后的判断，覆盖
+    2026-09-05 那种所有标的一起慢一天的情况。
+    """
+    dates = [d for s in symbols if (d := (data.get(s) or {}).get("last_date"))]
+    if not dates:
+        return []
+    target = max(max(dates), expected)
+    return [
+        s
+        for s in symbols
+        if (d := (data.get(s) or {}).get("last_date")) and d < target
+    ]
+
+
 def fetch_quotes(cfg: dict[str, Any]) -> dict[str, dict[str, Any]]:
     """
-    yfinance 主、东财兜底。兜底本身也可能滞后——2026-09-05 实测过一次：
-    watchlist 全部 6 只当天都从 yfinance 失败（大概率是 VPS 出向 Yahoo 被限流，
-    period="max" 每天拉全历史更容易撞上），整批转东财后，东财当时的最新一条比
-    Yahoo 晚了一整个交易日，且价格本身完全合理，回撤算出来也不异常，
-    跟 5.6 节 SPLG 那次同一个模式：**停更的行情不会报错**。
+    yfinance → 新浪 → 东财。2026-09-05 实测：yfinance 整批失败后若直接落到东财 kline，
+    会静默慢一天；新浪日线日期与 Yahoo 对齐，作为第一兜底。东财改用实时价后留作最后兜底。
 
-    所以这里不只是"取不到就兜底"，还要把「谁在用哪个源、兜底了几只」打到日志里
-    （随 cron 进 /var/log/us-dip.log），下次全批兜底时至少能在日志里看到线索；
-    真正让人当天就能发现的检查在 build_payload 里按「昨天」精确比对 last_date。
+    取到数不等于取对数：2026-09-17 yfinance 正常返回 QQQM，但只到 09-15，价格恰好是
+    09-16 的前收，肉眼看不出问题。所以拿到结果后还要按收盘日复核一遍，落后的标的一律
+    当失败重取。
     """
     items = cfg["items"]
     symbols = [it["symbol"] for it in items]
@@ -218,24 +366,60 @@ def fetch_quotes(cfg: dict[str, Any]) -> dict[str, dict[str, Any]]:
     try:
         data = fetch_via_yfinance(symbols)
     except Exception as e:  # noqa: BLE001  (yfinance 未安装/导入失败)
-        print(f"[info] yfinance 不可用，改用东方财富兜底：{e}", file=sys.stderr)
+        print(f"[info] yfinance 不可用，改用新浪/东财兜底：{e}", file=sys.stderr)
 
-    missing = [it for it in items if it["symbol"] not in data or data[it["symbol"]].get("error")]
+    def _missing() -> list[dict[str, Any]]:
+        return [it for it in items if it["symbol"] not in data or data[it["symbol"]].get("error")]
+
+    missing = _missing()
+    if missing:
+        sina = fetch_via_sina([it["symbol"] for it in missing])
+        for sym, v in sina.items():
+            if not v.get("error") or sym not in data:
+                data[sym] = v
+
+    missing = _missing()
     if missing:
         em = fetch_via_eastmoney(missing)
         for sym, v in em.items():
             if not v.get("error") or sym not in data:
                 data[sym] = v
 
+    expected = _previous_weekday(datetime.now(CST).date()).isoformat()
+    stale = _stale_symbols(data, symbols, expected)
+    if stale:
+        print(
+            f"[warn] 收盘日落后，按失败重取：{'、'.join(stale)}（本轮应为 {expected} 或更新）",
+            file=sys.stderr,
+        )
+        for sym, v in fetch_via_sina(stale).items():
+            if v.get("error"):
+                print(f"[warn] {sym} 新浪重取失败，沿用旧值：{v['error']}", file=sys.stderr)
+                continue
+            old = (data.get(sym) or {}).get("last_date")
+            if v.get("last_date") and (not old or v["last_date"] > old):
+                print(f"[info] {sym} 收盘日 {old} → {v['last_date']}，改用新浪", file=sys.stderr)
+                data[sym] = v
+
     ok = [s for s in symbols if not (data.get(s) or {}).get("error")]
     n_yf = sum(1 for s in ok if data[s].get("source") == "yfinance")
+    n_sina = sum(1 for s in ok if data[s].get("source") == "sina")
     n_em = sum(1 for s in ok if data[s].get("source") == "eastmoney")
-    print(f"[info] 数据源：yfinance {n_yf} 只 / 东财兜底 {n_em} 只 / 全部失败 {len(symbols) - len(ok)} 只",
-          file=sys.stderr)
-    if symbols and n_yf == 0 and n_em > 0:
-        print("[warn] yfinance 本轮 0 只成功，全部标的都在用东财兜底——"
-              "回撤数字仍会正常显示，但价格可能比 yfinance 慢，请对照邮件里每行的收盘日期核实",
-              file=sys.stderr)
+    print(
+        f"[info] 数据源：yfinance {n_yf} 只 / 新浪 {n_sina} 只 / 东财 {n_em} 只 / "
+        f"全部失败 {len(symbols) - len(ok)} 只",
+        file=sys.stderr,
+    )
+    for s in symbols:
+        v = data.get(s) or {}
+        detail = v.get("error") or f"{v.get('source')} {v.get('last_date')} {v.get('price')}"
+        print(f"[info]   {s:6} {detail}", file=sys.stderr)
+    if symbols and n_yf == 0 and (n_sina + n_em) > 0:
+        print(
+            "[warn] yfinance 本轮 0 只成功，已用新浪/东财兜底——"
+            "请对照邮件里每行的收盘日期核实是否仍是最新交易日",
+            file=sys.stderr,
+        )
     return data
 
 
@@ -394,16 +578,15 @@ def load_cash_ledger(path: Path = CASH_FILE) -> dict[str, Any] | None:
 
 
 def _weekdays_between(d0: date, d1: date) -> int:
-    """(d0, d1] 之间的工作日数。不含美股假日，宁可少算也不引入日历依赖。"""
+    """两个日期之间隔了多少个工作日（不含两端；仅按周一~周五，不含美股假日）。"""
     if d1 <= d0:
         return 0
-    days = (d1 - d0).days
-    full_weeks, rem = divmod(days, 7)
-    n = full_weeks * 5
-    wd = d0.weekday()
-    for i in range(1, rem + 1):
-        if (wd + i) % 7 < 5:
+    n = 0
+    cur = d0 + timedelta(days=1)
+    while cur <= d1:
+        if cur.weekday() < 5:
             n += 1
+        cur += timedelta(days=1)
     return n
 
 
@@ -506,14 +689,10 @@ def build_payload(
         ladder = cfg["groups"].get(g, {}).get("ladder", [])
         st = _ladder_status(drawdown, ladder, ath)
 
-        # 这套 cron 只在北京周二~周六早上跑，取"前一晚"美股收盘——在这个排班下，
-        # (今天−1 自然日) 永远是上一个交易日，从不跨周末（周六的前一天是周五）。
-        # 所以「last_date 应该恰好等于昨天」是一个可以精确核对的不变量，不是猜测；
-        # 2026-09-05 那次全部 6 只都晚了一天，靠的正是这条能被发现，而不是宽松的
-        # STALE_AFTER_WEEKDAYS=5（那个阈值只挡得住 SPLG 那种停更几个月的极端情况，
-        # 挡不住"整批兜底源慢一天"这种轻微但会误导当天买点判断的偏差）。
-        # 手动在非 cron 时段跑，或遇到美股假日时，这条会正常误报，只提示不拦截信号。
-        expected_date = (now.date() - timedelta(days=1)).isoformat()
+        # 这套 cron 在北京周二~周六早上跑，取"前一晚"美股收盘。期望交易日 = 上一个
+        # 周一~周五（周一手动跑时期望上周五，而不是日历昨天周日）。不含美股假日，
+        # 假日那天会误报 ⚠慢1天，只提示不拦截。2026-09-05 东财整批慢一天，靠这条抓到。
+        expected_date = _previous_weekday(now.date()).isoformat()
         lag_unexpected = bool(last_date) and last_date != expected_date
 
         rows.append({
@@ -684,7 +863,7 @@ def _has_new_trigger(payload: dict[str, Any]) -> bool:
 
 
 def _lagged_items(payload: dict[str, Any]) -> list[dict[str, Any]]:
-    """last_date 不等于「昨天」的那些行——见 build_payload 里的不变量说明。"""
+    """last_date 不等于「上一工作日」的那些行——见 build_payload 里的不变量说明。"""
     return [r for r in (payload.get("items") or []) if not r.get("error") and r.get("lag_unexpected")]
 
 
@@ -776,7 +955,7 @@ def render_email(
     lines = [f"更新时间：{payload.get('updated_at_text')}", ""]
     if lagged:
         lines.append(
-            f"⚠ 价格日期异常：以下 {len(lagged)} 只本该显示昨天（{lagged[0]['expected_date']}）的收盘价，"
+            f"⚠ 价格日期异常：以下 {len(lagged)} 只本该显示上一交易日（{lagged[0]['expected_date']}）的收盘价，"
             f"实际还停在更早的一天——可能是数据源当天没取到最新数据，回撤仍按此价算出，请对照券商确认："
         )
         for r in lagged:
@@ -925,8 +1104,9 @@ def render_email(
         )
         lag_html = (
             "<div style='background:#fef2f2;border-left:4px solid #dc2626;padding:10px 14px;"
-            f"margin:12px 0'><b>⚠ 价格日期异常</b>：以下 {len(lagged)} 只本该显示昨天"
+            f"margin:12px 0'><b>⚠ 价格日期异常</b>：以下 {len(lagged)} 只本该显示上一交易日"
             f"（{lagged[0]['expected_date']}）的收盘价，实际还停在更早的一天——"
+            f"常见原因是主源失败后落到滞后的兜底源。"
             f"回撤仍按此价算出，请对照券商确认<ul style='margin:8px 0 0'>{li}</ul></div>"
         )
 
