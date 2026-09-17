@@ -16,3 +16,6 @@ venv/
 !**/.env.example
 *.log
 tools/output/
+
+# 收件人名单（含个人邮箱；模板见 discipline_recipients.example.txt）
+tools/discipline_recipients.txt

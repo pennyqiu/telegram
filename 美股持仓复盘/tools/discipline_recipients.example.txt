@@ -1,0 +1,11 @@
+# 组合纪律检查的收件人。复制成 discipline_recipients.txt 后填自己的邮箱。
+# 一行一个，# 开头是注释，邮箱后面的内容会被忽略。
+#
+# ⚠ 这份名单**故意**不与 friends/tools/qdii_email_recipients.txt 共用。
+#   那份里有朋友，而本报告含持仓、期权义务与现金缺口。共用迟早会发错人，
+#   所以代码里物理上不给它回退到那份名单的路径。
+#
+# 没有这个文件时，也可以用环境变量 DISCIPLINE_RECIPIENTS="a@x.com,b@y.com"。
+# SMTP 账号仍复用 friends/tools/qdii_email.env（勿提交）。
+
+you@example.com
